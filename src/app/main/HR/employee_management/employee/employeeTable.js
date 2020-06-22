@@ -144,7 +144,7 @@ function EmployeesTable(props) {
 										</TableCell>
 
 										<TableCell component="th" scope="row">
-                      {n.fullName}
+                      {`${n.firstName} ${n.lastName}`}
 										</TableCell>
 
 										<TableCell component="th" scope="row">

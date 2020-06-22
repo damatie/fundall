@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { useAuth } from 'app/hooks/useAuth';
 
 export const GET_EMPLOYEES = 'GET EMPLOYEES';
 export const SET_EMPLOYEES_SEARCH_TEXT = 'SET EMPLOYEES SEARCH TEXT';
@@ -34,11 +35,20 @@ export function getEmployees() {
     }
   ]
 
-	return dispatch =>
-			dispatch({
-				type: GET_EMPLOYEES,
-				payload: employees
-			})
+	return dispatch => {
+      const request = axios.get('https://hris-cbit.herokuapp.com/api/v1/auth/employee/', {
+        headers: {
+          Authorization: `JWT ${useAuth().getToken}`
+        }
+      });
+      request.then(res => {
+        dispatch({
+          type: GET_EMPLOYEES,
+          payload: res.data.data
+        })
+        console.log(res)
+      })
+  }
 }
 
 export function setEmployeesSearchText(event) {

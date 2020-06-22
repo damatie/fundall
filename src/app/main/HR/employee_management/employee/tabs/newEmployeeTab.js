@@ -2,7 +2,7 @@ import { TextFieldFormsy } from '@fuse/core/formsy';
 import Button from '@material-ui/core/Button';
 import Icon from '@material-ui/core/Icon';
 import InputAdornment from '@material-ui/core/InputAdornment';
-// import * as authActions from 'app/auth/store/actions';
+import * as Actions from '../../store/actions';
 import Formsy from 'formsy-react';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,19 +10,19 @@ import { Redirect } from 'react-router';
 
 function NewEmployeeTab(props) {
 	const dispatch = useDispatch();
-	// const register = useSelector(({ auth }) => auth.register);
+	const employee = useSelector(({ employees }) => employees.employee);
 
-	const [isFormValid, setIsFormValid] = useState(false);
+	const [isFormValid, setIsFormValid] = useState(true);
 	const formRef = useRef(null);
 
-	// useEffect(() => {
-	// 	if (register.error && (register.error.username || register.error.password || register.error.email)) {
-	// 		formRef.current.updateInputsWithError({
-	// 			...register.error
-	// 		});
-	// 		disableButton();
-	// 	}
-	// }, [register.error]);
+	useEffect(() => {
+		// if (register.error && (register.error.username || register.error.password || register.error.email)) {
+		// 	formRef.current.updateInputsWithError({
+		// 		...register.error
+		// 	});
+		// 	disableButton();
+		// }
+	}, []);
 
 	function disableButton() {
 		setIsFormValid(false);
@@ -33,15 +33,14 @@ function NewEmployeeTab(props) {
 	}
 
 	function handleSubmit(model) {
-		// dispatch(authActions.submitRegister(model));
-		console.log(model);
+		dispatch(Actions.saveEmployee(model));
 	}
 
-	// if(register.success) {
-	// 	return (
-	// 		<Redirect to='/hr/confirmation' />
-	// 	);
-	// }
+	if(employee.success) {
+		return (
+			<Redirect to='/hr/employee_management' />
+		);
+	}
 
 	return (
 		<div className="w-full">
@@ -174,7 +173,7 @@ function NewEmployeeTab(props) {
 					color="primary"
 					className="w-full mx-auto mt-16 normal-case"
 					aria-label="REGISTER"
-					disabled={!isFormValid}
+					disabled={!isFormValid || employee.loading}
 					value="legacy"
 				>
 					Save
