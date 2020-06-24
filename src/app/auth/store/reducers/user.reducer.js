@@ -5,6 +5,7 @@ let initialState = JSON.parse(localStorage.getItem('user_data'));
 if(!initialState) {
 	initialState = {
 		role: [], // guest
+		id: 0,
 		data: {
 			displayName: 'John Doe',
 			photoURL: 'assets/images/avatars/Velazquez.jpg',

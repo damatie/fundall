@@ -40,6 +40,7 @@ export function submitLogin(data, user) {
 					const userState = {
 						role: role,
 						redirectUrl: redirectUrl,
+						id: user.id,
 						data: {
 							displayName: `${user.firstName} ${user.lastName}`,
 							photoURL: 'assets/images/avatars/Velazquez.jpg',

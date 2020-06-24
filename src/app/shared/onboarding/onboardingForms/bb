@@ -1,0 +1,11 @@
+<RadioGroupFormsy
+  className="my-16"
+  name="gender"
+  // label="Gender"
+  // validations="equals:female"
+  // validationError="Only ladies are accepted"
+  required
+>
+  <FormControlLabel value="yes" control={<Radio color="primary"/>} label="Yes"/>
+  <FormControlLabel value="no" control={<Radio color="primary"/>} label="No"/>
+</RadioGroupFormsy>

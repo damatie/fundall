@@ -34,7 +34,7 @@ function EmployeesTable(props) {
 
 	useEffect(() => {
 		if (searchText.length !== 0) {
-			setData(_.filter(employees, item => item.fullName.toLowerCase().includes(searchText.toLowerCase())));
+			setData(_.filter(employees, item => item.firstName.toLowerCase().includes(searchText.toLowerCase())));
 			setPage(0);
 		} else {
 			setData(employees);

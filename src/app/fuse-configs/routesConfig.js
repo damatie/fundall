@@ -9,6 +9,8 @@ import MailConfirmationPageConfig from 'app/main/HR/registration/MailConfirmPage
 import EmployeeLoginConfig from 'app/main/employee/registration/employeeLoginConfig';
 import HrConfirmConfig from 'app/main/HR/registration/hrConfirmConfig';
 import EmployeeManagementConfig from 'app/main/HR/employee_management/employeeManagementConfig';
+import EmployeeProfilePageConfig from 'app/main/employee/profile/ProfilePageConfig';
+import EmployeeOnboardingConfig from 'app/main/employee/onboarding/employeeOnboardingConfig';
 
 const routeConfigs = [
 	// ExampleConfig,
@@ -17,7 +19,9 @@ const routeConfigs = [
 	MailConfirmationPageConfig,
 	EmployeeLoginConfig,
 	HrConfirmConfig,
-	EmployeeManagementConfig
+	EmployeeManagementConfig,
+	EmployeeProfilePageConfig,
+	EmployeeOnboardingConfig,
 ];
 
 const routes = [

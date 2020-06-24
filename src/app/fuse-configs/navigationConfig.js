@@ -9,6 +9,7 @@ i18next.addResourceBundle('tr', 'navigation', tr);
 i18next.addResourceBundle('ar', 'navigation', ar);
 
 const navigationConfig = [
+	// hr nav
 	{
 		id: 'applications',
 		title: 'Applications',
@@ -150,6 +151,77 @@ const navigationConfig = [
 				title: 'Profile settings',
 				type: 'item',
 				url: '/hr/profile_settings',
+				icon: 'settings_applications',
+			}
+		]
+	},
+
+	//Employee nav
+	{
+		id: 'application',
+		title: 'Application',
+		translate: 'Application',
+		type: 'group',
+		auth: authRoles.staff,
+		children: [
+			{
+				id: 'dashboard',
+				title: 'Dashboard',
+				type: 'item',
+				url: '/employee/dashboard',
+				icon: 'dashboard',
+			},
+			{
+				id: 'onboarding',
+				title: 'Onboarding',
+				type: 'item',
+				url: '/employee/onboarding',
+				icon: 'card_membership',
+			},
+			{
+				id: 'company_policy_test',
+				title: 'Company policy test',
+				type: 'item',
+				url: '/employee/company_policy_test',
+				icon: 'list_alt',
+			}
+		]
+	},
+	{
+		id: 'Leave management',
+		title: 'Leave management',
+		translate: 'Leave management',
+		type: 'group',
+		auth: authRoles.staff,
+		children: [
+			{
+				id: 'request_leave',
+				title: 'Request leave',
+				type: 'item',
+				url: '/employee/request_leave',
+				icon: 'event',
+			},
+			{
+				id: 'leave_summary',
+				title: 'Leave summary',
+				type: 'item',
+				url: '/employee/leave_summary',
+				icon: 'calendar_today',
+			}
+		]
+	},
+	{
+		id: 'settings',
+		title: 'Settings',
+		translate: 'Settings',
+		type: 'group',
+		auth: authRoles.staff,
+		children: [
+			{
+				id: 'profile',
+				title: 'Profile',
+				type: 'item',
+				url: '/employee/profile',
 				icon: 'settings_applications',
 			}
 		]
