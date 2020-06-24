@@ -11,6 +11,8 @@ import HrConfirmConfig from 'app/main/HR/registration/hrConfirmConfig';
 import EmployeeManagementConfig from 'app/main/HR/employee_management/employeeManagementConfig';
 import EmployeeProfilePageConfig from 'app/main/employee/profile/ProfilePageConfig';
 import EmployeeOnboardingConfig from 'app/main/employee/onboarding/employeeOnboardingConfig';
+import LeaveTypeConfig from 'app/main/HR/leave_type/leaveTypeConfig';
+import SignatureConfig from 'app/main/employee/signature/signatureConfig';
 
 const routeConfigs = [
 	// ExampleConfig,
@@ -22,6 +24,8 @@ const routeConfigs = [
 	EmployeeManagementConfig,
 	EmployeeProfilePageConfig,
 	EmployeeOnboardingConfig,
+	LeaveTypeConfig,
+	SignatureConfig,
 ];
 
 const routes = [

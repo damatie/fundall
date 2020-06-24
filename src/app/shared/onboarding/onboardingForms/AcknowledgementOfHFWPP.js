@@ -1,14 +1,26 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import Grid from "@material-ui/core/Grid";
 import Formsy from 'formsy-react';
 import { TextFieldFormsy, CheckboxFormsy } from '@fuse/core/formsy';
 import Button from '@material-ui/core/Button';
 import { inputStyles } from '../../EmployeeFormInput';
+import { useSelector } from 'react-redux';
 
 const AcknowledgementOfHFWPP = () => {
   const classes = inputStyles();
   const [isFormValid, setIsFormValid] = useState(false);
   const formRef = useRef(null);
+  const userData = useSelector(({employeeProfile}) => employeeProfile.employeeProfile);
+  const [agree, setAgree] = useState(false);
+  const [date, setDate] = useState('');
+
+  useEffect(() => {
+    if(agree) {
+      setDate(new Date().toISOString().substring(0, 10));
+    } else {
+      setDate('')
+    }
+  }, [agree]);
 
   function disableButton()
   {
@@ -23,6 +35,14 @@ const AcknowledgementOfHFWPP = () => {
   function handleSubmit(model)
   {
     console.info('submit', model);
+  }
+
+  if(userData.loading) {
+    return (
+      <div>
+        Loading....
+      </div>
+    )
   }
 
   return (
@@ -65,6 +85,7 @@ const AcknowledgementOfHFWPP = () => {
                 type="text"
                 name="name"
                 label="Employee name"
+                value={`${userData.data.firstName} ${userData.data.lastName}`}
                 validations={{
                   minLength: 4,
                 }}
@@ -78,7 +99,7 @@ const AcknowledgementOfHFWPP = () => {
               <CheckboxFormsy
                 className="my-16"
                 name="accept"
-                value={false}
+                value={agree}
                 label="Sign Document"
                 validations={{
                   equals: true,
@@ -86,6 +107,7 @@ const AcknowledgementOfHFWPP = () => {
                 validationErrors={{
                   equals: "You need to accept"
                 }}
+                onChange={e => setAgree(!agree)}
               />
             </Grid>
             <Grid alignItems="center" container item sm="6" md="6" lg="6" xl="6">
@@ -93,6 +115,7 @@ const AcknowledgementOfHFWPP = () => {
                 className="mb-16 w-full"
                 type="date"
                 name="name"
+                value={date}
                 required
               />
             </Grid>
@@ -102,6 +125,7 @@ const AcknowledgementOfHFWPP = () => {
                     type="number"
                     name="name"
                     label="Employee number"
+                    value={`${userData.data.employeeNumber}`}
                     validations={{
                         minLength: 1,
                     }}
