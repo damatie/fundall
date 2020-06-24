@@ -80,9 +80,18 @@ const navigationConfig = [
 			{
 				id: 'leave_type',
 				title: 'Leave type',
-				type: 'item',
+				type: 'collapse',
 				url: '/hr/leave_type',
 				icon: 'flight_takeoff',
+				children: [
+					{
+						id: 'new_leave_type',
+						title: 'New leave type',
+						type: 'item',
+						url: '/hr/leave_type/new',
+					}
+
+				]
 			},
 			{
 				id: 'leave_options',
@@ -140,14 +149,14 @@ const navigationConfig = [
 
 	},
 	{
-		id: 'settings',
+		id: 'hr_settings',
 		title: 'Settings',
 		translate: 'Settings',
 		type: 'group',
 		auth: authRoles.admin,
 		children: [
 			{
-				id: 'profile_settings',
+				id: 'hr_profile_settings',
 				title: 'Profile settings',
 				type: 'item',
 				url: '/hr/profile_settings',
@@ -223,6 +232,13 @@ const navigationConfig = [
 				type: 'item',
 				url: '/employee/profile',
 				icon: 'settings_applications',
+			},
+			{
+				id: 'signature',
+				title: 'Signature',
+				type: 'item',
+				url: '/employee/signature',
+				icon: 'edit',
 			}
 		]
 	},
