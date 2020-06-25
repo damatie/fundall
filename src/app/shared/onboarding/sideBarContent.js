@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import AcknowledgementOfHFWPP from './onboardingForms/AcknowledgementOfHFWPP';
 import AcknowledgementOfSASFE from './onboardingForms/AcknowledgementOfSASFE';
@@ -10,11 +10,14 @@ import BusinessCardRequest from './onboardingForms/BusinessCardRequest';
 
 
 const SideBarContent = () => {
-  const index = useSelector(({indexTab}) => indexTab.indexTab);
-
-  switch(index.id) {
+  const [index, setIndex] = useState(1)
+  const indexs = useSelector(({indexTab}) => indexTab.indexTab);
+  useEffect(() => {
+    setIndex(indexs.id);
+  }, [indexs.id])
+  switch(index) {
     case 1: {
-      return <AcknowledgementOfHFWPP />
+      return <AcknowledgementOfHFWPP setIndex={setIndex}/>
     }
     case 2: {
       return <AcknowledgementOfSASFE />

@@ -39,7 +39,7 @@ function Login() {
 
 				<FuseAnimate animation="transition.slideUpIn" delay={300}>
 					<Typography variant="h3" color="inherit" className="font-light">
-						Welcome to the HR login page
+						Welcome to HR login page
 					</Typography>
 				</FuseAnimate>
 

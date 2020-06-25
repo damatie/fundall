@@ -12,7 +12,11 @@ import EmployeeManagementConfig from 'app/main/HR/employee_management/employeeMa
 import EmployeeProfilePageConfig from 'app/main/employee/profile/ProfilePageConfig';
 import EmployeeOnboardingConfig from 'app/main/employee/onboarding/employeeOnboardingConfig';
 import LeaveTypeConfig from 'app/main/HR/leave_type/leaveTypeConfig';
+import LeaveOptionsConfig from 'app/main/HR/leave_option/leaveOptionsConfig';
 import SignatureConfig from 'app/main/employee/signature/signatureConfig';
+import ProjectDashboardAppConfig from 'app/main/employee/dashboard/ProjectDashboardAppConfig';
+import OnboardingConfig from 'app/main/HR/employee_onboarding/onboardingConfig';
+import BusinessUnitsConfig from 'app/main/HR/business_unit/businessUnitsConfig';
 
 const routeConfigs = [
 	// ExampleConfig,
@@ -26,6 +30,10 @@ const routeConfigs = [
 	EmployeeOnboardingConfig,
 	LeaveTypeConfig,
 	SignatureConfig,
+	ProjectDashboardAppConfig,
+	LeaveOptionsConfig,
+	OnboardingConfig,
+	BusinessUnitsConfig,
 ];
 
 const routes = [

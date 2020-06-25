@@ -152,11 +152,11 @@ function LeaveTypeTable(props) {
 										</TableCell>
 
 										<TableCell component="th" scope="row">
-											{`${n.isDeductable}`}
+											{n.isDeductable ? 'Yes' : 'No'}
 										</TableCell>
 
 										<TableCell component="th" scope="row" align="right">
-											{`${n.isPreAllocated}`}
+											{n.isPreAllocated ? 'Yes' : 'No'}
 										</TableCell>
 
 										<TableCell component="th" scope="row" align="right">

@@ -4,7 +4,11 @@ import Formsy from 'formsy-react';
 import { TextFieldFormsy, CheckboxFormsy } from '@fuse/core/formsy';
 import Button from '@material-ui/core/Button';
 import { inputStyles } from '../../EmployeeFormInput';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import axios from 'axios';
+import swal from 'sweetalert2';
+import { useAuth } from "app/hooks/useAuth";
+import * as Actions from '../store/actions';
 
 const AcknowledgementOfSASFE = () => {
   const classes = inputStyles();
@@ -14,7 +18,19 @@ const AcknowledgementOfSASFE = () => {
   const [agree, setAgree] = useState(false);
   const [date, setDate] = useState('');
 
+  const dispatch = useDispatch()
+
+  const auth = useAuth;
+
   useEffect(() => {
+    const request = axios.get(`https://hris-cbit.herokuapp.com/api/v1/onboarding/${auth().getId}`, {
+      headers: {
+        Authorization: `JWT ${auth().getToken}`
+      }
+    });
+    request.then(res => {
+      console.table(res.data)
+    }).catch(e => console.error(e));
     if(agree) {
       setDate(new Date().toISOString().substring(0, 10));
     } else {
@@ -34,7 +50,22 @@ const AcknowledgementOfSASFE = () => {
 
   function handleSubmit(model)
   {
-    console.info('submit', model);
+    const request = axios.patch('https://hris-cbit.herokuapp.com/api/v1/onboarding/sign-form', {
+      substanceAbuseStandard: true
+    }, {
+      headers: {
+        Authorization: `JWT ${auth().getToken}`
+      }
+    });
+    request.then(res => {
+      swal.fire({
+        title: 'Form submisson',
+        text: res.data.message,
+        icon: 'success',
+        timer: 3000
+      })
+      
+    }).catch(e => console.error(e));
   }
 
   if(userData.loading) {

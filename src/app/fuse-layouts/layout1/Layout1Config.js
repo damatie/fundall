@@ -19,7 +19,7 @@ const config = {
 			position: 'below'
 		},
 		leftSidePanel: {
-			display: true
+			display: false
 		},
 		rightSidePanel: {
 			display: true

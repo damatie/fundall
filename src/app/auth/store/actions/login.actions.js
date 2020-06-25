@@ -22,7 +22,7 @@ export function submitLogin(data, user) {
 		else if(user === 'staff') {
 			url = 'https://hris-cbit.herokuapp.com/api/v1/auth/employee/login'
 			role = ['staff']
-			redirectUrl = ''
+			redirectUrl = '/employee/dashboard'
 		}
 		dispatch({
 			type: LOGIN_LOADING

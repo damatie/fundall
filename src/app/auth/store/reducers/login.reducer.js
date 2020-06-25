@@ -20,6 +20,7 @@ const login = (state = initialState, action) => {
 		}
 		case Actions.LOGIN_ERROR: {
 			return {
+				...initialState,
 				success: false,
 				error: action.payload,
 				loading: false
@@ -27,6 +28,7 @@ const login = (state = initialState, action) => {
 		}
 		case Actions.LOGIN_LOADING: {
 			return {
+				...initialState,
 				success: false,
 				error: action.payload,
 				loading: true

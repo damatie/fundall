@@ -21,7 +21,7 @@ export function saveLeaveTypes(data) {
     });
 		request.then(response => {
       console.log(response)
-      if(response.data.success /*&& response.data.message === ' created successfully'*/) {
+      // if(response.data.success /*&& response.data.message === ' created successfully'*/) {
         swal.fire({
           title: 'New leave type',
           text: response.data.message,
@@ -32,18 +32,7 @@ export function saveLeaveTypes(data) {
           type: SAVE_LEAVE_TYPE,
           // payload: response.data
         });
-      } else {
-        swal.fire({
-          title: 'New leave type',
-          text: response.data.message,
-          icon: 'info',
-          timer: 3000,
-        })
-        return dispatch({
-          type: LEAVE_TYPE_ERROR,
-          payload: 'Error'
-        });
-      }
+     
     }).catch(e => {
       console.log(e);
       swal.fire({
