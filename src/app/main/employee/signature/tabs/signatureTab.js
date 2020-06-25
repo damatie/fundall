@@ -4,11 +4,14 @@ import swal from 'sweetalert2';
 import 'react-drop-zone/dist/styles.css';
 import { Button } from '@material-ui/core';
 import { useAuth } from 'app/hooks/useAuth';
-
+import axios from 'axios';
+import { useHistory } from 'react-router';
 
 
 const SignatureTab = () => {
   const [file, setFile] = useState('');
+
+  const history = useHistory();
 
   const handleFile = (file, text) => {
     // if(file.name.match(/.(png|jpg|jpeg|PNG|JPG|JPEG)/)) {
@@ -22,15 +25,26 @@ const SignatureTab = () => {
     if(file !== '') {
       const formData = new FormData();
       formData.append('signature', file);
-      fetch('https://hris-cbit.herokuapp.com/api/v1/auth/employee', {
+      axios({
         method: 'patch',
-        headers: {
-          Authorization: `JWT ${auth().getToken}`
-        },
-        body: formData
-      }).then(res => res.json()).then(data => {
-        console.log(data);
-      }).catch(e => console.error(e));
+        url: 'https://hris-cbit.herokuapp.com/api/v1/auth/employee/',
+        data: formData,
+        headers: {'Content-Type': 'multipart/form-data', Authorization: `JWT ${auth().getToken}` }
+        })
+        .then(function (response) {
+            //handle success
+            swal.fire({
+              title: 'Signature upload',
+              text: 'signature uploaded successfully',
+              icon: 'success',
+              timer: 3000
+            })
+            history.push('/employee/onboarding')
+        })
+        .catch(function (response) {
+            //handle error
+            console.log(response);
+        });
     }
     
   }

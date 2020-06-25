@@ -158,7 +158,8 @@ function NewLeaveTypeTab(props) {
 					type="text"
 					name="description"
           label="Description"
-          rows='5'
+					rows="5"
+					multiline
 					validations={{
 						minLength: 1
 					}}

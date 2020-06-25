@@ -96,9 +96,17 @@ const navigationConfig = [
 			{
 				id: 'leave_options',
 				title: 'Leave options',
-				type: 'item',
+				type: 'collapse',
 				url: '/hr/leave_options',
 				icon: 'event',
+				children: [
+					{
+						id: 'new_leave_options',
+						title: 'New leave options',
+						type: 'item',
+						url: '/hr/leave_options/new',
+					}
+				]
 			},
 			{
 				id: 'employee_leave',

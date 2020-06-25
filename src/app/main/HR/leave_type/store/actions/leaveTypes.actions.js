@@ -35,17 +35,17 @@ export function getLeaveTypes() {
   console.log(leave)
 
 	return dispatch => {
-      // const request = axios.get('https://hris-cbit.herokuapp.com/api/v1/leave-type/', {
-      //   headers: {
-      //     Authorization: `JWT ${useAuth().getToken}`
-      //   }
-      // });
-      // request.then(res => {
+      const request = axios.get('https://hris-cbit.herokuapp.com/api/v1/leave-type/', {
+        headers: {
+          Authorization: `JWT ${useAuth().getToken}`
+        }
+      });
+      request.then(res => {
         dispatch({
           type: GET_LEAVE_TYPES,
-          payload: leave
+          payload: res.data.data
         })
-      // })
+      })
   }
 }
 

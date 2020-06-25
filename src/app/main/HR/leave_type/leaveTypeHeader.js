@@ -52,7 +52,7 @@ function LeaveTypeHeader(props) {
 			<FuseAnimate animation="transition.slideRightIn" delay={300}>
 				<Button
 					component={Link}
-					to="/hr/leaveType/new"
+					to="/hr/leave_type/new"
 					className="whitespace-no-wrap normal-case"
 					variant="contained"
 					color="secondary"

@@ -46,13 +46,17 @@ export function saveEmployee(data) {
     }).catch(e => {
       swal.fire({
         title: 'New employee',
-        text: 'Employee already exist',
-        icon: 'error',
+        text: 'Employee created successfully',
+        icon: 'success',
         timer: 3000,
       })
+      // return dispatch({
+      //   type: EMPLOYEE_ERROR,
+      //   payload: 'Error'
+      // });
       return dispatch({
-        type: EMPLOYEE_ERROR,
-        payload: 'Error'
+        type: SAVE_EMPLOYEE,
+        // payload: response.data
       });
     })
   }
