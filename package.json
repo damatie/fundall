@@ -76,7 +76,8 @@
         "sweetalert2": "^9.15.1",
         "typeface-muli": "1.1.3",
         "velocity-animate": "1.5.2",
-        "velocity-react": "1.4.3"
+        "velocity-react": "1.4.3",
+        "yarn": "^1.22.4"
     },
     "resolutions": {
         "react": "16.13.1",
