@@ -174,7 +174,7 @@ function JWTRegisterTab(props) {
 					color="primary"
 					className="w-full mx-auto mt-16 normal-case"
 					aria-label="REGISTER"
-					disabled={!isFormValid || register.loading}
+					disabled={!isFormValid}
 					value="legacy"
 				>
 					Register

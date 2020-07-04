@@ -23,7 +23,7 @@ function BusinessUnitsHeader(props) {
 				</FuseAnimate>
 				<FuseAnimate animation="transition.slideLeftIn" delay={300}>
 					<Typography className="hidden sm:flex mx-0 sm:mx-12" variant="h6">
-						Business units
+						Entities
 					</Typography>
 				</FuseAnimate>
 			</div>
@@ -57,7 +57,7 @@ function BusinessUnitsHeader(props) {
 					variant="contained"
 					color="secondary"
 				>
-					<span className="hidden sm:flex">Add New Business Units</span>
+					<span className="hidden sm:flex">Add New Entity</span>
 					<span className="flex sm:hidden">New</span>
 				</Button>
 			</FuseAnimate>

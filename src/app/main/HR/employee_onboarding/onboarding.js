@@ -3,8 +3,8 @@ import withReducer from 'app/store/withReducer';
 import React, { useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 // import { useParams } from 'react-router-dom';
-// import * as Actions from './store/actions';
-// import reducer from './store/reducers';
+import * as Actions from './store/actions';
+import reducer from './store/reducers';
 import OnboardingHeader from './onboardingHeader';
 import OnboardingList from './onboardingList';
 
@@ -18,6 +18,7 @@ function Onboarding(props) {
 		// dispatch(Actions.getFilters());
 		// dispatch(Actions.getFolders());
 		// dispatch(Actions.getLabels());
+		dispatch(Actions.getOnboardings());
 	}, [dispatch]);
 
 	return (
@@ -35,4 +36,4 @@ function Onboarding(props) {
 	);
 }
 
-export default withReducer('onboarding')(Onboarding);
+export default withReducer('onboarding', reducer)(Onboarding);

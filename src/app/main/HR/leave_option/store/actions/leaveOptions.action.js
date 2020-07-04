@@ -7,44 +7,31 @@ export const SET_LEAVE_OPTIONS_SEARCH_TEXT = 'SET LEAVE OPTIONS SEARCH TEXT';
 export function getLeaveOptions() {
   const leave = [
     {  
-      businessUnit:"c-bit",
+      businessUnit:"Spring rock group",
       calendarStartMonth:"june",
       halfDayRequests:true,
       skipHolidays:false,
       description:"work leave",
-      department:"c-bit",
+      department:"Support service",
       workingHours:"9-5",
       allowLeaveTransfer:true,
-      hrManager:"jane doe",
+      hrManager:"Joy",
       selectWeekendStartDay:"friday",
       selectWeekendEndDay:"sunday"
     },
     {  
-      businessUnit:"5cee",
+      businessUnit:"Spring rock group",
       calendarStartMonth:"june",
       halfDayRequests:true,
-      skipHolidays:true,
+      skipHolidays:false,
       description:"work leave",
-      department:"c-bit",
-      workingHours:"9-5",
-      allowLeaveTransfer:false,
-      hrManager:"jane doe",
-      selectWeekendStartDay:"friday",
-      selectWeekendEndDay:"sunday"
-    },
-    {  
-      businessUnit:"Spring rock",
-      calendarStartMonth:"may",
-      halfDayRequests:false,
-      skipHolidays:true,
-      description:"work leave",
-      department:"c-bit",
+      department:"Human resources",
       workingHours:"9-5",
       allowLeaveTransfer:true,
-      hrManager:"jane doe",
+      hrManager:"Amaka",
       selectWeekendStartDay:"friday",
       selectWeekendEndDay:"sunday"
-    },
+    }
   ];
 
   console.log(leave)

@@ -9,10 +9,19 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Redirect } from 'react-router';
 import MenuItem from '@material-ui/core/MenuItem';
 import { months, days } from 'data';
+import * as businessUnitsActions from 'app/main/HR/business_unit/store/actions';
+import * as departmentActions from 'app/main/HR/business_unit/department/store/actions';
+import withReducer from 'app/store/withReducer';
+import { CircularProgress } from '@material-ui/core';
+import { loaderStyles } from 'styles/loader';
+
 
 function NewLeaveOptionTab(props) {
 	const dispatch = useDispatch();
+	const loader = loaderStyles();
 	const leaveOption = useSelector(({ leaveOption }) => leaveOption.leaveOption);
+	const businessUnits = useSelector(({ businessUnits }) => businessUnits.businessUnits);
+	const departments = useSelector(({ departments }) => departments.departments);
 
 	const [isFormValid, setIsFormValid] = useState(true);
 	const formRef = useRef(null);
@@ -24,6 +33,7 @@ function NewLeaveOptionTab(props) {
 		// 	});
 		// 	disableButton();
 		// }
+		dispatch(businessUnitsActions.getBusinessUnits());
 	}, []);
 
 	function disableButton() {
@@ -36,6 +46,10 @@ function NewLeaveOptionTab(props) {
 
 	function handleSubmit(model) {
 		dispatch(Actions.saveLeaveOptions(model));
+	}
+
+	const getDepartments = id => {
+		departmentActions.getDepartments(id);
 	}
 
 	if(leaveOption.success) {
@@ -61,10 +75,13 @@ function NewLeaveOptionTab(props) {
           // validations="not-equals:none"
           validationError="requried"
           variant="outlined"
-          required
+					required
         >
-          <MenuItem value="yes">5cee</MenuItem>
-          <MenuItem value="no">Cbit</MenuItem>
+					{businessUnits.data.map(item => (
+						<MenuItem value={item.entityName} onClick={e => {
+							getDepartments(item.id);
+						}}>{item.entityName}</MenuItem>
+					))}
         </SelectFormsy>
 
         <SelectFormsy
@@ -77,8 +94,15 @@ function NewLeaveOptionTab(props) {
           variant="outlined"
           required
         >
-          <MenuItem value="yes">Accounting</MenuItem>
-          <MenuItem value="no">Human resources</MenuItem>
+					{departments.data.length === 0 ? 
+						<div>
+							<CircularProgress color='secondary' className={loader.loader}/>
+						</div>
+						:
+						departments.data.map(item => (
+							<MenuItem value="no">Human resources</MenuItem>
+						))
+					}
         </SelectFormsy>
 
         <SelectFormsy

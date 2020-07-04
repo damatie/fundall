@@ -9,16 +9,30 @@ import { useDispatch, useSelector } from 'react-redux';
 import { withRouter, useParams } from 'react-router-dom';
 import { useDeepCompareEffect } from '@fuse/hooks';
 import EmployeeTab from './tabs/employeeTab';
+import { Divider } from '@material-ui/core';
 // import * as Actions from '../store/actions';
 // import MailListItem from './MailListItem';
 
+
 function OnboardingList(props) {
 	const dispatch = useDispatch();
-	// const mails = useSelector(({ mailApp }) => mailApp.mails.entities);
+	const onboarding = useSelector(({ onboarding }) => onboarding.onboarding.data);
 	// const searchText = useSelector(({ mailApp }) => mailApp.mails.searchText);
 
 	const routeParams = useParams();
 	const [filteredData, setFilteredData] = useState([{
+    name: 'Dave',
+    time: 'jun 25',
+    avatar: '',
+    subject: 'Onboarding from from 5cee'
+	},
+	{
+    name: 'Dave',
+    time: 'jun 25',
+    avatar: '',
+    subject: 'Onboarding from from 5cee'
+	},
+	{
     name: 'Dave',
     time: 'jun 25',
     avatar: '',
@@ -67,9 +81,12 @@ function OnboardingList(props) {
 					animation: 'transition.slideUpBigIn'
 				}}
 			>
-				{filteredData.map((mail, i) => (
-          // <MailListItem mail={mail} key={mail.id} />
-          <EmployeeTab data={mail} key={i}/>
+				{onboarding.map((mail, i) => (
+					// <MailListItem mail={mail} key={mail.id} />
+					<>
+          <EmployeeTab data={mail} key={mail.id} index={i}/>
+					<Divider />
+					</>
 				))}
 			</FuseAnimateGroup>
 		</List>

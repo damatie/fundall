@@ -22,6 +22,8 @@ import { Link, useParams } from 'react-router-dom';
 import * as Actions from './store/actions';
 import reducer from './store/reducers';
 import NewLeaveOptionTab from './tabs/newLeaveOptionTab';
+import businessUnitsReducers from 'app/main/HR/business_unit/store/reducers';
+import departmentsReducers from 'app/main/HR/business_unit/department/store/reducers';
 
 const useStyles = makeStyles(theme => ({
 	productImageFeaturedStar: {
@@ -122,5 +124,6 @@ function LeaveOption(props) {
 		/>
 	);
 }
-
+withReducer('businessUnits', businessUnitsReducers)(LeaveOption);
+withReducer('departments', departmentsReducers)(LeaveOption);
 export default withReducer('leaveOption', reducer)(LeaveOption);

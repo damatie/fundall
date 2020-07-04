@@ -23,6 +23,7 @@ const AcknowledgementOfHFWPP = ({setIndex}) => {
   const auth = useAuth;
 
   useEffect(() => {
+    console.log(auth().getId)
     const request = axios.get(`https://hris-cbit.herokuapp.com/api/v1/onboarding/${auth().getId}`, {
       headers: {
         Authorization: `JWT ${auth().getToken}`
@@ -157,7 +158,7 @@ const AcknowledgementOfHFWPP = ({setIndex}) => {
                     type="text"
                     name="name"
                     label="Employee number"
-                    value={`${userData.data.employeeNumber}`}
+                    value={`${userData.data.employeeNumber ? userData.data.employeeNumber : ''}`}
                     validations={{
                         minLength: 1,
                     }}

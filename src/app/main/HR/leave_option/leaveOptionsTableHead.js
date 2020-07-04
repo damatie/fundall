@@ -20,7 +20,7 @@ const rows = [
 		id: 'business_unit',
 		align: 'left',
 		disablePadding: false,
-		label: 'Business unit',
+		label: 'Entity',
 		sort: true
 	},
 	{

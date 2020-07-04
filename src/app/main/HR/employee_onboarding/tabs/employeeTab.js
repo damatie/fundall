@@ -7,6 +7,7 @@ import clsx from 'clsx';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { withRouter, useParams } from 'react-router-dom';
+import moment from 'moment'
 
 const pathToRegexp = require('path-to-regexp');
 
@@ -44,37 +45,57 @@ const EmployeTab = props => {
 		<ListItem
 			dense
 			button
-			// onClick={() =>
-			// 	props.history.push(
-			// 		toPath({
-			// 			...routeParams,
-			// 			mailId: props.mail.id
-			// 		})
-			// 	)
-			// }
+			onClick={() =>
+				props.history.push(
+					`/hr/employee_onboarding_list/employee/${props.data.employeeId}`
+				)
+			}
 			className={'py-16 px-8'}
 		>
 			<div className="flex flex-1 flex-col relative overflow-hidden">
 				<div className="flex items-center justify-between px-16 pb-8">
 					<div className="flex items-center">
-						{props.data.avatar ? (
-							<Avatar alt={props.data.name} src={props.data.avatar} />
-						) : (
-							<Avatar className={classes.avatar}>{props.data.name}</Avatar>
-						)}
+						{props.index === 1 ?	<Avatar alt={'props.data.name'} src={'assets/images/avatars/vincent.jpg'} /> : <Avatar alt={'props.data.name'} src={'assets/images/avatars/andrew.jpg'} />}
 						<Typography variant="subtitle1" className="mx-8">
-							{props.data.name}
+							{props.index === 1 ? 'Dave' : 'David'}
 						</Typography>
 					</div>
-					<Typography variant="subtitle1">{props.data.time}</Typography>
-				</div>
-
-				<div className="flex flex-col px-16 py-0">
-					<Typography className="truncate">{props.data.subject}</Typography>
+					<MailChip color='gold' className='' title='pending'/>
+					<Typography variant="subtitle1">{moment(props.data.createdAt).format("dddd, MMMM Do YYYY")}</Typography>
 				</div>
 			</div>
 		</ListItem>
 	);
 };
+
+const useStyles2 = makeStyles(theme => ({
+	root: {
+		display: 'flex',
+		alignItems: 'center',
+		height: 21,
+		borderRadius: 2,
+		padding: '0 6px',
+		fontSize: 11,
+		backgroundColor: 'rgba(0,0,0,.08);'
+	},
+	color: {
+		width: 8,
+		height: 8,
+		marginRight: 4,
+		borderRadius: '50%'
+	}
+}));
+
+function MailChip(props) {
+	const classes = useStyles2();
+
+	return (
+		<div className={clsx(classes.root, props.className)}>
+			<div className={classes.color} style={{ backgroundColor: props.color }} />
+			<div>{props.title}</div>
+		</div>
+	);
+}
+
 
 export default withRouter(EmployeTab);
