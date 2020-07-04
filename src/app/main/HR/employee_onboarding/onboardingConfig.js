@@ -6,10 +6,10 @@ const OnboardingConfig  = {
 		layout: {}
 	},
 	routes: [
-		// {
-		// 	path: '/hr/employee_management/new',
-		// 	component: React.lazy(() => import('./employee/employee'))
-		// },
+		{
+			path: '/hr/employee_onboarding_list/employee/:id',
+			component: React.lazy(() => import('./onboardingForms'))
+		},
 		{
 			path: '/hr/employee_onboarding_list',
 			component: React.lazy(() => import('./onboarding'))

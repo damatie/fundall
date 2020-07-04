@@ -34,7 +34,7 @@ function BusinessUnitsTable(props) {
 
 	useEffect(() => {
 		if (searchText.length !== 0) {
-			setData(_.filter(businessUnits, item => item.entity.toLowerCase().includes(searchText.toLowerCase())));
+			setData(_.filter(businessUnits, item => item.entityName.toLowerCase().includes(searchText.toLowerCase())));
 			setPage(0);
 		} else {
 			setData(businessUnits);
@@ -158,7 +158,7 @@ function BusinessUnitsTable(props) {
 											{n.location}
 										</TableCell>
 
-										<TableCell component="th" scope="row" align="right">
+										<TableCell component="th" scope="row" align="left">
 											{n.description}
 										</TableCell>
 									</TableRow>

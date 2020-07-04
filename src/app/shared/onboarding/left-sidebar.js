@@ -22,15 +22,15 @@ const formList = [
   },
   {
     id: 4,
-    title: 'Authorization form for direct deposit of reimbursable expenses'
+    title: 'Springrock driving and seat belt policy'
   },
   {
     id: 5,
-    title: 'Axa Mansard enrollment template'
+    title: 'Employee handbook acknowledgement'
   },
   {
     id: 6,
-    title: 'Axa Mansard geriatrics health plan application'
+    title: 'Authorization form for direct deposit of reimbursable expenses'
   },
   {
     id: 7,
@@ -38,11 +38,11 @@ const formList = [
   },
   {
     id: 8,
-    title: 'Candidate evaluation form'
+    title: 'Axa Mansard enrollment template'
   },
   {
     id: 9,
-    title: 'Springrock driving and seat belt policy'
+    title: 'Axa Mansard geriatrics health plan application'
   },
   {
     id: 10,
@@ -54,7 +54,7 @@ const formList = [
   },
   {
     id: 12,
-    title: 'Employee handbook acknowledgement'
+    title: 'Candidate evaluation form'
   },
   {
     id: 13,

@@ -153,7 +153,7 @@ const AuthorizationForPayrollDeductions = () => {
                     type="text"
                     name="name"
                     label="Employee number"
-                    value={`${userData.data.employeeNumber}`}
+                    value={`${userData.data.employeeNumber ? userData.data.employeeNumber : ''}`}
                     validations={{
                         minLength: 1,
                     }}

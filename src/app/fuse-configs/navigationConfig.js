@@ -35,6 +35,13 @@ const navigationConfig = [
 				url: '/hr/employee_management',
 				children: [
 					{
+						id: 'employee_list',
+						title: 'Employes management',
+						type: 'item',
+						url: '/hr/employee_management',
+						exact: true
+					},
+					{
 						id: 'new_employee',
 						title: 'New employee',
 						type: 'item',
@@ -47,27 +54,86 @@ const navigationConfig = [
 		]
 	},
 	{
+		id: 'roles&Resources',
+		title: 'Roles and Resources',
+		translate: 'Roles and Resources',
+		type: 'group',
+		icon: 'apps',
+		auth: authRoles.admin,
+		children: [
+			{
+				id: 'roles',
+				title: 'Roles',
+				translate: 'Roles',
+				type: 'collapse',
+				icon: 'assignment_turned_in',
+				url: '/hr/roles',
+				children: [
+					{
+						id: 'roles_list',
+						title: 'Roles',
+						type: 'item',
+						url: '/hr/roles',
+						exact: true
+					},
+					{
+						id: 'new_role',
+						title: 'New role',
+						type: 'item',
+						url: '/hr/roles/new',
+						exact: true
+					},
+				]
+			},
+			{
+				id: 'resources',
+				title: 'Resources',
+				translate: 'Resources',
+				type: 'collapse',
+				icon: 'layers',
+				url: '/hr/resources',
+				children: [
+					{
+						id: 'resources_list',
+						title: 'Resources',
+						type: 'item',
+						url: '/hr/resources',
+						exact: true
+					},
+					{
+						id: 'new_resources',
+						title: 'New resources',
+						type: 'item',
+						url: '/hr/rources/new',
+						exact: true
+					},
+				]
+			},
+		
+		]
+	},
+	{
 		id: 'business_unit_management',
-		title: 'Business unit management',
-		translate: 'Business unit management',
+		title: 'Entities',
+		translate: 'Company management',
 		type: 'group',
 		icon: 'business',
 		auth: authRoles.admin,
 		children: [
 			{
 				id: 'business_unit',
-				title: 'Business unit',
+				title: 'Entities',
 				type: 'item',
 				icon: 'business',
 				url: '/hr/business_unit',
 			},
-			{
-				id: 'department',
-				title: 'Department',
-				type: 'item',
-				url: '/hr/department',
-				icon: 'work_outline',
-			},
+			// {
+			// 	id: 'department',
+			// 	title: 'Department',
+			// 	type: 'item',
+			// 	url: '/hr/department',
+			// 	icon: 'work_outline',
+			// },
 		]
 	},
 	{
@@ -90,7 +156,6 @@ const navigationConfig = [
 						type: 'item',
 						url: '/hr/leave_type/new',
 					}
-
 				]
 			},
 			{

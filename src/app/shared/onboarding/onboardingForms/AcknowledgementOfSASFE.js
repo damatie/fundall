@@ -181,7 +181,7 @@ const AcknowledgementOfSASFE = () => {
                 type="number"
                 name="name"
                 label="Employee number"
-                value={`${userData.data.employeeNumber}`}
+                value={`${userData.data.employeeNumber ? userData.data.employeeNumber : ''}`}
                 validations={{
                   minLength: 1,
                 }}

@@ -93,7 +93,7 @@ function SettingsPanel() {
 					paper: classes.dialogPaper
 				}}
 			>
-				<FuseScrollbars className="p-24 sm:p-32">
+				{/* <FuseScrollbars className="p-24 sm:p-32">
 					<IconButton className="fixed top-0 ltr:right-0 rtl:left-0 z-10" onClick={handleClose}>
 						<Icon>close</Icon>
 					</IconButton>
@@ -103,7 +103,7 @@ function SettingsPanel() {
 					</Typography>
 
 					<FuseSettings />
-				</FuseScrollbars>
+				</FuseScrollbars> */}
 			</Dialog>
 		</>
 	);

@@ -20,7 +20,7 @@ const rows = [
 		id: 'entity_name',
 		align: 'left',
 		disablePadding: false,
-		label: 'Business unit',
+		label: 'Entity',
 		sort: true
 	},
 	{
@@ -46,7 +46,7 @@ const rows = [
 	},
 	{
 		id: 'description',
-		align: 'right',
+		align: 'left',
 		disablePadding: false,
 		label: 'Description',
 		sort: true

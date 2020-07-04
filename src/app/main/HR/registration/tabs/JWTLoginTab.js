@@ -106,7 +106,7 @@ function JWTLoginTab(props) {
 					color="primary"
 					className="w-full mx-auto mt-16 normal-case"
 					aria-label="LOG IN"
-					disabled={!isFormValid || login.loading}
+					disabled={!isFormValid}
 					value="legacy"
 				>
 					Login

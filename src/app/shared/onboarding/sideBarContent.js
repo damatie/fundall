@@ -7,6 +7,8 @@ import AuthorizationFormForDDORE from './onboardingForms/AuthorizationFormForDDO
 import AxaMansardEnrollmentTemplate from './onboardingForms/AxamansardEnrollmentTemplate';
 import AxaMansardGeriatricsForm from './onboardingForms/axamansardGeriatrics';
 import BusinessCardRequest from './onboardingForms/BusinessCardRequest';
+import DrivingAndSeatBeltPolicy from './onboardingForms/DrivingAndSeatBeltPolicy';
+import EmployeeHandbookAcknowledgement from './onboardingForms/EmployeeHandbookAcknowledgement';
 
 
 const SideBarContent = () => {
@@ -27,16 +29,25 @@ const SideBarContent = () => {
       
     }
     case 4: {
-      return <AuthorizationFormForDDORE />
+      
+      return <DrivingAndSeatBeltPolicy />
     }
     case 5: {
-      return <AxaMansardEnrollmentTemplate />
+      
+      return <EmployeeHandbookAcknowledgement />
     }
     case 6: {
-      return <AxaMansardGeriatricsForm />
+      return <AuthorizationFormForDDORE />
+      
     }
     case 7: {
       return <BusinessCardRequest />
+    }
+    case 8: {
+      return <AxaMansardEnrollmentTemplate />
+    }
+    case 9: {
+      return <AxaMansardGeriatricsForm />
     }
     default: {
       return <></>

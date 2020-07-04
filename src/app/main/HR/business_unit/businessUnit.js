@@ -104,7 +104,7 @@ function BusinessUnit(props) {
 									<Icon className="text-20">
 										{theme.direction === 'ltr' ? 'arrow_back' : 'arrow_forward'}
 									</Icon>
-									<span className="mx-4">Business unit</span>
+									<span className="mx-4">Entities</span>
 								</Typography>
 							</FuseAnimate>
 
@@ -123,11 +123,11 @@ function BusinessUnit(props) {
 								<div className="flex flex-col min-w-0 mx-8 sm:mc-16">
 									<FuseAnimate animation="transition.slideLeftIn" delay={300}>
 										<Typography className="text-16 sm:text-20 truncate">
-										  New Business unit
+										  New Entity
 										</Typography>
 									</FuseAnimate>
 									<FuseAnimate animation="transition.slideLeftIn" delay={300}>
-										<Typography variant="caption">Business unit details</Typography>
+										<Typography variant="caption">Entity details</Typography>
 									</FuseAnimate>
 								</div>
 							</div>
@@ -143,7 +143,7 @@ function BusinessUnit(props) {
 					scrollButtons="auto"
 					classes={{ root: 'w-full h-64' }}
 				>
-					<Tab className="h-64 normal-case" label="Business unit" />
+					<Tab className="h-64 normal-case" label="Entity" />
 					<Tab className="h-64 normal-case" label="Departments" />
 				</Tabs> : null
 			}

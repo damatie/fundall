@@ -17,6 +17,11 @@ import SignatureConfig from 'app/main/employee/signature/signatureConfig';
 import ProjectDashboardAppConfig from 'app/main/employee/dashboard/ProjectDashboardAppConfig';
 import OnboardingConfig from 'app/main/HR/employee_onboarding/onboardingConfig';
 import BusinessUnitsConfig from 'app/main/HR/business_unit/businessUnitsConfig';
+import AllocateLeaveConfig from 'app/main/HR/employee_leave/allocateLeaveConfig';
+import CalendarAppConfig from 'app/main/employee/calendar/CalendarAppConfig';
+import ExternalRegConfig from 'app/main/external_user/registration/externalRegConfig';
+import RolesConfig from 'app/main/HR/roles/rolesConfig';
+import ResourcesConfig from 'app/main/HR/resources/resourceConfig';
 
 const routeConfigs = [
 	// ExampleConfig,
@@ -34,13 +39,18 @@ const routeConfigs = [
 	LeaveOptionsConfig,
 	OnboardingConfig,
 	BusinessUnitsConfig,
+	AllocateLeaveConfig,
+	CalendarAppConfig,
+	ExternalRegConfig,
+	RolesConfig,
+	ResourcesConfig,
 ];
 
 const routes = [
 	...FuseUtils.generateRoutesFromConfigs(routeConfigs),
 	{
 		path: '/',
-		component: () => <Redirect to="/example" />
+		component: () => <Redirect to="/" />
 	}
 ];
 
