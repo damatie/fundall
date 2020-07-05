@@ -96,7 +96,7 @@ function Employee(props) {
 								<FuseAnimate animation="transition.expandIn" delay={300}>
 										<img
 											className="w-32 sm:w-48 rounded"
-											src="assets/images/ecommerce/product-image-placeholder.png"
+											src="assets/images/e-commerce/product-image-placeholder.png"
 											alt={'form.name'}
 										/>
 								</FuseAnimate>
