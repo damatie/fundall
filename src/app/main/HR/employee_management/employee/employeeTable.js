@@ -20,7 +20,12 @@ function EmployeesTable(props) {
 	const searchText = useSelector(({ employees }) => employees.employees.searchText);
 
 	const [selected, setSelected] = useState([]);
-	const [data, setData] = useState(employees);
+	const [data, setData] = useState([
+  { id: 1, firstName: 'fred',   lastName: 'Barney', email: 'fredB@gmail.com', role: 'Employee' },
+  { id: 2, firstName: 'Frodd',   lastName: 'Cole', email: 'froddCole@gmail.com', role: 'Hr' },
+  { id: 3, firstName: 'Hugh',   lastName: 'Jackman', email: 'HughJackman@gmail.com', role: 'employee' },
+  { id: 4, firstName: 'John',   lastName: 'Doe', email: 'JohnDoe@gmail.com', role: 'Hr' },
+]);
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(10);
 	const [order, setOrder] = useState({
@@ -123,6 +128,7 @@ function EmployeesTable(props) {
 						)
 							.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
 							.map(n => {
+								console.log(n);
 								const isSelected = selected.indexOf(n.id) !== -1;
 								return (
 									<TableRow

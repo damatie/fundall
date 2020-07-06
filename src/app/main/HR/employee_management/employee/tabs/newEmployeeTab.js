@@ -1,4 +1,5 @@
-import { TextFieldFormsy } from '@fuse/core/formsy';
+import { TextFieldFormsy, SelectFormsy } from '@fuse/core/formsy';
+import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
 import Icon from '@material-ui/core/Icon';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -121,51 +122,18 @@ function NewEmployeeTab(props) {
 					required
 				/>
 
-				<TextFieldFormsy
+				<SelectFormsy
 					className="mb-16"
-					type="password"
-					name="password"
-					label="Password"
-					validations={{
-						minLength: 4
-					}}
-					validationErrors={{
-						minLength: 'Min character length is 4'
-					}}
-					InputProps={{
-						endAdornment: (
-							<InputAdornment position="end">
-								<Icon className="text-20" color="action">
-									vpn_key
-								</Icon>
-							</InputAdornment>
-						)
-					}}
+					name="role"
+					label="Employee role"
+					value=""
 					variant="outlined"
 					required
-				/>
-
-				<TextFieldFormsy
-					className="mb-16"
-					type="password"
-					name="confirmPassword"
-					label="Confirm Password"
-					validations="equalsField:password"
-					validationErrors={{
-						equalsField: 'Passwords do not match'
-					}}
-					InputProps={{
-						endAdornment: (
-							<InputAdornment position="end">
-								<Icon className="text-20" color="action">
-									vpn_key
-								</Icon>
-							</InputAdornment>
-						)
-					}}
-					variant="outlined"
-					required
-				/>
+					requiredError='Must not be None'
+				>
+					<MenuItem value="hr">Hr</MenuItem>
+					<MenuItem value="employee">Employee</MenuItem>
+				</SelectFormsy>
 
 				<Button
 					type="submit"
