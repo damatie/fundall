@@ -11,46 +11,95 @@ import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import * as Actions from './store/actions';
 import SharedTableHead from 'app/shared/sharedTableHead';
+
 const rows = [
 	{
-		id: 'resource',
+		id: 'employee_name',
 		align: 'left',
 		disablePadding: false,
-		label: 'Resource name',
+		label: 'Employee name',
+		sort: true
+	},
+	{
+		id: 'leave_type',
+		align: 'left',
+		disablePadding: false,
+		label: 'Leave type',
+		sort: true
+	},
+	{
+		id: 'from_date',
+		align: 'left',
+		disablePadding: false,
+		label: 'From date',
+		sort: true
+	},
+	{
+		id: 'to_date',
+		align: 'right',
+		disablePadding: false,
+		label: 'To date',
+		sort: true
+	},
+	{
+		id: 'applied_on',
+		align: 'right',
+		disablePadding: false,
+		label: 'Applied on',
+		sort: true
+  },
+  {
+		id: 'status',
+		align: 'right',
+		disablePadding: false,
+		label: 'Status',
 		sort: true
 	}
 ];
 
+const dummy = [
+  {
+    name: 'David chinweike',
+    leaveType: 'Medical leave',
+    fromDate: '06 july 2020',
+    toDate: '20 july 2020',
+    appliedOn: '01 july 2020',
+    status: 'pending'
+  },
+  {
+    name: 'Samuel Jobs',
+    leaveType: 'Vacation leave',
+    fromDate: '10 july 2020',
+    toDate: '20 july 2020',
+    appliedOn: '06 july 2020',
+    status: 'approved'
+  },
+  {
+    name: 'Maxwell sweeter',
+    leaveType: 'Maternity leave',
+    fromDate: '01 july 2020',
+    toDate: '30 july 2020',
+    appliedOn: '01 june 2020',
+    status: 'rejected'
+  }
+]
 
-function ResourcesTable(props) {
+function LeaveSummaryTable(props) {
 	const dispatch = useDispatch();
-	const resources = useSelector(({ resources }) => resources.resources);
-	const searchText = useSelector(({ resources }) => resources.resources.searchText);
 
 	const [selected, setSelected] = useState([]);
-	const [data, setData] = useState(resources.data);
+	const [data, setData] = useState(dummy);
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(10);
-	const [reload, setReload] = useState(false);
 	const [order, setOrder] = useState({
 		direction: 'asc',
 		id: null
 	});
 
 	useEffect(() => {
-		dispatch(Actions.getResources());
-	}, [dispatch, reload]);
-
-	useEffect(() => {
-		if (searchText.length !== 0) {
-			setData(_.filter(resources, item => item.name.toLowerCase().includes(searchText.toLowerCase())));
-			setPage(0);
-		} else {
-			setData(resources.data);
-		}
-	}, [resources, searchText]);
+		// dispatch(Actions.getBusinessUnits());
+	}, [dispatch]);
 
 	function handleRequestSort(event, property) {
 		const id = property;
@@ -75,7 +124,7 @@ function ResourcesTable(props) {
 	}
 
 	function handleClick(item) {
-		props.history.push(`/hr/resources/${item.id}`);
+		// props.history.push(`/hr/business_unit/details/${item.id}`);
 	}
 
 	function handleCheck(event, id) {
@@ -103,31 +152,18 @@ function ResourcesTable(props) {
 		setRowsPerPage(event.target.value);
 	}
 
-	const handleDelete = () => {
-		dispatch(Actions.deleteResources(selected));
-	};
-
-	
-
-	useEffect(() => {
-		if(resources.success) {
-			setReload(!reload)
-		}
-	})
-
 	return (
 		<div className="w-full flex flex-col">
 			<FuseScrollbars className="flex-grow overflow-x-auto">
 				<Table className="min-w-xl" aria-labelledby="tableTitle">
-				  <SharedTableHead
+					<SharedTableHead
 						numSelected={selected.length}
 						order={order}
 						onSelectAllClick={handleSelectAllClick}
 						onRequestSort={handleRequestSort}
             rowCount={data.length}
-						rows={rows}
-						handleDelete={handleDelete}
-						success={resources.success}
+            success={true}
+            rows={rows}
 					/>
 					<TableBody>
 						{_.orderBy(
@@ -160,18 +196,37 @@ function ResourcesTable(props) {
 										selected={isSelected}
 										onClick={event => handleClick(n)}
 									>
-										<TableCell className="w-64 text-center" padding="none">
-											<Checkbox
+										<TableCell className="w-64 text-center" padding="none" align="left">
+											{/* <Checkbox
 												checked={isSelected}
 												onClick={event => event.stopPropagation()}
 												onChange={event => handleCheck(event, n.id)}
-											/>
+											/> */}
 										</TableCell>
 
-										<TableCell component="th" scope="row">
+										<TableCell component="th" scope="row" align="left">
                       {n.name}
 										</TableCell>
 
+										<TableCell component="th" scope="row" align="left">
+											{n.leaveType}
+										</TableCell>
+
+										<TableCell className="truncate" component="th" scope="row" align="left">
+											{n.fromDate}
+										</TableCell>
+
+										<TableCell component="th" scope="row" align="right">
+											{n.toDate}
+										</TableCell>
+
+										<TableCell component="th" scope="row" align="right">
+											{n.appliedOn}
+										</TableCell>
+
+                    <TableCell component="th" scope="row" align="right">
+											<Status status={n.status} />
+										</TableCell>
 									</TableRow>
 								);
 							})}
@@ -196,6 +251,25 @@ function ResourcesTable(props) {
 			/>
 		</div>
 	);
+};
+
+const Status = ({status}) => {
+  switch(status) {
+    case 'pending': {
+      return <Icon className="text-yellow text-20">check_circle</Icon>
+    }
+    case 'approved': {
+      return <Icon className="text-green text-20">check_circle</Icon>
+    }
+    case 'rejected': {
+      return <Icon className="text-red text-20">check_circle</Icon>
+    }
+    default: {
+      return null;
+    }
+  }
+
+  return null;
 }
 
-export default withRouter(ResourcesTable);
+export default withRouter(LeaveSummaryTable);

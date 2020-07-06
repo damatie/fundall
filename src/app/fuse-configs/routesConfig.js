@@ -22,6 +22,7 @@ import CalendarAppConfig from 'app/main/employee/calendar/CalendarAppConfig';
 import ExternalRegConfig from 'app/main/external_user/registration/externalRegConfig';
 import RolesConfig from 'app/main/HR/roles/rolesConfig';
 import ResourcesConfig from 'app/main/HR/resources/resourceConfig';
+import LeaveSumamaryConfig from 'app/main/HR/leave_summary/leaveSummaryConfig';
 import EmployeeChecklistConfig from 'app/main/HR/employee_checklist/EmployeeChecklistConfig';
 
 const routeConfigs = [
@@ -45,6 +46,7 @@ const routeConfigs = [
 	ExternalRegConfig,
 	RolesConfig,
 	ResourcesConfig,
+	LeaveSumamaryConfig,
 	EmployeeChecklistConfig,
 ];
 

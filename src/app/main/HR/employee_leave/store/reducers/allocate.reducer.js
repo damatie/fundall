@@ -1,28 +1,29 @@
 import * as Actions from '../actions';
 
 const initialState = {
+  success: false,
   loading: false,
   error: false,
-  success: false,
-  data: {}
+  update: false,
 };
 
-export const resourceReducer = (state = initialState, actions) => {
+export const allocateReducer = (state = initialState, actions) => {
   switch(actions.type) {
-    case Actions.LOADING_RESOURCE: {
+    case Actions.ALLOCATING: {
       return {
         ...state,
         loading: true,
       }
     }
-    case Actions.CREATE_RESOURCE_SUCCESS: {
+    case Actions.ALLOCATE_LEAVE_SUCCESS: {
       return {
         ...state,
         loading: false,
-        success: true
+        success: true,
+        update: !state.update
       }
     }
-    case Actions.CREATE_RESOURCE_ERROR: {
+    case Actions.ALLOCATE_LEAVE_ERROR: {
       return {
         ...state,
         loading: false,
@@ -30,16 +31,8 @@ export const resourceReducer = (state = initialState, actions) => {
         error: true,
       }
     }
-    case Actions.GET_ONE_RESOURCES: {
-      return {
-        success: true,
-        ...state,
-        loading: false,
-        data: actions.payload
-      }
-    }
     default: {
       return state;
     }
   }
-}
+};

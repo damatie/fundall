@@ -37,11 +37,11 @@ function SharedTableHead(props) {
 		setSelectedProductsMenu(null)
 	}
 
-	// useEffect(() => {
-	// 	if(props.success) {
-	// 		setSelectedProductsMenu(null);
-	// 	}
-	// }, [props.success])
+	useEffect(() => {
+		if(props.success) {
+			setSelectedProductsMenu(null);
+		}
+	}, [props.success])
 
 	return (
 		<TableHead>

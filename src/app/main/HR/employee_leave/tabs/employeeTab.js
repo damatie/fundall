@@ -4,10 +4,18 @@ import ListItem from '@material-ui/core/ListItem';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { withRouter, useParams } from 'react-router-dom';
-import moment from 'moment'
+import moment from 'moment';
+import Button from '@material-ui/core/Button';
+import {
+	TextFieldFormsy
+} from '@fuse/core/formsy';
+import Formsy from 'formsy-react';
+import reducer from '../store/reducers';
+import ProgressBtn from 'app/shared/progressBtn';
+import * as Actions from '../store/actions';
 
 const pathToRegexp = require('path-to-regexp');
 
@@ -35,7 +43,7 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-const EmployeTab = props => {
+const EmployeeTab = props => {
 	const dispatch = useDispatch();
 	const routeParams = useParams();
 
@@ -44,23 +52,16 @@ const EmployeTab = props => {
 	return (
 		<ListItem
 			dense
-			button
-			// onClick={() =>
-			// 	props.history.push(
-			// 		`/hr/employee_onboarding_list/employee/${props.data.employeeId}`
-			// 	)
-			// }
-			// className={'py-16 px-8'}
 		>
 			<div className="flex flex-1 flex-col relative overflow-hidden">
 				<div className="flex items-center justify-between px-16 pb-8">
 					<div className="flex items-center">
-						{props.index === 1 ?	<Avatar alt={'props.data.name'} src={'assets/images/avatars/vincent.jpg'} /> : <Avatar alt={'props.data.name'} src={'assets/images/avatars/andrew.jpg'} />}
+					<Avatar alt={'props.data.name'} src={props.data.avatar} /> 
 						<Typography variant="subtitle1" className="mx-8">
-							{props.index === 1 ? 'Dave' : 'David'}
+							{props.data.name}
 						</Typography>
 					</div>
-					<MailChip color='green' className='' title='5 days'/>
+					<AllocateLeave id={props.data.id}/>
 				</div>
 			</div>
 		</ListItem>
@@ -85,16 +86,81 @@ const useStyles2 = makeStyles(theme => ({
 	}
 }));
 
-function MailChip(props) {
+
+const AllocateLeave = ({id}) => {
 	const classes = useStyles2();
+	const [showInput, setShowInput] = useState(false);
+	const [isFormValid, setIsFormValid] = useState(false);
+	const formRef = useRef(null);
+	const allocate = useSelector(({allocate}) => allocate.allocate);
+	const [userId, setUserId] = useState(null);
+	
+	const dispatch = useDispatch();
 
+	function disableButton()
+	{
+		setIsFormValid(false);
+	}
+
+	function enableButton()
+	{
+		setIsFormValid(true);
+	}
+
+	function handleSubmit(model)
+	{
+		console.info('submit', model);
+		dispatch(Actions.allocateLeave(
+			{
+				employeeId: id,
+				allotedYear: `${new Date().getFullYear()}`,
+				originalAllocatedDays: parseInt(model.name)
+			}
+		));
+	}
+	
+	useEffect(() => {
+		if(!allocate.loading) {
+			setUserId(null)
+		}
+	}, [allocate.loading])
 	return (
-		<div className={clsx(classes.root, props.className)}>
-			<div className={classes.color} style={{ backgroundColor: props.color }} />
-			<div>{props.title}</div>
-		</div>
+			<Formsy
+				onValidSubmit={handleSubmit}
+				onValid={enableButton}
+				onInvalid={disableButton}
+				ref={formRef}
+				className="flex items-center"
+			>
+			<TextFieldFormsy
+				className="m-16"
+				type="number"
+				name="name"
+				label="Leave days"
+				variant='outlined'
+				required
+				value='0'
+				size='small'
+			/>
+			{/* <Button
+				size='small'
+				type="submit"
+				variant="contained"
+				color="primary"
+				className="m-auto"
+				aria-label="LOG IN"
+				disabled={!isFormValid}
+			>
+				allocate
+			</Button> */}
+
+			<ProgressBtn success={userId === id ? allocate.success : false} loading={userId === id ? allocate.loading : false} content='Allocate' disable={!isFormValid} onClick={e => {
+				setUserId(id);
+				}}/>
+			
+			</Formsy>
 	);
-}
+};
 
 
-export default withRouter(EmployeTab);
+export default EmployeeTab;

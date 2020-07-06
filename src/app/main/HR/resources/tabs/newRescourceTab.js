@@ -6,16 +6,18 @@ import * as Actions from '../store/actions';
 import Formsy from 'formsy-react';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Redirect, useParams } from 'react-router';
+import { Redirect, useParams, useHistory } from 'react-router';
 import MenuItem from '@material-ui/core/MenuItem';
 import { useDeepCompareEffect } from '@fuse/hooks';
+import ProgressBtn from 'app/shared/progressBtn';
 
 function NewResourceTab(props) {
 	const dispatch = useDispatch();
-  // const role = useSelector(({ role }) => role.role);
+  const resources = useSelector(({ resource }) => resource.resource);
   const routeParams = useParams();
   const [name, setName] = React.useState('');
-  const [update, setUpdate] = useState(false);
+	const [update, setUpdate] = useState(false);
+	const history = useHistory();
 
 	const [isFormValid, setIsFormValid] = useState(true);
 	const formRef = useRef(null);
@@ -35,11 +37,10 @@ function NewResourceTab(props) {
 			
 
 			if (id === 'new') {
-        // dispatch(Actions.newProduct());
+        dispatch(Actions.getResources());
         setName('')
 			} else {
-        // dispatch(Actions.getProduct(routeParams));
-        setName('Employee management');
+        dispatch(Actions.getOneResources(id));
         setUpdate(true);
 			}
 		}
@@ -63,11 +64,13 @@ function NewResourceTab(props) {
 		}
 	}
 
-	// if(role.success) {
-	// 	return (
-	// 		<Redirect to='/hr/resources' />
-	// 	);
-	// }
+	
+
+	useEffect(() => {
+		if(resources.success) {
+			formRef.current.reset();
+		}
+	}, [resources.success])
 
 	return (
 		<div className="w-full">
@@ -76,14 +79,14 @@ function NewResourceTab(props) {
 				onValid={enableButton}
 				onInvalid={disableButton}
 				ref={formRef}
-				className="flex flex-col justify-center w-full"
+				className="flex flex-col justify-center w-full m-16"
 			>
 				<TextFieldFormsy
 					className="mb-16"
 					type="text"
 					name="name"
           label="Resources name"
-          value={name}
+          value={!resources.data.name ? '' : resources.data.name}
 					validations={{
 						minLength: 1
 					}}
@@ -103,7 +106,7 @@ function NewResourceTab(props) {
 					required
 				/>
 
-				<Button
+				{/* <Button
 					type="submit"
 					variant="contained"
 					color="primary"
@@ -113,7 +116,9 @@ function NewResourceTab(props) {
 					value="legacy"
 				>
 					{update ? 'Update' : 'Create'}
-				</Button>
+				</Button> */}
+
+				<ProgressBtn success={resources.success} loading={resources.loading} content={update ? 'Update' : 'Create'} disable={!isFormValid}/>
 			</Formsy>
 		</div>
 	);
