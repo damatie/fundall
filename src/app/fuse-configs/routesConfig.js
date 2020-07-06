@@ -23,6 +23,7 @@ import ExternalRegConfig from 'app/main/external_user/registration/externalRegCo
 import RolesConfig from 'app/main/HR/roles/rolesConfig';
 import ResourcesConfig from 'app/main/HR/resources/resourceConfig';
 import LeaveSumamaryConfig from 'app/main/HR/leave_summary/leaveSummaryConfig';
+import EmployeeChecklistConfig from 'app/main/HR/employee_checklist/EmployeeChecklistConfig';
 
 const routeConfigs = [
 	// ExampleConfig,
@@ -45,7 +46,8 @@ const routeConfigs = [
 	ExternalRegConfig,
 	RolesConfig,
 	ResourcesConfig,
-	LeaveSumamaryConfig
+	LeaveSumamaryConfig,
+	EmployeeChecklistConfig,
 ];
 
 const routes = [

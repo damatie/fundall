@@ -19,9 +19,11 @@ import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
-import * as Actions from '../store/actions';
-import reducer from '../store/reducers';
-import NewEmployeeTab from './tabs/newEmployeeTab';
+import PersonalInformation from './tabs/personalInformation';
+import EmploymentInformation from './tabs/employmentInformation';
+// import * as Actions from './store/actions';
+// import reducer from './store/reducers';
+// import EmployeeUnitTab from './tabs/newEmployeeTab';
 
 const useStyles = makeStyles(theme => ({
 	productImageFeaturedStar: {
@@ -58,11 +60,30 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-function Employee(props) {
-	const dispatch = useDispatch();
-	const theme = useTheme();
+function EmployeeUnit(props) {
+	// const dispatch = useDispatch();
+  const theme = useTheme();
+	const [tabValue, setTabValue] = useState(0);
+	
+	const params = useParams();
 
-	const classes = useStyles(props);
+  const classes = useStyles(props);
+  
+  function handleChangeTab(event, value) {
+		setTabValue(value);
+	}
+
+	// useEffect(() => {
+	// 	// if (register.error && (register.error.username || register.error.password || register.error.email)) {
+	// 	// 	formRef.current.updateInputsWithError({
+	// 	// 		...register.error
+	// 	// 	});
+	// 	// 	disableButton();
+	// 	// }
+	// 	if(params.id) {
+	// 		dispatch(Actions.getOneBusinessUnit(params.id))
+	// 	}
+	// }, []);
 
 	return (
 		<FusePageCarded
@@ -78,13 +99,13 @@ function Employee(props) {
 									className="normal-case flex items-center sm:mb-12"
 									component={Link}
 									role="button"
-									to="/hr/employee_management/"
+									to="/hr/business_unit/"
 									color="inherit"
 								>
 									<Icon className="text-20">
 										{theme.direction === 'ltr' ? 'arrow_back' : 'arrow_forward'}
 									</Icon>
-									<span className="mx-4">Employees</span>
+									<span className="mx-4">Employee details</span>
 								</Typography>
 							</FuseAnimate>
 
@@ -96,7 +117,7 @@ function Employee(props) {
 								<FuseAnimate animation="transition.expandIn" delay={300}>
 										<img
 											className="w-32 sm:w-48 rounded"
-											src="assets/images/e-commerce/product-image-placeholder.png"
+											src="assets/images/ecommerce/product-image-placeholder.png"
 											alt={'form.name'}
 										/>
 								</FuseAnimate>
@@ -107,20 +128,37 @@ function Employee(props) {
 										</Typography>
 									</FuseAnimate>
 									<FuseAnimate animation="transition.slideLeftIn" delay={300}>
-										<Typography variant="caption">Employee Detail</Typography>
+										<Typography variant="caption">Business unit details</Typography>
 									</FuseAnimate>
 								</div>
 							</div>
 					</div>
+      }
+      contentToolbar={ !params.id ? 
+				<Tabs
+					value={tabValue}
+					onChange={handleChangeTab}
+					indicatorColor="primary"
+					textColor="primary"
+					variant="scrollable"
+					scrollButtons="auto"
+					classes={{ root: 'w-full h-64' }}
+				>
+					<Tab className="h-64 normal-case" label="Personal Information" />
+					<Tab className="h-64 normal-case" label="Employment Information" />
+					<Tab className="h-64 normal-case" label="Document" />
+				</Tabs> : null
 			}
 			content={
-					<div className=" sm:p-24 ">
-						<NewEmployeeTab />
-					</div>
+        <div className=" sm:p-24 ">
+          {tabValue === 0 && (<PersonalInformation />)}
+          {tabValue === 1 && (<EmploymentInformation />)}
+        </div>
 			}
 			innerScroll
 		/>
 	);
 }
 
-export default withReducer('employees', reducer)(Employee);
+export default EmployeeUnit;
+// export default withReducer('EmployeeUnit', reducer)(EmployeeUnit);

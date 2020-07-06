@@ -7,6 +7,10 @@ const EmployeeManagementConfig = {
 	},
 	routes: [
 		{
+			path: '/hr/employee_management/employee_details',
+			component: React.lazy(() => import('./employee/employeeDetails'))
+		},
+		{
 			path: '/hr/employee_management/new',
 			component: React.lazy(() => import('./employee/employee'))
 		},
