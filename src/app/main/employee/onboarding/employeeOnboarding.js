@@ -4,16 +4,55 @@ import withReducer from 'app/store/withReducer';
 import * as Actions from '../store/actions';
 import reducer from '../store/reducer';
 import { useDispatch } from 'react-redux';
+import FusePageSimple from '@fuse/core/FusePageSimple';
+import { makeStyles } from '@material-ui/core/styles';
+import FuseAnimate from '@fuse/core/FuseAnimate';
+import Icon from '@material-ui/core/Icon';
+
+const useStyles = makeStyles({
+	layoutRoot: {}
+});
 
 const EmployeeOnboarding = () => {
+  const classes = useStyles();
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(Actions.getEmployeeProfile());
   }, []);
   return (
-    <div>
-      <Onboarding />
-    </div>
+    <FusePageSimple
+			classes={{
+				root: classes.layoutRoot
+			}}
+			header={
+				<div className="flex flex-col flex-1 p-24">
+					<div className="flex items-center py-24">
+						<div className="flex-1">
+              <div className="flex items-center flex-1">
+                <FuseAnimate animation="transition.expandIn" delay={300}>
+                  <Icon className="text-32">check_box</Icon>
+                </FuseAnimate>
+                <FuseAnimate animation="transition.slideLeftIn" delay={300}>
+                  <span className="text-24 mx-16">Onboarding forms</span>
+                </FuseAnimate>
+              </div>
+						</div>
+					</div>
+				</div>
+			}
+			// contentToolbar={
+			// 	<div className="px-24">
+			// 		<h4>Content Toolbar</h4>
+			// 	</div>
+			// }
+			content={
+				<div className="p-24">
+					<h4>Content</h4>
+					<br />
+					{/* <DemoContent /> */}
+				</div>
+      }
+    />
   );
 };
 export default withReducer('employeeProfile', reducer)(EmployeeOnboarding)

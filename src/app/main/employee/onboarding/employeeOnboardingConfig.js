@@ -9,7 +9,6 @@ const EmployeeOnboardingConfig = {
 			}
 		}
 	},
-	auth: authRoles.staff,
 	routes: [
 		{
 			path: '/employee/onboarding',
