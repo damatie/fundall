@@ -22,7 +22,7 @@ function DepartmentTable(props) {
 	const params = useParams();
 
 	const [selected, setSelected] = useState([]);
-	const [data, setData] = useState(departments);
+	const [data, setData] = useState([]);
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(10);
 	const [order, setOrder] = useState({

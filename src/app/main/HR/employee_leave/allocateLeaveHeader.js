@@ -5,21 +5,26 @@ import Input from '@material-ui/core/Input';
 import Paper from '@material-ui/core/Paper';
 import { ThemeProvider } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 // import * as Actions from './store/actions';
 import swal from 'sweetalert2';
 import {
-  FuseChipSelectFormsy,
-  TextFieldFormsy
+  SelectFormsy,
 } from '@fuse/core/formsy';
+import MenuItem from '@material-ui/core/MenuItem';
+import FuseChipSelect from '@fuse/core/FuseChipSelect';
 import Formsy from 'formsy-react';
+import * as departmentActions from 'app/main/HR/business_unit/department/store/actions';
+import * as businessUnitActions from 'app/main/HR/business_unit/store/actions';
+
 
 function AllocateLeaveHeader(props) {
 	const dispatch = useDispatch();
 	// const searchText = useSelector(({ leaveOptions }) => leaveOptions.leaveOptions.searchText);
-	const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
+  const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
+  
 
 	return (
     <>
@@ -28,10 +33,7 @@ function AllocateLeaveHeader(props) {
 	);
 };
 
-const suggestions = ['Spring rock'].map(item => ({
-  value: item,
-  label: item
-}));
+
 
 const suggestion = ['Support service'].map(item => ({
   value: item,
@@ -39,18 +41,35 @@ const suggestion = ['Support service'].map(item => ({
 }));
 
 const AllocateLeaveHead = () => {
+  const businessUnits = useSelector(({ businessUnits }) => businessUnits.businessUnits);
+  const departments = useSelector(({ departments }) => departments.departments);
   const [isFormValid, setIsFormValid] = useState(false);
   const formRef = useRef(null);
+  const dispatch = useDispatch();
+
+  const dateOne = businessUnits.data.map(item => ({
+    value: item.id,
+    label: item.entityName
+  }));
+  
+
+  useEffect(() => {
+    dispatch(businessUnitActions.getBusinessUnits());
+  }, [dispatch]);
 
   function disableButton()
   {
-      setIsFormValid(false);
+    setIsFormValid(false);
   }
 
   function enableButton()
   {
-      setIsFormValid(true);
+    setIsFormValid(true);
   }
+
+  const handleDepartment = id => {
+    dispatch(departmentActions.getDepartments(id));
+  };
 
   function handleSubmit(model)
   {
@@ -75,73 +94,41 @@ const AllocateLeaveHead = () => {
     >
     {/* <div className="flex flex-1 w-full items-center justify-between"> */}
       {/* <div> */}
-        <FuseChipSelectFormsy
-          className="mx-16 w-full"
-          name="tags"
-          placeholder="Select multiple entities"
-          textFieldProps={{
-              label          : 'Entities',
-              InputLabelProps: {
-                  shrink: true
-              },
-              // variant        : 'outlined'
-          }}
-          options={suggestions}
-          isMulti
-          validations={{minLength: 1}}
-          validationErrors={{
-              minLength: 'You need to select at least one'
-          }}
+        <SelectFormsy
+          className="w-full"
+          name="related-outlined"
+          label="Entities"
+          // value="none"
+          variant="outlined"
+          onChange={e => handleDepartment(e.target.value) }
           required
-        />
-
-      {/* </div> */}
-      {/* <div> */}
-        <FuseChipSelectFormsy
-          className="mx-16 w-full"
-          name="tags"
-          placeholder="Select multiple departments"
-          textFieldProps={{
-              label          : 'Department',
-              InputLabelProps: {
-                  shrink: true
-              },
-              // variant        : 'outlined'
-          }}
-          options={suggestions}
-          isMulti
-          validations={{minLength: 1}}
-          validationErrors={{
-              minLength: 'You need to select at least one'
-          }}
-          required
-          
-        />
-
-      {/* </div> */}
-      {/* <div> */}
-        <TextFieldFormsy
-          className="mx-16 w-full"
-          type="number"
-          name="name"
-          label="Allocate leave days"
-          // value={new Date().getFullYear()}
-          // disabled
-          required
-          // variant='outlined'
           size='small'
-        />
-
-        <Button
-          type="submit"
-          variant="contained"
-          color="secondary"
-          className="mx-16 w-full"
-          aria-label="LOG IN"
-          disabled={!isFormValid}
         >
-          Allocate leave
-        </Button>
+          {businessUnits.data.map(item => (
+            <MenuItem value={item.id}>{item.entityName}</MenuItem>
+          ))}
+        </SelectFormsy>
+
+      {/* </div> */}
+      {/* <div> */}
+        
+        <SelectFormsy
+          className="w-full"
+          name="related-outlined"
+          label="Department"
+          // value="none"
+          variant="outlined"
+          // onChange={e => handleDepartment(e.target.value) }
+          required
+          size='small'
+        >
+          {['Support service'].map(item => (
+            <MenuItem value={item}>{item}</MenuItem>
+          ))}
+        </SelectFormsy>
+
+      {/* </div> */}
+      {/* <div> */}
     </Formsy>
   );
 };

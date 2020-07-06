@@ -14,7 +14,8 @@ export const createRole = data => {
     fetch('https://hris-cbit.herokuapp.com/api/v1/roles', {
       method: 'post',
       headers: {
-        Authorization: `JWT ${auth().getToken}`
+        Authorization: `JWT ${auth().getToken}`,
+        'Content-type': 'application/json'
       },
       body: JSON.stringify(data)
     }).then(res => res.json()).then(data => {
