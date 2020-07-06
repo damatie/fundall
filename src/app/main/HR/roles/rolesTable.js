@@ -43,7 +43,7 @@ function RolesTable(props) {
 	});
 
 	useEffect(() => {
-    // dispatch(Actions.getRoles());
+    dispatch(Actions.getRoles());
     console.log(roles);
 	}, [dispatch]);
 

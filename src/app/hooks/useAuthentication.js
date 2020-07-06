@@ -1,4 +1,3 @@
-
 export const useAuthentication = async (type, req) => {
   switch(type) {
     case 'hr_signup': {

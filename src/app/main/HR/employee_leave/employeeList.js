@@ -21,21 +21,24 @@ function EmployeeList(props) {
 
 	const routeParams = useParams();
 	const [filteredData, setFilteredData] = useState([{
-    name: 'Dave',
+		id: 1,
+    name: 'Dave Chidi',
     time: 'jun 25',
-    avatar: '',
+    avatar: 'assets/images/avatars/vincent.jpg',
     subject: 'Onboarding from from 5cee'
 	},
 	{
-    name: 'Dave',
+		id: 2,
+    name: 'John Doe',
     time: 'jun 25',
-    avatar: '',
+    avatar: 'assets/images/avatars/andrew.jpg',
     subject: 'Onboarding from from 5cee'
 	},
 	{
-    name: 'Dave',
+		id: 3,
+    name: 'Samuel David',
     time: 'jun 25',
-    avatar: '',
+    avatar: 'assets/images/avatars/andrew.jpg',
     subject: 'Onboarding from from 5cee'
   }]);
 	const { t } = useTranslation('mailApp');
@@ -84,7 +87,7 @@ function EmployeeList(props) {
 				{filteredData.map((mail, i) => (
 					// <MailListItem mail={mail} key={mail.id} />
 					<>
-          <EmployeeTab data={mail} key={mail.id} index={i}/>
+          <EmployeeTab data={mail} key={mail.id}/>
 					<Divider />
 					</>
 				))}

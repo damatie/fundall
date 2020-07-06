@@ -45,9 +45,9 @@ const Fetch = id => {
 
 export const deleteResources = data => {
   return dispatch => {
-    dispatch({
-      type: DELETING_RESOURCES
-    });
+    // dispatch({
+    //   type: DELETING_RESOURCES
+    // });
     Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
@@ -58,9 +58,7 @@ export const deleteResources = data => {
       confirmButtonText: 'Yes, delete it!',
       showLoaderOnConfirm: true,
       preConfirm: () => {
-        for(const i of data) {
-          Fetch(i);
-        }
+        data.map(id => Fetch(id))
       }
       
     }).then((result) => {
@@ -70,18 +68,20 @@ export const deleteResources = data => {
           'Your file has been deleted.',
           'success'
         )
+        dispatch({
+          type: SET_RESOURCES_SUCCESS
+        })
+        setTimeout(() => {
+          dispatch({
+            type: RESET_RESOURCES
+          })
+        }, 3000)
       }
     })
-    dispatch({
-      type: SET_RESOURCES_SUCCESS
-    })
-    setTimeout(() => {
-      dispatch({
-        type: RESET_RESOURCES
-      })
-    }, 3000)
+    
   }
-}
+};
+
 
 
 export function setResourcesSearchText(event) {
