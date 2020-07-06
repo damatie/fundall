@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     textAlign: 'center',
-    margin: '1rem 0',
+    margin: '4rem 0 0 0',
   },
   btn: {
     margin: '2rem auto',
@@ -72,7 +72,7 @@ function EmployeeChecklistTable(props) {
               <p><b>EMPLOYEE NAME:</b></p>
             </Grid>
             <Grid item xs="12" sm="12" md="10" lg="10" xl="10">
-              <InputField options="" handleChange="" />
+              <InputField options={{ variant: 'outlined' }} handleChange="" />
             </Grid>
           </Grid>
 
@@ -81,7 +81,7 @@ function EmployeeChecklistTable(props) {
               <p><b>OFFICE MOBILE NUMBER:</b></p>
             </Grid>
             <Grid item xs="12" sm="12" md="10" lg="10" xl="10">
-              <InputField options="" handleChange="" />
+              <InputField options={{ variant: 'outlined' }} handleChange="" />
             </Grid>
           </Grid>
 
@@ -90,7 +90,7 @@ function EmployeeChecklistTable(props) {
               <p><b>JOB TITLE/ DEPARTMENT:</b></p>
             </Grid>
             <Grid item xs="12" sm="12" md="10" lg="10" xl="10">
-              <InputField options="" handleChange="" />
+              <InputField options={{ variant: 'outlined' }} handleChange="" />
             </Grid>
           </Grid>
 
@@ -98,8 +98,8 @@ function EmployeeChecklistTable(props) {
             <Grid item xs="12" sm="12" md="2" lg="2" xl="2">
               <p><b>DATE OF HIRE:</b></p>
             </Grid>
-            <Grid item xs="12" sm="12" md="10" lg="10" xl="10">
-              <InputField options="" handleChange="" />
+            <Grid item xs="12" sm="12" md="3" lg="3" xl="3">
+              <InputField options={{ type: 'date' }} handleChange="" />
             </Grid>
           </Grid>
         </div>
@@ -107,6 +107,7 @@ function EmployeeChecklistTable(props) {
         <div className={classes.title}>
           <p><strong>EMPLOYEE ONBOARDING CHECKLIST (OPERATIONS/EXPAT)</strong></p>
         </div>
+
         <Table className="min-w-xl" aria-labelledby="tableTitle">
           <EmployeeChecklistHead />
           <TableBody>
