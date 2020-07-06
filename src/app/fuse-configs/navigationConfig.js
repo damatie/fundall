@@ -244,7 +244,7 @@ const navigationConfig = [
 		title: 'Application',
 		translate: 'Application',
 		type: 'group',
-		auth: authRoles.staff,
+		// auth: authRoles.staff,
 		children: [
 			{
 				id: 'dashboard',
