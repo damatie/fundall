@@ -56,7 +56,7 @@ const routes = [
 	...FuseUtils.generateRoutesFromConfigs(routeConfigs),
 	{
 		path: '/',
-		component: () => <Redirect to="/" />
+		component: () => <Redirect to="/auth/login" />
 	}
 ];
 
