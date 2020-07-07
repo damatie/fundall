@@ -4,42 +4,38 @@ import * as Actions from 'app/store/actions';
 import * as UserActions from './user.actions';
 import { useAuthentication } from 'app/hooks/useAuthentication';
 import Swal from 'sweetalert2';
+import { fetchHeaders } from 'app/shared/fetchHeaders';
+import { redirectUrl } from '../../redirectUrl';
 
 export const LOGIN_ERROR = 'LOGIN_ERROR';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_LOADING = 'LOGIN_LOADING';
 
-export function submitLogin(data, user) {	
+
+const header = fetchHeaders();
+export function submitLogin(data) {	
 	return dispatch => {
-		let url = '';
-		let role = '';
-		let redirectUrl = '';
-		if(user === 'hr') {
-			url = 'https://hris-cbit.herokuapp.com/api/v1/auth/hr/login'
-			role = ['HR']
-			redirectUrl = '/hr/employee_management'
-		}
-		else if(user === 'staff') {
-			url = 'https://hris-cbit.herokuapp.com/api/v1/auth/employee/login'
-			role = ['staff']
-			redirectUrl = '/employee/dashboard'
-		}
 		dispatch({
 			type: LOGIN_LOADING
 		})
-		jwtService
-			.signInWithEmailAndPassword(data, url)
-			.then(user => {
-				if(user.success && user.message === 'Login successful') {
+		fetch('https://hris-cbit.herokuapp.com/api/v1/auth/employee/login', {
+			...header.reqHeader(
+				'post',
+				data
+			)
+		}).then(res => res.json()).then(
+			user => {
+				if(user.success) {
 					Swal.fire({
 						title: 'Login',
-						text: data.message,
+						text: user.message,
 						icon: 'success',
 						timer: 3000,
 					});
+					localStorage.setItem('jwt_access_token', user.token);
 					const userState = {
-						role: role,
-						redirectUrl: redirectUrl,
+						role: user.role,
+						redirectUrl: redirectUrl(user.role),
 						id: user.id,
 						data: {
 							displayName: `${user.firstName} ${user.lastName}`,
@@ -55,7 +51,7 @@ export function submitLogin(data, user) {
 				} else {
 					Swal.fire({
 						title: 'Login',
-						text: data.message,
+						text: user.message,
 						icon: 'error',
 						timer: 3000,
 					})
@@ -64,17 +60,19 @@ export function submitLogin(data, user) {
 						payload: ''
 					});
 				}
-			}).catch(error => {
-				Swal.fire({
-					title: 'Login',
-					text: 'Service unavailable',
-					icon: 'error',
-					timer: 3000,
-				})
-				return dispatch({
-					type: LOGIN_ERROR,
-					payload: error
-				});
+			}
+		)
+		.catch(error => {
+			Swal.fire({
+				title: 'Login',
+				text: 'Service unavailable',
+				icon: 'error',
+				timer: 3000,
+			})
+			return dispatch({
+				type: LOGIN_ERROR,
+				payload: error
+			});
 		});
 	}
 }

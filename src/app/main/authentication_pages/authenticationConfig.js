@@ -1,7 +1,7 @@
 import { authRoles } from 'app/auth';
-import Register from './register';
+import React from 'react';
 
-const authenticationConfig = {
+const AuthenticationConfig = {
 	settings: {
 		layout: {
 			config: {
@@ -24,7 +24,12 @@ const authenticationConfig = {
 		}
 	},
 	auth: authRoles.onlyGuest,
-	routes: [ ]
+	routes: [ 
+		{
+			path: '/auth/login',
+			component: React.lazy(() => import('./login/login'))
+		}
+	]
 };
 
-export default authenticationConfig;
+export default AuthenticationConfig;
