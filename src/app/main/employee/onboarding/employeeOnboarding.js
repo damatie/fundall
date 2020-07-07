@@ -60,6 +60,9 @@ const EmployeeOnboarding = () => {
 				<div className="p-24">
 					<br />
 					<br />
+					<CompanyPolicyAcknowledgementForm />
+					<br />
+					<br />
 					<SRGEmploymentDataSheet />
 					<br />
 					<br />
@@ -82,9 +85,6 @@ const EmployeeOnboarding = () => {
 					<br />
 					<br />
 					<CompanyAssetAcknowledgeForm />
-					<br />
-					<br />
-					<CompanyPolicyAcknowledgementForm />
 					<br />
 					<br />
 					<EmployeeHandbookAcknowledgement />

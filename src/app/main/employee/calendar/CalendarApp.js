@@ -175,6 +175,11 @@ function CalendarApp(props) {
 	}, [dispatch]);
 
 	function moveEvent({ event, start, end }) {
+		console.log({
+			...event,
+				start,
+				end
+		})
 		dispatch(
 			Actions.updateEvent({
 				...event,
@@ -227,8 +232,8 @@ function CalendarApp(props) {
 				onSelectSlot={slotInfo =>
 					dispatch(
 						Actions.openNewEventDialog({
-							start: slotInfo.start.toLocaleString(),
-							end: slotInfo.end.toLocaleString()
+							fromDate: slotInfo.start.toLocaleString(),
+							toDate: slotInfo.end.toLocaleString()
 						})
 					)
 				}
