@@ -19,7 +19,7 @@ export const fetchHeaders = () => {
 
   const reqHeader = (method, body) => {
     return {
-      methods: method,
+      method: method,
       headers: {
         ...auth,
         'Content-type': 'application/json'

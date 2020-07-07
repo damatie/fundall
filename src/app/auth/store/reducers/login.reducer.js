@@ -30,7 +30,6 @@ const login = (state = initialState, action) => {
 			return {
 				...initialState,
 				success: false,
-				error: action.payload,
 				loading: true
 			};
 		}

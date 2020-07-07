@@ -11,6 +11,10 @@ import Toolbar from 'react-big-calendar/lib/Toolbar';
 import { navigate } from 'react-big-calendar/lib/utils/constants';
 import connect from 'react-redux/es/connect/connect';
 import Paper from '@material-ui/core/Paper';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import * as Actions from './store/actions';
+import { useCompareYear } from 'app/hooks/useCompareYear';
 
 /* eslint-disable react/jsx-no-bind */
 const styles = theme => ({
@@ -130,6 +134,7 @@ class CalendarHeader extends Toolbar {
 		return null;
 	}
 
+
 	render() {
 		const { classes, mainThemeDark, label, date } = this.props;
 
@@ -146,30 +151,7 @@ class CalendarHeader extends Toolbar {
 									<Typography variant="h6">Leave request</Typography>
 								</FuseAnimate>
 							</div>
-							<div className="flex items-center">
-								<Tooltip title="Today">
-									<div>
-										<FuseAnimate animation="transition.expandIn" delay={500}>
-											{/* <IconButton
-												aria-label="today"
-												onClick={this.navigate.bind(null, navigate.TODAY)}
-											>
-												<Icon>today</Icon>
-											</IconButton> */}
-											<MailChip color='#55B9F3' className='' title='Total leave days' text='20 days'/>
-										</FuseAnimate>
-									</div>
-								</Tooltip>
-								{/* {this.viewButtons()} */}
-								<FuseAnimate animation="transition.expandIn" delay={500}>
-									<MailChip color='#3AD29F' className='' title='Leave available' text='15 days'/>
-								</FuseAnimate>
-								
-								<FuseAnimate animation="transition.expandIn" delay={500}>
-									<MailChip color='#E21616' className='' title='Leave taken' text='5 days'/>
-								</FuseAnimate>
-								
-							</div>
+							<LeaveDays />
 						</div>
 
 						<FuseAnimate delay={500}>
@@ -230,6 +212,42 @@ const useStyles2 = makeStyles(theme => ({
 		borderRadius: '50%',
 	}
 }));
+
+
+
+const LeaveDays = () => {
+
+	const dispatch = useDispatch();
+	const leaveDays = useSelector(({ calendarApp }) => calendarApp.leaveDays);
+
+	const { result } = useCompareYear(leaveDays.data)
+
+	useEffect(() => {
+		dispatch(Actions.getLeaveDays());
+		console.log(result)
+	}, [dispatch, leaveDays]);
+
+	return (
+		<div className="flex items-center">
+			<Tooltip title="Today">
+				<div>
+					<FuseAnimate animation="transition.expandIn" delay={500}>
+						<MailChip color='#55B9F3' className='' title='Total leave days' text={`${result.originalAllocatedDays} days`}/>
+					</FuseAnimate>
+				</div>
+			</Tooltip>
+			{/* {this.viewButtons()} */}
+			<FuseAnimate animation="transition.expandIn" delay={500}>
+				<MailChip color='#3AD29F' className='' title='Leave available' text={`${result.availableDays} days`}/>
+			</FuseAnimate>
+			
+			<FuseAnimate animation="transition.expandIn" delay={500}>
+				<MailChip color='#E21616' className='' title='Leave taken' text={`${result.usedDays} days`}/>
+			</FuseAnimate>
+			
+		</div>
+	)
+}
 
 function MailChip(props) {
 	const classes = useStyles2();

@@ -16,31 +16,20 @@ import { Divider } from '@material-ui/core';
 
 function EmployeeList(props) {
 	const dispatch = useDispatch();
+	const [ employees, setEmployees ] = useState([]);
 	// const onboarding = useSelector(({ onboarding }) => onboarding.onboarding.data);
 	// const searchText = useSelector(({ mailApp }) => mailApp.mails.searchText);
 
+	const employeeList = useSelector(({ employeeList }) => employeeList);
+
+	useEffect(() => {
+		setEmployees(employeeList.data)
+	}, [employeeList.update, employeeList])
+
+	useEffect(() => {
+		console.log(employeeList.data);
+	}, [])
 	const routeParams = useParams();
-	const [filteredData, setFilteredData] = useState([{
-		id: 1,
-    name: 'Dave Chidi',
-    time: 'jun 25',
-    avatar: 'assets/images/avatars/vincent.jpg',
-    subject: 'Onboarding from from 5cee'
-	},
-	{
-		id: 2,
-    name: 'John Doe',
-    time: 'jun 25',
-    avatar: 'assets/images/avatars/andrew.jpg',
-    subject: 'Onboarding from from 5cee'
-	},
-	{
-		id: 3,
-    name: 'Samuel David',
-    time: 'jun 25',
-    avatar: 'assets/images/avatars/andrew.jpg',
-    subject: 'Onboarding from from 5cee'
-  }]);
 	const { t } = useTranslation('mailApp');
 
 	useDeepCompareEffect(() => {
@@ -65,12 +54,12 @@ function EmployeeList(props) {
 	// 	return null;
 	// }
 
-	if (filteredData.length === 0) {
+	if (employees.length === 0) {
 		return (
 			<FuseAnimate delay={100}>
 				<div className="flex flex-1 items-center justify-center h-full">
 					<Typography color="textSecondary" variant="h5">
-						{t('NO_ONBOARDING FORMS')}
+						{t('NO_EMPLOYEES')}
 					</Typography>
 				</div>
 			</FuseAnimate>
@@ -84,7 +73,7 @@ function EmployeeList(props) {
 					animation: 'transition.slideUpBigIn'
 				}}
 			>
-				{filteredData.map((mail, i) => (
+				{employees.map((mail, i) => (
 					// <MailListItem mail={mail} key={mail.id} />
 					<>
           <EmployeeTab data={mail} key={mail.id}/>

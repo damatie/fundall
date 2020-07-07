@@ -24,6 +24,7 @@ import RolesConfig from 'app/main/HR/roles/rolesConfig';
 import ResourcesConfig from 'app/main/HR/resources/resourceConfig';
 import LeaveSumamaryConfig from 'app/main/HR/leave_summary/leaveSummaryConfig';
 import EmployeeChecklistConfig from 'app/main/HR/employee_checklist/EmployeeChecklistConfig';
+import AuthenticationConfig from 'app/main/authentication_pages/authenticationConfig';
 
 const routeConfigs = [
 	// ExampleConfig,
@@ -48,6 +49,7 @@ const routeConfigs = [
 	ResourcesConfig,
 	LeaveSumamaryConfig,
 	EmployeeChecklistConfig,
+	AuthenticationConfig,
 ];
 
 const routes = [
