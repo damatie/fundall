@@ -16,6 +16,7 @@ import Formsy from 'formsy-react';
 import reducer from '../store/reducers';
 import ProgressBtn from 'app/shared/progressBtn';
 import * as Actions from '../store/actions';
+import { useCompareYear } from 'app/hooks/useCompareYear';
 
 const pathToRegexp = require('path-to-regexp');
 
@@ -47,6 +48,10 @@ const EmployeeTab = props => {
 	const dispatch = useDispatch();
 	const routeParams = useParams();
 
+	useEffect(() => {
+		dispatch(Actions.getLeaveDays(props.data.id));
+	}, [dispatch]);
+
 	const classes = useStyles(props);
 
 	return (
@@ -56,9 +61,14 @@ const EmployeeTab = props => {
 			<div className="flex flex-1 flex-col relative overflow-hidden">
 				<div className="flex items-center justify-between px-16 pb-8">
 					<div className="flex items-center">
-					<Avatar alt={'props.data.name'} src={props.data.avatar} /> 
+						<Avatar alt={'props.data.name'} src={props.data.profilePicture} /> 
 						<Typography variant="subtitle1" className="mx-8">
-							{props.data.name}
+							{`${props.data.firstName} ${props.data.middleName} ${props.data.lastName}`}
+						</Typography>
+					</div>
+					<div>
+						<Typography variant="subtitle1" className="mx-8">
+							{`${props.data.role.name}`}
 						</Typography>
 					</div>
 					<AllocateLeave id={props.data.id}/>
@@ -93,7 +103,10 @@ const AllocateLeave = ({id}) => {
 	const [isFormValid, setIsFormValid] = useState(false);
 	const formRef = useRef(null);
 	const allocate = useSelector(({allocate}) => allocate.allocate);
+	const leaveDays = useSelector(({ allocate }) => allocate.leaveDays);
 	const [userId, setUserId] = useState(null);
+
+	const { result } = useCompareYear(leaveDays.data);
 	
 	const dispatch = useDispatch();
 
@@ -123,7 +136,8 @@ const AllocateLeave = ({id}) => {
 		if(!allocate.loading) {
 			setUserId(null)
 		}
-	}, [allocate.loading])
+	}, [allocate.loading]);
+
 	return (
 			<Formsy
 				onValidSubmit={handleSubmit}
@@ -139,21 +153,9 @@ const AllocateLeave = ({id}) => {
 				label="Leave days"
 				variant='outlined'
 				required
-				value='0'
+				value={result.originalAllocatedDays}
 				size='small'
 			/>
-			{/* <Button
-				size='small'
-				type="submit"
-				variant="contained"
-				color="primary"
-				className="m-auto"
-				aria-label="LOG IN"
-				disabled={!isFormValid}
-			>
-				allocate
-			</Button> */}
-
 			<ProgressBtn success={userId === id ? allocate.success : false} loading={userId === id ? allocate.loading : false} content='Allocate' disable={!isFormValid} onClick={e => {
 				setUserId(id);
 				}}/>

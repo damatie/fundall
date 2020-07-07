@@ -6,6 +6,7 @@ import EmployeeList from './employeeList';
 import businessUnitReducer from 'app/main/HR/business_unit/store/reducers';
 import departmentReducer from 'app/main/HR/business_unit/department/store/reducers';
 import reducer from './store/reducers';
+import employeeListReducer from 'app/store/reducers';
 
 function AllocateLeave() {
 	return (
@@ -21,6 +22,7 @@ function AllocateLeave() {
 	);
 }
 
+withReducer('employeeList', employeeListReducer)(AllocateLeave);
 withReducer('businessUnits', businessUnitReducer)(AllocateLeave);
 withReducer('departments', departmentReducer)(AllocateLeave);
 export default withReducer('allocate', reducer)(AllocateLeave);

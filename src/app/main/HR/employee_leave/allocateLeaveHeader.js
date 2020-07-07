@@ -18,6 +18,7 @@ import FuseChipSelect from '@fuse/core/FuseChipSelect';
 import Formsy from 'formsy-react';
 import * as departmentActions from 'app/main/HR/business_unit/department/store/actions';
 import * as businessUnitActions from 'app/main/HR/business_unit/store/actions';
+import * as employeeListActions from 'app/store/actions';
 
 
 function AllocateLeaveHeader(props) {
@@ -46,11 +47,6 @@ const AllocateLeaveHead = () => {
   const [isFormValid, setIsFormValid] = useState(false);
   const formRef = useRef(null);
   const dispatch = useDispatch();
-
-  const dateOne = businessUnits.data.map(item => ({
-    value: item.id,
-    label: item.entityName
-  }));
   
 
   useEffect(() => {
@@ -69,6 +65,13 @@ const AllocateLeaveHead = () => {
 
   const handleDepartment = id => {
     dispatch(departmentActions.getDepartments(id));
+    dispatch({
+      type: employeeListActions.RESET_DEPARTMENT_EMPLOYEE_LIST
+    })
+  };
+
+  const handleEmployeeList = id => {
+    dispatch(employeeListActions.getDepartmentEmployees(id));
   };
 
   function handleSubmit(model)
@@ -95,7 +98,7 @@ const AllocateLeaveHead = () => {
     {/* <div className="flex flex-1 w-full items-center justify-between"> */}
       {/* <div> */}
         <SelectFormsy
-          className="w-full"
+          className="w-full m-16"
           name="related-outlined"
           label="Entities"
           // value="none"
@@ -113,18 +116,19 @@ const AllocateLeaveHead = () => {
       {/* <div> */}
         
         <SelectFormsy
-          className="w-full"
+          className="w-full m-16"
           name="related-outlined"
           label="Department"
           // value="none"
           variant="outlined"
-          // onChange={e => handleDepartment(e.target.value) }
+          onChange={e => handleEmployeeList(e.target.value) }
           required
           size='small'
         >
-          {['Support service'].map(item => (
-            <MenuItem value={item}>{item}</MenuItem>
-          ))}
+          {departments.data.length !== 0 ? departments.data.map(item => (
+            <MenuItem value={item.id}>{item.departmentName}</MenuItem>
+          )) : 
+          <h3>No department</h3>}
         </SelectFormsy>
 
       {/* </div> */}
