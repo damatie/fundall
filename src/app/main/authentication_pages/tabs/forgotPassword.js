@@ -7,8 +7,10 @@ import { makeStyles } from '@material-ui/core/styles';
 import { darken } from '@material-ui/core/styles/colorManipulator';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
+import ProgressBtn from '../../../shared/progressBtn'
 import clsx from 'clsx';
-import React from 'react';
+import Swal from 'sweetalert2';
+import React, {useState} from 'react';
 import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
@@ -23,6 +25,7 @@ function ForgotPasswordPage() {
 	const { form, handleChange, resetForm } = useForm({
 		email: ''
 	});
+	const [ loading, setLoading ]  = useState(false);
 
 	function isFormValid() {
 		return form.email.length > 0;
@@ -30,6 +33,26 @@ function ForgotPasswordPage() {
 
 	function handleSubmit(ev) {
 		ev.preventDefault();
+		setLoading(true);
+		fetch('https://hris-cbit.herokuapp.com/api/v1/auth/employee/forgot_password', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(form)
+		})
+			.then((res) => res.json())
+			.then(res => {
+				setLoading(false);
+				if (res.success === true){
+					Swal.fire({
+						title: 'Mail sent',
+						text: res.message,
+						icon: 'success',
+						timer: 3000,
+					});
+				}
+			})
 		resetForm();
 	}
 
@@ -60,22 +83,13 @@ function ForgotPasswordPage() {
 									type="email"
 									name="email"
 									value={form.email}
-									onChange={handleChange}
+									onChange={e => handleChange(e)}
 									variant="outlined"
 									required
 									fullWidth
 								/>
 
-								<Button
-									variant="contained"
-									color="primary"
-									className="w-224 mx-auto mt-16"
-									aria-label="Reset"
-									disabled={!isFormValid()}
-									type="submit"
-								>
-									SEND RESET LINK
-								</Button>
+								<ProgressBtn content="SEND RESET LINK" loading={loading} />
 							</form>
 
 							<div className="flex flex-col items-center justify-center pt-32 pb-24">
