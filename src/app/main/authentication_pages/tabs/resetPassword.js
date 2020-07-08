@@ -7,8 +7,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import { darken } from '@material-ui/core/styles/colorManipulator';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
+import Swal from 'sweetalert2';
 import clsx from 'clsx';
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
@@ -27,6 +28,7 @@ function ResetPasswordPage() {
 		password: '',
 		passwordConfirm: ''
 	});
+	const [loading, setLoading] = useState(false)
 
 	function isFormValid() {
 		return (
@@ -39,6 +41,26 @@ function ResetPasswordPage() {
 
 	function handleSubmit(ev) {
 		ev.preventDefault();
+		setLoading(true);
+		fetch("https://hris-cbit.herokuapp.com/api/v1/auth/employee/reset_password/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNhbXVlbGNoaWJ1aWtlMjJAZ21haWwuY29tIiwiaWF0IjoxNTkwMDU5NzU5LCJleHAiOjE1OTAwNjMzNTl9.jHrk4jo0L9YDyvmCh-Do0AcUoK9krI8XAk8l6ma7-aM", {
+			method: 'PATCH',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(form)
+		})
+			.then((res) => res.json())
+			.then(res => {
+				setLoading(false);
+				if (res.success === true){
+					Swal.fire({
+						title: 'Check your email',
+						text: res.message,
+						icon: 'success',
+						timer: 3000,
+					});
+				}
+			})
 		resetForm();
 	}
 
@@ -62,10 +84,10 @@ function ResetPasswordPage() {
 							>
 								<TextField
 									className="mb-16"
-									label="Email"
+									label="Password"
 									autoFocus
-									type="email"
-									name="email"
+									type="password"
+									name="password"
 									value={form.email}
 									onChange={handleChange}
 									variant="outlined"
@@ -75,9 +97,9 @@ function ResetPasswordPage() {
 
 								<TextField
 									className="mb-16"
-									label="Password"
+									label="confirm password"
 									type="password"
-									name="password"
+									name="passwordConfirm"
 									value={form.password}
 									onChange={handleChange}
 									variant="outlined"
