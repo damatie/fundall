@@ -12,28 +12,46 @@ import Switch from '@material-ui/core/Switch';
 import TextField from '@material-ui/core/TextField';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import { DateTimePicker } from '@material-ui/pickers';
+import { DatePicker } from '@material-ui/pickers';
 import moment from 'moment';
 import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Actions from './store/actions';
 import swal from 'sweetalert2';
+import Axios from 'axios';
+import { useAuth } from 'app/hooks/useAuth';
+import MenuItem from '@material-ui/core/MenuItem';
+import ProgressBtn from 'app/shared/progressBtn';
 
 const defaultFormState = {
 	id: FuseUtils.generateGUID(),
-	title: '',
-	allDay: true,
-	start: moment(new Date(), 'MM/DD/YYYY'),
-	end: moment(new Date(), 'MM/DD/YYYY'),
-	desc: ''
+	leaveType: '',
+	leaveFor: '',
+	fromDate: moment(new Date(), 'MM/DD/YYYY'),
+	toDate: moment(new Date(), 'MM/DD/YYYY'),
+	lineManagerId: '',
+	backupEmployee: '',
+	days: 5,
+	allowance: false
 };
+
+// moment(new Date(), 'MM/DD/YYYY')
 
 function EventDialog(props) {
 	const dispatch = useDispatch();
 	const eventDialog = useSelector(({ calendarApp }) => calendarApp.events.eventDialog);
+	const leaveRequest = useSelector(({ calendarApp }) => calendarApp.leaveRequest)
 	const { form, handleChange, setForm, setInForm } = useForm(defaultFormState);
-	const start = moment(form.start, 'MM/DD/YYYY');
-	const end = moment(form.end, 'MM/DD/YYYY');
+	const start = moment(form.fromDate, 'MM/DD/YYYY');
+	const end = moment(form.toDate, 'MM/DD/YYYY');
+	const auth = useAuth
+	useEffect(() => {
+		Axios.get('https://hris-cbit.herokuapp.com/api/v1/leave-type/', {
+			headers: { Authorization: `JWT ${auth().getToken}` }
+		}).then(data => {
+			console.log(data)
+		})
+	}, []);
 
 	const initDialog = useCallback(() => {
 		/**
@@ -71,20 +89,19 @@ function EventDialog(props) {
 	}
 
 	function canBeSubmitted() {
-		return form.title.length > 0;
+		return form.leaveType.length > 0;
 	}
 
 	function handleSubmit(event) {
 		event.preventDefault();
+		console.log(form)
 
-		if (eventDialog.type === 'new') {
-			dispatch(Actions.addEvent(form));
-		} else {
-			dispatch(Actions.updateEvent(form));
-		}
-		closeComposeDialog();
-
-		
+		// if (eventDialog.type === 'new') {
+		// 	dispatch(Actions.addEvent(form));
+		// } else {
+		// 	dispatch(Actions.updateEvent(form));
+		// }
+		dispatch(Actions.requestLeave(form));
 	}
 
 	function handleRemove() {
@@ -97,7 +114,7 @@ function EventDialog(props) {
 			<AppBar position="static">
 				<Toolbar className="flex w-full">
 					<Typography variant="subtitle1" color="inherit">
-						{eventDialog.type === 'new' ? 'New Event' : 'Edit Event'}
+						{eventDialog.type === 'new' ? 'New Leave Request' : 'Edit Event'}
 					</Typography>
 				</Toolbar>
 			</AppBar>
@@ -108,12 +125,34 @@ function EventDialog(props) {
 					<TextField
 						id="title"
 						label="Leave type"
+						select
 						className="mt-8 mb-16"
 						InputLabelProps={{
 							shrink: true
 						}}
-						name="Leave type"
-						value={form.title}
+						name="leaveType"
+						defaultValue={form.leaveType}
+						onChange={handleChange}
+						variant="outlined"
+						autoFocus
+						required
+						fullWidth
+					>
+						{[{id: 1, name: 'Medical Leave'}, {id: 2, name: 'Maternity Leave'}].map(item => (
+						<MenuItem value={item.id}>
+							{item.name}
+						</MenuItem>))}
+					</TextField>
+
+					<TextField
+						id="title"
+						label="Leave for"
+						className="mt-8 mb-16"
+						InputLabelProps={{
+							shrink: true
+						}}
+						name="leaveFor"
+						defaultValue={form.leaveFor}
 						onChange={handleChange}
 						variant="outlined"
 						autoFocus
@@ -121,45 +160,61 @@ function EventDialog(props) {
 						fullWidth
 					/>
 
+					<DatePicker
+						label="From date"
+						inputVariant="outlined"
+						value={start}
+						onChange={date => setInForm('fromDate', date)}
+						className="mt-8 mb-16 w-full"
+						maxDate={end}
+					/>
+
+
+					<DatePicker
+						label="To date"
+						inputVariant="outlined"
+						value={end}
+						onChange={date => setInForm('toDate', date)}
+						className="mt-8 mb-16 w-full"
+						minDate={start}
+					/>
 
 					<TextField
-						id="title"
+						id="reporting_manager"
+						label="Reporting manager"
+						className="mt-8 mb-16"
+						InputLabelProps={{
+							shrink: true
+						}}
+						name="lineManagerId"
+						defaultValue={form.lineManagerId}
+						onChange={handleChange}
+						variant="outlined"
+						autoFocus
+						required
+						fullWidth
+					/>
+
+					<TextField
+						id="backup_employee"
 						label="Backup employee"
 						className="mt-8 mb-16"
 						InputLabelProps={{
 							shrink: true
 						}}
-						name="Leave type"
-						value={form.title}
+						name="backupEmployee"
+						defaultValue={form.leaveFor}
 						onChange={handleChange}
 						variant="outlined"
 						autoFocus
 						required
 						fullWidth
 					/>
-
+					
 					<FormControlLabel
 						className="mt-8 mb-16"
-						label="All Day"
-						control={<Switch checked={form.allDay} id="allDay" name="Leave allowance" onChange={handleChange} />}
-					/>
-
-					<DateTimePicker
-						label="Start"
-						inputVariant="outlined"
-						value={start}
-						onChange={date => setInForm('start', date)}
-						className="mt-8 mb-16 w-full"
-						maxDate={end}
-					/>
-
-					<DateTimePicker
-						label="End"
-						inputVariant="outlined"
-						value={end}
-						onChange={date => setInForm('end', date)}
-						className="mt-8 mb-16 w-full"
-						minDate={start}
+						label="Apply for leave allowance"
+						control={<Switch  id="allDay" name="leaveAllowance" onChange={handleChange} />}
 					/>
 
 					<TextField
@@ -167,21 +222,24 @@ function EventDialog(props) {
 						id="desc"
 						label="Leave reasons"
 						type="text"
-						name="desc"
-						value={form.desc}
+						name="reason"
+						defaultValue={form.desc}
 						onChange={handleChange}
 						multiline
 						rows={5}
 						variant="outlined"
 						fullWidth
 					/>
+
+
 				</DialogContent>
 
 				{eventDialog.type === 'new' ? (
-					<DialogActions className="justify-between px-8 sm:px-16">
-						<Button variant="contained" color="primary" type="submit" disabled={!canBeSubmitted()}>
+					<DialogActions className="justify-between px-8 sm:px-16 w-full">
+						{/* <Button variant="contained" color="primary" type="submit" disabled={!canBeSubmitted()}>
 							Add
-						</Button>
+						</Button> */}
+						<ProgressBtn succcess={leaveRequest.success} loading={leaveRequest.loading} content='Request leave' disabled={!canBeSubmitted()} />
 					</DialogActions>
 				) : (
 					<DialogActions className="justify-between px-8 sm:px-16">

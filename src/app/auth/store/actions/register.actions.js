@@ -19,7 +19,11 @@ export function submitRegister(data) {
 			body: data,
 			origin: window.location.host
 		}
-		useAuthentication('hr_signup', reg).then(data => {
+		fetch("https://hris-cbit.herokuapp.com/api/v1/auth/employee/signup", {
+			method: 'POST'
+		})
+		.then(data => {
+			console.log(data);
 			if(data.success && data.message !== "Accout already exist") {
 				swal.fire({
 					title: 'Sign up',
@@ -43,8 +47,8 @@ export function submitRegister(data) {
 				})
 				
 			}
-			
-		}).catch(error => {
+		})
+		.catch(error => {
 			return dispatch({
 				type: REGISTER_ERROR,
 				payload: error

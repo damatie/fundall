@@ -192,10 +192,10 @@ function mapStateToProps({ fuse }) {
 const useStyles2 = makeStyles(theme => ({
 	main: {
 		// height: 100,
-		width: 150,
+		width: 300,
 		borderRadius: 2,
 		padding: '1rem',
-		fontSize: 11,
+		fontSize: 20,
 		backgroundColor: '#fff',
 		color: '#111',
 		margin: '0 1rem'
@@ -224,8 +224,7 @@ const LeaveDays = () => {
 
 	useEffect(() => {
 		dispatch(Actions.getLeaveDays());
-		console.log(result)
-	}, [dispatch, leaveDays]);
+	}, [dispatch]);
 
 	return (
 		<div className="flex items-center">
@@ -254,12 +253,12 @@ function MailChip(props) {
 
 	return (
 		<div className={classes.main}>
-		<h6>{props.title}</h6>
+		<h3>{props.title}</h3>
 		<div className={clsx(classes.root, props.className)}>
 			
 			
 			<div className={classes.color} style={{ backgroundColor: props.color }} />
-			<h7>{props.text}</h7>
+			<h6>{props.text}</h6>
 			
 		</div>
 		</div>

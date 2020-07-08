@@ -26,6 +26,10 @@ const AuthenticationConfig = {
 	auth: authRoles.onlyGuest,
 	routes: [ 
 		{
+			path: '/auth/register',
+			component: React.lazy(() => import('./register/register'))
+		},
+		{
 			path: '/auth/login',
 			component: React.lazy(() => import('./login/login'))
 		}
