@@ -25,18 +25,11 @@ function ForgotPasswordPage() {
 	const { form, handleChange, resetForm } = useForm({
 		email: ''
 	});
-	const { loading, setLoading}  = useState(false);
-	// const [email, setEmail] = useState('')
+	const [ loading, setLoading ]  = useState(false);
 
 	function isFormValid() {
 		return form.email.length > 0;
 	}
-
-	// function handleChange(e) {
-	// 	const key = e.target.name
-	// 	setEmail({ key: e.target.value });
-	// 	console.log(email);
-	// }
 
 	function handleSubmit(ev) {
 		ev.preventDefault();
@@ -50,9 +43,10 @@ function ForgotPasswordPage() {
 		})
 			.then((res) => res.json())
 			.then(res => {
+				setLoading(false);
 				if (res.success === true){
 					Swal.fire({
-						title: 'Login',
+						title: 'Mail sent',
 						text: res.message,
 						icon: 'success',
 						timer: 3000,
@@ -95,16 +89,6 @@ function ForgotPasswordPage() {
 									fullWidth
 								/>
 
-								{/* <Button
-									variant="contained"
-									color="primary"
-									className="w-224 mx-auto mt-16"
-									aria-label="Reset"
-									disabled={!isFormValid()}
-									type="submit"
-								>
-									SEND RESET LINK
-								</Button> */}
 								<ProgressBtn content="SEND RESET LINK" loading={loading} />
 							</form>
 
