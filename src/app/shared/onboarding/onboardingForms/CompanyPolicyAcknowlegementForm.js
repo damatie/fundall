@@ -2,7 +2,9 @@ import React from 'react';
 import Formsy from 'formsy-react';
 import { TextFieldFormsy, CheckboxFormsy } from '@fuse/core/formsy';
 import Grid from "@material-ui/core/Grid";
+import Button from '@material-ui/core/Button';
 import { inputStyles } from '../../EmployeeFormInput';
+import Checkbox from '@material-ui/core/Checkbox';
 import MenuBookRoundedIcon from "@material-ui/icons/MenuBookRounded";
 
 const CompanyPolicyAcknowledgementForm = () => {
@@ -62,11 +64,17 @@ const CompanyPolicyAcknowledgementForm = () => {
               </div>
             </Grid>
             <Grid item xs="3">
-              <TextFieldFormsy
+              <CheckboxFormsy
                 className="mb-16 w-full"
-                type="file"
-                name="name"
-                variant="outlined"
+                name="accept"
+                value={false}
+                label="Agreed"
+                validations={{
+                  equals: true,
+                }}
+                validationErrors={{
+                  equals: "You need to accept"
+                }}
               />
             </Grid>
           </Grid>
@@ -88,11 +96,17 @@ const CompanyPolicyAcknowledgementForm = () => {
               </div>
             </Grid>
             <Grid item xs="3">
-              <TextFieldFormsy
+              <CheckboxFormsy
                 className="mb-16 w-full"
-                type="file"
-                name="name"
-                variant="outlined"
+                name="accept"
+                value={false}
+                label="Agreed"
+                validations={{
+                  equals: true,
+                }}
+                validationErrors={{
+                  equals: "You need to accept"
+                }}
               />
             </Grid>
           </Grid>
@@ -114,11 +128,17 @@ const CompanyPolicyAcknowledgementForm = () => {
               </div>
             </Grid>
             <Grid item xs="3">
-              <TextFieldFormsy
+              <CheckboxFormsy
                 className="mb-16 w-full"
-                type="file"
-                name="name"
-                variant="outlined"
+                name="accept"
+                value={false}
+                label="Agreed"
+                validations={{
+                  equals: true,
+                }}
+                validationErrors={{
+                  equals: "You need to accept"
+                }}
               />
             </Grid>
           </Grid>
@@ -140,11 +160,17 @@ const CompanyPolicyAcknowledgementForm = () => {
               </div>
             </Grid>
             <Grid item xs="3">
-              <TextFieldFormsy
+              <CheckboxFormsy
                 className="mb-16 w-full"
-                type="file"
-                name="name"
-                variant="outlined"
+                name="accept"
+                value={false}
+                label="Agreed"
+                validations={{
+                  equals: true,
+                }}
+                validationErrors={{
+                  equals: "You need to accept"
+                }}
               />
             </Grid>
           </Grid>
@@ -166,11 +192,17 @@ const CompanyPolicyAcknowledgementForm = () => {
               </div>
             </Grid>
             <Grid item xs="3">
-              <TextFieldFormsy
+              <CheckboxFormsy
                 className="mb-16 w-full"
-                type="file"
-                name="name"
-                variant="outlined"
+                name="accept"
+                value={false}
+                label="Agreed"
+                validations={{
+                  equals: true,
+                }}
+                validationErrors={{
+                  equals: "You need to accept"
+                }}
               />
             </Grid>
           </Grid>
@@ -192,11 +224,17 @@ const CompanyPolicyAcknowledgementForm = () => {
               </div>
             </Grid>
             <Grid item xs="3">
-              <TextFieldFormsy
+              <CheckboxFormsy
                 className="mb-16 w-full"
-                type="file"
-                name="name"
-                variant="outlined"
+                name="accept"
+                value={false}
+                label="Agreed"
+                validations={{
+                  equals: true,
+                }}
+                validationErrors={{
+                  equals: "You need to accept"
+                }}
               />
             </Grid>
           </Grid>
@@ -222,11 +260,17 @@ const CompanyPolicyAcknowledgementForm = () => {
           <Grid container spacing="4">
             <Grid item xs="6">
               <span>Employee (Name/ Signature)</span>
-              <TextFieldFormsy
+              <CheckboxFormsy
                 className="mb-16 w-full"
-                type="file"
-                name="name"
-                variant="outlined"
+                name="accept"
+                value={false}
+                label="Agreed"
+                validations={{
+                  equals: true,
+                }}
+                validationErrors={{
+                  equals: "You need to accept"
+                }}
               />
             </Grid>
             <Grid item xs="6">
@@ -259,6 +303,21 @@ const CompanyPolicyAcknowledgementForm = () => {
                 variant="outlined"
               />
             </Grid>
+          </Grid>
+
+          <Grid alignItems="center" container item sm="12" md="12" lg="12" xl="12">
+            <div className={card.submit}>
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                className="mx-auto mt-32 mb-80 w-6/12"
+                aria-label="LOG IN"
+              // disabled={!isFormValid}
+              >
+                Submit
+              </Button>
+            </div>
           </Grid>
         </div>
       </div>

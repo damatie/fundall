@@ -1,5 +1,5 @@
 import React from 'react';
-import { TextFieldFormsy, SelectFormsy } from '@fuse/core/formsy';
+import { TextFieldFormsy, CheckboxFormsy, SelectFormsy } from '@fuse/core/formsy';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import { inputStyles } from '../../EmployeeFormInput';
@@ -58,15 +58,21 @@ const MalaroneMalanilAcknowledgementForm = () => {
           </Grid>
 
           <Grid container spacing="4" alignItems="center">
-            <Grid container item sm="1" md="1" lg="1" xl="1" alignItems="center">
+            {/* <Grid container item sm="1" md="1" lg="1" xl="1" alignItems="center">
               <p><strong>Signature:</strong></p>
-            </Grid>
+            </Grid> */}
             <Grid container item sm="11" md="11" lg="11" xl="11" alignItems="center">
-              <TextFieldFormsy
+              <CheckboxFormsy
                 className="mb-16 w-full"
-                type="file"
-                name="signature"
-                variant="outlined"
+                name="accept"
+                value={false}
+                label="Sign document"
+                validations={{
+                  equals: true,
+                }}
+                validationErrors={{
+                  equals: "You need to accept"
+                }}
               />
             </Grid>
           </Grid>
@@ -83,6 +89,21 @@ const MalaroneMalanilAcknowledgementForm = () => {
                 variant="outlined"
               />
             </Grid>
+          </Grid>
+
+          <Grid alignItems="center" container item sm="12" md="12" lg="12" xl="12">
+            <div className={card.submit}>
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                className="mx-auto mt-32 mb-80 w-6/12"
+                aria-label="LOG IN"
+              // disabled={!isFormValid}
+              >
+                Submit
+              </Button>
+            </div>
           </Grid>
         </div>
       </div>

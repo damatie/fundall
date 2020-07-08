@@ -45,7 +45,7 @@ const CompanyAssetAcknowledgeForm = () => {
                 type="text"
                 variant="outlined"
                 name="name"
-                placeholder="Employee name"
+                placeholder="item name"
                 variant="outlined"
               />
             </Grid>
@@ -263,7 +263,7 @@ const CompanyAssetAcknowledgeForm = () => {
                 className="mb-16 w-full"
                 type="text"
                 name="name"
-                placeholder="Colour and quantity"
+                placeholder="Name"
                 variant="outlined"
               />
             </Grid>
@@ -285,18 +285,35 @@ const CompanyAssetAcknowledgeForm = () => {
           </Grid>
 
           <Grid container spacing="4" alignItems="center">
-            <Grid item xs="1" sm="1" md="1" lg="1" xl="1">
-              <p>SIGN/DATE:</p>
-            </Grid>
             <Grid item xs="11" sm="11" md="11" lg="11" xl="11">
-              <TextFieldFormsy
+              <CheckboxFormsy
                 className="mb-16 w-full"
-                type="file"
-                name="sign"
-                placeholder="Colour and quantity"
-                variant="outlined"
+                name="accept"
+                value={false}
+                label="Sign document"
+                validations={{
+                  equals: true,
+                }}
+                validationErrors={{
+                  equals: "You need to accept"
+                }}
               />
             </Grid>
+          </Grid>
+
+          <Grid alignItems="center" container item sm="12" md="12" lg="12" xl="12">
+            <div className={classes.submit}>
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                className="mx-auto mt-32 mb-80 w-6/12"
+                aria-label="LOG IN"
+              // disabled={!isFormValid}
+              >
+                Submit
+              </Button>
+            </div>
           </Grid>
         </div>
       </div>

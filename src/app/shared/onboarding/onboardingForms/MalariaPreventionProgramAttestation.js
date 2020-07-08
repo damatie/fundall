@@ -1,9 +1,10 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
 import LocalHotelRoundedIcon from "@material-ui/icons/LocalHotelRounded";
 import Formsy from 'formsy-react';
-import { TextFieldFormsy } from '@fuse/core/formsy';
+import { TextFieldFormsy, CheckboxFormsy } from '@fuse/core/formsy';
 import { inputStyles } from '../../EmployeeFormInput';
 import SelectFormsy from '../../selectInput/SelectInput';
 
@@ -69,15 +70,18 @@ const MalariaPreventionProgramAttestation = () => {
           </Grid>
 
           <Grid container spacing="4" alignItems="center">
-            <Grid container item sm="1" md="1" lg="1" xl="1">
-              <p>Signature:</p>
-            </Grid>
             <Grid container item sm="5" md="5" lg="5" xl="5">
-              <TextFieldFormsy
+              <CheckboxFormsy
                 className="mb-16 w-full"
-                type="file"
-                name="signature"
-                variant="outlined"
+                name="accept"
+                value={false}
+                label="Sign document"
+                validations={{
+                  equals: true,
+                }}
+                validationErrors={{
+                  equals: "You need to accept"
+                }}
               />
             </Grid>
             <Grid container item sm="1" md="1" lg="1" xl="1">
@@ -209,6 +213,21 @@ const MalariaPreventionProgramAttestation = () => {
                 variant="outlined"
               />
             </Grid>
+          </Grid>
+
+          <Grid alignItems="center" container item sm="12" md="12" lg="12" xl="12">
+            <div className={card.submit}>
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                className="mx-auto mt-32 mb-80 w-6/12"
+                aria-label="LOG IN"
+              // disabled={!isFormValid}
+              >
+                Submit
+              </Button>
+            </div>
           </Grid>
         </div>
       </div>
