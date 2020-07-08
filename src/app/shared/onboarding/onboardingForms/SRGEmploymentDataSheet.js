@@ -2,9 +2,9 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Formsy from 'formsy-react';
-import { TextFieldFormsy, SelectFormsy } from '@fuse/core/formsy';
+import { TextFieldFormsy, SelectFormsy, CheckboxFormsy } from '@fuse/core/formsy';
 import { inputStyles } from '../../EmployeeFormInput';
-// import SelectFormsy from '../../selectInput/SelectInput';
+import Button from '@material-ui/core/Button';
 import StorageRoundedIcon from '@material-ui/icons/StorageRounded';
 import MenuItem from '@material-ui/core/MenuItem';
 
@@ -265,7 +265,6 @@ const SRGEmploymentDataSheet = () => {
                 className="mb-16 w-full"
                 type="date"
                 name="name"
-                // Placeholder="Birth date"
                 variant="outlined"
               />
             </Grid>
@@ -346,7 +345,7 @@ const SRGEmploymentDataSheet = () => {
                 className="mb-16 w-full"
                 type="text"
                 name="name"
-                Placeholder="Nationality"
+                label="Nationality"
                 variant="outlined"
               />
             </Grid>
@@ -413,7 +412,7 @@ const SRGEmploymentDataSheet = () => {
                 className="mb-16 w-full"
                 type="text"
                 name="name"
-                Placeholder="Full name"
+                label="Full name"
                 variant="outlined"
               />
             </Grid>
@@ -431,7 +430,7 @@ const SRGEmploymentDataSheet = () => {
                 className="mb-16 w-full"
                 type="text"
                 name="name"
-                Placeholder="Nationality"
+                label="Nationality"
                 variant="outlined"
               />
             </Grid>
@@ -498,7 +497,7 @@ const SRGEmploymentDataSheet = () => {
                 className="mb-16 w-full"
                 type="text"
                 name="name"
-                Placeholder="Full name"
+                label="Full name"
                 variant="outlined"
               />
             </Grid>
@@ -516,7 +515,7 @@ const SRGEmploymentDataSheet = () => {
                 className="mb-16 w-full"
                 type="text"
                 name="name"
-                Placeholder="Nationality"
+                label="Nationality"
                 variant="outlined"
               />
             </Grid>
@@ -583,7 +582,7 @@ const SRGEmploymentDataSheet = () => {
                 className="mb-16 w-full"
                 type="text"
                 name="name"
-                Placeholder="Full name"
+                label="Full name"
                 variant="outlined"
               />
             </Grid>
@@ -601,7 +600,7 @@ const SRGEmploymentDataSheet = () => {
                 className="mb-16 w-full"
                 type="text"
                 name="name"
-                Placeholder="Nationality"
+                label="Nationality"
                 variant="outlined"
               />
             </Grid>
@@ -863,13 +862,17 @@ const SRGEmploymentDataSheet = () => {
 
           <Grid container spacing="4">
             <Grid item xs="12">
-              <p><b>Name, signature and sate</b></p>
-              <TextFieldFormsy
+              <CheckboxFormsy
                 className="mb-16 w-full"
-                type="text"
-                name="name"
-                Placeholder="Name, signature and sate"
-                variant="outlined"
+                name="accept"
+                value={false}
+                label="Agreed"
+                validations={{
+                  equals: true,
+                }}
+                validationErrors={{
+                  equals: "You need to accept"
+                }}
               />
             </Grid>
           </Grid>
@@ -1079,6 +1082,20 @@ const SRGEmploymentDataSheet = () => {
             </Grid>
           </Grid>
 
+          <Grid alignItems="center" container item sm="12" md="12" lg="12" xl="12">
+            <div className={card.submit}>
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                className="mx-auto mt-32 mb-80 w-6/12"
+                aria-label="LOG IN"
+              // disabled={!isFormValid}
+              >
+                Submit
+              </Button>
+            </div>
+          </Grid>
         </div>
       </div>
     </Formsy>

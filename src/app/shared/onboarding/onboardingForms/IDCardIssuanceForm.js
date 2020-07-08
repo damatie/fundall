@@ -1,8 +1,9 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
 import Formsy from 'formsy-react';
-import { TextFieldFormsy } from '@fuse/core/formsy';
+import { TextFieldFormsy, CheckboxFormsy } from '@fuse/core/formsy';
 import { inputStyles } from '../../EmployeeFormInput';
 import FeaturedVideoRoundedIcon from "@material-ui/icons/FeaturedVideoRounded";
 
@@ -58,11 +59,17 @@ const IDCardIssuanceForm = () => {
                   variant="outlined"
                 />
                 <span className={classes.span}><strong>Signature upload:</strong></span>
-                <TextFieldFormsy
+                <CheckboxFormsy
                   className="mb-16 w-full"
-                  type="file"
-                  name="signature"
-                  variant="outlined"
+                  name="accept"
+                  value={false}
+                  label="Upload signature"
+                  validations={{
+                    equals: true,
+                  }}
+                  validationErrors={{
+                    equals: "You need to accept"
+                  }}
                 />
               </div>
             </Grid>
@@ -101,11 +108,17 @@ const IDCardIssuanceForm = () => {
                   variant="outlined"
                 />
                 <span className={classes.span}><strong>Signature upload:</strong></span>
-                <TextFieldFormsy
+                <CheckboxFormsy
                   className="mb-16 w-full"
-                  type="file"
-                  name="upload"
-                  variant="outlined"
+                  name="accept"
+                  value={false}
+                  label="Upload signature"
+                  validations={{
+                    equals: true,
+                  }}
+                  validationErrors={{
+                    equals: "You need to accept"
+                  }}
                 />
               </div>
             </Grid>
@@ -144,11 +157,17 @@ const IDCardIssuanceForm = () => {
                   variant="outlined"
                 />
                 <span className={classes.span}><strong>Signature upload:</strong></span>
-                <TextFieldFormsy
+                <CheckboxFormsy
                   className="mb-16 w-full"
-                  type="file"
-                  name="signature"
-                  variant="outlined"
+                  name="accept"
+                  value={false}
+                  label="Upload signature"
+                  validations={{
+                    equals: true,
+                  }}
+                  validationErrors={{
+                    equals: "You need to accept"
+                  }}
                 />
               </div>
             </Grid>
@@ -187,11 +206,17 @@ const IDCardIssuanceForm = () => {
                   variant="outlined"
                 />
                 <span className={classes.span}><strong>Signature upload:</strong></span>
-                <TextFieldFormsy
+                <CheckboxFormsy
                   className="mb-16 w-full"
-                  type="file"
-                  name="upload"
-                  variant="outlined"
+                  name="accept"
+                  value={false}
+                  label="Upload signature"
+                  validations={{
+                    equals: true,
+                  }}
+                  validationErrors={{
+                    equals: "You need to accept"
+                  }}
                 />
               </div>
             </Grid>
@@ -206,6 +231,21 @@ const IDCardIssuanceForm = () => {
                 />
               </div>
             </Grid>
+          </Grid>
+
+          <Grid alignItems="center" container item sm="12" md="12" lg="12" xl="12">
+            <div className={card.submit}>
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                className="mx-auto mt-32 mb-80 w-6/12"
+                aria-label="LOG IN"
+              // disabled={!isFormValid}
+              >
+                Submit
+              </Button>
+            </div>
           </Grid>
         </div>
       </div>
