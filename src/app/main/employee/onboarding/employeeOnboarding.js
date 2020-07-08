@@ -8,6 +8,17 @@ import FusePageSimple from '@fuse/core/FusePageSimple';
 import { makeStyles } from '@material-ui/core/styles';
 import FuseAnimate from '@fuse/core/FuseAnimate';
 import Icon from '@material-ui/core/Icon';
+import IDCardIssuanceForm from '../../../shared/onboarding/onboardingForms/IDCardIssuanceForm';
+import MalariaPreventionProgramAttestation from '../../../shared/onboarding/onboardingForms/MalariaPreventionProgramAttestation';
+import AuthorizationFormForDDORE from '../../../shared/onboarding/onboardingForms/AuthorizationFormForDDORE';
+import AuthorizationForPayrollDeductions from '../../../shared/onboarding/onboardingForms/AuthorizationForPayrollDeductions';
+import EmployeeHandbookAcknowledgement from '../../../shared/onboarding/onboardingForms/EmployeeHandbookAcknowledgement';
+import CompanyAssetAcknowledgeForm from '../../../shared/onboarding/onboardingForms/CompanyAssetAcknowledgeForm';
+import CompanyPolicyAcknowledgementForm from '../../../shared/onboarding/onboardingForms/CompanyPolicyAcknowlegementForm';
+import AxaMansardEnrollmentTemplate from '../../../shared/onboarding/onboardingForms/AxamansardEnrollmentTemplate';
+import MalaroneMalanilAcknowledgementForm from '../../../shared/onboarding/onboardingForms/MalaroneMalanilAcknowledgementForm';
+import SRGEmploymentDataSheet from '../../../shared/onboarding/onboardingForms/SRGEmploymentDataSheet';
+
 
 const useStyles = makeStyles({
 	layoutRoot: {}
@@ -47,9 +58,36 @@ const EmployeeOnboarding = () => {
 			// }
 			content={
 				<div className="p-24">
-					<h4>Content</h4>
 					<br />
-					{/* <DemoContent /> */}
+					<br />
+					<CompanyPolicyAcknowledgementForm />
+					<br />
+					<br />
+					<SRGEmploymentDataSheet />
+					<br />
+					<br />
+					<MalaroneMalanilAcknowledgementForm />
+					<br />
+					<br />
+					<AxaMansardEnrollmentTemplate />
+					<br />
+					<br />
+					<IDCardIssuanceForm />
+					<br />
+					<br />
+					<MalariaPreventionProgramAttestation />
+					<br />
+					<br />
+					<AuthorizationFormForDDORE />
+					<br />
+					<br />
+					<AuthorizationForPayrollDeductions />
+					<br />
+					<br />
+					<CompanyAssetAcknowledgeForm />
+					<br />
+					<br />
+					<EmployeeHandbookAcknowledgement />
 				</div>
       }
     />

@@ -1,13 +1,11 @@
 import React from 'react';
-import TextInput from '../../../../../shared/inputs/textInputs';
+import { TextFieldFormsy, SelectFormsy } from '@fuse/core/formsy';
 import { makeStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+import { inputStyles } from '../../EmployeeFormInput';
 import Grid from '@material-ui/core/Grid';
-import { boxShadows } from '../../../../../styles/boxShadow';
-import container from '../../../../../styles/container';
-import Date from '../../../../../shared/dates/date';
 import BubbleChartIcon from "@material-ui/icons/BubbleChart";
-import authIcon from '../../../../../styles/authIcon';
-import title from '../../../../../styles/title';
+import Formsy from 'formsy-react';
 
 const useStyles = makeStyles((theme) => ({
   code: {
@@ -17,58 +15,78 @@ const useStyles = makeStyles((theme) => ({
 
 const MalaroneMalanilAcknowledgementForm = () => {
   //styles
-  const card = boxShadows();
-  const wrapper = container();
-  const icon = authIcon();
-  const heading = title();
-  const classes = useStyles();
+  const card = inputStyles();
 
   return (
-    <div className={card.card_boxshadow}>
-      <div className={classes.code}>
-        <div className={wrapper.container}>
-          <header className={heading.title}>
-            <h2><span className={icon.authIcon}><BubbleChartIcon /></span>Malarone/Malanil Acknowledgement Form.</h2>
+    <Formsy>
+      <div className={card.formField}>
+        <div className={card.container}>
+          <header className={card.title}>
+            <h2><span className={card.AuthIcon}><BubbleChartIcon /></span>EXTRA - Malarone/Malanil Acknowledgement Form.</h2>
           </header>
 
-          <Grid container spacing="10" alignItems="center">
+          <br />
+
+          <Grid container spacing="4" alignItems="center">
             <Grid container item sm="1" md="1" lg="1" xl="1" alignItems="center">
               <p><strong>Name:</strong></p>
             </Grid>
             <Grid container item sm="11" md="11" lg="11" xl="11" alignItems="center">
-              <TextInput textInputData={''} />
+              <TextFieldFormsy
+                className="mb-16 w-full"
+                type="text"
+                name="name"
+                variant="outlined"
+                placeholder="Name"
+              />
             </Grid>
           </Grid>
 
-          <Grid container spacing="10" alignItems="center">
+          <Grid container spacing="4" alignItems="center">
             <Grid container item sm="2" md="2" lg="2" xl="2" alignItems="center">
               <p><strong>Quantity Received:</strong></p>
             </Grid>
             <Grid container item sm="10" md="10" lg="10" xl="10" alignItems="center" >
-              <TextInput textInputData={''} />
+              <TextFieldFormsy
+                className="mb-16 w-full"
+                type="text"
+                name="name"
+                variant="outlined"
+                placeholder="Quantity Received"
+              />
             </Grid>
           </Grid>
 
-          <Grid container spacing="10" alignItems="center">
-            <Grid container item sm="2" md="2" lg="2" xl="2" alignItems="center">
+          <Grid container spacing="4" alignItems="center">
+            <Grid container item sm="1" md="1" lg="1" xl="1" alignItems="center">
               <p><strong>Signature:</strong></p>
             </Grid>
-            <Grid container item sm="10" md="10" lg="10" xl="10" alignItems="center">
-              <TextInput textInputData={''} />
+            <Grid container item sm="11" md="11" lg="11" xl="11" alignItems="center">
+              <TextFieldFormsy
+                className="mb-16 w-full"
+                type="file"
+                name="signature"
+                variant="outlined"
+              />
             </Grid>
           </Grid>
 
-          <Grid container spacing="10" alignItems="center">
+          <Grid container spacing="4" alignItems="center">
             <Grid container item sm="1" md="1" lg="1" xl="1" alignItems="center" >
               <p><strong>Date:</strong></p>
             </Grid>
             <Grid container item sm="4" md="4" lg="4" xl="4" alignItems="center" >
-              <Date dateData={''} />
+              <TextFieldFormsy
+                className="mb-16 w-full"
+                type="date"
+                name="name"
+                variant="outlined"
+              />
             </Grid>
           </Grid>
         </div>
       </div>
-    </div>
+    </Formsy>
   );
 };
 
