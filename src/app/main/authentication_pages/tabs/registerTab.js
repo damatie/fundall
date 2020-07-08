@@ -47,7 +47,6 @@ function JWTRegisterTab(props) {
 	function handleSubmit(model) {
 		console.log(model);
 		dispatch(authActions.submitRegister(model));
-		// console.log(model);
 	}
 
 	if(register.success) {
@@ -71,10 +70,10 @@ function JWTRegisterTab(props) {
 					name="firstName"
 					label="First name"
 					validations={{
-						minLength: 4
+						minLength: 3
 					}}
 					validationErrors={{
-						minLength: 'Min character length is 4'
+						minLength: 'Min character length is 3'
 					}}
 					InputProps={{
 						endAdornment: (
@@ -95,10 +94,10 @@ function JWTRegisterTab(props) {
 					name="lastName"
 					label="Last name"
 					validations={{
-						minLength: 4
+						minLength: 3
 					}}
 					validationErrors={{
-						minLength: 'Min character length is 4'
+						minLength: 'Min character length is 3'
 					}}
 					InputProps={{
 						endAdornment: (

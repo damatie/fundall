@@ -20,8 +20,14 @@ export function submitRegister(data) {
 			origin: window.location.host
 		}
 		fetch("https://hris-cbit.herokuapp.com/api/v1/auth/employee/signup", {
-			method: 'POST'
+			method: 'PATCH',
+			origin: window.location.host,
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(reg.body),
 		})
+		.then(res => res.json())
 		.then(data => {
 			console.log(data);
 			if(data.success && data.message !== "Accout already exist") {
