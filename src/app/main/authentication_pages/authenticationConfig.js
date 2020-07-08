@@ -26,6 +26,14 @@ const AuthenticationConfig = {
 	auth: authRoles.onlyGuest,
 	routes: [ 
 		{
+			path: '/auth/forgot-password',
+			component: React.lazy(() => import('./tabs/forgotPassword'))
+		},
+		{
+			path: '/auth/reset-passord',
+			component: React.lazy(() => import('./tabs/resetPassword'))
+		},
+		{
 			path: '/auth/register',
 			component: React.lazy(() => import('./register/register'))
 		},

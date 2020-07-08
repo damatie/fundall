@@ -20,7 +20,7 @@ export function submitRegister(data) {
 			origin: window.location.host
 		}
 		fetch("https://hris-cbit.herokuapp.com/api/v1/auth/employee/signup", {
-			method: 'POST'
+			method: 'PATCH'
 		})
 		.then(data => {
 			console.log(data);
