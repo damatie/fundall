@@ -48,7 +48,7 @@ const SRGEmploymentDataSheet = () => {
                 className="mb-16 w-full"
                 type="date"
                 name="name"
-                label="Name"
+                // label="Name"
                 variant="outlined"
               />
             </Grid>
@@ -116,7 +116,7 @@ const SRGEmploymentDataSheet = () => {
                 className="mb-16 w-full"
                 type="date"
                 name="name"
-                Placeholder="First name"
+                // Placeholder="First name"
                 variant="outlined"
               />
             </Grid>
@@ -228,7 +228,7 @@ const SRGEmploymentDataSheet = () => {
                 className="mb-16 w-full"
                 type="date"
                 name="name"
-                Placeholder="Since date"
+                // Placeholder="Since date"
                 variant="outlined"
               />
             </Grid>
@@ -238,7 +238,7 @@ const SRGEmploymentDataSheet = () => {
                 className="mb-16 w-full"
                 type="text"
                 name="name"
-                Placeholder="Since date"
+                Placeholder="No. Of eligible dependent children"
                 variant="outlined"
               />
             </Grid>
@@ -265,7 +265,7 @@ const SRGEmploymentDataSheet = () => {
                 className="mb-16 w-full"
                 type="date"
                 name="name"
-                Placeholder="Birth date"
+                // Placeholder="Birth date"
                 variant="outlined"
               />
             </Grid>
@@ -337,7 +337,7 @@ const SRGEmploymentDataSheet = () => {
                 className="mb-16 w-full"
                 type="date"
                 name="name"
-                label="Birth date"
+                // label="Birth date"
                 variant="outlined"
               />
             </Grid>
@@ -422,7 +422,7 @@ const SRGEmploymentDataSheet = () => {
                 className="mb-16 w-full"
                 type="date"
                 name="name"
-                Placeholder="Birth date"
+                // Placeholder="Birth date"
                 variant="outlined"
               />
             </Grid>
@@ -507,7 +507,7 @@ const SRGEmploymentDataSheet = () => {
                 className="mb-16 w-full"
                 type="date"
                 name="name"
-                Placeholder="Birth date"
+                // Placeholder="Birth date"
                 variant="outlined"
               />
             </Grid>
@@ -592,7 +592,7 @@ const SRGEmploymentDataSheet = () => {
                 className="mb-16 w-full"
                 type="date"
                 name="name"
-                Placeholder="Birth date"
+                // Placeholder="Birth date"
                 variant="outlined"
               />
             </Grid>
@@ -683,7 +683,7 @@ const SRGEmploymentDataSheet = () => {
                 className="mb-16 w-full"
                 type="date"
                 name="name"
-                Placeholder="Birth date"
+                // Placeholder="Birth date"
                 variant="outlined"
               />
             </Grid>
@@ -961,7 +961,7 @@ const SRGEmploymentDataSheet = () => {
               <span><b>Valid ID card number (attach photocopy)</b></span>
               <TextFieldFormsy
                 className="mb-16 w-full"
-                type="file"
+                type="text"
                 name="name"
                 Placeholder="Valid ID card number (attach photocopy)"
                 variant="outlined"
@@ -980,7 +980,7 @@ const SRGEmploymentDataSheet = () => {
               <span><b>Bank name</b></span>
               <TextFieldFormsy
                 className="mb-16 w-full"
-                type="file"
+                type="text"
                 name="name"
                 Placeholder="Bank name"
                 variant="outlined"
@@ -993,7 +993,7 @@ const SRGEmploymentDataSheet = () => {
               <span><b>Bank branch</b></span>
               <TextFieldFormsy
                 className="mb-16 w-full"
-                type="file"
+                type="text"
                 name="name"
                 Placeholder="Bank branch"
                 variant="outlined"
@@ -1006,7 +1006,7 @@ const SRGEmploymentDataSheet = () => {
               <span><b>Bank address</b></span>
               <TextFieldFormsy
                 className="mb-16 w-full"
-                type="file"
+                type="text"
                 name="name"
                 Placeholder="Bank address"
                 variant="outlined"
@@ -1019,7 +1019,7 @@ const SRGEmploymentDataSheet = () => {
               <span><b>Account number</b></span>
               <TextFieldFormsy
                 className="mb-16 w-full"
-                type="file"
+                type="text"
                 name="name"
                 Placeholder="Account number"
                 variant="outlined"
@@ -1032,7 +1032,7 @@ const SRGEmploymentDataSheet = () => {
               <span><b>ABA routing no.</b></span>
               <TextFieldFormsy
                 className="mb-16 w-full"
-                type="file"
+                type="text"
                 name="name"
                 Placeholder="ABA routing no."
                 variant="outlined"
@@ -1045,7 +1045,7 @@ const SRGEmploymentDataSheet = () => {
               <span><b>Swift code</b></span>
               <TextFieldFormsy
                 className="mb-16 w-full"
-                type="file"
+                type="text"
                 name="name"
                 Placeholder="Swift code"
                 variant="outlined"
@@ -1058,7 +1058,7 @@ const SRGEmploymentDataSheet = () => {
               <span><b>Sort code</b></span>
               <TextFieldFormsy
                 className="mb-16 w-full"
-                type="file"
+                type="text"
                 name="name"
                 Placeholder="Sort code"
                 variant="outlined"
@@ -1071,7 +1071,7 @@ const SRGEmploymentDataSheet = () => {
               <span><b>IBAN</b></span>
               <TextFieldFormsy
                 className="mb-16 w-full"
-                type="file"
+                type="text"
                 name="name"
                 Placeholder="IBAN"
                 variant="outlined"
