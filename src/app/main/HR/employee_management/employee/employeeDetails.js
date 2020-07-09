@@ -21,6 +21,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import PersonalInformation from './tabs/personalInformation';
 import EmploymentInformation from './tabs/employmentInformation';
+import PromotionHistory from './tabs/promotionHistory';
 // import * as Actions from './store/actions';
 // import reducer from './store/reducers';
 // import EmployeeUnitTab from './tabs/newEmployeeTab';
@@ -147,12 +148,15 @@ function EmployeeUnit(props) {
 					<Tab className="h-64 normal-case" label="Personal Information" />
 					<Tab className="h-64 normal-case" label="Employment Information" />
 					<Tab className="h-64 normal-case" label="Document" />
+					<Tab className="h-64 normal-case" label="Promotion History" />
 				</Tabs> : null
 			}
 			content={
         <div className=" sm:p-24 ">
           {tabValue === 0 && (<PersonalInformation />)}
           {tabValue === 1 && (<EmploymentInformation />)}
+          {tabValue === 2 && (<EmploymentInformation />)}
+          {tabValue === 3 && (<PromotionHistory />)}
         </div>
 			}
 			innerScroll
