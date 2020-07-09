@@ -10,17 +10,52 @@ import TableRow from '@material-ui/core/TableRow';
 import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { withRouter } from 'react-router-dom';
-import * as Actions from '../store/actions';
-import EmployeesTableHead from './employeeTableHead';
+import { withRouter, useParams } from 'react-router-dom';
+import SharedTableHead from 'app/shared/sharedTableHead';
 
-function EmployeesTable(props) {
+const rows = [
+	{
+		id: 'name',
+		align: 'left',
+		disablePadding: false,
+		label: 'Employee name',
+		sort: true
+  },
+  {
+		id: 'leave type',
+		align: 'left',
+		disablePadding: false,
+		label: 'Last name',
+		sort: true
+  },
+  {
+		id: 'fromDate',
+		align: 'left',
+		disablePadding: false,
+		label: 'From date',
+		sort: true
+  },
+  {
+		id: 'toDate',
+		align: 'left',
+		disablePadding: false,
+		label: 'To date',
+		sort: true
+  },
+  {
+		id: 'leaveFor',
+		align: 'right',
+		disablePadding: false,
+		label: 'Leave for',
+		sort: true
+	}
+];
+
+function LeaveTableTab(props) {
 	const dispatch = useDispatch();
-	const employees = useSelector(({ employees }) => employees.employees);
-	const searchText = useSelector(({ employees }) => employees.employees.searchText);
 
 	const [selected, setSelected] = useState([]);
-	const [data, setData] = useState(employees.data);
+	const [data, setData] = useState(props.data);
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(10);
 	const [order, setOrder] = useState({
@@ -29,17 +64,8 @@ function EmployeesTable(props) {
 	});
 
 	useEffect(() => {
-		dispatch(Actions.getEmployees());
-	}, [dispatch, employees.update]);
-
-	useEffect(() => {
-		if (searchText.length !== 0) {
-			setData(_.filter(employees, item => item.firstName.toLowerCase().includes(searchText.toLowerCase())));
-			setPage(0);
-		} else {
-			setData(employees.data);
-		}
-	}, [employees, searchText]);
+    setData(props.data)
+	}, [props.data]);
 
 	function handleRequestSort(event, property) {
 		const id = property;
@@ -64,8 +90,14 @@ function EmployeesTable(props) {
 	}
 
 	function handleClick(item) {
-		// props.history.push(`/apps/e-commerce/products/${item.id}/${item.handle}`);
-	}
+		if(props.user.user === 'line_manager') {
+			props.history.push(`/line_manager/leave_review/employee/${item.id}`);
+		} else if(props.user.user === 'hr') {
+			props.history.push(`/hr/leave_review/employee/${item.id}`);
+		}
+  }
+  
+
 
 	function handleCheck(event, id) {
 		const selectedIndex = selected.indexOf(id);
@@ -92,18 +124,24 @@ function EmployeesTable(props) {
 		setRowsPerPage(event.target.value);
 	}
 
+	const handleDelete = () => {
+		// dispatch(Actions.deleteRoles(selected));
+	};
+
 	return (
 		<div className="w-full flex flex-col">
 			<FuseScrollbars className="flex-grow overflow-x-auto">
 				<Table className="min-w-xl" aria-labelledby="tableTitle">
-					<EmployeesTableHead
+				  <SharedTableHead
 						numSelected={selected.length}
 						order={order}
 						onSelectAllClick={handleSelectAllClick}
 						onRequestSort={handleRequestSort}
-						rowCount={data.length}
+            rowCount={data.length}
+						rows={rows}
+						handleDelete={handleDelete}
+						success={true}
 					/>
-
 					<TableBody>
 						{_.orderBy(
 							data,
@@ -123,7 +161,6 @@ function EmployeesTable(props) {
 						)
 							.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
 							.map(n => {
-								console.log(n);
 								const isSelected = selected.indexOf(n.id) !== -1;
 								return (
 									<TableRow
@@ -136,41 +173,26 @@ function EmployeesTable(props) {
 										selected={isSelected}
 										onClick={event => handleClick(n)}
 									>
-										<TableCell className="w-64 text-center" padding="none">
-											<Checkbox
-												checked={isSelected}
-												onClick={event => event.stopPropagation()}
-												onChange={event => handleCheck(event, n.id)}
-											/>
+                    <TableCell component="th" scope="row" align='left'>
+                     
 										</TableCell>
 
-										<TableCell component="th" scope="row">
-                      {`${n.firstName} ${n.lastName}`}
+										<TableCell component="th" scope="row" align='left'>
+                      {n.firstName}
+										</TableCell>
+                    <TableCell component="th" scope="row" align='left'>
+                      {n.leaveType}
+										</TableCell>
+                    <TableCell component="th" scope="row" align='left'>
+                      {n.fromDate}
+										</TableCell>
+                    <TableCell component="th" scope="row" align='left'>
+                      {n.toDate}
+										</TableCell>
+                    <TableCell component="th" scope="row" align='right'>
+                      {n.leaveFor}
 										</TableCell>
 
-										<TableCell component="th" scope="row">
-											{n.email}
-										</TableCell>
-
-										<TableCell className="truncate" component="th" scope="row">
-											{n.department}
-										</TableCell>
-
-										<TableCell component="th" scope="row" align="right">
-											{n.entity}
-										</TableCell>
-
-										<TableCell component="th" scope="row" align="right">
-											{n.mobile}
-										</TableCell>
-
-										<TableCell component="th" scope="row" align="right">
-											{n.status ? (
-												<Icon className="text-green text-20">check_circle</Icon>
-											) : (
-												<Icon className="text-red text-20">remove_circle</Icon>
-											)}
-										</TableCell>
 									</TableRow>
 								);
 							})}
@@ -195,6 +217,6 @@ function EmployeesTable(props) {
 			/>
 		</div>
 	);
-}
+};
 
-export default withRouter(EmployeesTable);
+export default withRouter(LeaveTableTab);

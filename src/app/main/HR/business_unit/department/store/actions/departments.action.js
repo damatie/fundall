@@ -1,8 +1,11 @@
 import axios from 'axios';
 import { useAuth } from 'app/hooks/useAuth';
 
+
 export const GET_DEPARTMENTS = 'GET DEPARTMENTS';
 export const SET_DEPARTMENTS_SEARCH_TEXT = 'SET DEPARTMENTS SEARCH TEXT';
+export const GET_ONE_DEPARTMENT = 'GET ONE DEPARTMENT';
+export const LOADING_DEPARTMENT = 'LOADING DEPARTMENT';
 
 export function getDepartments(id) {
 

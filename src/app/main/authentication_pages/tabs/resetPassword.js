@@ -10,7 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import Swal from 'sweetalert2';
 import clsx from 'clsx';
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams, useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -21,6 +21,8 @@ const useStyles = makeStyles(theme => ({
 
 function ResetPasswordPage() {
 	const classes = useStyles();
+	const { id } = useParams();
+	const history = useHistory();
 
 	const { form, handleChange, resetForm } = useForm({
 		name: '',
@@ -42,7 +44,7 @@ function ResetPasswordPage() {
 	function handleSubmit(ev) {
 		ev.preventDefault();
 		setLoading(true);
-		fetch("https://hris-cbit.herokuapp.com/api/v1/auth/employee/reset_password/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNhbXVlbGNoaWJ1aWtlMjJAZ21haWwuY29tIiwiaWF0IjoxNTkwMDU5NzU5LCJleHAiOjE1OTAwNjMzNTl9.jHrk4jo0L9YDyvmCh-Do0AcUoK9krI8XAk8l6ma7-aM", {
+		fetch(`https://hris-cbit.herokuapp.com/api/v1/auth/employee/reset_password/${id}`, {
 			method: 'PATCH',
 			headers: {
 				'Content-Type': 'application/json',
@@ -54,9 +56,19 @@ function ResetPasswordPage() {
 				setLoading(false);
 				if (res.success === true){
 					Swal.fire({
-						title: 'Check your email',
+						title: 'Reset password',
 						text: res.message,
 						icon: 'success',
+						timer: 3000,
+					});
+					history.push({
+						pathname: '/auth/login'
+					})
+				} else {
+					Swal.fire({
+						title: 'Reset password',
+						text: res.message,
+						icon: 'error',
 						timer: 3000,
 					});
 				}

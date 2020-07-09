@@ -22,17 +22,18 @@ import Axios from 'axios';
 import { useAuth } from 'app/hooks/useAuth';
 import MenuItem from '@material-ui/core/MenuItem';
 import ProgressBtn from 'app/shared/progressBtn';
+import { useState } from 'react';
 
 const defaultFormState = {
-	id: FuseUtils.generateGUID(),
+	// id: FuseUtils.generateGUID(),
 	leaveType: '',
 	leaveFor: '',
 	fromDate: moment(new Date(), 'MM/DD/YYYY'),
 	toDate: moment(new Date(), 'MM/DD/YYYY'),
 	lineManagerId: '',
-	backupEmployee: '',
-	days: 5,
-	allowance: false
+	backUpEmployee: '',
+	allowance: false,
+	reason: ''
 };
 
 // moment(new Date(), 'MM/DD/YYYY')
@@ -45,13 +46,30 @@ function EventDialog(props) {
 	const start = moment(form.fromDate, 'MM/DD/YYYY');
 	const end = moment(form.toDate, 'MM/DD/YYYY');
 	const auth = useAuth
+	const [leaveType, setLeaveType] = useState([]);
+	const [ isTrue, setIsTrue ] = useState(true);
+	const [days, setDays] = useState(0);
+
 	useEffect(() => {
 		Axios.get('https://hris-cbit.herokuapp.com/api/v1/leave-type/', {
 			headers: { Authorization: `JWT ${auth().getToken}` }
 		}).then(data => {
-			console.log(data)
-		})
+			setLeaveType(data.data.data);
+		}).catch(e => console.error(e))
 	}, []);
+
+	useEffect(() => {
+		const fromDate = new Date(form.fromDate);
+		const toDate = new Date(form.toDate);
+		const diffInTime = toDate.getTime() - fromDate.getTime();
+		const diffInDays = diffInTime / (1000 * 3600 * 24);
+		setDays(diffInDays);
+		if(diffInDays >= 14) {
+			setIsTrue(false);
+		} else {
+			setIsTrue(true);
+		}
+	}, [form])
 
 	const initDialog = useCallback(() => {
 		/**
@@ -89,19 +107,25 @@ function EventDialog(props) {
 	}
 
 	function canBeSubmitted() {
-		return form.leaveType.length > 0;
+		// return form.leaveType.length > 0;
 	}
 
 	function handleSubmit(event) {
 		event.preventDefault();
-		console.log(form)
+		// console.log({
+		// 	...form,
+		// 	days: days
+		// })
 
 		// if (eventDialog.type === 'new') {
 		// 	dispatch(Actions.addEvent(form));
 		// } else {
 		// 	dispatch(Actions.updateEvent(form));
 		// }
-		dispatch(Actions.requestLeave(form));
+		dispatch(Actions.requestLeave({
+			...form,
+			days: days
+		}));
 	}
 
 	function handleRemove() {
@@ -138,9 +162,9 @@ function EventDialog(props) {
 						required
 						fullWidth
 					>
-						{[{id: 1, name: 'Medical Leave'}, {id: 2, name: 'Maternity Leave'}].map(item => (
+						{leaveType.map(item => (
 						<MenuItem value={item.id}>
-							{item.name}
+							{item.type}
 						</MenuItem>))}
 					</TextField>
 
@@ -169,7 +193,6 @@ function EventDialog(props) {
 						maxDate={end}
 					/>
 
-
 					<DatePicker
 						label="To date"
 						inputVariant="outlined"
@@ -180,41 +203,55 @@ function EventDialog(props) {
 					/>
 
 					<TextField
-						id="reporting_manager"
-						label="Reporting manager"
+						id="title"
+						label="Line manager"
+						select
 						className="mt-8 mb-16"
 						InputLabelProps={{
 							shrink: true
 						}}
 						name="lineManagerId"
-						defaultValue={form.lineManagerId}
-						onChange={handleChange}
+						defaultValue={form.leaveType}
+						onChange={ e => {
+							handleChange(e)
+						}}
 						variant="outlined"
 						autoFocus
 						required
 						fullWidth
-					/>
+					>
+						{[{name: 'David Chinweike', id: 1}, {name: 'Victor Jane', id: 2}].map(item => (
+						<MenuItem value={item.id}>
+							{item.name}
+						</MenuItem>))}
+					</TextField>
 
 					<TextField
-						id="backup_employee"
+						id="title"
 						label="Backup employee"
+						select
 						className="mt-8 mb-16"
 						InputLabelProps={{
 							shrink: true
 						}}
-						name="backupEmployee"
-						defaultValue={form.leaveFor}
+						name="backUpEmployee"
+						defaultValue={form.leaveType}
 						onChange={handleChange}
 						variant="outlined"
 						autoFocus
 						required
 						fullWidth
-					/>
+					>
+						{[{name: 'Matthew Nate', id: 1}, {name: 'Jay-Z Obi', id: 2}].map(item => (
+						<MenuItem value={item.id}>
+							{item.name}
+						</MenuItem>))}
+					</TextField>
 					
 					<FormControlLabel
 						className="mt-8 mb-16"
 						label="Apply for leave allowance"
-						control={<Switch  id="allDay" name="leaveAllowance" onChange={handleChange} />}
+						control={<Switch disabled={isTrue}  id="allDay" name="allowance" onChange={handleChange} />}
 					/>
 
 					<TextField

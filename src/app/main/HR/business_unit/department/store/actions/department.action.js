@@ -1,6 +1,7 @@
 import axios from 'axios';
 import swal from 'sweetalert2';
 import { useAuth } from 'app/hooks/useAuth';
+import { fetchHeaders } from 'app/shared/fetchHeaders';
 
 
 export const GET_DEPARTMENT = 'GET_DEPARTMENT';
@@ -59,5 +60,25 @@ export function saveDepartment(data, id) {
         payload: 'Error'
       });
     })
+  }
+}
+
+const header = fetchHeaders();
+
+export const getOneDepartment = id => {
+  return dispatch => {
+    dispatch({
+      type: DEPARTMENT_LOADING
+    })
+    fetch(`https://hris-cbit.herokuapp.com/api/v1/department/one/${id}`, {
+      ...header.getRegHeader()
+    }).then(res => res.json()).then(
+      data => {
+        dispatch({
+          type: GET_DEPARTMENT,
+          payload: data.data
+        })
+      }
+    ).catch(e => console.error(e));
   }
 }
