@@ -19,12 +19,8 @@ import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
-import * as Actions from '../store/actions';
-import reducer from '../store/reducers';
-import NewEmployeeTab from './tabs/newEmployeeTab';
-import entityReducer from 'app/main/HR/business_unit/store/reducers';
-import departmentReducer from 'app/main/HR/business_unit/department/store/reducers';
-import rolesReducer from 'app/main/HR/roles/store/reducers';
+import LeaveTableTab from './tabs/leaveTableTab';
+import reducer from 'app/store/reducers';
 
 const useStyles = makeStyles(theme => ({
 	productImageFeaturedStar: {
@@ -61,17 +57,27 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-function Employee(props) {
+function LeaveManagement(props) {
 	const dispatch = useDispatch();
-	const theme = useTheme();
+  const theme = useTheme();
+	const [tabValue, setTabValue] = useState(0);
+	
+	const leaveRequest = useSelector(({ leaveRequest }) => leaveRequest);
 
-	const classes = useStyles(props);
+  const classes = useStyles(props);
+  
+  function handleChangeTab(event, value) {
+		setTabValue(value);
+	}
+
+	useEffect(() => {
+	}, []);
 
 	return (
 		<FusePageCarded
 			classes={{
 				toolbar: 'p-0',
-				header: 'min-h-72 h-72 sm:h-136 sm:min-h-136'
+				header: 'min-h-50 h-50 sm:h-136 sm:min-h-136'
 			}}
 			header={
 					<div className="flex flex-1 w-full items-center justify-between">
@@ -79,15 +85,13 @@ function Employee(props) {
 							<FuseAnimate animation="transition.slideRightIn" delay={300}>
 								<Typography
 									className="normal-case flex items-center sm:mb-12"
-									component={Link}
 									role="button"
-									to="/hr/employee_management/"
 									color="inherit"
 								>
 									<Icon className="text-20">
-										{theme.direction === 'ltr' ? 'arrow_back' : 'arrow_forward'}
+										event
 									</Icon>
-									<span className="mx-4">Employees</span>
+									<span className="mx-4">Leave</span>
 								</Typography>
 							</FuseAnimate>
 
@@ -95,38 +99,34 @@ function Employee(props) {
 								
 							</div>
 						</div>
-            <div className="flex items-center max-w-full">
-								<FuseAnimate animation="transition.expandIn" delay={300}>
-										<img
-											className="w-32 sm:w-48 rounded"
-											src="public/assets/images/e-commerce/product-image-placeholder.png"
-											alt={'form.name'}
-										/>
-								</FuseAnimate>
-								<div className="flex flex-col min-w-0 mx-8 sm:mc-16">
-									<FuseAnimate animation="transition.slideLeftIn" delay={300}>
-										<Typography className="text-16 sm:text-20 truncate">
-										  New Employee
-										</Typography>
-									</FuseAnimate>
-									<FuseAnimate animation="transition.slideLeftIn" delay={300}>
-										<Typography variant="caption">Employee Detail</Typography>
-									</FuseAnimate>
-								</div>
-							</div>
+            
 					</div>
+      }
+      contentToolbar={
+				<Tabs
+					value={tabValue}
+					onChange={handleChangeTab}
+					indicatorColor="primary"
+					textColor="primary"
+					variant="scrollable"
+					scrollButtons="auto"
+					classes={{ root: 'w-full h-64' }}
+				>
+					<Tab className="h-64 normal-case" label="Pending Leave" />
+					<Tab className="h-64 normal-case" label="Reviewed Leave" />
+          <Tab className="h-64 normal-case" label="Approved Leave" />
+				</Tabs>
 			}
 			content={
-					<div className=" sm:p-24 ">
-						<NewEmployeeTab />
-					</div>
+        <div className=" sm:p-24 ">
+          {tabValue === 0 && (<LeaveTableTab data={leaveRequest.pendingLeaves} user={props.config}/>)}
+          {tabValue === 1 && (<LeaveTableTab data={leaveRequest.reviewedLeaves} user={props.config} />)}
+          {tabValue === 2 && (<LeaveTableTab data={leaveRequest.approvedLeaves} user={props.config} />)}
+        </div>
 			}
 			innerScroll
 		/>
 	);
 }
 
-withReducer('roles', rolesReducer)(Employee);
-withReducer('entity', entityReducer)(Employee);
-withReducer('department', departmentReducer)(Employee);
-export default withReducer('employees', reducer)(Employee);
+export default withReducer('leaveRequest', reducer)(LeaveManagement);

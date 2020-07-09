@@ -181,6 +181,13 @@ const navigationConfig = [
 				icon: 'calendar_today',
 			},
 			{
+				id: 'leave_review',
+				title: 'Leave review',
+				type: 'item',
+				url: '/hr/leave_review',
+				icon: 'calendar_today',
+			},
+			{
 				id: 'leave_summary',
 				title: 'Leave summary',
 				type: 'item',
@@ -288,6 +295,13 @@ const navigationConfig = [
 				title: 'Leave summary',
 				type: 'item',
 				url: '/employee/leave_summary',
+				icon: 'calendar_today',
+			},
+			{
+				id: 'leave_review',
+				title: 'Leave review',
+				type: 'item',
+				url: '/line_manager/leave_review',
 				icon: 'calendar_today',
 			}
 		]

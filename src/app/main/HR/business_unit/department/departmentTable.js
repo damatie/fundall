@@ -66,7 +66,7 @@ function DepartmentTable(props) {
 	}
 
 	function handleClick(item) {
-		// props.history.push(`/apps/e-commerce/products/${item.id}/${item.handle}`);
+		props.history.push(`/hr/business_unit/department/details/${item.id}`);
 	}
 
 	function handleCheck(event, id) {

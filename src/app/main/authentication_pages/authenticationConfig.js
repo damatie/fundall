@@ -30,7 +30,7 @@ const AuthenticationConfig = {
 			component: React.lazy(() => import('./tabs/forgotPassword'))
 		},
 		{
-			path: '/auth/reset-passord',
+			path: '/auth/reset-passord:id',
 			component: React.lazy(() => import('./tabs/resetPassword'))
 		},
 		{

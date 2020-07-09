@@ -55,7 +55,7 @@ function NewLeaveTypeTab(props) {
 				<TextFieldFormsy
 					className="mb-16"
 					type="text"
-					name="leaveType"
+					name="type"
 					label="Leave type"
 					validations={{
 						minLength: 4
@@ -79,7 +79,7 @@ function NewLeaveTypeTab(props) {
 				<TextFieldFormsy
 					className="mb-16"
 					type="text"
-					name="leaveShortCode"
+					name="shortCode"
 					label="Leave short code"
 					validations={{
 						minLength: 1

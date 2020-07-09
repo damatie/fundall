@@ -25,6 +25,8 @@ import ResourcesConfig from 'app/main/HR/resources/resourceConfig';
 import LeaveSumamaryConfig from 'app/main/HR/leave_summary/leaveSummaryConfig';
 import EmployeeChecklistConfig from 'app/main/HR/employee_checklist/EmployeeChecklistConfig';
 import AuthenticationConfig from 'app/main/authentication_pages/authenticationConfig';
+import LeaveReviewConfig from 'app/main/line_manager/leave_review/leaveReviewConfig';
+import HrLeaveReviewConfig from 'app/main/HR/leave_review/hrLeaveReviewConfig';
 
 const routeConfigs = [
 	// ExampleConfig,
@@ -50,13 +52,15 @@ const routeConfigs = [
 	LeaveSumamaryConfig,
 	EmployeeChecklistConfig,
 	AuthenticationConfig,
+	LeaveReviewConfig,
+	HrLeaveReviewConfig
 ];
 
 const routes = [
 	...FuseUtils.generateRoutesFromConfigs(routeConfigs),
 	{
 		path: '/',
-		component: () => <Redirect to="/auth/login" />
+		component: () => <Redirect to="/" />
 	}
 ];
 

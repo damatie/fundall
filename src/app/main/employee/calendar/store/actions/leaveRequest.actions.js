@@ -18,7 +18,6 @@ export const requestLeave = result => {
       )
     }).then(res => res.json()).then(
       data => {
-        console.log(data)
         if(data.success) {
           swal.fire({
             title: 'Leave Request',

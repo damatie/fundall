@@ -23,11 +23,7 @@ export function saveLeaveTypes(data) {
         data
       )
     }).then(res => res.json()).then(data => {
-      if(data.success) { 
-        dispatch({
-          type: LEAVE_TYPE_ERROR,
-          payload: 'Error'
-        }) 
+      if(data.Success) {
         swal.fire({
           title: 'New leave type',
           text: data.message,

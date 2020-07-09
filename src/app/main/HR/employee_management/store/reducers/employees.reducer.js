@@ -2,7 +2,8 @@ import * as Actions from '../actions';
 
 const initialState = {
 	data: [],
-	searchText: ''
+	searchText: '',
+	update: false
 };
 
 const employeesReducer = (state = initialState, action) => {
@@ -18,6 +19,12 @@ const employeesReducer = (state = initialState, action) => {
 				...state,
 				searchText: action.searchText
 			};
+		}
+		case Actions.UPDATE_EMPLOYEES: {
+			return {
+				...state,
+				update: !state.update
+			}
 		}
 		default: {
 			return state;

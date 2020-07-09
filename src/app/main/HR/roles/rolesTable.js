@@ -22,19 +22,14 @@ const rows = [
 		sort: true
 	}
 ];
-const leaveOptions = [
-  {name: 'HR', id: 1},
-  {name: 'Employee', id: 2},
-  {name: 'Vendor', id: 3},
-  {name: 'External user', id: 4}
-]
+
 function RolesTable(props) {
 	const dispatch = useDispatch();
 	const roles = useSelector(({ roles }) => roles.roles);
 	const searchText = useSelector(({ roles }) => roles.roles.searchText);
 
 	const [selected, setSelected] = useState([]);
-	const [data, setData] = useState(leaveOptions);
+	const [data, setData] = useState(roles.data);
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(10);
 	const [order, setOrder] = useState({
@@ -52,7 +47,7 @@ function RolesTable(props) {
 			setData(_.filter(roles, item => item.name.toLowerCase().includes(searchText.toLowerCase())));
 			setPage(0);
 		} else {
-			setData(leaveOptions);
+			setData(roles.data);
 		}
 	}, [roles, searchText]);
 
@@ -108,9 +103,7 @@ function RolesTable(props) {
 	}
 
 	const handleDelete = () => {
-		console.log(selected);
 		dispatch(Actions.deleteRoles(selected));
-		
 	};
 
 	if(roles.isDeleting) {
