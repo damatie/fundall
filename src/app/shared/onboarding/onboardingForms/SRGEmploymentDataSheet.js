@@ -862,17 +862,13 @@ const SRGEmploymentDataSheet = () => {
 
           <Grid container spacing="4">
             <Grid item xs="12">
-              <CheckboxFormsy
+              <p>Upload your signature</p>
+              <TextFieldFormsy
                 className="mb-16 w-full"
-                name="accept"
-                value={false}
-                label="Agreed"
-                validations={{
-                  equals: true,
-                }}
-                validationErrors={{
-                  equals: "You need to accept"
-                }}
+                type="file"
+                name="name"
+                Placeholder="Address"
+                variant="outlined"
               />
             </Grid>
           </Grid>
