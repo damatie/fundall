@@ -137,6 +137,22 @@ const navigationConfig = [
 		]
 	},
 	{
+		id: 'loan_management',
+		title: 'LOAN MANAGEMENT',
+		translate: 'Loan management',
+		type: 'group',
+		auth: authRoles.admin,
+		children: [
+			{
+				id: 'loan_review',
+				title: 'Loan request',
+				type: 'item',
+				url: '/hr/loan/loan_management/',
+				icon: 'monetization_on',
+			}
+		]
+	},
+	{
 		id: 'leave_management',
 		title: 'Leave management',
 		translate: 'Leave management',
@@ -228,6 +244,7 @@ const navigationConfig = [
 		]
 
 	},
+
 	{
 		id: 'hr_settings',
 		title: 'Settings',
@@ -303,6 +320,23 @@ const navigationConfig = [
 				type: 'item',
 				url: '/line_manager/leave_review',
 				icon: 'calendar_today',
+				auth: authRoles.manager,
+			}
+		]
+	},
+	{
+		id: 'loan_request',
+		title: 'Loan request',
+		translate: 'Loan request',
+		type: 'group',
+		auth: authRoles.staff,
+		children: [
+			{
+				id: 'loan_request',
+				title: 'Loan request',
+				type: 'item',
+				url: '/loan/loan_request',
+				icon: 'monetization_on',
 			}
 		]
 	},

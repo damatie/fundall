@@ -3,6 +3,9 @@ export const redirectUrl = role => {
     case 'employee': {
       return '/employee/dashboard'
     }
+    case 'Line managers': {
+      return '/employee/dashboard'
+    }
     case 'HR': {
       return '/hr/employee_management'
     }

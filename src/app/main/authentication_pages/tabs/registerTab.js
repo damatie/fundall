@@ -51,7 +51,7 @@ function JWTRegisterTab(props) {
 
 	if(register.success) {
 		return (
-			<Redirect to='/hr/confirmation' />
+			<Redirect to='/auth/login' />
 		);
 	}
 

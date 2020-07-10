@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ProgressBtn = ({success, loading, content, disable, onClick}) => {
+const ProgressBtn = ({success, loading, content, disable, onClick, color}) => {
   const classes = useStyles();
 
   const buttonClassname = clsx({
@@ -48,7 +48,7 @@ const ProgressBtn = ({success, loading, content, disable, onClick}) => {
     <div className={classes.wrapper}>
       <Button
         variant="contained"
-        color="primary"
+        color={!color ? "primary" : color}
         className={`${buttonClassname} w-full`}
         disabled={loading || disable}
         onClick={onClick}

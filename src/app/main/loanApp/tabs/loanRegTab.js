@@ -10,18 +10,52 @@ import TableRow from '@material-ui/core/TableRow';
 import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { withRouter } from 'react-router-dom';
-import * as Actions from '../store/actions';
-import EmployeesTableHead from './employeeTableHead';
+import { withRouter, useParams } from 'react-router-dom';
+import SharedTableHead from 'app/shared/sharedTableHead';
 
+const rows = [
+	{
+		id: 'name',
+		align: 'left',
+		disablePadding: false,
+		label: 'Employee Name',
+		sort: true
+  },
+  {
+		id: 'amountRequested',
+		align: 'left',
+		disablePadding: false,
+		label: 'Amount Requested',
+		sort: true
+  },
+  {
+		id: 'deductableAmount',
+		align: 'left',
+		disablePadding: false,
+		label: 'Deductable Amount',
+		sort: true
+  },
+  {
+		id: 'amountApproved',
+		align: 'left',
+		disablePadding: false,
+		label: 'Amount Approved',
+		sort: true
+  },
+  {
+		id: 'dateRequested',
+		align: 'right',
+		disablePadding: false,
+		label: 'Date Requested',
+		sort: true
+	}
+];
 
-function EmployeesTable(props) {
+function LoanReqTab(props) {
 	const dispatch = useDispatch();
-	const employees = useSelector(({ employees }) => employees.employees);
-	const searchText = useSelector(({ employees }) => employees.employees.searchText);
 
-	const [selected, setSelected] = useState([]);
-	const [data, setData] = useState(employees.data);
+	const [selected, setSelected] = useState(props.loans);
+	const [data, setData] = useState([]);
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(10);
 	const [order, setOrder] = useState({
@@ -30,17 +64,8 @@ function EmployeesTable(props) {
 	});
 
 	useEffect(() => {
-		dispatch(Actions.getEmployees());
-	}, [dispatch, employees]);
-
-	useEffect(() => {
-		if (searchText.length !== 0) {
-			setData(_.filter(employees, item => item.firstName.toLowerCase().includes(searchText.toLowerCase())));
-			setPage(0);
-		} else {
-			setData(employees.data);
-		}
-	}, [employees, searchText]);
+		setData(props.loans)
+	}, [props.loans]);
 
 	function handleRequestSort(event, property) {
 		const id = property;
@@ -65,8 +90,16 @@ function EmployeesTable(props) {
 	}
 
 	function handleClick(item) {
-		props.history.push(`/hr/employee_management/employee_details`);
-	}
+		// if(props.user.user === 'line_manager') {
+		// 	props.history.push(`/line_manager/leave_review/employee/${item.id}`);
+		// } else if(props.user.user === 'hr') {
+		// 	props.history.push(`/hr/leave_review/employee/${item.id}`);
+		// }
+		
+		props.history.push(`/hr/loan/loan_management/details/${item.id}`);
+  }
+  
+
 
 	function handleCheck(event, id) {
 		const selectedIndex = selected.indexOf(id);
@@ -93,18 +126,24 @@ function EmployeesTable(props) {
 		setRowsPerPage(event.target.value);
 	}
 
+	const handleDelete = () => {
+		// dispatch(Actions.deleteRoles(selected));
+	};
+
 	return (
 		<div className="w-full flex flex-col">
 			<FuseScrollbars className="flex-grow overflow-x-auto">
 				<Table className="min-w-xl" aria-labelledby="tableTitle">
-					<EmployeesTableHead
+				  <SharedTableHead
 						numSelected={selected.length}
 						order={order}
 						onSelectAllClick={handleSelectAllClick}
 						onRequestSort={handleRequestSort}
-						rowCount={data.length}
+            rowCount={data.length}
+						rows={rows}
+						handleDelete={handleDelete}
+						success={true}
 					/>
-
 					<TableBody>
 						{_.orderBy(
 							data,
@@ -136,37 +175,26 @@ function EmployeesTable(props) {
 										selected={isSelected}
 										onClick={event => handleClick(n)}
 									>
-										<TableCell className="w-64 text-center" padding="none">
-											<Checkbox
-												checked={isSelected}
-												onClick={event => event.stopPropagation()}
-												onChange={event => handleCheck(event, n.id)}
-											/>
+                    <TableCell component="th" scope="row" align='left'>
+                     
 										</TableCell>
 
-										<TableCell component="th" scope="row">
-                      {`${n.firstName} ${n.lastName}`}
+										<TableCell component="th" scope="row" align='left'>
+                      {`${n.employee.firstName} ${n.employee.lastName}`}
+										</TableCell>
+                    <TableCell component="th" scope="row" align='left'>
+                      {n.amountRequested}
+										</TableCell>
+                    <TableCell component="th" scope="row" align='left'>
+                      {n.deductableAmount}
+										</TableCell>
+                    <TableCell component="th" scope="row" align='left'>
+                      {n.amountApproved}
+										</TableCell>
+                    <TableCell component="th" scope="row" align='right'>
+                      {n.dateRequested}
 										</TableCell>
 
-										<TableCell component="th" scope="row">
-											{n.email}
-										</TableCell>
-
-										<TableCell className="truncate" component="th" scope="row">
-											{/* {!n.department.departmentName ? 'IT' : n.department.departmentName} */}
-										</TableCell>
-
-										<TableCell component="th" scope="row" align="right">
-											{/* {!n.entity.entityName ? 'C-bit' : n.entity.entityName} */}
-										</TableCell>
-
-										<TableCell component="th" scope="row" align="right">
-											{n.mobile}
-										</TableCell>
-
-										<TableCell component="th" scope="row" align="right">
-											{/* {!n.role.name ? 'employee' : n.role.name} */}
-										</TableCell>
 									</TableRow>
 								);
 							})}
@@ -191,6 +219,6 @@ function EmployeesTable(props) {
 			/>
 		</div>
 	);
-}
+};
 
-export default withRouter(EmployeesTable);
+export default withRouter(LoanReqTab);

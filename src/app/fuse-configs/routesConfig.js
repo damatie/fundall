@@ -27,6 +27,7 @@ import EmployeeChecklistConfig from 'app/main/HR/employee_checklist/EmployeeChec
 import AuthenticationConfig from 'app/main/authentication_pages/authenticationConfig';
 import LeaveReviewConfig from 'app/main/line_manager/leave_review/leaveReviewConfig';
 import HrLeaveReviewConfig from 'app/main/HR/leave_review/hrLeaveReviewConfig';
+import LoanReqConfig from 'app/main/loanApp/loanReqConfig';
 
 const routeConfigs = [
 	// ExampleConfig,
@@ -53,7 +54,8 @@ const routeConfigs = [
 	EmployeeChecklistConfig,
 	AuthenticationConfig,
 	LeaveReviewConfig,
-	HrLeaveReviewConfig
+	HrLeaveReviewConfig,
+	LoanReqConfig
 ];
 
 const routes = [

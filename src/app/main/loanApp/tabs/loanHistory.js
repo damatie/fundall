@@ -17,23 +17,20 @@ import Typography from '@material-ui/core/Typography';
 
 
 const header = fetchHeaders();
-const DepartmentLeave = ({id}) => {
+const LoanHistory = ({id}) => {
   const [history, setHistory] = useState([
   {
-    name: 'David chinweike',
-    toDate: '20/8/2020',
-    profilePicture: 'assets/images/avatars/Velazquez.jpg'
+    amountRequested: '300,000',
+    amountApproved: '150,000',
+    dateApproved: '01/03/2020',
+    dueDate: '05/10/2020'
   },
   {
-    name: 'Samuel Chidiebere',
-    toDate: '20/8/2020',
-    profilePicture: 'assets/images/avatars/Velazquez.jpg'
+    amountRequested: '300,000',
+    amountApproved: '150,000',
+    dateApproved: '01/03/2020',
+    dueDate: '05/10/2020'
   },
-  {
-    name: 'Kalu eke eme',
-    toDate: '20/8/2020',
-    profilePicture: 'assets/images/avatars/Velazquez.jpg'
-  }
 ]);
 
   // useEffect(() => {
@@ -46,11 +43,12 @@ const DepartmentLeave = ({id}) => {
 						animation: 'transition.slideUpBigIn'
 					}}
 				>
+
       <Card className="w-full mb-16">
         <AppBar position="static" elevation={0}>
           <Toolbar className="px-8">
             <Typography variant="subtitle1" color="inherit" className="flex-1 px-12">
-              Employee on leave
+              Employee loan history
             </Typography>
             {/* <Button className="normal-case" color="inherit" size="small">
               See all
@@ -61,31 +59,64 @@ const DepartmentLeave = ({id}) => {
           <List className="p-0">
             {history.map(group => (
               <ListItem key={group.id} className="px-8">
-                <Avatar className="mx-8" src={group.profilePicture} alt={group.name} />
                 <ListItemText
                   primary={
                     <>
-                    <Typography
-                        className="font-bold"
-                        color="primary"
-                        paragraph={false}
-                      >
-                        {group.name}
-                    </Typography>
-                    <div className="flex">
+                    <div className="flex my-16">
                       <Typography
                         className="font-bold"
                         color="primary"
                         paragraph={false}
                       >
-                        Return Date
+                        Amount Requested
                       </Typography>
 
                       <Typography className="mx-4" paragraph={false}>
-                        {group.toDate}
+                        {group.amountRequested}
                       </Typography>
                     </div>
-                    </>
+
+                    <div className="flex my-16">
+                      <Typography
+                        className="font-bold"
+                        color="primary"
+                        paragraph={false}
+                      >
+                        Amount Approved
+                      </Typography>
+
+                      <Typography className="mx-4" paragraph={false}>
+                        {group.amountApproved}
+                      </Typography>
+                    </div>
+                    <div className="flex my-16">
+                      <Typography
+                        className="font-bold"
+                        color="primary"
+                        paragraph={false}
+                      >
+                        Date Approved
+                      </Typography>
+
+                      <Typography className="mx-4" paragraph={false}>
+                        {group.dateApproved}
+                      </Typography>
+                    </div>
+
+                    <div className="flex my-16">
+                      <Typography
+                        className="font-bold"
+                        color="primary"
+                        paragraph={false}
+                      >
+                        Due Date
+                      </Typography>
+
+                      <Typography className="mx-4" paragraph={false}>
+                        {group.dueDate}
+                      </Typography>
+                    </div>
+                  </>
                   }
                   
                 />
@@ -98,4 +129,4 @@ const DepartmentLeave = ({id}) => {
   );
 };
 
-export default DepartmentLeave;
+export default LoanHistory;  

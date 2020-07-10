@@ -64,7 +64,7 @@ function LeaveTableTab(props) {
 	});
 
 	useEffect(() => {
-    setData(props.data)
+		setData(props.data)
 	}, [props.data]);
 
 	function handleRequestSort(event, property) {
@@ -178,7 +178,7 @@ function LeaveTableTab(props) {
 										</TableCell>
 
 										<TableCell component="th" scope="row" align='left'>
-                      {n.firstName}
+                      {n.employeeName}
 										</TableCell>
                     <TableCell component="th" scope="row" align='left'>
                       {n.leaveType}

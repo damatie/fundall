@@ -7,15 +7,17 @@ import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import Typography from '@material-ui/core/Typography';
 import React, { useState } from 'react';
-import EmployeeLeaveReq from './tabs/employeeLeaveReq';
-import * as Actions from 'app/store/actions';
 import { useEffect } from 'react';
-import { useParams, Link, useHistory } from 'react-router-dom';
+import { useParams, Link, useHistory, Redirect } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Icon from '@material-ui/core/Icon';
-import { fetchHeaders } from '../fetchHeaders';
-import ProgressBtn from '../progressBtn';
+import { fetchHeaders } from 'app/shared/fetchHeaders';
+import ProgressBtn from 'app/shared/progressBtn';
 import swal from 'sweetalert2';
+import LoanDetailsTab from '../tabs/loanDetailsTab';
+import reducer from '../store/reducers';
+import withReducer from 'app/store/withReducer';
+import * as Actions from '../store/actions';
 
 
 const useStyles = makeStyles(theme => ({
@@ -29,7 +31,7 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-function EmployeeLeaveDetails(props) {
+function LoanDetails(props) {
 	const header = fetchHeaders();
 	const classes = useStyles();
 	const [selectedTab, setSelectedTab] = useState(0);
@@ -42,7 +44,7 @@ function EmployeeLeaveDetails(props) {
 	const [success3, setSuccess3] = useState(false);
 	const [loading3, setLoading3] = useState(false);
 
-	const leaveDetails = useSelector(({ leaveRequestDetails }) => leaveRequestDetails)
+	const loan = useSelector(({ loan }) => loan.loan.data)
 
 	const { id } = useParams();
 
@@ -57,22 +59,27 @@ function EmployeeLeaveDetails(props) {
 	}
 
 	useEffect(() => {
-		dispatch(Actions.getLeaveReqDetails(id))
+		dispatch(Actions.getLoan(id))
+		return () => {
+			window.location.reload();
+		}
 	}, [dispatch])
 
 	const handleApproveLeave = () => {
 		setLoading3(true);
-		fetch(`https://hris-cbit.herokuapp.com/api/v1/employee-leave/approve/${id}`, {
+		fetch(`https://hris-cbit.herokuapp.com/api/v1/loan/approve/hr/${id}`, {
 			...header.reqHeader(
 				'patch',
-				{}
+				{
+					hello: 'hi'
+				}
 			),
 		}).then(res => res.json()).then(
 			data => {
 				setLoading3(false);
 				if(data.success) {
 					swal.fire({
-						title: 'Approve leave',
+						title: 'Approve Loan',
 						text: data.message,
 						icon: 'success',
 						timer: 3000
@@ -80,7 +87,7 @@ function EmployeeLeaveDetails(props) {
 					setSuccess3(true);
 				} else {
 					swal.fire({
-						title: 'Approve leave',
+						title: 'Approve Loan  ',
 						text: data.message,
 						icon: 'error',
 						timer: 3000
@@ -91,52 +98,17 @@ function EmployeeLeaveDetails(props) {
 		).catch(e => {
 			setLoading3(false);
 			console.error(e)});
-	};
-
-	const handleReviewLeave = () => {
-		setLoading1(true);
-		fetch(`https://hris-cbit.herokuapp.com/api/v1/employee-leave/review/${id}`, {
-			...header.reqHeader(
-				'patch',
-				{}
-			),
-		}).then(res => res.json()).then(
-			data => {
-				setLoading1(false);
-				if(data.success) {
-					swal.fire({
-						title: 'Approve leave',
-						text: data.message,
-						icon: 'success',
-						timer: 3000
-					})
-					setSuccess1(true);
-				} else {
-					swal.fire({
-						title: 'Approve leave',
-						text: data.message,
-						icon: 'error',
-						timer: 3000
-					})
-					setSuccess1(true);
-				}
-			}
-		).catch(e => {
-			setLoading1(false);
-			console.error(e)});
-	};
+  };
+  
 
 	const handleReject = () => {
 		setLoading2(true);
-		fetch(`https://hris-cbit.herokuapp.com/api/v1/employee-leave/cancel/${id}`, {
-			...header.reqHeader(
-				'patch',
-				{}
-			),
+		fetch(`https://hris-cbit.herokuapp.com/api/v1/loan/${id}`, {
+			...header.delHeader()
 		}).then(res => res.json()).then(
 			data => {
 				setLoading2(false);
-				if(data.success) {
+				if(data.message === 'Loan request has been cancelled and deleted') {
 					swal.fire({
 						title: 'Approve leave',
 						text: data.message,
@@ -144,6 +116,9 @@ function EmployeeLeaveDetails(props) {
 						timer: 3000
 					})
 					setSuccess2(true);
+					// history.push({
+					// 	pathname: '/hr/loan/loan_management/'
+					// })
 				} else {
 					swal.fire({
 						title: 'Approve leave',
@@ -157,6 +132,12 @@ function EmployeeLeaveDetails(props) {
 		).catch(e => {
 			setLoading2(false);
 			console.error(e)});
+	}
+
+	if(success2) {
+		return (
+			<Redirect to='/hr/loan/loan_management/' />
+		)
 	}
 
 	return (
@@ -192,20 +173,15 @@ function EmployeeLeaveDetails(props) {
 						</FuseAnimate>
 						<FuseAnimate animation="transition.slideLeftIn" delay={300}>
 							<Typography className="md:mx-24" variant="h4" color="inherit">
-								{leaveDetails.data.employeeName}
+								{/* {`${loan.employee.firstName} ${loan.employee.lastName}`} */}
 							</Typography>
 						</FuseAnimate>
 					</div>
 
-					<div className="flex items-center justify-end">
-					
-						{leaveDetails.data.status === 'in progress' ? 	<><ProgressBtn loading={loading1} success={success1} color='secondary' onClick={handleReviewLeave} content='Review Leave' /> 
-						<ProgressBtn loading={loading2} success={success2} color='secondary' onClick={handleReject} content='Reject Leave' /> </> :
-						<>
-					<ProgressBtn loading={loading3} success={success3} color='primary' onClick={handleApproveLeave} content='Approve Leave'/> 
-					<ProgressBtn loading={loading2} success={success2} color='secondary' onClick={handleReject} content='Reject Leave' />
-					</>}
-					</div>
+					{loan.status !== 'approved' ? <div className="flex items-center justify-end">
+					<ProgressBtn loading={loading3} success={success3} color='primary' onClick={handleApproveLeave} content='Approve Loan'/> 
+					<ProgressBtn loading={loading2} success={success2} color='secondary' onClick={handleReject} content='Reject Loan' />
+					</div> : <></>}
 				</div>
 				</>
 			}
@@ -225,7 +201,7 @@ function EmployeeLeaveDetails(props) {
 						classes={{
 							root: 'h-64'
 						}}
-						label="Leave details"
+						label="Loan details"
 					/>
 					{/* <Tab
 						classes={{
@@ -243,7 +219,7 @@ function EmployeeLeaveDetails(props) {
 			}
 			content={
 				<div className="p-16 sm:p-24">
-					{selectedTab === 0 && <EmployeeLeaveReq user={props.config.user}/>}
+					{selectedTab === 0 && <LoanDetailsTab />}
 					{/* {selectedTab === 1 && <AboutTab />}
 					{selectedTab === 2 && <PhotosVideosTab />} */}
 				</div>
@@ -252,4 +228,4 @@ function EmployeeLeaveDetails(props) {
 	);
 }
 
-export default EmployeeLeaveDetails;
+export default withReducer('loan', reducer)(LoanDetails);
