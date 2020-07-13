@@ -14,7 +14,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { withRouter, useParams } from 'react-router-dom';
 // import * as Actions from './store/actions';
 import DepartmentTableHead from './promotionHistoryTableHead';
-import PromotionDialog from './promotionDialog'
+import PromotionDialog from './promotionDialog';
+import swal from 'sweetalert2';
 
 function DepartmentTable(props) {
 	const dispatch = useDispatch();
@@ -25,9 +26,9 @@ function DepartmentTable(props) {
 
 	const [selected, setSelected] = useState([]);
 	const [data, setData] = useState([
-    {date: '04/12/2014', position: 'Junior Developer', lineManager: 'Line Manager'},
-    {date: '04/04/2016', position: 'Intermediate Developer', lineManager: 'Line Manager'},
-    {date: '04/06/2018', position: 'Senior Developer', lineManager: 'Line Manager'},
+    {date: '04/12/2014', position: 'Junior Developer', lineManager: 'David chinweike'},
+    {date: '04/04/2016', position: 'Intermediate Developer', lineManager: 'Maxwell Adams'},
+    {date: '04/06/2018', position: 'Senior Developer', lineManager: 'Matthew Okey'},
   ]);
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -74,7 +75,7 @@ function DepartmentTable(props) {
 	}
 
 	function handleClick(item) {
-		props.history.push(`/hr/business_unit/department/details/${item.id}`);
+		// props.history.push(`/hr/business_unit/department/details/${item.id}`);
 	}
 
 	function handleCheck(event, id) {
@@ -104,7 +105,19 @@ function DepartmentTable(props) {
 
   const handleClickOpen = () => {
     setOpen(true);
-  };
+	};
+	
+	const handleClose = () => {
+		setOpen(false);
+		setTimeout(() => {
+			swal.fire({
+				title: 'Promotion history',
+				text: 'employee promotion history added',
+				icon: 'success',
+				timer: 3000,
+			})
+		}, 1500)
+	}
 
 	return (
 		<div className="w-full flex flex-col">
@@ -112,7 +125,7 @@ function DepartmentTable(props) {
         <Button variant="contained" className="mb-16" color="primary" onClick={handleClickOpen} disableElevation>
           Promote employee
         </Button>
-        <PromotionDialog open={open} />
+        <PromotionDialog open={open} handleClose={handleClose}/>
 				<Table className="min-w-xl" aria-labelledby="tableTitle">
 					<DepartmentTableHead
 						numSelected={selected.length}

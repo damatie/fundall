@@ -94,7 +94,7 @@ const NonDisclosureAndConfidentialityPolicy = () => {
             xl="12"
           >
             <div className={classes.submit}>
-              <SignUPButton title="Submit" />
+              {/* <SignUPButton title="Submit" /> */}
             </div>
           </Grid>
         </Grid>

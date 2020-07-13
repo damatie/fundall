@@ -234,7 +234,7 @@ const IDCardIssuanceForm = () => {
           </Grid>
 
           <Grid alignItems="center" container item sm="12" md="12" lg="12" xl="12">
-            <div className={card.submit}>
+            {/* <div className={card.submit}>
               <Button
                 type="submit"
                 variant="contained"
@@ -245,7 +245,7 @@ const IDCardIssuanceForm = () => {
               >
                 Submit
               </Button>
-            </div>
+            </div> */}
           </Grid>
         </div>
       </div>

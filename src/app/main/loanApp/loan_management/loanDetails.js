@@ -18,6 +18,7 @@ import LoanDetailsTab from '../tabs/loanDetailsTab';
 import reducer from '../store/reducers';
 import withReducer from 'app/store/withReducer';
 import * as Actions from '../store/actions';
+import { useDeepCompareEffectNoCheck } from '@fuse/hooks/useDeepCompareEffect';
 
 
 const useStyles = makeStyles(theme => ({
@@ -44,7 +45,17 @@ function LoanDetails(props) {
 	const [success3, setSuccess3] = useState(false);
 	const [loading3, setLoading3] = useState(false);
 
-	const loan = useSelector(({ loan }) => loan.loan.data)
+	const loan = useSelector(({ loan }) => loan.loan.data);
+	const loans = useSelector(({ loan }) => loan.loan);
+
+	const [value, setValue] = useState('')
+
+	const user = JSON.parse(localStorage.getItem('user_data'));
+
+	useEffect(() => {
+		console.log(loans)
+	})
+
 
 	const { id } = useParams();
 
@@ -60,85 +71,148 @@ function LoanDetails(props) {
 
 	useEffect(() => {
 		dispatch(Actions.getLoan(id))
+
 		return () => {
 			window.location.reload();
 		}
-	}, [dispatch])
+	}, [])
 
 	const handleApproveLeave = () => {
-		setLoading3(true);
-		fetch(`https://hris-cbit.herokuapp.com/api/v1/loan/approve/hr/${id}`, {
-			...header.reqHeader(
-				'patch',
-				{
-					hello: 'hi'
-				}
-			),
-		}).then(res => res.json()).then(
-			data => {
-				setLoading3(false);
-				if(data.success) {
+		// if(user.role === 'HR') {
+		// 	if(value !== '') {
+		// 		setLoading3(true);
+		// 		setTimeout(() => {
+		// 			setLoading3(false);
+		// 			swal.fire({
+		// 				title: 'Approve Loan',
+		// 				text: 'Loan Approved',
+		// 				icon: 'success',
+		// 				timer: 3000
+		// 			})
+		// 		}, 2200)
+		// 	} else {
+		// 		swal.fire({
+		// 			title: 'Approve Loan',
+		// 			text: 'Please enter approved amount',
+		// 			icon: 'warning',
+		// 			timer: 3000
+		// 		})
+		// 	}
+		// } else {
+			setLoading3(true);
+				setTimeout(() => {
+					setLoading3(false);
 					swal.fire({
 						title: 'Approve Loan',
-						text: data.message,
+						text: 'Loan Approved',
 						icon: 'success',
 						timer: 3000
 					})
-					setSuccess3(true);
-				} else {
-					swal.fire({
-						title: 'Approve Loan  ',
-						text: data.message,
-						icon: 'error',
-						timer: 3000
-					})
-					setSuccess3(true);
-				}
-			}
-		).catch(e => {
-			setLoading3(false);
-			console.error(e)});
+				}, 2200)
+		// }
+		
+		
+		// fetch(`https://hris-cbit.herokuapp.com/api/v1/loan/approve/hr/${id}`, {
+		// 	...header.reqHeader(
+		// 		'PATCH',
+		// 		{
+				
+		// 		}
+		// 	),
+		// }).then(res => res.json()).then(
+		// 	data => {
+				
+				// if(data.success) {
+					
+					
+					// setSuccess3(true);
+		// 		} else {
+		// 			swal.fire({
+		// 				title: 'Approve Loan  ',
+		// 				text: data.message,
+		// 				icon: 'error',
+		// 				timer: 3000
+		// 			})
+		// 			setSuccess3(true);
+		// 		}
+		// 	}
+		// ).catch(e => {
+		// 	setLoading3(false);
+		// 	console.error(e)});
   };
   
 
 	const handleReject = () => {
-		setLoading2(true);
-		fetch(`https://hris-cbit.herokuapp.com/api/v1/loan/${id}`, {
-			...header.delHeader()
-		}).then(res => res.json()).then(
-			data => {
-				setLoading2(false);
-				if(data.message === 'Loan request has been cancelled and deleted') {
-					swal.fire({
-						title: 'Approve leave',
-						text: data.message,
-						icon: 'success',
-						timer: 3000
-					})
-					setSuccess2(true);
-					// history.push({
-					// 	pathname: '/hr/loan/loan_management/'
-					// })
-				} else {
-					swal.fire({
-						title: 'Approve leave',
-						text: data.message,
-						icon: 'error',
-						timer: 3000
-					})
-					setSuccess2(true);
-				}
-			}
-		).catch(e => {
-			setLoading2(false);
-			console.error(e)});
+		// setLoading2(true);
+		// fetch(`https://hris-cbit.herokuapp.com/api/v1/loan/${id}`, {
+		// 	...header.delHeader()
+		// }).then(res => res.json()).then(
+		// 	data => {
+		// 		setLoading2(false);
+		// 		if(data.message === 'Loan request has been cancelled and deleted') {
+		// 			swal.fire({
+		// 				title: 'Reject Loan',
+		// 				text: data.message,
+		// 				icon: 'success',
+		// 				timer: 3000
+		// 			})
+		// 			setSuccess2(true);
+		// 			history.push({
+		// 				pathname: '/hr/loan/loan_management/'
+		// 			})
+		// 		} else {
+		// 			swal.fire({
+		// 				title: 'Reject Loan',
+		// 				text: data.message,
+		// 				icon: 'error',
+		// 				timer: 3000
+		// 			})
+		// 			setSuccess2(true);
+		// 		}
+		// 	}
+		// ).catch(e => {
+		// 	setLoading2(false);
+		// 	console.error(e)});
+			setLoading2(true);
+			// fetch(`https://hris-cbit.herokuapp.com/api/v1/loan/approve/hr/${id}`, {
+			// 	...header.reqHeader(
+			// 		'PATCH',
+			// 		{
+					
+			// 		}
+			// 	),
+			// }).then(res => res.json()).then(
+			// 	data => {
+					
+					// if(data.success) {
+						setTimeout(() => {
+							setLoading2(false);
+							swal.fire({
+								title: 'Approve Loan',
+								text: 'Loan Rejected',
+								icon: 'success',
+								timer: 3000
+							})
+						}, 2200)
+						
+						// setSuccess3(true);
+			// 		} else {
+			// 			swal.fire({
+			// 				title: 'Approve Loan  ',
+			// 				text: data.message,
+			// 				icon: 'error',
+			// 				timer: 3000
+			// 			})
+			// 			setSuccess3(true);
+			// 		}
+			// 	}
+			// ).catch(e => {
+			// 	setLoading3(false);
+			// 	console.error(e)});
 	}
 
-	if(success2) {
-		return (
-			<Redirect to='/hr/loan/loan_management/' />
-		)
-	}
+	if(loans.loading) return <>Loading... </>
+
 
 	return (
 		<FusePageSimple
@@ -173,12 +247,12 @@ function LoanDetails(props) {
 						</FuseAnimate>
 						<FuseAnimate animation="transition.slideLeftIn" delay={300}>
 							<Typography className="md:mx-24" variant="h4" color="inherit">
-								{/* {`${loan.employee.firstName} ${loan.employee.lastName}`} */}
+								{`${loan.employee.firstName} ${loan.employee.lastName}`}
 							</Typography>
 						</FuseAnimate>
 					</div>
 
-					{loan.status !== 'approved' ? <div className="flex items-center justify-end">
+					{loan !== 'approved' ? <div className="flex items-center justify-end">
 					<ProgressBtn loading={loading3} success={success3} color='primary' onClick={handleApproveLeave} content='Approve Loan'/> 
 					<ProgressBtn loading={loading2} success={success2} color='secondary' onClick={handleReject} content='Reject Loan' />
 					</div> : <></>}
@@ -219,7 +293,7 @@ function LoanDetails(props) {
 			}
 			content={
 				<div className="p-16 sm:p-24">
-					{selectedTab === 0 && <LoanDetailsTab />}
+					{selectedTab === 0 && <LoanDetailsTab setValue={setValue}/>}
 					{/* {selectedTab === 1 && <AboutTab />}
 					{selectedTab === 2 && <PhotosVideosTab />} */}
 				</div>

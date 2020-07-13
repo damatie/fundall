@@ -42,7 +42,9 @@ function EmployeeLeaveDetails(props) {
 	const [success3, setSuccess3] = useState(false);
 	const [loading3, setLoading3] = useState(false);
 
-	const leaveDetails = useSelector(({ leaveRequestDetails }) => leaveRequestDetails)
+	const leaveDetails = useSelector(({ leaveRequestDetails }) => leaveRequestDetails);
+
+	const user = JSON.parse(localStorage.getItem('user_data'))
 
 	const { id } = useParams();
 
@@ -57,6 +59,7 @@ function EmployeeLeaveDetails(props) {
 	}
 
 	useEffect(() => {
+		console.log(props.config.user)
 		dispatch(Actions.getLeaveReqDetails(id))
 	}, [dispatch])
 
@@ -64,7 +67,7 @@ function EmployeeLeaveDetails(props) {
 		setLoading3(true);
 		fetch(`https://hris-cbit.herokuapp.com/api/v1/employee-leave/approve/${id}`, {
 			...header.reqHeader(
-				'patch',
+				'PATCH',
 				{}
 			),
 		}).then(res => res.json()).then(
@@ -97,7 +100,7 @@ function EmployeeLeaveDetails(props) {
 		setLoading1(true);
 		fetch(`https://hris-cbit.herokuapp.com/api/v1/employee-leave/review/${id}`, {
 			...header.reqHeader(
-				'patch',
+				'PATCH',
 				{}
 			),
 		}).then(res => res.json()).then(
@@ -130,7 +133,7 @@ function EmployeeLeaveDetails(props) {
 		setLoading2(true);
 		fetch(`https://hris-cbit.herokuapp.com/api/v1/employee-leave/cancel/${id}`, {
 			...header.reqHeader(
-				'patch',
+				'PATCH',
 				{}
 			),
 		}).then(res => res.json()).then(
@@ -197,15 +200,15 @@ function EmployeeLeaveDetails(props) {
 						</FuseAnimate>
 					</div>
 
-					<div className="flex items-center justify-end">
+					{leaveDetails.data.status !== 'approved' ? <div className="flex items-center justify-end">
 					
 						{leaveDetails.data.status === 'in progress' ? 	<><ProgressBtn loading={loading1} success={success1} color='secondary' onClick={handleReviewLeave} content='Review Leave' /> 
 						<ProgressBtn loading={loading2} success={success2} color='secondary' onClick={handleReject} content='Reject Leave' /> </> :
 						<>
-					<ProgressBtn loading={loading3} success={success3} color='primary' onClick={handleApproveLeave} content='Approve Leave'/> 
-					<ProgressBtn loading={loading2} success={success2} color='secondary' onClick={handleReject} content='Reject Leave' />
+						<ProgressBtn loading={loading3} success={success3} color='primary' onClick={handleApproveLeave} content='Approve Leave'/> 
+						<ProgressBtn loading={loading2} success={success2} color='secondary' onClick={handleReject} content='Reject Leave' />
 					</>}
-					</div>
+					</div> : <></>}
 				</div>
 				</>
 			}

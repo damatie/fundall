@@ -26,7 +26,7 @@ export default function FormDialog(props) {
 
   return (
     <div>
-      <Dialog open={props.open} onClose={handleClose} aria-labelledby="form-dialog-title">
+      <Dialog open={props.open} onClose={props.handleClose} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Promote Employee</DialogTitle>
         <DialogContent>
           <DialogContentText>
@@ -99,10 +99,10 @@ export default function FormDialog(props) {
           </Formsy>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
+          <Button onClick={props.handleClose} color="primary">
             cancel
           </Button>
-          <Button onClick={handleClose} color="primary">
+          <Button onClick={props.handleClose} color="primary">
             Promote this employee
           </Button>
         </DialogActions>

@@ -9,11 +9,13 @@ import Typography from '@material-ui/core/Typography';
 import * as authActions from 'app/auth/store/actions';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 function UserMenu(props) {
 	const dispatch = useDispatch();
 	const user = useSelector(({ auth }) => auth.user);
+
+	const history = useHistory();
 
 	const [userMenu, setUserMenu] = useState(null);
 
@@ -95,8 +97,10 @@ function UserMenu(props) {
 						</MenuItem>
 						<MenuItem
 							onClick={() => {
-								dispatch(authActions.logoutUser());
+								// dispatch(authActions.logoutUser());
 								userMenuClose();
+								localStorage.clear();
+								history.push('/auth/login');
 							}}
 						>
 							<ListItemIcon className="min-w-40">

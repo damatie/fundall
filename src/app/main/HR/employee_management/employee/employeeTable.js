@@ -12,13 +12,58 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import * as Actions from '../store/actions';
-import EmployeesTableHead from './employeeTableHead';
+import SharedTableHead from 'app/shared/sharedTableHead';
 
+const rows = [
+	{
+		id: 'full_name',
+		align: 'left',
+		disablePadding: false,
+		label: 'Full name',
+		sort: true
+	},
+	{
+		id: 'email',
+		align: 'left',
+		disablePadding: false,
+		label: 'email',
+		sort: true
+	},
+	{
+		id: 'department',
+		align: 'left',
+		disablePadding: false,
+		label: 'Department',
+		sort: true
+	},
+	{
+		id: 'entity',
+		align: 'right',
+		disablePadding: false,
+		label: 'Entity',
+		sort: true
+	},
+	{
+		id: 'mobile',
+		align: 'right',
+		disablePadding: false,
+		label: 'Mobile number',
+		sort: true
+	},
+	{
+		id: 'onboarding_status',
+		align: 'right',
+		disablePadding: false,
+		label: 'Onboarding status',
+		sort: true
+	}
+];
 
 function EmployeesTable(props) {
 	const dispatch = useDispatch();
 	const employees = useSelector(({ employees }) => employees.employees);
 	const searchText = useSelector(({ employees }) => employees.employees.searchText);
+	let success = false;
 
 	const [selected, setSelected] = useState([]);
 	const [data, setData] = useState(employees.data);
@@ -30,8 +75,9 @@ function EmployeesTable(props) {
 	});
 
 	useEffect(() => {
+		setSelected([])
 		dispatch(Actions.getEmployees());
-	}, [dispatch, employees]);
+	}, [dispatch, employees.update]);
 
 	useEffect(() => {
 		if (searchText.length !== 0) {
@@ -93,16 +139,23 @@ function EmployeesTable(props) {
 		setRowsPerPage(event.target.value);
 	}
 
+	const handleDelete = () => {
+		dispatch(Actions.deleteEmployee(selected[0]));
+	};
+
 	return (
 		<div className="w-full flex flex-col">
 			<FuseScrollbars className="flex-grow overflow-x-auto">
 				<Table className="min-w-xl" aria-labelledby="tableTitle">
-					<EmployeesTableHead
+					<SharedTableHead
 						numSelected={selected.length}
 						order={order}
 						onSelectAllClick={handleSelectAllClick}
 						onRequestSort={handleRequestSort}
-						rowCount={data.length}
+            rowCount={data.length}
+						rows={rows}
+						handleDelete={handleDelete}
+						success={success}
 					/>
 
 					<TableBody>

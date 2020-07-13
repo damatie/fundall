@@ -302,7 +302,7 @@ const CompanyAssetAcknowledgeForm = () => {
           </Grid>
 
           <Grid alignItems="center" container item sm="12" md="12" lg="12" xl="12">
-            <div className={classes.submit}>
+            {/* <div className={classes.submit}>
               <Button
                 type="submit"
                 variant="contained"
@@ -313,7 +313,7 @@ const CompanyAssetAcknowledgeForm = () => {
               >
                 Submit
               </Button>
-            </div>
+            </div> */}
           </Grid>
         </div>
       </div>

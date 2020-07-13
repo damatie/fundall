@@ -18,14 +18,14 @@ const navigationConfig = [
 		icon: 'apps',
 		auth: authRoles.admin,
 		children: [
-			{
-				id: 'dashboard',
-				title: 'Dashboard',
-				translate: 'Dashboard',
-				type: 'item',
-				icon: 'dashboard',
-				url: '/hr/dashboard'
-			},
+			// {
+			// 	id: 'dashboard',
+			// 	title: 'Dashboard',
+			// 	translate: 'Dashboard',
+			// 	type: 'item',
+			// 	icon: 'dashboard',
+			// 	url: '/hr/dashboard'
+			// },
 			{
 				id: 'employee_management',
 				title: 'Employee management',
@@ -141,11 +141,11 @@ const navigationConfig = [
 		title: 'LOAN MANAGEMENT',
 		translate: 'Loan management',
 		type: 'group',
-		auth: authRoles.admin,
+		auth: authRoles.manager,
 		children: [
 			{
 				id: 'loan_review',
-				title: 'Loan request',
+				title: 'Loan review',
 				type: 'item',
 				url: '/hr/loan/loan_management/',
 				icon: 'monetization_on',

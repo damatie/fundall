@@ -221,7 +221,7 @@ function EventDialog(props) {
 						required
 						fullWidth
 					>
-						{[{name: 'David Chinweike', id: 8}].map(item => (
+						{[{name: 'David Chinweike', id: 10}].map(item => (
 						<MenuItem value={item.id}>
 							{item.name}
 						</MenuItem>))}
@@ -243,7 +243,7 @@ function EventDialog(props) {
 						required
 						fullWidth
 					>
-						{[{name: 'Matthew Nate', id: 4}].map(item => (
+						{[{name: 'Matthew Nate', id: 7}].map(item => (
 						<MenuItem value={item.id}>
 							{item.name}
 						</MenuItem>))}

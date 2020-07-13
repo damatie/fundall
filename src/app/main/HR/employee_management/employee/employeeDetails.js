@@ -22,6 +22,7 @@ import { Link, useParams } from 'react-router-dom';
 import PersonalInformation from './tabs/personalInformation';
 import EmploymentInformation from './tabs/employmentInformation';
 import PromotionHistory from './tabs/promotionHistory';
+import FamilyInformation from './tabs/familyInfomation';
 // import * as Actions from './store/actions';
 // import reducer from './store/reducers';
 // import EmployeeUnitTab from './tabs/newEmployeeTab';
@@ -146,6 +147,7 @@ function EmployeeUnit(props) {
 					classes={{ root: 'w-full h-64' }}
 				>
 					<Tab className="h-64 normal-case" label="Personal Information" />
+					<Tab className="h-64 normal-case" label="Family Information" />
 					<Tab className="h-64 normal-case" label="Employment Information" />
 					<Tab className="h-64 normal-case" label="Document" />
 					<Tab className="h-64 normal-case" label="Promotion History" />
@@ -154,9 +156,10 @@ function EmployeeUnit(props) {
 			content={
         <div className=" sm:p-24 ">
           {tabValue === 0 && (<PersonalInformation />)}
-          {tabValue === 1 && (<EmploymentInformation />)}
+					{tabValue === 1 && (<FamilyInformation />)}
           {tabValue === 2 && (<EmploymentInformation />)}
-          {tabValue === 3 && (<PromotionHistory />)}
+          {tabValue === 3 && (<EmploymentInformation />)}
+          {tabValue === 4 && (<PromotionHistory />)}
         </div>
 			}
 			innerScroll

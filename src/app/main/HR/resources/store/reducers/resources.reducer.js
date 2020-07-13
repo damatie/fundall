@@ -26,20 +26,7 @@ export const resourcesReducer = (state = initialState, actions) => {
     case Actions.DELETING_RESOURCES: {
       return {
         ...state,
-        isDeleting: false,
-      }
-    }
-    case Actions.SET_RESOURCES_SUCCESS: {
-      return {
-        ...state,
         isDeleting: !state.isDeleting,
-        success: true
-      }
-    }
-    case Actions.RESET_RESOURCES: {
-      return {
-        ...state,
-        success: false
       }
     }
     case Actions.SET_RESOURCES_SEARCH_TEXT: {

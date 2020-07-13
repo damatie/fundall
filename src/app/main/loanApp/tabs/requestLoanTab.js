@@ -52,7 +52,7 @@ function RequestLoanTab(props) {
 		dispatch(Actions.applyLoan({
 			...model,
 			departmentHead: 7,
-			hrManager: 3,
+			hrManager: 4,
 			financeManager: 5,
 		}))
   }
@@ -98,11 +98,13 @@ function RequestLoanTab(props) {
 					required
 				/>
 
+
+
         <TextFieldFormsy
 					className="mb-16"
-					type="number"
+					type="text"
 					name="deductableAmount"
-					label="Deductable amount"
+					label="Work location"
 					validations={{
 						minLength: 1
 					}}
@@ -113,7 +115,7 @@ function RequestLoanTab(props) {
 						endAdornment: (
 							<InputAdornment position="end">
 								<Icon className="text-20" color="action">
-                  attach_money
+                  map
 								</Icon>
 							</InputAdornment>
 						)
@@ -146,25 +148,57 @@ function RequestLoanTab(props) {
 					required
 				/>
 
-        {/* <SelectFormsy
+
+
+        <SelectFormsy
           className="my-16"
           name="duration"
-          label="Duration"
+          label="Employement type"
           value="none"
           // validations="not-equals:none"
           validationError="requried"
           variant="outlined"
 					required
         >
-					{durations.map(item => (
+					{['Full-time', 'Part-time', 'Contract'].map(item => (
 						<MenuItem value={item} key={item}>{item}</MenuItem>
 					))}
-        </SelectFormsy> */}
+        </SelectFormsy>
 
 				<SelectFormsy
           className="my-16"
           name="financeOfficer"
-          label="Finance officer"
+          label="Finance manager"
+          value="none"
+          // validations="not-equals:none"
+          validationError="requried"
+          variant="outlined"
+					required
+        >
+					{['Emmanuel maxwell'].map(item => (
+						<MenuItem value={item} key={item}>{item}</MenuItem>
+					))}
+        </SelectFormsy>
+
+				<SelectFormsy
+          className="my-16"
+          name="financeOfficer"
+          label="Head of department"
+          value="none"
+          // validations="not-equals:none"
+          validationError="requried"
+          variant="outlined"
+					required
+        >
+					{['Emmanuel maxwell'].map(item => (
+						<MenuItem value={item} key={item}>{item}</MenuItem>
+					))}
+        </SelectFormsy>
+
+				<SelectFormsy
+          className="my-16"
+          name="financeOfficer"
+          label="HR manager"
           value="none"
           // validations="not-equals:none"
           validationError="requried"
@@ -210,7 +244,7 @@ function RequestLoanTab(props) {
 					Request
 				</Button> */}
 
-				<ProgressBtn success={loan.success} loading={loan.loading} content='Request' disable={!isFormValid}/>
+				<ProgressBtn success={loan.success} loading={loan.loadings} content='Request' disable={!isFormValid}/>
 			</Formsy>
 		</div>
 	);

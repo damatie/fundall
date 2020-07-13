@@ -32,18 +32,7 @@ export const getRoles = () => {
   }
 };
 
-const Fetch = id => {
-  fetch(`https://hris-cbit.herokuapp.com/api/v1/roles/${id}`, {
-    method: 'delete',
-    headers: {
-      Authorization: `JWT ${auth().getToken}`
-    }
-  }).then(res => res.json()).then(data => {
-    return data
-  })
-};
-
-export const deleteRoles = data => {
+export const deleteRoles = id => {
   return dispatch => {
     dispatch({
       type: DELETING_ROLES
@@ -58,28 +47,32 @@ export const deleteRoles = data => {
       confirmButtonText: 'Yes, delete it!',
       showLoaderOnConfirm: true,
       preConfirm: () => {
-        for(const i of data) {
-          Fetch(i);
-        }
+        fetch(`https://hris-cbit.herokuapp.com/api/v1/roles/${id}`, {
+          method: 'delete',
+          headers: {
+            Authorization: `JWT ${auth().getToken}`
+          }
+        }).then(res => res.json()).then(data => {
+          if(data.success) {
+            Swal.fire(
+              'Deleted!',
+              'Your file has been deleted.',
+              'success'
+            )
+            dispatch({
+              type: DELETING_ROLES
+            })
+          } else {
+            Swal.fire(
+              'Deleted!',
+              'Something went wrong.',
+              'error'
+            )
+          }
+        })
       }
       
-    }).then((result) => {
-      if (result.value) {
-        Swal.fire(
-          'Deleted!',
-          'Your file has been deleted.',
-          'success'
-        )
-      }
     })
-    dispatch({
-      type: SET_ROLES_SUCCESS
-    })
-    setTimeout(() => {
-      dispatch({
-        type: RESET_ROLES
-      })
-    }, 3000)
   }
 }
 

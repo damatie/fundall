@@ -33,15 +33,15 @@ function ResourcesTable(props) {
 	const [data, setData] = useState(resources.data);
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(10);
-	const [reload, setReload] = useState(false);
 	const [order, setOrder] = useState({
 		direction: 'asc',
 		id: null
 	});
 
 	useEffect(() => {
+		setSelected([])
 		dispatch(Actions.getResources());
-	}, [dispatch, reload]);
+	}, [dispatch,resources, resources.isDeleting]);
 
 	useEffect(() => {
 		if (searchText.length !== 0) {
@@ -104,16 +104,9 @@ function ResourcesTable(props) {
 	}
 
 	const handleDelete = () => {
-		dispatch(Actions.deleteResources(selected));
+		dispatch(Actions.deleteResources(selected[0]));
 	};
 
-	
-
-	useEffect(() => {
-		if(resources.success) {
-			setReload(!reload)
-		}
-	})
 
 	return (
 		<div className="w-full flex flex-col">
@@ -127,7 +120,7 @@ function ResourcesTable(props) {
             rowCount={data.length}
 						rows={rows}
 						handleDelete={handleDelete}
-						success={resources.success}
+						// success={resources.success}
 					/>
 					<TableBody>
 						{_.orderBy(

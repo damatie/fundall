@@ -5,6 +5,7 @@ import swal from 'sweetalert2';
 export const GET_EMPLOYEES = 'GET EMPLOYEES';
 export const SET_EMPLOYEES_SEARCH_TEXT = 'SET EMPLOYEES SEARCH TEXT';
 export const UPDATE_EMPLOYEES = 'UPDATE EMPLOYEE';
+export const EMPLOYEE_SUCCESS = 'EMPLOYEE SUCCESS';
 
 const auth = useAuth
 export function getEmployees() {
@@ -25,7 +26,9 @@ export function getEmployees() {
   }
 }
 
+
 export const deleteEmployee = id => {
+  let done = false;
   return dispatch => {
     swal.fire({
       title: 'Are you sure?',
@@ -36,7 +39,7 @@ export const deleteEmployee = id => {
       cancelButtonColor: '#d33',
       confirmButtonText: 'Yes, delete it!',
       showLoaderOnConfirm: true,
-      preConfirm: () => {
+      preConfirm: () => [
         fetch(`https://hris-cbit.herokuapp.com/api/v1/auth/employee/${id}`, {
           method: 'delete',
           headers: {
@@ -45,25 +48,26 @@ export const deleteEmployee = id => {
         }).then(res => res.json()).then(
           data => {
             if(data.success) {
+              done = true;
               console.log(data);
+              swal.fire(
+                'Deleted!',
+                'Your file has been deleted.',
+                'success'
+              )
+              return dispatch({
+                type: UPDATE_EMPLOYEES
+              })
+            } else {
+              swal.fire(
+                'Deleted!',
+                'something went wrong',
+                'error'
+              )
             }
           }
         ).catch(e => console.error(e))
-      }
-    }).then((result) => {
-      if (result.value) {
-        swal.fire(
-          'Deleted!',
-          'Your file has been deleted.',
-          'success'
-        )
-        setTimeout(() => {
-          dispatch({
-            type: UPDATE_EMPLOYEES
-          })
-        }, 2000)
-        
-      }
+        ]
     })
   }
   

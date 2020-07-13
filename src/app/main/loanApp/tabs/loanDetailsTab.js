@@ -15,8 +15,9 @@ import Typography from '@material-ui/core/Typography';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import LoanHistory from './loanHistory';
+import { TextField } from '@material-ui/core';
 
-function LoanDetailsTab({user}) {
+function LoanDetailsTab({setValue}) {
 
 
 	const role = JSON.parse(localStorage.getItem('user_data'));
@@ -42,7 +43,7 @@ function LoanDetailsTab({user}) {
 						<CardContent>
 							<div className="mb-24">
 								<Typography className="font-bold mb-4 text-15">Email</Typography>
-								<Typography>{loan.email}</Typography>
+								<Typography>{loan.employee.email}</Typography>
 							</div>
 
 							<div className="mb-24">
@@ -58,6 +59,7 @@ function LoanDetailsTab({user}) {
               <div className="mb-24">
 								<Typography className="font-bold mb-4 text-15">Amount Approved</Typography>
 								<Typography>{loan.amountApproved}</Typography>
+								<TextField label='Amount approved' type='number' className='w-full' variant='outlined' onChange={e => setValue(e.target.value)}/>
 							</div>
 
               <div className="mb-24">

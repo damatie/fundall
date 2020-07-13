@@ -49,7 +49,7 @@ const ProgressBtn = ({success, loading, content, disable, onClick, color}) => {
       <Button
         variant="contained"
         color={!color ? "primary" : color}
-        className={`${buttonClassname} w-full`}
+        className={`w-full`}
         disabled={loading || disable}
         onClick={onClick}
         type='submit'

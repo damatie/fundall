@@ -177,7 +177,7 @@ const AuthorizationForPayrollDeductions = () => {
                 lg="12"
                 xl="12"
               >
-                <div className={classes.submit}>
+                {/* <div className={classes.submit}>
                   <Button
                     type="submit"
                     variant="contained"
@@ -188,7 +188,7 @@ const AuthorizationForPayrollDeductions = () => {
                   >
                     Submit
               </Button>
-                </div>
+                </div> */}
               </Grid>
             </Grid>
           </div>

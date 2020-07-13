@@ -64,6 +64,8 @@ function LeaveManagement(props) {
 	
 	const leaveRequest = useSelector(({ leaveRequest }) => leaveRequest);
 
+	const user = JSON.parse(localStorage.getItem('user_data'))
+
   const classes = useStyles(props);
   
   function handleChangeTab(event, value) {
@@ -103,6 +105,21 @@ function LeaveManagement(props) {
 					</div>
       }
       contentToolbar={
+				user.role === 'HR' ? 
+				<Tabs
+					value={tabValue}
+					onChange={handleChangeTab}
+					indicatorColor="primary"
+					textColor="primary"
+					variant="scrollable"
+					scrollButtons="auto"
+					classes={{ root: 'w-full h-64' }}
+				>
+					{/* <Tab className="h-64 normal-case" label="Pending Leave" /> */}
+					<Tab className="h-64 normal-case" label="Reviewed Leave" />
+          <Tab className="h-64 normal-case" label="Approved Leave" />
+				</Tabs> 
+				:
 				<Tabs
 					value={tabValue}
 					onChange={handleChangeTab}
@@ -113,15 +130,22 @@ function LeaveManagement(props) {
 					classes={{ root: 'w-full h-64' }}
 				>
 					<Tab className="h-64 normal-case" label="Pending Leave" />
-					<Tab className="h-64 normal-case" label="Reviewed Leave" />
+					{/* <Tab className="h-64 normal-case" label="Reviewed Leave" /> */}
           <Tab className="h-64 normal-case" label="Approved Leave" />
-				</Tabs>
+				</Tabs> 
 			}
 			content={
+				user.role === 'HR' ? 
         <div className=" sm:p-24 ">
+          {/* {tabValue === 0 && (<LeaveTableTab data={leaveRequest.pendingLeaves} user={props.config}/>)} */}
+          {tabValue === 0 && (<LeaveTableTab data={leaveRequest.reviewedLeaves} user={props.config} />)}
+          {tabValue === 1 && (<LeaveTableTab data={leaveRequest.approvedLeaves} user={props.config} />)}
+        </div>
+				:
+				<div className=" sm:p-24 ">
           {tabValue === 0 && (<LeaveTableTab data={leaveRequest.pendingLeaves} user={props.config}/>)}
-          {tabValue === 1 && (<LeaveTableTab data={leaveRequest.reviewedLeaves} user={props.config} />)}
-          {tabValue === 2 && (<LeaveTableTab data={leaveRequest.approvedLeaves} user={props.config} />)}
+          {/* {tabValue === 1 && (<LeaveTableTab data={leaveRequest.reviewedLeaves} user={props.config} />)} */}
+          {tabValue === 1 && (<LeaveTableTab data={leaveRequest.approvedLeaves} user={props.config} />)}
         </div>
 			}
 			innerScroll
