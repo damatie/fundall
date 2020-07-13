@@ -10,6 +10,7 @@ import Formsy from 'formsy-react';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ProgressBtn from 'app/shared/progressBtn';
+import { Link } from 'react-router-dom';
 
 function LoginTab(props) {
 	const dispatch = useDispatch();
@@ -100,9 +101,13 @@ function LoginTab(props) {
 					variant="outlined"
 					required
 				/>
-
         <ProgressBtn success={login.success} loading={login.loading} disable={!isFormValid} content='Login'/>
 			</Formsy>
+			<div className="flex flex-col items-center justify-center pt-32 pb-24">
+								<Link className="font-medium" to="/auth/register">
+									Register
+								</Link>
+							</div>
 		</div>
 	);
 }

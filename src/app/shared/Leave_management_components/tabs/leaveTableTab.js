@@ -12,6 +12,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { withRouter, useParams } from 'react-router-dom';
 import SharedTableHead from 'app/shared/sharedTableHead';
+import moment from 'moment';
 
 const rows = [
 	{
@@ -55,7 +56,7 @@ function LeaveTableTab(props) {
 	const dispatch = useDispatch();
 
 	const [selected, setSelected] = useState([]);
-	const [data, setData] = useState(props.data);
+	const [data, setData] = useState([]);
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(10);
 	const [order, setOrder] = useState({
@@ -64,7 +65,7 @@ function LeaveTableTab(props) {
 	});
 
 	useEffect(() => {
-    setData(props.data)
+		setData(props.data)
 	}, [props.data]);
 
 	function handleRequestSort(event, property) {
@@ -178,16 +179,16 @@ function LeaveTableTab(props) {
 										</TableCell>
 
 										<TableCell component="th" scope="row" align='left'>
-                      {n.firstName}
+                      {n.employeeName}
 										</TableCell>
                     <TableCell component="th" scope="row" align='left'>
                       {n.leaveType}
 										</TableCell>
                     <TableCell component="th" scope="row" align='left'>
-                      {n.fromDate}
+                      {moment(new Date(n.fromDate)).format("dddd, MMMM Do YYYY")}
 										</TableCell>
                     <TableCell component="th" scope="row" align='left'>
-                      {n.toDate}
+                      {moment(new Date(n.toDate)).format("dddd, MMMM Do YYYY")}
 										</TableCell>
                     <TableCell component="th" scope="row" align='right'>
                       {n.leaveFor}

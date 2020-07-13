@@ -32,22 +32,9 @@ export const getResources = () => {
   }
 };
 
-const Fetch = id => {
-  fetch(`https://hris-cbit.herokuapp.com/api/v1/resources/${id}`, {
-    method: 'delete',
-    headers: {
-      Authorization: `JWT ${auth().getToken}`
-    }
-  }).then(res => res.json()).then(data => {
-    return data
-  })
-};
 
-export const deleteResources = data => {
+export const deleteResources = id => {
   return dispatch => {
-    // dispatch({
-    //   type: DELETING_RESOURCES
-    // });
     Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
@@ -58,27 +45,32 @@ export const deleteResources = data => {
       confirmButtonText: 'Yes, delete it!',
       showLoaderOnConfirm: true,
       preConfirm: () => {
-        data.map(id => Fetch(id))
+        fetch(`https://hris-cbit.herokuapp.com/api/v1/resources/${id}`, {
+          method: 'delete',
+          headers: {
+            Authorization: `JWT ${auth().getToken}`
+          }
+        }).then(res => res.json()).then(data => {
+          if(data.success) {
+            Swal.fire(
+              'Deleted!',
+              'Your file has been deleted.',
+              'success'
+            )
+            dispatch({
+              type: DELETING_RESOURCES
+            })
+          } else {
+            Swal.fire(
+              'Deleted!',
+              'Something went wrong.',
+              'error'
+            )
+          }
+        })
       }
       
-    }).then((result) => {
-      if (result.value) {
-        Swal.fire(
-          'Deleted!',
-          'Your file has been deleted.',
-          'success'
-        )
-        dispatch({
-          type: SET_RESOURCES_SUCCESS
-        })
-        setTimeout(() => {
-          dispatch({
-            type: RESET_RESOURCES
-          })
-        }, 3000)
-      }
     })
-    
   }
 };
 

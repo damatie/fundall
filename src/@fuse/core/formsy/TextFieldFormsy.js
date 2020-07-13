@@ -31,7 +31,8 @@ function TextFieldFormsy(props) {
 		'select',
 		'SelectProps',
 		'type',
-		'variant'
+		'variant',
+		'style'
 	]);
 
 	const { errorMessage } = props;

@@ -11,8 +11,11 @@ import EmployeeLeaveReq from './tabs/employeeLeaveReq';
 import * as Actions from 'app/store/actions';
 import { useEffect } from 'react';
 import { useParams, Link, useHistory } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Icon from '@material-ui/core/Icon';
+import { fetchHeaders } from '../fetchHeaders';
+import ProgressBtn from '../progressBtn';
+import swal from 'sweetalert2';
 
 
 const useStyles = makeStyles(theme => ({
@@ -27,9 +30,21 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function EmployeeLeaveDetails(props) {
-	
+	const header = fetchHeaders();
 	const classes = useStyles();
 	const [selectedTab, setSelectedTab] = useState(0);
+	const [success1, setSuccess1] = useState(false);
+	const [loading1, setLoading1] = useState(false);
+
+	const [success2, setSuccess2] = useState(false);
+	const [loading2, setLoading2] = useState(false);
+
+	const [success3, setSuccess3] = useState(false);
+	const [loading3, setLoading3] = useState(false);
+
+	const leaveDetails = useSelector(({ leaveRequestDetails }) => leaveRequestDetails);
+
+	const user = JSON.parse(localStorage.getItem('user_data'))
 
 	const { id } = useParams();
 
@@ -44,8 +59,108 @@ function EmployeeLeaveDetails(props) {
 	}
 
 	useEffect(() => {
+		console.log(props.config.user)
 		dispatch(Actions.getLeaveReqDetails(id))
 	}, [dispatch])
+
+	const handleApproveLeave = () => {
+		setLoading3(true);
+		fetch(`https://hris-cbit.herokuapp.com/api/v1/employee-leave/approve/${id}`, {
+			...header.reqHeader(
+				'PATCH',
+				{}
+			),
+		}).then(res => res.json()).then(
+			data => {
+				setLoading3(false);
+				if(data.success) {
+					swal.fire({
+						title: 'Approve leave',
+						text: data.message,
+						icon: 'success',
+						timer: 3000
+					})
+					setSuccess3(true);
+				} else {
+					swal.fire({
+						title: 'Approve leave',
+						text: data.message,
+						icon: 'error',
+						timer: 3000
+					})
+					setSuccess3(true);
+				}
+			}
+		).catch(e => {
+			setLoading3(false);
+			console.error(e)});
+	};
+
+	const handleReviewLeave = () => {
+		setLoading1(true);
+		fetch(`https://hris-cbit.herokuapp.com/api/v1/employee-leave/review/${id}`, {
+			...header.reqHeader(
+				'PATCH',
+				{}
+			),
+		}).then(res => res.json()).then(
+			data => {
+				setLoading1(false);
+				if(data.success) {
+					swal.fire({
+						title: 'Approve leave',
+						text: data.message,
+						icon: 'success',
+						timer: 3000
+					})
+					setSuccess1(true);
+				} else {
+					swal.fire({
+						title: 'Approve leave',
+						text: data.message,
+						icon: 'error',
+						timer: 3000
+					})
+					setSuccess1(true);
+				}
+			}
+		).catch(e => {
+			setLoading1(false);
+			console.error(e)});
+	};
+
+	const handleReject = () => {
+		setLoading2(true);
+		fetch(`https://hris-cbit.herokuapp.com/api/v1/employee-leave/cancel/${id}`, {
+			...header.reqHeader(
+				'PATCH',
+				{}
+			),
+		}).then(res => res.json()).then(
+			data => {
+				setLoading2(false);
+				if(data.success) {
+					swal.fire({
+						title: 'Approve leave',
+						text: data.message,
+						icon: 'success',
+						timer: 3000
+					})
+					setSuccess2(true);
+				} else {
+					swal.fire({
+						title: 'Approve leave',
+						text: data.message,
+						icon: 'error',
+						timer: 3000
+					})
+					setSuccess2(true);
+				}
+			}
+		).catch(e => {
+			setLoading2(false);
+			console.error(e)});
+	}
 
 	return (
 		<FusePageSimple
@@ -68,7 +183,7 @@ function EmployeeLeaveDetails(props) {
 									<Icon className="text-20">
 										{theme.direction === 'ltr' ? 'arrow_back' : 'arrow_forward'}
 									</Icon>
-									<span className="mx-4">Entities</span>
+									<span className="mx-4">Back</span>
 								</Typography>
 							</FuseAnimate>
 						</div>
@@ -80,19 +195,20 @@ function EmployeeLeaveDetails(props) {
 						</FuseAnimate>
 						<FuseAnimate animation="transition.slideLeftIn" delay={300}>
 							<Typography className="md:mx-24" variant="h4" color="inherit">
-								John Doe
+								{leaveDetails.data.employeeName}
 							</Typography>
 						</FuseAnimate>
 					</div>
 
-					<div className="flex items-center justify-end">
-						<Button className="mx-8 normal-case" variant="contained" color="secondary" aria-label="Follow">
-							Reject Leave
-						</Button>
-						<Button className="normal-case" variant="contained" color="primary" aria-label="Send Message">
-							Approve Leave
-						</Button>
-					</div>
+					{leaveDetails.data.status !== 'approved' ? <div className="flex items-center justify-end">
+					
+						{leaveDetails.data.status === 'in progress' ? 	<><ProgressBtn loading={loading1} success={success1} color='secondary' onClick={handleReviewLeave} content='Review Leave' /> 
+						<ProgressBtn loading={loading2} success={success2} color='secondary' onClick={handleReject} content='Reject Leave' /> </> :
+						<>
+						<ProgressBtn loading={loading3} success={success3} color='primary' onClick={handleApproveLeave} content='Approve Leave'/> 
+						<ProgressBtn loading={loading2} success={success2} color='secondary' onClick={handleReject} content='Reject Leave' />
+					</>}
+					</div> : <></>}
 				</div>
 				</>
 			}

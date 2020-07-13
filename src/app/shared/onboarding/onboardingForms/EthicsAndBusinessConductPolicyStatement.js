@@ -60,7 +60,7 @@ const EthicsAndBusinessConductPolicyStatement = () => {
             </Grid>
             <Grid alignItems="center"  container item sm="12" md="12" lg="12" xl="12">
               <div className={classes.submit}>
-              <SignUPButton title='Submit' />
+              {/* <SignUPButton title='Submit' /> */}
               </div>
             </Grid>
           </Grid>

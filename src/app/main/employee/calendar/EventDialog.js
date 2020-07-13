@@ -124,7 +124,8 @@ function EventDialog(props) {
 		// }
 		dispatch(Actions.requestLeave({
 			...form,
-			days: days
+			days: days,
+			allotedYear: new Date().getFullYear()
 		}));
 	}
 
@@ -163,7 +164,7 @@ function EventDialog(props) {
 						fullWidth
 					>
 						{leaveType.map(item => (
-						<MenuItem value={item.id}>
+						<MenuItem value={item.type}>
 							{item.type}
 						</MenuItem>))}
 					</TextField>
@@ -220,7 +221,7 @@ function EventDialog(props) {
 						required
 						fullWidth
 					>
-						{[{name: 'David Chinweike', id: 1}, {name: 'Victor Jane', id: 2}].map(item => (
+						{[{name: 'David Chinweike', id: 10}].map(item => (
 						<MenuItem value={item.id}>
 							{item.name}
 						</MenuItem>))}
@@ -242,7 +243,7 @@ function EventDialog(props) {
 						required
 						fullWidth
 					>
-						{[{name: 'Matthew Nate', id: 1}, {name: 'Jay-Z Obi', id: 2}].map(item => (
+						{[{name: 'Matthew Nate', id: 7}].map(item => (
 						<MenuItem value={item.id}>
 							{item.name}
 						</MenuItem>))}

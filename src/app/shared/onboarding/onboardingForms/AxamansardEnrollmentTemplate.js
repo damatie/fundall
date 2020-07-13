@@ -347,7 +347,7 @@ const AxaMansardEnrollmentTemplate = () => {
             lg="12"
             xl="12"
           >
-            <div className={classes.submit}>
+            {/* <div className={classes.submit}>
               <Button
                 type="submit"
                 variant="contained"
@@ -358,7 +358,7 @@ const AxaMansardEnrollmentTemplate = () => {
               >
                 Submit
               </Button>
-            </div>
+            </div> */}
           </Grid>
         </div>
       </div>

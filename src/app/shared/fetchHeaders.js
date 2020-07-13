@@ -17,6 +17,15 @@ export const fetchHeaders = () => {
     };
   };
 
+  const delHeader = () => {
+    return {
+      method: 'delete',
+      headers: {
+        ...auth,
+      },
+    }
+  }
+
   const reqHeader = (method, body) => {
     return {
       method: method,
@@ -30,7 +39,8 @@ export const fetchHeaders = () => {
 
   return {
     getRegHeader,
-    reqHeader
+    reqHeader,
+    delHeader
   };
 
 };

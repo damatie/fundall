@@ -26,13 +26,12 @@ export const rolesReducer = (state = initialState, actions) => {
     case Actions.DELETING_ROLES: {
       return {
         ...state,
-        isDeleting: true,
+        isDeleting: !state.isDeleting,
       }
     }
     case Actions.SET_ROLES_SUCCESS: {
       return {
         ...state,
-        isDeleting: false,
         success: true
       }
     }

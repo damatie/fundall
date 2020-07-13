@@ -38,9 +38,9 @@ function RolesTable(props) {
 	});
 
 	useEffect(() => {
+		setSelected([])
     dispatch(Actions.getRoles());
-    console.log(roles);
-	}, [dispatch]);
+	}, [dispatch, roles.isDeleting]);
 
 	useEffect(() => {
 		if (searchText.length !== 0) {
@@ -103,12 +103,9 @@ function RolesTable(props) {
 	}
 
 	const handleDelete = () => {
-		dispatch(Actions.deleteRoles(selected));
+		dispatch(Actions.deleteRoles(selected[0]));
 	};
 
-	if(roles.isDeleting) {
-
-	}
 
 	return (
 		<div className="w-full flex flex-col">

@@ -3,7 +3,8 @@ import * as Actions from '../actions';
 const initialState = {
 	data: [],
 	searchText: '',
-	update: false
+	update: false,
+	succeess: false,
 };
 
 const employeesReducer = (state = initialState, action) => {
@@ -11,7 +12,8 @@ const employeesReducer = (state = initialState, action) => {
 		case Actions.GET_EMPLOYEES: {
 			return {
 				...state,
-				data: action.payload
+				data: action.payload,
+				success: true,
 			};
 		}
 		case Actions.SET_EMPLOYEES_SEARCH_TEXT: {
@@ -23,7 +25,8 @@ const employeesReducer = (state = initialState, action) => {
 		case Actions.UPDATE_EMPLOYEES: {
 			return {
 				...state,
-				update: !state.update
+				update: !state.update,
+				success: false
 			}
 		}
 		default: {

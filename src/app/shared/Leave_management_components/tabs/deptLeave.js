@@ -46,7 +46,6 @@ const DepartmentLeave = ({id}) => {
 						animation: 'transition.slideUpBigIn'
 					}}
 				>
-
       <Card className="w-full mb-16">
         <AppBar position="static" elevation={0}>
           <Toolbar className="px-8">
