@@ -14,6 +14,9 @@ import ProgressBtn from '../../shared/progressBtn'
 const useStyles = makeStyles((theme) => ({
   root: {
     padding: theme.spacing(4),
+    [theme.breakpoints.down('xs')]: {
+      padding: theme.spacing(2)
+    },
   },
   addPostBtn: {
     margin: '0 0 24px 0',
@@ -21,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
   blogTitle: {
     minHeight: 76,
     fontSize: 24,
-    minWidth: '100%',
+    width: '100%',
     padding: 16,
   },
   blogContent: {
