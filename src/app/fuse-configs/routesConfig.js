@@ -3,6 +3,7 @@ import React from 'react';
 import { Redirect } from 'react-router-dom';
 import FuseUtils from '@fuse/utils';
 // import ExampleConfig from 'app/main/example/ExampleConfig.js';
+import BlogConfig from 'app/main/blog_app/blogConfig';
 import HrLoginConfig from 'app/main/HR/registration/loginConfig';
 import RegisterConfig from 'app/main/HR/registration/registerConfig';
 import MailConfirmationPageConfig from 'app/main/HR/registration/MailConfirmPageConfig';
@@ -31,6 +32,7 @@ import LoanReqConfig from 'app/main/loanApp/loanReqConfig';
 
 const routeConfigs = [
 	// ExampleConfig,
+	BlogConfig,
 	HrLoginConfig,
 	RegisterConfig,
 	MailConfirmationPageConfig,
