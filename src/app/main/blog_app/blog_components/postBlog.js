@@ -9,7 +9,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import Checkbox from '@material-ui/core/Checkbox';
-import ProgressBtn from '../../shared/progressBtn'
+import ProgressBtn from '../../../shared/progressBtn'
 
 const useStyles = makeStyles((theme) => ({
   root: {
