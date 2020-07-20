@@ -157,8 +157,8 @@ function EmployeeUnit(props) {
         <div className=" sm:p-24 ">
           {tabValue === 0 && (<PersonalInformation />)}
 					{tabValue === 1 && (<FamilyInformation />)}
-          {tabValue === 2 && (<EmploymentInformation />)}
-          {tabValue === 3 && (<EmploymentInformation />)}
+          {/* {tabValue === 2 && (<EmploymentInformation />)}
+          {tabValue === 3 && (<EmploymentInformation />)} */}
           {tabValue === 4 && (<PromotionHistory />)}
         </div>
 			}

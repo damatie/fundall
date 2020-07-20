@@ -16,7 +16,7 @@ export const redirectUrl = role => {
       return '/employee/dashboard'
     }
     default: {
-      return '/login'
+      return '/auth/login'
     }
   } 
 }

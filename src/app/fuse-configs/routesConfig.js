@@ -60,10 +60,10 @@ const routeConfigs = [
 
 const routes = [
 	...FuseUtils.generateRoutesFromConfigs(routeConfigs),
-	// {
-	// 	path: '/',
-	// 	component: () => <Redirect to="/" />
-	// }
+	{
+		path: '/auth/login',
+		component: React.lazy(import('app/main/authentication_pages/login/login'))
+	}
 ];
 
 export default routes;

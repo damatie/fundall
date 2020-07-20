@@ -18,14 +18,14 @@ const navigationConfig = [
 		icon: 'apps',
 		auth: authRoles.admin,
 		children: [
-			// {
-			// 	id: 'dashboard',
-			// 	title: 'Dashboard',
-			// 	translate: 'Dashboard',
-			// 	type: 'item',
-			// 	icon: 'dashboard',
-			// 	url: '/hr/dashboard'
-			// },
+			{
+				id: 'dashboard',
+				title: 'HR Dashboard',
+				translate: 'Dashboard',
+				type: 'item',
+				icon: 'dashboard',
+				url: '/hr/dashboard'
+			},
 			{
 				id: 'employee_management',
 				title: 'Employee management',
@@ -325,7 +325,7 @@ const navigationConfig = [
 		]
 	},
 	{
-		id: 'loan_request',
+		id: 'loan_requests',
 		title: 'Loan request',
 		translate: 'Loan request',
 		type: 'group',

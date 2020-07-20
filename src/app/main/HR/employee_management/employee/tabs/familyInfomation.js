@@ -9,7 +9,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect } from 'react-router';
 import { useParams } from 'react-router-dom';
-import Grid from '@material-ui/core/Grid'
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
 
 const FamilyInformation = () => {
   const [numbers, setNumbers] = useState([]);
@@ -20,15 +21,23 @@ const FamilyInformation = () => {
   // const {convert, number} = useConvertToArray();
 
 	const [isFormValid, setIsFormValid] = useState(true);
-	const formRef = useRef(null);
+  const formRef = useRef(null);
+  
+  const nextOfkin = [
+    {label: 'First name', name: 'firstName', value: '', icon: 'person', type: 'text'},
+    {label: 'Last name', name: 'lastName', value: '', icon: 'person', type: 'text'},
+    {label: 'Email', name: 'email', value: '', icon: 'mail', type: 'email'},
+    {label: 'Relationship', name: 'relationship', value: '', icon: 'person', type: 'text'},
+    {label: 'Contact number', name: 'contactNumber', value: '', icon: 'phone', type: 'number'},
+    {label: 'Address', name: 'address', value: '', icon: 'map', type: 'text'}
+  ];
+  const whoToContact = [
+    {label: 'Email', name: 'email', value: '', icon: 'mail', type: 'email'},
+    {label: 'Contact number', name: 'contactNumber', value: '', icon: 'phone', type: 'number'},
+    {label: 'Address', name: 'address', value: '', icon: 'map', type: 'text'}
+  ];
 
 	useEffect(() => {
-		// if (register.error && (register.error.username || register.error.password || register.error.email)) {
-		// 	formRef.current.updateInputsWithError({
-		// 		...register.error
-		// 	});
-		// 	disableButton();
-		// }
   }, []);
   
   const handleChange = e => {
@@ -80,7 +89,7 @@ const FamilyInformation = () => {
         break;
       }
     };
-  }
+  };
 
 	function disableButton() {
 		setIsFormValid(false);
@@ -92,7 +101,71 @@ const FamilyInformation = () => {
 
 	function handleSubmit(model) {
 		// dispatch(Actions.saveBusinessUnit(model));
-	}
+  }
+  
+  const NextOfKin = nextOfkin.map(item => {
+    return (
+      <TextFieldFormsy
+        className="mb-16"
+        type={item.type}
+        name={item.name}
+        label={item.label}
+        value={item.value}
+        // placeholder={'max. 10 dependants'}
+        validations={{
+          minLength: 1,
+          maxLength: 10
+        }}
+        validationErrors={{
+          minLength: 'Min character length is 1'
+        }}
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <Icon className="text-20" color="action">
+                {item.icon}
+              </Icon>
+            </InputAdornment>
+          )
+        }}
+        onChange={handleChange}
+        variant="outlined"
+        required
+			/>
+    )
+  });
+
+  const WhoToContact = whoToContact.map(item => {
+    return (
+      <TextFieldFormsy
+        className="mb-16"
+        type={item.type}
+        name={item.name}
+        label={item.label}
+        value={item.value}
+        // placeholder={'max. 10 dependants'}
+        validations={{
+          minLength: 1,
+          maxLength: 10
+        }}
+        validationErrors={{
+          minLength: 'Min character length is 1'
+        }}
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <Icon className="text-20" color="action">
+                {item.icon}
+              </Icon>
+            </InputAdornment>
+          )
+        }}
+        onChange={handleChange}
+        variant="outlined"
+        required
+			/>
+    )
+  })
 
   return (
     <div className="w-full">
@@ -132,6 +205,10 @@ const FamilyInformation = () => {
 			  />
 
         {numbers.map( x => (<Depandants />))}
+        <Typography className='my-16' variant="subtitle1">Next of Kin</Typography>
+        {NextOfKin}
+        <Typography className='my-16' variant="subtitle1">Who to contact incase of emergency</Typography>
+        {WhoToContact}
       </Formsy>
     </div>
   );
