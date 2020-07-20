@@ -26,7 +26,7 @@ export function submitLogin(data) {
 		}).then(res => res.json()).then(
 			user => {
 				if(user.success) {
-					console.log(user)
+					// console.log(user)
 					Swal.fire({
 						title: 'Login',
 						text: user.message,
@@ -42,7 +42,7 @@ export function submitLogin(data) {
 							displayName: `${user.firstName} ${user.lastName}`,
 							photoURL: 'assets/images/avatars/Velazquez.jpg',
 							email: user.email,
-							shortcuts: ['calendar', 'mail', 'contacts', 'todo']
+							shortcuts: ['loan_request', 'request_leave', 'blog_list', 'todo']
 						}
 					};
 					dispatch(UserActions.setUserData(userState));

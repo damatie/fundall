@@ -4,11 +4,12 @@ export const fetchHeaders = () => {
   
   const token = useAuth;
 
+  // authorization
   const auth = {
     Authorization: `JWT ${token().getToken}`
   }
   
-
+  // get request header
   const getRegHeader = () => {
     return {
       headers: {
@@ -17,6 +18,7 @@ export const fetchHeaders = () => {
     };
   };
 
+  // delete request header
   const delHeader = () => {
     return {
       method: 'delete',
@@ -26,6 +28,7 @@ export const fetchHeaders = () => {
     }
   }
 
+  // post, put, patch request header
   const reqHeader = (method, body) => {
     return {
       method: method,
@@ -37,6 +40,8 @@ export const fetchHeaders = () => {
     };
   };
 
+
+  // returns functions
   return {
     getRegHeader,
     reqHeader,
