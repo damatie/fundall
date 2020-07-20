@@ -42,7 +42,7 @@ export function submitLogin(data) {
 							displayName: `${user.firstName} ${user.lastName}`,
 							photoURL: 'assets/images/avatars/Velazquez.jpg',
 							email: user.email,
-							shortcuts: ['loan_request', 'request_leave', 'blog', 'todo']
+							shortcuts: ['loan_request', 'request_leave', 'blog_list', 'todo']
 						}
 					};
 					dispatch(UserActions.setUserData(userState));

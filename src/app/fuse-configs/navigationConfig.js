@@ -9,14 +9,14 @@ i18next.addResourceBundle('tr', 'navigation', tr);
 i18next.addResourceBundle('ar', 'navigation', ar);
 
 const navigationConfig = [
-	// hr nav
+	// Dashboard navigations
 	{
 		id: 'applications',
 		title: 'Applications',
 		translate: 'Applications',
 		type: 'group',
 		icon: 'apps',
-		auth: authRoles.admin,
+		
 		children: [
 			{
 				id: 'dashboard',
@@ -24,8 +24,27 @@ const navigationConfig = [
 				translate: 'Dashboard',
 				type: 'item',
 				icon: 'dashboard',
-				url: '/hr/dashboard'
+				type: 'collapse',
+				children: [
+					{
+						id: 'hr_dashboard',
+						title: 'Hr dashboard',
+						type: 'item',
+						url: '/hr/dashboard',
+						icon: 'dashboard',
+						auth: authRoles.admin,
+					},
+					{
+						id: 'employee_dashboard',
+						title: 'Dashboard',
+						type: 'item',
+						url: '/employee/dashboard',
+						icon: 'dashboard',
+						auth: authRoles.staff,
+					},
+				]
 			},
+			
 			{
 				id: 'employee_management',
 				title: 'Employee management',
@@ -33,6 +52,7 @@ const navigationConfig = [
 				type: 'collapse',
 				icon: 'group_add',
 				url: '/hr/employee_management',
+				auth: authRoles.admin,
 				children: [
 					{
 						id: 'employee_list',
@@ -53,6 +73,83 @@ const navigationConfig = [
 		
 		]
 	},
+	// Blog navigations
+	{
+		id: 'blog',
+		title: 'Blog',
+		translate: 'Blog',
+		type: 'group',
+		children: [
+			{
+				id: 'blog_post',
+				title: 'Blog post',
+				type: 'item',
+				url: '/blog/post',
+				icon: 'add_comment',
+				auth: authRoles.admin,
+			},
+			{
+				id: 'blog_list',
+				title: 'Blog list',
+				type: 'item',
+				url: '/blog/list',
+				icon: 'chrome_reader_mode',
+				auth: authRoles.staff,
+			}
+		]
+	},
+	// Onboarding navigations
+	{
+		id: 'employee_onboarding',
+		title: 'Employee onboarding',
+		translate: 'Employee onboarding',
+		type: 'group',
+		
+		children: [
+			{
+				id: 'employee_onboarding_list',
+				title: 'Employee onboarding list',
+				type: 'item',
+				url: '/hr/employee_onboarding_list',
+				icon: 'card_membership',
+				auth: authRoles.admin,
+			},
+			{
+				id: 'create_onboarding_quiz',
+				title: 'Create onboarding quiz',
+				type: 'item',
+				url: '/hr/create_onboarding_quiz',
+				icon: 'playlist_add',
+				auth: authRoles.admin,
+			},
+			{
+				id: 'onboarding_quiz-results',
+				title: 'Onboarding quiz result',
+				type: 'item',
+				url: '/hr/onboarding_quiz_result',
+				icon: 'list_alt',
+				auth: authRoles.admin,
+			},
+			{
+				id: 'onboarding',
+				title: 'Onboarding',
+				type: 'item',
+				url: '/employee/onboarding',
+				icon: 'card_membership',
+				auth: authRoles.staff,
+			},
+			{
+				id: 'company_policy_test',
+				title: 'Company policy test',
+				type: 'item',
+				url: '/employee/company_policy_test',
+				icon: 'list_alt',
+				auth: authRoles.staff,
+			}
+		]
+
+	},
+	// roles & resource navigations
 	{
 		id: 'roles&Resources',
 		title: 'Roles and Resources',
@@ -112,6 +209,7 @@ const navigationConfig = [
 		
 		]
 	},
+	// Entity & department navigations
 	{
 		id: 'business_unit_management',
 		title: 'Entities',
@@ -136,12 +234,12 @@ const navigationConfig = [
 			// },
 		]
 	},
+	// Loan navigations
 	{
 		id: 'loan_management',
 		title: 'LOAN MANAGEMENT',
 		translate: 'Loan management',
 		type: 'group',
-		auth: authRoles.manager,
 		children: [
 			{
 				id: 'loan_review',
@@ -149,15 +247,24 @@ const navigationConfig = [
 				type: 'item',
 				url: '/hr/loan/loan_management/',
 				icon: 'monetization_on',
+				auth: authRoles.managers,
+			},
+			{
+				id: 'loan_request',
+				title: 'Loan request',
+				type: 'item',
+				url: '/loan/loan_request',
+				icon: 'monetization_on',
+				auth: authRoles.staff,
 			}
 		]
 	},
+	// Leave navigations
 	{
 		id: 'leave_management',
 		title: 'Leave management',
 		translate: 'Leave management',
 		type: 'group',
-		auth: authRoles.admin,
 		children: [
 			{
 				id: 'leave_type',
@@ -165,6 +272,7 @@ const navigationConfig = [
 				type: 'collapse',
 				url: '/hr/leave_type',
 				icon: 'flight_takeoff',
+				auth: authRoles.admin,
 				children: [
 					{
 						id: 'new_leave_type',
@@ -180,6 +288,7 @@ const navigationConfig = [
 				type: 'collapse',
 				url: '/hr/leave_options',
 				icon: 'event',
+				auth: authRoles.admin,
 				children: [
 					{
 						id: 'new_leave_options',
@@ -195,125 +304,41 @@ const navigationConfig = [
 				type: 'item',
 				url: '/hr/employee_leave',
 				icon: 'calendar_today',
+				auth: authRoles.admin,
 			},
-			{
-				id: 'leave_review',
-				title: 'Leave review',
-				type: 'item',
-				url: '/hr/leave_review',
-				icon: 'calendar_today',
-			},
+			// {
+			// 	id: 'leave_review',
+			// 	title: 'Leave review',
+			// 	type: 'item',
+			// 	url: '/hr/leave_review',
+			// 	icon: 'calendar_today',
+			// 	auth: authRoles.admin,
+			// },
 			{
 				id: 'leave_summary',
 				title: 'Leave summary',
 				type: 'item',
 				url: '/hr/leave_summary',
 				icon: 'event_available',
+				auth: authRoles.staff,
 				
 			},
-		]
-	},
-	{
-		id: 'employee_onboarding',
-		title: 'Employee onboarding',
-		translate: 'Employee onboarding',
-		type: 'group',
-		auth: authRoles.admin,
-		children: [
-			{
-				id: 'employee_onboarding_list',
-				title: 'Employee onboarding list',
-				type: 'item',
-				url: '/hr/employee_onboarding_list',
-				icon: 'card_membership',
-			},
-			{
-				id: 'create_onboarding_quiz',
-				title: 'Create onboarding quiz',
-				type: 'item',
-				url: '/hr/create_onboarding_quiz',
-				icon: 'playlist_add',
-			},
-			{
-				id: 'onboarding_quiz-results',
-				title: 'Onboarding quiz result',
-				type: 'item',
-				url: '/hr/onboarding_quiz_result',
-				icon: 'list_alt',
-			},
-		]
-
-	},
-
-	{
-		id: 'hr_settings',
-		title: 'Settings',
-		translate: 'Settings',
-		type: 'group',
-		auth: authRoles.admin,
-		children: [
-			{
-				id: 'hr_profile_settings',
-				title: 'Profile settings',
-				type: 'item',
-				url: '/hr/profile_settings',
-				icon: 'settings_applications',
-			}
-		]
-	},
-
-	//Employee nav
-	{
-		id: 'application',
-		title: 'Application',
-		translate: 'Application',
-		type: 'group',
-		auth: authRoles.staff,
-		children: [
-			{
-				id: 'dashboard',
-				title: 'Dashboard',
-				type: 'item',
-				url: '/employee/dashboard',
-				icon: 'dashboard',
-			},
-			{
-				id: 'onboarding',
-				title: 'Onboarding',
-				type: 'item',
-				url: '/employee/onboarding',
-				icon: 'card_membership',
-			},
-			{
-				id: 'company_policy_test',
-				title: 'Company policy test',
-				type: 'item',
-				url: '/employee/company_policy_test',
-				icon: 'list_alt',
-			}
-		]
-	},
-	{
-		id: 'Leave management',
-		title: 'Leave management',
-		translate: 'Leave management',
-		type: 'group',
-		auth: authRoles.staff,
-		children: [
 			{
 				id: 'request_leave',
 				title: 'Request leave',
 				type: 'item',
 				url: '/employee/request_leave',
 				icon: 'event',
+				auth: authRoles.staff,
 			},
-			{
-				id: 'leave_summary',
-				title: 'Leave summary',
-				type: 'item',
-				url: '/employee/leave_summary',
-				icon: 'calendar_today',
-			},
+			// {
+			// 	id: 'leave_summary',
+			// 	title: 'Leave summary',
+			// 	type: 'item',
+			// 	url: '/employee/leave_summary',
+			// 	icon: 'calendar_today',
+			// 	auth: authRoles.staff,
+			// },
 			{
 				id: 'leave_review',
 				title: 'Leave review',
@@ -324,22 +349,7 @@ const navigationConfig = [
 			}
 		]
 	},
-	{
-		id: 'loan_requests',
-		title: 'Loan request',
-		translate: 'Loan request',
-		type: 'group',
-		auth: authRoles.staff,
-		children: [
-			{
-				id: 'loan_request',
-				title: 'Loan request',
-				type: 'item',
-				url: '/loan/loan_request',
-				icon: 'monetization_on',
-			}
-		]
-	},
+	// Settings navigations
 	{
 		id: 'settings',
 		title: 'Settings',
