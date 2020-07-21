@@ -16,7 +16,7 @@ export const getPendingLoan = () => {
       ...header.getRegHeader()
     }).then(res => res.json()).then(
       data => {
-        if(data.message === 'Success') {
+        if(data.success) {
           dispatch({
             type: GET_ALL_PENDING_LOAN,
             payload: data.loanData

@@ -245,7 +245,7 @@ const navigationConfig = [
 				id: 'loan_review',
 				title: 'Loan review',
 				type: 'item',
-				url: '/hr/loan/loan_management/',
+				url: '/loan/review/',
 				icon: 'monetization_on',
 				auth: authRoles.managers,
 			},
@@ -253,7 +253,7 @@ const navigationConfig = [
 				id: 'loan_request',
 				title: 'Loan request',
 				type: 'item',
-				url: '/loan/loan_request',
+				url: '/loan/request',
 				icon: 'monetization_on',
 				auth: authRoles.staff,
 			}

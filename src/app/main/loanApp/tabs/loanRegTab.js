@@ -96,7 +96,7 @@ function LoanReqTab(props) {
 		// 	props.history.push(`/hr/leave_review/employee/${item.id}`);
 		// }
 		
-		props.history.push(`/hr/loan/loan_management/details/${item.id}`);
+		props.history.push(`/loan/review/list/details/${item.id}`);
   }
   
 

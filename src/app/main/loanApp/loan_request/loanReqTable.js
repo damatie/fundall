@@ -12,6 +12,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { withRouter, useParams } from 'react-router-dom';
 import SharedTableHead from 'app/shared/sharedTableHead';
+import * as Actions from '../store/actions';
 
 const rows = [
 	{
@@ -54,8 +55,10 @@ const rows = [
 function LoanReqTable(props) {
 	const dispatch = useDispatch();
 
+	const pendingLoan = useSelector(({ loan }) => loan.loans);
+
 	const [selected, setSelected] = useState([]);
-	const [data, setData] = useState([]);
+	const [data, setData] = useState(pendingLoan.pendingLoan);
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(10);
 	const [order, setOrder] = useState({
@@ -64,8 +67,13 @@ function LoanReqTable(props) {
 	});
 
 	useEffect(() => {
-		setData([])
+		setData(pendingLoan.pendingLoan)
+		dispatch(Actions.getPendingLoan());
 	}, []);
+
+	useEffect(() => {
+		setData(pendingLoan.pendingLoan)
+	})
 
 	function handleRequestSort(event, property) {
 		const id = property;
