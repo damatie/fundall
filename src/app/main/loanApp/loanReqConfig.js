@@ -6,24 +6,40 @@ const LoanReqConfig = {
   },
   routes: [
     {
-      path: '/hr/loan/loan_management/details/:id',
+      path: '/loan/review/list/details/:id',
       component: React.lazy(() => import('./loan_management/loanDetails'))
     },
     {
-      path: '/hr/loan/loan_management',
+      path: '/loan/review/list',
       component: React.lazy(() => import('./loan_management/manageLoan'))
     },
     {
-      path: '/loan/loan_request/details/:id',
+      path: '/loan/request/details/:id',
       component: React.lazy(() => import('./loan_request/loanReq'))
     },
     {
-      path: '/loan/loan_request/new',
+      path: '/loan/request/new',
       component: React.lazy(() => import('./loan_request/loanReq'))
     },
     {
-      path: '/loan/loan_request',
+      path: '/loan/request/list',
       component: React.lazy(() => import('./loan_request/loanReqs'))
+    },
+    {
+      path: '/loan/request/salaryadvance_request/new',
+      component: React.lazy(() => import('./salaryAdvance/salaryAdvance'))
+    },
+    {
+      path: '/loan/request/salaryadvance_request/list',
+      component: React.lazy(() => import('./salaryAdvance/salaryAdvanceTable'))
+    },
+    {
+      path: '/loan/review',
+      component: React.lazy(() => import('./reviewLoan'))
+    },
+    {
+      path: '/loan/request',
+      component: React.lazy(() => import('./loanHome'))
     }
   ]
 }

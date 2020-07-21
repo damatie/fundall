@@ -91,12 +91,12 @@ export const applyLoan = body => {
     })
     fetch(`https://hris-cbit.herokuapp.com/api/v1/loan/`, {
       ...header.reqHeader(
-        'post',
+        'POST',
         body
       )
     }).then(res => res.json()).then(
       data => {
-        // if(data.message === 'Created!') {
+        if(data.success) {
           swal.fire({
             title: 'Loan application',
             text: 'Loan applied successfully',
@@ -106,17 +106,17 @@ export const applyLoan = body => {
           dispatch({
             type: LOAN_SUCCESS
           })
-        // } else {
-        //   swal.fire({
-        //     title: 'Loan application',
-        //     text: data.message,
-        //     icon: 'error',
-        //     timer: 3000
-        //   })
-        //   dispatch({
-        //     type: LOAN_ERROR
-        //   })
-        // }
+        } else {
+          swal.fire({
+            title: 'Loan application',
+            text: data.message,
+            icon: 'error',
+            timer: 3000
+          })
+          dispatch({
+            type: LOAN_ERROR
+          })
+        }
       }
     ).catch(e => console.error(e))
   }

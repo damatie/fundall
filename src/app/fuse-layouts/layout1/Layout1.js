@@ -6,14 +6,18 @@ import { makeStyles } from '@material-ui/core/styles';
 import AppContext from 'app/AppContext';
 import SettingsPanel from 'app/fuse-layouts/shared-components/SettingsPanel';
 import clsx from 'clsx';
-import React, { useContext } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useContext, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { renderRoutes } from 'react-router-config';
 import FooterLayout1 from './components/FooterLayout1';
 import LeftSideLayout1 from './components/LeftSideLayout1';
 import NavbarWrapperLayout1 from './components/NavbarWrapperLayout1';
 import RightSideLayout1 from './components/RightSideLayout1';
 import ToolbarLayout1 from './components/ToolbarLayout1';
+import * as Actions from 'app/store/actions';
+import { useAuth } from 'app/hooks/useAuth';
+import withReducer from 'app/store/withReducer';
+import reducer from 'app/store/reducers';
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -82,6 +86,12 @@ const useStyles = makeStyles(theme => ({
 
 function Layout1(props) {
 	const config = useSelector(({ fuse }) => fuse.settings.current.layout.config);
+	const id = useAuth().getId;
+	const dispatch = useDispatch();
+
+	useEffect(() => {
+		dispatch(Actions.getEmployeeProfile(id))
+	}, [])
 
 	const appContext = useContext(AppContext);
 	const classes = useStyles(props);
@@ -202,4 +212,5 @@ function Layout1(props) {
 	}
 }
 
+withReducer('profile', reducer)(Layout1);
 export default React.memo(Layout1);
