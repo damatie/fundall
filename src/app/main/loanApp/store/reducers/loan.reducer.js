@@ -5,7 +5,7 @@ const initialState = {
   loadings: false,
   success: false,
   error: false,
-  data: []
+  data: {}
 }
 
 export const loanReducer = (state = initialState, actions) => {

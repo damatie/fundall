@@ -15,18 +15,12 @@ import employeeReducer from 'app/store/reducers';
 import * as employeeActions from 'app/store/actions';
 
 const durations = [
-  '1 month',
-  '2 months',
-  '3 months',
-  '4 months',
-  '5 months',
-  '6 months',
-  '7 months',
-  '8 months',
-  '9 months',
-  '10 months',
-  '11 months',
-  '12 months',
+  {value: '1 month', id: 1},
+  {value: '2 months', id: 2},
+  {value: '3 months', id: 3},
+  {value: '4 months', id: 4},
+  {value: '5 months', id: 5},
+  {value: '6 months', id: 6},
 ];
 
 const matchRole = (data, role) => {
@@ -157,31 +151,20 @@ function RequestLoanTab(props) {
 					required
 				/>
 
-				<TextFieldFormsy
-					className="mb-16"
-					type="number"
-					name="duration"
-					label="Duration"
-					validations={{
-						minLength: 1
-					}}
-					validationErrors={{
-						minLength: 'Min character length is 1'
-					}}
-					InputProps={{
-						endAdornment: (
-							<InputAdornment position="end">
-								<Icon className="text-20" color="action">
-									access_alarm
-								</Icon>
-							</InputAdornment>
-						)
-					}}
-					variant="outlined"
+				<SelectFormsy
+          className="my-16"
+          name="duration"
+          label="Duration"
+          value="none"
+          // validations="not-equals:none"
+          validationError="requried"
+          variant="outlined"
 					required
-				/>
-
-
+        >
+					{durations.map(item => (
+						<MenuItem value={item.id} key={item.id}>{item.value}</MenuItem>
+					))}
+        </SelectFormsy>
 
         <SelectFormsy
           className="my-16"

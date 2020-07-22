@@ -55,10 +55,10 @@ const rows = [
 function LoanReqTable(props) {
 	const dispatch = useDispatch();
 
-	const pendingLoan = useSelector(({ loan }) => loan.loans);
+	const loanHistory = useSelector(({ loan }) => loan.loans);
 
 	const [selected, setSelected] = useState([]);
-	const [data, setData] = useState(pendingLoan.pendingLoan);
+	const [data, setData] = useState([]);
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(10);
 	const [order, setOrder] = useState({
@@ -67,12 +67,11 @@ function LoanReqTable(props) {
 	});
 
 	useEffect(() => {
-		setData(pendingLoan.pendingLoan)
-		dispatch(Actions.getPendingLoan());
+		dispatch(Actions.getEmployeeLoan());
 	}, []);
 
 	useEffect(() => {
-		setData(pendingLoan.pendingLoan)
+		setData(loanHistory.loanHistory);
 	})
 
 	function handleRequestSort(event, property) {
