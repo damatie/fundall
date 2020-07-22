@@ -166,23 +166,26 @@ const loan = {
 
 export const getLoan = id => {
   return dispatch => {
-    // dispatch({
-    //   type: LOADING_LOAN
-    // })
-    // fetch(`https://hris-cbit.herokuapp.com/api/v1/loan/${id}`, {
-    //   ...header.getRegHeader()
-    // }).then(res => res.json()).then(
-    //   data => {
-    //     dispatch({
-    //       type: GET_LOAN,
-    //       payload: data.loanData
-    //     })
-    //   }
-    // ).catch(e => console.error(e))
     dispatch({
-      type: GET_LOAN,
-      payload: loan
+      type: LOADING_LOAN
     })
+    fetch(`https://hris-cbit.herokuapp.com/api/v1/loan/${id}`, {
+      ...header.getRegHeader()
+    }).then(res => res.json()).then(
+      data => {
+        dispatch({
+          type: GET_LOAN,
+          payload: {
+            ...data.loanData,
+            ...data.employee
+          }
+        })
+      }
+    ).catch(e => console.error(e))
+    // dispatch({
+    //   type: GET_LOAN,
+    //   payload: loan
+    // })
   }
   // dispatch({
   //   type: GET_LOAN,

@@ -58,11 +58,24 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
+// filter data by status
+const filterData = (data, status) => {
+	const arr = [];
+	for(const i of data) {
+		if(i.status === status) {
+			arr.push(i);
+		}
+	}
+	return arr;
+};
+
 function ManageLoan(props) {
 	const dispatch = useDispatch();
   const theme = useTheme();
 	const [tabValue, setTabValue] = useState(0);
 	const loans = useSelector(({ loans }) => loans.loans);
+	const profile = useSelector(({ profile }) => profile.data);
+	const profileLoading = useSelector(({ profile }) => profile.loading)
 
 
   const classes = useStyles(props);
@@ -74,9 +87,20 @@ function ManageLoan(props) {
 	useEffect(() => {
 		dispatch(Actions.getPendingLoan());
 		dispatch(Actions.getApprovedLoan());
+		dispatch(Actions.getOpenLoan());
+		dispatch(Actions.getClosedLoan());
 	}, [dispatch]);
 
+	useEffect(() => {
+
+	})
+
 	// useEffect(() => window.location.reload(false), [])
+	if(loans.loading || profileLoading) {
+		return (
+			<div>Loading...</div>
+		)
+	}
 
 	return (
 		<FusePageCarded
@@ -108,6 +132,7 @@ function ManageLoan(props) {
 					</div>
       }
       contentToolbar={
+				profile.role.name !== 'Finance manager' ? 
 				<Tabs
 					value={tabValue}
 					onChange={handleChangeTab}
@@ -117,19 +142,46 @@ function ManageLoan(props) {
 					scrollButtons="auto"
 					classes={{ root: 'w-full h-64' }}
 				>
-					<Tab className="h-64 normal-case" label="Pending Loan" />
-					<Tab className="h-64 normal-case" label="Approved Loan" />
-				</Tabs>
+					{profile.role.name === 'Head of department' ? <Tab className="h-64 normal-case" label="Pending Loan" /> : ''}
+					{profile.role.name === 'HR' ? <Tab className="h-64 normal-case" label="Reviewed Loan" /> : ''}
+				</Tabs> : 
+
+				<Tabs
+				value={tabValue}
+				onChange={handleChangeTab}
+				indicatorColor="primary"
+				textColor="primary"
+				variant="scrollable"
+				scrollButtons="auto"
+				classes={{ root: 'w-full h-64' }}
+				>
+					
+				<Tab className="h-64 normal-case" label="Approved Loan" /> 
+				<Tab className="h-64 normal-case" label="Open Loan" /> 
+				<Tab className="h-64 normal-case" label="Close Loan" /> 
+			</Tabs>
 			}
 			content={
-        <div className=" sm:p-24 ">
-          {tabValue === 0 && (<LoanReqTab loans={loans.pendingLoan}/>)}
-          {tabValue === 1 && (<LoanReqTab loans={loans.approvedLoan}/>)}
-        </div>
+				<>
+        {profile.role.name === 'Head of department' ? <div className=" sm:p-24 ">
+          {tabValue === 0 && (<LoanReqTab loans={filterData(loans.pendingLoan, 'pending')}/>)}
+				</div> : <></>}
+				
+				{profile.role.name === 'HR' ? 	<div className=" sm:p-24 ">
+					{tabValue === 0 && (<LoanReqTab loans={filterData(loans.pendingLoan, 'reviewed')}/>)}
+				</div> : <></>}
+				
+				{profile.role.name === 'Finance manager' ? <div className=" sm:p-24 ">
+					{tabValue === 0 && (<LoanReqTab loans={loans.approvedLoan}/>)}
+					{tabValue === 1 && (<LoanReqTab loans={loans.openLoan}/>)}
+					{tabValue === 2 && (<LoanReqTab loans={loans.closedLoan}/>)}
+				</div> : <></>}
+				</>
 			}
 			innerScroll
 		/>
 	);
-}
+};
+
 
 export default withReducer('loans', reducer)(ManageLoan);

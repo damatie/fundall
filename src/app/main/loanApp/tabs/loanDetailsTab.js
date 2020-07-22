@@ -18,19 +18,17 @@ import LoanHistory from './loanHistory';
 import { TextField } from '@material-ui/core';
 
 function LoanDetailsTab({setValue}) {
-
-
-	const role = JSON.parse(localStorage.getItem('user_data'));
 	const loan = useSelector(({ loan }) => loan.loan.data);
+	const profile = useSelector(({ profile}) => profile.data)
 
 	return (
 		<div className="md:flex">
 			<div className="flex flex-col flex-1 md:ltr:pr-32 md:rtl:pl-32">
-				<FuseAnimateGroup
+				{/* <FuseAnimateGroup
 					enter={{
 						animation: 'transition.slideUpBigIn'
 					}}
-				>
+				> */}
 					<Card className="w-full mb-16">
 						<AppBar position="static" elevation={0}>
 							<Toolbar className="px-8">
@@ -43,7 +41,17 @@ function LoanDetailsTab({setValue}) {
 						<CardContent>
 							<div className="mb-24">
 								<Typography className="font-bold mb-4 text-15">Email</Typography>
-								<Typography>{loan.employee.email}</Typography>
+								<Typography>{loan.email}</Typography>
+							</div>
+
+							<div className="mb-24">
+								<Typography className="font-bold mb-4 text-15">Country</Typography>
+								<Typography>{loan.country}</Typography>
+							</div>
+
+							<div className="mb-24">
+								<Typography className="font-bold mb-4 text-15">Residential Address</Typography>
+								<Typography>{loan.residentialAddress}</Typography>
 							</div>
 
 							<div className="mb-24">
@@ -56,11 +64,13 @@ function LoanDetailsTab({setValue}) {
 								<Typography>{loan.deductableAmount}</Typography>
 							</div>
 
-              <div className="mb-24">
-								<Typography className="font-bold mb-4 text-15">Amount Approved</Typography>
-								<Typography>{loan.amountApproved}</Typography>
-								<TextField label='Amount approved' type='number' className='w-full' variant='outlined' onChange={e => setValue(e.target.value)}/>
-							</div>
+              {profile.role.name === 'Finance manager' ? 
+								<div className="mb-24">
+									<Typography className="font-bold mb-4 text-15">Amount Approved</Typography>
+									<Typography>{loan.amountApproved}</Typography>
+									<TextField label='Amount approved' type='number' className='w-full' variant='outlined' onChange={e => setValue(e.target.value)}/>
+								</div> 
+							: <></>}
 
               <div className="mb-24">
 								<Typography className="font-bold mb-4 text-15">Employement Type</Typography>
@@ -89,12 +99,12 @@ function LoanDetailsTab({setValue}) {
 
               <div className="mb-24">
 								<Typography className="font-bold mb-4 text-15">Duration</Typography>
-								<Typography>{loan.duration}</Typography>
+								<Typography>{`${loan.duration} Months`}</Typography>
 							</div>
 
 							<div className="mb-24">
-								<Typography className="font-bold mb-4 text-15">Payment Mode</Typography>
-								<Typography>{loan.paymentMode}</Typography>
+								<Typography className="font-bold mb-4 text-15">Purpose</Typography>
+								<Typography>{loan.purpose}</Typography>
 							</div>
 						</CardContent>
 					</Card>
@@ -139,12 +149,10 @@ function LoanDetailsTab({setValue}) {
 								<Typography>{loan.numberOfInstallements}</Typography>
 							</div>
 
-              <div className="mb-24">
-								<Typography className="font-bold mb-4 text-15">Pay Off Date</Typography>
-								<Typography>{loan.payOffDate}</Typography>
+							<div className="mb-24">
+								<Typography className="font-bold mb-4 text-15">Payment Mode</Typography>
+								<Typography>{loan.paymentMode}</Typography>
 							</div>
-
-              
 
               <div className="mb-24">
 								{/* <Typography className="font-bold mb-4 text-15">Payment Mode</Typography> */}
@@ -152,7 +160,7 @@ function LoanDetailsTab({setValue}) {
 							</div>
 						</CardContent>
 				</Card> : <></> }
-        </FuseAnimateGroup>
+        {/* </FuseAnimateGroup> */}
 			</div>
 
 		  <div className="flex flex-col md:w-320">
@@ -162,4 +170,4 @@ function LoanDetailsTab({setValue}) {
 	);
 }
 
-export default LoanDetailsTab;
+export default React.memo(LoanDetailsTab);
