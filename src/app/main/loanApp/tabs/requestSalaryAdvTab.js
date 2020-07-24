@@ -13,15 +13,7 @@ import * as Actions from '../store/actions';
 import ProgressBtn from 'app/shared/progressBtn';
 import employeeReducer from 'app/store/reducers';
 import * as employeeActions from 'app/store/actions';
-
-const durations = [
-  {value: '1 month', id: 1},
-  {value: '2 months', id: 2},
-  {value: '3 months', id: 3},
-  {value: '4 months', id: 4},
-  {value: '5 months', id: 5},
-  {value: '6 months', id: 6},
-];
+import Typography from '@material-ui/core/Typography';
 
 const matchRole = (data, role) => {
 	const arr = [];
@@ -33,20 +25,21 @@ const matchRole = (data, role) => {
 	return arr;
 }
 
-function RequestLoanTab(props) {
+function RequestSalaryAdvTab(props) {
 	const dispatch = useDispatch();
 
 	const [isFormValid, setIsFormValid] = useState(true);
 	const formRef = useRef(null);
 
-	const loan = useSelector(({ loan }) => loan.loan);
+	const salaryAdvance = useSelector(({ salaryAdvance }) => salaryAdvance.salaryAdvance);
 	const profile = useSelector(({ profile }) => profile);
 	const employeeList = useSelector(({ employeeList }) => employeeList);
 
 	useEffect(() => {
 		if(!profile.loading) {
 			dispatch(employeeActions.getDepartmentEmployees(profile.data.departmentId));
-		}
+    }
+    // console.log(salaryAdvance)
 	}, [profile.data]);
 
 	function disableButton() {
@@ -58,8 +51,7 @@ function RequestLoanTab(props) {
 	}
 
 	function handleSubmit(model) {
-		console.log(model);
-		dispatch(Actions.applyLoan(model))
+		dispatch(Actions.applySalaryAdvance(model))
   }
   
 
@@ -82,7 +74,7 @@ function RequestLoanTab(props) {
         <TextFieldFormsy
 					className="mb-16"
 					type="number"
-					name="amountRequested"
+					name="amount"
 					label="Amount requested"
 					validations={{
 						minLength: 1
@@ -106,8 +98,8 @@ function RequestLoanTab(props) {
 				<TextFieldFormsy
 					className="mb-16"
 					type="number"
-					name="deductableAmount"
-					label="Deductable amount"
+					name="netSalary"
+					label="Net Salary"
 					validations={{
 						minLength: 1
 					}}
@@ -127,59 +119,15 @@ function RequestLoanTab(props) {
 					required
 				/>
 
+        <Typography variant="subtitle1" color="initial">Repayment Date</Typography>
         <TextFieldFormsy
 					className="mb-16"
-					type="text"
-					name="workLocation"
-					label="Work location"
-					validations={{
-						minLength: 1
-					}}
-					validationErrors={{
-						minLength: 'Min character length is 1'
-					}}
-					InputProps={{
-						endAdornment: (
-							<InputAdornment position="end">
-								<Icon className="text-20" color="action">
-                  map
-								</Icon>
-							</InputAdornment>
-						)
-					}}
+					type="date"
+					name="repaymentDate"
+					// label="Repayment Date"
 					variant="outlined"
 					required
 				/>
-
-				<SelectFormsy
-          className="my-16"
-          name="duration"
-          label="Duration"
-          value="none"
-          // validations="not-equals:none"
-          validationError="requried"
-          variant="outlined"
-					required
-        >
-					{durations.map(item => (
-						<MenuItem value={item.id} key={item.id}>{item.value}</MenuItem>
-					))}
-        </SelectFormsy>
-
-        <SelectFormsy
-          className="my-16"
-          name="employementType"
-          label="Employement type"
-          value="none"
-          // validations="not-equals:none"
-          validationError="requried"
-          variant="outlined"
-					required
-        >
-					{['full-time', 'part-time', 'contract'].map(item => (
-						<MenuItem value={item} key={item}>{item}</MenuItem>
-					))}
-        </SelectFormsy>
 
 				<SelectFormsy
           className="my-16"
@@ -198,7 +146,7 @@ function RequestLoanTab(props) {
 
 				<SelectFormsy
           className="my-16"
-          name="departmentHead"
+          name="supervisor"
           label="Head of department"
           value="none"
           // validations="not-equals:none"
@@ -225,34 +173,12 @@ function RequestLoanTab(props) {
 						<MenuItem value={item.id} key={item.id}>{`${item.firstName} ${item.lastName}`}</MenuItem>
 					))}
         </SelectFormsy>
-
-				<TextFieldFormsy
-					className="mb-16"
-					type="text"
-					name="purpose"
-          label="Purpose"
-          rows='5'
-          multiline
-					validations={{
-						minLength: 1
-					}}
-					InputProps={{
-						endAdornment: (
-							<InputAdornment position="end">
-								<Icon className="text-20" color="action">
-                  description
-								</Icon>
-							</InputAdornment>
-						)
-					}}
-          variant="outlined"
-				/>
-				<ProgressBtn success={loan.success} loading={loan.loadings} content='Request' disable={!isFormValid}/>
+				<ProgressBtn success={salaryAdvance.success} loading={salaryAdvance.loadings} content='Request' disable={!isFormValid}/>
 			</Formsy>
 		</div>
 	);
 };
 
 
-withReducer('employeeList', employeeReducer)(RequestLoanTab);
-export default RequestLoanTab;
+withReducer('employeeList', employeeReducer)(RequestSalaryAdvTab);
+export default RequestSalaryAdvTab;

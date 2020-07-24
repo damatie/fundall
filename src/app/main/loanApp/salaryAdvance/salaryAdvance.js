@@ -19,7 +19,7 @@ import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
-import RequestLoanTab from '../tabs/requestLoanTab';
+import RequestSalaryAdvTab from '../tabs/requestSalaryAdvTab';
 import reducer from '../store/reducers';
 
 const useStyles = makeStyles(theme => ({
@@ -57,7 +57,7 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-function LoanReq(props) {
+function SalaryAdvance(props) {
 	const dispatch = useDispatch();
 	const theme = useTheme();
 
@@ -77,13 +77,13 @@ function LoanReq(props) {
 									className="normal-case flex items-center sm:mb-12"
 									component={Link}
 									role="button"
-									to="/loan/request/list"
+									to="/loan/request/salaryadvance_request/list"
 									color="inherit"
 								>
 									<Icon className="text-20">
 										{theme.direction === 'ltr' ? 'arrow_back' : 'arrow_forward'}
 									</Icon>
-									<span className="mx-4">Leave options</span>
+									<span className="mx-4">Salary Advance</span>
 								</Typography>
 							</FuseAnimate>
 
@@ -102,7 +102,7 @@ function LoanReq(props) {
 								<div className="flex flex-col min-w-0 mx-8 sm:mc-16">
 									<FuseAnimate animation="transition.slideLeftIn" delay={300}>
 										<Typography className="text-16 sm:text-20 truncate">
-										  New Loan Request
+										  New Salary Advance Request
 										</Typography>
 									</FuseAnimate>
 									{/* <FuseAnimate animation="transition.slideLeftIn" delay={300}>
@@ -114,7 +114,7 @@ function LoanReq(props) {
 			}
 			content={
 					<div className=" sm:p-24 ">
-						<RequestLoanTab />
+						<RequestSalaryAdvTab />
 					</div>
 			}
 			innerScroll
@@ -122,4 +122,4 @@ function LoanReq(props) {
 	);
 }
 
-export default withReducer('loan', reducer)(LoanReq);
+export default withReducer('salaryAdvance', reducer)(SalaryAdvance);

@@ -5,6 +5,8 @@ const initialState = {
   approvedLoan: [],
   loanHistory: [],
   loading: false,
+  openLoan: [],
+  closedLoan: [],
 };
 
 export const loansReducer = (state = initialState, actions) => {
@@ -21,6 +23,20 @@ export const loansReducer = (state = initialState, actions) => {
         ...state,
         loading: false,
         pendingLoan: actions.payload
+      }
+    }
+    case Actions.GET_ALL_OPEN_LOAN: {
+      return {
+        ...state,
+        loading: false,
+        openLoan: actions.payload
+      }
+    }
+    case Actions.GET_ALL_CLOSED_LOAN: {
+      return {
+        ...state,
+        loading: false,
+        closedLoan: actions.payload
       }
     }
     case Actions.EMPLOYEE_LOAN_HISTORY: {
