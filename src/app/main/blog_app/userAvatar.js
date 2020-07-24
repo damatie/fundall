@@ -26,6 +26,7 @@ export default function UserAvatar(props) {
       <Avatar>MN</Avatar>
       <div className={classes.userName}>
         {props.fullName && <Typography varaint="body1" >{props.fullName}</Typography>}
+        {props.time && <Typography varaint="body1" >{props.time}</Typography>}
         {props.userName && <Typography varaint="caption">{`@${props.userName}`}</Typography>}
         {props.title && <Typography varaint="caption">{props.title}</Typography>}
         {/* {(props.tag.length > 0) && relatedPostTags} */}

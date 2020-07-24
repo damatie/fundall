@@ -1,30 +1,19 @@
-import React from 'react';
-import BlogContent from './blogContent';
-
-const blogs = [
-  {
-    id: 1,
-    fullName: 'Matthew Nte',
-    time: 'Jul 16(19 hours ago)',
-    title: '5 Tips for getting alert fatigue under control',
-    tags: ['sports', 'discuss', 'funny'],
-  },
-  {
-    id: 2,
-    fullName: 'David smith',
-    time: 'Jul 14',
-    title: 'Another Blog',
-    tags: ['anime', 'discuss', 'funny'],
-  }
-];
+import React, { useEffect } from 'react';
+import * as blogActions from '../store/actions';
+import { useDispatch, useSelector } from 'react-redux';
+import BlogListContent from './blogListContent';
 
 function BlogPostList() {
+  const dispatch = useDispatch();
+  const blogPost = useSelector(state => state.blog.getBlogs.data);
 
-  const blogContentList = blogs.map((blog) => <BlogContent blog={blog} key={blog.id} />)
+  useEffect(() => {
+    dispatch(blogActions.getBlogPost());
+  }, []);
 
   return (
     <>
-      { blogContentList }
+      { !blogPost ? 'loading...' : blogPost.map(blog => <BlogListContent blog={blog} key={blog.id} />) }
     </>
   )
 }

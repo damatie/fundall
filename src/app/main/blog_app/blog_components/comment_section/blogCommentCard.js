@@ -6,8 +6,10 @@ import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import BlogCommentInput from './blogCommentInput';
-import UserAvatar from '../../userAvatar';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import SectionHeader from '../../sectionHeader';
+import * as blogActions from '../../store/actions';
+import { useDispatch } from 'react-redux';
 
 const theme = createMuiTheme();
 
@@ -33,28 +35,52 @@ const useStyles = makeStyles((theme) => ({
 
 function BlogComment(props) {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const [showInput, setShowInput] = useState(true);
+  const [content, setContent] = useState('');
 
   const showReplyInput = (e) => {
     e.preventDefault();
     setShowInput(false)
   };
 
+  const handleChange = (value) => {
+    if(value === true) {
+      setShowInput(value)
+    } else {
+      setContent(value);
+    }
+  }
+
+  const handleSubmitReply = () => {
+    const model = {commentId: props.comment.id, content};
+    dispatch(blogActions.submitBlogCommentReply(model));
+  }
+
+  const buttonContent = ['Edit comment', 'Delete commemt'];
+
   return (
     <Paper variant="outlined" className={classes.paper}>
       <ThemeProvider theme={theme}>
-        <UserAvatar fullName={props.comment.name} />
+        <SectionHeader fullName='Aviy Hosny' buttonContent={buttonContent} />
         <Typography varaint="body1" className={classes.commentBody}>{props.comment.content}</Typography>
       </ThemeProvider>
-      {showInput ? <div className={`${classes.dFlex} ${classes.spaceBtw}`}>
-        <div>
-          <IconButton aria-label="like" component="span" style={{marginLeft: '-16px'}}>
-            <FavoriteBorder />
-          </IconButton>
-          <Typography varaint="body1" component="span" className={classes.userName}>{props.comment.likes}</Typography>
-        </div>
-        <Button onClick={showReplyInput}>Reply</Button>
-      </div> : <BlogCommentInput cancel="Cancel" onChange={value => setShowInput(value)} /> }
+      {showInput
+        ? <div className={`${classes.dFlex} ${classes.spaceBtw}`}>
+            <div>
+              <IconButton aria-label="like" component="span" style={{marginLeft: '-16px'}}>
+                <FavoriteBorder />
+              </IconButton>
+              <Typography varaint="body1" component="span" className={classes.userName}>{props.comment.likes}</Typography>
+            </div>
+            <Button onClick={showReplyInput}>Reply</Button>
+          </div> 
+        : <BlogCommentInput
+            cancel="Cancel"
+            onClick={() => handleSubmitReply()}
+            onChange={value => handleChange(value)}
+          />
+      }
     </Paper>
   )
 }

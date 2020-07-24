@@ -1,6 +1,5 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import ProgressBtn from '../../../../shared/progressBtn';
 
@@ -19,14 +18,18 @@ function BlogCommentInput(props) {
 
   return (
     <>
-      <textarea placeholder="Add to the discussion" className={classes.textarea} />
+      <textarea
+        placeholder="Add to the discussion"
+        onChange={event => props.onChange(event.target.value)}
+        className={classes.textarea}
+      />
       <div style={{display: 'flex', justifyContent: 'flex-end'}}>
         { props.cancel && 
           <Button onClick={() => props.onChange(true)}>
             {props.cancel}
           </Button>
         }
-        <ProgressBtn content='Submit' />
+        <ProgressBtn content='Submit' onClick={() => props.onClick()} />
       </div>
     </>
   )

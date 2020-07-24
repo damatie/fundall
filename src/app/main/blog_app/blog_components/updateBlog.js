@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
@@ -10,9 +10,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import Checkbox from '@material-ui/core/Checkbox';
 import * as blogActions from '../store/actions';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import ProgressBtn from '../../../shared/progressBtn'
-import { Button } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -42,12 +41,20 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function PostBlog() {
+function PostBlog({ match }) {
   const classes = useStyles();
   const dispatch = useDispatch();
   const [checked, setChecked] = useState([0]);
-  const [title, setTitle] = useState('');
-  const [body, setBody] = useState('');
+  const blogPost = useSelector(state => state.blog.getBlogs.data);
+
+  const id = +match.params.blog_id;
+
+  const currentBlogPost = blogPost.map((post) => {
+    if (post.id === id) return post;
+  });
+
+  const [title, setTitle] = useState(currentBlogPost[0].title);
+  const [body, setBody] = useState(currentBlogPost[0].body);
 
   const handleToggle = (value) => () => {
     const currentIndex = checked.indexOf(value);
@@ -63,14 +70,14 @@ function PostBlog() {
   };
 
   const handleSubmit = () => {
-    const model = {title, body};
-    dispatch(blogActions.submitBlogPost(model));
+    const model = { title, body, id };
+    dispatch(blogActions.editBlogPost(model));
   }
 
   return (
     <Grid container className={classes.root}>
       <Grid item xs={12} sm={3} className={classes.addPostBtn}>
-        <ProgressBtn onClick={handleSubmit} content="Add new blog post" />
+        <ProgressBtn onClick={handleSubmit} content="Update blog post" />
       </Grid>
       <Grid item container spacing={3}>
         <Grid item xs={12} sm={8}>
@@ -78,6 +85,7 @@ function PostBlog() {
             <input
               placeholder='Blog title'
               className={classes.blogTitle}
+              value={title}
               onChange={event => setTitle(event.target.value)}
             />
           </Paper>
@@ -91,6 +99,7 @@ function PostBlog() {
             <textarea
               placeholder='Blog content'
               className={classes.blogContent}
+              value={body}
               onChange={event => setBody(event.target.value)}
             />
           </Paper>

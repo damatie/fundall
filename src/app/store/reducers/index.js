@@ -1,4 +1,5 @@
 import auth from 'app/auth/store/reducers';
+import blog from 'app/main/blog_app/store/reducers';
 import { combineReducers } from 'redux';
 import fuse from './fuse';
 import { employeeListReducer } from './employeeList.reducer';
@@ -9,6 +10,7 @@ import { profileReducers } from './profile.reducers';
 const createReducer = asyncReducers =>
 	combineReducers({
 		auth,
+		blog,
 		fuse,
 		...asyncReducers,
 		employeeList: employeeListReducer,

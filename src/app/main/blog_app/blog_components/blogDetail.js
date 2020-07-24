@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
@@ -6,11 +6,13 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import Divider from '@material-ui/core/Divider';
 import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
+import * as blogActions from '../store/actions';
 import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
-import BlogComment from './comment_section/blogComment';
+import AddCommentToPost from './comment_section/addCommentToPost';
 import UserAvatar from '../userAvatar';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
-
+import BlogTags from './blogTags';
+import { useDispatch, useSelector } from 'react-redux';
 const theme = createMuiTheme();
 
 theme.typography.h2 = {
@@ -52,12 +54,6 @@ const useStyles = makeStyles((theme) => ({
     alignSelf: 'center',
     marginBottom: 16,
   },
-  tag: {
-    padding: '2px 8px',
-    borderRadius: 4,
-    display: 'inline-block',
-    margin: '16px 8px 24px 0'
-  },
   dFlex: {
     display: 'flex',
   },
@@ -71,42 +67,25 @@ const user = {
   tags: ['sports', 'discuss', 'funny'],
 };
 
-let textColor = '';
-
-const generateRandomColors = () => {
-  const rgb = [];
-  rgb[0] = Math.round(Math.random() * 255);
-  rgb[1] = Math.round(Math.random() * 255);
-  rgb[2] = Math.round(Math.random() * 255);
-  const brightness = Math.round(((parseInt(rgb[0]) * 299) +
-                    (parseInt(rgb[1]) * 587) +
-                    (parseInt(rgb[2]) * 114)) / 1000);
-  (brightness > 125) ? textColor = 'black' : textColor = 'white';
-  return `rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})`;
-};
-
-function BlogDetail() {
+function BlogDetail({ match }) {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const blogPost = useSelector(state => state.blog.getBlogs.data);
 
   const [likes, setLikes] = useState(0);
   const [noOfComments] = useState(0);
+  const id = +match.params.post_id;
+
+  useEffect(() => {
+    dispatch(blogActions.getOneBlogPost(id));
+  }, []);
 
   const handleLikes = () => {
     setLikes(prevLike => prevLike + 1);
   };
 
-  const scrollToCommentField = () => {};
-
-  const blogTags = () => user.tags.map((tag, i) => {
-    // generateRandomColors()
-    return <Typography 
-            key={i}
-            variant="caption"
-            className={classes.tag}
-            style={{background: generateRandomColors(), color: textColor}}
-          >
-            {`#${tag}`}
-          </Typography>
+  const currentBlogPost = blogPost.map((post) => {
+    if (post.id === id) return post;
   });
 
   return (
@@ -120,7 +99,7 @@ function BlogDetail() {
             <Typography style={{textAlign: 'center'}}>{likes}</Typography>
           </div>
           <div className={classes.alignCenter}>
-            <IconButton aria-label="like" onClick={scrollToCommentField} component="span">
+            <IconButton aria-label="like" component="span">
               <ChatBubbleOutlineIcon />
             </IconButton>
             <Typography style={{textAlign: 'center'}}>{noOfComments}</Typography>
@@ -132,21 +111,14 @@ function BlogDetail() {
           <ThemeProvider theme={theme}>
             <Typography variant="h2">Creating a Reusable Grid System in React</Typography>
           </ThemeProvider>
-          {blogTags()}
+          <BlogTags tags={user.tags} />
           <ThemeProvider theme={theme}>
             <Typography variant="body1" component='p'>
-              The grid system is arguably the most valuable layout tool for building websites. 
-              Without it, responsive layouts would be, well, NOT responsive.
-              I use React a lot, so I decided to create a grid system that I could reuse in my React apps. 
-              It started as a personal tool, but as I got more use out of it, 
-              I decided to release it for other devs to use.
-              So I did. It's called React Tiny Grid, and it's a 12-column grid system that's pretty handy. 
-              You can find it here.
-              But today, we're going to rebuild it step-by-step, so you can follow along and see how it's built.
+              { currentBlogPost[0].body }
             </Typography>
           </ThemeProvider>
         </Paper>
-        <BlogComment />
+        <AddCommentToPost postId={match.params.post_id} comments={currentBlogPost[0].comment} />
       </Grid>
       <Grid item xs={12} sm={3}>
         <Paper className={classes.sidePaper} variant="outlined">
