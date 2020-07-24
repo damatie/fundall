@@ -10,3 +10,4 @@ export * from './deleteCommentReply.action';
 export * from './likeAComment.action';
 export * from './likeAndUnlikeBlogPost.action';
 export * from './deleteOneBlogPost.action';
+export * from './updateAComment.action';

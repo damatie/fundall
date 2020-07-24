@@ -8,12 +8,12 @@ export const GET_REPLY_TO_COMMENT_LOADING = 'GET_REPLY_TO_COMMENT_LOADING';
 
 const header = fetchHeaders();
 
-export function submitBlogComment(data) {
+export function submitBlogComment(id) {
 	return dispatch => {
 		dispatch({
 			type: GET_REPLY_TO_COMMENT_LOADING
 		})
-		fetch('https://hris-cbit.herokuapp.com/api/v1/comment/reply/one/:id', {
+		fetch(`https://hris-cbit.herokuapp.com/api/v1/comment/reply/one/${id}`, {
 			...header.getRegHeader()
 		}).then(res => res.json()).then(
 			comment => {
