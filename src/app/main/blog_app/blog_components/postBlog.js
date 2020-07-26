@@ -12,7 +12,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import * as blogActions from '../store/actions';
 import { useDispatch } from 'react-redux';
 import ProgressBtn from '../../../shared/progressBtn'
-import { Button } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -39,6 +39,18 @@ const useStyles = makeStyles((theme) => ({
   tagInput: {
     padding: 16,
     minWidth: '100%'
+  },
+  input: {
+    display: 'none',
+  },
+  upload: {
+    width: '100%',
+    justifyContent: 'flex-start',
+    textTransform: 'none',
+    paddingLeft: 16,
+    color: 'rgba(0,0,0,.25)',
+    fontWeight: 'bold',
+    fontSize: 16,
   }
 }));
 
@@ -48,6 +60,7 @@ function PostBlog() {
   const [checked, setChecked] = useState([0]);
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
+  const [images, setImages] = useState(null);
 
   const handleToggle = (value) => () => {
     const currentIndex = checked.indexOf(value);
@@ -63,8 +76,11 @@ function PostBlog() {
   };
 
   const handleSubmit = () => {
-    const model = {title, body};
-    dispatch(blogActions.submitBlogPost(model));
+    let formData = new FormData();
+    formData.append('title', title);
+    formData.append('body', body);
+    formData.append('images', images);
+    dispatch(blogActions.submitBlogPost(formData));
   }
 
   return (
@@ -83,9 +99,18 @@ function PostBlog() {
           </Paper>
           <Paper variant="outlined" elevation={3}>
             <input
+              accept="image/*"
+              className={classes.input}
+              id="contained-button-file"
+              onChange={(event) => setImages(event.target.files)}
+              multiple
               type="file"
-              placeholder='Blog content'
             />
+            <label htmlFor="contained-button-file">
+              <Button color="primary" component="span" className={classes.upload}>
+                Upload Image
+              </Button>
+            </label>
           </Paper>
           <Paper variant="outlined" elevation={3}>
             <textarea

@@ -60,87 +60,83 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const user = {
-  id: 1,
-  fullName: 'Matthew Nte',
-  time: 'Jul 16(19 hours ago)',
-  title: '5 Tips for getting alert fatigue under control',
   tags: ['sports', 'discuss', 'funny'],
 };
 
 function BlogDetail({ match }) {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const blogPost = useSelector(state => state.blog.getBlogs.data);
+  const blogPost = useSelector(state => state.blog.getOneBlogPost.data);
 
   const [likes, setLikes] = useState(0);
   const [noOfComments] = useState(0);
-  const id = +match.params.post_id;
 
   useEffect(() => {
-    dispatch(blogActions.getOneBlogPost(id));
+    dispatch(blogActions.getOneBlogPost(match.params.post_id));
   }, []);
 
   const handleLikes = () => {
     setLikes(prevLike => prevLike + 1);
   };
 
-  const currentBlogPost = blogPost.map((post) => {
-    if (post.id === id) return post;
-  });
-
   return (
-    <Grid container spacing={3}>
-      <Grid item xs={12} sm={1}>
-        <div className={classes.iconButton}>
-          <div className={classes.alignCenter}>
-            <IconButton aria-label="like" onClick={handleLikes} component="span">
-              <FavoriteBorder />
-            </IconButton>
-            <Typography style={{textAlign: 'center'}}>{likes}</Typography>
-          </div>
-          <div className={classes.alignCenter}>
-            <IconButton aria-label="like" component="span">
-              <ChatBubbleOutlineIcon />
-            </IconButton>
-            <Typography style={{textAlign: 'center'}}>{noOfComments}</Typography>
-          </div>
-        </div>
-      </Grid>
-      <Grid item xs={12} sm={8}>
-        <Paper className={classes.paper} variant="outlined">
-          <ThemeProvider theme={theme}>
-            <Typography variant="h2">Creating a Reusable Grid System in React</Typography>
-          </ThemeProvider>
-          <BlogTags tags={user.tags} />
-          <ThemeProvider theme={theme}>
-            <Typography variant="body1" component='p'>
-              { currentBlogPost[0].body }
-            </Typography>
-          </ThemeProvider>
-        </Paper>
-        <AddCommentToPost postId={match.params.post_id} comments={currentBlogPost[0].comment} />
-      </Grid>
-      <Grid item xs={12} sm={3}>
-        <Paper className={classes.sidePaper} variant="outlined">
-          <ThemeProvider theme={theme}>
-            <UserAvatar fullName={user.fullName} />
-          </ThemeProvider>
-          <Typography varaint="body1" style={{lineHeight: 2}}>Front-end dev, loves learning things deeply, and eager about helping others</Typography>
-        </Paper>
-        <Paper variant="outlined">
-          <Typography variant='h6' className={classes.sidePaperPadding}>
-            Related Posts
-          </Typography>
-          <Divider />
-          <div className={classes.sidePaperPadding}>
-            <UserAvatar
-              title='The firebase tutorial of 2020: learn by example'
-              tag={['firseTag', 'firestore', 'sometag']}
-            />
-          </div>
-        </Paper>
-      </Grid>
-    </Grid>
+    <>
+      {blogPost.length === 0
+        ? 'Loading...'
+        : <Grid container spacing={3}>
+            <Grid item xs={12} sm={1}>
+              <div className={classes.iconButton}>
+                <div className={classes.alignCenter}>
+                  <IconButton aria-label="like" onClick={handleLikes} component="span">
+                    <FavoriteBorder />
+                  </IconButton>
+                  <Typography style={{textAlign: 'center'}}>{likes}</Typography>
+                </div>
+                <div className={classes.alignCenter}>
+                  <IconButton aria-label="like" component="span">
+                    <ChatBubbleOutlineIcon />
+                  </IconButton>
+                  <Typography style={{textAlign: 'center'}}>{noOfComments}</Typography>
+                </div>
+              </div>
+            </Grid>
+            <Grid item xs={12} sm={8}>
+              <Paper className={classes.paper} variant="outlined">
+                <ThemeProvider theme={theme}>
+                  <Typography variant="h2">{blogPost.title}</Typography>
+                </ThemeProvider>
+                <BlogTags tags={user.tags} />
+                <ThemeProvider theme={theme}>
+                  <Typography variant="body1" component='p'>
+                    { blogPost && blogPost.body }
+                  </Typography>
+                </ThemeProvider>
+              </Paper>
+              <AddCommentToPost postId={match.params.post_id} comments={blogPost.comment} />
+            </Grid>
+            <Grid item xs={12} sm={3}>
+              <Paper className={classes.sidePaper} variant="outlined">
+                <ThemeProvider theme={theme}>
+                  <UserAvatar fullName={user.fullName} />
+                </ThemeProvider>
+                <Typography varaint="body1" style={{lineHeight: 2}}>Front-end dev, loves learning things deeply, and eager about helping others</Typography>
+              </Paper>
+              <Paper variant="outlined">
+                <Typography variant='h6' className={classes.sidePaperPadding}>
+                  Related Posts
+                </Typography>
+                <Divider />
+                <div className={classes.sidePaperPadding}>
+                  <UserAvatar
+                    title='The firebase tutorial of 2020: learn by example'
+                    tag={['firseTag', 'firestore', 'sometag']}
+                  />
+                </div>
+              </Paper>
+            </Grid>
+          </Grid>
+      }
+    </>
   )
 }
 

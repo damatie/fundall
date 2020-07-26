@@ -16,6 +16,7 @@ export function getBlogPost() {
 		}).then(res => res.json()).then(
 			post => {
 				if(post.message === 'Success') {
+					console.log(post)
 					return dispatch({
 						type: GETBLOGS_SUCCESS,
 						payload: post.data
