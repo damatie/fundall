@@ -31,6 +31,15 @@ function AboutTab() {
 
 	const dispatch = useDispatch();
 
+	const aboutInfo = [
+		{label: 'First name', name: 'firstName', value: '', type: 'text'},
+		{label: 'Last name', name: 'lastName', value: '', type: 'text'},
+		{label: 'Middle name', name: 'middleName', value: '', type: 'text'},
+		{label: 'Email address', name: 'email', value: '', type: 'email'},
+		{label: 'Phone number', name: 'phoneNumber', value: '', type: 'number'},
+		{label: 'Middle name', name: 'middleName', value: '', type: 'text'},
+	]
+
 	return (
 		<div className="md:flex">
 			<div className="flex flex-col flex-1 md:ltr:pr-32 md:rtl:pl-32">
@@ -68,102 +77,7 @@ function AboutTab() {
 
 							<div className="mb-24">
 								<Typography className="font-bold mb-4 text-15">Email</Typography>
-								{/* <Typography>{general.about}</Typography> */}
-							</div>
-						</CardContent>
-					</Card>
-					<Card className="w-full mb-16">
-						<AppBar position="static" elevation={0}>
-							<Toolbar className="px-8">
-								<Typography variant="subtitle1" color="inherit" className="flex-1 px-12">
-									Personal Information
-								</Typography>
-								<Button className="normal-case" color="inherit" size="small">
-									update
-								</Button>
-							</Toolbar>
-						</AppBar>
-
-						<CardContent>
-							<div className="mb-24">
-								<Typography className="font-bold mb-4 text-15">Nationality</Typography>
-								{/* <Typography>{general.about}</Typography> */}
-							</div>
-							<div className="mb-24">
-								<Typography className="font-bold mb-4 text-15">County of birth</Typography>
-								{/* <Typography>{general.about}</Typography> */}
-							</div>
-							<div className="mb-24">
-								<Typography className="font-bold mb-4 text-15">Nationality ID</Typography>
-								{/* <Typography>{general.about}</Typography> */}
-							</div>
-							<div className="mb-24">
-								<Typography className="font-bold mb-4 text-15">Marital status</Typography>
-								{/* <Typography>{general.about}</Typography> */}
-							</div>
-							<div className="mb-24">
-								<Typography className="font-bold mb-4 text-15">Marital status date</Typography>
-								{/* <Typography>{general.about}</Typography> */}
-							</div>
-							<div className="mb-24">
-								<Typography className="font-bold mb-4 text-15">Title</Typography>
-								{/* <Typography>{general.about}</Typography> */}
-							</div>
-							<div className="mb-24">
-								<Typography className="font-bold mb-4 text-15">Second title</Typography>
-								{/* <Typography>{general.about}</Typography> */}
-							</div>
-							<div className="mb-24">
-								<Typography className="font-bold mb-4 text-15">Gender</Typography>
-								{/* <Typography>{general.about}</Typography> */}
-							</div>
-						</CardContent>
-					</Card>
-
-					<Card className="w-full mb-16">
-						<AppBar position="static" elevation={0}>
-							<Toolbar className="px-8">
-								<Typography variant="subtitle1" color="inherit" className="flex-1 px-12">
-									work information
-								</Typography>
-								<Button className="normal-case" color="inherit" size="small">
-									update
-								</Button>
-							</Toolbar>
-						</AppBar>
-
-						<CardContent>
-							<div className="mb-24">
-								<Typography className="font-bold mb-4 text-15">Nationality</Typography>
-								{/* <Typography>{general.about}</Typography> */}
-							</div>
-							<div className="mb-24">
-								<Typography className="font-bold mb-4 text-15">County of birth</Typography>
-								{/* <Typography>{general.about}</Typography> */}
-							</div>
-							<div className="mb-24">
-								<Typography className="font-bold mb-4 text-15">Nationality ID</Typography>
-								{/* <Typography>{general.about}</Typography> */}
-							</div>
-							<div className="mb-24">
-								<Typography className="font-bold mb-4 text-15">Marital status</Typography>
-								{/* <Typography>{general.about}</Typography> */}
-							</div>
-							<div className="mb-24">
-								<Typography className="font-bold mb-4 text-15">Marital status date</Typography>
-								{/* <Typography>{general.about}</Typography> */}
-							</div>
-							<div className="mb-24">
-								<Typography className="font-bold mb-4 text-15">Title</Typography>
-								{/* <Typography>{general.about}</Typography> */}
-							</div>
-							<div className="mb-24">
-								<Typography className="font-bold mb-4 text-15">Second title</Typography>
-								{/* <Typography>{general.about}</Typography> */}
-							</div>
-							<div className="mb-24">
-								<Typography className="font-bold mb-4 text-15">Gender</Typography>
-								{/* <Typography>{general.about}</Typography> */}
+								<Typography>{'general.about'}</Typography>
 							</div>
 						</CardContent>
 					</Card>
