@@ -77,7 +77,7 @@ function AboutTab() {
 
 							<div className="mb-24">
 								<Typography className="font-bold mb-4 text-15">Email</Typography>
-								<Typography>{'general.about'}</Typography>
+								{/* <Typography>{'general.about'}</Typography> */}
 							</div>
 						</CardContent>
 					</Card>
