@@ -12,6 +12,7 @@ import PhotosVideosTab from './tabs/PhotosVideosTab';
 import TimelineTab from './tabs/TimelineTab';
 import withReducer from 'app/store/withReducer';
 import reducer from './store/reducer';
+import EmployeementInfoTab from './tabs/employeementInfoTab';
 
 const useStyles = makeStyles(theme => ({
 	layoutHeader: {
@@ -71,11 +72,18 @@ function ProfilePage() {
 						}}
 						label="About"
 					/>
+					<Tab
+						classes={{
+							root: 'h-64'
+						}}
+						label="Employeement information"
+					/>
 				</Tabs>
 			}
 			content={
 				<div className="p-16 sm:p-24">
 					{selectedTab === 0 && <AboutTab />}
+					{selectedTab === 1 && <EmployeementInfoTab />}/s
 				</div>
 			}
 		/>
