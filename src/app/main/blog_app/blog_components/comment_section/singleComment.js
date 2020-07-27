@@ -5,7 +5,7 @@ import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
-import BlogCommentInput from './blogCommentInput';
+import CommentInput from './commentInput';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import SectionHeader from '../../sectionHeader';
 import * as blogActions from '../../store/actions';
@@ -79,7 +79,7 @@ function BlogComment(props) {
             </div>
             <Button onClick={showReplyInput}>Reply</Button>
           </div> 
-        : <BlogCommentInput
+        : <CommentInput
             cancel="Cancel"
             onClick={() => handleSubmitReply()}
             onChange={value => handleChange(value)}
