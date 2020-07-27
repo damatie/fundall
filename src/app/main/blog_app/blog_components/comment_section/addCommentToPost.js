@@ -21,9 +21,9 @@ function BlogComment(props) {
   const classes = useStyles();
   const dispatch = useDispatch();
   const [content, setContent] = useState('');
-  const [comments, setComments] = useState(props.comments)
+  // const [comments, setComments] = useState(props.comments)
 
-  const blogCommentCard = comments.map(comment => <CommentCard key={comment.id} comment={comment} />);
+  const blogCommentCard = props.comments.map(comment => <CommentCard key={comment.id} comment={comment} />);
 
   const postId = props.postId;
   const handleSubmit = () => {

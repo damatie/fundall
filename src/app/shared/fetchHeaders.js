@@ -40,11 +40,22 @@ export const fetchHeaders = () => {
     };
   };
 
+  const fdHeader = (method, body) => {
+    return {
+      method: method,
+      headers: {
+        ...auth,
+      },
+      body: body
+    };
+  };
+
 
   // returns functions
   return {
     getRegHeader,
     reqHeader,
+    fdHeader,
     delHeader
   };
 

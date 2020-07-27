@@ -55,6 +55,7 @@ function PostBlog({ match }) {
 
   const [title, setTitle] = useState(currentBlogPost[0].title);
   const [body, setBody] = useState(currentBlogPost[0].body);
+  const [images, setImages] = useState(currentBlogPost[0].images);
 
   const handleToggle = (value) => () => {
     const currentIndex = checked.indexOf(value);
@@ -70,8 +71,11 @@ function PostBlog({ match }) {
   };
 
   const handleSubmit = () => {
-    const model = { title, body, id };
-    dispatch(blogActions.editBlogPost(model));
+    let formData = new FormData();
+    formData.append('title', title);
+    formData.append('body', body);
+    formData.append('images', images);
+    dispatch(blogActions.editBlogPost(formData));
   }
 
   return (
@@ -93,6 +97,8 @@ function PostBlog({ match }) {
             <input
               type="file"
               placeholder='Blog content'
+              multiple
+              onChange={(event) => setImages(event.target.files)}
             />
           </Paper>
           <Paper variant="outlined" elevation={3}>

@@ -16,9 +16,9 @@ export function editBlogPost(data) {
 		})
 		console.log({data: data.title, body: data.body});
 		fetch(`https://hris-cbit.herokuapp.com/api/v1/posts/${data.id}`, {
-			...header.reqHeader(
-				'put',
-				{data: data.title, body: data.body}
+			...header.fdHeader(
+				'PUT',
+				data
 			)
 		}).then(res => res.json()).then(
 			post => {

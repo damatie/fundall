@@ -13,7 +13,7 @@ const BlogConfig = {
 		},
 		{
 			path: '/blog/list',
-			component: React.lazy(() => import('./blog_components/blogList.js')),
+			component: React.lazy(() => import('./blog_components/blogList')),
 		},
 		{
 			path: '/blog/blog_detail/:post_id',

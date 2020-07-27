@@ -57,12 +57,16 @@ function BlogComment(props) {
     dispatch(blogActions.submitBlogCommentReply(model));
   }
 
+  const handleCommentDelete = () => {
+    dispatch(blogActions.deleteComment(props.comment.id));
+  }
+
   const buttonContent = ['Edit comment', 'Delete commemt'];
 
   return (
     <Paper variant="outlined" className={classes.paper}>
       <ThemeProvider theme={theme}>
-        <SectionHeader fullName='Aviy Hosny' buttonContent={buttonContent} />
+        <SectionHeader fullName='Aviy Hosny' buttonContent={buttonContent} onClick={() => handleCommentDelete()} />
         <Typography varaint="body1" className={classes.commentBody}>{props.comment.content}</Typography>
       </ThemeProvider>
       {showInput

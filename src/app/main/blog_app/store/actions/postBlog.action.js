@@ -9,15 +9,18 @@ export const BlogPost_LOADING = 'BlogPost_LOADING';
 
 const header = fetchHeaders();
 
-export function submitBlogPost(data) {
+export function submitBlogPost(formdata) {
 	return dispatch => {
 		dispatch({
 			type: BlogPost_LOADING
 		})
+		for (var pair of formdata.entries()) {
+      console.log(pair[0]+ ', ' + pair[1]); 
+    }
 		fetch('https://hris-cbit.herokuapp.com/api/v1/posts/', {
-			...header.reqHeader(
+			...header.fdHeader(
 				'POST',
-				data
+				formdata
 			)
 		}).then(res => res.json()).then(
 			post => {
@@ -48,8 +51,9 @@ export function submitBlogPost(data) {
 			}
 		)
 		.catch(error => {
+			console.log(error);
 			Swal.fire({
-				title: 'BlogPost',
+				title: 'Blog post was unseccessful',
 				text: 'Service unavailable',
 				icon: 'error',
 				timer: 3000,
