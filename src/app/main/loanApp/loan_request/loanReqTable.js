@@ -10,7 +10,7 @@ import TableRow from '@material-ui/core/TableRow';
 import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { withRouter, useParams } from 'react-router-dom';
+import { withRouter, useParams, useHistory } from 'react-router-dom';
 import SharedTableHead from 'app/shared/sharedTableHead';
 import * as Actions from '../store/actions';
 
@@ -57,6 +57,8 @@ function LoanReqTable(props) {
 
 	const loanHistory = useSelector(({ loan }) => loan.loans);
 
+	const history = useHistory();
+
 	const [selected, setSelected] = useState([]);
 	const [data, setData] = useState([]);
 	const [page, setPage] = useState(0);
@@ -97,7 +99,7 @@ function LoanReqTable(props) {
 	}
 
 	function handleClick(item) {
-		
+		history.push(`/loan/request/new/${item.id}`)
   }
   
 

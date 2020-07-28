@@ -89,11 +89,12 @@ function ManageLoan(props) {
 		dispatch(Actions.getApprovedLoan());
 		dispatch(Actions.getOpenLoan());
 		dispatch(Actions.getClosedLoan());
+		dispatch(Actions.getReviewedLoan());
 	}, [dispatch]);
 
-	useEffect(() => {
+	// useEffect(() => {
 
-	})
+	// })
 
 	// useEffect(() => window.location.reload(false), [])
 	if(loans.loading || profileLoading) {
@@ -164,11 +165,11 @@ function ManageLoan(props) {
 			content={
 				<>
         {profile.role.name === 'Head of department' ? <div className=" sm:p-24 ">
-          {tabValue === 0 && (<LoanReqTab loans={filterData(loans.pendingLoan, 'pending')}/>)}
+          {tabValue === 0 && (<LoanReqTab loans={loans.pendingLoan}/>)}
 				</div> : <></>}
 				
 				{profile.role.name === 'HR' ? 	<div className=" sm:p-24 ">
-					{tabValue === 0 && (<LoanReqTab loans={filterData(loans.pendingLoan, 'reviewed')}/>)}
+					{tabValue === 0 && (<LoanReqTab loans={loans.reviewedLoan}/>)}
 				</div> : <></>}
 				
 				{profile.role.name === 'Finance manager' ? <div className=" sm:p-24 ">

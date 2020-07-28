@@ -5,7 +5,9 @@ const initialState = {
   loadings: false,
   success: false,
   error: false,
-  data: {}
+  data: {},
+  updating: false,
+  closing: false,
 }
 
 export const loanReducer = (state = initialState, actions) => {
@@ -39,6 +41,32 @@ export const loanReducer = (state = initialState, actions) => {
         loading: false,
         loadings: false,
         data: actions.payload
+      }
+    }
+    case Actions.UPDATING_LOAN: {
+      return {
+        ...state,
+        updating: true,
+      }
+    }
+    case Actions.UPDATE_SUCCESS: {
+      return {
+        ...state,
+        updating: false,
+        success: true,
+      }
+    }
+    case Actions.CLOSING_LOAN: {
+      return {
+        ...state,
+        closing: true,
+      }
+    }
+    case Actions.CLOSED_SUCCESS: {
+      return {
+        ...state,
+        closing: false,
+        success: true,
       }
     }
     default: {

@@ -1,4 +1,5 @@
 import { fetchHeaders } from "app/shared/fetchHeaders";
+import { handleResponse } from "app/auth/handleRes";
 
 
 export const GET_ALL_PENDING_LOAN = 'GET ALL PENDING LOAN';
@@ -7,6 +8,7 @@ export const EMPLOYEE_LOAN_HISTORY = 'GET EMPLOYEE LOAN HISTORY';
 export const LOADING_LOANS = 'LOADING LOANS';
 export const GET_ALL_CLOSED_LOAN = 'GET ALL CLOSED LOAN';
 export const GET_ALL_OPEN_LOAN = 'GET ALL OPEN LOAN';
+export const GET_ALL_REVIEWED_LOAN = 'GET ALL REVIEWED LOAN';
 
 const header = fetchHeaders();
 export const getPendingLoan = () => {
@@ -14,11 +16,10 @@ export const getPendingLoan = () => {
     dispatch({
       type: LOADING_LOANS
     })
-    fetch(`https://hris-cbit.herokuapp.com/api/v1/loan/all/pending`, {
+    fetch(`https://hris-cbit.herokuapp.com/api/v1/loan/all/department/request`, {
       ...header.getRegHeader()
     }).then(res => res.json()).then(
       data => {
-        console.log(data)
         if(data.success) {
           dispatch({
             type: GET_ALL_PENDING_LOAN,
@@ -27,6 +28,23 @@ export const getPendingLoan = () => {
         }
       }
     ).catch(e => console.error(e))
+  }
+};
+
+export const getReviewedLoan = () => {
+  return dispatch => {
+    fetch('https://hris-cbit.herokuapp.com/api/v1/loan/all/reviewed', {
+      ...header.getRegHeader()
+    }).then(res => handleResponse(res)).then(
+      data => {
+        if(data.success){
+          dispatch({
+            type: GET_ALL_REVIEWED_LOAN,
+            payload: data.data
+          })
+        }
+      }
+    ).catch(e => console.error);
   }
 };
 
