@@ -11,6 +11,7 @@ import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
 import { withRouter, useParams } from 'react-router-dom';
 import SharedTableHead from 'app/shared/sharedTableHead';
+import moment from 'moment';
 
 function SharedTable(props) {
 	const [selected, setSelected] = useState([]);
@@ -158,9 +159,18 @@ const TableCells = (props) => {
                      
           </TableCell>
           {props.rows.map(item => (
-            <TableCell component="th" scope="row" align={props.rows.align} key={item.id}>
-              {props.data[item.field]}   
-            </TableCell>
+						<>
+            {
+							item.type === 'date' ?
+							<TableCell component="th" scope="row" align={item.align} key={item.id}>
+								{moment(props.data[item.field]).format('LL')}   
+							</TableCell>
+							:
+							<TableCell component="th" scope="row" align={item.align} key={item.id}>
+								{props.data[item.field]}   
+            	</TableCell>
+						}
+						</>
           ))}
         </>
       );

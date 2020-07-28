@@ -3,7 +3,7 @@ import LoanBanner from './tabs/loanBanner';
 
 const config = {
   urlOne: '/loan/review/list',
-  urlTwo: '/loan/review/list',
+  urlTwo: '/loan/review/salaryadvance/list',
   title: 'Loan Review'
 }
 const ReviewLoan = () => {

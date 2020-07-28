@@ -109,7 +109,7 @@ export const applyLoan = body => {
         } else {
           swal.fire({
             title: 'Loan application',
-            text: data.message,
+            text: data.mesage || data.message,
             icon: 'error',
             timer: 3000
           })

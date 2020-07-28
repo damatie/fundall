@@ -4,7 +4,9 @@ const intialState = {
   loading: false,
   success: false,
   log: [],
-  error: false
+  error: false,
+  details: [],
+  loadingDetails: false,
 };
 
 export const salaryAdvanceReducer = (state = intialState, actions) => {
@@ -28,6 +30,19 @@ export const salaryAdvanceReducer = (state = intialState, actions) => {
         ...state,
         loading: false,
         error: true
+      }
+    }
+    case Actions.GET_SALARY_ADVANCE_DETAILS: {
+      return {
+        ...state,
+        details: actions.payload,
+        loadingDetails: false,
+      }
+    }
+    case Actions.LOADING_SALARY_ADVANCE_DETAILS: {
+      return {
+        ...state,
+        loadingDetails: true,
       }
     }
     default: {

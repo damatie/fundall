@@ -18,6 +18,7 @@ export const getPendingLoan = () => {
       ...header.getRegHeader()
     }).then(res => res.json()).then(
       data => {
+        console.log(data)
         if(data.success) {
           dispatch({
             type: GET_ALL_PENDING_LOAN,
