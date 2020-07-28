@@ -5,10 +5,12 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import Divider from '@material-ui/core/Divider';
+import Favorite from '@material-ui/icons/Favorite';
 import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
 import * as blogActions from '../store/actions';
 import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
-import AddCommentToPost from './comment_section/addCommentToPost';
+import SingleComment from './comment_section/singleComment';
+import CommentInput from './comment_section/commentInput';
 import UserAvatar from '../userAvatar';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import BlogTags from './blogTags';
@@ -69,15 +71,27 @@ function BlogDetail({ match }) {
   const blogPost = useSelector(state => state.blog.getOneBlogPost.data);
 
   const [likes, setLikes] = useState(0);
-  const [noOfComments] = useState(0);
+  const [clicked, setClicked] = React.useState(false);
+  const [content, setContent] = useState('');
+
+  const postId = match.params.post_id;
 
   useEffect(() => {
-    dispatch(blogActions.getOneBlogPost(match.params.post_id));
+    dispatch(blogActions.getOneBlogPost(postId));
   }, []);
 
   const handleLikes = () => {
-    setLikes(prevLike => prevLike + 1);
+    setClicked(prevState => prevState = !prevState);
+    setLikes(prevLike => prevLike = !prevLike);
+    dispatch(blogActions.likeAndUnlikeBlogPost(postId));
   };
+
+  const handleSubmit = () => {
+    const model = {postId, content};
+    dispatch(blogActions.submitBlogComment(model));
+  }
+
+  const getColor = () => !clicked ? '#4d5760' : '#F44336';
 
   return (
     <>
@@ -87,8 +101,8 @@ function BlogDetail({ match }) {
             <Grid item xs={12} sm={1}>
               <div className={classes.iconButton}>
                 <div className={classes.alignCenter}>
-                  <IconButton aria-label="like" onClick={handleLikes} component="span">
-                    <FavoriteBorder />
+                  <IconButton aria-label="like" onClick={handleLikes} style={{color: getColor()}} component="span">
+                    {!clicked ? <FavoriteBorder /> : <Favorite />}
                   </IconButton>
                   <Typography style={{textAlign: 'center'}}>{likes}</Typography>
                 </div>
@@ -96,7 +110,7 @@ function BlogDetail({ match }) {
                   <IconButton aria-label="like" component="span">
                     <ChatBubbleOutlineIcon />
                   </IconButton>
-                  <Typography style={{textAlign: 'center'}}>{noOfComments}</Typography>
+                  <Typography style={{textAlign: 'center'}}>{blogPost.comment.length}</Typography>
                 </div>
               </div>
             </Grid>
@@ -112,7 +126,13 @@ function BlogDetail({ match }) {
                   </Typography>
                 </ThemeProvider>
               </Paper>
-              <AddCommentToPost postId={match.params.post_id} comments={blogPost.comment} />
+              <Paper className={classes.paper} variant="outlined">
+                <Typography variant="h6" component='h2' style={{marginBottom: 12}}>
+                  Discussion
+                </Typography>
+                <CommentInput onClick={() => handleSubmit()} onChange={value => setContent(value)} />
+                {(blogPost.comment.length > 0) && blogPost.comment.map(comment => <SingleComment key={comment.id} comment={comment} />)}
+              </Paper>
             </Grid>
             <Grid item xs={12} sm={3}>
               <Paper className={classes.sidePaper} variant="outlined">
