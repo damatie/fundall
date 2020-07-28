@@ -60,7 +60,7 @@ function PostBlog() {
   const [checked, setChecked] = useState([0]);
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
-  const [images, setImages] = useState(null);
+  const [images, setImages] = useState([]);
 
   const handleToggle = (value) => () => {
     const currentIndex = checked.indexOf(value);
@@ -79,7 +79,9 @@ function PostBlog() {
     let formData = new FormData();
     formData.append('title', title);
     formData.append('body', body);
-    formData.append('images', images);
+    for (let i = 0; i < images.length; i++) {
+      formData.append('images', images[i]);
+    }
     dispatch(blogActions.submitBlogPost(formData));
   }
 

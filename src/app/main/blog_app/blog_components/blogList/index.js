@@ -7,7 +7,6 @@ import BlogListContent from './content.blogList';
 import BlogSideAtrraction from './aSide.blogList';
 import BlogListHeader from './header.blogList.js';
 
-
 const useStyles = makeStyles((theme) => ({
   root: {
     padding: theme.spacing(4),
@@ -15,6 +14,11 @@ const useStyles = makeStyles((theme) => ({
       padding: 0,
     },
   },
+  aSide: {
+    [theme.breakpoints.down('xs')]: {
+      display: 'none',
+    }
+  }
 }));
 
 function BlogPostList() {
@@ -32,7 +36,7 @@ function BlogPostList() {
         <BlogListHeader />
         { !blogPost ? 'loading...' : blogPost.map(blog => <BlogListContent blog={blog} key={blog.id} />) }
       </Grid>
-      <Grid item xs={12} sm={3}>
+      <Grid item xs={12} sm={3} className={classes.aSide}>
         <BlogSideAtrraction />
       </Grid>
     </Grid>

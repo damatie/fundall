@@ -8,22 +8,23 @@ export const UPDATE_A_COMMENT_LOADING = 'UPDATE_A_COMMENT_LOADING';
 
 const header = fetchHeaders();
 
-export function updateAComment(data) {
+export function updateAComment({id, content}) {
 	return dispatch => {
 		dispatch({
 			type: UPDATE_A_COMMENT_LOADING
 		})
-		fetch(`https://hris-cbit.herokuapp.com/api/v1/comment/update/${data.id}`, {
+		fetch(`https://hris-cbit.herokuapp.com/api/v1/comment/update/${id}`, {
 			...header.reqHeader(
 				'PATCH',
-				{content: data.content}
+				{content}
 			)
 		}).then(res => res.json()).then(
 			comment => {
 				if(comment.success === true) {
 					console.log(comment)
 					return dispatch({
-						type: UPDATE_A_COMMENT_SUCCESS
+						type: UPDATE_A_COMMENT_SUCCESS,
+						payload: {id, content}
 					});
 				} else {
 					console.log(comment);

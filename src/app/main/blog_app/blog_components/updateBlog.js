@@ -74,8 +74,10 @@ function PostBlog({ match }) {
     let formData = new FormData();
     formData.append('title', title);
     formData.append('body', body);
-    formData.append('images', images);
-    dispatch(blogActions.editBlogPost(formData));
+    for (let i = 0; i < images.length; i++) {
+      formData.append('images', images[i]);
+    }
+    dispatch(blogActions.editBlogPost(formData, id));
   }
 
   return (
