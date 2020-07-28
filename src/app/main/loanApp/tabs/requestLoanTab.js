@@ -15,12 +15,12 @@ import employeeReducer from 'app/store/reducers';
 import * as employeeActions from 'app/store/actions';
 
 const durations = [
-  {value: '1 month', id: 1},
-  {value: '2 months', id: 2},
-  {value: '3 months', id: 3},
-  {value: '4 months', id: 4},
-  {value: '5 months', id: 5},
-  {value: '6 months', id: 6},
+  {value: '1 month', id: '1'},
+  {value: '2 months', id: '2'},
+  {value: '3 months', id: '3'},
+  {value: '4 months', id: '4'},
+  {value: '5 months', id: '5'},
+  {value: '6 months', id: '6'},
 ];
 
 const matchRole = (data, role) => {

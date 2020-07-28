@@ -132,10 +132,6 @@ function ManageSALoan(props) {
   const profileLoading = useSelector(({ profile }) => profile.loading);
   const salaryAdvance = useSelector(({ salaryAdvance }) => salaryAdvance.salaryAdvance);
 
-
-
-
-
   const classes = useStyles(props);
   
   function handleChangeTab(event, value) {
