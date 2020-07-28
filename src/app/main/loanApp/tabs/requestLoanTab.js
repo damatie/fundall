@@ -5,7 +5,7 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import Formsy from 'formsy-react';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Redirect } from 'react-router';
+import { Redirect, useParams } from 'react-router';
 import MenuItem from '@material-ui/core/MenuItem';
 import withReducer from 'app/store/withReducer';
 import { CircularProgress } from '@material-ui/core';
@@ -15,12 +15,12 @@ import employeeReducer from 'app/store/reducers';
 import * as employeeActions from 'app/store/actions';
 
 const durations = [
-  {value: '1 month', id: '1'},
-  {value: '2 months', id: '2'},
-  {value: '3 months', id: '3'},
-  {value: '4 months', id: '4'},
-  {value: '5 months', id: '5'},
-  {value: '6 months', id: '6'},
+  {value: '1 month', id: 1},
+  {value: '2 months', id: 2},
+  {value: '3 months', id: 3},
+  {value: '4 months', id: 4},
+  {value: '5 months', id: 5},
+  {value: '6 months', id: 6},
 ];
 
 const matchRole = (data, role) => {
@@ -39,6 +39,8 @@ function RequestLoanTab(props) {
 	const [isFormValid, setIsFormValid] = useState(true);
 	const formRef = useRef(null);
 
+	const { id } = useParams();
+
 	const loan = useSelector(({ loan }) => loan.loan);
 	const profile = useSelector(({ profile }) => profile);
 	const employeeList = useSelector(({ employeeList }) => employeeList);
@@ -48,6 +50,12 @@ function RequestLoanTab(props) {
 			dispatch(employeeActions.getDepartmentEmployees(profile.data.departmentId));
 		}
 	}, [profile.data]);
+
+	useEffect(() => {
+		// if(id) {
+		// 	// dispatch
+		// }
+	})
 
 	function disableButton() {
 		setIsFormValid(false);
@@ -59,7 +67,7 @@ function RequestLoanTab(props) {
 
 	function handleSubmit(model) {
 		console.log(model);
-		dispatch(Actions.applyLoan(model))
+		// dispatch(Actions.applyLoan(model))
   }
   
 
