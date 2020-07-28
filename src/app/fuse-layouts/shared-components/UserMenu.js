@@ -104,9 +104,10 @@ function UserMenu(props) {
 							onClick={() => {
 								dispatch(authActions.logoutUser());
 								userMenuClose();
-								// localStorage.clear();
-								history.push('/auth/login');
+								localStorage.clear();
+								// history.push('/auth/login');
 								// setRedirect(true);
+								window.location.assign('/auth/login')
 							}}
 						>
 							<ListItemIcon className="min-w-40">
