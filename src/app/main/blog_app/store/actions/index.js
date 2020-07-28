@@ -12,3 +12,4 @@ export * from './likeAndUnlikeBlogPost.action';
 export * from './deleteOneBlogPost.action';
 export * from './updateAComment.action';
 export * from './deleteComment.action';
+export * from './getAllCommentsForAPost.action';

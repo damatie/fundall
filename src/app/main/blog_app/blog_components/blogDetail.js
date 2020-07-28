@@ -12,6 +12,7 @@ import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
 import SingleComment from './comment_section/singleComment';
 import CommentInput from './comment_section/commentInput';
 import UserAvatar from '../userAvatar';
+import ReplyComment from './comment_section/replyComment';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import BlogTags from './blogTags';
 import { useDispatch, useSelector } from 'react-redux';
@@ -39,6 +40,13 @@ const useStyles = makeStyles((theme) => ({
       padding: theme.spacing(2)
     },
   },
+  replyComment: {
+    padding: theme.spacing(2),
+    [theme.breakpoints.down('xs')]: {
+      padding: theme.spacing(1)
+    },
+    marginTop: theme.spacing(4),
+  },
   sidePaper: {
     padding: theme.spacing(2),
     margin: '16px 0 16px 0',
@@ -46,11 +54,19 @@ const useStyles = makeStyles((theme) => ({
   sidePaperPadding: {
     padding: 12,
   },
+  title: {
+    fontWeight: 'bold',
+  },
   iconButton: {
     display: 'flex',
     flexDirection: 'column',
     marginTop: 32,
     justifyContent: 'center',
+    [theme.breakpoints.down('xs')]: {
+      flexDirection: 'row',
+      marginTop: 16,
+      // position: 'absolute'
+    }
   },
   alignCenter: {
     alignSelf: 'center',
@@ -69,6 +85,7 @@ function BlogDetail({ match }) {
   const classes = useStyles();
   const dispatch = useDispatch();
   const blogPost = useSelector(state => state.blog.getOneBlogPost.data);
+  const comments = useSelector(state => state.blog.getAllCommentsForAPost.data);
 
   const [likes, setLikes] = useState(0);
   const [clicked, setClicked] = React.useState(false);
@@ -78,24 +95,26 @@ function BlogDetail({ match }) {
 
   useEffect(() => {
     dispatch(blogActions.getOneBlogPost(postId));
+    dispatch(blogActions.getAllCommentsForAPost(postId));
   }, []);
 
   const handleLikes = () => {
     setClicked(prevState => prevState = !prevState);
-    setLikes(prevLike => prevLike = !prevLike);
+    !clicked ? setLikes(prev => prev + 1) : setLikes(prev => prev - 1);
     dispatch(blogActions.likeAndUnlikeBlogPost(postId));
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const model = {postId, content};
-    dispatch(blogActions.submitBlogComment(model));
+    await dispatch(blogActions.submitBlogComment(model));
+    dispatch(blogActions.getAllCommentsForAPost(postId));
   }
 
   const getColor = () => !clicked ? '#4d5760' : '#F44336';
 
   return (
     <>
-      {blogPost.length === 0
+      {(blogPost.length === 0 || comments === 0)
         ? 'Loading...'
         : <Grid container spacing={3}>
             <Grid item xs={12} sm={1}>
@@ -110,14 +129,14 @@ function BlogDetail({ match }) {
                   <IconButton aria-label="like" component="span">
                     <ChatBubbleOutlineIcon />
                   </IconButton>
-                  <Typography style={{textAlign: 'center'}}>{blogPost.comment.length}</Typography>
+                  <Typography style={{textAlign: 'center'}}>{comments.length}</Typography>
                 </div>
               </div>
             </Grid>
             <Grid item xs={12} sm={8}>
               <Paper className={classes.paper} variant="outlined">
                 <ThemeProvider theme={theme}>
-                  <Typography variant="h2">{blogPost.title}</Typography>
+                  <Typography variant="h2" className={classes.title}>{blogPost.title}</Typography>
                 </ThemeProvider>
                 <BlogTags tags={user.tags} />
                 <ThemeProvider theme={theme}>
@@ -131,7 +150,14 @@ function BlogDetail({ match }) {
                   Discussion
                 </Typography>
                 <CommentInput onClick={() => handleSubmit()} onChange={value => setContent(value)} />
-                {(blogPost.comment.length > 0) && blogPost.comment.map(comment => <SingleComment key={comment.id} comment={comment} />)}
+                {(comments.length > 0) && comments.map((comment) => {
+                    return (
+                      <Paper variant="outlined" key={comment.id} className={classes.replyComment}>
+                        <SingleComment comment={comment} postId={postId} />
+                        <ReplyComment reply={comment.replyComment} postId={postId} />
+                      </Paper>
+                    )
+                })}
               </Paper>
             </Grid>
             <Grid item xs={12} sm={3}>

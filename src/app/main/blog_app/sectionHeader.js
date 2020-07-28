@@ -6,6 +6,7 @@ import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import { Link } from 'react-router-dom';
 import IconButton from '@material-ui/core/IconButton';
 import UserAvatar from './userAvatar';
+import { useLocation } from 'react-router-dom'
 
 const useStyles = makeStyles({
   root: {display: 'flex', justifyContent: 'space-between'},
@@ -15,6 +16,7 @@ const useStyles = makeStyles({
 
 export default function SectionHeader(props) {
   const classes = useStyles();
+  let location = useLocation();
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleClick = (event) => {
@@ -29,8 +31,8 @@ export default function SectionHeader(props) {
   const id = open ? 'simple-popover' : undefined;
 
   const moreContent = props.buttonContent.map((item, index) => {
-    if (index === 0) return <Button className={classes.btn} key={index} component={Link} to={`/blog/update_blog/${props.id}`}>{item}</Button>;
-    else return <Button className={classes.btn} key={index} onClick={() => props.onClick()}>{item}</Button>;
+    if (index === 0 && location === '/blog/list') return <Button className={classes.btn} key={index} component={Link} to={`/blog/update_blog/${props.id}`}>{item}</Button>;
+    else return <Button className={classes.btn} key={index} onClick={() => props.onClick(item)}>{item}</Button>;
   });
 
   return (
