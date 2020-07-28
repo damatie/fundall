@@ -23,6 +23,18 @@ const durations = [
   {value: '6 months', id: 6},
 ];
 
+const getData = (id, type) => {
+	switch(type) {
+		case 'duration': {
+			for(let i of durations) {
+				if(id === i.id) {
+					return i.value;
+				}
+			}
+		}
+	}
+}
+
 const matchRole = (data, role) => {
 	const arr = [];
 	for(const i of data) {
@@ -52,10 +64,11 @@ function RequestLoanTab(props) {
 	}, [profile.data]);
 
 	useEffect(() => {
-		// if(id) {
-		// 	// dispatch
-		// }
-	})
+		if(id) {
+			dispatch(Actions.getLoan(id));
+		}
+		console.log(id)
+	}, [id])
 
 	function disableButton() {
 		setIsFormValid(false);
@@ -67,15 +80,19 @@ function RequestLoanTab(props) {
 
 	function handleSubmit(model) {
 		console.log(model);
-		// dispatch(Actions.applyLoan(model))
+		dispatch(Actions.applyLoan(model))
+		if(id) {
+			dispatch(Actions.updateLoan(id, model));
+		}
   }
-  
-
-	// if(leaveOption.success) {
-	// 	return (
-	// 		<Redirect to='/hr/leave_options' />
-	// 	);
-	// }
+	
+	if(id) {
+		if(loan.loading) {
+			return (
+				<>Loading... </>
+			);
+		}
+	}
 
 	return (
 		<div className="w-full">
@@ -87,11 +104,37 @@ function RequestLoanTab(props) {
 				className="flex flex-col justify-center w-full"
 			>
 
+				<TextFieldFormsy
+					className="mb-16"
+					type="number"
+					name="annualPay"
+					label="Annual Pay"
+					value={id ? loan.data.annualPay : ''}
+					validations={{
+						minLength: 1
+					}}
+					validationErrors={{
+						minLength: 'Min character length is 1'
+					}}
+					InputProps={{
+						endAdornment: (
+							<InputAdornment position="end">
+								<Icon className="text-20" color="action">
+                  attach_money
+								</Icon>
+							</InputAdornment>
+						)
+					}}
+					variant="outlined"
+					required
+				/>
+
         <TextFieldFormsy
 					className="mb-16"
 					type="number"
 					name="amountRequested"
 					label="Amount requested"
+					value={id ? loan.data.amountRequested : ''}
 					validations={{
 						minLength: 1
 					}}
@@ -116,6 +159,7 @@ function RequestLoanTab(props) {
 					type="number"
 					name="deductableAmount"
 					label="Deductable amount"
+					value={id ? loan.data.deductableAmount : ''}
 					validations={{
 						minLength: 1
 					}}
@@ -140,6 +184,7 @@ function RequestLoanTab(props) {
 					type="text"
 					name="workLocation"
 					label="Work location"
+					value={id ? loan.data.workLocation : ''}
 					validations={{
 						minLength: 1
 					}}
@@ -163,7 +208,7 @@ function RequestLoanTab(props) {
           className="my-16"
           name="duration"
           label="Duration"
-          value="none"
+          value={id ? loan.data.duration : 'none'}
           // validations="not-equals:none"
           validationError="requried"
           variant="outlined"
@@ -178,7 +223,7 @@ function RequestLoanTab(props) {
           className="my-16"
           name="employementType"
           label="Employement type"
-          value="none"
+          value={id ? loan.data.employementType : 'none'}
           // validations="not-equals:none"
           validationError="requried"
           variant="outlined"
@@ -193,7 +238,7 @@ function RequestLoanTab(props) {
           className="my-16"
           name="financeManager"
           label="Finance manager"
-          value="none"
+          value={id ? loan.data.financeManager : 'none'}
           // validations="not-equals:none"
           validationError="requried"
           variant="outlined"
@@ -208,7 +253,7 @@ function RequestLoanTab(props) {
           className="my-16"
           name="departmentHead"
           label="Head of department"
-          value="none"
+          value={id ? loan.data.departmentHead : 'none'}
           // validations="not-equals:none"
           validationError="requried"
           variant="outlined"
@@ -223,7 +268,7 @@ function RequestLoanTab(props) {
           className="my-16"
           name="hrManager"
           label="HR manager"
-          value="none"
+          value={id ? loan.data.hrManager : 'none'}
           // validations="not-equals:none"
           validationError="requried"
           variant="outlined"
@@ -240,7 +285,8 @@ function RequestLoanTab(props) {
 					name="purpose"
           label="Purpose"
           rows='5'
-          multiline
+					multiline
+					value={id ? loan.data.purpose : ''}
 					validations={{
 						minLength: 1
 					}}
@@ -255,7 +301,9 @@ function RequestLoanTab(props) {
 					}}
           variant="outlined"
 				/>
-				<ProgressBtn success={loan.success} loading={loan.loadings} content='Request' disable={!isFormValid}/>
+				{id ? <></> : <ProgressBtn success={loan.success} loading={loan.loadings} content='Request' disable={!isFormValid}/>}
+
+				{loan.data.status === 'pending' ? <ProgressBtn success={loan.success} loading={loan.updating} content='Update Request' disable={!isFormValid}/> : <></>}
 			</Formsy>
 		</div>
 	);

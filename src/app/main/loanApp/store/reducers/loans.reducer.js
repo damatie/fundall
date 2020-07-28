@@ -7,6 +7,7 @@ const initialState = {
   loading: false,
   openLoan: [],
   closedLoan: [],
+  reviewedLoan: [],
 };
 
 export const loansReducer = (state = initialState, actions) => {
@@ -50,6 +51,13 @@ export const loansReducer = (state = initialState, actions) => {
       return {
         ...state,
         loading: true,
+      }
+    }
+    case Actions.GET_ALL_REVIEWED_LOAN: {
+      return {
+        ...state,
+        loading: false,
+        reviewedLoan: actions.payload
       }
     }
     default: {

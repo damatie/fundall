@@ -1,5 +1,6 @@
 import { fetchHeaders } from "app/shared/fetchHeaders";
 import swal from 'sweetalert2';
+import { handleResponse } from "app/auth/handleRes";
 
 export const APPROVE_LOAN = 'APPROVE LOAN';
 export const REJECT_LOAN = 'REJECT LOAN';
@@ -8,6 +9,10 @@ export const LOAN_SUCCESS = 'LOAN SUCCESS';
 export const LOAN_ERROR = 'LOAN ERROR';
 export const LOADING_LOAN = 'LOANDING LOAN';
 export const GET_LOAN = 'GET LOAN';
+export const UPDATING_LOAN = 'UPDATING LOAN';
+export const UPDATE_SUCCESS = 'UPDATE SUCCESS';
+export const CLOSING_LOAN = 'CLOSING LOAN';
+export const CLOSED_SUCCESS = 'CLOSED SUCCESS';
 
 const header = fetchHeaders();
 
@@ -191,4 +196,60 @@ export const getLoan = id => {
   //   type: GET_LOAN,
   //   payload: loan
   // })
+};
+
+export const updateLoan = (id, body) => {
+  return dispatch => {
+    dispatch({
+      type: UPDATING_LOAN
+    })
+    fetch(`https://hris-cbit.herokuapp.com/api/v1/loan/${id}`, {
+      ...header.reqHeader(
+        'PATCH',
+        body
+      ),
+    }).then(res => handleResponse(res)).then(
+      data => {
+        // if(data.success) {
+          dispatch({
+            type: UPDATE_SUCCESS
+          });
+          swal.fire({
+            title: 'Loan',
+            text: data.message,
+            icon: 'success',
+            timer: 2000
+          });
+          dispatch(getLoan(id));
+
+        // }
+      }
+    ).catch(e => console.error(e));
+  }
+};
+
+export const cancelLoan = (id, history) => {
+  return dispatch => {
+    dispatch({
+      type: CLOSING_LOAN
+    })
+    fetch(`https://hris-cbit.herokuapp.com/api/v1/loan/${id}`, {
+      ...header.delHeader(),
+    }).then(res => handleResponse(res)).then(
+      data => {
+        // if(data.success) {
+          swal.fire({
+            title: 'Loan',
+            text: data.message,
+            icon: 'success',
+            timer: 2000
+          });
+          dispatch({
+            type: CLOSED_SUCCESS
+          });
+          history.push('/loan/request/list')
+        // }
+      }
+    ).catch(e => console.error(e));
+  }
 }
