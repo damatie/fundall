@@ -97,11 +97,7 @@ function LoanReqTable(props) {
 	}
 
 	function handleClick(item) {
-		// if(props.user.user === 'employee') {
-		// 	props.history.push(`/line_manager/leave_review/employee/${item.id}`);
-		// } else if(props.user.user === 'hr') {
-		// 	props.history.push(`/hr/leave_review/employee/${item.id}`);
-		// }
+		
   }
   
 
