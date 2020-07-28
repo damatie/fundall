@@ -63,7 +63,7 @@ const routeConfigs = [
 const routes = [
 	...FuseUtils.generateRoutesFromConfigs(routeConfigs),
 	{
-		path: '/auth/login',
+		path: '/',
 		component: React.lazy(import('app/main/authentication_pages/login/login'))
 	}
 ];

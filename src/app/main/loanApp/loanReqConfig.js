@@ -6,8 +6,16 @@ const LoanReqConfig = {
   },
   routes: [
     {
+      path: '/loan/review/salaryadvance/list/details/:id',
+      component: React.lazy(() => import('./salaryAdvance/manage_salary_advance_loan/loanDetails'))
+    },
+    {
       path: '/loan/review/list/details/:id',
       component: React.lazy(() => import('./loan_management/loanDetails'))
+    },
+    {
+      path: '/loan/review/salaryadvance/list',
+      component: React.lazy(() => import('./salaryAdvance/manage_salary_advance_loan/manageSalaryAdvanceLoan'))
     },
     {
       path: '/loan/review/list',
