@@ -1,6 +1,5 @@
 import Swal from 'sweetalert2';
 import { fetchHeaders } from 'app/shared/fetchHeaders';
-// import { redirectUrl } from '../../redirectUrl';
 
 export const LIKE_A_COMMENT_ERROR = 'COMMENTTOPOST_ERROR';
 export const LIKE_A_COMMENT_SUCCESS = 'COMMENTTOPOST_SUCCESS';
@@ -8,7 +7,7 @@ export const LIKE_A_COMMENT_LOADING = 'COMMENTTOPOST_LOADING';
 
 const header = fetchHeaders();
 
-export function submitBlogComment(data) {
+export function likeAComment(data) {
 	return dispatch => {
 		dispatch({
 			type: LIKE_A_COMMENT_LOADING
@@ -16,7 +15,7 @@ export function submitBlogComment(data) {
 		fetch('https://hris-cbit.herokuapp.com/api/v1/comment/likes/new', {
 			...header.reqHeader(
 				'POST',
-				data
+				{commentId: data}
 			)
 		}).then(res => res.json()).then(
 			comment => {

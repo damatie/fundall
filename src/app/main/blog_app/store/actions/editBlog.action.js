@@ -9,13 +9,12 @@ export const EDITBLOG_LOADING = 'EDITBLOG_LOADING';
 
 const header = fetchHeaders();
 
-export function editBlogPost(data) {
+export function editBlogPost(data, id) {
 	return dispatch => {
 		dispatch({
 			type: EDITBLOG_LOADING
 		})
-		console.log({data: data.title, body: data.body});
-		fetch(`https://hris-cbit.herokuapp.com/api/v1/posts/${data.id}`, {
+		fetch(`https://hris-cbit.herokuapp.com/api/v1/posts/${id}`, {
 			...header.fdHeader(
 				'PUT',
 				data

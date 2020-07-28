@@ -13,6 +13,7 @@ import likeAndUnlikeBlogPost from './likeAndUnlikeBlogPost.reducer';
 import deleteOneBlogPost from './deleteOneBlogPost.reducer';
 import updateAComment from './updateAComment.reducer';
 import deleteComment from './deleteComment.reducer';
+import getAllCommentsForAPost from './getAllCommentsForAPost.reducer';
 
 const blogReducers = combineReducers({
 	postBlog,
@@ -29,6 +30,7 @@ const blogReducers = combineReducers({
 	deleteOneBlogPost,
 	updateAComment,
 	deleteComment,
+	getAllCommentsForAPost,
 });
 
 export default blogReducers;
