@@ -17,16 +17,17 @@ const theme = createMuiTheme();
 theme.typography.h4 = {
   fontSize: '2.3rem',
   '@media (min-width:600px)': {
-    fontSize: '3.5rem',
+    fontSize: '3.0rem',
   },
   [theme.breakpoints.up('md')]: {
-    fontSize: '3.8rem',
+    fontSize: '3.3rem',
   },
 };
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    padding: theme.spacing(2)
+    padding: theme.spacing(2),
+    borderRadius: theme.spacing(1),
   },
   blogInfo: {
     marginLeft: 44,
@@ -71,7 +72,6 @@ function Blog(props) {
         fullName={props.blog.employees[0].firstName}
         updatedAt={props.blog.updatedAt}
         id={props.blog.id}
-        ml='16px'
         buttonContent={['Edit post', 'Delete post']}
         onClick={() => handleDelete()}
       />

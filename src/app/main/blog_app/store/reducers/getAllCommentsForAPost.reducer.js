@@ -35,6 +35,22 @@ const getAllCommentsForAPost = (state = initialState, action) => {
 				data: newData,
 			};
 		}
+		case Actions.COMMENT_TO_POST_SUCCESS: {
+			const newData = [ action.payload, ...state.data ];
+			return {
+				...initialState,
+				loading: false,
+				data: newData,
+			};
+		}
+		case Actions.COMMENT_TO_COMMENT_SUCCESS: {
+			const newData = [...state.data.replyComment, action.payload];
+			return {
+				...initialState,
+				loading: false,
+				data: [...state.data, {replyComment: newData}],
+			};
+		}
 		case Actions.GET_ALL_COMMENTS_FOR_A_POST_ERROR: {
 			return {
 				...initialState,
