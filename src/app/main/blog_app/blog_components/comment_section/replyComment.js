@@ -21,7 +21,7 @@ function ReplyComment(props) {
 
   return (
     <>
-      { props.reply.length !== 0 &&
+      { props.reply && props.reply.length !== 0 &&
         <>
           <Typography variant="body1" className={classes.text}>View more 1 comment(s)</Typography>
           { props.reply.map((reply) => {
