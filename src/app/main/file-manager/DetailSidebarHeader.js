@@ -15,7 +15,7 @@ function DetailSidebarHeader(props) {
 	const files = useSelector(({ fileManagerApp }) => fileManagerApp.files);
 	const selectedItem = useSelector(({ fileManagerApp }) => files[fileManagerApp.selectedItemId]);
 	const linkRef = React.createRef();
-	const user = useAuth();
+	const userId = useAuth().getId;
 
 	if (!selectedItem) {
 		return null;
@@ -39,17 +39,29 @@ function DetailSidebarHeader(props) {
 	}
 
 	function hiddenBtn(){
-		const userId = user().getId();
-		return (userId !== selectedItem.uploaderId)
-	}
+		console.log(userId);
+		if(userId !== selectedItem.uploaderId){
+		  return (
+			<hidden>
+				<IconButton>
+						<Icon onClick={deleteFile}>delete</Icon>
+					</IconButton>
+			</hidden>
+		  )
+		}else{
+		  return (
+			<IconButton>
+				<Icon onClick={deleteFile}>delete</Icon>
+			</IconButton>
+		  )
+		}
+	  }
 
 	return (
 		<div className="flex flex-col justify-between h-full p-4 sm:p-12">
 			<div className="toolbar flex align-center justify-end">
 				<FuseAnimate animation="transition.expandIn" delay={200}>
-					<IconButton  hidden={hiddenBtn}>
-						<Icon onClick={deleteFile}>delete</Icon>
-					</IconButton>
+					<hiddenBtn />
 				</FuseAnimate>
 				<FuseAnimate animation="transition.expandIn" delay={200}>
 					<IconButton>

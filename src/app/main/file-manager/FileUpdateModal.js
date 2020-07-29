@@ -26,12 +26,12 @@ export default function FileUpdateModal() {
     const files = useSelector(({ fileManagerApp }) => fileManagerApp.files);
     const selectedItem = useSelector(({ fileManagerApp }) => files[fileManagerApp.selectedItemId]);
     const [open, setOpen] = useState(false);
+    const [hideBtn, setHideBtn] = useState(false);
     const [isFormValid, setIsFormValid] = useState(true);
     const [file, setFile] = useState({});
     const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
     const user = useAuth();
     const userId = useAuth().getId;
-    const [hide, setHide] = useState(true);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -60,12 +60,28 @@ export default function FileUpdateModal() {
         setFile({"file": event.target.files[0]});
     }
 
+    function hiddenBtn(){
+      console.log(userId);
+      if(userId !== selectedItem.uploaderId){
+        return (
+          <hidden>
+              <IconButton>
+                  <Icon onClick={handleClickOpen}>edit</Icon>
+              </IconButton>
+          </hidden>
+        )
+      }else{
+        return (
+          <IconButton>
+						<Icon onClick={handleClickOpen}>edit</Icon>
+				</IconButton>
+        )
+      }
+    }
 
   return (
     <div>
-        <IconButton onClick={handleClickOpen} hidden={true}>
-						<Icon>edit</Icon>
-				</IconButton>
+        <hiddenBtn />
 			<ThemeProvider theme={mainTheme}>
       <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Update Document</DialogTitle>
