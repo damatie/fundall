@@ -29,7 +29,7 @@ import AuthenticationConfig from 'app/main/authentication_pages/authenticationCo
 import LeaveReviewConfig from 'app/main/line_manager/leave_review/leaveReviewConfig';
 import HrLeaveReviewConfig from 'app/main/HR/leave_review/hrLeaveReviewConfig';
 import LoanReqConfig from 'app/main/loanApp/loanReqConfig';
-import fileManagerAppConfig from 'app/main/file-manager/FileManagerAppConfig';
+// import fileManagerAppConfig from 'app/main/file-manager/FileManagerAppConfig';
 
 const routeConfigs = [
 	// ExampleConfig,
@@ -59,7 +59,7 @@ const routeConfigs = [
 	LeaveReviewConfig,
 	HrLeaveReviewConfig,
 	LoanReqConfig,
-	fileManagerAppConfig
+	// fileManagerAppConfig
 ];
 
 const routes = [
