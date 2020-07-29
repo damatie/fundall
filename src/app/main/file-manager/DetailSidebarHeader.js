@@ -8,12 +8,14 @@ import Moment from 'react-moment';
 import * as Actions from './store/actions';
 import FileUpdateModal from './FileUpdateModal';
 import DownloadLink from "react-download-link";
+import { useAuth } from 'app/hooks/useAuth';
 
 function DetailSidebarHeader(props) {
 	const dispatch = useDispatch();
 	const files = useSelector(({ fileManagerApp }) => fileManagerApp.files);
 	const selectedItem = useSelector(({ fileManagerApp }) => files[fileManagerApp.selectedItemId]);
 	const linkRef = React.createRef();
+	const user = useAuth();
 
 	if (!selectedItem) {
 		return null;
@@ -36,11 +38,16 @@ function DetailSidebarHeader(props) {
 		link.parentNode.removeChild(link);
 	}
 
+	function hiddenBtn(){
+		const userId = user().getId();
+		return (userId !== selectedItem.uploaderId)
+	}
+
 	return (
 		<div className="flex flex-col justify-between h-full p-4 sm:p-12">
 			<div className="toolbar flex align-center justify-end">
 				<FuseAnimate animation="transition.expandIn" delay={200}>
-					<IconButton>
+					<IconButton  hidden={hiddenBtn}>
 						<Icon onClick={deleteFile}>delete</Icon>
 					</IconButton>
 				</FuseAnimate>
