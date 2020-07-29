@@ -120,7 +120,7 @@ function RequestLoanTab(props) {
 						endAdornment: (
 							<InputAdornment position="end">
 								<Icon className="text-20" color="action">
-                  attach_money
+                  money
 								</Icon>
 							</InputAdornment>
 						)
@@ -145,7 +145,7 @@ function RequestLoanTab(props) {
 						endAdornment: (
 							<InputAdornment position="end">
 								<Icon className="text-20" color="action">
-                  attach_money
+								money
 								</Icon>
 							</InputAdornment>
 						)
@@ -170,7 +170,7 @@ function RequestLoanTab(props) {
 						endAdornment: (
 							<InputAdornment position="end">
 								<Icon className="text-20" color="action">
-                  attach_money
+                  money
 								</Icon>
 							</InputAdornment>
 						)

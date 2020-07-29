@@ -20,6 +20,13 @@ const rows = [
 		disablePadding: false,
 		label: 'Employee Name',
 		sort: true
+	},
+	{
+		id: 'email',
+		align: 'left',
+		disablePadding: false,
+		label: 'Email',
+		sort: true
   },
   {
 		id: 'amountRequested',
@@ -181,6 +188,9 @@ function LoanReqTab(props) {
 
 										<TableCell component="th" scope="row" align='left'>
                       {`${n.employee.firstName} ${n.employee.lastName}`}
+										</TableCell>
+										<TableCell component="th" scope="row" align='left'>
+                      {`${n.employee.email}`}
 										</TableCell>
                     <TableCell component="th" scope="row" align='left'>
                       {n.amountRequested}

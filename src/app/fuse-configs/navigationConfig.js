@@ -299,8 +299,8 @@ const navigationConfig = [
 				]
 			},
 			{
-				id: 'employee_leave',
-				title: 'Employee leave',
+				id: 'allocate_leave',
+				title: 'Allocate leave',
 				type: 'item',
 				url: '/hr/employee_leave',
 				icon: 'calendar_today',
@@ -340,8 +340,8 @@ const navigationConfig = [
 			// 	auth: authRoles.staff,
 			// },
 			{
-				id: 'leave_review',
-				title: 'Leave review',
+				id: 'employee_leave',
+				title: 'Employee leave',
 				type: 'item',
 				url: '/line_manager/leave_review',
 				icon: 'calendar_today',
