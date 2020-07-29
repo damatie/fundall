@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
@@ -22,7 +22,7 @@ theme.typography.body1 = {
   fontSize: '1.75rem',
 };
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   dFlex: {
     display: 'flex',
   },
@@ -32,7 +32,7 @@ const useStyles = makeStyles({
   commentBody: {
     margin: '12px 0',
   }
-});
+}));
 
 function BlogComment(props) {
   const classes = useStyles();
@@ -42,10 +42,6 @@ function BlogComment(props) {
   const [open, setOpen] = useState(false);
   const [likes, setLikes] = useState(props.comment.commentLike || []);
   const [clicked, setClicked] = useState(false);
-
-  useEffect(() => {
-
-  }, [])
 
   const showReplyInput = (e) => {
     e.preventDefault();
@@ -121,7 +117,7 @@ function BlogComment(props) {
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleCommentEdit} color="primary">
+          <Button variant="contained" onClick={handleCommentEdit} color="primary">
             Update
           </Button>
         </DialogActions>

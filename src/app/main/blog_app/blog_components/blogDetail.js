@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
   },
   sidePaper: {
     padding: theme.spacing(2),
-    margin: '16px 0 16px 0',
+    marginBottom: '16px',
   },
   sidePaperPadding: {
     padding: 12,
@@ -104,10 +104,10 @@ function BlogDetail({ match }) {
     dispatch(blogActions.likeAndUnlikeBlogPost(postId));
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     const model = {postId, content};
-    await dispatch(blogActions.submitBlogComment(model));
-    dispatch(blogActions.getAllCommentsForAPost(postId));
+    dispatch(blogActions.submitBlogComment(model));
+    setContent('');
   }
 
   const getColor = () => !clicked ? '#4d5760' : '#F44336';
@@ -116,7 +116,7 @@ function BlogDetail({ match }) {
     <>
       {(blogPost.length === 0 || comments === 0)
         ? 'Loading...'
-        : <Grid container spacing={3}>
+        : <Grid container spacing={1} style={{marginTop: 16}}>
             <Grid item xs={12} sm={1}>
               <div className={classes.iconButton}>
                 <div className={classes.alignCenter}>
@@ -133,7 +133,7 @@ function BlogDetail({ match }) {
                 </div>
               </div>
             </Grid>
-            <Grid item xs={12} sm={8}>
+            <Grid item xs={12} sm={7}>
               <Paper className={classes.paper} variant="outlined">
                 <ThemeProvider theme={theme}>
                   <Typography variant="h2" className={classes.title}>{blogPost.title}</Typography>
@@ -151,23 +151,24 @@ function BlogDetail({ match }) {
                 </Typography>
                 <CommentInput onClick={() => handleSubmit()} onChange={value => setContent(value)} />
                 {(comments.length > 0) && comments.map((comment) => {
-                    return (
-                      <Paper variant="outlined" key={comment.id} className={classes.replyComment}>
-                        <SingleComment comment={comment} postId={postId} />
-                        <ReplyComment reply={comment.replyComment} postId={postId} />
-                      </Paper>
-                    )
+                  return (
+                    <Paper variant="outlined" key={comment.id} className={classes.replyComment}>
+                      <SingleComment comment={comment} postId={postId} />
+                      <ReplyComment reply={comment.replyComment} postId={postId} />
+                    </Paper>
+                  )
                 })}
               </Paper>
             </Grid>
-            <Grid item xs={12} sm={3}>
-              <Paper className={classes.sidePaper} variant="outlined">
-                <ThemeProvider theme={theme}>
-                  <UserAvatar fullName={user.fullName} />
-                </ThemeProvider>
-                <Typography varaint="body1" style={{lineHeight: 2}}>Front-end dev, loves learning things deeply, and eager about helping others</Typography>
-              </Paper>
-              <Paper variant="outlined">
+            <Grid item xs={12} sm={4}>
+              <div style={{margin: '0 32px 0 0'}}>
+                <Paper className={classes.sidePaper} variant="outlined">
+                  <ThemeProvider theme={theme}>
+                    <UserAvatar fullName={user.fullName} />
+                  </ThemeProvider>
+                  <Typography varaint="body1" style={{lineHeight: 2}}>Front-end dev, loves learning things deeply, and eager about helping others</Typography>
+                </Paper>
+                <Paper variant="outlined">
                 <Typography variant='h6' className={classes.sidePaperPadding}>
                   Related Posts
                 </Typography>
@@ -179,6 +180,7 @@ function BlogDetail({ match }) {
                   />
                 </div>
               </Paper>
+              </div>
             </Grid>
           </Grid>
       }

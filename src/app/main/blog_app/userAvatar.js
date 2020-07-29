@@ -35,7 +35,9 @@ export default function UserAvatar(props) {
     <div className={classes.root}>
       <Avatar className={classes.avatar}>MN</Avatar>
       <div className={classes.userName}>
-        {props.fullName && <Typography variant="body1" style={{fontWeight: 'bold'}} >{props.fullName}</Typography>}
+        {props.fullName && <Typography variant="body1" style={{fontWeight: 'bold', fontSize: 16}}>
+          {props.fullName}
+        </Typography>}
         {props.time && <Typography variant="caption" >Jul 24 (20 hours ago)</Typography>}
         {props.userName && <Typography variant="caption">{`@${props.userName}`}</Typography>}
         {props.title && <Typography variant="caption">{props.title}</Typography>}

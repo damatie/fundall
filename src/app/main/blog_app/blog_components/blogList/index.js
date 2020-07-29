@@ -31,12 +31,12 @@ function BlogPostList() {
   }, []);
 
   return (
-    <Grid container className={classes.root} spacing={3}>
-      <Grid item xs={12} sm={9}>
+    <Grid container className={classes.root} spacing={2}>
+      <Grid item xs={12} sm={8}>
         <BlogListHeader />
         { !blogPost ? 'loading...' : blogPost.map(blog => <BlogListContent blog={blog} key={blog.id} />) }
       </Grid>
-      <Grid item xs={12} sm={3} className={classes.aSide}>
+      <Grid item xs={12} sm={4} className={classes.aSide}>
         <BlogSideAtrraction />
       </Grid>
     </Grid>

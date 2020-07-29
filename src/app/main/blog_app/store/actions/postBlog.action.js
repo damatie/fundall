@@ -6,7 +6,6 @@ export const BlogPost_ERROR = 'BlogPost_ERROR';
 export const BlogPost_SUCCESS = 'BlogPost_SUCCESS';
 export const BlogPost_LOADING = 'BlogPost_LOADING';
 
-
 const header = fetchHeaders();
 
 export function submitBlogPost(formdata) {

@@ -37,7 +37,7 @@ export default function SectionHeader(props) {
 
   return (
     <div className={classes.root}>
-      <UserAvatar fullName={props.fullName} time={props.updatedAt} ml={props.ml} />
+      <UserAvatar fullName={props.fullName} time={props.updatedAt} />
       <div style={{alignSelf: 'center'}}>
         <IconButton aria-describedby={id} aria-label="like" component="span" onClick={handleClick}>
           <MoreHorizIcon fontSize="small" />
