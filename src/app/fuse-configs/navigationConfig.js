@@ -349,6 +349,22 @@ const navigationConfig = [
 			}
 		]
 	},
+	// Document Library
+	{
+		id: 'library',
+		title: 'Library',
+		translate: 'Library',
+		type: 'group',
+		children: [
+			{
+				id: 'documents',
+				title: 'Documents',
+				type: 'item',
+				url: '/library/documents',
+				icon: 'folder'
+			}
+		]
+	},
 	// Settings navigations
 	{
 		id: 'settings',
