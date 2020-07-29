@@ -19,15 +19,19 @@ import ProgressBtn from 'app/shared/progressBtn';
 import Grid from '@material-ui/core/Grid';
 import * as Actions from './store/actions/files.actions';
 import { ThemeProvider } from '@material-ui/core/styles';
+import { useAuth } from 'app/hooks/useAuth';
 
 export default function FileUpdateModal() {
     const dispatch = useDispatch();
     const files = useSelector(({ fileManagerApp }) => fileManagerApp.files);
     const selectedItem = useSelector(({ fileManagerApp }) => files[fileManagerApp.selectedItemId]);
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
     const [isFormValid, setIsFormValid] = useState(true);
     const [file, setFile] = useState({});
     const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
+    const user = useAuth();
+    const userId = useAuth().getId;
+    const [hide, setHide] = useState(true);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -56,10 +60,11 @@ export default function FileUpdateModal() {
         setFile({"file": event.target.files[0]});
     }
 
+
   return (
     <div>
-        <IconButton>
-						<Icon onClick={handleClickOpen}>edit</Icon>
+        <IconButton onClick={handleClickOpen} hidden={true}>
+						<Icon>edit</Icon>
 				</IconButton>
 			<ThemeProvider theme={mainTheme}>
       <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useAuth } from 'app/hooks/useAuth';
-import { useBaseUrl } from 'app/hooks/useBaseUrl';
+import { getBaseUrl } from 'app/shared/getBaseUrl';
 import swal from 'sweetalert2';
 import {fetchHeaders} from 'app/shared/fetchHeaders'
 
@@ -11,7 +11,7 @@ export const CREATE_FILE_SUCCESS = 'CREATE FILE_SUCCESS';
 export const CREATE_FILE_ERROR = 'CREATE FILE_ERROR';
 export const SET_FILE_SEARCH_TEXT = 'SET FILE SEARCH TEXT';
 const auth = useAuth;
-const basUrl = useBaseUrl;
+const basUrl = getBaseUrl;
 const headers = fetchHeaders();
 
   export function createDocument (model, file){
