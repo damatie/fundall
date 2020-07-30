@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { withRouter, useParams } from 'react-router-dom';
 import SharedTableHead from 'app/shared/sharedTableHead';
 import moment from 'moment';
+import { desSort } from 'app/shared/sortData';
 
 const rows = [
 	{
@@ -23,10 +24,10 @@ const rows = [
 		sort: true
   },
   {
-		id: 'leave type',
+		id: 'leave_type',
 		align: 'left',
 		disablePadding: false,
-		label: 'Last name',
+		label: 'Leave type',
 		sort: true
   },
   {
@@ -49,6 +50,13 @@ const rows = [
 		disablePadding: false,
 		label: 'Leave for',
 		sort: true
+	},
+	{
+		id: 'email',
+		align: 'right',
+		disablePadding: false,
+		label: 'Email',
+		sort: true
 	}
 ];
 
@@ -65,7 +73,7 @@ function LeaveTableTab(props) {
 	});
 
 	useEffect(() => {
-		setData(props.data)
+		setData(props.data ? desSort(props.data) : props.data)
 	}, [props.data]);
 
 	function handleRequestSort(event, property) {
@@ -193,7 +201,9 @@ function LeaveTableTab(props) {
                     <TableCell component="th" scope="row" align='right'>
                       {n.leaveFor}
 										</TableCell>
-
+										<TableCell component="th" scope="row" align='right'>
+                      employee@test.co
+										</TableCell>
 									</TableRow>
 								);
 							})}

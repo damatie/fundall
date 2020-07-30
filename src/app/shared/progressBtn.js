@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { green } from '@material-ui/core/colors';
+import { green, red } from '@material-ui/core/colors';
 import Button from '@material-ui/core/Button';
 
 const useStyles = makeStyles((theme) => ({
@@ -35,10 +35,15 @@ const useStyles = makeStyles((theme) => ({
     marginTop: -12,
     marginLeft: -12,
   },
+  btn: {
+    background: red[500],
+    margin: '0 1rem',
+    color: '#fff'
+  }
 }));
 
-const ProgressBtn = ({success, loading, content, disable, onClick, color}) => {
-  const classes = useStyles();
+const ProgressBtn = ({success, loading, content, disable, onClick, color}, props) => {
+  const classes = useStyles(props);
 
   const buttonClassname = clsx({
     [classes.buttonSuccess]: success,
@@ -49,7 +54,7 @@ const ProgressBtn = ({success, loading, content, disable, onClick, color}) => {
       <Button
         variant="contained"
         color={!color ? "primary" : color}
-        className={`w-full`}
+        className={color === 'red' ? `${classes.btn} w-full` : 'w-full'}
         disabled={loading || disable}
         onClick={onClick}
         type='submit'

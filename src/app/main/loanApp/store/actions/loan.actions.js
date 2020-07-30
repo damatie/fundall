@@ -101,7 +101,7 @@ export const applyLoan = body => {
       )
     }).then(res => res.json()).then(
       data => {
-        if(data.success) {
+        if(data) {
           swal.fire({
             title: 'Loan application',
             text: 'Loan applied successfully',

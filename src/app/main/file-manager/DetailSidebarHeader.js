@@ -38,7 +38,7 @@ function DetailSidebarHeader(props) {
 		link.parentNode.removeChild(link);
 	}
 
-	function hiddenBtn(){
+	function HiddenBtn(){
 		console.log(userId);
 		if(userId !== selectedItem.uploaderId){
 		  return (
@@ -61,7 +61,7 @@ function DetailSidebarHeader(props) {
 		<div className="flex flex-col justify-between h-full p-4 sm:p-12">
 			<div className="toolbar flex align-center justify-end">
 				<FuseAnimate animation="transition.expandIn" delay={200}>
-					<hiddenBtn />
+					<HiddenBtn />
 				</FuseAnimate>
 				<FuseAnimate animation="transition.expandIn" delay={200}>
 					<IconButton>

@@ -20,10 +20,10 @@ export const getPendingLoan = () => {
       ...header.getRegHeader()
     }).then(res => res.json()).then(
       data => {
-        if(data.success) {
+        if(data) {
           dispatch({
             type: GET_ALL_PENDING_LOAN,
-            payload: data.loanData
+            payload: data.loanData ? data.loanData : []
           })
         }
       }
@@ -37,10 +37,10 @@ export const getReviewedLoan = () => {
       ...header.getRegHeader()
     }).then(res => handleResponse(res)).then(
       data => {
-        if(data.success){
+        if(data){
           dispatch({
             type: GET_ALL_REVIEWED_LOAN,
-            payload: data.data
+            payload: data.loanData ? data.loanData : []
           })
         }
       }
@@ -57,10 +57,10 @@ export const getApprovedLoan = () => {
       ...header.getRegHeader()
     }).then(res => res.json()).then(
       data => {
-        if(data.success) {
+        if(data) {
           dispatch({
             type: GET_ALL_APPROVED_LOAN,
-            payload: data.loanData
+            payload: data.loanData ? data.loanData : []
           })
         }
       }
@@ -97,10 +97,10 @@ export const getClosedLoan = () => {
       ...header.getRegHeader()
     }).then(res => res.json()).then(
       data => {
-        if(data.success) {
+        if(data) {
           dispatch({
             type: GET_ALL_CLOSED_LOAN,
-            payload: data.loanData
+            payload: data.loanData ? data.loanData : []
           })
         }
       }
@@ -117,10 +117,10 @@ export const getEmployeeLoan = () => {
       ...header.getRegHeader()
     }).then(res => res.json()).then(
       data => {
-        if(data.success) {
+        if(data) {
           dispatch({
             type: EMPLOYEE_LOAN_HISTORY,
-            payload: data.loanData
+            payload: data.loanData ? data.loanData : []
           })
         }
       }

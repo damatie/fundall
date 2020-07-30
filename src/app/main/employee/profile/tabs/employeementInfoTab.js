@@ -12,13 +12,43 @@ import IconButton from '@material-ui/core/IconButton';
 // import ListItemText from '@material-ui/core/ListItemText';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import React, { useEffect, useState } from 'react';
-import { TextFieldFormsy } from '@fuse/core/formsy';
+import React, { useEffect, useState, useRef } from 'react';
+import { TextFieldFormsy, SelectFormsy, } from '@fuse/core/formsy';
 import Formsy from 'formsy-react';
+import makeStyles from '@material-ui/core/styles/makeStyles';
+import MenuItem from '@material-ui/core/MenuItem';
+
+const useStyles = makeStyles(theme => ({
+  grid: {
+    display: 'grid',
+    gridTemplateColumns: '1fr 1fr',
+    gridGap: '.5rem',
+  }
+}))
 
 function EmployeementInfoTab() {
 
-    const natureOfEmployeement = [
+  const [isFormValid, setIsFormValid] = useState(false);
+  const formRef = useRef(null);
+
+  function disableButton()
+  {
+      setIsFormValid(false);
+  }
+
+  function enableButton()
+  {
+      setIsFormValid(true);
+  }
+
+  function handleSubmit(model)
+  {
+      console.info('submit', model);
+  }
+
+  const classes = useStyles();
+
+  const natureOfEmployeement = [
     {label: 'Title', name: 'title', value: '', type: 'text'},
     {label: 'Second title', name: 'secondTitle', value: '', type: 'text'},
     {label: 'Employee number', name: 'employeeNumber', value: '', type: 'number'},
@@ -58,6 +88,7 @@ function EmployeementInfoTab() {
     {label: 'Years in service', name: 'yearsInService', type: 'select', data: () => {
       const arr = [];
       for(let i = 1; i <= 35; i+=1) {
+
         arr.push(i)
       }
       return arr;
@@ -73,7 +104,79 @@ function EmployeementInfoTab() {
       <>
         <div className="mb-24">
           <Typography className="font-bold mb-4 text-15">{info.label}</Typography>
-					<Typography>DATA</Typography>
+					{/* <Typography>DATA</Typography> */}
+          {info.type === 'text' || info.type === 'number' || info.type === 'email' ? 
+            <TextFieldFormsy
+              className="mb-16 w-full"
+              variant="outlined"
+              type={info.type}
+              name={info.name}
+              value={info.value}
+              validations={{
+                minLength: 1,
+              }}
+              validationErrors={{
+                minLength: 'Min character length is 1',
+              }}
+              required
+            /> : <></>}
+
+            {info.type === 'date' || info.type === 'dateOpt' ? 
+            <>
+            <TextFieldFormsy
+              className="mb-16 w-full"
+              variant="outlined"
+              type="date"
+              name={info.name}
+              value={info.value}
+              validations={{
+                minLength: 1,
+              }}
+              validationErrors={{
+                minLength: 'Min character length is 1',
+              }}
+              required
+            />
+            <Typography variant='subtitle1'>{info.opt}</Typography>
+            </>
+             : <></>}
+
+            {info.type === 'textArea' ? 
+            <TextFieldFormsy
+              className="mb-16 w-full"
+              variant="outlined"
+              type="text"
+              name={info.name}
+              value={info.value}
+              multiline
+              rows='4'
+              validations={{
+                minLength: 1,
+              }}
+              validationErrors={{
+                minLength: 'Min character length is 1',
+              }}
+              required
+            /> : <></>}
+
+
+            {info.type === 'select' ? 
+              <SelectFormsy
+                className="mb-16 w-full"
+                name={info.name}
+                value={info.value}
+                variant='filled'
+                required
+              >
+                {[].map((item) => (
+                <MenuItem value={item} key={item}>
+                  {item}
+                </MenuItem>
+                ))}
+              </SelectFormsy>
+            :
+            <></>
+            }
 				</div>
       </>
     )
@@ -100,7 +203,15 @@ function EmployeementInfoTab() {
 						</AppBar>
 
 						<CardContent>
-							{TextField}
+              <Formsy
+                onValidSubmit={handleSubmit}
+                onValid={enableButton}
+                onInvalid={disableButton}
+                ref={formRef}
+                className={classes.grid}
+              >
+							  {TextField}
+              </Formsy>
 						</CardContent>
 					</Card>
         </FuseAnimateGroup>
