@@ -112,6 +112,8 @@ function BlogDetail({ match }) {
 
   const getColor = () => !clicked ? '#4d5760' : '#F44336';
 
+  const buttonContent = ['Edit comment', 'Delete comment'];
+
   return (
     <>
       {(blogPost.length === 0 || comments === 0)
@@ -150,11 +152,11 @@ function BlogDetail({ match }) {
                   Discussion
                 </Typography>
                 <CommentInput onClick={() => handleSubmit()} onChange={value => setContent(value)} />
-                {(comments.length > 0) && comments.map((comment) => {
+                {(comments.length > 0) && comments.map((comment, index) => {
                   return (
-                    <Paper variant="outlined" key={comment.id} className={classes.replyComment}>
-                      <SingleComment comment={comment} postId={postId} />
-                      <ReplyComment reply={comment.replyComment} postId={postId} />
+                    <Paper variant="outlined" key={index} className={classes.replyComment}>
+                      <SingleComment comment={comment} postId={postId} moreContent={buttonContent} />
+                      <ReplyComment reply={comment.replyComment} commentId={comment.id} postId={postId} />
                     </Paper>
                   )
                 })}

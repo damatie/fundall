@@ -19,15 +19,17 @@ const useStyles = makeStyles((theme) => ({
 function ReplyComment(props) {
   const classes = useStyles();
 
+  const replyContent = ['Edit reply', 'Delete reply'];
+
   return (
     <>
       { props.reply && props.reply.length !== 0 &&
         <>
           <Typography variant="body1" className={classes.text}>View more 1 comment(s)</Typography>
-          { props.reply.map((reply) => {
+          { props.reply.map((reply, index) => {
             return (
-              <Paper variant="outlined" key={reply.id} className={classes.paper}>
-                <SingleComment comment={reply} postId={props.postId} />
+              <Paper variant="outlined" key={index} className={classes.paper}>
+                <SingleComment comment={reply} commentId={props.commentId} postId={props.postId} moreContent={replyContent} />
                 {/* <ReplyComment /> */}
               </Paper>
             )
