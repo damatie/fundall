@@ -2,33 +2,34 @@ import Swal from 'sweetalert2';
 import { fetchHeaders } from 'app/shared/fetchHeaders';
 // import { redirectUrl } from '../../redirectUrl';
 
-export const EDIT_COMMENT_REPLY_ERROR = 'EDIT_COMMENT_REPLY_ERROR';
-export const EDIT_COMMENT_REPLY_SUCCESS = 'EDIT_COMMENT_REPLY_SUCCESS';
-export const EDIT_COMMENT_REPLY_LOADING = 'EDIT_COMMENT_REPLY_LOADING';
+export const UPDATE_A_COMMENT_REPLY_ERROR = 'UPDATE_A_COMMENT_REPLY_ERROR';
+export const UPDATE_A_COMMENT_REPLY_SUCCESS = 'UPDATE_A_COMMENT_REPLY_SUCCESS';
+export const UPDATE_A_COMMENT_REPLY_LOADING = 'UPDATE_A_COMMENT_REPLY_LOADING';
 
 const header = fetchHeaders();
 
-export function submitBlogComment(data) {
+export function updateACommentReply({id, content, commentId}) {
 	return dispatch => {
 		dispatch({
-			type: EDIT_COMMENT_REPLY_LOADING
+			type: UPDATE_A_COMMENT_REPLY_LOADING
 		})
-		fetch('https://hris-cbit.herokuapp.com/api/v1/comment/reply/update/:id', {
+		fetch(`https://hris-cbit.herokuapp.com/api/v1/comment/reply/update/${id}`, {
 			...header.reqHeader(
 				'PATCH',
-				data
+				{content}
 			)
 		}).then(res => res.json()).then(
 			comment => {
 				if(comment.success === true) {
 					console.log(comment)
 					return dispatch({
-						type: EDIT_COMMENT_REPLY_SUCCESS
+						type: UPDATE_A_COMMENT_REPLY_SUCCESS,
+						payload: {id, content, commentId}
 					});
 				} else {
 					console.log(comment);
 					return dispatch({
-						type: EDIT_COMMENT_REPLY_ERROR,
+						type: UPDATE_A_COMMENT_REPLY_ERROR,
 						payload: ''
 					});
 				}
@@ -42,7 +43,7 @@ export function submitBlogComment(data) {
 				timer: 3000,
 			})
 			return dispatch({
-				type: EDIT_COMMENT_REPLY_ERROR,
+				type: UPDATE_A_COMMENT_REPLY_ERROR,
 				payload: error
 			});
 		});

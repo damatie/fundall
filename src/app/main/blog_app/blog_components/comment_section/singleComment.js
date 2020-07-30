@@ -42,6 +42,7 @@ function BlogComment(props) {
   const [open, setOpen] = useState(false);
   const [likes, setLikes] = useState(props.comment.commentLike || []);
   const [clicked, setClicked] = useState(false);
+  const [value, setValue] = useState('');
 
   const showReplyInput = (e) => {
     e.preventDefault();
@@ -57,14 +58,9 @@ function BlogComment(props) {
   }
 
   const handleSubmitReply = () => {
-    setShowInput(false);
+    setShowInput(true);
     const model = {commentId: props.comment.id, content};
     dispatch(blogActions.submitBlogCommentReply(model));
-  }
-
-  const selectClickedButton = (value) => {
-    if (value === 'Edit comment') setOpen(true);
-    else handleCommentDelete();
   }
 
   const handleCommentEdit = () => {
@@ -73,8 +69,38 @@ function BlogComment(props) {
     setOpen(false);
   }
 
+  const handleEditReply = () => {
+    const model = {id: props.comment.id, commentId: props.commentId, content};
+    dispatch(blogActions.updateACommentReply(model));
+    setOpen(false);
+  }
+
+  const checkForMethodToCall = () => {
+    if (value === 'Edit comment') handleCommentEdit();
+    else handleEditReply();
+  }
+
   const handleCommentDelete = () => {
     dispatch(blogActions.deleteComment(props.comment.id));
+  }
+
+  const handleDeleteReply = () => {
+    console.log(props.comment.id);
+    dispatch(blogActions.deleteCommentReply(props.comment.id));
+  }
+
+  const selectClickedButton = (value) => {
+    switch(value) {
+      case 'Delete comment':
+        handleCommentDelete();
+        break;
+      case 'Delete reply':
+        handleDeleteReply();
+        break;
+      default:
+        setValue(value);
+        setOpen(true);
+    }
   }
 
   const handleClose = () => {
@@ -88,14 +114,13 @@ function BlogComment(props) {
   };
 
   const getColor = () => !clicked ? '#4d5760' : '#F44336';
-  const buttonContent = ['Edit comment', 'Delete commemt'];
 
   return (
     <>
       <ThemeProvider theme={theme}>
         <SectionHeader
           fullName={!props.comment.employee ? 'George Ole' : `${props.comment.employee.lastName} ${props.comment.employee.firstName}`}
-          buttonContent={buttonContent}
+          buttonContent={props.moreContent}
           onClick={(value) => selectClickedButton(value)}
         />
         <Typography varaint="body1" className={classes.commentBody}>{props.comment && props.comment.content}</Typography>
@@ -117,7 +142,7 @@ function BlogComment(props) {
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
-          <Button variant="contained" onClick={handleCommentEdit} color="primary">
+          <Button variant="contained" onClick={checkForMethodToCall} color="primary">
             Update
           </Button>
         </DialogActions>
