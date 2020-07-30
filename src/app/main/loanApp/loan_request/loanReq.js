@@ -91,7 +91,7 @@ function LoanReq(props) {
 									<Icon className="text-20">
 										{theme.direction === 'ltr' ? 'arrow_back' : 'arrow_forward'}
 									</Icon>
-									<span className="mx-4">Leave options</span>
+									<span className="mx-4">Loan Request</span>
 								</Typography>
 							</FuseAnimate>
 

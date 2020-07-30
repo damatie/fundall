@@ -60,7 +60,7 @@ export default function FileUpdateModal() {
         setFile({"file": event.target.files[0]});
     }
 
-    function hiddenBtn(){
+    function HiddenBtn(){
       console.log(userId);
       if(userId !== selectedItem.uploaderId){
         return (
@@ -81,7 +81,7 @@ export default function FileUpdateModal() {
 
   return (
     <div>
-        <hiddenBtn />
+        <HiddenBtn />
 			<ThemeProvider theme={mainTheme}>
       <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Update Document</DialogTitle>

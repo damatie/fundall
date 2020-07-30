@@ -13,6 +13,16 @@ import * as Actions from '../store/actions';
 import ProgressBtn from 'app/shared/progressBtn';
 import employeeReducer from 'app/store/reducers';
 import * as employeeActions from 'app/store/actions';
+import makeStyles from '@material-ui/core/styles/makeStyles';
+import GridSystem from 'app/shared/gridSystem';
+
+const useStyles = makeStyles(theme => ({
+	grid: {
+		display: 'grid',
+		gridTemplateColumns: '1fr 1fr',
+		gridGap: 20
+	}
+}));
 
 const durations = [
   {value: '1 month', id: 1},
@@ -46,6 +56,7 @@ const matchRole = (data, role) => {
 }
 
 function RequestLoanTab(props) {
+	const classes = useStyles();
 	const dispatch = useDispatch();
 
 	const [isFormValid, setIsFormValid] = useState(true);
@@ -103,8 +114,8 @@ function RequestLoanTab(props) {
 				ref={formRef}
 				className="flex flex-col justify-center w-full"
 			>
-
-				<TextFieldFormsy
+				<GridSystem>
+				{/* <TextFieldFormsy
 					className="mb-16"
 					type="number"
 					name="annualPay"
@@ -127,7 +138,7 @@ function RequestLoanTab(props) {
 					}}
 					variant="outlined"
 					required
-				/>
+				/> */}
 
         <TextFieldFormsy
 					className="mb-16"
@@ -154,7 +165,7 @@ function RequestLoanTab(props) {
 					required
 				/>
 
-				<TextFieldFormsy
+				{/* <TextFieldFormsy
 					className="mb-16"
 					type="number"
 					name="deductableAmount"
@@ -177,7 +188,7 @@ function RequestLoanTab(props) {
 					}}
 					variant="outlined"
 					required
-				/>
+				/> */}
 
         <TextFieldFormsy
 					className="mb-16"
@@ -204,10 +215,62 @@ function RequestLoanTab(props) {
 					required
 				/>
 
+				<TextFieldFormsy
+					className="mb-16"
+					type="number"
+					name="number"
+					label="Phone number"
+					// value={id ? loan.data.amountRequested : ''}
+					validations={{
+						minLength: 1
+					}}
+					validationErrors={{
+						minLength: 'Min character length is 1'
+					}}
+					InputProps={{
+						endAdornment: (
+							<InputAdornment position="end">
+								<Icon className="text-20" color="action">
+									phone
+								</Icon>
+							</InputAdornment>
+						)
+					}}
+					variant="outlined"
+					required
+				/>
+
+				<TextFieldFormsy
+					className="mb-16"
+					type="text"
+					name="residentialAddress"
+					label="Residential address"
+					// value={id ? loan.data.amountRequested : ''}
+					validations={{
+						minLength: 1
+					}}
+					validationErrors={{
+						minLength: 'Min character length is 1'
+					}}
+					InputProps={{
+						endAdornment: (
+							<InputAdornment position="end">
+								<Icon className="text-20" color="action">
+									home
+								</Icon>
+							</InputAdornment>
+						)
+					}}
+					variant="outlined"
+					required
+				/>
+
+
+
 				<SelectFormsy
           className="my-16"
           name="duration"
-          label="Duration"
+          label="Purpose Duration"
           value={id ? loan.data.duration : 'none'}
           // validations="not-equals:none"
           validationError="requried"
@@ -219,7 +282,7 @@ function RequestLoanTab(props) {
 					))}
         </SelectFormsy>
 
-        <SelectFormsy
+        {/* <SelectFormsy
           className="my-16"
           name="employementType"
           label="Employement type"
@@ -232,7 +295,7 @@ function RequestLoanTab(props) {
 					{['full-time', 'part-time', 'contract'].map(item => (
 						<MenuItem value={item} key={item}>{item}</MenuItem>
 					))}
-        </SelectFormsy>
+        </SelectFormsy> */}
 
 				<SelectFormsy
           className="my-16"
@@ -278,9 +341,9 @@ function RequestLoanTab(props) {
 						<MenuItem value={item.id} key={item.id}>{`${item.firstName} ${item.lastName}`}</MenuItem>
 					))}
         </SelectFormsy>
-
+				</GridSystem>
 				<TextFieldFormsy
-					className="mb-16"
+					className="my-16"
 					type="text"
 					name="purpose"
           label="Purpose"
@@ -301,7 +364,7 @@ function RequestLoanTab(props) {
 					}}
           variant="outlined"
 				/>
-				{id ? <></> : <ProgressBtn success={loan.success} loading={loan.loadings} content='Request' disable={!isFormValid}/>}
+				{id ? <></> : <ProgressBtn success={loan.success} loading={loan.loadings} content='Request Loan' disable={!isFormValid}/>}
 
 				{loan.data.status === 'pending' ? <ProgressBtn success={loan.success} loading={loan.updating} content='Update Request' disable={!isFormValid}/> : <></>}
 			</Formsy>

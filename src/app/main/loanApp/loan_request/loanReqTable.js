@@ -73,7 +73,11 @@ function LoanReqTable(props) {
 	}, []);
 
 	useEffect(() => {
-		setData(loanHistory.loanHistory);
+		if(props.type !== 'returned') {
+			setData(loanHistory.loanHistory);
+		} else {
+			setData([]);
+		}
 	})
 
 	function handleRequestSort(event, property) {
@@ -99,7 +103,8 @@ function LoanReqTable(props) {
 	}
 
 	function handleClick(item) {
-		history.push(`/loan/request/new/${item.id}`)
+		if (props.type !== 'returned') history.push(`/loan/request/new/${item.id}`)
+		
   }
   
 
