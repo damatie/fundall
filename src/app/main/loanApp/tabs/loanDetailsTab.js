@@ -16,6 +16,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import LoanHistory from './loanHistory';
 import { TextField } from '@material-ui/core';
+import LoanActionsBtn from '../loanActionsBtn';
 
 function LoanDetailsTab({setValue}) {
 	const loan = useSelector(({ loan }) => loan.loan.data);
@@ -106,6 +107,7 @@ function LoanDetailsTab({setValue}) {
 								<Typography className="font-bold mb-4 text-15">Purpose</Typography>
 								<Typography>{loan.purpose}</Typography>
 							</div>
+							{loan.status === 'approved' ? '' : <LoanActionsBtn />}
 						</CardContent>
 					</Card>
 
@@ -158,6 +160,7 @@ function LoanDetailsTab({setValue}) {
 								{/* <Typography className="font-bold mb-4 text-15">Payment Mode</Typography> */}
 								{/* <Typography>{leaveRequestDetails.reason}</Typography> */}
 							</div>
+							<LoanActionsBtn />
 						</CardContent>
 				</Card> : <></> }
         {/* </FuseAnimateGroup> */}

@@ -91,7 +91,7 @@ function LoanReq(props) {
 									<Icon className="text-20">
 										{theme.direction === 'ltr' ? 'arrow_back' : 'arrow_forward'}
 									</Icon>
-									<span className="mx-4">Leave options</span>
+									<span className="mx-4">Loan Request</span>
 								</Typography>
 							</FuseAnimate>
 
@@ -112,7 +112,7 @@ function LoanReq(props) {
 										{id ? 
 										<ProgressBtn success={loan.success} loading={loan.closing} content='Cancel Loan' onClick={e => {
 											dispatch(Actions.cancelLoan(id, history))
-										}}/> :
+										}} color='red'/> :
 										<Typography className="text-16 sm:text-20 truncate">
 										  New Loan Request
 										</Typography>}

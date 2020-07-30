@@ -16,6 +16,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import DepartmentLeave from './deptLeave';
 import LeaveHistory from './leaveHistory';
+import LeaveActionBtn from '../actionBtn';
 
 function EmployeeLeaveReq({user}) {
 
@@ -73,16 +74,19 @@ function EmployeeLeaveReq({user}) {
 
               <div className="mb-24">
 								<Typography className="font-bold mb-4 text-15">Backup employee</Typography>
-								{/* <Typography>{leaveRequestDetails.backUpEmployee}</Typography> */}
+								<Typography>{leaveRequestDetails.backUpEmployeeName}</Typography>
 							</div>
 
               <div className="mb-24">
 								<Typography className="font-bold mb-4 text-15">Leave reason</Typography>
 								<Typography>{leaveRequestDetails.reason}</Typography>
 							</div>
+							<LeaveActionBtn />
 						</CardContent>
 					</Card>
-
+					<div>
+						
+					</div>
         </FuseAnimateGroup>
 			</div>
 
