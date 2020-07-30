@@ -262,16 +262,3 @@ export function deleteDocument(id){
 	};
 };
 
-export function downloadDocument(url, name){
-	fetch( url, 'get' )
-	.then((response) => response.blob())
-	  .then((blob) => {
-		const url = window.URL.createObjectURL(new Blob([blob]));
-		const link = document.createElement('a');
-		link.href = url;
-		link.setAttribute('download', name);
-		document.body.appendChild(link);
-		link.click();
-		link.parentNode.removeChild(link);
-	});
-}

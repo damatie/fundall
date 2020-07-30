@@ -11,6 +11,7 @@ import Icon from '@material-ui/core/Icon';
 import IconButton from '@material-ui/core/IconButton';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
+import Hidden from '@material-ui/core/Hidden';
 import { TextFieldFormsy, SelectFormsy, } from '@fuse/core/formsy';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Formsy from 'formsy-react';
@@ -64,11 +65,11 @@ export default function FileUpdateModal() {
       console.log(userId);
       if(userId !== selectedItem.uploaderId){
         return (
-          <hidden>
+          <Hidden>
               <IconButton>
                   <Icon onClick={handleClickOpen}>edit</Icon>
               </IconButton>
-          </hidden>
+          </Hidden>
         )
       }else{
         return (

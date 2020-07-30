@@ -140,7 +140,7 @@ function FileList(props) {
 	
 						<TableBody>
 						{_.orderBy(
-								files,
+								data,
 								[
 									o => {
 										switch (order.id) {
