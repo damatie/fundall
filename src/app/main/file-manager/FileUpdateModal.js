@@ -24,8 +24,9 @@ import { useAuth } from 'app/hooks/useAuth';
 
 export default function FileUpdateModal() {
     const dispatch = useDispatch();
-    const files = useSelector(({ fileManagerApp }) => fileManagerApp.files);
+    const files = useSelector(({ fileManagerApp }) => fileManagerApp.files.data);
     const selectedItem = useSelector(({ fileManagerApp }) => files[fileManagerApp.selectedItemId]);
+    const loading = useSelector(({ fileManagerApp }) => files[fileManagerApp.files.loading]);
     const [open, setOpen] = useState(false);
     const [hideBtn, setHideBtn] = useState(false);
     const [isFormValid, setIsFormValid] = useState(true);

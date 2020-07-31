@@ -21,7 +21,7 @@ import reducer from './store/reducers';
 
 function FileManagerApp() {
 	const dispatch = useDispatch();
-	const searchText = useSelector(({ fileManagerApp }) => fileManagerApp.searchText);
+	const searchText = useSelector(({ fileManagerApp }) => fileManagerApp.files.searchText);
 	const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
 	const pageLayout = useRef(null);
 
