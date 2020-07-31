@@ -14,6 +14,8 @@ import ProgressBtn from 'app/shared/progressBtn';
 import employeeReducer from 'app/store/reducers';
 import * as employeeActions from 'app/store/actions';
 import Typography from '@material-ui/core/Typography';
+import GridSystem from 'app/shared/gridSystem';
+import { useForm } from '@fuse/hooks';
 
 const matchRole = (data, role) => {
 	const arr = [];
@@ -34,6 +36,11 @@ function RequestSalaryAdvTab(props) {
 	const salaryAdvance = useSelector(({ salaryAdvance }) => salaryAdvance.salaryAdvance);
 	const profile = useSelector(({ profile }) => profile);
 	const employeeList = useSelector(({ employeeList }) => employeeList);
+
+	const { form, setForm, handleChange } = useForm({
+		amount: 0,
+		netSalary: 0
+	})
 
 	useEffect(() => {
 		if(!profile.loading) {
@@ -70,64 +77,73 @@ function RequestSalaryAdvTab(props) {
 				ref={formRef}
 				className="flex flex-col justify-center w-full"
 			>
-
-        <TextFieldFormsy
-					className="mb-16"
-					type="number"
-					name="amount"
-					label="Amount requested"
-					validations={{
-						minLength: 1
-					}}
-					validationErrors={{
-						minLength: 'Min character length is 1'
-					}}
-					InputProps={{
-						endAdornment: (
-							<InputAdornment position="end">
-								<Icon className="text-20" color="action">
-                  attach_money
-								</Icon>
-							</InputAdornment>
-						)
-					}}
-					variant="outlined"
-					required
-				/>
-
-				<TextFieldFormsy
-					className="mb-16"
-					type="number"
-					name="netSalary"
-					label="Net Salary"
-					validations={{
-						minLength: 1
-					}}
-					validationErrors={{
-						minLength: 'Min character length is 1'
-					}}
-					InputProps={{
-						endAdornment: (
-							<InputAdornment position="end">
-								<Icon className="text-20" color="action">
-                  attach_money
-								</Icon>
-							</InputAdornment>
-						)
-					}}
-					variant="outlined"
-					required
-				/>
-
-        <Typography variant="subtitle1" color="initial">Repayment Date</Typography>
-        <TextFieldFormsy
-					className="mb-16"
-					type="date"
-					name="repaymentDate"
-					// label="Repayment Date"
-					variant="outlined"
-					required
-				/>
+				<GridSystem>
+				<div>
+					<TextFieldFormsy
+						className="mb-16 w-full"
+						type="number"
+						name="amount"
+						label="Amount requested"
+						onChange={handleChange}
+						validations={{
+							minLength: 1
+						}}
+						validationErrors={{
+							minLength: 'Min character length is 1'
+						}}
+						InputProps={{
+							endAdornment: (
+								<InputAdornment position="end">
+									<Icon className="text-20" color="action">
+										money
+									</Icon>
+								</InputAdornment>
+							)
+						}}
+						variant="outlined"
+						required
+					/>
+					Amount: {new Intl.NumberFormat().format(form.amount)}
+				</div>
+				
+				<div>
+					<TextFieldFormsy
+						className="mb-16 w-full"
+						type="number"
+						name="netSalary"
+						label="Net Salary"
+						onChange={handleChange}
+						validations={{
+							minLength: 1
+						}}
+						validationErrors={{
+							minLength: 'Min character length is 1'
+						}}
+						InputProps={{
+							endAdornment: (
+								<InputAdornment position="end">
+									<Icon className="text-20" color="action">
+										money
+									</Icon>
+								</InputAdornment>
+							)
+						}}
+						variant="outlined"
+						required
+					/>
+					Amount: {new Intl.NumberFormat().format(form.netSalary)}
+				</div>
+				<div style={{marginTop: '-10px'}}>
+					<Typography variant="subtitle1" color="initial">Repayment Date</Typography>
+					<TextFieldFormsy
+						className="mb-16 w-full"
+						type="date"
+						name="repaymentDate"
+						// label="Repayment Date"
+						variant="outlined"
+						required
+					/>
+				</div>
 
 				<SelectFormsy
           className="my-16"
@@ -173,6 +189,7 @@ function RequestSalaryAdvTab(props) {
 						<MenuItem value={item.id} key={item.id}>{`${item.firstName} ${item.lastName}`}</MenuItem>
 					))}
         </SelectFormsy>
+				</GridSystem>
 				<ProgressBtn success={salaryAdvance.success} loading={salaryAdvance.loadings} content='Request' disable={!isFormValid}/>
 			</Formsy>
 		</div>

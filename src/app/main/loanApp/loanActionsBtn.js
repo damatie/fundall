@@ -5,7 +5,7 @@ import swal from 'sweetalert2';
 import { useParams, Link, useHistory, Redirect } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
-const LoanActionsBtn = () => {
+const LoanActionsBtn = props => {
   const header = fetchHeaders();
 	const [selectedTab, setSelectedTab] = useState(0);
 	const [success1, setSuccess1] = useState(false);
@@ -62,50 +62,67 @@ const LoanActionsBtn = () => {
 	}
 
 	const reject = url => {
-		setLoading2(true);
-		fetch(`${url}${id}`, {
-			...header.delHeader()
-		}).then(res => res.json()).then(
-			data => {
-				setLoading2(false);
-				if(data) {
-					swal.fire({
-						title: 'Reject Loan',
-						text: data.message,
-						icon: 'success',
-						timer: 3000
-					})
-					setSuccess2(true);
-					history.push({
-						pathname: '/loan/review/list'
-					})
+		swal.fire({
+			title: 'Reason for canceling the loan',
+			input: 'textarea',
+			inputPlaceholder: 'Type your message here...',
+			inputAttributes: {
+				'aria-label': 'Type your message here'
+			},
+			showCancelButton: true,
+			confirmButtonText: 'Send',
+			preConfirm: (input) => {
+				if (input) {
+					setLoading2(true);
+					swal.showLoading();
+					fetch(`${url}${id}`, {
+						...header.delHeader()
+					}).then(res => res.json()).then(
+						data => {
+							setLoading2(false);
+							if(data) {
+								swal.fire({
+									title: 'Reject Loan',
+									text: data.message,
+									icon: 'success',
+									timer: 3000
+								})
+								setSuccess2(true);
+								history.push({
+									pathname: '/loan/review/list'
+								})
+							} else {
+								swal.fire({
+									title: 'Reject Loan',
+									text: data.message,
+									icon: 'error',
+									timer: 3000
+								})
+								setSuccess2(true);
+							}
+						}
+					).catch(e => {
+						setLoading2(false);
+						console.error(e)});
 				} else {
-					swal.fire({
-						title: 'Reject Loan',
-						text: data.message,
-						icon: 'error',
-						timer: 3000
-					})
-					setSuccess2(true);
+					swal.showValidationMessage('Please enter your message')   
 				}
 			}
-		).catch(e => {
-			setLoading2(false);
-			console.error(e)});
+		})
 	}
 
 	const handleApproveLeave = () => {
 		switch(loan.status) {
 			case 'pending': {
-				approve('https://hris-cbit.herokuapp.com/api/v1/loan/approve/hod/');
+				approve('https://hris-cbit.herokuapp.com/api/v1/loan/approve/hod/', {});
 				break;
 			}
 			case 'reviewed': {
-				approve('https://hris-cbit.herokuapp.com/api/v1/loan/approve/hr/');
+				approve('https://hris-cbit.herokuapp.com/api/v1/loan/approve/hr/', {});
 				break;
 			}
 			case 'approved': {
-				approve('https://hris-cbit.herokuapp.com/api/v1/loan/approve/finance/');
+				approve('https://hris-cbit.herokuapp.com/api/v1/loan/approve/finance/', {...props.form});
 				break;
 			}
 			default: {
@@ -129,7 +146,8 @@ const LoanActionsBtn = () => {
 				break;
 			}
 			default: {
-				return 'hello';
+				reject('')
+				break;
 			}
 		}
 	}
@@ -204,13 +222,54 @@ const LoanActionsBtn = () => {
 			setLoading2(false);
 			console.error(e)});
   }
-  
+	
+	const handelReturnLeave = () => {
+		setLoading3(true);
+		fetch(`https://hris-cbit.herokuapp.com/api/v1/loan/approve/close/${id}`, {
+			...header.reqHeader(
+				'PATCH',
+				{
+					
+				}
+			)
+		}).then(res => res.json()).then(
+			data => {
+				setLoading3(false);
+				if(data.success) {
+					swal.fire({
+						title: 'Return Loan',
+						text: data.message,
+						icon: 'success',
+						timer: 3000
+					})
+					setSuccess3(true);
+					history.push({
+						pathname: '/loan/review/list'
+					})
+				} else {
+					swal.fire({
+						title: 'Return Loan',
+						text: data.message,
+						icon: 'error',
+						timer: 3000
+					})
+					setSuccess3(true);
+				}
+			}
+		).catch(e => {
+			setLoading3(false);
+			console.error(e)});
+	}
 
   return (
     <div className="flex items-center justify-evenly">
       {loan.status !== 'open' && loan.status !== 'closed' ? 
       <>
-        <ProgressBtn loading={loading3} success={success3} color='primary' onClick={handleApproveLeave} content='Approve Loan'/> 
+				{props.form.amountApproved > loan.amountRequested ? <ProgressBtn loading={loading3} success={success3} color='primary' onClick={handelReturnLeave} content='Return Loan'/> :
+
+				<ProgressBtn loading={loading3} success={success3} color='primary' onClick={handleApproveLeave} content='Approve Loan'/>
+
+				}
         <ProgressBtn loading={loading2} success={success2} color='red' onClick={handleReject} content='Reject Loan' /> 
       </>
       : <></>}
