@@ -6,9 +6,12 @@ import {fetchHeaders} from 'app/shared/fetchHeaders'
 
 export const GET_FILES = 'GET FILES';
 export const LOADING_FILES = 'LOADING FILES';
-export const UPDATE_FILES = 'UPDATE FILES';
 export const CREATE_FILE_SUCCESS = 'CREATE FILE_SUCCESS';
 export const CREATE_FILE_ERROR = 'CREATE FILE_ERROR';
+export const UPDATE_FILE_SUCCESS = 'UPDATE FILE_SUCCESS';
+export const UPDATE_FILE_ERROR = 'UPDATE FILE_ERROR';
+export const DELETE_FILE_SUCCESS = 'DELETE FILE_SUCCESS';
+export const DELETE_FILE_ERROR = 'DELETE FILE_ERROR';
 export const SET_FILE_SEARCH_TEXT = 'SET FILE SEARCH TEXT';
 const auth = useAuth;
 const basUrl = getBaseUrl;
@@ -27,19 +30,19 @@ const headers = fetchHeaders();
 		type: LOADING_FILES
 	  })
 	  fetch(`${basUrl()}/library/new-doc`, {...headers.fdHeader('post', payload)}
-      ).then(res => res.json()).then( data => {
+      ).then(res => res.json()).then( async data => {
 		// let data = response.data;
-		console.log(data)
+		// console.log(data)
 		if(data.success) {
+		  dispatch({
+			type: CREATE_FILE_SUCCESS,
+			payload: await getFile()
+		  })
 		  swal.fire({
 			title: 'Create Document',
 			text: data.message,
 			timer: 3000,
 			icon: 'success'
-		  })
-		  getFiles();
-		  dispatch({
-			type: CREATE_FILE_SUCCESS
 		  })
 		} else {
 		  swal.fire({
@@ -75,29 +78,28 @@ const headers = fetchHeaders();
 		type: LOADING_FILES
 	  })
 	  fetch(`${basUrl()}/library/update-doc/${id}`, {...headers.reqHeader('patch', model)}
-      ).then(res => res.json()).then( data => {
+      ).then(res => res.json()).then(async data => {
 		// let data = response.data;
-		console.log(data)
 		if(data.success) {
+		  dispatch({
+			type: UPDATE_FILE_SUCCESS,
+			payload: await getFile()
+		  })
 		  swal.fire({
-			title: 'Create Document',
+			title: 'Update Document',
 			text: data.message,
 			timer: 3000,
 			icon: 'success'
 		  })
-		  getFiles();
-		  dispatch({
-			type: CREATE_FILE_SUCCESS
-		  })
 		} else {
 		  swal.fire({
-			title: 'Create Document',
+			title: 'Update Document',
 			text: data.error,
 			timer: 3000,
 			icon: 'error'
 		  })
 		  dispatch({
-			type: CREATE_FILE_ERROR
+			type: UPDATE_FILE_ERROR
 		  })
 		}
 	  }).catch(e => {
@@ -109,7 +111,7 @@ const headers = fetchHeaders();
 			icon: 'error'
 		  })
 		dispatch({
-		  type: CREATE_FILE_ERROR
+		  type: UPDATE_FILE_ERROR
 		})
 	  })
 	}
@@ -123,14 +125,10 @@ export function getFiles() {
       });
 
 	return dispatch =>{
-		swal.fire("Processing ...");
-		swal.showLoading();
 		dispatch({
 			type: LOADING_FILES
 		  })
 		request.then(response => {
-			swal.hideLoading();
-			swal.close();
 			response.data.success ? 
           dispatch({
             type: GET_FILES,
@@ -191,14 +189,6 @@ export function getFileById(id) {
 	}
 }
 
-// function getFileSize(url) {
-// 	const request = axios.get(url);
-
-// 	return request.then(response => {
-// 			response.headers.
-// 		}
-// 	}
-// }
 
 export function deleteDocument(id){
 	console.log(id);
@@ -219,21 +209,23 @@ export function deleteDocument(id){
 		confirmButtonText: 'Yes, delete it!',
 		showLoaderOnConfirm: true,
 		preConfirm: () => [
-		  fetch(`${basUrl()}/library/delete-one/${id}`, {...headers.delHeader('patch')})
-		  .then(res => res.json()).then(
-			data => {
+		  fetch(`${basUrl()}/library/delete-one/${id}`, {...headers.delHeader()})
+		  .then(res => res.json()).then(async data => {
 			  if(data.success) {
 				done = true;
-				console.log(data);
+				return dispatch({
+				  type: DELETE_FILE_SUCCESS,
+				  payload: await getFile()
+				})
 				swal.fire(
 				  'Deleted!',
 				  'Your file has been deleted.',
 				  'success'
 				)
-				return dispatch({
-				  type: UPDATE_FILES
-				})
 			  } else {
+				return dispatch({
+					type: DELETE_FILE_ERROR
+				  })
 				swal.fire(
 				  'Deleted!',
 				  'something went wrong',
@@ -243,6 +235,9 @@ export function deleteDocument(id){
 			}
 		  ).catch(e => {
 			  console.log(e);
+			  return dispatch({
+				  type: DELETE_FILE_ERROR
+				})
 			swal.fire(
 			'Oops!',
 			'something went wrong',
@@ -262,16 +257,17 @@ export function deleteDocument(id){
 	};
 };
 
-export function downloadDocument(url, name){
-	fetch( url, 'get' )
-	.then((response) => response.blob())
-	  .then((blob) => {
-		const url = window.URL.createObjectURL(new Blob([blob]));
-		const link = document.createElement('a');
-		link.href = url;
-		link.setAttribute('download', name);
-		document.body.appendChild(link);
-		link.click();
-		link.parentNode.removeChild(link);
-	});
+export function getFile() {
+	const request = axios.get(`${basUrl()}/library/all-docs`,{
+        headers: {
+          Authorization: `JWT ${auth().getToken}`
+        }
+      });
+
+	return request.then(response => {
+			return response.data.success ? response.data.data : [];
+		}).catch(err => {
+			return []
+		});
 }
+
