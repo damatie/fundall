@@ -17,10 +17,17 @@ import { useSelector } from 'react-redux';
 import LoanHistory from './loanHistory';
 import { TextField } from '@material-ui/core';
 import LoanActionsBtn from '../loanActionsBtn';
+import { useForm } from '@fuse/hooks';
+import _ from '@lodash';
 
 function LoanDetailsTab({setValue}) {
 	const loan = useSelector(({ loan }) => loan.loan.data);
-	const profile = useSelector(({ profile}) => profile.data)
+	const profile = useSelector(({ profile}) => profile.data);
+
+	const { handleChange, form, setForm} = useForm({
+		amountApproved: 0,
+		deductableAmount: 0,
+	});
 
 	return (
 		<div className="md:flex">
@@ -60,27 +67,31 @@ function LoanDetailsTab({setValue}) {
 								<Typography>{loan.amountRequested}</Typography>
 							</div>
 
-							<div className="mb-24">
-								<Typography className="font-bold mb-4 text-15">Deductable Amount</Typography>
-								<Typography>{loan.deductableAmount}</Typography>
-							</div>
-
-              {profile.role.name === 'Finance manager' ? 
+							{profile.role.name === 'Finance manager' ? 
+								<>
 								<div className="mb-24">
 									<Typography className="font-bold mb-4 text-15">Amount Approved</Typography>
 									<Typography>{loan.amountApproved}</Typography>
-									<TextField label='Amount approved' type='number' className='w-full' variant='outlined' onChange={e => setValue(e.target.value)}/>
+									<TextField error={form.amountApproved > loan.amountApproved} name='amountApproved' type='number' className='w-full' variant='outlined' onChange={handleChange}/>
 								</div> 
+
+								<div className="mb-24">
+									<Typography className="font-bold mb-4 text-15">Deductable Amount</Typography>
+									<Typography>{loan.deductableAmount}</Typography>
+									<TextField error={form.deductableAmount < 0} name='deductableAmount' type='number' className='w-full' variant='outlined' onChange={handleChange} required/>
+								</div>
+
+								{/* <div className="mb-24">
+									<Typography className="font-bold mb-4 text-15">Annual Pay</Typography>
+									<Typography>{loan.annualPay}</Typography>
+									<TextField type='number' className='w-full' variant='outlined' onChange={onChange={handleChange}} requried/>
+								</div> */}
+								</>
 							: <></>}
 
               <div className="mb-24">
 								<Typography className="font-bold mb-4 text-15">Employement Type</Typography>
 								<Typography>{loan.employementType}</Typography>
-							</div>
-
-              <div className="mb-24">
-								<Typography className="font-bold mb-4 text-15">Annual Pay</Typography>
-								<Typography>{loan.annualPay}</Typography>
 							</div>
 
               <div className="mb-24">
@@ -107,7 +118,7 @@ function LoanDetailsTab({setValue}) {
 								<Typography className="font-bold mb-4 text-15">Purpose</Typography>
 								<Typography>{loan.purpose}</Typography>
 							</div>
-							{loan.status === 'approved' ? '' : <LoanActionsBtn />}
+							{loan.status === 'approved' ? '' : <LoanActionsBtn form={form}/>}
 						</CardContent>
 					</Card>
 
@@ -160,7 +171,7 @@ function LoanDetailsTab({setValue}) {
 								{/* <Typography className="font-bold mb-4 text-15">Payment Mode</Typography> */}
 								{/* <Typography>{leaveRequestDetails.reason}</Typography> */}
 							</div>
-							<LoanActionsBtn />
+							<LoanActionsBtn form={form}/>
 						</CardContent>
 				</Card> : <></> }
         {/* </FuseAnimateGroup> */}

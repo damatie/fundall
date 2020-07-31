@@ -36,7 +36,7 @@ function LoanReq() {
 			}
 			content={
 				<>
-				{tabValue === 0 && (<LoanReqTable />)}
+				{tabValue === 0 && (<LoanReqTable type='normal'/>)}
 				{tabValue === 1 && (<LoanReqTable type='returned'/>)}
 				</>
 			}

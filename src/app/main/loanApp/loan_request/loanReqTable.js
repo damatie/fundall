@@ -78,7 +78,7 @@ function LoanReqTable(props) {
 		} else {
 			setData([]);
 		}
-	})
+	}, [loanHistory])
 
 	function handleRequestSort(event, property) {
 		const id = property;
