@@ -84,12 +84,14 @@ const user = {
 function BlogDetail({ match }) {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const blogPost = useSelector(state => state.blog.getOneBlogPost.data);
-  const comments = useSelector(state => state.blog.getAllCommentsForAPost.data);
+  const blogPost = useSelector(state => state.blog.getOneBlogPost.data) || [];
+  const comments = useSelector(state => state.blog.getAllCommentsForAPost.data) || [];
 
   const [likes, setLikes] = useState(0);
   const [clicked, setClicked] = React.useState(false);
   const [content, setContent] = useState('');
+  const [isCommentLiked, setIsCommentLiked] = useState(false);
+
 
   const postId = match.params.post_id;
 
@@ -97,6 +99,19 @@ function BlogDetail({ match }) {
     dispatch(blogActions.getOneBlogPost(postId));
     dispatch(blogActions.getAllCommentsForAPost(postId));
   }, []);
+
+  useEffect(() => {
+    console.log(comments);
+    // if (comments.length > 0) {
+    //   comments.forEach((comment) => CheckForCommentLike(comment))
+    // }
+  }, [comments])
+
+  // const CheckForCommentLike = (comment) => {
+  //   const isCommentLiked = comment.commentLike.find(comment => comment.employeeId === 4);
+  //   console.log(isCommentLiked);
+  //   isCommentLiked ? setIsCommentLiked(true) : setIsCommentLiked(false);
+  // }
 
   const handleLikes = () => {
     setClicked(prevState => prevState = !prevState);
@@ -155,7 +170,13 @@ function BlogDetail({ match }) {
                 {(comments.length > 0) && comments.map((comment, index) => {
                   return (
                     <Paper variant="outlined" key={index} className={classes.replyComment}>
-                      <SingleComment comment={comment} postId={postId} moreContent={buttonContent} />
+                      <SingleComment
+                        comment={comment}
+                        isLiked={isCommentLiked}
+                        postId={postId}
+                        moreContent={buttonContent}
+                        onClick={(value) => setIsCommentLiked(value)}
+                      />
                       <ReplyComment reply={comment.replyComment} commentId={comment.id} postId={postId} />
                     </Paper>
                   )

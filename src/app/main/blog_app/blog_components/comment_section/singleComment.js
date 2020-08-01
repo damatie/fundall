@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
@@ -40,8 +40,7 @@ function BlogComment(props) {
   const [showInput, setShowInput] = useState(true);
   const [content, setContent] = useState(props.comment.content);
   const [open, setOpen] = useState(false);
-  const [likes, setLikes] = useState(props.comment.commentLike || []);
-  const [clicked, setClicked] = useState(false);
+  const [likes, setLikes] = useState(props.comment.commentLike);
   const [value, setValue] = useState('');
 
   const showReplyInput = (e) => {
@@ -102,18 +101,18 @@ function BlogComment(props) {
         setOpen(true);
     }
   }
-
+  
   const handleClose = () => {
     setOpen(false);
   };
 
   const handleLikes = () => {
-    setClicked(prevState => prevState = !prevState);
-    !clicked ? setLikes(prev => prev + 1) : setLikes(prev => prev - 1);
+    props.onClick(!props.isLiked);
+    props.isLiked ? setLikes(prev => prev - 1) : setLikes(prev => prev + 1);
     dispatch(blogActions.likeAComment(props.comment.id));
   };
 
-  const getColor = () => !clicked ? '#4d5760' : '#F44336';
+  const getColor = () => !props.isLiked ? '#4d5760' : '#F44336';
 
   return (
     <>
@@ -151,7 +150,7 @@ function BlogComment(props) {
         ? <div className={`${classes.dFlex} ${classes.spaceBtw}`}>
             <div>
               <IconButton aria-label="like" onClick={handleLikes} style={{color: getColor()}} component="span">
-                {!clicked ? <FavoriteBorder /> : <Favorite />}
+                {props.isliked && (!props.isliked ? <FavoriteBorder /> : <Favorite />)}
               </IconButton>
               <Typography varaint="body1" component="span" className={classes.userName}>
                 {props.comment.commentLike && likes.length}

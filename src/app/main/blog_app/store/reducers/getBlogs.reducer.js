@@ -16,6 +16,18 @@ const getBlogs = (state = initialState, action) => {
 				data: action.payload
 			};
 		}
+		case Actions.LIKE_AND_UNLIKE_BLOGPOST_SUCCESS: {
+			const newData = state.data.map((post) => {
+				if (post.id === action.payload.postId) post.likes.push(action.payload);
+			})
+			return {
+				...initialState,
+				success: false,
+				loading: false,
+				error: {},
+				data: newData,
+			};
+		}
 		case Actions.GETBLOGS_ERROR: {
 			return {
 				...initialState,

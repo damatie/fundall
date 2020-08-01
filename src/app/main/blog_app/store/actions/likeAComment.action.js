@@ -7,7 +7,7 @@ export const LIKE_A_COMMENT_LOADING = 'COMMENTTOPOST_LOADING';
 
 const header = fetchHeaders();
 
-export function likeAComment(data) {
+export function likeAComment(id) {
 	return dispatch => {
 		dispatch({
 			type: LIKE_A_COMMENT_LOADING
@@ -15,14 +15,15 @@ export function likeAComment(data) {
 		fetch('https://hris-cbit.herokuapp.com/api/v1/comment/likes/new', {
 			...header.reqHeader(
 				'POST',
-				{commentId: data}
+				{commentId: id}
 			)
 		}).then(res => res.json()).then(
 			comment => {
 				if(comment.success === true) {
 					console.log(comment)
 					return dispatch({
-						type: LIKE_A_COMMENT_SUCCESS
+						type: LIKE_A_COMMENT_SUCCESS,
+						payload: id
 					});
 				} else {
 					console.log(comment);

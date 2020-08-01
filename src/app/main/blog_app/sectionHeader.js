@@ -31,7 +31,7 @@ export default function SectionHeader(props) {
   const id = open ? 'simple-popover' : undefined;
 
   const moreContent = props.buttonContent.map((item, index) => {
-    if (index === 0 && location === '/blog/list') return <Button className={classes.btn} key={index} component={Link} to={`/blog/update_blog/${props.id}`}>{item}</Button>;
+    if (index === 0 && location.pathname === '/blog/list') return <Button className={classes.btn} key={index} component={Link} to={`/blog/update_blog/${props.id}`}>{item}</Button>;
     else return <Button className={classes.btn} key={index} onClick={() => props.onClick(item)}>{item}</Button>;
   });
 
