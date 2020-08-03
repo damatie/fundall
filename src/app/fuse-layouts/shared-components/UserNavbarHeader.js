@@ -39,6 +39,7 @@ const useStyles = makeStyles(theme => ({
 
 function UserNavbarHeader(props) {
 	const user = useSelector(({ auth }) => auth.user);
+	const profile = useSelector(({ profile }) => profile.data);
 
 	const classes = useStyles();
 
@@ -51,18 +52,18 @@ function UserNavbarHeader(props) {
 			className="user relative flex flex-col items-center justify-center pt-24 pb-64 mb-32 z-0"
 		>
 			<Typography className="username text-16 whitespace-no-wrap" color="inherit">
-				{user.data.displayName}
+				{`${profile.firstName} ${profile.lastName}`}
 			</Typography>
 			<Typography className="email text-13 mt-8 opacity-50 whitespace-no-wrap" color="inherit">
-				{user.data.email}
+				{profile.email}
 			</Typography>
 			<Avatar
 				className={clsx(classes.avatar, 'avatar')}
 				alt="user photo"
 				src={
 					user.data.photoURL && user.data.photoURL !== ''
-						? user.data.photoURL
-						: 'assets/images/avatars/profile.jpg'
+						? profile.profilePicture
+						: user.data.displayName[0]
 				}
 			/>
 		</AppBar>
