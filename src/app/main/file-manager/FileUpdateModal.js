@@ -11,6 +11,7 @@ import Icon from '@material-ui/core/Icon';
 import IconButton from '@material-ui/core/IconButton';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
+import Hidden from '@material-ui/core/Hidden';
 import { TextFieldFormsy, SelectFormsy, } from '@fuse/core/formsy';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Formsy from 'formsy-react';
@@ -23,8 +24,9 @@ import { useAuth } from 'app/hooks/useAuth';
 
 export default function FileUpdateModal() {
     const dispatch = useDispatch();
-    const files = useSelector(({ fileManagerApp }) => fileManagerApp.files);
+    const files = useSelector(({ fileManagerApp }) => fileManagerApp.files.data);
     const selectedItem = useSelector(({ fileManagerApp }) => files[fileManagerApp.selectedItemId]);
+    const loading = useSelector(({ fileManagerApp }) => files[fileManagerApp.files.loading]);
     const [open, setOpen] = useState(false);
     const [hideBtn, setHideBtn] = useState(false);
     const [isFormValid, setIsFormValid] = useState(true);
@@ -64,11 +66,11 @@ export default function FileUpdateModal() {
       console.log(userId);
       if(userId !== selectedItem.uploaderId){
         return (
-          <hidden>
+          <Hidden>
               <IconButton>
                   <Icon onClick={handleClickOpen}>edit</Icon>
               </IconButton>
-          </hidden>
+          </Hidden>
         )
       }else{
         return (

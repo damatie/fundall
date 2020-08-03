@@ -21,7 +21,7 @@ import reducer from './store/reducers';
 
 function FileManagerApp() {
 	const dispatch = useDispatch();
-	const searchText = useSelector(({ fileManagerApp }) => fileManagerApp.searchText);
+	const searchText = useSelector(({ fileManagerApp }) => fileManagerApp.files.searchText);
 	const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
 	const pageLayout = useRef(null);
 
@@ -44,7 +44,7 @@ function FileManagerApp() {
 						<FuseAnimate animation="transition.slideLeftIn" delay={300}>
 							<span className="text-24 mx-16">Document Library</span>
 						</FuseAnimate>
-					{/* <div className="flex flex-1 items-center justify-center px-12">
+					<div className="flex flex-1 items-center justify-center px-12">
 						<FuseAnimate animation="transition.slideDownIn" delay={300}>
 						<Paper className="flex items-center w-full max-w-512 px-8 py-4 rounded-8" elevation={1}>
 							<Icon color="action">search</Icon>
@@ -62,7 +62,7 @@ function FileManagerApp() {
 							/>
 						</Paper>
 					</FuseAnimate>
-					</div> */}
+					</div>
 					</div>
 						<div className="flex flex-1 items-end">
 							<FuseAnimate animation="transition.expandIn" delay={600}>

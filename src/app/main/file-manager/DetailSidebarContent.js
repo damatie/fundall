@@ -45,7 +45,7 @@ const useStyles = makeStyles({
 });
 
 function DetailSidebarContent(props) {
-	const files = useSelector(({ fileManagerApp }) => fileManagerApp.files);
+	const files = useSelector(({ fileManagerApp }) => fileManagerApp.files.data);
 	const selectedItem = useSelector(({ fileManagerApp }) => files[fileManagerApp.selectedItemId]);
 	const [fileSize, setFileSize] = useState('');
 

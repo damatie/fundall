@@ -12,7 +12,7 @@ import { useAuth } from 'app/hooks/useAuth';
 
 function DetailSidebarHeader(props) {
 	const dispatch = useDispatch();
-	const files = useSelector(({ fileManagerApp }) => fileManagerApp.files);
+	const files = useSelector(({ fileManagerApp }) => fileManagerApp.files.data);
 	const selectedItem = useSelector(({ fileManagerApp }) => files[fileManagerApp.selectedItemId]);
 	const linkRef = React.createRef();
 	const userId = useAuth().getId;
