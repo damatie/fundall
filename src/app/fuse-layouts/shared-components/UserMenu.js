@@ -14,6 +14,8 @@ import { Link, useHistory, Redirect } from 'react-router-dom';
 function UserMenu(props) {
 	const dispatch = useDispatch();
 	const user = useSelector(({ auth }) => auth.user);
+	const profile = useSelector(({ profile }) => profile.data);
+	
 	const [redirect, setRedirect] = useState(false);
 
 	const history = useHistory();
@@ -36,14 +38,14 @@ function UserMenu(props) {
 		<>
 			<Button className="h-64" onClick={userMenuClick}>
 				{user.data.photoURL ? (
-					<Avatar className="" alt="user photo" src={user.data.photoURL} />
+					<Avatar className="" alt="user photo" src={profile.profilePicture} />
 				) : (
 					<Avatar className="">{user.data.displayName[0]}</Avatar>
 				)}
 
 				<div className="hidden md:flex flex-col mx-12 items-start">
 					<Typography component="span" className="normal-case font-600 flex">
-						{user.data.displayName}
+						{`${profile.firstName} ${profile.lastName}`}
 					</Typography>
 					<Typography className="text-11 capitalize" color="textSecondary">
 						{user.role.toString()}
@@ -88,17 +90,11 @@ function UserMenu(props) {
 					</>
 				) : (
 					<>
-						<MenuItem component={Link} to="/pages/profile" onClick={userMenuClose} role="button">
+						<MenuItem component={Link} to="/employee/profile" onClick={userMenuClose} role="button">
 							<ListItemIcon className="min-w-40">
 								<Icon>account_circle</Icon>
 							</ListItemIcon>
 							<ListItemText primary="My Profile" />
-						</MenuItem>
-						<MenuItem component={Link} to="/apps/mail" onClick={userMenuClose} role="button">
-							<ListItemIcon className="min-w-40">
-								<Icon>mail</Icon>
-							</ListItemIcon>
-							<ListItemText primary="Inbox" />
 						</MenuItem>
 						<MenuItem
 							onClick={() => {
