@@ -30,6 +30,9 @@ import LeaveReviewConfig from 'app/main/line_manager/leave_review/leaveReviewCon
 import HrLeaveReviewConfig from 'app/main/HR/leave_review/hrLeaveReviewConfig';
 import LoanReqConfig from 'app/main/loanApp/loanReqConfig';
 import fileManagerAppConfig from 'app/main/file-manager/FileManagerAppConfig';
+import TrainingConfig from 'app/main/line_manager/training/trainingConfig';
+import HrTrainingConifg from 'app/main/HR/training/hrTrainingConfig';
+import HrTrainingConfig from 'app/main/HR/training/hrTrainingConfig';
 
 const routeConfigs = [
 	// ExampleConfig,
@@ -59,7 +62,9 @@ const routeConfigs = [
 	LeaveReviewConfig,
 	HrLeaveReviewConfig,
 	LoanReqConfig,
-	fileManagerAppConfig
+	fileManagerAppConfig,
+	TrainingConfig,
+	HrTrainingConfig
 ];
 
 const routes = [
