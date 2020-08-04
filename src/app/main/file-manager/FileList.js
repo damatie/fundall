@@ -130,9 +130,7 @@ function FileList(props) {
 				<FuseScrollbars className="flex-grow overflow-x-auto">
 					<Table>
 						<FileTableHead 
-						// numSelected={selected.length}
 						order={order}
-						// onSelectAllClick={handleSelectAllClick}
 						onRequestSort={handleRequestSort}
 						rowCount={data.length}
 						/>
