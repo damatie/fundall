@@ -92,7 +92,7 @@ function Layout1(props) {
 
 	useEffect(() => {
 		dispatch(Actions.getEmployeeProfile(id))
-	}, [profileState.success]);
+	}, [profileState.success, id]);
 
 	const appContext = useContext(AppContext);
 	const classes = useStyles(props);

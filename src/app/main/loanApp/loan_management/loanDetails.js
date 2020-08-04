@@ -102,10 +102,10 @@ function LoanDetails(props) {
 						<FuseAnimate animation="transition.slideLeftIn" delay={300}>
 							<div>
 								<Typography className="md:mx-24" variant="h4" color="inherit">
-									{`${loan.firstName} ${loan.lastName}`}
+									{`${loan.employee.firstName} ${loan.employee.lastName}`}
 								</Typography>
 								<Typography className="md:m-24" variant="subtitle1" color="inherit">
-									{`${loan.email}`}
+									{`${loan.employee.email}`}
 								</Typography>
 							</div>
 						</FuseAnimate>
@@ -131,7 +131,7 @@ function LoanDetails(props) {
 						}}
 						label="Loan details"
 					/>
-					{loan.status === 'open' ? <Tab
+					{loan.loanData.status === 'open' ? <Tab
 						classes={{
 							root: 'h-64'
 						}}
