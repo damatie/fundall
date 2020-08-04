@@ -4,19 +4,11 @@ const initialState = {
 	success: false,
 	loading: false,
 	error: {},
-	data: '',
 };
 
 const DeleteOneBlogPost = (state = initialState, action) => {
 	switch (action.type) {
-		case Actions.DELETEONEBLOGPOST_SUCCESS: {
-			return {
-				...initialState,
-				loading: false,
-				data: action.payload
-			};
-		}
-		case Actions.DELETEONEBLOGPOST_ERROR: {
+		case Actions.DELETE_ONE_BLOGPOST_ERROR: {
 			return {
 				...initialState,
 				success: false,
@@ -24,7 +16,7 @@ const DeleteOneBlogPost = (state = initialState, action) => {
 				loading: false
 			};
 		}
-		case Actions.DELETEONEBLOGPOST_LOADING: {
+		case Actions.DELETE_ONE_BLOGPOST_LOADING: {
 			return {
 				...initialState,
 				success: false,

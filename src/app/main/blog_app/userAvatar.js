@@ -19,7 +19,12 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
     marginBottom: 16,
-    color: '#4d5760',
+  },
+  name: {
+    display: 'inline-block',
+    fontWeight: 'bold',
+    fontSize: 18,
+    marginRight: 8,
   },
 }));
 
@@ -35,10 +40,10 @@ export default function UserAvatar(props) {
     <div className={classes.root}>
       <Avatar className={classes.avatar}>MN</Avatar>
       <div className={classes.userName}>
-        {props.fullName && <Typography variant="body1" style={{fontWeight: 'bold', fontSize: 16}}>
+        {props.fullName && <Typography variant="body1" className={classes.name}>
           {props.fullName}
         </Typography>}
-        {props.time && <Typography variant="caption" >Jul 24 (20 hours ago)</Typography>}
+        {props.time && <Typography variant="caption" component="span" style={{color: 'grey'}} >Jul 24 (20 hours ago)</Typography>}
         {props.userName && <Typography variant="caption">{`@${props.userName}`}</Typography>}
         {props.title && <Typography variant="caption">{props.title}</Typography>}
         {/* {(props.tag.length > 0) && relatedPostTags} */}
