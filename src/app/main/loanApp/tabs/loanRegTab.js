@@ -137,6 +137,16 @@ function LoanReqTab(props) {
 		// dispatch(Actions.deleteRoles(selected));
 	};
 
+	// check if input value is valid, if valid formate the value and return the value
+	const compareInput = data => {
+		if (data) {
+			const x = Intl.NumberFormat().format(data);
+			return x;
+		} else {
+			return '0.0'
+		}
+	};
+
 	return (
 		<div className="w-full flex flex-col">
 			<FuseScrollbars className="flex-grow overflow-x-auto">
@@ -180,7 +190,7 @@ function LoanReqTab(props) {
 										tabIndex={-1}
 										key={n.id}
 										selected={isSelected}
-										onClick={event => handleClick(n)}
+										onClick={event => handleClick(n.loan)}
 									>
                     <TableCell component="th" scope="row" align='left'>
                      
@@ -193,16 +203,16 @@ function LoanReqTab(props) {
                       {`${n.employee.email}`}
 										</TableCell>
                     <TableCell component="th" scope="row" align='left'>
-                      {n.amountRequested}
+                      {`₦ ${compareInput(n.loan.amountRequested)}`}
 										</TableCell>
                     <TableCell component="th" scope="row" align='left'>
-                      {n.deductableAmount}
+                      {`₦ ${compareInput(n.loan.deductableAmount)}`}
 										</TableCell>
                     <TableCell component="th" scope="row" align='left'>
-                      {n.amountApproved}
+                      {`₦ ${compareInput(n.loan.amountApproved)}`}
 										</TableCell>
                     <TableCell component="th" scope="row" align='right'>
-                      {n.dateRequested}
+                      {n.loan.dateRequested}
 										</TableCell>
 
 									</TableRow>

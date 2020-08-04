@@ -18,13 +18,14 @@ import LoanHistory from './loanHistory';
 import { TextField } from '@material-ui/core';
 import { fetchHeaders } from 'app/shared/fetchHeaders';
 import { useParams } from 'react-router';
+import { getBaseUrl } from 'app/shared/getBaseUrl';
 
 const headers = fetchHeaders();
 function LoanStatementTab() {
   const [statements, setStatements] = useState([]);
   const { id } = useParams();
   useEffect(() => {
-    fetch(`https://hris-cbit.herokuapp.com/api/v1/loan/statements/all/${id}`).then(res => res.json()).then(
+    fetch(`${getBaseUrl()}/loan/statements/all/${id}`).then(res => res.json()).then(
       data => {
         console.log(data)
         if(data.message) {

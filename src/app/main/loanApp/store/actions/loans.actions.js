@@ -1,5 +1,6 @@
 import { fetchHeaders } from "app/shared/fetchHeaders";
 import { handleResponse } from "app/auth/handleRes";
+import { getBaseUrl } from "app/shared/getBaseUrl";
 
 
 export const GET_ALL_PENDING_LOAN = 'GET ALL PENDING LOAN';
@@ -17,7 +18,7 @@ export const getPendingLoan = () => {
     dispatch({
       type: LOADING_LOANS
     })
-    fetch(`https://hris-cbit.herokuapp.com/api/v1/loan/all/department/request`, {
+    fetch(`${getBaseUrl()}/loan/all/department/request`, {
       ...header.getRegHeader()
     }).then(res => res.json()).then(
       data => {
@@ -34,7 +35,7 @@ export const getPendingLoan = () => {
 
 export const getReviewedLoan = () => {
   return dispatch => {
-    fetch('https://hris-cbit.herokuapp.com/api/v1/loan/all/reviewed', {
+    fetch(`${getBaseUrl()}/loan/all/reviewed`, {
       ...header.getRegHeader()
     }).then(res => handleResponse(res)).then(
       data => {
@@ -54,7 +55,7 @@ export const getApprovedLoan = () => {
     dispatch({
       type: LOADING_LOANS
     })
-    fetch(`https://hris-cbit.herokuapp.com/api/v1/loan/all/approved`, {
+    fetch(`${getBaseUrl()}/loan/all/approved`, {
       ...header.getRegHeader()
     }).then(res => res.json()).then(
       data => {
@@ -74,7 +75,7 @@ export const getReturnedLoan = () => {
     dispatch({
       type: LOADING_LOANS
     })
-    fetch(`https://hris-cbit.herokuapp.com/api/v1/loan/all/approved`, {
+    fetch(`${getBaseUrl()}/loan/all/approved`, {
       ...header.getRegHeader()
     }).then(res => res.json()).then(
       data => {
@@ -94,7 +95,7 @@ export const getOpenLoan = () => {
     dispatch({
       type: LOADING_LOANS
     })
-    fetch(`https://hris-cbit.herokuapp.com/api/v1/loan/all/open`, {
+    fetch(`${getBaseUrl()}/loan/all/open`, {
       ...header.getRegHeader()
     }).then(res => res.json()).then(
       data => {
@@ -114,7 +115,7 @@ export const getClosedLoan = () => {
     dispatch({
       type: LOADING_LOANS
     })
-    fetch(`https://hris-cbit.herokuapp.com/api/v1/loan/all/closed`, {
+    fetch(`${getBaseUrl()}/loan/all/closed`, {
       ...header.getRegHeader()
     }).then(res => res.json()).then(
       data => {
@@ -134,14 +135,14 @@ export const getEmployeeLoan = () => {
     dispatch({
       type: LOADING_LOANS
     })
-    fetch(`https://hris-cbit.herokuapp.com/api/v1/loan/all/log`, {
+    fetch(`${getBaseUrl()}/loan/all/log`, {
       ...header.getRegHeader()
     }).then(res => res.json()).then(
       data => {
-        if(data) {
+        if(data.success) {
           dispatch({
             type: EMPLOYEE_LOAN_HISTORY,
-            payload: data.data ? data.data : []
+            payload: data.loanData
           })
         }
       }
