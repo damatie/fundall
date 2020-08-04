@@ -175,7 +175,7 @@ useEffect(() => {
                 {!isLikeComment ? <FavoriteBorder /> : <Favorite />}
               </IconButton>
               <Typography varaint="body1" component="span" className={classes.userName}>
-                {likes}
+                {likes.length}
               </Typography>
             </div>
             <Button onClick={showReplyInput}>Reply</Button>
