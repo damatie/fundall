@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
@@ -37,16 +37,35 @@ const useStyles = makeStyles((theme) => ({
 function BlogComment(props) {
   const classes = useStyles();
   const dispatch = useDispatch();
+
   const [showInput, setShowInput] = useState(true);
-  const [content, setContent] = useState(props.comment.content);
+  const [content, setContent] = useState('');
   const [open, setOpen] = useState(false);
-  const [likes, setLikes] = useState(props.comment.commentLike || []);
-  const [clicked, setClicked] = useState(false);
+  const [isLikeComment, setIsLikeComment] = useState(props.isLike);
+  const [likes, setLikes] = useState([]);
+  const [employeeDetails, setEmployeeDetails] = useState();
+  const [value, setValue] = useState('');
+
+useEffect(() => {
+  if (props.comment) {
+    setContent(props.comment.content);
+    setLikes(props.comment.commentLike);
+    setEmployeeDetails(props.comment.employee);
+  }
+}, [props.comment])
 
   const showReplyInput = (e) => {
     e.preventDefault();
     setShowInput(false)
   };
+
+  useEffect(() => {
+    if (props.comment) {
+      const checkLike = (employee) => employee.employeeId !== props.userId;
+      const isLiked = props.comment.commentLike && props.comment.commentLike.every(checkLike);
+      if (!isLiked) setIsLikeComment(!isLiked);
+    }
+  }, [props.comment]);
 
   const handleChange = (value) => {
     if(value === true) {
@@ -57,14 +76,9 @@ function BlogComment(props) {
   }
 
   const handleSubmitReply = () => {
-    setShowInput(false);
+    setShowInput(true);
     const model = {commentId: props.comment.id, content};
     dispatch(blogActions.submitBlogCommentReply(model));
-  }
-
-  const selectClickedButton = (value) => {
-    if (value === 'Edit comment') setOpen(true);
-    else handleCommentDelete();
   }
 
   const handleCommentEdit = () => {
@@ -73,32 +87,64 @@ function BlogComment(props) {
     setOpen(false);
   }
 
+  const handleEditReply = () => {
+    const model = {id: props.comment.id, commentId: props.commentId, content};
+    dispatch(blogActions.updateACommentReply(model));
+    setOpen(false);
+  }
+
+  const checkForMethodToCall = () => {
+    if (value === 'Edit comment') handleCommentEdit();
+    else handleEditReply();
+  }
+
   const handleCommentDelete = () => {
     dispatch(blogActions.deleteComment(props.comment.id));
   }
 
+  const handleDeleteReply = () => {
+    console.log(props.comment.id);
+    dispatch(blogActions.deleteCommentReply(props.comment.id));
+  }
+
+  const selectClickedButton = (value) => {
+    switch(value) {
+      case 'Delete comment':
+        handleCommentDelete();
+        break;
+      case 'Delete reply':
+        handleDeleteReply();
+        break;
+      default:
+        setValue(value);
+        setOpen(true);
+    }
+  }
+  
   const handleClose = () => {
     setOpen(false);
   };
 
   const handleLikes = () => {
-    setClicked(prevState => prevState = !prevState);
-    !clicked ? setLikes(prev => prev + 1) : setLikes(prev => prev - 1);
-    dispatch(blogActions.likeAComment(props.comment.id));
+    setIsLikeComment(!isLikeComment);
+    dispatch(blogActions.likeAComment(props.comment.id, props.userId));
   };
 
-  const getColor = () => !clicked ? '#4d5760' : '#F44336';
-  const buttonContent = ['Edit comment', 'Delete commemt'];
+  const getColor = () => !isLikeComment ? '#4d5760' : '#F44336';
+
+  if (!props.comment) {
+    return <h1>Loadingkahf...</h1>
+  }
 
   return (
     <>
       <ThemeProvider theme={theme}>
         <SectionHeader
-          fullName={!props.comment.employee ? 'George Ole' : `${props.comment.employee.lastName} ${props.comment.employee.firstName}`}
-          buttonContent={buttonContent}
+          fullName={!employeeDetails ? 'George Ole' : `${employeeDetails.lastName} ${employeeDetails.firstName}`}
+          buttonContent={props.moreContent}
           onClick={(value) => selectClickedButton(value)}
         />
-        <Typography varaint="body1" className={classes.commentBody}>{props.comment && props.comment.content}</Typography>
+        <Typography varaint="body1" className={classes.commentBody}>{content}</Typography>
       </ThemeProvider>
       <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Update comment</DialogTitle>
@@ -117,7 +163,7 @@ function BlogComment(props) {
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
-          <Button variant="contained" onClick={handleCommentEdit} color="primary">
+          <Button variant="contained" onClick={checkForMethodToCall} color="primary">
             Update
           </Button>
         </DialogActions>
@@ -126,10 +172,10 @@ function BlogComment(props) {
         ? <div className={`${classes.dFlex} ${classes.spaceBtw}`}>
             <div>
               <IconButton aria-label="like" onClick={handleLikes} style={{color: getColor()}} component="span">
-                {!clicked ? <FavoriteBorder /> : <Favorite />}
+                {!isLikeComment ? <FavoriteBorder /> : <Favorite />}
               </IconButton>
               <Typography varaint="body1" component="span" className={classes.userName}>
-                {props.comment.commentLike && likes.length}
+                {likes}
               </Typography>
             </div>
             <Button onClick={showReplyInput}>Reply</Button>

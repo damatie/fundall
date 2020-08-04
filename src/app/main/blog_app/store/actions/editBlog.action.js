@@ -14,6 +14,9 @@ export function editBlogPost(data, id) {
 		dispatch({
 			type: EDITBLOG_LOADING
 		})
+		for (var pair of data.entries()) {
+			console.log(pair[0]+ ', ' + pair[1]); 
+		}
 		fetch(`https://hris-cbit.herokuapp.com/api/v1/posts/${id}`, {
 			...header.fdHeader(
 				'PUT',
@@ -24,7 +27,7 @@ export function editBlogPost(data, id) {
 				if(post.message === 'Updated!') {
 					console.log(post)
 					Swal.fire({
-						title: 'Blog update was sucessful',
+						title: 'Blog updated successfully',
 						text: post.message,
 						icon: 'success',
 						timer: 3000,

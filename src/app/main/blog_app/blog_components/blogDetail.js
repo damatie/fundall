@@ -34,6 +34,10 @@ theme.typography.body1 = {
 };
 
 const useStyles = makeStyles((theme) => ({
+  img: {
+    width: '100%',
+    height: '40vh',
+  },
   paper: {
     padding: theme.spacing(4),
     [theme.breakpoints.down('xs')]: {
@@ -65,7 +69,6 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('xs')]: {
       flexDirection: 'row',
       marginTop: 16,
-      // position: 'absolute'
     }
   },
   alignCenter: {
@@ -84,11 +87,11 @@ const user = {
 function BlogDetail({ match }) {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const blogPost = useSelector(state => state.blog.getOneBlogPost.data);
+  const blogPost = useSelector(state => state.blog.getOneBlogPost.data.postData);
   const comments = useSelector(state => state.blog.getAllCommentsForAPost.data);
+  const userId = useSelector(state => state.auth.user.id);
 
-  const [likes, setLikes] = useState(0);
-  const [clicked, setClicked] = React.useState(false);
+  const [isLikedPost, setIsLikedPost] = useState(false);
   const [content, setContent] = useState('');
 
   const postId = match.params.post_id;
@@ -98,9 +101,15 @@ function BlogDetail({ match }) {
     dispatch(blogActions.getAllCommentsForAPost(postId));
   }, []);
 
+  useEffect(() => {
+    if (blogPost) {
+      const isLiked = blogPost.employees && blogPost.employees.every(employee => employee.id !== userId);
+      if (!isLiked) setIsLikedPost(!isLiked);
+    }
+  }, [blogPost]);
+
   const handleLikes = () => {
-    setClicked(prevState => prevState = !prevState);
-    !clicked ? setLikes(prev => prev + 1) : setLikes(prev => prev - 1);
+    setIsLikedPost(prevState => prevState = !prevState);
     dispatch(blogActions.likeAndUnlikeBlogPost(postId));
   };
 
@@ -110,20 +119,22 @@ function BlogDetail({ match }) {
     setContent('');
   }
 
-  const getColor = () => !clicked ? '#4d5760' : '#F44336';
+  const getColor = () => !isLikedPost ? '#4d5760' : '#F44336';
+
+  const buttonContent = ['Edit comment', 'Delete comment'];
 
   return (
     <>
-      {(blogPost.length === 0 || comments === 0)
+      {!blogPost
         ? 'Loading...'
-        : <Grid container spacing={1} style={{marginTop: 16}}>
+        : <Grid container spacing={2} style={{marginTop: 16}}>
             <Grid item xs={12} sm={1}>
               <div className={classes.iconButton}>
                 <div className={classes.alignCenter}>
                   <IconButton aria-label="like" onClick={handleLikes} style={{color: getColor()}} component="span">
-                    {!clicked ? <FavoriteBorder /> : <Favorite />}
+                    {!isLikedPost ? <FavoriteBorder /> : <Favorite />}
                   </IconButton>
-                  <Typography style={{textAlign: 'center'}}>{likes}</Typography>
+                  <Typography style={{textAlign: 'center'}}>{blogPost.employees && blogPost.employees.length}</Typography>
                 </div>
                 <div className={classes.alignCenter}>
                   <IconButton aria-label="like" component="span">
@@ -134,27 +145,35 @@ function BlogDetail({ match }) {
               </div>
             </Grid>
             <Grid item xs={12} sm={7}>
-              <Paper className={classes.paper} variant="outlined">
-                <ThemeProvider theme={theme}>
-                  <Typography variant="h2" className={classes.title}>{blogPost.title}</Typography>
-                </ThemeProvider>
-                <BlogTags tags={user.tags} />
-                <ThemeProvider theme={theme}>
-                  <Typography variant="body1" component='p'>
-                    { blogPost && blogPost.body }
-                  </Typography>
-                </ThemeProvider>
+              <Paper variant="outlined">
+                <img src={blogPost.images[0].url} alt="" className={classes.img}></img>
+                <div className={classes.paper}>
+                  <ThemeProvider theme={theme}>
+                    <Typography variant="h2" className={classes.title}>{blogPost && blogPost.title}</Typography>
+                  </ThemeProvider>
+                  <BlogTags tags={user.tags} />
+                  <ThemeProvider theme={theme}>
+                    <Typography variant="body1" component='p'>
+                      { blogPost && blogPost.body }
+                    </Typography>
+                  </ThemeProvider>
+                </div>
               </Paper>
               <Paper className={classes.paper} variant="outlined">
                 <Typography variant="h6" component='h2' style={{marginBottom: 12}}>
                   Discussion
                 </Typography>
                 <CommentInput onClick={() => handleSubmit()} onChange={value => setContent(value)} />
-                {(comments.length > 0) && comments.map((comment) => {
+                {(comments.length > 0) && comments.map((comment, index) => {
                   return (
-                    <Paper variant="outlined" key={comment.id} className={classes.replyComment}>
-                      <SingleComment comment={comment} postId={postId} />
-                      <ReplyComment reply={comment.replyComment} postId={postId} />
+                    <Paper variant="outlined" key={index} className={classes.replyComment}>
+                      {/* <SingleComment
+                        comment={comment}
+                        postId={postId}
+                        moreContent={buttonContent}
+                        userId={userId}
+                      /> */}
+                      {/* <ReplyComment reply={comment.replyComment} commentId={comment.id} postId={postId} /> */}
                     </Paper>
                   )
                 })}

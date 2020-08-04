@@ -28,15 +28,15 @@ function BlogSideAttraction() {
     {title: 'Some awesome title: Just a second title', category: 'awesome'},
   ]
 
-  const trendingBlogs = trending.map(blog => {
+  const trendingBlogs = trending.map((blog, index) => {
     return (
-      <>
-        <div className={classes.section}>
+      <div key={index}>
+        <div className={classes.section} >
           <Typography variant="body1" component="h3" className={classes.title} style={{fontSize: 16}}>{blog.title}</Typography>
           <Typography variant="body1" style={{color: 'grey'}}>{blog.category}</Typography>
         </div>
         <Divider />
-      </>
+      </div>
     )
   })
   

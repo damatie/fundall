@@ -38,24 +38,30 @@ const useStyles = makeStyles((theme) => ({
   tagInput: {
     padding: 16,
     minWidth: '100%'
-  }
+  },
 }));
 
 function PostBlog({ match }) {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const [checked, setChecked] = useState([0]);
-  const blogPost = useSelector(state => state.blog.getBlogs.data);
+  const blogPost = useSelector(state => state.blog.getOneBlogPost.data);
 
+  const [checked, setChecked] = useState([0]);
+  const [title, setTitle] = useState('');
+  const [body, setBody] = useState('');
+  const [images, setImages] = useState('');
+  
   const id = +match.params.blog_id;
 
-  const currentBlogPost = blogPost.map((post) => {
-    if (post.id === id) return post;
-  });
+  useEffect(() => {
+    dispatch(blogActions.getOneBlogPost(id));
+  }, []);
 
-  const [title, setTitle] = useState(currentBlogPost[0].title);
-  const [body, setBody] = useState(currentBlogPost[0].body);
-  const [images, setImages] = useState(currentBlogPost[0].images);
+  useEffect(() => {
+    setTitle(blogPost.title);
+    setBody(blogPost.body);
+    setImages(blogPost.images);
+  }, [blogPost])
 
   const handleToggle = (value) => () => {
     const currentIndex = checked.indexOf(value);
@@ -100,6 +106,7 @@ function PostBlog({ match }) {
               type="file"
               placeholder='Blog content'
               multiple
+              className={classes.img}
               onChange={(event) => setImages(event.target.files)}
             />
           </Paper>
