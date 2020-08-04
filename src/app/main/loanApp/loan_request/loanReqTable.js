@@ -73,10 +73,13 @@ function LoanReqTable(props) {
 	}, []);
 
 	useEffect(() => {
+		console.log()
 		if(props.type !== 'returned') {
-			setData(loanHistory.loanHistory);
+			const x = loanHistory.loanHistory.filter(i => i.status !== 'corrected')
+			setData(x);
 		} else {
-			setData([]);
+			const x = loanHistory.loanHistory.filter(i => i.status === 'corrected')
+			setData(x);
 		}
 	}, [loanHistory])
 
@@ -103,8 +106,11 @@ function LoanReqTable(props) {
 	}
 
 	function handleClick(item) {
-		if (props.type !== 'returned') history.push(`/loan/request/new/${item.id}`)
-		
+		if (props.type !== 'returned') {
+			history.push(`/loan/request/new/${item.id}`)
+		} else {
+			history.push(`/loan/review/list/details/${item.id}`)
+		}
   }
   
 

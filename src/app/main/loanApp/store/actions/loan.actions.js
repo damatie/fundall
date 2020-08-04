@@ -1,6 +1,7 @@
 import { fetchHeaders } from "app/shared/fetchHeaders";
 import swal from 'sweetalert2';
 import { handleResponse } from "app/auth/handleRes";
+import { getBaseUrl } from "app/shared/getBaseUrl";
 
 export const APPROVE_LOAN = 'APPROVE LOAN';
 export const REJECT_LOAN = 'REJECT LOAN';
@@ -21,7 +22,7 @@ export const approveLoan = id => {
     dispatch({
       type: LOADING_LOAN
     })
-    fetch(`https://hris-cbit.herokuapp.com/api/v1/loan/approve/hr/${id}`, {
+    fetch(`${getBaseUrl()}/loan/approve/hr/${id}`, {
       ...header.reqHeader(
         'patch',
         {}
@@ -59,7 +60,7 @@ export const rejectLoan = id => {
     dispatch({
       type: LOADING_LOAN
     })
-    fetch(`https://hris-cbit.herokuapp.com/api/v1/loan/${id}`, {
+    fetch(`${getBaseUrl()}/loan/${id}`, {
       ...header.delHeader()
     }).then(res => res.json()).then(
       data => {
@@ -94,14 +95,14 @@ export const applyLoan = body => {
     dispatch({
       type: LOADING_LOAN
     })
-    fetch(`https://hris-cbit.herokuapp.com/api/v1/loan/`, {
+    fetch(`${getBaseUrl()}/loan/`, {
       ...header.reqHeader(
         'POST',
         body
       )
     }).then(res => res.json()).then(
       data => {
-        if(data) {
+        if(data.message === 'Created!') {
           swal.fire({
             title: 'Loan application',
             text: 'Loan applied successfully',
@@ -111,7 +112,8 @@ export const applyLoan = body => {
           dispatch({
             type: LOAN_SUCCESS
           })
-        } else {
+        }
+        if(data.success === false) {
           swal.fire({
             title: 'Loan application',
             text: data.mesage || data.message,
@@ -174,15 +176,14 @@ export const getLoan = id => {
     dispatch({
       type: LOADING_LOAN
     })
-    fetch(`https://hris-cbit.herokuapp.com/api/v1/loan/${id}`, {
+    fetch(`${getBaseUrl()}/loan/${id}`, {
       ...header.getRegHeader()
     }).then(res => res.json()).then(
       data => {
         dispatch({
           type: GET_LOAN,
           payload: {
-            ...data.loanData,
-            ...data.employee
+            ...data,
           }
         })
       }
@@ -203,7 +204,7 @@ export const updateLoan = (id, body) => {
     dispatch({
       type: UPDATING_LOAN
     })
-    fetch(`https://hris-cbit.herokuapp.com/api/v1/loan/${id}`, {
+    fetch(`${getBaseUrl()}/loan/${id}`, {
       ...header.reqHeader(
         'PATCH',
         body
@@ -233,7 +234,7 @@ export const cancelLoan = (id, history) => {
     dispatch({
       type: CLOSING_LOAN
     })
-    fetch(`https://hris-cbit.herokuapp.com/api/v1/loan/${id}`, {
+    fetch(`${getBaseUrl()}/loan/${id}`, {
       ...header.delHeader(),
     }).then(res => handleResponse(res)).then(
       data => {

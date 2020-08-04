@@ -2,8 +2,10 @@ import * as Actions from '../actions';
 
 const initialState = {
   loading: false,
-  success: true,
-  data: {}
+  success: false,
+  data: {},
+  updating: false,
+  error: false,
 }
 
 export const profileReducers = (state = initialState, actions) => {
@@ -19,6 +21,25 @@ export const profileReducers = (state = initialState, actions) => {
       return {
         ...state,
         loading: true
+      }
+    }
+    case Actions.UPDATING_EMPLOYEE_PROFILE: {
+      return {
+        ...state,
+        updating: true,
+      }
+    }
+    case Actions.UPDATE_EMPLOYEE_PROFILE: {
+      return {
+        ...state,
+        updating: false,
+        success: true,
+      }
+    }
+    case Actions.ERROR: {
+      return {
+        ...state,
+        error: false,
       }
     }
     default: {

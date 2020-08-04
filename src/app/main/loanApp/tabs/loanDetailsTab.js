@@ -49,36 +49,48 @@ function LoanDetailsTab({setValue}) {
 						<CardContent>
 							<div className="mb-24">
 								<Typography className="font-bold mb-4 text-15">Email</Typography>
-								<Typography>{loan.email}</Typography>
+								<Typography>{loan.employee.email}</Typography>
+							</div>
+
+							<div className="mb-24">
+								<Typography className="font-bold mb-4 text-15">Department</Typography>
+								<Typography>{loan.employee.department.departmentName}</Typography>
 							</div>
 
 							<div className="mb-24">
 								<Typography className="font-bold mb-4 text-15">Country</Typography>
-								<Typography>{loan.country}</Typography>
+								<Typography>{loan.employee.country}</Typography>
 							</div>
 
 							<div className="mb-24">
 								<Typography className="font-bold mb-4 text-15">Residential Address</Typography>
-								<Typography>{loan.residentialAddress}</Typography>
+								<Typography>{loan.employee.residentialAddress}</Typography>
 							</div>
 
 							<div className="mb-24">
 								<Typography className="font-bold mb-4 text-15">Amount Requested</Typography>
-								<Typography>{loan.amountRequested}</Typography>
+								<Typography>{`₦ ${Intl.NumberFormat().format(loan.loanData.amountRequested)}`}</Typography>
+							</div>
+
+							<div className="mb-24">
+								<Typography className="font-bold mb-4 text-15">Amount Available</Typography>
+								<Typography>{`₦ ${Intl.NumberFormat().format(1000)}`}</Typography>
 							</div>
 
 							{profile.role.name === 'Finance manager' ? 
 								<>
 								<div className="mb-24">
 									<Typography className="font-bold mb-4 text-15">Amount Approved</Typography>
-									<Typography>{loan.amountApproved}</Typography>
-									<TextField error={form.amountApproved > loan.amountApproved} name='amountApproved' type='number' className='w-full' variant='outlined' onChange={handleChange}/>
+									<Typography>{`₦ ${Intl.NumberFormat().format(loan.loanData.amountApproved)}`}</Typography>
+									{loan.loanData.status !== 'open' ? <><TextField error={form.amountApproved > loan.loanData.amountRequested} name='amountApproved' type='number' className='w-full' variant='outlined' onChange={handleChange}/>
+									<Typography variant="subtitle1" color="initial">{`₦ ${Intl.NumberFormat().format(form.amountApproved)}`}</Typography></> : ''}
 								</div> 
 
 								<div className="mb-24">
 									<Typography className="font-bold mb-4 text-15">Deductable Amount</Typography>
-									<Typography>{loan.deductableAmount}</Typography>
-									<TextField error={form.deductableAmount < 0} name='deductableAmount' type='number' className='w-full' variant='outlined' onChange={handleChange} required/>
+									<Typography>{`₦ ${Intl.NumberFormat().format(loan.loanData.deductableAmount)}`}</Typography>
+									{loan.loanData.status !== 'open' ? <><TextField error={form.deductableAmount < 0} name='deductableAmount' type='number' className='w-full' variant='outlined' onChange={handleChange} required/>
+									<Typography variant="subtitle1" color="initial">{`₦ ${Intl.NumberFormat().format(form.deductableAmount)}`}</Typography></> : ''}
 								</div>
 
 								{/* <div className="mb-24">
@@ -90,39 +102,34 @@ function LoanDetailsTab({setValue}) {
 							: <></>}
 
               <div className="mb-24">
-								<Typography className="font-bold mb-4 text-15">Employement Type</Typography>
-								<Typography>{loan.employementType}</Typography>
-							</div>
-
-              <div className="mb-24">
 								<Typography className="font-bold mb-4 text-15">Work Location</Typography>
-								<Typography>{loan.workLocation}</Typography>
+								<Typography>{loan.loanData.workLocation}</Typography>
 							</div>
 
               <div className="mb-24">
 								<Typography className="font-bold mb-4 text-15">Payment Mode</Typography>
-								<Typography>{loan.paymentMode}</Typography>
+								<Typography>{loan.loanData.paymentMode}</Typography>
 							</div>
 
               <div className="mb-24">
 								<Typography className="font-bold mb-4 text-15">Date Requested</Typography>
-								<Typography>{loan.dateRequested}</Typography>
+								<Typography>{loan.loanData.dateRequested}</Typography>
 							</div>
 
               <div className="mb-24">
 								<Typography className="font-bold mb-4 text-15">Duration</Typography>
-								<Typography>{`${loan.duration} Months`}</Typography>
+								<Typography>{`${loan.loanData.duration} Months`}</Typography>
 							</div>
 
 							<div className="mb-24">
 								<Typography className="font-bold mb-4 text-15">Purpose</Typography>
-								<Typography>{loan.purpose}</Typography>
+								<Typography>{loan.loanData.purpose}</Typography>
 							</div>
-							{loan.status === 'approved' ? '' : <LoanActionsBtn form={form}/>}
+							{loan.loanData.status === 'approved' ? '' : <LoanActionsBtn form={form}/>}
 						</CardContent>
 					</Card>
 
-					{loan.status === 'approved' ? <Card className="w-full mb-16">
+					{loan.loanData.status === 'approved' ? <Card className="w-full mb-16">
 						<AppBar position="static" elevation={0}>
 							<Toolbar className="px-8">
 								<Typography variant="subtitle1" color="inherit" className="flex-1 px-12">
@@ -134,37 +141,37 @@ function LoanDetailsTab({setValue}) {
 						<CardContent>
 							<div className="mb-24">
 								<Typography className="font-bold mb-4 text-15">Hr Manager Approval</Typography>
-								<Typography>{loan.hrManagerApproval}</Typography>
+								<Typography>{loan.hrManager}</Typography>
 							</div>
 
 							<div className="mb-24">
 								<Typography className="font-bold mb-4 text-15">Hr Manager Approval Date</Typography>
-								<Typography>{loan.hrManagerApprovalDate}</Typography>
+								<Typography>{loan.loanData.hrManagerApprovalDate}</Typography>
 							</div>
 
 							<div className="mb-24">
 								<Typography className="font-bold mb-4 text-15">Finance Manager Approval</Typography>
-								<Typography>{loan.financeManagerApproval}</Typography>
+								<Typography>{loan.financeManager}</Typography>
 							</div>
 
               <div className="mb-24">
 								<Typography className="font-bold mb-4 text-15">Loan Disbursed On</Typography>
-								<Typography>{loan.loanDisbursedOn}</Typography>
+								<Typography>{loan.loanData.loanDisbursedOn}</Typography>
 							</div>
 
               <div className="mb-24">
 								<Typography className="font-bold mb-4 text-15">First Due Date</Typography>
-								<Typography>{`${loan.firstDueDate} days`}</Typography>
+								<Typography>{`${loan.loanData.firstDueDate} days`}</Typography>
 							</div>
 
               <div className="mb-24">
 								<Typography className="font-bold mb-4 text-15">Number Of Installements</Typography>
-								<Typography>{loan.numberOfInstallements}</Typography>
+								<Typography>{loan.loanData.numberOfInstallements}</Typography>
 							</div>
 
 							<div className="mb-24">
 								<Typography className="font-bold mb-4 text-15">Payment Mode</Typography>
-								<Typography>{loan.paymentMode}</Typography>
+								<Typography>{loan.loanData.paymentMode}</Typography>
 							</div>
 
               <div className="mb-24">
