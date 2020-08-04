@@ -365,6 +365,47 @@ const navigationConfig = [
 			}
 		]
 	},
+	// Training navigations
+	{
+		id: 'training',
+		title: 'Training',
+		translate: 'training',
+		type: 'group',
+		children: [
+			{
+				id: 'trainingManagement',
+				title: 'Training Management',
+				type: 'item',
+				url: '/hr/training/management',
+				icon: 'school',
+				auth: authRoles.admin,
+			},
+			{
+				id: 'deptTraining',
+				title: 'Department Training',
+				type: 'item',
+				url: '/training/dept',
+				icon: 'group',
+				auth: authRoles.manager,
+			},
+			{
+				id: 'personalTraining',
+				title: 'Personal Training',
+				type: 'item',
+				url: '/training/personal',
+				icon: 'book',
+				auth: authRoles.staff,
+			},
+			{
+				id: 'courseCategory',
+				title: 'Course Category',
+				type: 'item',
+				url: '/hr/training/category',
+				icon: 'category',
+				auth: authRoles.admin,
+			}
+		]
+	},
 	// Settings navigations
 	{
 		id: 'settings',
