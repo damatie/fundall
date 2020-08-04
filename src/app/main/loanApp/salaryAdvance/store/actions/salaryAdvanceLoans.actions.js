@@ -1,5 +1,7 @@
 import { handleResponse } from "app/auth/handleRes";
 import { fetchHeaders } from "app/shared/fetchHeaders";
+import { getBaseUrl } from "app/shared/getBaseUrl";
+import { desSort } from "app/shared/sortData";
 
 export const GET_PENDING_SA = 'GET PENDING SA';
 export const LOADING_SA = 'LOADING SA';
@@ -10,33 +12,72 @@ export const GET_OPEN_SA = 'GET OPEN SA';
 export const LOADING_OPEN_SA = 'LOADING OPEN SA';
 export const GET_CLOSED_SA = 'GET CLOSED SA';
 export const LOADING_CLOSED_SA = 'LOADING CLOSED SA';
+export const GET_REVIEWED_SA = 'GET REVIEWED SA';
+export const LOADING_REVIEWED_SA = 'LOANDING REVIEWED SA';
 
 const formateData = data => {
   const arr = [];
   for(let i of data) {
     arr.push(
       {
+        loanId: i.id,
         ...i,
         ...i.employee
       }
     )
   }
-  return arr;
+  return desSort(arr);
 }
+
+const formateDatas = data => {
+  const arr = [];
+  for(let i of data) {
+    arr.push(
+      {
+        loanId: i.salaryAdvance.id,
+        ...i.salaryAdvance,
+        ...i.employee
+      }
+    )
+  }
+  return desSort(arr);
+}
+
 const headers = fetchHeaders();
+
 export const getPendingSA = () => {
   return dispatch => {
     dispatch({
       type: LOADING_SA
     });
-    fetch('https://hris-cbit.herokuapp.com/api/v1/salary-advance/all/pending', {
+    fetch(`${getBaseUrl()}/salary-advance/all/department/request`, {
       ...headers.getRegHeader(),
     }).then(res => handleResponse(res)).then(
       data => {
         if(data.success) {
           dispatch({
             type: GET_PENDING_SA,
-            payload: formateData(data.salaryAdvanceData),
+            payload: formateData(data.loanData),
+          })
+        }
+      }
+    ).catch(e => console.error(e));
+  }
+};
+
+export const getReviewedSA = () => {
+  return dispatch => {
+    dispatch({
+      type: LOADING_REVIEWED_SA
+    });
+    fetch(`${getBaseUrl()}/salary-advance/all/reviewed`, {
+      ...headers.getRegHeader(),
+    }).then(res => handleResponse(res)).then(
+      data => {
+        if(data.success) {
+          dispatch({
+            type: GET_REVIEWED_SA,
+            payload: formateDatas(data.data),
           })
         }
       }
@@ -49,14 +90,15 @@ export const getApprovedSA = () => {
     dispatch({
       type: LOADING_APPROVED_SA
     });
-    fetch('https://hris-cbit.herokuapp.com/api/v1/salary-advance/all/approved', {
+    fetch(`${getBaseUrl()}/salary-advance/all/approved`, {
       ...headers.getRegHeader(),
     }).then(res => handleResponse(res)).then(
       data => {
+        console.log(formateDatas(data.data))
         if(data.success) {
           dispatch({
             type: GET_APPROVED_SA,
-            payload: formateData(data.salaryAdvanceData),
+            payload: formateDatas(data.data),
           })
         }
       }
@@ -69,14 +111,14 @@ export const getOpenSA = () => {
     dispatch({
       type: LOADING_OPEN_SA
     });
-    fetch('https://hris-cbit.herokuapp.com/api/v1/salary-advance/all/open', {
+    fetch(`${getBaseUrl()}/salary-advance/all/open`, {
       ...headers.getRegHeader(),
     }).then(res => handleResponse(res)).then(
       data => {
         if(data.success) {
           dispatch({
             type: GET_OPEN_SA,
-            payload: formateData(data.salaryAdvanceData),
+            payload: formateDatas(data.data),
           })
         }
       }
@@ -89,7 +131,7 @@ export const getClosedSA = () => {
     dispatch({
       type: LOADING_CLOSED_SA
     });
-    fetch('https://hris-cbit.herokuapp.com/api/v1/salary-advance/all/closed', {
+    fetch(`${getBaseUrl()}/salary-advance/all/closed`, {
       ...headers.getRegHeader(),
     }).then(res => handleResponse(res)).then(
       data => {

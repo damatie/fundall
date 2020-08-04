@@ -142,7 +142,8 @@ function ManageSALoan(props) {
     dispatch(Actions.getPendingSA());
     dispatch(Actions.getApprovedSA());
     dispatch(Actions.getOpenSA());
-    dispatch(Actions.getClosedSA());
+		dispatch(Actions.getClosedSA());
+		dispatch(Actions.getReviewedSA());
 	}, [dispatch]);
 
 	useEffect(() => {
@@ -150,7 +151,7 @@ function ManageSALoan(props) {
   })
   
   const handleClick = e => {
-    history.push(`/loan/review/salaryadvance/list/details/${e.id}`);
+    history.push(`/loan/review/salaryadvance/list/details/${e.loanId}`);
   }
 
 	// useEffect(() => window.location.reload(false), [])
@@ -226,7 +227,7 @@ function ManageSALoan(props) {
 				</div> : <></>}
 				
 				{profile.role.name === 'HR' ? <div className=" sm:p-24 ">
-					{tabValue === 0 && (<SharedTable data={salaryAdvance.pendingSA} rows={rows} handleClick={handleClick} handleDelete={handleDelete} type='default'/>)}
+					{tabValue === 0 && (<SharedTable data={salaryAdvance.reviewedSA} rows={rows} handleClick={handleClick} handleDelete={handleDelete} type='default'/>)}
 				</div> : <></>}
 				
 				{profile.role.name === 'Finance manager' ? <div className=" sm:p-24 ">

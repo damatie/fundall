@@ -17,6 +17,7 @@ import { useSelector } from 'react-redux';
 // import LoanHistory from './loanHistory';
 import moment from 'moment';
 import LoanHistory from './loanHistory';
+import SalaryAdvanceActionBtn from '../salaryAdvance/salaryAdvanceActionBtn';
 
 function SALoanDetailsTab({setValue}) {
 	// const profile = useSelector(({ profile}) => profile.data)
@@ -57,13 +58,15 @@ function SALoanDetailsTab({setValue}) {
 
 							<div className="mb-24">
 								<Typography className="font-bold mb-4 text-15">Amount Requested</Typography>
-								<Typography>{salaryAdvanceDetails.details.amount}</Typography>
+								<Typography>{`₦ ${Intl.NumberFormat().format(salaryAdvanceDetails.details.amount)}`}</Typography>
 							</div>
 
 							<div className="mb-24">
 								<Typography className="font-bold mb-4 text-15">Net Salary</Typography>
-								<Typography>{salaryAdvanceDetails.details.netSalary}</Typography>
+								<Typography>{`₦ ${Intl.NumberFormat().format(salaryAdvanceDetails.details.netSalary)}`}</Typography>
 							</div>
+
+							{salaryAdvanceDetails.details.status !== 'approved' ? <SalaryAdvanceActionBtn /> : <></>}
 						</CardContent>
 					</Card>
 
@@ -107,7 +110,7 @@ function SALoanDetailsTab({setValue}) {
 								<Typography className="font-bold mb-4 text-15">Supervisor Approval Date</Typography>
 								<Typography>{moment(salaryAdvanceDetails.details.supervisorApprovalDate).format('LL')}</Typography>
 							</div>
-
+							<SalaryAdvanceActionBtn />
 						</CardContent>
 				</Card> 
          : <></> }

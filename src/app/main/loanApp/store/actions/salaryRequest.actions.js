@@ -1,5 +1,6 @@
 import { fetchHeaders } from "app/shared/fetchHeaders";
 import Swal from 'sweetalert2';
+import { getBaseUrl } from "app/shared/getBaseUrl";
 
 export const SALARY_REQUEST = 'SALARY REQUEST';
 export const LOADING_SALARY_REQUEST = 'LOADING SALARY REQUEST';
@@ -11,14 +12,14 @@ export const applySalaryAdvance = body => {
     dispatch({
       type: LOADING_SALARY_REQUEST
     })
-    fetch(`https://hris-cbit.herokuapp.com/api/v1/salary-advance`, {
+    fetch(`${getBaseUrl()}/salary-advance`, {
       ...headers.reqHeader(
         'POST',
         body
       )
     }).then(res => res.json()).then(
       data => {
-        if(data.success) {
+        if(data.message === 'Created!') {
           Swal.fire({
             title: 'Salary advance request',
             text: data.message,
@@ -28,7 +29,8 @@ export const applySalaryAdvance = body => {
           dispatch({
             type: SALARY_REQUEST
           })
-        } else {
+        } 
+        if(data.success === false) {
           Swal.fire({
             title: 'Salary advance request',
             text: data.message,
@@ -42,4 +44,5 @@ export const applySalaryAdvance = body => {
       }
     ).catch(e => console.error(e));
   }
-}
+};
+

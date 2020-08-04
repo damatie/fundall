@@ -9,6 +9,7 @@ const initialState = {
   approvedSA: [],
   openSA: [],
   closedSA: [],
+  reviewedSA: [],
 };
 
 export const salaryAdvanceLoansReducers = (state = initialState, actions) => {
@@ -32,7 +33,7 @@ export const salaryAdvanceLoansReducers = (state = initialState, actions) => {
         loadingApprovedSA: true,
       }
     }
-    case Actions.GET_PENDING_SA: {
+    case Actions.GET_APPROVED_SA: {
       return {
         ...state,
         loadingApprovedSA: false,
@@ -45,7 +46,7 @@ export const salaryAdvanceLoansReducers = (state = initialState, actions) => {
         loadingOpenSA: true,
       }
     }
-    case Actions.GET_PENDING_SA: {
+    case Actions.GET_OPEN_SA: {
       return {
         ...state,
         loadingOpenSA: false,
@@ -58,11 +59,24 @@ export const salaryAdvanceLoansReducers = (state = initialState, actions) => {
         loadingClosedSA: true,
       }
     }
-    case Actions.GET_PENDING_SA: {
+    case Actions.GET_CLOSED_SA: {
       return {
         ...state,
         loadingClosedSA: false,
         closedSA: actions.payload
+      }
+    }
+    case Actions.LOADING_REVIEWED_SA: {
+      return {
+        ...state,
+        loadingReviewedSA: true,
+      }
+    }
+    case Actions.GET_REVIEWED_SA: {
+      return {
+        ...state,
+        loadingReviewedSA: true,
+        reviewedSA: actions.payload
       }
     }
     default: {
