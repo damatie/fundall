@@ -87,6 +87,7 @@ const user = {
 function BlogDetail({ match }) {
   const classes = useStyles();
   const dispatch = useDispatch();
+  
   const blogPost = useSelector(state => state.blog.getOneBlogPost.data.postData);
   const comments = useSelector(state => state.blog.getAllCommentsForAPost.data);
   const userId = useSelector(state => state.auth.user.id);
@@ -167,12 +168,12 @@ function BlogDetail({ match }) {
                 {(comments.length > 0) && comments.map((comment, index) => {
                   return (
                     <Paper variant="outlined" key={index} className={classes.replyComment}>
-                      {/* <SingleComment
+                      <SingleComment
                         comment={comment}
                         postId={postId}
                         moreContent={buttonContent}
                         userId={userId}
-                      /> */}
+                      />
                       {/* <ReplyComment reply={comment.replyComment} commentId={comment.id} postId={postId} /> */}
                     </Paper>
                   )
