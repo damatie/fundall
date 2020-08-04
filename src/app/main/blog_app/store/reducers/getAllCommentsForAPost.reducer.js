@@ -77,7 +77,6 @@ const getAllCommentsForAPost = (state = initialState, action) => {
 		case Actions.LIKE_A_COMMENT_SUCCESS: {
 			const newData = state.data.map(comment => {
 				if (comment.id === action.payload.commentId) {
-          console.log()
           return {...comment, commentLike: [...comment.commentLike, {...action.payload}]};
         }
 				return comment;

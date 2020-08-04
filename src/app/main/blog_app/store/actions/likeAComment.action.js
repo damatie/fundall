@@ -1,4 +1,3 @@
-import Swal from 'sweetalert2';
 import { fetchHeaders } from 'app/shared/fetchHeaders';
 
 export const LIKE_A_COMMENT_ERROR = 'COMMENTTOPOST_ERROR';
@@ -35,12 +34,7 @@ export function likeAComment(id, userId) {
 			}
 		)
 		.catch(error => {
-			Swal.fire({
-				title: 'COMMENT TO POST',
-				text: 'Service unavailable',
-				icon: 'error',
-				timer: 3000,
-			})
+      console.log(error)
 			return dispatch({
 				type: LIKE_A_COMMENT_ERROR,
 				payload: error
