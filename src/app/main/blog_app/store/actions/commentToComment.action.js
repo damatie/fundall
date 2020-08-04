@@ -24,7 +24,8 @@ export function submitBlogCommentReply(data) {
 				if(comment.success === true) {
 					console.log(comment)
 					return dispatch({
-						type: COMMENT_TO_COMMENT_SUCCESS
+						type: COMMENT_TO_COMMENT_SUCCESS,
+						payload: data
 					});
 				} else {
 					console.log(comment);

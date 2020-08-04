@@ -7,7 +7,7 @@ import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
 import Favorite from '@material-ui/icons/Favorite';
 import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
 import * as blogActions from '../../store/actions';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 import SectionHeader from '../../sectionHeader';
@@ -60,11 +60,17 @@ const useStyles = makeStyles((theme) => ({
 function Blog(props) {
   const classes = useStyles();
   const dispatch = useDispatch()
+
   const [clicked, setClicked] = React.useState(false);
+
+  React.useEffect(() => {
+    const isLiked = props.blog.employees.every(employee => employee.id !== props.userId);
+    if (!isLiked) setClicked(!isLiked);
+  }, [])
 
   const handleLike = (id) => {
     setClicked(prevState => prevState = !prevState);
-    dispatch(blogActions.likeAndUnlikeBlogPost(id));
+    dispatch(blogActions.likeAndUnlikeBlogPost({id, employeeId: props.userId}));
   }
 
   const handleDelete = (value) => {
@@ -110,14 +116,14 @@ function Blog(props) {
             startIcon={!clicked && (props.blog) ? <FavoriteBorder /> : <Favorite />}
             onClick={() => handleLike(props.blog.id)}
           >
-            {props.blog.likes !== undefined && props.blog.likes.length === 0 ? props.likes.length : 'Likes'}
+            {props.blog.employees && props.blog.employees.length}
           </Button>
           <Button
             style={{color: '#4d5760'}}
             className={classes.button}
             startIcon={<ChatBubbleOutlineIcon />}
           >
-            { props.blog.comment !== undefined && props.blog.comment.length === 0 ? 'Comment' : props.blog.comment.length }
+            { props.blog.comment && props.blog.comment.length }
           </Button>
         </div>
       </div>

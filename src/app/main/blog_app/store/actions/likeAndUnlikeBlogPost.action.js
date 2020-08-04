@@ -7,7 +7,7 @@ export const LIKE_AND_UNLIKE_BLOGPOST_SUCCESS = 'LIKE_AND_UNLIKE_BLOGPOST_SUCCES
 
 const header = fetchHeaders();
 
-export function likeAndUnlikeBlogPost(id) {
+export function likeAndUnlikeBlogPost({id, employeeId}) {
 	return dispatch => {
 		fetch(`https://hris-cbit.herokuapp.com/api/v1/posts/post/like/${id}`, {
 			...header.reqHeader(
@@ -19,7 +19,7 @@ export function likeAndUnlikeBlogPost(id) {
 					console.log(post);
 					return dispatch({
 						type: LIKE_AND_UNLIKE_BLOGPOST_SUCCESS,
-						payload: post.result	
+						payload: {...post.result, employeeId}
 					});
 				} else {
 					return dispatch({

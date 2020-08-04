@@ -24,7 +24,6 @@ const getAllCommentsForAPost = (state = initialState, action) => {
 				loading: false,
 				data: newData,
 			};
-			break;
 		}
 		case Actions.UPDATE_A_COMMENT_SUCCESS: {
 			const newData = state.data.map((comment) => {
@@ -48,13 +47,13 @@ const getAllCommentsForAPost = (state = initialState, action) => {
 		}
 		case Actions.COMMENT_TO_COMMENT_SUCCESS: {
 			const newData = state.data.map((comment => {
-				if (comment.id === action.payload.commentId) return console.log('coments');
+				if (comment.id === action.payload.commentId) return comment.replyComment.concat(action.payload);
 				return comment;
 			}));
 			return {
 				...initialState,
 				loading: false,
-				data: [...state.data, {replyComment: newData}],
+				data: newData,
 			};
 		}
 		case Actions.UPDATE_A_COMMENT_REPLY_SUCCESS: {
@@ -77,16 +76,14 @@ const getAllCommentsForAPost = (state = initialState, action) => {
 		}
 		case Actions.LIKE_A_COMMENT_SUCCESS: {
 			const newData = state.data.map(comment => {
-				if (comment.id === action.payload.id) {
-          console.log('comment added');
-					return comment.commentLikes.push(action.payload);
-				}
+				if (comment.id === action.payload.commentId) {
+          console.log()
+          return {...comment, commentLike: [...comment.commentLike, {...action.payload}]};
+        }
 				return comment;
 			})
 			return {
-				...initialState,
-				success: false,
-				error: action.payload,
+				...state,
 				data: newData,
 			};
 		}

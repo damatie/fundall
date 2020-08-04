@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
 function ReplyComment(props) {
   const classes = useStyles();
   const [viewAllComments, setViewAllComments] = useState(false);
-  const [noOfReply] = useState(props.reply.length);
+  const [noOfReply] = useState(props.reply.length || []);
 
   const replyContent = ['Edit reply', 'Delete reply'];
 

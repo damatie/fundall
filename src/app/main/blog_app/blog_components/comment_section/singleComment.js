@@ -37,16 +37,35 @@ const useStyles = makeStyles((theme) => ({
 function BlogComment(props) {
   const classes = useStyles();
   const dispatch = useDispatch();
+
   const [showInput, setShowInput] = useState(true);
-  const [content, setContent] = useState(props.comment.content);
+  const [content, setContent] = useState('');
   const [open, setOpen] = useState(false);
-  const [likes, setLikes] = useState(props.comment.commentLike);
+  const [isLikeComment, setIsLikeComment] = useState(props.isLike);
+  const [likes, setLikes] = useState([]);
+  const [employeeDetails, setEmployeeDetails] = useState();
   const [value, setValue] = useState('');
+
+useEffect(() => {
+  if (props.comment) {
+    setContent(props.comment.content);
+    setLikes(props.comment.commentLike);
+    setEmployeeDetails(props.comment.employee);
+  }
+}, [props.comment])
 
   const showReplyInput = (e) => {
     e.preventDefault();
     setShowInput(false)
   };
+
+  useEffect(() => {
+    if (props.comment) {
+      const checkLike = (employee) => employee.employeeId !== props.userId;
+      const isLiked = props.comment.commentLike && props.comment.commentLike.every(checkLike);
+      if (!isLiked) setIsLikeComment(!isLiked);
+    }
+  }, [props.comment]);
 
   const handleChange = (value) => {
     if(value === true) {
@@ -107,22 +126,25 @@ function BlogComment(props) {
   };
 
   const handleLikes = () => {
-    props.onClick(!props.isLiked);
-    props.isLiked ? setLikes(prev => prev - 1) : setLikes(prev => prev + 1);
-    dispatch(blogActions.likeAComment(props.comment.id));
+    setIsLikeComment(!isLikeComment);
+    dispatch(blogActions.likeAComment(props.comment.id, props.userId));
   };
 
-  const getColor = () => !props.isLiked ? '#4d5760' : '#F44336';
+  const getColor = () => !isLikeComment ? '#4d5760' : '#F44336';
+
+  if (!props.comment) {
+    return <h1>Loadingkahf...</h1>
+  }
 
   return (
     <>
       <ThemeProvider theme={theme}>
         <SectionHeader
-          fullName={!props.comment.employee ? 'George Ole' : `${props.comment.employee.lastName} ${props.comment.employee.firstName}`}
+          fullName={!employeeDetails ? 'George Ole' : `${employeeDetails.lastName} ${employeeDetails.firstName}`}
           buttonContent={props.moreContent}
           onClick={(value) => selectClickedButton(value)}
         />
-        <Typography varaint="body1" className={classes.commentBody}>{props.comment && props.comment.content}</Typography>
+        <Typography varaint="body1" className={classes.commentBody}>{content}</Typography>
       </ThemeProvider>
       <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Update comment</DialogTitle>
@@ -150,10 +172,10 @@ function BlogComment(props) {
         ? <div className={`${classes.dFlex} ${classes.spaceBtw}`}>
             <div>
               <IconButton aria-label="like" onClick={handleLikes} style={{color: getColor()}} component="span">
-                {props.isliked && (!props.isliked ? <FavoriteBorder /> : <Favorite />)}
+                {!isLikeComment ? <FavoriteBorder /> : <Favorite />}
               </IconButton>
               <Typography varaint="body1" component="span" className={classes.userName}>
-                {props.comment.commentLike && likes.length}
+                {likes}
               </Typography>
             </div>
             <Button onClick={showReplyInput}>Reply</Button>

@@ -17,14 +17,28 @@ const getBlogs = (state = initialState, action) => {
 			};
 		}
 		case Actions.LIKE_AND_UNLIKE_BLOGPOST_SUCCESS: {
-			const newData = state.data.map((post) => {
-				if (post.id === action.payload.postId) post.likes.push(action.payload);
-			})
+      let newData;
+      if (action.payload.like) {
+        newData = state.data.map((post) => {
+          if (post.id === action.payload.postId) return {...post, employees: [...post.employees, action.payload]};
+          return post;
+        })
+      } else {
+        const removeLike = (post) => post.employees.filter(employee => employee.employeeId !== action.payload.employeeId )
+        newData = state.data.map(post => {
+          if (post.id === action.payload.postId) return {...post, employees: removeLike(post)};
+          return post;
+        })
+      }
 			return {
 				...initialState,
-				success: false,
-				loading: false,
-				error: {},
+				data: newData,
+			};
+		}
+		case Actions.DELETE_ONE_BLOGPOST_SUCCESS: {
+			const newData = state.data.filter(post => post.id !== action.payload);
+			return {
+				...state,
 				data: newData,
 			};
 		}
