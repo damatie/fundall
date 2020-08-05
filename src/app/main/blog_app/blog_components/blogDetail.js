@@ -199,6 +199,7 @@ function BlogDetail({ match }) {
                         comment={comment}
                         postId={postId}
                         moreContent={buttonContent}
+                        btnContent='Reply'
                         userId={userId}
                       />
                       {/* <ReplyComment reply={comment.replyComment} commentId={comment.id} postId={postId} /> */}
