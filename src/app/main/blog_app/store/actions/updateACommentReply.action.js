@@ -37,7 +37,7 @@ export function updateACommentReply({id, content, commentId}) {
 		)
 		.catch(error => {
 			Swal.fire({
-				title: 'COMMENT TO POST',
+				title: 'UPDATE TO COMMENT REPLY WAS NOT SUCCESSFUL',
 				text: 'Service unavailable',
 				icon: 'error',
 				timer: 3000,

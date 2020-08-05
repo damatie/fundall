@@ -24,7 +24,7 @@ export function submitBlogComment(data) {
 					console.log(comment)
 					return dispatch({
 						type: COMMENT_TO_POST_SUCCESS,
-						payload: { ...data, commentLike: [], replyComment: [] }
+						payload: comment.data
 					});
 				} else {
 					console.log(comment);
