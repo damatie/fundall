@@ -116,8 +116,8 @@ function BlogDetail({ match }) {
 
   const handleSubmit = () => {
     const model = {postId, content};
-    dispatch(blogActions.submitBlogComment(model));
     setContent('');
+    dispatch(blogActions.submitBlogComment(model));
   }
 
   const getColor = () => !isLikedPost ? '#4d5760' : '#F44336';
@@ -174,7 +174,7 @@ function BlogDetail({ match }) {
                         moreContent={buttonContent}
                         userId={userId}
                       />
-                      {/* <ReplyComment reply={comment.replyComment} commentId={comment.id} postId={postId} /> */}
+                      <ReplyComment reply={comment.replyComment} commentId={comment.id} postId={postId} />
                     </Paper>
                   )
                 })}

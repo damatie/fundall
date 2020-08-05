@@ -20,10 +20,10 @@ export function likeAComment(id, userId) {
 			comment => {
 				if(comment.success === true) {
 					console.log(comment)
-					return dispatch({
-						type: LIKE_A_COMMENT_SUCCESS,
-						payload: {commentId: id, userId}
-					});
+					// return dispatch({
+					// 	type: LIKE_A_COMMENT_SUCCESS,
+					// 	payload: {commentId: id, userId}
+					// });
 				} else {
 					console.log(comment);
 					return dispatch({
