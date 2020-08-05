@@ -74,18 +74,18 @@ const getAllCommentsForAPost = (state = initialState, action) => {
 			};
 			break;
 		}
-		case Actions.LIKE_A_COMMENT_SUCCESS: {
-			const newData = state.data.map(comment => {
-				if (comment.id === action.payload.commentId) {
-          return {...comment, commentLike: [...comment.commentLike, {...action.payload}]};
-        }
-				return comment;
-			})
-			return {
-				...state,
-				data: newData,
-			};
-		}
+		// case Actions.LIKE_A_COMMENT_SUCCESS: {
+		// 	const newData = state.data.map(comment => {
+		// 		// if (comment.id === action.payload.commentId) {
+    //     //   return {...comment, commentLike: [...comment.commentLike, {...action.payload}]};
+    //     // }
+		// 		return comment;
+		// 	})
+		// 	return {
+		// 		...state,
+		// 		data: newData,
+		// 	};
+		// }
 		case Actions.GET_ALL_COMMENTS_FOR_A_POST_ERROR: {
 			return {
 				...initialState,

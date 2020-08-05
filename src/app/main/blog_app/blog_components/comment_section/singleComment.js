@@ -46,18 +46,18 @@ function BlogComment(props) {
   const [employeeDetails, setEmployeeDetails] = useState();
   const [value, setValue] = useState('');
 
-useEffect(() => {
-  if (props.comment) {
-    setContent(props.comment.content);
-    setLikes(props.comment.commentLike);
-    setEmployeeDetails(props.comment.employee);
-  }
-}, [props.comment])
+  useEffect(() => {
+    if (props.comment) {
+      setContent(props.comment.content);
+      setEmployeeDetails(props.comment.employee);
+    }
+  }, [props.comment])
 
-  const showReplyInput = (e) => {
-    e.preventDefault();
-    setShowInput(false)
-  };
+  useEffect(() => {
+    if (props.comment.commentLike) {
+      setLikes(props.comment.commentLike.length);
+    }
+  }, [props.comment.commentLike])
 
   useEffect(() => {
     if (props.comment) {
@@ -66,6 +66,11 @@ useEffect(() => {
       if (!isLiked) setIsLikeComment(!isLiked);
     }
   }, [props.comment]);
+
+  const showReplyInput = (e) => {
+    e.preventDefault();
+    setShowInput(false)
+  };
 
   const handleChange = (value) => {
     if(value === true) {
@@ -127,6 +132,7 @@ useEffect(() => {
 
   const handleLikes = () => {
     setIsLikeComment(!isLikeComment);
+    isLikeComment ? setLikes(prev => prev - 1) : setLikes(prev => prev + 1);
     dispatch(blogActions.likeAComment(props.comment.id, props.userId));
   };
 
@@ -175,7 +181,7 @@ useEffect(() => {
                 {!isLikeComment ? <FavoriteBorder /> : <Favorite />}
               </IconButton>
               <Typography varaint="body1" component="span" className={classes.userName}>
-                {likes.length}
+                {likes}
               </Typography>
             </div>
             <Button onClick={showReplyInput}>Reply</Button>
