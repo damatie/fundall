@@ -29,6 +29,20 @@ export const salaryAdvanceReducers = (state = initialState, actions) => {
         error: true
       }
     }
+    case Actions.UPDATE_SALARY_REQUEST: {
+      return {
+        ...state,
+        loading: false,
+        success: true
+      }
+    }
+    case Actions.CANCEL_SALARY_REQUEST: {
+      return {
+        ...state,
+        loading: false,
+        success: true
+      }
+    }
     default: {
       return state;
     }

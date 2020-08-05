@@ -2,7 +2,7 @@ import React from 'react';
 
 const BlogConfig = {
 	settings: {},
-	routes: [ 
+	routes: [
 		{
 			path: '/blog/post',
 			component: React.lazy(() => import('./blog_components/postBlog.js')),

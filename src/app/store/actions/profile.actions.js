@@ -17,7 +17,7 @@ export const getEmployeeProfile = id => {
     dispatch({
       type: LOADING_EMPLOYEE_PROFILE
     });
-    fetch(`https://hris-cbit.herokuapp.com/api/v1/auth/employee/${id}`, {
+    fetch(`${getBaseUrl()}/auth/employee/${id}`, {
       ...headers.getRegHeader()
     }).then(res => res.json()).then(
       data => {
@@ -37,7 +37,7 @@ export const updateEmployeeProfile = (id, body) => {
     dispatch({
       type: UPDATING_EMPLOYEE_PROFILE
     });
-    fetch(`https://hris-cbit.herokuapp.com/api/v1/auth/employee/`,{
+    fetch(`${getBaseUrl()}/auth/employee/`,{
       ...headers.reqHeader(
         'PATCH',
         body

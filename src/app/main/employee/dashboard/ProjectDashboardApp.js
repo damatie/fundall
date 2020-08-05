@@ -29,6 +29,8 @@ import Widget8 from './widgets/Widget8';
 import Widget9 from './widgets/Widget9';
 import WidgetNow from './widgets/WidgetNow';
 import WidgetWeather from './widgets/WidgetWeather';
+import * as profileActions from 'app/store/actions';
+import { useAuth } from 'app/hooks/useAuth';
 
 const useStyles = makeStyles(theme => ({
 	content: {
@@ -53,6 +55,8 @@ function ProjectDashboardApp(props) {
 	const dispatch = useDispatch();
 	const widgets = useSelector(({ projectDashboardApp }) => projectDashboardApp.widgets);
 	const projects = useSelector(({ projectDashboardApp }) => projectDashboardApp.projects);
+
+	const id = useAuth().getId;
 
 	const classes = useStyles(props);
 	const pageLayout = useRef(null);
