@@ -174,7 +174,7 @@ function BlogDetail({ match }) {
                         moreContent={buttonContent}
                         userId={userId}
                       />
-                      <ReplyComment reply={comment.replyComment} commentId={comment.id} postId={postId} />
+                      {/* <ReplyComment reply={comment.replyComment} commentId={comment.id} postId={postId} /> */}
                     </Paper>
                   )
                 })}

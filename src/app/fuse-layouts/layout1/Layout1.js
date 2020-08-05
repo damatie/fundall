@@ -88,11 +88,12 @@ function Layout1(props) {
 	const config = useSelector(({ fuse }) => fuse.settings.current.layout.config);
 	const profileState = useSelector(({ profile }) => profile);
 	const id = useAuth().getId;
+	const token = useAuth().getToken;
 	const dispatch = useDispatch();
 
 	useEffect(() => {
 		dispatch(Actions.getEmployeeProfile(id))
-	}, [profileState.success, id]);
+	}, [dispatch]);
 
 	const appContext = useContext(AppContext);
 	const classes = useStyles(props);

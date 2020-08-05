@@ -50,6 +50,7 @@ export const updateEmployeeInfo = (id, body) => {
             icon: 'success',
             timer: 3000
           });
+          dispatch(getEmployeeInfo(1));
         } else {
           swal.fire({
             title: 'Employee Info',
@@ -69,7 +70,7 @@ export const createEmployeeInfo = (id, body) => {
     dispatch({
       type: CREATING_EMPLOYEE_INFO
     })
-    fetch(``, {
+    fetch(`${getBaseUrl()}/info`, {
       ...header.formDHeader(
         'POST',
         body
@@ -85,6 +86,7 @@ export const createEmployeeInfo = (id, body) => {
           icon: 'success',
           timer: 3000
         });
+        dispatch(getEmployeeInfo(1));
       }
     )
   }

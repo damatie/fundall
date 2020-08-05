@@ -1,5 +1,6 @@
 import { fetchHeaders } from "app/shared/fetchHeaders";
 import { handleResponse } from "app/auth/handleRes";
+import { getBaseUrl } from "app/shared/getBaseUrl";
 
 export const LOADING_SALARY_ADVANCE = 'LOADING SALARY ADVANCE';
 export const GET_SALARY_ADVANCE = 'GET SALARY ADVANCE';
@@ -14,7 +15,7 @@ export const getSalaryAdvance = () => {
     dispatch({
       type: LOADING_SALARY_ADVANCE
     })
-    fetch(`https://hris-cbit.herokuapp.com/api/v1/salary-advance/all/log`, {
+    fetch(`${getBaseUrl()}/salary-advance/all/log`, {
       ...headers.getRegHeader()
     }).then(res => res.json()).then(
       data => {
@@ -38,7 +39,7 @@ export const getSalaryAdvanceDetails = id => {
     dispatch({
       type: LOADING_SALARY_ADVANCE_DETAILS
     });
-    fetch(`https://hris-cbit.herokuapp.com/api/v1/salary-advance/${id}`, {
+    fetch(`${getBaseUrl()}/salary-advance/${id}`, {
       ...headers.getRegHeader()
     }).then(res => handleResponse(res)).then(
       data => {
