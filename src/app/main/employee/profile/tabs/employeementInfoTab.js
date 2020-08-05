@@ -55,11 +55,11 @@ function EmployeementInfoTab() {
     dispatch(departmentAction.getDepartments(profile.department.entityId));
     dispatch(regionActions.getCountries());
     dispatch(Actions.getEmployeeInfo());
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
-    setData(employementInfo.data);
-  })
+    setData(employementInfo.data ? employementInfo.data : {});
+  }, [employementInfo.data, employementInfo])
 
   function disableButton()
   {

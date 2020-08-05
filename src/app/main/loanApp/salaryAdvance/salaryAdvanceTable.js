@@ -6,6 +6,7 @@ import SalaryAdvanceHeader from './salaryAdvanceheader';
 import { useSelector, useDispatch } from 'react-redux';
 import * as Actions from '../store/actions';
 import SharedTable from 'app/shared/sharedTable';
+import { useHistory } from 'react-router';
 
 const rows = [
 	{
@@ -38,9 +39,6 @@ const handleDelete = () => {
 
 };
 
-const handleClick = id => {
-
-}
 
 function SalaryAdvanceTable() {
   const dispatch = useDispatch();
@@ -53,7 +51,15 @@ function SalaryAdvanceTable() {
 
   useEffect(() => {
     setData(salaryAdvanceLog.log)
-  });
+	});
+
+	const history = useHistory();
+	
+	const handleClick = n => {
+		if(n.status === 'pending') {
+			history.push(`/loan/request/salaryadvance_request/new/${n.id}`)
+		}
+	}
   
 	return (
 		<FusePageCarded

@@ -202,7 +202,7 @@ function BlogDetail({ match }) {
                         btnContent='Reply'
                         userId={userId}
                       />
-                      <ReplyComment reply={comment.replyComment} commentId={comment.id} postId={postId} />
+                      {/* <ReplyComment reply={comment.replyComment} commentId={comment.id} postId={postId} /> */}
                     </Paper>
                   )
                 })}
