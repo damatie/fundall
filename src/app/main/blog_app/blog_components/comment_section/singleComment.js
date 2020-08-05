@@ -89,7 +89,7 @@ function BlogComment(props) {
   }
 
   const updateCommentReply = () => {
-    const model = {id: props.comment.id, commentId: props.commentId, content};
+    const model = {replyId: props.comment.id, commentId: props.commentId, content};
     dispatch(blogActions.updateACommentReply(model));
     setOpen(false);
   }
