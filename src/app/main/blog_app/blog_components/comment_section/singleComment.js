@@ -177,7 +177,7 @@ function BlogComment(props) {
                 {likes}
               </Typography>
             </div>
-            <Button onClick={showReplyInput}>Reply</Button>
+            {props.btnContent && <Button onClick={showReplyInput}>{props.btnContent}</Button>}
           </div> 
         : <CommentInput
             cancel="Cancel"
