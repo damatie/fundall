@@ -7,6 +7,8 @@ import IconButton from '@material-ui/core/IconButton';
 import Divider from '@material-ui/core/Divider';
 import Favorite from '@material-ui/icons/Favorite';
 import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
+import FacebookIcon from '@material-ui/icons/Facebook';
+import TwitterIcon from '@material-ui/icons/Twitter';
 import * as blogActions from '../store/actions';
 import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
 import SingleComment from './comment_section/singleComment';
@@ -94,6 +96,7 @@ function BlogDetail({ match }) {
 
   const [isLikedPost, setIsLikedPost] = useState(false);
   const [content, setContent] = useState('');
+  const [numberOflikedpost, setNumberOfLikedPost] = useState();
 
   const postId = match.params.post_id;
 
@@ -104,20 +107,30 @@ function BlogDetail({ match }) {
 
   useEffect(() => {
     if (blogPost) {
-      const isLiked = blogPost.employees && blogPost.employees.every(employee => employee.id !== userId);
-      if (!isLiked) setIsLikedPost(!isLiked);
+      let isLiked; 
+      if(blogPost.employees.length <= 0) {
+        isLiked = false;
+      }else {
+        isLiked = blogPost.employees.every(employee => employee.id !== userId);
+        if (!isLiked) setIsLikedPost(!isLiked);
+      } 
     }
   }, [blogPost]);
 
-  const handleLikes = () => {
+  useEffect(() => {
+    blogPost && setNumberOfLikedPost(blogPost.employees.length);
+  }, [blogPost])
+
+  const handleLikes = (id) => {
     setIsLikedPost(prevState => prevState = !prevState);
-    dispatch(blogActions.likeAndUnlikeBlogPost(postId));
+    numberOflikedpost ? setNumberOfLikedPost(prev => prev - 1) : setNumberOfLikedPost(prev => prev + 1);
+    dispatch(blogActions.likeAndUnlikeBlogPost({id}));
   };
 
   const handleSubmit = () => {
     const model = {postId, content};
-    setContent('');
     dispatch(blogActions.submitBlogComment(model));
+    setContent('');
   }
 
   const getColor = () => !isLikedPost ? '#4d5760' : '#F44336';
@@ -132,10 +145,10 @@ function BlogDetail({ match }) {
             <Grid item xs={12} sm={1}>
               <div className={classes.iconButton}>
                 <div className={classes.alignCenter}>
-                  <IconButton aria-label="like" onClick={handleLikes} style={{color: getColor()}} component="span">
+                  <IconButton aria-label="like" onClick={() => handleLikes(blogPost.id)} style={{color: getColor()}} component="span">
                     {!isLikedPost ? <FavoriteBorder /> : <Favorite />}
                   </IconButton>
-                  <Typography style={{textAlign: 'center'}}>{blogPost.employees && blogPost.employees.length}</Typography>
+                  <Typography style={{textAlign: 'center'}}>{numberOflikedpost}</Typography>
                 </div>
                 <div className={classes.alignCenter}>
                   <IconButton aria-label="like" component="span">
@@ -143,11 +156,21 @@ function BlogDetail({ match }) {
                   </IconButton>
                   <Typography style={{textAlign: 'center'}}>{comments.length}</Typography>
                 </div>
+                <div className={classes.alignCenter}>
+                  <IconButton aria-label="like" component="span">
+                    <FacebookIcon />
+                  </IconButton>
+                </div>
+                <div className={classes.alignCenter}>
+                  <IconButton aria-label="like" component="span">
+                    <TwitterIcon />
+                  </IconButton>
+                </div>
               </div>
             </Grid>
             <Grid item xs={12} sm={7}>
               <Paper variant="outlined">
-                <img src={blogPost.images[0].url} alt="" className={classes.img}></img>
+                {blogPost.images.length > 0 && <img src={blogPost.images[0].url} alt="" className={classes.img}></img>}
                 <div className={classes.paper}>
                   <ThemeProvider theme={theme}>
                     <Typography variant="h2" className={classes.title}>{blogPost && blogPost.title}</Typography>
@@ -164,7 +187,11 @@ function BlogDetail({ match }) {
                 <Typography variant="h6" component='h2' style={{marginBottom: 12}}>
                   Discussion
                 </Typography>
-                <CommentInput onClick={() => handleSubmit()} onChange={value => setContent(value)} />
+                <CommentInput
+                  onClick={() => handleSubmit()}
+                  value={content}
+                  onChange={value => setContent(value)}
+                />
                 {(comments.length > 0) && comments.map((comment, index) => {
                   return (
                     <Paper variant="outlined" key={index} className={classes.replyComment}>

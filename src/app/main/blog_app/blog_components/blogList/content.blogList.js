@@ -11,6 +11,7 @@ import { useDispatch } from 'react-redux';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 import SectionHeader from '../../sectionHeader';
+import { fetchHeaders } from 'app/shared/fetchHeaders';
 const theme = createMuiTheme();
 
 theme.typography.h4 = {
@@ -62,11 +63,32 @@ function Blog(props) {
   const dispatch = useDispatch()
 
   const [clicked, setClicked] = React.useState(false);
+  const [userData, setUserData] = React.useState();
+
+  const header = fetchHeaders();
 
   React.useEffect(() => {
     const isLiked = props.blog.employees.every(employee => employee.id !== props.userId);
     if (!isLiked) setClicked(!isLiked);
   }, [])
+
+  React.useEffect(() => {
+    fetch(`https://hris-cbit.herokuapp.com/api/v1/auth/employee/${props.userId}`, {
+			...header.getRegHeader()
+		}).then(res => res.json()).then(
+      user => {
+				if(user.success === true) {
+					setUserData(user.data);
+				} else {
+					console.log(user)
+				}
+			}
+		)
+		.catch(error => {
+			console.log(error);
+		});
+	
+  })
 
   const handleLike = (id) => {
     setClicked(prevState => prevState = !prevState);
@@ -94,7 +116,7 @@ function Blog(props) {
   return (
     <Paper className={classes.paper} variant="outlined">
       <SectionHeader
-        fullName='Mark Jack'
+        fullName={userData && `${userData.firstName} ${userData.lastName}`}
         updatedAt={props.blog.updatedAt}
         id={props.blog.id}
         buttonContent={['Edit post', 'Delete post']}

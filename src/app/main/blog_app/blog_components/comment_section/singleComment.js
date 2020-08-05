@@ -39,6 +39,7 @@ function BlogComment(props) {
   const dispatch = useDispatch();
 
   const [showInput, setShowInput] = useState(true);
+  const [commentBody, setCommentBody] = useState('');
   const [content, setContent] = useState('');
   const [open, setOpen] = useState(false);
   const [isLikeComment, setIsLikeComment] = useState(props.isLike);
@@ -48,16 +49,11 @@ function BlogComment(props) {
 
   useEffect(() => {
     if (props.comment) {
-      setContent(props.comment.content);
+      setCommentBody(props.comment.content);
+      setLikes(props.comment.commentLike ? props.comment.commentLike.length : 0);
       setEmployeeDetails(props.comment.employee);
     }
   }, [props.comment])
-
-  useEffect(() => {
-    if (props.comment.commentLike) {
-      setLikes(props.comment.commentLike.length);
-    }
-  }, [props.comment.commentLike])
 
   useEffect(() => {
     if (props.comment) {
@@ -84,6 +80,7 @@ function BlogComment(props) {
     setShowInput(true);
     const model = {commentId: props.comment.id, content};
     dispatch(blogActions.submitBlogCommentReply(model));
+    setContent('');
   }
 
   const handleCommentEdit = () => {
@@ -138,10 +135,6 @@ function BlogComment(props) {
 
   const getColor = () => !isLikeComment ? '#4d5760' : '#F44336';
 
-  if (!props.comment) {
-    return <h1>Loadingkahf...</h1>
-  }
-
   return (
     <>
       <ThemeProvider theme={theme}>
@@ -150,7 +143,7 @@ function BlogComment(props) {
           buttonContent={props.moreContent}
           onClick={(value) => selectClickedButton(value)}
         />
-        <Typography varaint="body1" className={classes.commentBody}>{content}</Typography>
+        <Typography varaint="body1" className={classes.commentBody}>{props.comment.content}</Typography>
       </ThemeProvider>
       <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Update comment</DialogTitle>
@@ -159,10 +152,10 @@ function BlogComment(props) {
             autoFocus
             margin="dense"
             label="Update comment"
-            value={content}
+            value={commentBody}
             type="text"
             fullWidth
-            onChange={event => setContent(event.target.value)}
+            onChange={event => setCommentBody(event.target.value)}
           />
         </DialogContent>
         <DialogActions>
@@ -188,6 +181,7 @@ function BlogComment(props) {
           </div> 
         : <CommentInput
             cancel="Cancel"
+            value={content}
             onClick={() => handleSubmitReply()}
             onChange={value => handleChange(value)}
           />

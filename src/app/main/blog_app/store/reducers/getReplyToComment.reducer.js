@@ -12,7 +12,8 @@ const GetReplyToComment = (state = initialState, action) => {
 			return {
 				...initialState,
 				success: true,
-				loading: false
+				loading: false,
+				data: action.payload
 			};
 		}
 		case Actions.GET_REPLY_TO_COMMENT_ERROR: {

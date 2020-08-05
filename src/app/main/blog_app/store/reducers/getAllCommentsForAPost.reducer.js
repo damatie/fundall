@@ -47,7 +47,9 @@ const getAllCommentsForAPost = (state = initialState, action) => {
 		}
 		case Actions.COMMENT_TO_COMMENT_SUCCESS: {
 			const newData = state.data.map((comment => {
-				if (comment.id === action.payload.commentId) return comment.replyComment.concat(action.payload);
+        if (comment.id === action.payload.commentId) {
+          return {...comment, replyComment: [{...action.payload}, ...comment.replyComment]};
+        }
 				return comment;
 			}));
 			return {
@@ -72,7 +74,6 @@ const getAllCommentsForAPost = (state = initialState, action) => {
 				loading: false,
 				data: currentComment
 			};
-			break;
 		}
 		// case Actions.LIKE_A_COMMENT_SUCCESS: {
 		// 	const newData = state.data.map(comment => {
