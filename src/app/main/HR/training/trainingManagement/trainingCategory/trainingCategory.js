@@ -149,7 +149,7 @@ function TrainingCategory(props) {
 							}}
 						>
                             <div className="widget flex w-full p-12">
-								<CategoryTableWidget title={"Category List"} type="default" handleDelete={handleDelete} columns={columns} rows={rows}/>
+								<CategoryTableWidget title={"Category List"} type="default" handleDelete={handleDelete} columns={columns} rows={rows} showEdit={false}/>
 							</div>
 						</FuseAnimateGroup>
 				</div>

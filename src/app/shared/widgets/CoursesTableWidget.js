@@ -318,7 +318,8 @@ const CoursesTableWidget = (props) =>{
 								],
 								[order.direction]
 							)
-								.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                .sort()
 								.map(n => {
 								return (
 									<TableRow

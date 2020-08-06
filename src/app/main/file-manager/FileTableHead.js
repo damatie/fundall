@@ -15,19 +15,26 @@ import Tooltip from '@material-ui/core/Tooltip';
 import clsx from 'clsx';
 import React, { useState } from 'react';
 
-const rows = [
+const columns = [
 	{
 		id: 'name',
-		align: 'left',
+		align: 'center',
 		disablePadding: false,
 		label: 'Name',
 		sort: true
 	},
 	{
 		id: 'type',
-		align: 'left',
+		align: 'center',
 		disablePadding: false,
 		label: 'Type',
+		sort: true
+	},
+	{
+		id: 'size',
+		align: 'left',
+		disablePadding: false,
+		label: 'Size',
 		sort: true
 	},
 	{
@@ -39,14 +46,14 @@ const rows = [
 	},
 	{
 		id: 'category',
-		align: 'right',
+		align: 'left',
 		disablePadding: false,
 		label: 'Category',
 		sort: true
 	},
 	{
 		id: 'modified',
-		align: 'left',
+		align: 'center',
 		disablePadding: false,
 		label: 'Modified',
 		sort: true
@@ -79,7 +86,7 @@ function FileTableHead(props) {
 		<TableHead>
 			<TableRow className="h-64">
             <TableCell className="max-w-64 w-64 p-0 text-center"> </TableCell>
-				{rows.map(row => {
+				{columns.map(row => {
 					return (
 						<TableCell
 							key={row.id}

@@ -59,21 +59,13 @@ const CategoryTableWidget = (props) =>{
         setSearch(event.target.value);
     }
 
-    function handleDelete(event, id){
-        console.log("deleted")
-    }
-
-    function handleEdit(event, id){
-        console.log("edited")
-    }
-
     const handleClose = () => {
         setOpen(false);
     };
 
     useEffect(() => {
 		if (search.length >= 2) {
-			setData(_.filter(props.rows, row => row.name.toLowerCase().includes(search.toLowerCase())));
+			setData(_.filter(props.rows, row => ( (row.name) ? row.name.toLowerCase() : row.categoryName.toLowerCase()).includes(search.toLowerCase())));
 			setPage(0);
 		} else {
 			setData(props.rows);
@@ -166,21 +158,30 @@ const CategoryTableWidget = (props) =>{
 											{count}
 										</TableCell>
                                         <TableCell className="text-center hidden sm:table-cell">
-											{n.name}
+											{(n.name) ? n.name : n.categoryName}
 										</TableCell>
 										<TableCell className="text-center hidden sm:table-cell"><Moment format="ddd MMM, YY | hh:mm:ss a">{n.createdAt}</Moment></TableCell>
                                         <TableCell className="text-center hidden sm:table-cell">
                                         <Moment format="ddd MMM, YY | hh:mm:ss a">{n.updatedAt}</Moment>           
                                         </TableCell>
-                                        <TableCell className="text-center hidden sm:table-cell">
-                                            {/* <Icon onClick={ev => handleEdit(ev, n.id)} className="text-yellow text-20" color="action">
-                                                edit
-                                            </Icon>
-                                            &nbsp; */}
-                                            <Icon onClick={ev => props.handleDelete(ev, n.id)} className="text-red text-20" color="action">
-                                                delete
-                                            </Icon>
-                                        </TableCell>
+                                            { (props.showEdit)?
+                                                <TableCell className="text-center hidden sm:table-cell">
+                                                    <Icon onClick={ev => props.handleEdit(ev, n)} className="text-yellow text-20" color="action">
+                                                        edit
+                                                    </Icon>
+                                                    &nbsp;
+                                                    &nbsp;
+                                                    <Icon onClick={ev => props.handleDelete(ev, n.id)} className="text-red text-20" color="action">
+                                                        delete
+                                                    </Icon>
+                                                </TableCell>
+                                            : 
+                                                <TableCell className="text-center hidden sm:table-cell">
+                                                    <Icon onClick={ev => props.handleDelete(ev, n.id)} className="text-red text-20" color="action">
+                                                        delete
+                                                    </Icon>
+                                                </TableCell>
+                                            }
 									</TableRow>
 								);
 							})}
