@@ -168,7 +168,7 @@ function BlogComment(props) {
       </Dialog>
       {showInput
         ? <div className={`${classes.dFlex} ${classes.spaceBtw}`}>
-            <div>
+           {props.btnContent &&<> <div>
               <IconButton aria-label="like" onClick={handleLikes} style={{color: getColor()}} component="span">
                 {!isLikeComment ? <FavoriteBorder /> : <Favorite />}
               </IconButton>
@@ -176,7 +176,7 @@ function BlogComment(props) {
                 {likes}
               </Typography>
             </div>
-            {props.btnContent && <Button onClick={showReplyInput}>{props.btnContent}</Button>}
+             <Button onClick={showReplyInput}>{props.btnContent}</Button> </>}
           </div> 
         : <CommentInput
             cancel="Cancel"

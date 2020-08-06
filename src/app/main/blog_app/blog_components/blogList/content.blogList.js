@@ -63,7 +63,7 @@ function Blog(props) {
   const dispatch = useDispatch()
 
   const [clicked, setClicked] = React.useState(false);
-  const [userData, setUserData] = React.useState();
+  const [userData, setUserData] = React.useState({});
 
   const header = fetchHeaders();
 
@@ -78,7 +78,7 @@ function Blog(props) {
 		}).then(res => res.json()).then(
       user => {
 				if(user.success === true) {
-					setUserData(user.data);
+          setUserData(user.data);
 				} else {
 					console.log(user)
 				}
@@ -121,6 +121,7 @@ function Blog(props) {
         id={props.blog.id}
         buttonContent={['Edit post', 'Delete post']}
         onClick={(value) => handleDelete(value)}
+        profilePicture={userData.profilePicture}
       />
       <div className={classes.blogInfo}>
         <ThemeProvider theme={theme}>
