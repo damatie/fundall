@@ -7,8 +7,6 @@ import IconButton from '@material-ui/core/IconButton';
 import Divider from '@material-ui/core/Divider';
 import Favorite from '@material-ui/icons/Favorite';
 import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
-import FacebookIcon from '@material-ui/icons/Facebook';
-import TwitterIcon from '@material-ui/icons/Twitter';
 import * as blogActions from '../store/actions';
 import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
 import SingleComment from './comment_section/singleComment';
@@ -17,7 +15,10 @@ import UserAvatar from '../userAvatar';
 import ReplyComment from './comment_section/replyComment';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import BlogTags from './blogTags';
+import Facebook from 'react-sharingbuttons/dist/buttons/Facebook'
+import Twitter from 'react-sharingbuttons/dist/buttons/Twitter'
 import { useDispatch, useSelector } from 'react-redux';
+import 'react-sharingbuttons/dist/main.css'
 const theme = createMuiTheme();
 
 theme.typography.h2 = {
@@ -99,6 +100,8 @@ function BlogDetail({ match }) {
   const [numberOflikedpost, setNumberOfLikedPost] = useState();
 
   const postId = match.params.post_id;
+  const url = 'window.location.href';
+  const shareText = 'Check out this post!';
 
   useEffect(() => {
     dispatch(blogActions.getOneBlogPost(postId));
@@ -156,16 +159,8 @@ function BlogDetail({ match }) {
                   </IconButton>
                   <Typography style={{textAlign: 'center'}}>{comments.length}</Typography>
                 </div>
-                <div className={classes.alignCenter}>
-                  <IconButton aria-label="like" component="span">
-                    <FacebookIcon />
-                  </IconButton>
-                </div>
-                <div className={classes.alignCenter}>
-                  <IconButton aria-label="like" component="span">
-                    <TwitterIcon />
-                  </IconButton>
-                </div>
+                <Facebook url={url} style={{bottomMargin: 16}} />
+                <Twitter url={url} shareText={shareText} style={{bottomMargin: 16}} />
               </div>
             </Grid>
             <Grid item xs={12} sm={7}>
@@ -202,7 +197,7 @@ function BlogDetail({ match }) {
                         btnContent='Reply'
                         userId={userId}
                       />
-                      {/* <ReplyComment reply={comment.replyComment} commentId={comment.id} postId={postId} /> */}
+                      <ReplyComment reply={comment.replyComment} commentId={comment.id} postId={postId} />
                     </Paper>
                   )
                 })}
