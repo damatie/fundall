@@ -18,6 +18,7 @@ export default function SectionHeader(props) {
   const classes = useStyles();
   let location = useLocation();
   const [anchorEl, setAnchorEl] = React.useState(null);
+ 
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -37,7 +38,7 @@ export default function SectionHeader(props) {
 
   return (
     <div className={classes.root}>
-      <UserAvatar fullName={props.fullName} time={props.updatedAt} />
+      <UserAvatar fullName={props.fullName} time={props.updatedAt} src={props.profilePicture}/>
       <div style={{alignSelf: 'center'}}>
         <IconButton aria-describedby={id} aria-label="like" component="span" onClick={handleClick}>
           <MoreHorizIcon fontSize="small" />

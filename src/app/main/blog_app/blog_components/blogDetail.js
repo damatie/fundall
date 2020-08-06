@@ -39,7 +39,7 @@ theme.typography.body1 = {
 const useStyles = makeStyles((theme) => ({
   img: {
     width: '100%',
-    height: '40vh',
+    // height: '40vh',
   },
   paper: {
     padding: theme.spacing(4),
@@ -92,6 +92,7 @@ function BlogDetail({ match }) {
   const dispatch = useDispatch();
   
   const blogPost = useSelector(state => state.blog.getOneBlogPost.data.postData);
+  const author = useSelector(state => state.blog.getOneBlogPost.data.author);
   const comments = useSelector(state => state.blog.getAllCommentsForAPost.data);
   const userId = useSelector(state => state.auth.user.id);
 
@@ -120,13 +121,16 @@ function BlogDetail({ match }) {
     }
   }, [blogPost]);
 
+  // set number of like when ever there is a change in the blogpost store
   useEffect(() => {
-    blogPost && setNumberOfLikedPost(blogPost.employees.length);
+    if(blogPost) {
+      setNumberOfLikedPost(blogPost.employees.length);
+      console.log(blogPost)
+    }
   }, [blogPost])
 
   const handleLikes = (id) => {
     setIsLikedPost(prevState => prevState = !prevState);
-    numberOflikedpost ? setNumberOfLikedPost(prev => prev - 1) : setNumberOfLikedPost(prev => prev + 1);
     dispatch(blogActions.likeAndUnlikeBlogPost({id}));
   };
 
@@ -207,9 +211,10 @@ function BlogDetail({ match }) {
               <div style={{margin: '0 32px 0 0'}}>
                 <Paper className={classes.sidePaper} variant="outlined">
                   <ThemeProvider theme={theme}>
-                    <UserAvatar fullName={user.fullName} />
+                    <UserAvatar fullName={`${author.firstName} ${author.lastName}`} userName={author.email} src={author.profilePicture}/>
                   </ThemeProvider>
-                  <Typography varaint="body1" style={{lineHeight: 2}}>Front-end dev, loves learning things deeply, and eager about helping others</Typography>
+                  <div>
+                  </div>
                 </Paper>
                 <Paper variant="outlined">
                 <Typography variant='h6' className={classes.sidePaperPadding}>

@@ -35,17 +35,21 @@ export default function UserAvatar(props) {
   const userAvatar = useSelector(state => state.auth.user.data.photoURL);
 
   return (
-    <div className={classes.root}>
-      <Avatar className={classes.avatar} src={userAvatar}></Avatar>
-      <div className={classes.userName}>
-        {props.fullName && <Typography variant="body1" className={classes.name}>
-          {props.fullName}
-        </Typography>}
-        {props.time && <Typography variant="caption" component="span" style={{color: 'grey'}}>{timeAgo.fromNow()}</Typography>}
-        {props.userName && <Typography variant="caption">{`@${props.userName}`}</Typography>}
-        {props.title && <Typography variant="caption">{props.title}</Typography>}
-        {/* {(props.tag.length > 0) && relatedPostTags} */}
+    <div>
+      <div className={classes.root}>
+        <Avatar className={classes.avatar} src={!props.src ? userAvatar : props.src}></Avatar>
+        <div className={classes.userName}>
+          {props.fullName && <Typography variant="body1" className={classes.name}>
+            {props.fullName}
+          </Typography>}
+          {props.time && <Typography variant="caption" component="span" style={{color: 'grey'}}>{timeAgo.fromNow()}</Typography>}
+          {/* {props.userName && <Typography variant="caption">{props.userName}</Typography>} */}
+          {props.title && <Typography variant="caption">{props.title}</Typography>}
+          {/* {(props.tag.length > 0) && relatedPostTags} */}
+        </div>
       </div>
+      <Typography variant="subtitle1">{props.userName}</Typography>
     </div>
+    
   )
 }
