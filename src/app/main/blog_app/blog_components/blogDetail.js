@@ -19,6 +19,7 @@ import Facebook from 'react-sharingbuttons/dist/buttons/Facebook'
 import Twitter from 'react-sharingbuttons/dist/buttons/Twitter'
 import { useDispatch, useSelector } from 'react-redux';
 import 'react-sharingbuttons/dist/main.css'
+import { desSort } from 'app/shared/sortData';
 const theme = createMuiTheme();
 
 theme.typography.h2 = {
@@ -191,7 +192,7 @@ function BlogDetail({ match }) {
                   value={content}
                   onChange={value => setContent(value)}
                 />
-                {(comments.length > 0) && comments.map((comment, index) => {
+                {(comments.length > 0) && desSort(comments).map((comment, index) => {
                   return (
                     <Paper variant="outlined" key={index} className={classes.replyComment}>
                       <SingleComment

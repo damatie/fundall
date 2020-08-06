@@ -34,6 +34,20 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+const checkIfUserLikedComment = data => {
+  const id = JSON.parse(localStorage.getItem('user_data'));
+  if(data) {
+    for(const i of data) {
+      if(i.employeeId === id.id) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }
+
+};
+
 function BlogComment(props) {
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -43,7 +57,7 @@ function BlogComment(props) {
   const [open, setOpen] = useState(false);
   const [isLikeComment, setIsLikeComment] = useState(props.isLike);
   const [likes, setLikes] = useState([]);
-  const [employeeDetails, setEmployeeDetails] = useState();
+  const [employeeDetails, setEmployeeDetails] = useState({});
   const [value, setValue] = useState('');
 
   useEffect(() => {
@@ -56,11 +70,9 @@ function BlogComment(props) {
 
   useEffect(() => {
     if (props.comment) {
-      const checkLike = (employee) => employee.employeeId !== props.userId;
-      const isLiked = props.comment.commentLike && props.comment.commentLike.every(checkLike);
-      if (!isLiked) setIsLikeComment(!isLiked);
+      setIsLikeComment(checkIfUserLikedComment(props.comment.commentLike))
     }
-  }, [props.comment]);
+  }, [props, props.comment]);
 
   const showReplyInput = (e) => {
     e.preventDefault();
@@ -73,40 +85,40 @@ function BlogComment(props) {
     } else {
       setContent(value);
     }
-  }
+  };
 
   const handleSubmitReply = () => {
     setShowInput(true);
     const model = {commentId: props.comment.id, content};
     dispatch(blogActions.submitBlogCommentReply(model));
     setContent('');
-  }
+  };
 
   const handleCommentEdit = () => {
     const model = {id: props.comment.id, content};
     dispatch(blogActions.updateAComment(model));
     setOpen(false);
-  }
+  };
 
   const updateCommentReply = () => {
     const model = {replyId: props.comment.id, commentId: props.commentId, content};
     dispatch(blogActions.updateACommentReply(model));
     setOpen(false);
-  }
+  };
 
   const checkForMethodToCall = () => {
     if (value === 'Edit comment') handleCommentEdit();
     else updateCommentReply();
-  }
+  };
 
   const handleCommentDelete = () => {
     dispatch(blogActions.deleteComment(props.comment.id));
-  }
+  };
 
   const handleDeleteReply = () => {
     console.log(props.comment.id);
     dispatch(blogActions.deleteCommentReply(props.comment.id));
-  }
+  };
 
   const selectClickedButton = (value) => {
     switch(value) {
@@ -120,16 +132,14 @@ function BlogComment(props) {
         setValue(value);
         setOpen(true);
     }
-  }
+  };
   
   const handleClose = () => {
     setOpen(false);
   };
 
   const handleLikes = () => {
-    setIsLikeComment(!isLikeComment);
-    isLikeComment ? setLikes(prev => prev - 1) : setLikes(prev => prev + 1);
-    dispatch(blogActions.likeAComment(props.comment.id, props.userId));
+    dispatch(blogActions.likeAComment(props.comment.id, props.userId, props.comment.postId));
   };
 
   const getColor = () => !isLikeComment ? '#4d5760' : '#F44336';
@@ -141,8 +151,9 @@ function BlogComment(props) {
           fullName={!employeeDetails ? 'George Ole' : `${employeeDetails.lastName} ${employeeDetails.firstName}`}
           buttonContent={props.moreContent}
           onClick={(value) => selectClickedButton(value)}
+          // profilePicture={employeeDetails.profilePicture}
         />
-        <Typography varaint="body1" className={classes.commentBody}>{props.comment.content}</Typography>
+        <Typography varaint="body1" className={classes.commentBody}>{content}</Typography>
       </ThemeProvider>
       <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Update comment</DialogTitle>

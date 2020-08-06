@@ -67,12 +67,21 @@ const routeConfigs = [
 	HrTrainingConfig
 ];
 
+const checkIfLoggedIn = () => {
+	if(localStorage.getItem('jwt_access_token')) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
 const routes = [
 	...FuseUtils.generateRoutesFromConfigs(routeConfigs),
 	{
 		path: '/',
-		component: React.lazy(import('app/main/authentication_pages/login/login'))
-	}
+		exact: true,
+		component: checkIfLoggedIn() ?  React.lazy(() => import('app/main/employee/dashboard/ProjectDashboardApp')) : () => <Redirect to="/auth/login" />
+	},
 ];
 
 export default routes;
