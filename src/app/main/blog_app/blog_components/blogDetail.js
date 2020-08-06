@@ -126,7 +126,6 @@ function BlogDetail({ match }) {
   useEffect(() => {
     if(blogPost) {
       setNumberOfLikedPost(blogPost.employees.length);
-      console.log(blogPost)
     }
   }, [blogPost])
 
