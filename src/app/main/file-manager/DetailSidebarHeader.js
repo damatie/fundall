@@ -12,8 +12,7 @@ import { useAuth } from 'app/hooks/useAuth';
 
 function DetailSidebarHeader(props) {
 	const dispatch = useDispatch();
-	const files = useSelector(({ fileManagerApp }) => fileManagerApp.files.data);
-	const selectedItem = useSelector(({ fileManagerApp }) => files[fileManagerApp.selectedItemId]);
+	const selectedItem = useSelector(({ fileManagerApp }) => fileManagerApp.selectedItemId.selectedItem);
 	const linkRef = React.createRef();
 	const userId = useAuth().getId;
 
@@ -39,21 +38,16 @@ function DetailSidebarHeader(props) {
 	}
 
 	function HiddenBtn(){
-		console.log(userId);
-		if(userId !== selectedItem.uploaderId){
+		if(userId === selectedItem.employeeId){
 		  return (
-			<hidden>
-				<IconButton>
-						<Icon onClick={deleteFile}>delete</Icon>
-					</IconButton>
-			</hidden>
-		  )
-		}else{
-		  return (
-			<IconButton>
-				<Icon onClick={deleteFile}>delete</Icon>
+			<IconButton onClick={deleteFile}>
+				<Icon>delete</Icon>
 			</IconButton>
 		  )
+		}else{
+			return (
+				<></>
+			)
 		}
 	  }
 
@@ -64,8 +58,8 @@ function DetailSidebarHeader(props) {
 					<HiddenBtn />
 				</FuseAnimate>
 				<FuseAnimate animation="transition.expandIn" delay={200}>
-					<IconButton>
-						<Icon onClick={downloadFile}>cloud_download</Icon>
+					<IconButton onClick={downloadFile}>
+						<Icon>cloud_download</Icon>
 					</IconButton>
 				</FuseAnimate>
 				<FuseAnimate animation="transition.expandIn" delay={200}>

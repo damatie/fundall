@@ -1,9 +1,17 @@
 import * as Actions from '../actions';
 
-const selectedItemIdReducer = (state = '1', action) => {
+const initialState = {
+	data: [],
+	id: '0'
+  }
+const selectedItemIdReducer = (state = initialState, action) => {
 	switch (action.type) {
 		case Actions.SET_SELECTED_ITEM_ID:
-			return action.payload;
+			return {
+				...state,
+				id: action.id,
+				selectedItem: action.payload
+			  }
 		default:
 			return state;
 	}

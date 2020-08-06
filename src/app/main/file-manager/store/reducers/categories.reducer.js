@@ -2,64 +2,64 @@ import _ from '@lodash';
 import * as Actions from '../actions';
 const initialState = {
 	loading: true,
-	data: [],
+	categories: [],
 	success: true,
 	searchText: ''
   }
 const filesReducer = (state = initialState, action) => {
 	switch (action.type) {
-		case Actions.LOADING_FILES: {
+		case Actions.LOADING_CATEGORIES: {
 			return {
 			  ...state,
 			  loading: true,
 			}
 		  }
-		case Actions.GET_FILES:
+		case Actions.GET_CATEGORIES:
 			return {
 				...state,
 				loading: false,
-				data: action.payload
+				categories: action.payload
 			};
-		case Actions.CREATE_FILE_SUCCESS:
+		case Actions.CREATE_CATEGORY_SUCCESS:
 			return {
 				...state,
 				loading: false,
-				success: true,
-				data: action.payload
+				sucess: true,
+				categories: action.payload
 			};
-		case Actions.CREATE_FILE_ERROR:
+		case Actions.CREATE_CATEGORY_ERROR:
 			return {
 				...state,
 				loading: false,
 				success: false
 			};
-		case Actions.UPDATE_FILE_SUCCESS:
+		case Actions.UPDATE_CATEGORY_SUCCESS:
 			return {
 				...state,
 				loading: false,
 				success: true,
-				data: action.payload
+				categories: action.payload
 			};
-		case Actions.UPDATE_FILE_ERROR:
-			return {
-				...state,
-				loading: false,
-				success: false,
-			};	
-		case Actions.DELETE_FILE_SUCCESS:
-			return {
-				...state,
-				loading: false,
-				success: true,
-				data: action.payload
-			};	
-		case Actions.DELETE_FILE_ERROR:
+		case Actions.UPDATE_CATEGORY_ERROR:
 			return {
 				...state,
 				loading: false,
 				success: false
 			};
-		case Actions.SET_FILE_SEARCH_TEXT: 
+		case Actions.DELETE_CATEGORY_SUCCESS:
+			return {
+				...state,
+				loading: false,
+				success: true,
+				categories: action.payload
+			};
+		case Actions.DELETE_CATEGORY_ERROR:
+			return {
+				...state,
+				loading: false,
+				success: false
+			};
+		case Actions.SET_CATEGORY_SEARCH_TEXT: 
 		return {
 			...state,
 			loading: false,

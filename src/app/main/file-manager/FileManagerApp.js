@@ -9,7 +9,6 @@ import withReducer from 'app/store/withReducer';
 import { ThemeProvider } from '@material-ui/core/styles';
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import Breadcrumb from './Breadcrumb';
 import DetailSidebarContent from './DetailSidebarContent';
 import DetailSidebarHeader from './DetailSidebarHeader';
 import FileList from './FileList';

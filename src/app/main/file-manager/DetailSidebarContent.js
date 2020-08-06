@@ -45,34 +45,32 @@ const useStyles = makeStyles({
 });
 
 function DetailSidebarContent(props) {
-	const files = useSelector(({ fileManagerApp }) => fileManagerApp.files.data);
-	const selectedItem = useSelector(({ fileManagerApp }) => files[fileManagerApp.selectedItemId]);
+	const selectedItem = useSelector(({ fileManagerApp }) => fileManagerApp.selectedItemId.selectedItem);
 	const [fileSize, setFileSize] = useState('');
 
 	const classes = useStyles();
 
 	const getExt = (filename) =>{
-		console.log(filename);
-		let ext = filename.split('.').pop();
-		if(ext.toUpperCase() === 'PDF'){
-			return 'pdf';
-		}else if (ext.toUpperCase() === 'DOC' || ext.toUpperCase() === 'DOCX'){
-			return 'document';
-		}else if (ext.toUpperCase() === 'JPG' || ext.toUpperCase() === 'PNG' || ext.toUpperCase() === 'SVG' || ext.toUpperCase() === 'JPEG'){
-			return 'image';
-		}else if (ext.toUpperCase() === 'MP3' || ext.toUpperCase() === 'WAV'){
-			return 'audio';
-		}else if (ext.toUpperCase() === 'MP4' || ext.toUpperCase() === 'OGG' || ext.toUpperCase() === '3GP'){
-			return 'video';
-		}else if (ext.toUpperCase() === 'XLSX' || ext.toUpperCase() === 'XLS' || ext.toUpperCase() === '3GP'){
-			return 'spreadsheet';
+		if(filename){
+			let ext = filename.split('.').pop();
+			if(ext.toUpperCase() === 'PDF'){
+				return 'pdf';
+			}else if (ext.toUpperCase() === 'DOC' || ext.toUpperCase() === 'DOCX'){
+				return 'document';
+			}else if (ext.toUpperCase() === 'JPG' || ext.toUpperCase() === 'PNG' || ext.toUpperCase() === 'SVG' || ext.toUpperCase() === 'JPEG'){
+				return 'image';
+			}else if (ext.toUpperCase() === 'MP3' || ext.toUpperCase() === 'WAV'){
+				return 'audio';
+			}else if (ext.toUpperCase() === 'MP4' || ext.toUpperCase() === 'OGG' || ext.toUpperCase() === '3GP'){
+				return 'video';
+			}else if (ext.toUpperCase() === 'XLSX' || ext.toUpperCase() === 'XLS' || ext.toUpperCase() === '3GP'){
+				return 'spreadsheet';
+			}
 		}
 	}
 
 	function getSize(url){
 		remote(url, function(err, size) {
-		console.log(formatBytes(size));
-		// => 1548
 		setFileSize(formatBytes(size));
 	  });
 	  return fileSize;
@@ -89,7 +87,6 @@ function DetailSidebarContent(props) {
 
 	function getIcon(url){
 		let ext = getExt(url);
-		console.log(ext);
 		if(ext === 'image'){
 			return (
 				<div style={{height: "200px", width: "200px"}}>
@@ -124,13 +121,6 @@ function DetailSidebarContent(props) {
 						{getIcon(selectedItem.docUrl)}
 					</FuseAnimate>
 				</div>
-
-				{/* <FormControlLabel
-					className="offline-switch"
-					control={<Switch checked={selectedItem.offline} aria-label="Available Offline" />}
-					label="Available Offline"
-				/> */}
-
 				<Typography variant="subtitle1" className="py-16">
 					Info
 				</Typography>
@@ -139,12 +129,12 @@ function DetailSidebarContent(props) {
 					<tbody>
 						<tr className="type">
 							<th>Type</th>
-							<td>{getExt(selectedItem.docUrl)}</td>
+							<td>{selectedItem.fileType}</td>
 						</tr>
 
 						<tr className="size">
 							<th>Size</th>
-							<td>{getSize(selectedItem.docUrl) === '' ? '-' : getSize(selectedItem.docUrl)}</td>
+							<td>{formatBytes(selectedItem.size) === '' || (!formatBytes(selectedItem.size)) ? '-' : formatBytes(selectedItem.size)}</td>
 						</tr>
 
 						<tr className="location">
@@ -156,7 +146,7 @@ function DetailSidebarContent(props) {
 
 						<tr className="owner">
 							<th>Owner</th>
-							<td>{selectedItem.uploaderName}</td>
+							<td>{selectedItem.employee.firstName +' '+selectedItem.employee.lastName}</td>
 						</tr>
 
 						<tr className="modified">
