@@ -39,7 +39,6 @@ function BlogComment(props) {
   const dispatch = useDispatch();
 
   const [showInput, setShowInput] = useState(true);
-  const [commentBody, setCommentBody] = useState('');
   const [content, setContent] = useState('');
   const [open, setOpen] = useState(false);
   const [isLikeComment, setIsLikeComment] = useState(props.isLike);
@@ -49,7 +48,7 @@ function BlogComment(props) {
 
   useEffect(() => {
     if (props.comment) {
-      setCommentBody(props.comment.content);
+      setContent(props.comment.content);
       setLikes(props.comment.commentLike ? props.comment.commentLike.length : 0);
       setEmployeeDetails(props.comment.employee);
     }
@@ -89,15 +88,15 @@ function BlogComment(props) {
     setOpen(false);
   }
 
-  const handleEditReply = () => {
-    const model = {id: props.comment.id, commentId: props.commentId, content};
+  const updateCommentReply = () => {
+    const model = {replyId: props.comment.id, commentId: props.commentId, content};
     dispatch(blogActions.updateACommentReply(model));
     setOpen(false);
   }
 
   const checkForMethodToCall = () => {
     if (value === 'Edit comment') handleCommentEdit();
-    else handleEditReply();
+    else updateCommentReply();
   }
 
   const handleCommentDelete = () => {
@@ -152,10 +151,10 @@ function BlogComment(props) {
             autoFocus
             margin="dense"
             label="Update comment"
-            value={commentBody}
+            value={content}
             type="text"
             fullWidth
-            onChange={event => setCommentBody(event.target.value)}
+            onChange={event => setContent(event.target.value)}
           />
         </DialogContent>
         <DialogActions>

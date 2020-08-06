@@ -61,18 +61,18 @@ const getAllCommentsForAPost = (state = initialState, action) => {
 		case Actions.UPDATE_A_COMMENT_REPLY_SUCCESS: {
 			const updateReply = (comment) => {
 				comment.map((reply) => {
-					if(reply.id === action.payload.id) reply.content = action.payload.content;
+					if(reply.id === action.payload.replyId) reply.content = action.payload.content;
 					return reply;
 				});
 			}
-			const currentComment = state.data.map((comment) => {
+			const newData = state.data.map((comment) => {
 				if(comment.id === action.payload.commentId) updateReply(comment.replyComment);
 				return comment;
 			});
 			return {
 				...initialState,
 				loading: false,
-				data: currentComment
+				data: newData
 			};
 		}
 		// case Actions.LIKE_A_COMMENT_SUCCESS: {
