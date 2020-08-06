@@ -20,7 +20,6 @@ function BlogCommentInput(props) {
     <>
       <textarea
         placeholder="Add to the discussion"
-        value={props.value}
         onChange={event => props.onChange(event.target.value)}
         className={classes.textarea}
       />

@@ -8,12 +8,12 @@ export const UPDATE_A_COMMENT_REPLY_LOADING = 'UPDATE_A_COMMENT_REPLY_LOADING';
 
 const header = fetchHeaders();
 
-export function updateACommentReply({id, content, commentId}) {
+export function updateACommentReply({replyId, content, commentId}) {
 	return dispatch => {
 		dispatch({
 			type: UPDATE_A_COMMENT_REPLY_LOADING
 		})
-		fetch(`https://hris-cbit.herokuapp.com/api/v1/comment/reply/update/${id}`, {
+		fetch(`https://hris-cbit.herokuapp.com/api/v1/comment/reply/update/${replyId}`, {
 			...header.reqHeader(
 				'PATCH',
 				{content}
@@ -24,7 +24,7 @@ export function updateACommentReply({id, content, commentId}) {
 					console.log(comment)
 					return dispatch({
 						type: UPDATE_A_COMMENT_REPLY_SUCCESS,
-						payload: {id, content, commentId}
+						payload: {replyId, content, commentId}
 					});
 				} else {
 					console.log(comment);
