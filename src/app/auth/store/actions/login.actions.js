@@ -36,7 +36,7 @@ export function submitLogin(data) {
 						icon: 'success',
 						timer: 3000,
 					});
-					localStorage.setItem('jwt_access_token', user.token);
+					localStorage.setItem('jwt_access_token', JSON.stringify(user.token));
 					const userState = {
 						role: user.role,
 						redirectUrl: redirectUrl(user.role),
@@ -48,6 +48,7 @@ export function submitLogin(data) {
 							shortcuts: ['loan_request', 'request_leave', 'blog_list', 'todo']
 						}
 					};
+					localStorage.setItem('user_data', JSON.stringify(userState));
 					dispatch(getProfile(user.id, user.token));
 					dispatch(UserActions.setUserData(userState));
 					return dispatch({

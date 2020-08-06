@@ -122,7 +122,7 @@ function BlogDetail({ match }) {
     }
   }, [blogPost]);
 
-  // set number of like when ever there is a change in the blogpost store
+  // set number of like when ever there is a changes in the blogpost store
   useEffect(() => {
     if(blogPost) {
       setNumberOfLikedPost(blogPost.employees.length);

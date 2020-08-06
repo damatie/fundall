@@ -15,6 +15,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import { checkIfUserLikedComment } from './checkIfuserlikedComment';
 
 const theme = createMuiTheme();
 
@@ -33,20 +34,6 @@ const useStyles = makeStyles((theme) => ({
     margin: '12px 0',
   }
 }));
-
-const checkIfUserLikedComment = data => {
-  const id = JSON.parse(localStorage.getItem('user_data'));
-  if(data) {
-    for(const i of data) {
-      if(i.employeeId === id.id) {
-        return true;
-      } else {
-        return false;
-      }
-    }
-  }
-
-};
 
 function BlogComment(props) {
   const classes = useStyles();
