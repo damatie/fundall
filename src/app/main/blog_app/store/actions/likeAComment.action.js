@@ -1,4 +1,6 @@
 import { fetchHeaders } from 'app/shared/fetchHeaders';
+import { autoGetAllCommentsForAPost } from './getAllCommentsForAPost.action';
+import { autoGetOneBlogPost } from './getOneBlogPost.action';
 
 export const LIKE_A_COMMENT_ERROR = 'COMMENTTOPOST_ERROR';
 export const LIKE_A_COMMENT_SUCCESS = 'COMMENTTOPOST_SUCCESS';
@@ -6,7 +8,8 @@ export const LIKE_A_COMMENT_LOADING = 'COMMENTTOPOST_LOADING';
 
 const header = fetchHeaders();
 
-export function likeAComment(id, userId) {
+export function likeAComment(id, userId, postId) {
+	console.log(postId)
 	return dispatch => {
 		dispatch({
 			type: LIKE_A_COMMENT_LOADING
@@ -18,12 +21,14 @@ export function likeAComment(id, userId) {
 			)
 		}).then(res => res.json()).then(
 			comment => {
+				console.log(comment)
 				if(comment.success === true) {
-					console.log(comment)
 					// return dispatch({
 					// 	type: LIKE_A_COMMENT_SUCCESS,
 					// 	payload: {commentId: id, userId}
 					// });
+					dispatch(autoGetAllCommentsForAPost(postId))
+					dispatch(autoGetOneBlogPost(postId))
 				} else {
 					console.log(comment);
 					return dispatch({

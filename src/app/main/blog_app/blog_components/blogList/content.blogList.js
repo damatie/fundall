@@ -12,6 +12,7 @@ import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 import SectionHeader from '../../sectionHeader';
 import { fetchHeaders } from 'app/shared/fetchHeaders';
+import { checkIfUserLikedComment } from '../comment_section/checkIfuserlikedComment';
 const theme = createMuiTheme();
 
 theme.typography.h4 = {
@@ -58,40 +59,25 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const formatData = data => {
+  const result = data.map(i => i.postLike);
+}
+
 function Blog(props) {
   const classes = useStyles();
   const dispatch = useDispatch()
 
   const [clicked, setClicked] = React.useState(false);
-  const [userData, setUserData] = React.useState({});
 
   const header = fetchHeaders();
 
   React.useEffect(() => {
-    const isLiked = props.blog.employees.every(employee => employee.id !== props.userId);
-    if (!isLiked) setClicked(!isLiked);
-  }, [])
+    const result = props.blog.post.employees.map(i => i.postLike);
+    setClicked(checkIfUserLikedComment(!result ? [] : result));
+  }, [props.blog])
 
-  React.useEffect(() => {
-    fetch(`https://hris-cbit.herokuapp.com/api/v1/auth/employee/${props.userId}`, {
-			...header.getRegHeader()
-		}).then(res => res.json()).then(
-      user => {
-				if(user.success === true) {
-          setUserData(user.data);
-				} else {
-					console.log(user)
-				}
-			}
-		)
-		.catch(error => {
-			console.log(error);
-		});
-	
-  })
 
   const handleLike = (id) => {
-    setClicked(prevState => prevState = !prevState);
     dispatch(blogActions.likeAndUnlikeBlogPost({id, employeeId: props.userId}));
   }
 
@@ -116,17 +102,17 @@ function Blog(props) {
   return (
     <Paper className={classes.paper} variant="outlined">
       <SectionHeader
-        fullName={userData && `${userData.firstName} ${userData.lastName}`}
-        updatedAt={props.blog.updatedAt}
-        id={props.blog.id}
+        fullName={`${props.blog.author.firstName} ${props.blog.author.lastName}`}
+        updatedAt={props.blog.post.updatedAt}
+        id={props.blog.post.id}
         buttonContent={['Edit post', 'Delete post']}
         onClick={(value) => handleDelete(value)}
-        profilePicture={userData.profilePicture}
+        profilePicture={props.blog.author.profilePicture}
       />
       <div className={classes.blogInfo}>
         <ThemeProvider theme={theme}>
-          <Link to={`/blog/blog_detail/${props.blog.id}`} style={{textDecoration: 'none'}}>
-            <Typography variant="h4" className={classes.blogTitle}>{props.blog.title}</Typography>
+          <Link to={`/blog/blog_detail/${props.blog.post.id}`} style={{textDecoration: 'none'}}>
+            <Typography variant="h4" className={classes.blogTitle}>{props.blog.post.title}</Typography>
           </Link>
         </ThemeProvider>
         <div className={classes.dFlex}>
@@ -137,16 +123,16 @@ function Blog(props) {
             style={{color: getColor()}}
             className={classes.button}
             startIcon={!clicked && (props.blog) ? <FavoriteBorder /> : <Favorite />}
-            onClick={() => handleLike(props.blog.id)}
+            onClick={() => handleLike(props.blog.post.id)}
           >
-            {props.blog.employees && props.blog.employees.length}
+            {props.blog.post.employees && props.blog.post.employees.length}
           </Button>
           <Button
             style={{color: '#4d5760'}}
             className={classes.button}
             startIcon={<ChatBubbleOutlineIcon />}
           >
-            { props.blog.comment && props.blog.comment.length }
+            { props.blog.post.comment && props.blog.post.comment.length }
           </Button>
         </div>
       </div>

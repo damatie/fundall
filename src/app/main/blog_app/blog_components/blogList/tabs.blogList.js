@@ -104,24 +104,19 @@ function BlogListHeader(props) {
       {
         <div className={classes.content}>
           {tabValue === 0 && (
-            !sortedPosts ? <h1>Loading...</h1> 
-            : sortedPosts.map((blog, i) => <BlogListContent blog={blog} userId={userId} key={i} tags={props.tags} />)
+            blogPost.map((blog, i) => <BlogListContent blog={blog} userId={userId} key={i} tags={props.tags} />)
           )}
           {tabValue === 1 && (
-            week.length === 0 ? <NoPost /> 
-            : week.map((blog, i) => <BlogListContent blog={blog} userId={userId} key={i} tags={props.tags} />)
+            blogPost.map((blog, i) => <BlogListContent blog={blog} userId={userId} key={i} tags={props.tags} />)
           )}
           {tabValue === 2 && (
-            month.length === 0 ? <NoPost />
-            : month.map((blog, i) => <BlogListContent blog={blog} userId={userId} key={i} tags={props.tags} />)
+            blogPost.map((blog, i) => <BlogListContent blog={blog} userId={userId} key={i} tags={props.tags} />)
           )}
           {tabValue === 3 && (
-            year.length === 0 ? <NoPost />
-            : year.map((blog, i) => <BlogListContent blog={blog} userId={userId} key={i} tags={props.tags} />)
+            blogPost.map((blog, i) => <BlogListContent blog={blog} userId={userId} key={i} tags={props.tags} />)
           )}
           {tabValue === 4 && (
-            !sortedPosts > 0 ? <h1>Loading...</h1>
-            : sortedPosts.map((blog, i) => <BlogListContent blog={blog} userId={userId} key={i} tags={props.tags} />)
+            blogPost.map((blog, i) => <BlogListContent blog={blog} userId={userId} key={i} tags={props.tags} />)
           )}
         </div>
       }

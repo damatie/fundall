@@ -6,11 +6,14 @@ export const GETBLOGS_LOADING = 'GETBLOGS_LOADING';
 
 const header = fetchHeaders();
 
-export function getBlogPost() {
+export function getBlogPost(auto) {
 	return dispatch => {
-		dispatch({
-			type: GETBLOGS_LOADING
-		})
+		if(!auto) {
+			dispatch({
+				type: GETBLOGS_LOADING
+			})
+		}
+		
 		fetch('https://hris-cbit.herokuapp.com/api/v1/posts/', {
 			...header.getRegHeader()
 		}).then(res => res.json()).then(

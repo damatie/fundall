@@ -1,6 +1,9 @@
 import axios from 'axios';
 import { useAuth } from 'app/hooks/useAuth';
 import swal from 'sweetalert2';
+import { getBaseUrl } from 'app/shared/getBaseUrl';
+import { fetchHeaders } from 'app/shared/fetchHeaders';
+import { handleResponse } from 'app/auth/handleRes';
 
 export const GET_EMPLOYEES = 'GET EMPLOYEES';
 export const SET_EMPLOYEES_SEARCH_TEXT = 'SET EMPLOYEES SEARCH TEXT';
@@ -8,21 +11,22 @@ export const UPDATE_EMPLOYEES = 'UPDATE EMPLOYEE';
 export const EMPLOYEE_SUCCESS = 'EMPLOYEE SUCCESS';
 
 const auth = useAuth
+const headers = fetchHeaders();
 export function getEmployees() {
 
 	return dispatch => {
       
-      const request = axios.get('https://hris-cbit.herokuapp.com/api/v1/auth/employee/', {
-        headers: {
-          Authorization: `JWT ${auth().getToken}`
-        }
-      });
-      request.then(res => {
+    const request = fetch(`${getBaseUrl()}/auth/employee/`, {
+      ...headers.getRegHeader(),
+    });
+    request.then(res => handleResponse(res)).then(
+      data => {
         dispatch({
           type: GET_EMPLOYEES,
-          payload: res.data.data
+          payload: data.data
         })
-      })
+      }
+    )
   }
 }
 

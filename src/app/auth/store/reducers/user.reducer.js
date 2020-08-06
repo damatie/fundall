@@ -22,7 +22,7 @@ const user = (state = initialState, action) => {
 				...initialState,
 				...action.payload
 			}
-			localStorage.setItem('user_data', JSON.stringify(user));
+			
 			return user;
 			
 		}

@@ -92,7 +92,9 @@ function Layout1(props) {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		dispatch(Actions.getEmployeeProfile(id))
+		if(token && id ){
+			dispatch(Actions.getEmployeeProfile(id))
+		}
 	}, [dispatch]);
 
 	const appContext = useContext(AppContext);
