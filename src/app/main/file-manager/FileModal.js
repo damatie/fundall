@@ -17,10 +17,13 @@ import Formsy from 'formsy-react';
 import { CircularProgress } from '@material-ui/core';
 import ProgressBtn from 'app/shared/progressBtn';
 import Grid from '@material-ui/core/Grid';
-import * as Actions from './store/actions/files.actions';
+import * as Actions from './store/actions';
 
 export default function FileModal() {
     const dispatch = useDispatch();
+    const categories = useSelector(({ fileManagerApp }) => fileManagerApp.categories.categories);
+    const loading = useSelector(({ fileManagerApp }) => fileManagerApp.files.loading);
+    const success = useSelector(({ fileManagerApp }) => fileManagerApp.files.success);
     const [open, setOpen] = React.useState(false);
     const [isFormValid, setIsFormValid] = useState(true);
     const [file, setFile] = useState({});
@@ -43,14 +46,17 @@ export default function FileModal() {
 	}
 
 	function handleSubmit(model) {
-        dispatch(Actions.createDocument(model, file));
-        setOpen(false);
-    }
+    dispatch(Actions.createDocument(model, file));
+    handleClose();
+  }
 
-    function fileChange(event){
-        console.log(event.target.files[0]);
-        setFile({"file": event.target.files[0]});
-    }
+  function fileChange(event){
+      setFile({"file": event.target.files[0]});
+  }
+
+  useEffect(() => {
+      dispatch(Actions.getCategories());
+  },[dispatch] )
 
   return (
     <div>
@@ -62,100 +68,85 @@ export default function FileModal() {
         >
             <Icon>add</Icon>
         </Fab>
-      {/* <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-        Open form dialog
-      </Button> */}
-      <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">Add New Document</DialogTitle>
-        <DialogContent>
-          <div className="w-full">
-			<Formsy
-				onValidSubmit={handleSubmit}
-				onValid={enableButton}
-				onInvalid={disableButton}
-				ref={formRef}
-				className="flex flex-col justify-center w-full"
-			>
+        <Dialog open={open} onClose={handleClose} fullWidth maxWidth={'sm'} aria-labelledby="form-dialog-title">
+          <DialogTitle id="form-dialog-title">Add New Document</DialogTitle>
+            <DialogContent>
+              <div className="w-full">
+                <Formsy
+                  onValidSubmit={handleSubmit}
+                  onValid={enableButton}
+                  onInvalid={disableButton}
+                  ref={formRef}
+                  className="flex flex-col justify-center w-full"
+                >
 
-        <TextFieldFormsy
-					className="mb-16"
-					type="text"
-					name="docName"
-					label="Document Name"
-					validations={{
-						minLength: 1
-					}}
-					validationErrors={{
-						minLength: 'Min character length is 1'
-					}}
-					InputProps={{
-						endAdornment: (
-							<InputAdornment position="end">
-								<Icon className="text-20" color="action">
-                  folder
-								</Icon>
-							</InputAdornment>
-						)
-					}}
-					variant="outlined"
-					required
-				/>
-
-        <SelectFormsy
-          className="my-16"
-          name="docType"
-          label="Document Type"
-          value=""
-          validationError="requried"
-          variant="outlined"
-					required
-        >
-					{['Personal-Data', 'Engineering', 'contract'].map(item => (
-						<MenuItem value={item} key={item}>{item}</MenuItem>
-					))}
-        </SelectFormsy>
-        <TextField
-					className="mb-16"
-					type="file"
-					name="docFile"
-					label="Document File"
-					InputProps={{
-						endAdornment: (
-							<InputAdornment position="end">
-								<Icon className="text-20" color="action">
-                                    files
-								</Icon>
-							</InputAdornment>
-						)
-					}}
-					variant="outlined"
+                  <TextFieldFormsy
+                    className="mb-16"
+                    type="text"
+                    name="docName"
+                    label="Document Name"
+                    validations={{
+                      minLength: 1
+                    }}
+                    validationErrors={{
+                      minLength: 'Min character length is 1'
+                    }}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <Icon className="text-20" color="action">
+                            folder
+                          </Icon>
+                        </InputAdornment>
+                      )
+                    }}
+                    variant="outlined"
                     required
-                    onChange={fileChange}
-				/>
-        <DialogActions>
-				<Grid container spacing={2}>
-                    <Grid item xs>
-                        <ProgressBtn  content='Create' disable={!isFormValid}/>
-                    </Grid>
+                  />
 
-                    <Grid item xs>
-                        <ProgressBtn  content='Close' onClick={handleClose}/>
+                  <SelectFormsy
+                    className="my-16"
+                    name="documentCategoryId"
+                    label="Document Category"
+                    value=""
+                    validationError="requried"
+                    variant="outlined"
+                    required
+                  >
+                    {categories.map(item => (
+                      <MenuItem value={item.id} key={item.id}>{item.categoryName}</MenuItem>
+                    ))}
+                  </SelectFormsy>
+                  <TextField
+                    className="mb-16"
+                    type="file"
+                    name="docFile"
+                    label="Document File"
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <Icon className="text-20" color="action">
+                              files
+                          </Icon>
+                        </InputAdornment>
+                      )
+                    }}
+                    variant="outlined"
+                              required
+                              onChange={fileChange}
+                  />
+                  <DialogActions>
+                    <Grid container spacing={2}>
+                        <Grid item xs>
+                            <ProgressBtn  success={success} loading={loading} content='Create' disable={!isFormValid}/>
+                        </Grid>
                     </Grid>
-                </Grid>
-            </DialogActions>
-                <br></br>
-			</Formsy>
-		</div>
-        </DialogContent>
-        {/* <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={handleClose} color="primary">
-            Subscribe
-          </Button>
-        </DialogActions> */}
-      </Dialog>
+                  </DialogActions>
+                      <br></br>
+                </Formsy>
+		          </div>
+            </DialogContent>
+        </Dialog>
     </div>
   );
 }

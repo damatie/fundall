@@ -361,7 +361,16 @@ const navigationConfig = [
 				title: 'Documents',
 				type: 'item',
 				url: '/library/documents',
-				icon: 'folder'
+				icon: 'folder',
+				auth: authRoles.staff,
+			},
+			{
+				id: 'documentCategory',
+				title: 'Document Category',
+				type: 'item',
+				url: '/library/categories',
+				icon: 'category',
+				auth: authRoles.admin,
 			}
 		]
 	},

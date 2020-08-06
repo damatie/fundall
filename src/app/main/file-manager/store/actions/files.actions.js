@@ -18,14 +18,15 @@ const basUrl = getBaseUrl;
 const headers = fetchHeaders();
 
   export function createDocument (model, file){
+	  console.log(model);
 	let payload = new FormData();
 	payload.append('docName', model.docName);
-	payload.append('category', model.docType);
+	payload.append('documentCategoryId', model.documentCategoryId);
 	payload.append('anydoc', file.file);
 	const auth = useAuth;
 	return dispatch => {
-	swal.fire("Processing ...");
-	swal.showLoading();
+	// swal.fire("Processing ...");
+	// swal.showLoading();
 	  dispatch({
 		type: LOADING_FILES
 	  })
@@ -72,12 +73,10 @@ const headers = fetchHeaders();
 
   export function updateDocument (model, id){
 	return dispatch => {
-	swal.fire("Processing ...");
-	swal.showLoading();
 	  dispatch({
 		type: LOADING_FILES
 	  })
-	  fetch(`${basUrl()}/library/update-doc/${id}`, {...headers.reqHeader('patch', model)}
+	  fetch(`${basUrl()}/library/update-doc/${id}`, {...headers.reqHeader('PATCH', model)}
       ).then(res => res.json()).then(async data => {
 		// let data = response.data;
 		if(data.success) {
@@ -118,23 +117,18 @@ const headers = fetchHeaders();
   };
 
 export function getFiles() {
-	const request = axios.get(`${basUrl()}/library/all-docs`,{
-        headers: {
-          Authorization: `JWT ${auth().getToken}`
-        }
-      });
-
 	return dispatch =>{
 		dispatch({
 			type: LOADING_FILES
 		  })
-		request.then(response => {
-			response.data.success ? 
+		fetch(`${basUrl()}/library/all-docs`, {...headers.getRegHeader()})
+		  .then(res => res.json()).then(async data => {
+			  console.log(data);
+			data.success ? 
           dispatch({
             type: GET_FILES,
-            payload: response.data.data
+            payload: data.data
 		  })
-		
           :
           dispatch({
             type: GET_FILES,
@@ -213,36 +207,36 @@ export function deleteDocument(id){
 		  .then(res => res.json()).then(async data => {
 			  if(data.success) {
 				done = true;
+				swal.fire(
+				  'Deleted!',
+				  'Your document has been deleted.',
+				  'success'
+				)
 				return dispatch({
 				  type: DELETE_FILE_SUCCESS,
 				  payload: await getFile()
 				})
-				swal.fire(
-				  'Deleted!',
-				  'Your file has been deleted.',
-				  'success'
-				)
 			  } else {
-				return dispatch({
-					type: DELETE_FILE_ERROR
-				  })
 				swal.fire(
 				  'Deleted!',
 				  'something went wrong',
 				  'error'
 				)
+				return dispatch({
+					type: DELETE_FILE_ERROR
+				})
 			  }
 			}
 		  ).catch(e => {
 			  console.log(e);
-			  return dispatch({
-				  type: DELETE_FILE_ERROR
-				})
 			swal.fire(
 			'Oops!',
 			'something went wrong',
 			'error'
 			)
+			return dispatch({
+				type: DELETE_FILE_ERROR
+			})
 		})
 		  ]
 	  })
@@ -269,5 +263,6 @@ export function getFile() {
 		}).catch(err => {
 			return []
 		});
+		
 }
 

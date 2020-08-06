@@ -8,9 +8,14 @@ const FileManagerAppConfig = {
 	},
 	routes: [
 		{
+			path: '/library/categories',
+			component: React.lazy(() => import('./documentCategories/DocumentCategories'))
+		},
+		{
 			path: '/library/documents',
 			component: React.lazy(() => import('./FileManagerApp'))
 		}
+		
 	]
 };
 
