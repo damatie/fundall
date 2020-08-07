@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
 import { useSelector } from 'react-redux';
+import LensIcon from '@material-ui/icons/Lens';
 import moment from 'moment';
 
 const useStyles = makeStyles((theme) => ({
@@ -42,13 +43,17 @@ export default function UserAvatar(props) {
           {props.fullName && <Typography variant="body1" className={classes.name}>
             {props.fullName}
           </Typography>}
-          {props.time && <Typography variant="caption" component="span" style={{color: 'grey'}}>{timeAgo.fromNow()}</Typography>}
-          {/* {props.userName && <Typography variant="caption">{props.userName}</Typography>} */}
-          {props.title && <Typography variant="caption">{props.title}</Typography>}
+          {props.fullName && <LensIcon style={{ fontSize: 4, marginRight: 8 }} />}
+        {props.time && <Typography variant="caption" component="span" style={{color: 'grey', fontSize: 14}}>
+          {timeAgo.fromNow()}
+        </Typography>}
+        {props.email && <Typography variant="caption" component="h5" style={{color: 'grey', fontSize: 14}}>
+          {props.email}
+        </Typography>}
+        {props.title && <Typography variant="caption">{props.title}</Typography>}
           {/* {(props.tag.length > 0) && relatedPostTags} */}
         </div>
       </div>
-      <Typography variant="subtitle1">{props.userName}</Typography>
     </div>
     
   )
