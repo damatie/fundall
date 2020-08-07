@@ -73,12 +73,15 @@ function LoanReqTable(props) {
 	}, []);
 
 	useEffect(() => {
+		console.log()
 		if(props.type !== 'returned') {
-			setData(loanHistory.loanHistory);
+			const x = loanHistory.loanHistory.filter(i => i.status !== 'corrected')
+			setData(x);
 		} else {
-			setData([]);
+			const x = loanHistory.loanHistory.filter(i => i.status === 'corrected')
+			setData(x);
 		}
-	})
+	}, [loanHistory])
 
 	function handleRequestSort(event, property) {
 		const id = property;
@@ -103,7 +106,15 @@ function LoanReqTable(props) {
 	}
 
 	function handleClick(item) {
-		if (props.type !== 'returned') history.push(`/loan/request/new/${item.id}`)
+		if (props.type !== 'returned') {
+			if(item.status !== 'open') {
+				history.push(`/loan/request/new/${item.id}`)
+			}
+			
+		} else {
+			history.push(`/loan/review/list/details/${item.id}`)
+		}
+
 		
   }
   
@@ -200,7 +211,7 @@ function LoanReqTable(props) {
                       {n.purpose}
 										</TableCell>
                     <TableCell component="th" scope="row" align="right">
-											{n.status === 'approved' ? (
+											{n.status === 'open' ? (
 												<Icon className="text-green text-20">check_circle</Icon>
 											) : (
 												<Icon className="text-red text-20">remove_circle</Icon>

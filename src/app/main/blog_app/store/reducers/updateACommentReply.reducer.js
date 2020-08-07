@@ -6,16 +6,9 @@ const initialState = {
 	error: {},
 };
 
-const editCommentReply = (state = initialState, action) => {
+const updateCommentReply = (state = initialState, action) => {
 	switch (action.type) {
-		case Actions.EDIT_COMMENT_REPLY_SUCCESS: {
-			return {
-				...initialState,
-				success: true,
-				loading: false
-			};
-		}
-		case Actions.EDIT_COMMENT_REPLY_ERROR: {
+		case Actions.UPDATE_A_COMMENT_REPLY_ERROR: {
 			return {
 				...initialState,
 				success: false,
@@ -23,7 +16,7 @@ const editCommentReply = (state = initialState, action) => {
 				loading: false
 			};
 		}
-		case Actions.EDIT_COMMENT_REPLY_LOADING: {
+		case Actions.UPDATE_A_COMMENT_REPLY_LOADING: {
 			return {
 				...initialState,
 				success: false,
@@ -36,4 +29,4 @@ const editCommentReply = (state = initialState, action) => {
 	}
 };
 
-export default editCommentReply;
+export default updateCommentReply;

@@ -38,6 +38,10 @@ const LoanReqConfig = {
       component: React.lazy(() => import('./loan_request/loanReqs'))
     },
     {
+      path: '/loan/request/salaryadvance_request/new/:id',
+      component: React.lazy(() => import('./salaryAdvance/salaryAdvance'))
+    },
+    {
       path: '/loan/request/salaryadvance_request/new',
       component: React.lazy(() => import('./salaryAdvance/salaryAdvance'))
     },

@@ -30,6 +30,10 @@ import LeaveReviewConfig from 'app/main/line_manager/leave_review/leaveReviewCon
 import HrLeaveReviewConfig from 'app/main/HR/leave_review/hrLeaveReviewConfig';
 import LoanReqConfig from 'app/main/loanApp/loanReqConfig';
 import fileManagerAppConfig from 'app/main/file-manager/FileManagerAppConfig';
+import TrainingConfig from 'app/main/line_manager/training/trainingConfig';
+import HrTrainingConfig from 'app/main/HR/training/hrTrainingConfig';
+import PersonalTrainingConfig from 'app/main/personalTraining/personalTrainingConfig';
+import CreatePersonalTrainingConfig from 'app/main/personalTraining/createPersonalTraining/CreatePersonalTrainingConfig';
 
 const routeConfigs = [
 	// ExampleConfig,
@@ -59,15 +63,28 @@ const routeConfigs = [
 	LeaveReviewConfig,
 	HrLeaveReviewConfig,
 	LoanReqConfig,
-	fileManagerAppConfig
+	fileManagerAppConfig,
+	TrainingConfig,
+	HrTrainingConfig,
+	CreatePersonalTrainingConfig,
+	PersonalTrainingConfig
 ];
+
+const checkIfLoggedIn = () => {
+	if(localStorage.getItem('jwt_access_token')) {
+		return true;
+	} else {
+		return false;
+	}
+}
 
 const routes = [
 	...FuseUtils.generateRoutesFromConfigs(routeConfigs),
 	{
 		path: '/',
-		component: React.lazy(import('app/main/authentication_pages/login/login'))
-	}
+		exact: true,
+		component: checkIfLoggedIn() ?  React.lazy(() => import('app/main/employee/dashboard/ProjectDashboardApp')) : () => <Redirect to="/auth/login" />
+	},
 ];
 
 export default routes;

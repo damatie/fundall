@@ -1,8 +1,9 @@
-export const SET_SELECTED_ITEM_ID = '[FILE MANAGER APP] SET SELECTED ITEM';
+export const SET_SELECTED_ITEM_ID = 'SET SELECTED ITEM';
 
-export function setSelectedItem(id) {
+export function setSelectedItem(id, payload) {
 	return {
 		type: SET_SELECTED_ITEM_ID,
-		payload: id
+		id: id,
+		payload: payload
 	};
 }

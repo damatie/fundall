@@ -1,5 +1,7 @@
 import Swal from 'sweetalert2';
 import { fetchHeaders } from 'app/shared/fetchHeaders';
+import { autoGetAllCommentsForAPost } from './getAllCommentsForAPost.action';
+import { autoGetOneBlogPost } from './getOneBlogPost.action';
 // import { redirectUrl } from '../../redirectUrl';
 
 export const COMMENT_TO_POST_ERROR = 'COMMENT_TO_POST_ERROR';
@@ -21,13 +23,15 @@ export function submitBlogComment(data) {
 		}).then(res => res.json()).then(
 			comment => {
 				if(comment.success === true) {
-					console.log(comment)
+					// console.log(comment)
+					dispatch(autoGetAllCommentsForAPost(data.postId));
+					dispatch(autoGetOneBlogPost(data.postId))
 					return dispatch({
 						type: COMMENT_TO_POST_SUCCESS,
-						payload: data
+						payload: comment.data
 					});
 				} else {
-					console.log(comment);
+					// console.log(comment);
 					return dispatch({
 						type: COMMENT_TO_POST_ERROR,
 						payload: ''

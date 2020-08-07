@@ -8,8 +8,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
+import TableFooter from '@material-ui/core/TableFooter';
 import TableRow from '@material-ui/core/TableRow';
+import TablePagination from '@material-ui/core/TablePagination';
 import clsx from 'clsx';
 import React, {useState, useEffect} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -17,6 +18,7 @@ import * as Actions from './store/actions';
 import * as mime from 'react-native-mime-types';
 import * as remote from 'remote-file-size';
 import Moment from 'react-moment';
+import FileTableHead from './FileTableHead';
 
 const useStyles = makeStyles({
 	typeIcon: {
@@ -54,10 +56,11 @@ const useStyles = makeStyles({
 
 function FileList(props) {
 	const dispatch = useDispatch();
-	const files = useSelector(({ fileManagerApp }) => 
-		fileManagerApp.files );
-	const selectedItemId = useSelector(({ fileManagerApp }) => fileManagerApp.selectedItemId);
-	const searchText = useSelector(({ fileManagerApp }) => fileManagerApp.searchText);
+	const files = useSelector(({ fileManagerApp }) =>  fileManagerApp.files.data );
+	const categories = useSelector(({fileManagerApp}) => fileManagerApp.categories.categories);
+	const selectedItemId = useSelector(({ fileManagerApp }) => fileManagerApp.selectedItemId.id);
+	const selectedItem = useSelector(({ fileManagerApp }) => fileManagerApp.selectedItemId.selectedItem);
+	const searchText = useSelector(({ fileManagerApp }) => fileManagerApp.files.searchText);
 	const classes = useStyles();
 	const [data, setData] = useState(files);
 	const [page, setPage] = useState(0);
@@ -66,37 +69,49 @@ function FileList(props) {
 		direction: 'asc',
 		id: null
 	});
+	const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
 
 	useEffect(() => {
+		dispatch(Actions.getCategories());
 		dispatch(Actions.getFiles());
-		setData(files);
 	}, [dispatch]);
 
 	useEffect(() => {
-		if (searchText.length !== 0) {
-			setData(_.filter(files, item => item.docName.toLowerCase().includes(searchText.toLowerCase())));
+		if (searchText.length >= 2) {
+			setData(
+				_.filter(files, 
+					item => { 
+						item.docName.toLowerCase().includes(searchText.toLowerCase()) || item.employee.firstName.toLowerCase().includes(searchText.toLowerCase()) || item.item.employee.lastName.toLowerCase().includes(searchText.toLowerCase())
+				})
+			);
 			setPage(0);
 		} else {
 			setData(files);
 		}
 	}, [files, searchText]);
 	
-
+	function formatBytes(a,b=2){
+		if(0===a)return"0 Bytes";
+		const c=0>b?0:b,d=Math.floor(Math.log(a)/Math.log(1024));
+		return parseFloat((a/Math.pow(1024,d)).toFixed(c))+" "+["Bytes","KB","MB","GB","TB","PB","EB","ZB","YB"][d]
+	}
 
 	const getExt = (filename) =>{
-		let ext = filename.split('.').pop();
-		if(ext.toUpperCase() === 'PDF'){
-			return 'pdf';
-		}else if (ext.toUpperCase() === 'DOC' || ext.toUpperCase() === 'DOCX'){
-			return 'document';
-		}else if (ext.toUpperCase() === 'JPG' || ext.toUpperCase() === 'PNG' || ext.toUpperCase() === 'SVG' || ext.toUpperCase() === 'JPEG'){
-			return 'image';
-		}else if (ext.toUpperCase() === 'MP3' || ext.toUpperCase() === 'WAV'){
-			return 'audio';
-		}else if (ext.toUpperCase() === 'MP4' || ext.toUpperCase() === 'OGG' || ext.toUpperCase() === '3GP'){
-			return 'video';
-		}else if (ext.toUpperCase() === 'XLSX' || ext.toUpperCase() === 'XLS' || ext.toUpperCase() === '3GP'){
-			return 'spreadsheet';
+		if(filename){
+			let ext = filename.split('.').pop();
+			if(ext.toUpperCase() === 'PDF'){
+				return 'pdf';
+			}else if (ext.toUpperCase() === 'DOC' || ext.toUpperCase() === 'DOCX'){
+				return 'document';
+			}else if (ext.toUpperCase() === 'JPG' || ext.toUpperCase() === 'PNG' || ext.toUpperCase() === 'SVG' || ext.toUpperCase() === 'JPEG'){
+				return 'image';
+			}else if (ext.toUpperCase() === 'MP3' || ext.toUpperCase() === 'WAV'){
+				return 'audio';
+			}else if (ext.toUpperCase() === 'MP4' || ext.toUpperCase() === 'OGG' || ext.toUpperCase() === '3GP'){
+				return 'video';
+			}else if (ext.toUpperCase() === 'XLSX' || ext.toUpperCase() === 'XLS' || ext.toUpperCase() === '3GP'){
+				return 'spreadsheet';
+			}
 		}
 	}
 	function handleChangePage(event, value) {
@@ -104,7 +119,8 @@ function FileList(props) {
 	}
 	
 	function handleChangeRowsPerPage(event) {
-		setRowsPerPage(event.target.value);
+		setRowsPerPage(parseInt(event.target.value, 10));
+		setPage(0);
 	}
 	
 	function handleRequestSort(event, property) {
@@ -120,79 +136,99 @@ function FileList(props) {
 			id
 		});
 	}
+
+	function handleOpenSideBar(event, payload){
+		dispatch(Actions.setSelectedItem(payload.id, payload));
+		props.pageLayout.current.toggleRightSidebar()
+	}
 		
-			return (
-				<FuseAnimate animation="transition.slideUpIn" delay={300}>
-				<FuseScrollbars className="flex-grow overflow-x-auto">
-					<Table>
-						<TableHead
-							order={order}
-							onRequestSort={handleRequestSort}>
-							<TableRow>
-								<TableCell className="max-w-64 w-64 p-0 text-center"> </TableCell>
-								<TableCell>Name</TableCell>
-								<TableCell className="hidden sm:table-cell">Type</TableCell>
-								<TableCell className="hidden sm:table-cell">Owner</TableCell>
-								<TableCell className="text-center hidden sm:table-cell">Category</TableCell>
-								<TableCell className="hidden sm:table-cell">Modified</TableCell>
-							</TableRow>
-						</TableHead>
-	
-						<TableBody>
-						{_.orderBy(
-								files,
-								[
-									o => {
-										switch (order.id) {
-											case 'categories': {
-												return o.categories[0];
-											}
-											default: {
-												return o[order.id];
-											}
+		return (
+			<FuseAnimate animation="transition.slideUpIn" delay={300}>
+			<FuseScrollbars className="flex-grow overflow-x-auto">
+				<Table>
+					<FileTableHead 
+					order={order}
+					onRequestSort={handleRequestSort}
+					rowCount={data.length}
+					/>
+
+					<TableBody>
+					{_.orderBy(
+							data,
+							[
+								o => {
+									switch (order.id) {
+										case 'categories': {
+											return o.categories[0];
+										}
+										default: {
+											return o[order.id];
 										}
 									}
-								],
-								[order.direction]
-							)
-								.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-								.map(n => {
-								return (
-									<TableRow
-										key={n.id}
-										hover
-										onClick={event => props.pageLayout.current.toggleRightSidebar(dispatch(Actions.setSelectedItem(n.id)))}
-										selected={n.id === selectedItemId}
-										className="cursor-pointer"
-									>
-										<TableCell className="max-w-64 w-64 p-0 text-center">
-											<Icon className={clsx(classes.typeIcon, getExt(n.docUrl))} />
+								}
+							],
+							[order.direction]
+						)
+							.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+							.map(n => {
+								const category = categories.find(c => {return c.id === n.documentCategoryId});
+							return (
+								<TableRow
+									key={n.id}
+									hover
+									onClick={event => handleOpenSideBar(event, n)}
+									selected={n.id === selectedItemId}
+									className="cursor-pointer"
+								>
+									<TableCell className="max-w-64 w-64 p-0 text-center">
+										<Icon className={clsx(classes.typeIcon, getExt(n.docUrl))} />
+									</TableCell>
+									<TableCell>{n.docName}</TableCell>
+									<TableCell className="hidden sm:table-cell">{getExt(n.docUrl)}</TableCell>
+									<TableCell className="text-left hidden sm:table-cell">{formatBytes(n.size) === '' || (!formatBytes(n.size)) ? '-' : formatBytes(n.size)}</TableCell>
+									<TableCell className="text-left hidden sm:table-cell">{n.employee.firstName +' '+n.employee.lastName}</TableCell>
+									<TableCell className="text-left hidden sm:table-cell">
+										{(category) ? category.categoryName : ''}
+									</TableCell>
+									<TableCell className="hidden sm:table-cell"><Moment format="ddd MMM, YY | hh:mm:ss a">{n.updatedAt}</Moment></TableCell>
+									<Hidden lgUp>
+										<TableCell>
+											<IconButton
+												onClick={ev => handleOpenSideBar(ev, n)}
+												aria-label="open right sidebar"
+											>
+												<Icon>info</Icon>
+											</IconButton>
 										</TableCell>
-										<TableCell>{n.docName}</TableCell>
-										<TableCell className="hidden sm:table-cell">{getExt(n.docUrl)}</TableCell>
-										<TableCell className="hidden sm:table-cell">{n.uploaderName}</TableCell>
-										<TableCell className="text-center hidden sm:table-cell">
-											{n.category}
-										</TableCell>
-										<TableCell className="hidden sm:table-cell"><Moment format="ddd MMM, YY | hh:mm:ss a">{n.updatedAt}</Moment></TableCell>
-										<Hidden lgUp>
-											<TableCell>
-												<IconButton
-													onClick={ev => props.pageLayout.current.toggleRightSidebar(dispatch(Actions.setSelectedItem(n.id)))}
-													aria-label="open right sidebar"
-												>
-													<Icon>info</Icon>
-												</IconButton>
-											</TableCell>
-										</Hidden>
-									</TableRow>
-								);
-							})}
-						</TableBody>
-					</Table>
-					</FuseScrollbars>
-				</FuseAnimate>
-			);
+									</Hidden>
+								</TableRow>
+							);
+						})}
+					</TableBody>
+			<TableFooter>
+			<TableRow>
+				<TablePagination
+					className="overflow-hidden"
+					// component="div"
+					colSpan={7}
+					count={data.length}
+					rowsPerPage={rowsPerPage}
+					page={page}
+					backIconButtonProps={{
+						'aria-label': 'Previous Page'
+					}}
+					nextIconButtonProps={{
+						'aria-label': 'Next Page'
+					}}
+					onChangePage={handleChangePage}
+					onChangeRowsPerPage={handleChangeRowsPerPage}
+				/>
+				</TableRow>
+				</TableFooter>
+				</Table>
+				</FuseScrollbars>
+			</FuseAnimate>
+		);
 	}
 	
 	export default FileList;

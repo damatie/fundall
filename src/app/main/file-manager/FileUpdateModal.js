@@ -11,27 +11,31 @@ import Icon from '@material-ui/core/Icon';
 import IconButton from '@material-ui/core/IconButton';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
+import Hidden from '@material-ui/core/Hidden';
 import { TextFieldFormsy, SelectFormsy, } from '@fuse/core/formsy';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Formsy from 'formsy-react';
 import { CircularProgress } from '@material-ui/core';
 import ProgressBtn from 'app/shared/progressBtn';
 import Grid from '@material-ui/core/Grid';
-import * as Actions from './store/actions/files.actions';
+import * as Actions from './store/actions';
 import { ThemeProvider } from '@material-ui/core/styles';
 import { useAuth } from 'app/hooks/useAuth';
 
 export default function FileUpdateModal() {
     const dispatch = useDispatch();
-    const files = useSelector(({ fileManagerApp }) => fileManagerApp.files);
-    const selectedItem = useSelector(({ fileManagerApp }) => files[fileManagerApp.selectedItemId]);
+    const categories = useSelector(({ fileManagerApp }) => fileManagerApp.categories.categories);
+    const selectedItem = useSelector(({ fileManagerApp }) => fileManagerApp.selectedItemId.selectedItem);
+    const loading = useSelector(({ fileManagerApp }) => fileManagerApp.files.loading);
+    const success = useSelector(({ fileManagerApp }) => fileManagerApp.files.success);
     const [open, setOpen] = useState(false);
-    const [hideBtn, setHideBtn] = useState(false);
     const [isFormValid, setIsFormValid] = useState(true);
-    const [file, setFile] = useState({});
     const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
-    const user = useAuth();
     const userId = useAuth().getId;
+
+    useEffect(() => {
+      dispatch(Actions.getCategories());
+    },[dispatch] )
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -51,113 +55,91 @@ export default function FileUpdateModal() {
 	}
 
 	function handleSubmit(model) {
-        dispatch(Actions.updateDocument(model, selectedItem.id));
-        setOpen(false);
-    }
+      dispatch(Actions.updateDocument(model, selectedItem.id));
+      handleClose();
+  }
 
-    function fileChange(event){
-        console.log(event.target.files[0]);
-        setFile({"file": event.target.files[0]});
+  function HiddenBtn(){
+    if(userId === selectedItem.employeeId){
+      return (
+        <IconButton onClick={handleClickOpen}>
+          <Icon>edit</Icon>
+        </IconButton>
+      )
+    }else{
+      return (
+				<></>
+			)
     }
-
-    function HiddenBtn(){
-      console.log(userId);
-      if(userId !== selectedItem.uploaderId){
-        return (
-          <hidden>
-              <IconButton>
-                  <Icon onClick={handleClickOpen}>edit</Icon>
-              </IconButton>
-          </hidden>
-        )
-      }else{
-        return (
-          <IconButton>
-						<Icon onClick={handleClickOpen}>edit</Icon>
-				</IconButton>
-        )
-      }
-    }
+  }
 
   return (
     <div>
-        <HiddenBtn />
-			<ThemeProvider theme={mainTheme}>
-      <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">Update Document</DialogTitle>
-        <DialogContent>
-          <div className="w-full">
-			<Formsy
-				onValidSubmit={handleSubmit}
-				onValid={enableButton}
-				onInvalid={disableButton}
-				ref={formRef}
-				className="flex flex-col justify-center w-full"
-			>
+      <HiddenBtn />
+			  <ThemeProvider theme={mainTheme}>
+          <Dialog open={open} onClose={handleClose} fullWidth maxWidth={'sm'} aria-labelledby="form-dialog-title">
+            <DialogTitle id="form-dialog-title">Update Document</DialogTitle>
+              <DialogContent>
+                <div className="w-full">
+                  <Formsy
+                    onValidSubmit={handleSubmit}
+                    onValid={enableButton}
+                    onInvalid={disableButton}
+                    ref={formRef}
+                    className="flex flex-col justify-center w-full"
+                  >
 
-        <TextFieldFormsy
-					className="mb-16"
-					type="text"
-					name="docName"
-          label="Document Name"
-          value={selectedItem.docName}
-					validations={{
-						minLength: 1
-					}}
-					validationErrors={{
-						minLength: 'Min character length is 1'
-					}}
-					InputProps={{
-						endAdornment: (
-							<InputAdornment position="end">
-								<Icon className="text-20" color="action">
-                  folder
-								</Icon>
-							</InputAdornment>
-						)
-					}}
-					variant="outlined"
-					required
-				/>
+                    <TextFieldFormsy
+                      className="mb-16"
+                      type="text"
+                      name="docName"
+                      label="Document Name"
+                      value={selectedItem.docName}
+                      validations={{
+                        minLength: 1
+                      }}
+                      validationErrors={{
+                        minLength: 'Min character length is 1'
+                      }}
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <Icon className="text-20" color="action">
+                              folder
+                            </Icon>
+                          </InputAdornment>
+                        )
+                      }}
+                      variant="outlined"
+                      required
+                    />
 
-        <SelectFormsy
-          className="mb-16"
-          name="docType"
-          label="Document Type"
-          value={selectedItem.category}
-          validationError="requried"
-          variant="outlined"
-					required
-        >
-					{['Personal-Data', 'Engineering', 'contract'].map(item => (
-						<MenuItem value={item} key={item}>{item}</MenuItem>
-					))}
-        </SelectFormsy>
-        <DialogActions>
-				<Grid container spacing={2}>
-                    <Grid item xs>
-                        <ProgressBtn  content='Update' disable={!isFormValid}/>
-                    </Grid>
-
-                    <Grid item xs>
-                        <ProgressBtn  content='Close' onClick={handleClose}/>
-                    </Grid>
-                </Grid>
-            </DialogActions>
-                <br></br>
-			</Formsy>
-		</div>
-        </DialogContent>
-        {/* <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={handleClose} color="primary">
-            Subscribe
-          </Button>
-        </DialogActions> */}
-      </Dialog>
-      </ThemeProvider>
+                    <SelectFormsy
+                      className="mb-16"
+                      name="documentCategoryId"
+                      label="Document Category"
+                      value={selectedItem.documentCategoryId}
+                      validationError="requried"
+                      variant="outlined"
+                      required
+                    >
+                      {categories.map(item => (
+                        <MenuItem value={item.id} key={item.id}>{item.categoryName}</MenuItem>
+                      ))}
+                    </SelectFormsy>
+                  <DialogActions>
+                      <Grid container spacing={2}>
+                        <Grid item xs>
+                            <ProgressBtn loading={loading} success={success} content='Update' disable={!isFormValid}/>
+                        </Grid>
+                      </Grid>
+                  </DialogActions>
+                  <br></br>
+                </Formsy>
+              </div>
+            </DialogContent>
+          </Dialog>
+        </ThemeProvider>
     </div>
   );
 }

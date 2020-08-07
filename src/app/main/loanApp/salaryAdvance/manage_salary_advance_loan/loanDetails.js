@@ -19,6 +19,7 @@ import { useDeepCompareEffectNoCheck } from '@fuse/hooks/useDeepCompareEffect';
 import SALoanDetailsTab from '../../tabs/salaryAdvanceLoanDetailsTab';
 import reducers from '../../store/reducers';
 import * as Actions from '../../store/actions';
+import SalaryAdvanceActionBtn from '../salaryAdvanceActionBtn';
 
 
 const useStyles = makeStyles(theme => ({
@@ -39,14 +40,6 @@ function LoanDetails(props) {
 	const salaryAdvanceDetails = useSelector(({salaryAdvanceDetails}) => salaryAdvanceDetails.salaryAdvances);
 
 	const [selectedTab, setSelectedTab] = useState(0);
-	const [success1, setSuccess1] = useState(false);
-	const [loading1, setLoading1] = useState(false);
-
-	const [success2, setSuccess2] = useState(false);
-	const [loading2, setLoading2] = useState(false);
-
-	const [success3, setSuccess3] = useState(false);
-	const [loading3, setLoading3] = useState(false);
 
 	const [value, setValue] = useState('')
 
@@ -68,153 +61,6 @@ function LoanDetails(props) {
 		dispatch(Actions.getSalaryAdvanceDetails(id));
 	}, []);
 
-	const approve = url => {
-		fetch(`${url}${id}`, {
-			...header.reqHeader(
-				'PATCH',
-				{
-					// amountApproved: 20000
-				}
-			),
-		}).then(res => res.json()).then(
-			data => {
-				
-				if(data.success) {
-					setSuccess3(true);
-					swal.fire({
-						title: 'Approve Salary Advance  ',
-						text: data.message,
-						icon: 'success',
-						timer: 3000
-					})
-					history.push({
-						pathname: '/loan/review/salaryadvance/list'
-					})
-				} else {
-					swal.fire({
-						title: 'Approve Salary Advance  ',
-						text: data.message,
-						icon: 'error',
-						timer: 3000
-					})
-					setSuccess3(true);
-				}
-			}
-		).catch(e => {
-			setLoading3(false);
-			console.error(e)});
-	}
-
-	const reject = url => {
-		setLoading2(true);
-		fetch(`${url}${id}`, {
-			...header.delHeader()
-		}).then(res => res.json()).then(
-			data => {
-				setLoading2(false);
-				if(data.success) {
-					swal.fire({
-						title: 'Reject Loan',
-						text: data.message,
-						icon: 'success',
-						timer: 3000
-					})
-					setSuccess2(true);
-					history.push({
-						pathname: '/loan/review/list'
-					})
-				} else {
-					swal.fire({
-						title: 'Reject Loan',
-						text: data.message,
-						icon: 'error',
-						timer: 3000
-					})
-					setSuccess2(true);
-				}
-			}
-		).catch(e => {
-			setLoading2(false);
-			console.error(e)});
-	}
-
-	const handleApproveLeave = () => {
-		switch(salaryAdvanceDetails.details.status) {
-			case 'pending': {
-				approve('https://hris-cbit.herokuapp.com/api/v1/salary-advance/approve/hod/');
-				break;
-			}
-			case 'reviewed': {
-				approve('https://hris-cbit.herokuapp.com/api/v1/salary-advance/approve/hr/');
-				break;
-			}
-			case 'approved': {
-				approve('https://hris-cbit.herokuapp.com/api/v1/salary-advance/approve/finance/');
-				break;
-			}
-			default: {
-				return 'hello';
-			}
-		}
-  };
-  
-	const handleReject = () => {
-		switch(salaryAdvanceDetails.details.status) {
-			case 'pending': {
-				reject('https://hris-cbit.herokuapp.com/api/v1/salary-advance/hod/reject/');
-				break;
-			}
-			case 'reviewed': {
-				reject('https://hris-cbit.herokuapp.com/api/v1/salary-advance/hr/reject/');
-				break;
-			}
-			case 'approved': {
-				reject('https://hris-cbit.herokuapp.com/api/v1/salary-advance/finance/reject/');
-				break;
-			}
-			default: {
-				return 'hello';
-			}
-		}
-	}
-
-	const closeLoan = () => {
-		setLoading2(true);
-		fetch(`https://hris-cbit.herokuapp.com/api/v1/loan/approve/close/${id}`, {
-			...header.reqHeader(
-				'PATCH',
-				{
-					
-				}
-			)
-		}).then(res => res.json()).then(
-			data => {
-				setLoading2(false);
-				if(data.success) {
-					swal.fire({
-						title: 'Close Loan',
-						text: data.message,
-						icon: 'success',
-						timer: 3000
-					})
-					setSuccess2(true);
-					history.push({
-						pathname: '/loan/review/list'
-					})
-				} else {
-					swal.fire({
-						title: 'Close Loan',
-						text: data.message,
-						icon: 'error',
-						timer: 3000
-					})
-					setSuccess2(true);
-				}
-			}
-		).catch(e => {
-			setLoading2(false);
-			console.error(e)});
-	}
 
 	if(salaryAdvanceDetails.loadingDetails) return <>Loading...</>
 
@@ -249,27 +95,18 @@ function LoanDetails(props) {
 						<FuseAnimate animation="transition.expandIn" delay={300}>
 							<Avatar className="w-96 h-96" src="assets/images/avatars/Velazquez.jpg" />
 						</FuseAnimate>
+						<div>
 						<FuseAnimate animation="transition.slideLeftIn" delay={300}>
 							<Typography className="md:mx-24" variant="h4" color="inherit">
 								{`${salaryAdvanceDetails.details.firstName} ${salaryAdvanceDetails.details.lastName}`}
 							</Typography>
+							
 						</FuseAnimate>
-					</div>
-					<div className="flex items-center justify-end">
-						{salaryAdvanceDetails.details.status !== 'open' && salaryAdvanceDetails.details.status !== 'closed' ? 
-						<>
-							<ProgressBtn loading={loading3} success={success3} color='primary' onClick={handleApproveLeave} content='Approve Loan'/> 
-							<ProgressBtn loading={loading2} success={success2} color='secondary' onClick={handleReject} content='Reject Loan' /> 
-						</>
-						: <></>}
-
-						{salaryAdvanceDetails.details.status === 'open' ? 
-						<>
-							{/* <ProgressBtn loading={loading3} success={success3} color='primary' onClick={generateLoanStatement} content='Loan statement'/>  */}
-							<ProgressBtn loading={loading2} success={success2} color='secondary' onClick={closeLoan} content='Close Loan' /> 
-						</> :
-						<></>
-						}
+						<Typography className="md:mx-24" variant='subtitle1' color="inherit">
+								{salaryAdvanceDetails.details.email}
+						</Typography>
+						</div>
+						
 					</div>
 				</div>
 				</>

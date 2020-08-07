@@ -13,6 +13,10 @@ import * as blogActions from '../store/actions';
 import { useDispatch } from 'react-redux';
 import ProgressBtn from '../../../shared/progressBtn'
 import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@material-ui/icons/CheckBox';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -37,14 +41,12 @@ const useStyles = makeStyles((theme) => ({
     minWidth: '100%',
   },
   tagInput: {
-    padding: 16,
-    minWidth: '100%'
+    maxWidth: '100%'
   },
   input: {
     display: 'none',
   },
   upload: {
-    width: '100%',
     justifyContent: 'flex-start',
     textTransform: 'none',
     paddingLeft: 16,
@@ -54,6 +56,9 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
+const checkedIcon = <CheckBoxIcon fontSize="small" />;
+
 function PostBlog() {
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -61,6 +66,17 @@ function PostBlog() {
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
   const [images, setImages] = useState([]);
+  const [tags, setTags] = useState([]);
+  const [names, setNames] = useState('');
+
+  const setImage = (event) => {
+    const nameArray = Object.values(event.target.files);
+    nameArray.forEach((item, index, array) => {
+      if (array.length <= 1) setNames(`${item.name}`);
+      else setNames(`${array.length} files`);
+    })
+    setImages(event.target.files);
+  };
 
   const handleToggle = (value) => () => {
     const currentIndex = checked.indexOf(value);
@@ -79,6 +95,8 @@ function PostBlog() {
     let formData = new FormData();
     formData.append('title', title);
     formData.append('body', body);
+    formData.append('categories', checked);
+    formData.append('tags', tags);
     for (let i = 0; i < images.length; i++) {
       formData.append('images', images[i]);
     }
@@ -104,14 +122,17 @@ function PostBlog() {
               accept="image/*"
               className={classes.input}
               id="contained-button-file"
-              onChange={(event) => setImages(event.target.files)}
+              onChange={event => setImage(event)}
               multiple
               type="file"
             />
             <label htmlFor="contained-button-file">
               <Button color="primary" component="span" className={classes.upload}>
-                Upload Image
+                Uplaod image(s)
               </Button>
+              <Typography variant="body1" component='span' style={{margin: '2px 0 0 12px'}}>
+                {images.length === 0 ? 'No image choosen' : names}
+              </Typography>
             </label>
           </Paper>
           <Paper variant="outlined" elevation={3}>
@@ -153,12 +174,48 @@ function PostBlog() {
             <Typography variant='caption' component="h3" style={{padding: '16px 16px 0 16px'}}>
               Tags
             </Typography>
-            <input placeholder='Add tags' className={classes.tagInput} />
+            <Autocomplete
+              className={classes.tagInput}
+              multiple
+              id="checkboxes-tags-demo"
+              options={tagList}
+              disableCloseOnSelect
+              getOptionLabel={(option) => option.title}
+              renderOption={(option, { selected }) => (
+                <React.Fragment>
+                  <Checkbox
+                    icon={icon}
+                    checkedIcon={checkedIcon}
+                    style={{ marginRight: 8 }}
+                    checked={selected}
+                  />
+                  {option.title}
+                </React.Fragment>
+              )}
+              style={{ width: 500 }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  variant="outlined"
+                  placeholder="Select tags"
+                />
+              )}
+            />
+            {tags}
           </Paper>
         </Grid>
       </Grid>
     </Grid>
   )
 }
+
+const tagList = [
+  { title: 'sport', year: 1994 },
+  { title: 'Education', year: 1972 },
+  { title: 'Javascript', year: 1974 },
+  { title: 'Sales', year: 2008 },
+  { title: 'Jobs', year: 1957 },
+  { title: "Some random tag", year: 1993 },
+];
 
 export default PostBlog;

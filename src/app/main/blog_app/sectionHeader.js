@@ -18,6 +18,7 @@ export default function SectionHeader(props) {
   const classes = useStyles();
   let location = useLocation();
   const [anchorEl, setAnchorEl] = React.useState(null);
+ 
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -31,13 +32,13 @@ export default function SectionHeader(props) {
   const id = open ? 'simple-popover' : undefined;
 
   const moreContent = props.buttonContent.map((item, index) => {
-    if (index === 0 && location === '/blog/list') return <Button className={classes.btn} key={index} component={Link} to={`/blog/update_blog/${props.id}`}>{item}</Button>;
+    if (index === 0 && location.pathname === '/blog/list') return <Button className={classes.btn} key={index} component={Link} to={`/blog/update_blog/${props.id}`}>{item}</Button>;
     else return <Button className={classes.btn} key={index} onClick={() => props.onClick(item)}>{item}</Button>;
   });
 
   return (
     <div className={classes.root}>
-      <UserAvatar fullName={props.fullName} time={props.updatedAt} />
+      <UserAvatar fullName={props.fullName} time={props.updatedAt} src={props.profilePicture}/>
       <div style={{alignSelf: 'center'}}>
         <IconButton aria-describedby={id} aria-label="like" component="span" onClick={handleClick}>
           <MoreHorizIcon fontSize="small" />

@@ -157,7 +157,8 @@ function ManageLoan(props) {
 				classes={{ root: 'w-full h-64' }}
 				>
 					
-				<Tab className="h-64 normal-case" label="Approved Loan" /> 
+				<Tab className="h-64 normal-case" label="Approved Loan" />
+				<Tab className="h-64 normal-case" label="Returned Loan" /> 
 				<Tab className="h-64 normal-case" label="Open Loan" /> 
 				<Tab className="h-64 normal-case" label="Close Loan" /> 
 			</Tabs>
@@ -165,7 +166,7 @@ function ManageLoan(props) {
 			content={
 				<>
         {profile.role.name === 'Head of department' ? <div className=" sm:p-24 ">
-          {tabValue === 0 && (<LoanReqTab loans={filterData(loans.pendingLoan, 'pending')}/>)}
+          {tabValue === 0 && (<LoanReqTab loans={loans.pendingLoan}/>)}
 				</div> : <></>}
 				
 				{profile.role.name === 'HR' ? 	<div className=" sm:p-24 ">
@@ -174,8 +175,9 @@ function ManageLoan(props) {
 				
 				{profile.role.name === 'Finance manager' ? <div className=" sm:p-24 ">
 					{tabValue === 0 && (<LoanReqTab loans={loans.approvedLoan}/>)}
-					{tabValue === 1 && (<LoanReqTab loans={loans.openLoan}/>)}
-					{tabValue === 2 && (<LoanReqTab loans={loans.closedLoan}/>)}
+					{tabValue === 1 && (<LoanReqTab loans={loans.approvedLoan}/>)}
+					{tabValue === 2 && (<LoanReqTab loans={loans.openLoan}/>)}
+					{tabValue === 3 && (<LoanReqTab loans={loans.closedLoan}/>)}
 				</div> : <></>}
 				</>
 			}

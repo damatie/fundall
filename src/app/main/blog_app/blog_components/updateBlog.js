@@ -12,6 +12,11 @@ import Checkbox from '@material-ui/core/Checkbox';
 import * as blogActions from '../store/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import ProgressBtn from '../../../shared/progressBtn'
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@material-ui/icons/CheckBox';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -36,26 +41,56 @@ const useStyles = makeStyles((theme) => ({
     minWidth: '100%',
   },
   tagInput: {
-    padding: 16,
-    minWidth: '100%'
+    maxWidth: '100%'
+  },
+  input: {
+    display: 'none',
+  },
+  upload: {
+    justifyContent: 'flex-start',
+    textTransform: 'none',
+    paddingLeft: 16,
+    color: 'rgba(0,0,0,.25)',
+    fontWeight: 'bold',
+    fontSize: 16,
   }
 }));
 
-function PostBlog({ match }) {
+const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
+const checkedIcon = <CheckBoxIcon fontSize="small" />;
+
+function UpdateBlog({ match }) {
   const classes = useStyles();
   const dispatch = useDispatch();
   const [checked, setChecked] = useState([0]);
-  const blogPost = useSelector(state => state.blog.getBlogs.data);
+  const [title, setTitle] = useState('');
+  const [body, setBody] = useState('');
+  const [images, setImages] = useState([]);
+  const [tags, setTags] = useState([]);
+  const [names, setNames] = useState('');
+
+  const blogPost = useSelector(state => state.blog.getOneBlogPost.data);
 
   const id = +match.params.blog_id;
 
-  const currentBlogPost = blogPost.map((post) => {
-    if (post.id === id) return post;
-  });
+  useEffect(() => {
+    dispatch(blogActions.getOneBlogPost(id));
+  }, []);
 
-  const [title, setTitle] = useState(currentBlogPost[0].title);
-  const [body, setBody] = useState(currentBlogPost[0].body);
-  const [images, setImages] = useState(currentBlogPost[0].images);
+  useEffect(() => {
+    setTitle(blogPost.title);
+    setBody(blogPost.body);
+    setImages(blogPost.images);
+  }, [blogPost])
+
+  const setImage = (event) => {
+    const nameArray = Object.values(event.target.files);
+    nameArray.forEach((item, index, array) => {
+      if (array.length <= 1) setNames(`${item.name}`);
+      else setNames(`${array.length} files`);
+    })
+    setImages(event.target.files);
+  };
 
   const handleToggle = (value) => () => {
     const currentIndex = checked.indexOf(value);
@@ -74,16 +109,18 @@ function PostBlog({ match }) {
     let formData = new FormData();
     formData.append('title', title);
     formData.append('body', body);
+    formData.append('categories', checked);
+    formData.append('tags', tags);
     for (let i = 0; i < images.length; i++) {
       formData.append('images', images[i]);
     }
-    dispatch(blogActions.editBlogPost(formData, id));
+    dispatch(blogActions.editBlogPost(formData));
   }
 
   return (
     <Grid container className={classes.root}>
       <Grid item xs={12} sm={3} className={classes.addPostBtn}>
-        <ProgressBtn onClick={handleSubmit} content="Update blog post" />
+        <ProgressBtn onClick={handleSubmit} content="Add new blog post" />
       </Grid>
       <Grid item container spacing={3}>
         <Grid item xs={12} sm={8}>
@@ -91,23 +128,31 @@ function PostBlog({ match }) {
             <input
               placeholder='Blog title'
               className={classes.blogTitle}
-              value={title}
               onChange={event => setTitle(event.target.value)}
             />
           </Paper>
           <Paper variant="outlined" elevation={3}>
             <input
-              type="file"
-              placeholder='Blog content'
+              accept="image/*"
+              className={classes.input}
+              id="contained-button-file"
+              onChange={event => setImage(event)}
               multiple
-              onChange={(event) => setImages(event.target.files)}
+              type="file"
             />
+            <label htmlFor="contained-button-file">
+              <Button color="primary" component="span" className={classes.upload}>
+                Uplaod image(s)
+              </Button>
+              <Typography variant="body1" component='span' style={{margin: '2px 0 0 12px'}}>
+                {images && images.length === 0 ? 'No image choosen' : names}
+              </Typography>
+            </label>
           </Paper>
           <Paper variant="outlined" elevation={3}>
             <textarea
               placeholder='Blog content'
               className={classes.blogContent}
-              value={body}
               onChange={event => setBody(event.target.value)}
             />
           </Paper>
@@ -143,7 +188,34 @@ function PostBlog({ match }) {
             <Typography variant='caption' component="h3" style={{padding: '16px 16px 0 16px'}}>
               Tags
             </Typography>
-            <input placeholder='Add tags' className={classes.tagInput} />
+            <Autocomplete
+              className={classes.tagInput}
+              multiple
+              id="checkboxes-tags-demo"
+              options={tagList}
+              disableCloseOnSelect
+              getOptionLabel={(option) => option.title}
+              renderOption={(option, { selected }) => (
+                <React.Fragment>
+                  <Checkbox
+                    icon={icon}
+                    checkedIcon={checkedIcon}
+                    style={{ marginRight: 8 }}
+                    checked={selected}
+                  />
+                  {option.title}
+                </React.Fragment>
+              )}
+              style={{ width: 500 }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  variant="outlined"
+                  placeholder="Select tags"
+                />
+              )}
+            />
+            {tags}
           </Paper>
         </Grid>
       </Grid>
@@ -151,4 +223,13 @@ function PostBlog({ match }) {
   )
 }
 
-export default PostBlog;
+const tagList = [
+  { title: 'sport', year: 1994 },
+  { title: 'Education', year: 1972 },
+  { title: 'Javascript', year: 1974 },
+  { title: 'Sales', year: 2008 },
+  { title: 'Jobs', year: 1957 },
+  { title: "Some random tag", year: 1993 },
+];
+
+export default UpdateBlog;

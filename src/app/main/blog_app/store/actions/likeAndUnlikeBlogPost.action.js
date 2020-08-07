@@ -1,18 +1,16 @@
 import Swal from 'sweetalert2';
 import { fetchHeaders } from 'app/shared/fetchHeaders';
+import { autoGetOneBlogPost } from './getOneBlogPost.action';
+import { getBlogPost } from './getBlogs.action';
 // import { redirectUrl } from '../../redirectUrl';
 
 export const LIKE_AND_UNLIKE_BLOGPOST_ERROR = 'LIKE_AND_UNLIKE_BLOGPOST_ERROR';
 export const LIKE_AND_UNLIKE_BLOGPOST_SUCCESS = 'LIKE_AND_UNLIKE_BLOGPOST_SUCCESS';
-export const LIKE_AND_UNLIKE_BLOGPOST_LOADING = 'LIKE_AND_UNLIKE_BLOGPOST_LOADING';
 
 const header = fetchHeaders();
 
-export function likeAndUnlikeBlogPost(id) {
+export function likeAndUnlikeBlogPost({id, employeeId}) {
 	return dispatch => {
-		dispatch({
-			type: LIKE_AND_UNLIKE_BLOGPOST_LOADING
-		})
 		fetch(`https://hris-cbit.herokuapp.com/api/v1/posts/post/like/${id}`, {
 			...header.reqHeader(
 				'PATCH',
@@ -20,9 +18,11 @@ export function likeAndUnlikeBlogPost(id) {
 		}).then(res => res.json()).then(
 			post => {
 				if(post.success === true) {
+					dispatch(getBlogPost(true))
+					dispatch(autoGetOneBlogPost(id))
 					return dispatch({
 						type: LIKE_AND_UNLIKE_BLOGPOST_SUCCESS,
-						payload: id
+						payload: {...post.result, employeeId}
 					});
 				} else {
 					return dispatch({
