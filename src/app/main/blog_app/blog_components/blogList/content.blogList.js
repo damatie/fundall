@@ -103,6 +103,7 @@ function Blog(props) {
         dp={props.author.profilePicture}
         time={props.blog.updatedAt}
         id={props.blog.id}
+        blogPoster={props.blog.employeeId}
         buttonContent={['Edit post', 'Delete post']}
         onClick={(value) => handleDelete(value)}
       />
