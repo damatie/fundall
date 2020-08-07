@@ -139,13 +139,15 @@ function BlogComment(props) {
         <SectionHeader
           fullName={!employeeDetails ? 'George Ole' : `${employeeDetails.lastName} ${employeeDetails.firstName}`}
           buttonContent={props.moreContent}
+          email={employeeDetails && employeeDetails.email}
+          blogPoster={employeeDetails && employeeDetails.id}
           onClick={(value) => selectClickedButton(value)}
           time={props.comment.createdAt}
           profilePicture={!props.comment.employee ? '' : props.comment.employee.profilePicture}
         />
         <Typography varaint="body1" className={classes.commentBody}>{comment}</Typography>
       </ThemeProvider>
-      <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+      <Dialog open={open} onClose={handleClose} fullWidth aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Update comment</DialogTitle>
         <DialogContent>
           <TextField

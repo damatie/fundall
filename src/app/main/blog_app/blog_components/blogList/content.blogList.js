@@ -11,7 +11,6 @@ import { useDispatch } from 'react-redux';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 import SectionHeader from '../../sectionHeader';
-import { fetchHeaders } from 'app/shared/fetchHeaders';
 import { checkIfUserLikedComment } from '../comment_section/checkIfuserlikedComment';
 const theme = createMuiTheme();
 
@@ -69,10 +68,8 @@ function Blog(props) {
 
   const [clicked, setClicked] = React.useState(false);
 
-  const header = fetchHeaders();
-
   React.useEffect(() => {
-    const result = props.blog.post.employees.map(i => i.postLike);
+    const result = props.blog.employees.map(i => i.postLike);
     setClicked(checkIfUserLikedComment(!result ? [] : result));
   }, [props.blog])
 
@@ -102,17 +99,18 @@ function Blog(props) {
   return (
     <Paper className={classes.paper} variant="outlined">
       <SectionHeader
-        fullName={`${props.blog.author.firstName} ${props.blog.author.lastName}`}
-        updatedAt={props.blog.post.updatedAt}
-        id={props.blog.post.id}
+        fullName={`${props.author.firstName} ${props.author.lastName}`}
+        dp={props.author.profilePicture}
+        time={props.blog.updatedAt}
+        id={props.blog.id}
+        blogPoster={props.blog.employeeId}
         buttonContent={['Edit post', 'Delete post']}
         onClick={(value) => handleDelete(value)}
-        profilePicture={props.blog.author.profilePicture}
       />
       <div className={classes.blogInfo}>
         <ThemeProvider theme={theme}>
-          <Link to={`/blog/blog_detail/${props.blog.post.id}`} style={{textDecoration: 'none'}}>
-            <Typography variant="h4" className={classes.blogTitle}>{props.blog.post.title}</Typography>
+          <Link to={`/blog/blog_detail/${props.blog.id}`} style={{textDecoration: 'none'}}>
+            <Typography variant="h4" className={classes.blogTitle}>{props.blog.title}</Typography>
           </Link>
         </ThemeProvider>
         <div className={classes.dFlex}>
@@ -123,16 +121,16 @@ function Blog(props) {
             style={{color: getColor()}}
             className={classes.button}
             startIcon={!clicked && (props.blog) ? <FavoriteBorder /> : <Favorite />}
-            onClick={() => handleLike(props.blog.post.id)}
+            onClick={() => handleLike(props.blog.id)}
           >
-            {props.blog.post.employees && props.blog.post.employees.length}
+            {props.blog.employees && props.blog.employees.length}
           </Button>
           <Button
             style={{color: '#4d5760'}}
             className={classes.button}
             startIcon={<ChatBubbleOutlineIcon />}
           >
-            { props.blog.post.comment && props.blog.post.comment.length }
+            { props.blog.comment && props.blog.comment.length }
           </Button>
         </div>
       </div>

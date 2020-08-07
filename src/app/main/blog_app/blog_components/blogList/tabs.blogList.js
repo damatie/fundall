@@ -27,46 +27,46 @@ function BlogListHeader(props) {
   const classes = useStyles();
   const dispatch = useDispatch();
   
-  const blogPost = useSelector(state => state.blog.getBlogs.data);
-  const userId = useSelector(state => state.auth.user.id);
+  const blogPost = useSelector(state => state.blog.getBlogs.data.map(blog => blog.post));
+  const blogAuthor = useSelector(state => state.blog.getBlogs.data.map(blog => blog.author));
   
   const [tabValue, setTabValue] = useState(0);
-  const [sortedPosts, setSortedPosts] = useState([]);
+  // const [sortedPosts, setSortedPosts] = useState([]);
 
   useEffect(() => {
     dispatch(blogActions.getBlogPost());
   }, []);
 
-  useEffect(() => {
-    const dateBlogObj = {};
-    if (blogPost.length > 0) {
-      const blogPostCreatedAts = blogPost.map((e, i) => {
-        const dateValue = new Date(e.createdAt).valueOf();
-        dateBlogObj[dateValue] = i;
-        return dateValue;
-      }).sort().reverse();
-      setSortedPosts(blogPostCreatedAts.map((e) => blogPost[dateBlogObj[e]]));
-    }
-  }, [blogPost])
-
+  // useEffect(() => {
+  //   const dateBlogObj = {};
+  //   if (blogPost.length > 0) {
+  //     const blogPostCreatedAts = blogPost.map((blog, i) => {
+  //       const dateValue = new Date(blog.createdAt).valueOf();
+  //       dateBlogObj[dateValue] = i;
+  //       return dateValue;
+  //     }).sort().reverse();
+  //     setSortedPosts(blogPostCreatedAts.map((e) => blogPost[dateBlogObj[e]]));
+  //   }
+  // }, [])
+  
   function handleChangeTab(event, value) {
     setTabValue(value);
     if (tabValue === 4) dispatch(blogActions.getBlogPost());
   }
 
-  const week = sortedPosts.filter(blog => {
+  const week = blogPost.filter(blog => {
     const weekAgo = new Date();
     weekAgo.setDate(weekAgo.getDate() - 7);
     return new Date(blog.createdAt) >= weekAgo;
   })
 
-  const month = sortedPosts.filter(blog => {
+  const month = blogPost.filter(blog => {
     const monthAgo = new Date();
     monthAgo.setDate(monthAgo.getDate() - 30);
     return new Date(blog.createdAt) >= monthAgo;
   })
 
-  const year = sortedPosts.filter(blog => {
+  const year = blogPost.filter(blog => {
     const yearAgo = new Date();
     yearAgo.setDate(yearAgo.getDate() - 365);
     return new Date(blog.createdAt) >= yearAgo;
@@ -104,19 +104,24 @@ function BlogListHeader(props) {
       {
         <div className={classes.content}>
           {tabValue === 0 && (
-            blogPost.map((blog, i) => <BlogListContent blog={blog} userId={userId} key={i} tags={props.tags} />)
+            !blogPost ? <h1>Loading...</h1> 
+            : blogPost.map((blog, i) => <BlogListContent blog={blog} author={blogAuthor[i]} key={i} tags={props.tags} />)
           )}
           {tabValue === 1 && (
-            blogPost.map((blog, i) => <BlogListContent blog={blog} userId={userId} key={i} tags={props.tags} />)
+            week.length === 0 ? <NoPost /> 
+            : week.map((blog, i) => <BlogListContent blog={blog} author={blogAuthor[i]} key={i} tags={props.tags} />)
           )}
           {tabValue === 2 && (
-            blogPost.map((blog, i) => <BlogListContent blog={blog} userId={userId} key={i} tags={props.tags} />)
+            month.length === 0 ? <NoPost />
+            : month.map((blog, i) => <BlogListContent blog={blog} author={blogAuthor[i]} key={i} tags={props.tags} />)
           )}
           {tabValue === 3 && (
-            blogPost.map((blog, i) => <BlogListContent blog={blog} userId={userId} key={i} tags={props.tags} />)
+            year.length === 0 ? <NoPost />
+            : year.map((blog, i) => <BlogListContent blog={blog} author={blogAuthor[i]} key={i} tags={props.tags} />)
           )}
           {tabValue === 4 && (
-            blogPost.map((blog, i) => <BlogListContent blog={blog} userId={userId} key={i} tags={props.tags} />)
+            !blogPost > 0 ? <h1>Loading...</h1>
+            : blogPost.map((blog, i) => <BlogListContent blog={blog} author={blogAuthor[i]} key={i} tags={props.tags} />)
           )}
         </div>
       }
