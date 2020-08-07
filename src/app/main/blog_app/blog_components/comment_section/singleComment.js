@@ -43,6 +43,7 @@ function BlogComment(props) {
   const [content, setContent] = useState('');
   const [open, setOpen] = useState(false);
   const [isLikeComment, setIsLikeComment] = useState(props.isLike);
+  const [comment, setComment] = useState('');
   const [likes, setLikes] = useState([]);
   const [employeeDetails, setEmployeeDetails] = useState({});
   const [value, setValue] = useState('');
@@ -50,6 +51,7 @@ function BlogComment(props) {
   useEffect(() => {
     if (props.comment) {
       setContent(props.comment.content);
+      setComment(props.comment.content)
       setLikes(props.comment.commentLike ? props.comment.commentLike.length : 0);
       setEmployeeDetails(props.comment.employee);
     }
@@ -77,7 +79,7 @@ function BlogComment(props) {
   const handleSubmitReply = () => {
     setShowInput(true);
     const model = {commentId: props.comment.id, content};
-    dispatch(blogActions.submitBlogCommentReply(model));
+    dispatch(blogActions.submitBlogCommentReply(model, props.comment.postId));
     setContent('');
   };
 
@@ -138,9 +140,10 @@ function BlogComment(props) {
           fullName={!employeeDetails ? 'George Ole' : `${employeeDetails.lastName} ${employeeDetails.firstName}`}
           buttonContent={props.moreContent}
           onClick={(value) => selectClickedButton(value)}
-          // profilePicture={employeeDetails.profilePicture}
+          time={props.comment.createdAt}
+          profilePicture={!props.comment.employee ? '' : props.comment.employee.profilePicture}
         />
-        <Typography varaint="body1" className={classes.commentBody}>{content}</Typography>
+        <Typography varaint="body1" className={classes.commentBody}>{comment}</Typography>
       </ThemeProvider>
       <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Update comment</DialogTitle>
