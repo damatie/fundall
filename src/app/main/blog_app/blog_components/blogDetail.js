@@ -20,6 +20,8 @@ import Twitter from 'react-sharingbuttons/dist/buttons/Twitter'
 import { useDispatch, useSelector } from 'react-redux';
 import 'react-sharingbuttons/dist/main.css'
 import { desSort } from 'app/shared/sortData';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import { useHistory } from 'react-router';
 const theme = createMuiTheme();
 
 theme.typography.h2 = {
@@ -82,6 +84,10 @@ const useStyles = makeStyles((theme) => ({
   dFlex: {
     display: 'flex',
   },
+  previousBtn: {
+    marginBottom: 32,
+    alignSelf: 'center',
+  },
 }));
 
 const user = {
@@ -91,24 +97,36 @@ const user = {
 function BlogDetail({ match }) {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const [commentState, setCommentState] = useState([]);
   
   const blogPost = useSelector(state => state.blog.getOneBlogPost.data.postData);
   const author = useSelector(state => state.blog.getOneBlogPost.data.author);
   const comments = useSelector(state => state.blog.getAllCommentsForAPost.data);
   const userId = useSelector(state => state.auth.user.id);
 
+  const history = useHistory();
+
   const [isLikedPost, setIsLikedPost] = useState(false);
   const [content, setContent] = useState('');
   const [numberOflikedpost, setNumberOfLikedPost] = useState();
 
   const postId = match.params.post_id;
-  const url = 'window.location.href';
+  const url = 'howmies.netlify.com';
   const shareText = 'Check out this post!';
+  // 'window.location.href'
+
+  const goToPreviousRoute = () => {
+    history.push('/blog/list');
+  }
 
   useEffect(() => {
     dispatch(blogActions.getOneBlogPost(postId));
     dispatch(blogActions.getAllCommentsForAPost(postId));
   }, []);
+
+  useEffect(() => {
+    setCommentState(desSort(comments));
+  }, [comments])
 
   useEffect(() => {
     if (blogPost) {
@@ -151,6 +169,11 @@ function BlogDetail({ match }) {
         : <Grid container spacing={2} style={{marginTop: 16}}>
             <Grid item xs={12} sm={1}>
               <div className={classes.iconButton}>
+                <div className={classes.previousBtn}>
+                  <IconButton aria-label="go back" component="span" onClick={goToPreviousRoute}>
+                    <ArrowBackIcon />
+                  </IconButton>
+                </div>
                 <div className={classes.alignCenter}>
                   <IconButton aria-label="like" onClick={() => handleLikes(blogPost.id)} style={{color: getColor()}} component="span">
                     {!isLikedPost ? <FavoriteBorder /> : <Favorite />}
@@ -163,8 +186,12 @@ function BlogDetail({ match }) {
                   </IconButton>
                   <Typography style={{textAlign: 'center'}}>{comments.length}</Typography>
                 </div>
-                <Facebook url={url} style={{bottomMargin: 16}} />
-                <Twitter url={url} shareText={shareText} style={{bottomMargin: 16}} />
+                <div className={classes.alignCenter}>
+							    <Facebook url={url} />
+                </div>
+                <div className={classes.alignCenter}>
+                  <Twitter url={url} shareText={shareText} style={{bottomMargin: 16}} />
+                </div>
               </div>
             </Grid>
             <Grid item xs={12} sm={7}>
@@ -191,7 +218,7 @@ function BlogDetail({ match }) {
                   value={content}
                   onChange={value => setContent(value)}
                 />
-                {(comments.length > 0) && desSort(comments).map((comment, index) => {
+                {(comments.length > 0) && commentState.map((comment, index) => {
                   return (
                     <Paper variant="outlined" key={index} className={classes.replyComment}>
                       <SingleComment

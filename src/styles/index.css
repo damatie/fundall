@@ -107,6 +107,9 @@ input:-webkit-autofill {
     -webkit-box-shadow:0 0 0 100px transparent inset!important;
 }
 
+.react-sharing-button__text {
+    display: none;
+}
 
 @import 'print.css';
 
