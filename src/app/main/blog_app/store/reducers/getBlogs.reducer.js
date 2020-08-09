@@ -36,7 +36,7 @@ const getBlogs = (state = initialState, action) => {
 			};
 		}
 		case Actions.DELETE_ONE_BLOGPOST_SUCCESS: {
-			const newData = state.data.filter(post => post.id !== action.payload);
+			const newData = state.data.filter(blog => blog.post.id !== action.payload);
 			return {
 				...state,
 				data: newData,

@@ -17,6 +17,7 @@ import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
+import { useHistory } from 'react-router';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -62,6 +63,8 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
 function PostBlog() {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const history = useHistory();
+  
   const [checked, setChecked] = useState([0]);
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
@@ -100,7 +103,7 @@ function PostBlog() {
     for (let i = 0; i < images.length; i++) {
       formData.append('images', images[i]);
     }
-    dispatch(blogActions.submitBlogPost(formData));
+    dispatch(blogActions.submitBlogPost(formData, history));
   }
 
   return (
