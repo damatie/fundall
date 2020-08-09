@@ -14,16 +14,19 @@ export function getBlogPost(auto) {
 			})
 		}
 		
+		// fetch('https://hris-cbit.herokuapp.com/api/v1/posts/all/paginate?limit=10&offset=0', {
 		fetch('https://hris-cbit.herokuapp.com/api/v1/posts/', {
 			...header.getRegHeader()
 		}).then(res => res.json()).then(
 			post => {
 				if(post.message === 'Success') {
+					console.log(post)
 					return dispatch({
 						type: GETBLOGS_SUCCESS,
 						payload: post.data
 					});
 				} else {
+					console.log(post)
 					return dispatch({
 						type: GETBLOGS_ERROR,
 						payload: ''
@@ -32,6 +35,7 @@ export function getBlogPost(auto) {
 			}
 		)
 		.catch(error => {
+			console.log(error)
 			return dispatch({
 				type: GETBLOGS_ERROR,
 				payload: error

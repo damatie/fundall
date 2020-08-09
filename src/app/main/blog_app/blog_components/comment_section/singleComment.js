@@ -55,6 +55,7 @@ function BlogComment(props) {
   const [open, setOpen] = useState(false);
   const [isLikeComment, setIsLikeComment] = useState(props.isLike);
   const [comment, setComment] = useState('');
+  const [input, setInput] = useState('');
   const [likes, setLikes] = useState([]);
   const [employeeDetails, setEmployeeDetails] = useState({});
   const [value, setValue] = useState('');
@@ -83,9 +84,10 @@ function BlogComment(props) {
     if(value === true) {
       setShowInput(value)
     } else {
+      setInput(value);
       setContent(value);
     }
-  };
+  }
 
   const handleSubmitReply = () => {
     setShowInput(true);
@@ -138,6 +140,8 @@ function BlogComment(props) {
   };
 
   const handleLikes = () => {
+    setIsLikeComment(!isLikeComment);
+    isLikeComment ? setLikes(prev => prev - 1) : setLikes(prev => prev + 1);
     dispatch(blogActions.likeAComment(props.comment.id, props.userId, props.comment.postId));
   };
 
@@ -173,7 +177,7 @@ function BlogComment(props) {
             </div> 
           : <CommentInput
               cancel="Cancel"
-              value={content}
+              value={input}
               onClick={() => handleSubmitReply()}
               onChange={value => handleChange(value)}
             />
