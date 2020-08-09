@@ -13,8 +13,11 @@ const useStyles = makeStyles((theme) => ({
       marginLeft: '12px',
     },
   },
-  btn: {color: 'grey', marginTop: '16px',
-    textTransform: 'none'
+  btn: {color: 'grey', marginTop: '8px',
+    textTransform: 'none',
+    [theme.breakpoints.down('xs')]: {
+      marginTop: 0,
+    },
   },
 }));
 
@@ -30,28 +33,22 @@ function ReplyComment(props) {
     <>
       { props.reply && noOfReply !== 0 &&
         <>
-          { noOfReply !== 1 &&
-            <Button className={classes.btn} onClick={() => setViewAllComments(!viewAllComments)}>
-              { !viewAllComments ? `View more ${noOfReply - 1} comments` : 'Hide comments'}
-            </Button>
-          }
+          <Button className={classes.btn} onClick={() => setViewAllComments(!viewAllComments)}>
+            { !viewAllComments ? `View more ${noOfReply - 1} comments` : 'Hide comments'}
+          </Button>
           {!viewAllComments 
             ?
-              <Paper variant="outlined" className={classes.paper}>
-                <SingleComment comment={props.reply[0]} commentId={props.commentId} postId={props.postId} moreContent={replyContent} />
-              </Paper>
+              <SingleComment comment={props.reply[0]} commentId={props.commentId} postId={props.postId} moreContent={replyContent} />
             :
-              props.reply.map((reply, index) => {
+              props.reply.map((reply, i) => {
                 return (
-                  <Paper variant="outlined" key={index} className={classes.paper}>
-                    <SingleComment
-                      comment={reply}
-                      commentId={props.commentId}
-                      postId={props.postId}
-                      moreContent={replyContent}
-                      />
-                    {/* <ReplyComment /> */}
-                  </Paper>
+                  <SingleComment
+                    key={i}
+                    comment={reply}
+                    commentId={props.commentId}
+                    postId={props.postId}
+                    moreContent={replyContent}
+                  />
                 )
               })
             }

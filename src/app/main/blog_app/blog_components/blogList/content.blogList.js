@@ -17,10 +17,10 @@ const theme = createMuiTheme();
 theme.typography.h4 = {
   fontSize: '2.3rem',
   '@media (min-width:600px)': {
-    fontSize: '3.0rem',
+    fontSize: '2.5rem',
   },
   [theme.breakpoints.up('md')]: {
-    fontSize: '3.3rem',
+    fontSize: '3rem',
   },
 };
 
@@ -67,14 +67,17 @@ function Blog(props) {
   const dispatch = useDispatch()
 
   const [clicked, setClicked] = React.useState(false);
+  const [numberOflikedpost, setNumberOfLikedPost] = React.useState();
 
   React.useEffect(() => {
     const result = props.blog.employees.map(i => i.postLike);
     setClicked(checkIfUserLikedComment(!result ? [] : result));
+    setNumberOfLikedPost(result.length);
   }, [props.blog])
 
-
   const handleLike = (id) => {
+    setClicked(prevState => prevState = !prevState);
+    numberOflikedpost ? setNumberOfLikedPost(prev => prev - 1) : setNumberOfLikedPost(prev => prev + 1);
     dispatch(blogActions.likeAndUnlikeBlogPost({id, employeeId: props.userId}));
   }
 
@@ -123,7 +126,7 @@ function Blog(props) {
             startIcon={!clicked && (props.blog) ? <FavoriteBorder /> : <Favorite />}
             onClick={() => handleLike(props.blog.id)}
           >
-            {props.blog.employees && props.blog.employees.length}
+            {numberOflikedpost || 0}
           </Button>
           <Button
             style={{color: '#4d5760'}}

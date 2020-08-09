@@ -8,13 +8,6 @@ const initialState = {
 
 const deleteAReply = (state = initialState, action) => {
 	switch (action.type) {
-		case Actions.DELETE_COMMENT_REPLY_SUCCESS: {
-			return {
-				...initialState,
-				success: true,
-				loading: false
-			};
-		}
 		case Actions.DELETE_COMMENT_REPLY_ERROR: {
 			return {
 				...initialState,

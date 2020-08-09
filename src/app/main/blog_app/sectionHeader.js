@@ -37,7 +37,7 @@ export default function SectionHeader(props) {
 
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
-  const isBlogPoster = userId === props.blogPoster;
+  const isBlogPoster = userId === props.blogPoster || userId === props.commentReplier;
 
   const moreContent = props.buttonContent.map((item, index) => {
     if (index === 0 && location.pathname === '/blog/list') return <Button className={classes.btn} key={index} component={Link} to={`/blog/update_blog/${props.id}`}>{item}</Button>;
@@ -46,7 +46,13 @@ export default function SectionHeader(props) {
 
   return (
     <div className={classes.root}>
-      <UserAvatar fullName={props.fullName} time={props.time} email={props.email} src={props.profilePicture} />
+      <UserAvatar
+        fullName={props.fullName}
+        time={props.time}
+        email={props.email}
+        src={props.profilePicture}
+        size={props.commentReplier == true}
+      />
       <div style={{alignSelf: 'center'}}>
         {isBlogPoster &&
           <IconButton aria-describedby={id} aria-label="like" component="span" onClick={handleClick}>

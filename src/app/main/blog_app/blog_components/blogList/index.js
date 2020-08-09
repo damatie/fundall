@@ -1,6 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
+import Pagination from '@material-ui/lab/Pagination';
 import BlogSideAtrraction from './aSide.blogList';
 import Tabs from './tabs.blogList.js';
 
@@ -15,6 +16,11 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('xs')]: {
       display: 'none',
     }
+  },
+  pagination: {
+    display: 'flex',
+    justifyContent: 'center',
+    marginBottom: '32px'
   }
 }));
 
@@ -24,6 +30,7 @@ function BlogPostList() {
   const tags = ['Games', 'Sports', 'JavaScript'];
 
   return (
+    <>
     <Grid container className={classes.root} spacing={2}>
       <Grid item xs={12} sm={8}>
         <Tabs tags={tags} />
@@ -32,6 +39,10 @@ function BlogPostList() {
         <BlogSideAtrraction />
       </Grid>
     </Grid>
+    <div className={classes.pagination}>
+      <Pagination count={10} color="primary" />
+    </div>
+    </>
   )
 }
 

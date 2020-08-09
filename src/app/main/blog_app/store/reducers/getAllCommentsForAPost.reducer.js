@@ -35,7 +35,6 @@ const getAllCommentsForAPost = (state = initialState, action) => {
 				loading: false,
 				data: newData,
 			};
-			break;
 		}
 		case Actions.COMMENT_TO_POST_SUCCESS: {
 			const newData = [ action.payload, ...state.data ];
@@ -59,14 +58,13 @@ const getAllCommentsForAPost = (state = initialState, action) => {
 			};
 		}
 		case Actions.UPDATE_A_COMMENT_REPLY_SUCCESS: {
-			const updateReply = (comment) => {
-				comment.map((reply) => {
-					if(reply.id === action.payload.replyId) reply.content = action.payload.content;
-					return reply;
-				});
-			}
 			const newData = state.data.map((comment) => {
-				if(comment.id === action.payload.commentId) updateReply(comment.replyComment);
+				if(comment.id === action.payload.commentId) {
+          return {...comment, replyComment: comment.replyComment.map((reply) => {
+            if(reply.id === action.payload.replyId) return {...reply, content: action.payload.content}
+            return reply
+          })}
+        }
 				return comment;
 			});
 			return {
@@ -75,18 +73,21 @@ const getAllCommentsForAPost = (state = initialState, action) => {
 				data: newData
 			};
 		}
-		// case Actions.LIKE_A_COMMENT_SUCCESS: {
-		// 	const newData = state.data.map(comment => {
-		// 		// if (comment.id === action.payload.commentId) {
-    //     //   return {...comment, commentLike: [...comment.commentLike, {...action.payload}]};
-    //     // }
-		// 		return comment;
-		// 	})
-		// 	return {
-		// 		...state,
-		// 		data: newData,
-		// 	};
-		// }
+		case Actions.DELETE_COMMENT_REPLY_SUCCESS: {
+			const newData = state.data.map((comment) => { 
+        if (comment.id === action.payload.commentId) {
+          return {...comment, replyComment: comment.replyComment.filter((reply) => {
+            return reply.id !== action.payload.replyId;
+          })}
+        }
+				return comment;
+			});
+			return {
+				...state,
+				loading: false,
+				data: newData
+			};
+		}
 		case Actions.GET_ALL_COMMENTS_FOR_A_POST_ERROR: {
 			return {
 				...initialState,

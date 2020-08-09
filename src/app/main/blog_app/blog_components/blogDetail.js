@@ -70,7 +70,6 @@ const useStyles = makeStyles((theme) => ({
   iconButton: {
     display: 'flex',
     flexDirection: 'column',
-    marginTop: 32,
     justifyContent: 'center',
     [theme.breakpoints.down('xs')]: {
       flexDirection: 'row',
@@ -228,7 +227,9 @@ function BlogDetail({ match }) {
                         btnContent='Reply'
                         userId={userId}
                       />
-                      <ReplyComment reply={comment.replyComment} commentId={comment.id} postId={postId} />
+                      {comment.replyComment.length > 0 
+                        && <ReplyComment reply={comment.replyComment} commentId={comment.id} postId={postId} />
+                      }
                     </Paper>
                   )
                 })}

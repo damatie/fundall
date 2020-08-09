@@ -16,11 +16,20 @@ const useStyles = makeStyles((theme) => ({
       display: 'none',
     },
   },
+  header: {
+    flexGrow: 1,
+    display: 'flex'
+  },
   title: {
     fontWeight: 'bold',
     alignSelf: 'center',
-    flexGrow: 1,
   },
+  search: {
+    height: '44px',
+    width: '300px',
+    padding: '16px 8px',
+    marginLeft: '16px',
+  }
 }));
 
 function BlogListHeader(props) {
@@ -36,18 +45,6 @@ function BlogListHeader(props) {
   useEffect(() => {
     dispatch(blogActions.getBlogPost());
   }, []);
-
-  // useEffect(() => {
-  //   const dateBlogObj = {};
-  //   if (blogPost.length > 0) {
-  //     const blogPostCreatedAts = blogPost.map((blog, i) => {
-  //       const dateValue = new Date(blog.createdAt).valueOf();
-  //       dateBlogObj[dateValue] = i;
-  //       return dateValue;
-  //     }).sort().reverse();
-  //     setSortedPosts(blogPostCreatedAts.map((e) => blogPost[dateBlogObj[e]]));
-  //   }
-  // }, [])
   
   function handleChangeTab(event, value) {
     setTabValue(value);
@@ -83,7 +80,10 @@ function BlogListHeader(props) {
   return (
     <>
       <div className={classes.root}>
-        <Typography variant="h6" className={classes.title}>Posts</Typography>
+        <div className={classes.header}>
+          <Typography variant="h6" className={classes.title}>Posts</Typography>
+          <input type="text" className={classes.search} placeholder="Search post..." />
+        </div>
         <Tabs
           value={tabValue}
           onChange={handleChangeTab}
