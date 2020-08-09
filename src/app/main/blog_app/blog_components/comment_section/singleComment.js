@@ -20,10 +20,17 @@ import { checkIfUserLikedComment } from './checkIfuserlikedComment';
 const theme = createMuiTheme();
 
 theme.typography.body1 = {
-  fontSize: '1.75rem',
+  fontSize: '16px',
 };
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    marginLeft: '48px',
+    marginTop: 16,
+    [theme.breakpoints.down('xs')]: {
+      marginTop: theme.spacing(1)
+    },
+  },
   dFlex: {
     display: 'flex',
   },
@@ -31,8 +38,12 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'space-between',
   },
   commentBody: {
-    margin: '12px 0',
-  }
+    marginLeft: '48px',
+  },
+  content: {
+    margin: '8px 0',
+    lineHeight: 1.5,
+  },
 }));
 
 function BlogComment(props) {
@@ -105,8 +116,7 @@ function BlogComment(props) {
   };
 
   const handleDeleteReply = () => {
-    console.log(props.comment.id);
-    dispatch(blogActions.deleteCommentReply(props.comment.id));
+    dispatch(blogActions.deleteCommentReply({replyId: props.comment.id, commentId: props.commentId}));
   };
 
   const selectClickedButton = (value) => {
@@ -134,19 +144,41 @@ function BlogComment(props) {
   const getColor = () => !isLikeComment ? '#4d5760' : '#F44336';
 
   return (
-    <>
-      <ThemeProvider theme={theme}>
-        <SectionHeader
-          fullName={!employeeDetails ? 'George Ole' : `${employeeDetails.lastName} ${employeeDetails.firstName}`}
-          buttonContent={props.moreContent}
-          email={employeeDetails && employeeDetails.email}
-          blogPoster={employeeDetails && employeeDetails.id}
-          onClick={(value) => selectClickedButton(value)}
-          time={props.comment.createdAt}
-          profilePicture={!props.comment.employee ? '' : props.comment.employee.profilePicture}
-        />
-        <Typography varaint="body1" className={classes.commentBody}>{comment}</Typography>
-      </ThemeProvider>
+    <div className={`${props.commentId && classes.root}`}>
+      <SectionHeader
+        fullName={employeeDetails && `${employeeDetails.lastName} ${employeeDetails.firstName}`}
+        buttonContent={props.moreContent}
+        email={employeeDetails && employeeDetails.email}
+        blogPoster={employeeDetails && employeeDetails.id}
+        commentReplier={props.comment && props.comment.employeeId}
+        onClick={(value) => selectClickedButton(value)}
+        time={props.comment && props.comment.createdAt}
+        profilePicture={employeeDetails && employeeDetails.profilePicture}
+      />
+      <div className={classes.commentBody}>
+        <ThemeProvider theme={theme}>
+          <Typography varaint="body1" className={classes.content}>{comment}</Typography>
+        </ThemeProvider>
+        {showInput
+          ? <div className={`${classes.dFlex} ${classes.spaceBtw}`}>
+            {props.btnContent &&<> <div>
+                <IconButton aria-label="like" onClick={handleLikes} style={{color: getColor()}} component="span">
+                  {!isLikeComment ? <FavoriteBorder /> : <Favorite />}
+                </IconButton>
+                <Typography varaint="body1" component="span" className={classes.userName}>
+                  {likes}
+                </Typography>
+              </div>
+              <Button onClick={showReplyInput}>{props.btnContent}</Button> </>}
+            </div> 
+          : <CommentInput
+              cancel="Cancel"
+              value={content}
+              onClick={() => handleSubmitReply()}
+              onChange={value => handleChange(value)}
+            />
+        }
+      </div>
       <Dialog open={open} onClose={handleClose} fullWidth aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Update comment</DialogTitle>
         <DialogContent>
@@ -169,26 +201,7 @@ function BlogComment(props) {
           </Button>
         </DialogActions>
       </Dialog>
-      {showInput
-        ? <div className={`${classes.dFlex} ${classes.spaceBtw}`}>
-           {props.btnContent &&<> <div>
-              <IconButton aria-label="like" onClick={handleLikes} style={{color: getColor()}} component="span">
-                {!isLikeComment ? <FavoriteBorder /> : <Favorite />}
-              </IconButton>
-              <Typography varaint="body1" component="span" className={classes.userName}>
-                {likes}
-              </Typography>
-            </div>
-             <Button onClick={showReplyInput}>{props.btnContent}</Button> </>}
-          </div> 
-        : <CommentInput
-            cancel="Cancel"
-            value={content}
-            onClick={() => handleSubmitReply()}
-            onChange={value => handleChange(value)}
-          />
-      }
-    </>
+    </div>
   )
 }
 

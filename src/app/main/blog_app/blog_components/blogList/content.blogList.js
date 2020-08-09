@@ -17,10 +17,10 @@ const theme = createMuiTheme();
 theme.typography.h4 = {
   fontSize: '2.3rem',
   '@media (min-width:600px)': {
-    fontSize: '3.0rem',
+    fontSize: '2.5rem',
   },
   [theme.breakpoints.up('md')]: {
-    fontSize: '3.3rem',
+    fontSize: '3rem',
   },
 };
 

@@ -24,8 +24,6 @@ export function submitBlogCommentReply(data, id) {
 		}).then(res => res.json()).then(
 			comment => {
 				if(comment.success === true) {
-					// dispatch(autoGetAllCommentsForAPost(id))
-					dispatch(submitBlogComment(data.id, true))
 					return dispatch({
 						type: COMMENT_TO_COMMENT_SUCCESS,
 						payload: comment.data
