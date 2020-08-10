@@ -15,6 +15,8 @@ import employeeReducer from 'app/store/reducers';
 import * as employeeActions from 'app/store/actions';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import GridSystem from 'app/shared/gridSystem';
+import { useFormValues } from 'app/hooks/useFromValues';
+import { getOneInput } from '../getOneInput';
 
 const useStyles = makeStyles(theme => ({
 	grid: {
@@ -60,7 +62,12 @@ function RequestLoanTab(props) {
 	const dispatch = useDispatch();
 
 	const [isFormValid, setIsFormValid] = useState(true);
+	const annualRef = useRef(null);
 	const formRef = useRef(null);
+	const [amountRequested, setAmountRequested] = useState(0);
+	const [annualPay, setAnnualPay] = useState(0);
+
+	const { inputs, setInputs } = useFormValues();
 
 	const { id } = useParams();
 
@@ -115,48 +122,26 @@ function RequestLoanTab(props) {
 				className="flex flex-col justify-center w-full"
 			>
 				<GridSystem>
-				{/* <TextFieldFormsy
-					className="mb-16"
+				<div>
+				<TextFieldFormsy
+					className="mb-8 w-full"
 					type="number"
 					name="annualPay"
 					label="Annual Pay"
 					value={id ? loan.data.annualPay : ''}
+					ref={annualRef}
 					validations={{
 						minLength: 1
 					}}
 					validationErrors={{
 						minLength: 'Min character length is 1'
 					}}
+					onChange={e => setAnnualPay(e.target.value)}
 					InputProps={{
 						endAdornment: (
 							<InputAdornment position="end">
 								<Icon className="text-20" color="action">
                   money
-								</Icon>
-							</InputAdornment>
-						)
-					}}
-					variant="outlined"
-					required
-				/> */}
-
-        <TextFieldFormsy
-					className="mb-16"
-					type="number"
-					name="amountRequested"
-					label="Amount requested"
-					value={id ? loan.data.amountRequested : ''}
-					validations={{
-						minLength: 1
-					}}
-					validationErrors={{
-						minLength: 'Min character length is 1'
-					}}
-					InputProps={{
-						endAdornment: (
-							<InputAdornment position="end">
-								<Icon className="text-20" color="action">
-								money
 								</Icon>
 							</InputAdornment>
 						)
@@ -164,31 +149,39 @@ function RequestLoanTab(props) {
 					variant="outlined"
 					required
 				/>
-
-				{/* <TextFieldFormsy
-					className="mb-16"
-					type="number"
-					name="deductableAmount"
-					label="Deductable amount"
-					value={id ? loan.data.deductableAmount : ''}
-					validations={{
-						minLength: 1
-					}}
-					validationErrors={{
-						minLength: 'Min character length is 1'
-					}}
-					InputProps={{
-						endAdornment: (
-							<InputAdornment position="end">
-								<Icon className="text-20" color="action">
-                  money
-								</Icon>
-							</InputAdornment>
-						)
-					}}
-					variant="outlined"
-					required
-				/> */}
+					<div>Annual Pay: {new Intl.NumberFormat().format(annualPay)}</div>
+				</div>
+				<div style={{width: '100%'}}>
+					<TextFieldFormsy
+						className="mb-8 w-full"
+						type="number"
+						name="amountRequested"
+						label="Amount requested"
+						step="1"
+						value={id ? loan.data.amountRequested : ''}
+						validations={{
+							// matchRegexp: /^([1-20])$/
+							// isGreaterThan: annualRef.current ? annualRef.current.state.value : 1
+						}}
+						error={amountRequested > annualPay * 30 / 100}
+						helperText={amountRequested > annualPay * 30 / 100 ? 'Please you can not request for an amount that is greater than 30% of your annual payment' : `Max Amount: ${new Intl.NumberFormat().format(annualPay * 30 / 100)}`}
+						onChange={e => {
+							setAmountRequested(e.target.value)
+						}}
+						InputProps={{
+							endAdornment: (
+								<InputAdornment position="end">
+									<Icon className="text-20" color="action">
+									money
+									</Icon>
+								</InputAdornment>
+							)
+						}}
+						variant="outlined"
+						required
+					/>
+					<div>{`Amount Requested: ${new Intl.NumberFormat().format(amountRequested)}`}</div>
+				</div>
 
         <TextFieldFormsy
 					className="mb-16"
@@ -218,7 +211,7 @@ function RequestLoanTab(props) {
 				<TextFieldFormsy
 					className="mb-16"
 					type="number"
-					name="number"
+					name="phoneNumber"
 					label="Phone number"
 					// value={id ? loan.data.amountRequested : ''}
 					validations={{
@@ -265,8 +258,6 @@ function RequestLoanTab(props) {
 					required
 				/>
 
-
-
 				<SelectFormsy
           className="my-16"
           name="duration"
@@ -281,21 +272,6 @@ function RequestLoanTab(props) {
 						<MenuItem value={item.id} key={item.id}>{item.value}</MenuItem>
 					))}
         </SelectFormsy>
-
-        {/* <SelectFormsy
-          className="my-16"
-          name="employementType"
-          label="Employement type"
-          value={id ? loan.data.employementType : 'none'}
-          // validations="not-equals:none"
-          validationError="requried"
-          variant="outlined"
-					required
-        >
-					{['full-time', 'part-time', 'contract'].map(item => (
-						<MenuItem value={item} key={item}>{item}</MenuItem>
-					))}
-        </SelectFormsy> */}
 
 				<SelectFormsy
           className="my-16"
@@ -341,7 +317,6 @@ function RequestLoanTab(props) {
 						<MenuItem value={item.id} key={item.id}>{`${item.firstName} ${item.lastName}`}</MenuItem>
 					))}
         </SelectFormsy>
-				</GridSystem>
 				<TextFieldFormsy
 					className="my-16"
 					type="text"
@@ -364,6 +339,7 @@ function RequestLoanTab(props) {
 					}}
           variant="outlined"
 				/>
+				</GridSystem>
 				{id ? <></> : <ProgressBtn success={loan.success} loading={loan.loadings} content='Request Loan' disable={!isFormValid}/>}
 
 				{loan.data.status === 'pending' ? <ProgressBtn success={loan.success} loading={loan.updating} content='Update Request' disable={!isFormValid}/> : <></>}

@@ -18,9 +18,11 @@ import withReducer from 'app/store/withReducer';
 import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useHistory } from 'react-router-dom';
 import RequestSalaryAdvTab from '../tabs/requestSalaryAdvTab';
 import reducer from '../store/reducers';
+import ProgressBtn from 'app/shared/progressBtn';
+import * as Actions from '../store/actions';
 
 const useStyles = makeStyles(theme => ({
 	productImageFeaturedStar: {
@@ -63,6 +65,12 @@ function SalaryAdvance(props) {
 
 	const classes = useStyles(props);
 
+	const salaryAdvance = useSelector(({ salaryAdvance }) => salaryAdvance.salaryAdvance);
+
+	const history = useHistory();
+
+	const { id } = useParams();
+
 	return (
 		<FusePageCarded
 			classes={{
@@ -101,9 +109,13 @@ function SalaryAdvance(props) {
 								</FuseAnimate>
 								<div className="flex flex-col min-w-0 mx-8 sm:mc-16">
 									<FuseAnimate animation="transition.slideLeftIn" delay={300}>
+									{id ? 
+										<ProgressBtn success={salaryAdvance.success} loading={salaryAdvance.loading} content='Cancel Salary advance' onClick={e => {
+											dispatch(Actions.cancelSalaryAdvance(id, history))
+										}} color='red'/> :
 										<Typography className="text-16 sm:text-20 truncate">
 										  New Salary Advance Request
-										</Typography>
+										</Typography>}
 									</FuseAnimate>
 									{/* <FuseAnimate animation="transition.slideLeftIn" delay={300}>
 										<Typography variant="caption">Leave options details</Typography>

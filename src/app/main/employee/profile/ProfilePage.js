@@ -6,13 +6,17 @@ import { makeStyles } from '@material-ui/core/styles';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import Typography from '@material-ui/core/Typography';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AboutTab from './tabs/AboutTab';
 import PhotosVideosTab from './tabs/PhotosVideosTab';
 import TimelineTab from './tabs/TimelineTab';
 import withReducer from 'app/store/withReducer';
 import reducer from './store/reducer';
 import EmployeementInfoTab from './tabs/employeementInfoTab';
+import departmentsReducer from 'app/main/HR/business_unit/department/store/reducers';
+import { useSelector, useDispatch } from 'react-redux';
+import ProfilePicture from './profilePicture';
+
 
 const useStyles = makeStyles(theme => ({
 	layoutHeader: {
@@ -28,9 +32,19 @@ const useStyles = makeStyles(theme => ({
 function ProfilePage() {
 	const classes = useStyles();
 	const [selectedTab, setSelectedTab] = useState(0);
+	const profile = useSelector(({ profile }) => profile.data);
+	const [data, setData] = useState({});
+
+	useEffect(() => {
+		setData(profile);
+	}, [profile]);
 
 	function handleTabChange(event, value) {
 		setSelectedTab(value);
+	}
+
+	if(Object.entries(data).length === 0) {
+		return <>Loading </>
 	}
 
 	return (
@@ -43,15 +57,18 @@ function ProfilePage() {
 				<div className="p-24 flex flex-1 flex-col items-center justify-center md:flex-column md:items-center">
 					<div className="flex flex-1 flex-col items-center justify-center md:flex-row md:items-center md:justify-start">
 						<FuseAnimate animation="transition.expandIn" delay={300}>
-							<Avatar className="w-96 h-96" src="assets/images/avatars/Velazquez.jpg" />
+							<ProfilePicture />
 						</FuseAnimate>
 						
 					</div>
-					<FuseAnimate animation="transition.slideLeftIn" delay={300}>
+					{/* <FuseAnimate animation="transition.slideLeftIn" delay={300}> */}
 							<Typography className="md:mx-24" variant="h4" color="inherit">
-								John Doe
+								{`${data.firstName} ${data.lastName}`}
 							</Typography>
-						</FuseAnimate>
+							<Typography className="md:mx-24" variant="subtitle1" color="inherit">
+								{`${data.email}`}
+							</Typography>
+					{/* </FuseAnimate> */}
 				</div>
 			}
 			contentToolbar={
@@ -83,11 +100,13 @@ function ProfilePage() {
 			content={
 				<div className="p-16 sm:p-24">
 					{selectedTab === 0 && <AboutTab />}
-					{selectedTab === 1 && <EmployeementInfoTab />}/s
+					{selectedTab === 1 && <EmployeementInfoTab />}
 				</div>
 			}
 		/>
 	);
 }
 
+
+withReducer('departments', departmentsReducer)(ProfilePage);
 export default withReducer('employeeProfile', reducer)(ProfilePage);

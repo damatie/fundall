@@ -15,6 +15,7 @@ const getAllCommentsForAPost = (state = initialState, action) => {
 				loading: false,
 				data: action.payload
 			};
+			break
 		}
 		case Actions.DELETE_COMMENT_SUCCESS: {
 			const newData = state.data.filter((comment) => comment.id !== action.payload);
@@ -44,11 +45,47 @@ const getAllCommentsForAPost = (state = initialState, action) => {
 			};
 		}
 		case Actions.COMMENT_TO_COMMENT_SUCCESS: {
-			const newData = [...state.data.replyComment, action.payload];
+			const newData = state.data.map((comment => {
+        if (comment.id === action.payload.commentId) {
+          return {...comment, replyComment: [{...action.payload}, ...comment.replyComment]};
+        }
+				return comment;
+			}));
 			return {
 				...initialState,
 				loading: false,
-				data: [...state.data, {replyComment: newData}],
+				data: newData,
+			};
+		}
+		case Actions.UPDATE_A_COMMENT_REPLY_SUCCESS: {
+			const newData = state.data.map((comment) => {
+				if(comment.id === action.payload.commentId) {
+          return {...comment, replyComment: comment.replyComment.map((reply) => {
+            if(reply.id === action.payload.replyId) return {...reply, content: action.payload.content}
+            return reply
+          })}
+        }
+				return comment;
+			});
+			return {
+				...initialState,
+				loading: false,
+				data: newData
+			};
+		}
+		case Actions.DELETE_COMMENT_REPLY_SUCCESS: {
+			const newData = state.data.map((comment) => { 
+        if (comment.id === action.payload.commentId) {
+          return {...comment, replyComment: comment.replyComment.filter((reply) => {
+            return reply.id !== action.payload.replyId;
+          })}
+        }
+				return comment;
+			});
+			return {
+				...state,
+				loading: false,
+				data: newData
 			};
 		}
 		case Actions.GET_ALL_COMMENTS_FOR_A_POST_ERROR: {

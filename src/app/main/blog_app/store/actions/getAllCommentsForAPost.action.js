@@ -36,3 +36,32 @@ export function getAllCommentsForAPost(id) {
 		});
 	}
 }
+
+
+export function autoGetAllCommentsForAPost(id) {
+	return dispatch => {
+		fetch(`https://hris-cbit.herokuapp.com/api/v1/comment/all/${id}`, {
+			...header.getRegHeader()
+		}).then(res => res.json()).then(
+			post => {
+				if(post.success === true) {
+					return dispatch({
+						type: GET_ALL_COMMENTS_FOR_A_POST_SUCCESS,
+						payload: post.data
+					});
+				} else {
+					return dispatch({
+						type: GET_ALL_COMMENTS_FOR_A_POST_ERROR,
+						payload: ''
+					});
+				}
+			}
+		)
+		.catch(error => {
+			return dispatch({
+				type: GET_ALL_COMMENTS_FOR_A_POST_ERROR,
+				payload: error
+			});
+		});
+	}
+}

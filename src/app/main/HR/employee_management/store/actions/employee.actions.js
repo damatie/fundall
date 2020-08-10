@@ -2,6 +2,7 @@ import axios from 'axios';
 import swal from 'sweetalert2';
 import { useAuth } from 'app/hooks/useAuth';
 import { fetchHeaders } from 'app/shared/fetchHeaders';
+import { getBaseUrl } from 'app/shared/getBaseUrl';
 
 
 export const GET_EMPLOYEE = 'GET_EMPLOYEE';
@@ -22,7 +23,7 @@ export function saveEmployee(data) {
       type: EMPLOYEE_LOADING
     });
 
-    fetch('https://hris-cbit.herokuapp.com/api/v1/auth/employee/add-employee', {
+    fetch(`${getBaseUrl()}/auth/employee/add-employee`, {
       ...header.reqHeader(
         'post',
         body

@@ -60,13 +60,30 @@ export const fetchHeaders = () => {
     };
   };
 
+  // post, put, patch formdata request header
+  const formDHeader = (method, body) => {
+    const formData = new FormData();
+    const entries = Object.entries(body)
+    for(const [key, value] of entries) {
+      formData.append(key, value);
+    }
+    return {
+      method: method,
+      headers: {
+        ...auth,
+      },
+      body: formData
+    };
+  }
+
 
   // returns functions
   return {
     getRegHeader,
     reqHeader,
     fdHeader,
-    delHeader
+    delHeader,
+    formDHeader
   };
 
 };

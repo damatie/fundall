@@ -6,6 +6,7 @@ import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import { Link } from 'react-router-dom';
 import IconButton from '@material-ui/core/IconButton';
 import UserAvatar from './userAvatar';
+import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom'
 
 const useStyles = makeStyles({
@@ -18,10 +19,17 @@ export default function SectionHeader(props) {
   const classes = useStyles();
   let location = useLocation();
   const [anchorEl, setAnchorEl] = React.useState(null);
+ 
+  const userId = useSelector(state => state.auth.user.id);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
+
+  const handleMenuClick = (item) => {
+    props.onClick(item)
+    handleClose(null);
+  }
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -29,19 +37,28 @@ export default function SectionHeader(props) {
 
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
+  const isBlogPoster = userId === props.blogPoster || userId === props.commentReplier;
 
   const moreContent = props.buttonContent.map((item, index) => {
-    if (index === 0 && location === '/blog/list') return <Button className={classes.btn} key={index} component={Link} to={`/blog/update_blog/${props.id}`}>{item}</Button>;
-    else return <Button className={classes.btn} key={index} onClick={() => props.onClick(item)}>{item}</Button>;
+    if (index === 0 && location.pathname === '/blog/list') return <Button className={classes.btn} key={index} component={Link} to={`/blog/update_blog/${props.id}`}>{item}</Button>;
+    else return <Button className={classes.btn} key={index} onClick={() => handleMenuClick(item)}>{item}</Button>;
   });
 
   return (
     <div className={classes.root}>
-      <UserAvatar fullName={props.fullName} time={props.updatedAt} />
+      <UserAvatar
+        fullName={props.fullName}
+        time={props.time}
+        email={props.email}
+        src={props.profilePicture}
+        size={props.commentReplier == true}
+      />
       <div style={{alignSelf: 'center'}}>
-        <IconButton aria-describedby={id} aria-label="like" component="span" onClick={handleClick}>
-          <MoreHorizIcon fontSize="small" />
-        </IconButton>
+        {isBlogPoster &&
+          <IconButton aria-describedby={id} aria-label="like" component="span" onClick={handleClick}>
+            <MoreHorizIcon fontSize="small" />
+          </IconButton>
+        }
         <Popover
           id={id}
           open={open}

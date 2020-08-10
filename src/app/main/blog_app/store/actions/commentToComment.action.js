@@ -1,5 +1,8 @@
 import Swal from 'sweetalert2';
 import { fetchHeaders } from 'app/shared/fetchHeaders';
+import { autoGetAllCommentsForAPost } from './getAllCommentsForAPost.action';
+import { getBaseUrl } from 'app/shared/getBaseUrl';
+import { submitBlogComment } from './commentToPost.action';
 // import { redirectUrl } from '../../redirectUrl';
 
 export const COMMENT_TO_COMMENT_ERROR = 'COMMENTTOPOST_ERROR';
@@ -8,13 +11,12 @@ export const COMMENT_TO_COMMENT_LOADING = 'COMMENTTOPOST_LOADING';
 
 const header = fetchHeaders();
 
-export function submitBlogCommentReply(data) {
+export function submitBlogCommentReply(data, id) {
 	return dispatch => {
 		dispatch({
 			type: COMMENT_TO_COMMENT_LOADING
 		})
-		console.log(data);
-		fetch('https://hris-cbit.herokuapp.com/api/v1/comment/reply/new', {
+		fetch(`${getBaseUrl()}/comment/reply/new`, {
 			...header.reqHeader(
 				'POST',
 				data
@@ -22,12 +24,11 @@ export function submitBlogCommentReply(data) {
 		}).then(res => res.json()).then(
 			comment => {
 				if(comment.success === true) {
-					console.log(comment)
 					return dispatch({
-						type: COMMENT_TO_COMMENT_SUCCESS
+						type: COMMENT_TO_COMMENT_SUCCESS,
+						payload: comment.data
 					});
 				} else {
-					console.log(comment);
 					return dispatch({
 						type: COMMENT_TO_COMMENT_ERROR,
 						payload: ''

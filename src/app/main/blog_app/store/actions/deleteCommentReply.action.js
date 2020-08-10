@@ -8,19 +8,20 @@ export const DELETE_COMMENT_REPLY_LOADING = 'COMMENTTOPOST_LOADING';
 
 const header = fetchHeaders();
 
-export function deleteAReply(data) {
+export function deleteCommentReply({replyId, commentId}) {
 	return dispatch => {
 		dispatch({
 			type: DELETE_COMMENT_REPLY_LOADING
 		})
-		fetch('https://hris-cbit.herokuapp.com/api/v1/comment/reply/one/:id', {
+		fetch(`https://hris-cbit.herokuapp.com/api/v1/comment/reply/one/${replyId}`, {
 			...header.delHeader()
 		}).then(res => res.json()).then(
 			comment => {
 				if(comment.success === true) {
-					console.log(comment)
+					console.log('reply: ', comment)
 					return dispatch({
-						type: DELETE_COMMENT_REPLY_SUCCESS
+						type: DELETE_COMMENT_REPLY_SUCCESS,
+						payload: {replyId, commentId}
 					});
 				} else {
 					console.log(comment);

@@ -7,27 +7,31 @@ import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
 import Favorite from '@material-ui/icons/Favorite';
 import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
 import * as blogActions from '../../store/actions';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
-import BlogTags from '../blogTags';
 import { Link } from 'react-router-dom';
 import SectionHeader from '../../sectionHeader';
+import { checkIfUserLikedComment } from '../comment_section/checkIfuserlikedComment';
 const theme = createMuiTheme();
 
 theme.typography.h4 = {
   fontSize: '2.3rem',
   '@media (min-width:600px)': {
-    fontSize: '3.0rem',
+    fontSize: '2.5rem',
   },
   [theme.breakpoints.up('md')]: {
-    fontSize: '3.3rem',
+    fontSize: '3rem',
   },
 };
 
 const useStyles = makeStyles((theme) => ({
   paper: {
     padding: theme.spacing(2),
-    borderRadius: theme.spacing(1),
+    borderRadius: theme.spacing(.5),
+    marginBottom: theme.spacing(2),
+    [theme.breakpoints.down('xs')]: {
+      marginBottom: 0,
+    }
   },
   blogInfo: {
     marginLeft: 44,
@@ -48,21 +52,50 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: theme.spacing(0),
     textTransform: 'none',
   },
+  tag: {
+    display: 'inline-block',
+    margin: '8px 8px 24px 0'
+  },
 }));
+
+const formatData = data => {
+  const result = data.map(i => i.postLike);
+}
 
 function Blog(props) {
   const classes = useStyles();
   const dispatch = useDispatch()
+
   const [clicked, setClicked] = React.useState(false);
+  const [numberOflikedpost, setNumberOfLikedPost] = React.useState();
+
+  React.useEffect(() => {
+    const result = props.blog.employees.map(i => i.postLike);
+    setClicked(checkIfUserLikedComment(!result ? [] : result));
+    setNumberOfLikedPost(result.length);
+  }, [props.blog])
 
   const handleLike = (id) => {
     setClicked(prevState => prevState = !prevState);
-    dispatch(blogActions.likeAndUnlikeBlogPost(id));
+    numberOflikedpost ? setNumberOfLikedPost(prev => prev - 1) : setNumberOfLikedPost(prev => prev + 1);
+    dispatch(blogActions.likeAndUnlikeBlogPost({id, employeeId: props.userId}));
   }
 
-  const handleDelete = () => {
-    dispatch(blogActions.deleteOneBlogPost(props.blog.id));
+  const handleDelete = (value) => {
+    if (value === 'Delete post') {
+      dispatch(blogActions.deleteOneBlogPost(props.blog.id));
+    }
   }
+
+  const blogTags = () => props.tags.map((tag, i) => {
+    return <Typography 
+            key={i}
+            variant="caption"
+            className={classes.tag}
+          >
+            {`#${tag}`}
+          </Typography>
+  });
 
   const getColor = () => !clicked ? '#4d5760' : '#F44336';
   
@@ -70,11 +103,13 @@ function Blog(props) {
   return (
     <Paper className={classes.paper} variant="outlined">
       <SectionHeader
-        fullName={props.blog.employees[0].firstName}
-        updatedAt={props.blog.updatedAt}
+        fullName={`${props.author.firstName} ${props.author.lastName}`}
+        dp={props.author.profilePicture}
+        time={props.blog.updatedAt}
         id={props.blog.id}
+        blogPoster={props.blog.employeeId}
         buttonContent={['Edit post', 'Delete post']}
-        onClick={() => handleDelete()}
+        onClick={(value) => handleDelete(value)}
       />
       <div className={classes.blogInfo}>
         <ThemeProvider theme={theme}>
@@ -83,24 +118,23 @@ function Blog(props) {
           </Link>
         </ThemeProvider>
         <div className={classes.dFlex}>
-          {props.blog.tags && <BlogTags tags={props.blog.tags} />}
+          {blogTags()}
         </div>
         <div className={classes.dFlex}>
           <Button
             style={{color: getColor()}}
             className={classes.button}
-            startIcon={clicked ? <Favorite /> : <FavoriteBorder />}
+            startIcon={!clicked && (props.blog) ? <FavoriteBorder /> : <Favorite />}
             onClick={() => handleLike(props.blog.id)}
           >
-            Like
+            {numberOflikedpost || 0}
           </Button>
           <Button
             style={{color: '#4d5760'}}
             className={classes.button}
             startIcon={<ChatBubbleOutlineIcon />}
-            // onClick={() => handleLike(props.blog.id)}
           >
-            Comment
+            { props.blog.comment && props.blog.comment.length }
           </Button>
         </div>
       </div>

@@ -6,6 +6,10 @@ import { useAuthentication } from 'app/hooks/useAuthentication';
 import Swal from 'sweetalert2';
 import { fetchHeaders } from 'app/shared/fetchHeaders';
 import { redirectUrl } from '../../redirectUrl';
+import { getBaseUrl } from 'app/shared/getBaseUrl';
+import { handleResponse } from 'app/auth/handleRes';
+import { GET_EMPLOYEE_PROFILE, LOADING_EMPLOYEE_PROFILE } from 'app/store/actions';
+import { GET_NOTIFICATIONS, LOADING_NOTIFICATIONS } from 'app/main/notifications/store/actions';
 
 export const LOGIN_ERROR = 'LOGIN_ERROR';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
@@ -18,7 +22,7 @@ export function submitLogin(data) {
 		dispatch({
 			type: LOGIN_LOADING
 		})
-		fetch('https://hris-cbit.herokuapp.com/api/v1/auth/employee/login', {
+		fetch(`${getBaseUrl()}/auth/employee/login`, {
 			...header.reqHeader(
 				'post',
 				data
@@ -33,7 +37,7 @@ export function submitLogin(data) {
 						icon: 'success',
 						timer: 3000,
 					});
-					localStorage.setItem('jwt_access_token', user.token);
+					localStorage.setItem('jwt_access_token', JSON.stringify(user.token));
 					const userState = {
 						role: user.role,
 						redirectUrl: redirectUrl(user.role),
@@ -47,7 +51,10 @@ export function submitLogin(data) {
 							details: user.employee.info
 						}
 					};
+					localStorage.setItem('user_data', JSON.stringify(userState));
+					dispatch(getProfile(user.id, user.token));
 					dispatch(UserActions.setUserData(userState));
+					dispatch(getNotification(user.token));
 					return dispatch({
 						type: LOGIN_SUCCESS
 					});
@@ -77,6 +84,47 @@ export function submitLogin(data) {
 				payload: error
 			});
 		});
+	}
+}
+
+const getProfile = (id, token) => {
+	return dispatch => {
+		dispatch({
+      type: LOADING_EMPLOYEE_PROFILE
+    });
+		fetch(`${getBaseUrl()}/auth/employee/${id}`, {
+			headers: {
+				authorization: `JWT ${token}`
+			}
+		}).then(res => handleResponse(res)).then(
+			data => {
+				dispatch({
+					type: GET_EMPLOYEE_PROFILE,
+					payload: data.data
+				})
+			}
+		)
+	}
+}
+
+const getNotification = token => {
+	return dispatch => {
+		dispatch({
+      type: LOADING_NOTIFICATIONS
+    });
+		fetch(`${getBaseUrl()}/notification`, {
+			headers: {
+				authorization: `JWT ${token}`
+			}
+		}).then(res => handleResponse(res)).then(
+			data => {
+				console.log(data)
+				dispatch({
+					type: GET_NOTIFICATIONS,
+					payload: data.data
+				})
+			}
+		)
 	}
 }
 

@@ -6,11 +6,15 @@ export const GETBLOGS_LOADING = 'GETBLOGS_LOADING';
 
 const header = fetchHeaders();
 
-export function getBlogPost() {
+export function getBlogPost(auto) {
 	return dispatch => {
-		dispatch({
-			type: GETBLOGS_LOADING
-		})
+		if(!auto) {
+			dispatch({
+				type: GETBLOGS_LOADING
+			})
+		}
+		
+		// fetch('https://hris-cbit.herokuapp.com/api/v1/posts/all/paginate?limit=10&offset=0', {
 		fetch('https://hris-cbit.herokuapp.com/api/v1/posts/', {
 			...header.getRegHeader()
 		}).then(res => res.json()).then(
@@ -22,6 +26,7 @@ export function getBlogPost() {
 						payload: post.data
 					});
 				} else {
+					console.log(post)
 					return dispatch({
 						type: GETBLOGS_ERROR,
 						payload: ''
@@ -30,6 +35,7 @@ export function getBlogPost() {
 			}
 		)
 		.catch(error => {
+			console.log(error)
 			return dispatch({
 				type: GETBLOGS_ERROR,
 				payload: error

@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function BlogTags(props) {
+ const BlogTags = React.memo((props) => {
   const classes = useStyles();
 
   const generateRandomColors = () => {
@@ -42,4 +42,6 @@ export default function BlogTags(props) {
       {blogTags()}
     </>
   )
-}
+})
+
+export default BlogTags;

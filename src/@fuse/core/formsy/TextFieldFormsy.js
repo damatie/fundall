@@ -32,10 +32,13 @@ function TextFieldFormsy(props) {
 		'SelectProps',
 		'type',
 		'variant',
-		'style'
+		'style',
+		'step'
 	]);
 
 	const { errorMessage } = props;
+	const { error } = props;
+	const { helperText } = props;
 	const value = props.value || '';
 
 	function changeValue(event) {
@@ -50,8 +53,8 @@ function TextFieldFormsy(props) {
 			{...importedProps}
 			onChange={changeValue}
 			value={value}
-			error={Boolean((!props.isPristine && props.showRequired) || errorMessage)}
-			helperText={errorMessage}
+			error={Boolean((!props.isPristine && props.showRequired) || errorMessage ||error)}
+			helperText={errorMessage || helperText}
 		/>
 	);
 }

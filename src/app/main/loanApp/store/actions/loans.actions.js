@@ -1,5 +1,6 @@
 import { fetchHeaders } from "app/shared/fetchHeaders";
 import { handleResponse } from "app/auth/handleRes";
+import { getBaseUrl } from "app/shared/getBaseUrl";
 
 
 export const GET_ALL_PENDING_LOAN = 'GET ALL PENDING LOAN';
@@ -9,6 +10,7 @@ export const LOADING_LOANS = 'LOADING LOANS';
 export const GET_ALL_CLOSED_LOAN = 'GET ALL CLOSED LOAN';
 export const GET_ALL_OPEN_LOAN = 'GET ALL OPEN LOAN';
 export const GET_ALL_REVIEWED_LOAN = 'GET ALL REVIEWED LOAN';
+export const GET_RETURNED_LOAN = 'GET RETURNED LOAN'
 
 const header = fetchHeaders();
 export const getPendingLoan = () => {
@@ -16,14 +18,14 @@ export const getPendingLoan = () => {
     dispatch({
       type: LOADING_LOANS
     })
-    fetch(`https://hris-cbit.herokuapp.com/api/v1/loan/all/department/request`, {
+    fetch(`${getBaseUrl()}/loan/all/department/request`, {
       ...header.getRegHeader()
     }).then(res => res.json()).then(
       data => {
         if(data) {
           dispatch({
             type: GET_ALL_PENDING_LOAN,
-            payload: data.loanData ? data.loanData : []
+            payload: data.data ? data.data : []
           })
         }
       }
@@ -33,14 +35,14 @@ export const getPendingLoan = () => {
 
 export const getReviewedLoan = () => {
   return dispatch => {
-    fetch('https://hris-cbit.herokuapp.com/api/v1/loan/all/reviewed', {
+    fetch(`${getBaseUrl()}/loan/all/reviewed`, {
       ...header.getRegHeader()
     }).then(res => handleResponse(res)).then(
       data => {
         if(data){
           dispatch({
             type: GET_ALL_REVIEWED_LOAN,
-            payload: data.loanData ? data.loanData : []
+            payload: data.data ? data.data : []
           })
         }
       }
@@ -53,14 +55,34 @@ export const getApprovedLoan = () => {
     dispatch({
       type: LOADING_LOANS
     })
-    fetch(`https://hris-cbit.herokuapp.com/api/v1/loan/all/approved`, {
+    fetch(`${getBaseUrl()}/loan/all/approved`, {
       ...header.getRegHeader()
     }).then(res => res.json()).then(
       data => {
         if(data) {
           dispatch({
             type: GET_ALL_APPROVED_LOAN,
-            payload: data.loanData ? data.loanData : []
+            payload: data.data ? data.data : []
+          })
+        }
+      }
+    ).catch(e => console.error(e))
+  }
+};
+
+export const getReturnedLoan = () => {
+  return dispatch => {
+    dispatch({
+      type: LOADING_LOANS
+    })
+    fetch(`${getBaseUrl()}/loan/all/approved`, {
+      ...header.getRegHeader()
+    }).then(res => res.json()).then(
+      data => {
+        if(data) {
+          dispatch({
+            type: GET_RETURNED_LOAN,
+            payload: data.data ? data.data : []
           })
         }
       }
@@ -73,14 +95,14 @@ export const getOpenLoan = () => {
     dispatch({
       type: LOADING_LOANS
     })
-    fetch(`https://hris-cbit.herokuapp.com/api/v1/loan/all/open`, {
+    fetch(`${getBaseUrl()}/loan/all/open`, {
       ...header.getRegHeader()
     }).then(res => res.json()).then(
       data => {
         if(data.success) {
           dispatch({
             type: GET_ALL_OPEN_LOAN,
-            payload: data.loanData
+            payload: data.data
           })
         }
       }
@@ -93,14 +115,14 @@ export const getClosedLoan = () => {
     dispatch({
       type: LOADING_LOANS
     })
-    fetch(`https://hris-cbit.herokuapp.com/api/v1/loan/all/closed`, {
+    fetch(`${getBaseUrl()}/loan/all/closed`, {
       ...header.getRegHeader()
     }).then(res => res.json()).then(
       data => {
         if(data) {
           dispatch({
             type: GET_ALL_CLOSED_LOAN,
-            payload: data.loanData ? data.loanData : []
+            payload: data.data ? data.data : []
           })
         }
       }
@@ -113,14 +135,14 @@ export const getEmployeeLoan = () => {
     dispatch({
       type: LOADING_LOANS
     })
-    fetch(`https://hris-cbit.herokuapp.com/api/v1/loan/all/log`, {
+    fetch(`${getBaseUrl()}/loan/all/log`, {
       ...header.getRegHeader()
     }).then(res => res.json()).then(
       data => {
-        if(data) {
+        if(data.success) {
           dispatch({
             type: EMPLOYEE_LOAN_HISTORY,
-            payload: data.loanData ? data.loanData : []
+            payload: data.loanData
           })
         }
       }

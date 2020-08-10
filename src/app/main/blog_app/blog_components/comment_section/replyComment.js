@@ -1,37 +1,57 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import SingleComment from './singleComment';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
     padding: '16px 8px 0 16px',
-    marginLeft: '24px',
+    marginLeft: '16px 24px 0 16px',
     marginBottom: '16px',
     [theme.breakpoints.down('xs')]: {
       marginLeft: '12px',
     },
   },
-  text: {color: 'grey', margin: '16px 0',},
+  btn: {color: 'grey', marginTop: '8px',
+    textTransform: 'none',
+    [theme.breakpoints.down('xs')]: {
+      marginTop: 0,
+    },
+  },
 }));
 
 function ReplyComment(props) {
   const classes = useStyles();
+  
+  const [viewAllComments, setViewAllComments] = useState(false);
+  const [noOfReply] = useState(props.reply.length);
+
+  const replyContent = ['Edit reply', 'Delete reply'];
 
   return (
     <>
-      { props.reply && props.reply.length !== 0 &&
+      { props.reply && noOfReply !== 0 &&
         <>
-          <Typography variant="body1" className={classes.text}>View more 1 comment(s)</Typography>
-          { props.reply.map((reply) => {
-            return (
-              <Paper variant="outlined" key={reply.id} className={classes.paper}>
-                <SingleComment comment={reply} postId={props.postId} />
-                {/* <ReplyComment /> */}
-              </Paper>
-            )
-          })}
+          <Button className={classes.btn} onClick={() => setViewAllComments(!viewAllComments)}>
+            { !viewAllComments ? `View more ${noOfReply - 1} comments` : 'Hide comments'}
+          </Button>
+          {!viewAllComments 
+            ?
+              <SingleComment comment={props.reply[0]} commentId={props.commentId} postId={props.postId} moreContent={replyContent} />
+            :
+              props.reply.map((reply, i) => {
+                return (
+                  <SingleComment
+                    key={i}
+                    comment={reply}
+                    commentId={props.commentId}
+                    postId={props.postId}
+                    moreContent={replyContent}
+                  />
+                )
+              })
+            }
         </>
       }
     </>

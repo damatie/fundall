@@ -2,6 +2,8 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
+import LensIcon from '@material-ui/icons/Lens';
+import moment from 'moment';
 
 const useStyles = makeStyles((theme) => ({
   userName: {
@@ -13,36 +15,41 @@ const useStyles = makeStyles((theme) => ({
   },
   avatar: {
     alignSelf: 'center',
-    width: theme.spacing(4),
-    height: theme.spacing(4),
   },
   root: {
     display: 'flex',
-    marginBottom: 16,
-    color: '#4d5760',
+  },
+  name: {
+    display: 'inline-block',
+    fontWeight: 'bold',
+    fontSize: 16,
+    marginRight: 8,
   },
 }));
 
 export default function UserAvatar(props) {
   const classes = useStyles();
-
-  // const timeInSeconds = props.time
-  // const lastLoggedInTime = new Date(Date.now() - timeInSec * 1000);
-
-  // const relatedPostTags = props.tag.map((tag, i) => <Typography key={i} variant='caption'>#{tag}</Typography>);
+  const timeAgo = moment(props.time);
 
   return (
-    <div className={classes.root}>
-      <Avatar className={classes.avatar}>MN</Avatar>
-      <div className={classes.userName}>
-        {props.fullName && <Typography variant="body1" style={{fontWeight: 'bold', fontSize: 16}}>
-          {props.fullName}
+    <div>
+      <div className={classes.root}>
+        <Avatar className={classes.avatar} src={props.src}></Avatar>
+        <div className={classes.userName}>
+          {props.fullName && <Typography variant="body1" className={classes.name}>
+            {props.fullName}
+          </Typography>}
+          {props.fullName && <LensIcon style={{ fontSize: 4, marginRight: 8 }} />}
+        {props.time && <Typography variant="caption" component="span" style={{color: 'grey', fontSize: 14}}>
+          {timeAgo.fromNow()}
         </Typography>}
-        {props.time && <Typography variant="caption" >Jul 24 (20 hours ago)</Typography>}
-        {props.userName && <Typography variant="caption">{`@${props.userName}`}</Typography>}
+        {props.email && <Typography variant="caption" component="h5" style={{color: 'grey', fontSize: 14}}>
+          {props.email}
+        </Typography>}
         {props.title && <Typography variant="caption">{props.title}</Typography>}
-        {/* {(props.tag.length > 0) && relatedPostTags} */}
+        </div>
       </div>
     </div>
+    
   )
 }
