@@ -48,6 +48,54 @@ const projectsReducer = (state = initialState, action) => {
 				loading: false,
 				courseCategories: action.payload
 			};
+		case Actions.CREATE_COURSE_SUCCESS:
+			return {
+				...state,
+				loading: false,
+				success: true,
+			};
+		case Actions.CREATE_COURSE_ERROR:
+			return {
+				...state,
+				loading: false,
+				success: false,
+			};
+		case Actions.UPDATE_COURSE_SUCCESS:
+			return {
+				...state,
+				loading: false,
+				success: true,
+			};
+		case Actions.UPDATE_COURSE_ERROR:
+			return {
+				...state,
+				loading: false,
+				success: false,
+			};
+		case Actions.APPROVE_COURSE_SUCCESS:
+			return {
+				...state,
+				loading: false,
+				success: true,
+			};
+		case Actions.APPROVE_COURSE_ERROR:
+			return {
+				...state,
+				loading: false,
+				success: false,
+			};
+		case Actions.REJECT_COURSE_SUCCESS:
+			return {
+				...state,
+				loading: false,
+				success: true,
+			};
+		case Actions.REJECT_COURSE_ERROR:
+			return {
+				...state,
+				loading: false,
+				success: false,
+			};
 		default:
 			return state;
 	}

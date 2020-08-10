@@ -11,7 +11,7 @@ import Fab from '@material-ui/core/Fab';
 import Icon from '@material-ui/core/Icon';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-import { TextFieldFormsy, SelectFormsy, } from '@fuse/core/formsy';
+import { TextFieldFormsy, SelectFormsy, CheckboxFormsy} from '@fuse/core/formsy';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Formsy from 'formsy-react';
 import { CircularProgress } from '@material-ui/core';
@@ -23,8 +23,11 @@ import FuseAnimate from '@fuse/core/FuseAnimate';
 export default function AddCourseModal(props) {
     const dispatch = useDispatch();
 	const courseCategories = useSelector(({ DeptTraining }) => DeptTraining.courses.courseCategories);
+	const loading = useSelector(({ DeptTraining }) => DeptTraining.courses.loading);
+	const success = useSelector(({ DeptTraining }) => DeptTraining.courses.success);
     const [open, setOpen] = React.useState(false);
     const [isFormValid, setIsFormValid] = useState(true);
+    const [agree, setAgree] = useState(false);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -43,10 +46,13 @@ export default function AddCourseModal(props) {
 		setIsFormValid(true);
 	}
 
-	// function handleSubmit(model) {
-    //     dispatch(Actions.createDocument(model, file));
-    //     setOpen(false);
-    // }
+	function handleSubmit(model) {
+        model.department = "IT";
+        model.hrManager = 4;
+        console.log(model);
+        dispatch(Actions.createCourse(model));
+        setOpen(false);
+    }
 
     useEffect(() => {
 		dispatch(Actions.getCourseCategories());
@@ -69,7 +75,7 @@ export default function AddCourseModal(props) {
         <DialogContent>
           <div className="w-full">
 			<Formsy
-				// onValidSubmit={handleSubmit}
+				onValidSubmit={handleSubmit}
 				onValid={enableButton}
 				onInvalid={disableButton}
 				ref={formRef}
@@ -104,7 +110,7 @@ export default function AddCourseModal(props) {
                     <Grid container item sm={6} md={6} lg={6} lx={6} alignItems="center">
                         <TextFieldFormsy
                             className="mb-16 w-full"
-                            type="number"
+                            type="text"
                             name="cost"
                             label="Cost"
                             validations={{
@@ -192,14 +198,17 @@ export default function AddCourseModal(props) {
                             <MenuItem value={item.name} key={item.id}>{item.name}</MenuItem>
                         ))}
                 </SelectFormsy>
+                <CheckboxFormsy
+                    className="my-16"
+                    name="certification"
+                    value={agree}
+                    label="Certification"
+                    onChange={e => setAgree(!agree)}
+                />
                 <DialogActions>
                     <Grid container spacing={2}>
                         <Grid item xs>
-                            <ProgressBtn  content='Create' disable={!isFormValid}/>
-                        </Grid>
-
-                        <Grid item xs>
-                            <ProgressBtn  content='Close' onClick={handleClose}/>
+                            <ProgressBtn loading={loading} success={success} content='Create' disable={!isFormValid}/>
                         </Grid>
                     </Grid>
                 </DialogActions>

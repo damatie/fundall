@@ -23,6 +23,7 @@ import TableWidget from 'app/shared/widgets/TableWidget';
 import CoursesTableWidget from 'app/shared/widgets/CoursesTableWidget';
 import FuseAnimate from '@fuse/core/FuseAnimate';
 import AddCourseModal from './addCourseModal';
+import { useAuth } from 'app/hooks/useAuth';
 
 const useStyles = makeStyles(theme => ({
 	content: {
@@ -55,7 +56,9 @@ function DeptTraining(props) {
 	const [selectedProject, setSelectedProject] = useState({
 		id: 1,
 		menuEl: null
-	});
+    });
+    
+	const userData = useAuth().getUserData;
 
 	useEffect(() => {
 		dispatch(Actions.getApprovedTraining());
@@ -68,8 +71,19 @@ function DeptTraining(props) {
 
 	function handleChangeTab(event, value) {
 		setTabValue(value);
-	}
+    }
+    
+    function checkRole() {
+        return (userData.role.upperCase() === 'HR')
+    }
 
+    function handleReject(ev, id){
+        dispatch(Actions.rejectCourse(id));
+    }
+
+    function handleApprove(ev, id){
+        dispatch(Actions.approveCourse(id));
+    }
 
     const columns = [
         {
@@ -278,7 +292,7 @@ function DeptTraining(props) {
 								<CardWidget count={rejectedCourses.length} title={"Rejected"} color="red" />
 							</div>
                             <div className="widget flex w-full p-12">
-								<CoursesTableWidget title={"Department Course Management"} allowClick={false}  type="default" columns={coursesColumn} rows={totalCourses}/>
+								<CoursesTableWidget title={"Department Course Management"} allowClick={true} allowAuth={checkRole} handleReject={handleReject} handleApprove={handleApprove} type="default" columns={coursesColumn} rows={totalCourses}/>
 							</div>
 						</FuseAnimateGroup>
 					)}

@@ -83,12 +83,11 @@ const CoursesTableWidget = (props) =>{
 
     function handleItemClick(event, item){
         if(props.allowClick){
-            console.log(item);
             setSelected(item);
             setOpen(true);
         }
     }
-    
+
     function CheckStatus(status){
         switch (status) {
             case "pending":
@@ -131,6 +130,7 @@ const CoursesTableWidget = (props) =>{
 
     const handleClose = () => {
         setOpen(false);
+        handleShow();
     };
 
     const handleShow = () => {
@@ -170,7 +170,7 @@ const CoursesTableWidget = (props) =>{
                             </tr>
 
                             <tr className="location">
-                                <th>Size</th>
+                                <th>Location</th>
                                 <td>{selected.location}</td>
                             </tr>
 
@@ -200,32 +200,32 @@ const CoursesTableWidget = (props) =>{
                             </tr>
                             <tr className="created">
                                 <th>Created</th>
-                                <td><Moment format="ddd MMM, YY | hh:mm:ss a">{selected.createdAt}</Moment></td>
+                                <td><Moment format="ddd Do MMM, YYYY | hh:mm:ss a">{selected.createdAt}</Moment></td>
                             </tr>
                             <tr className="updated">
                                 <th>Updated</th>
-                                <td><Moment format="ddd MMM, YY | hh:mm:ss a">{selected.updatedAt}</Moment></td>
+                                <td><Moment format="ddd Do MMM, YYYY | hh:mm:ss a">{selected.updatedAt}</Moment></td>
                             </tr>
                         </tbody>
                     </table>
-                        {(selected.status === 'pending' && show) ? 
+                        {(selected.status === 'pending' && props.allowAuth) ? 
                             <Grid container className="items-center w-full pt-20" justify="center" alignItems="center">
                                 <Button className="bg-red text-white" 
-                                startIcon={<RejectIcon />} onClick={ev => {props.handleReject(ev, selected.id); handleShow()}} 
+                                startIcon={<RejectIcon />} onClick={ev => {props.handleReject(ev, selected.id); handleClose(); }} 
                                 >
                                     Reject
                                 </Button>
                                 &nbsp;
                                 <Button className="bg-green text-white" 
-                                startIcon={<ApproveIcon />} onClick={ev => {props.handleApprove(ev, selected.id); handleShow() }} 
+                                startIcon={<ApproveIcon />} onClick={ev => {props.handleApprove(ev, selected.id); handleClose(); }} 
                                 >
                                     Approve
                                 </Button>
                             </Grid>
                         : 
-                        <Grid container className="items-center w-full pt-20" justify="center" alignItems="center">
-                            {CheckStatus(selected.status)}
-                        </Grid>
+                            <Grid container className="items-center w-full pt-20" justify="center" alignItems="center">
+                                {CheckStatus(selected.status)}
+                            </Grid>
                     }
                     </DialogContent>
                     <DialogActions>
@@ -338,7 +338,7 @@ const CoursesTableWidget = (props) =>{
 											{n.category}
 										</TableCell>
 										<TableCell className="text-center hidden sm:table-cell">
-                                            <Moment format="ddd MMM, YY | hh:mm:ss a">{n.createdAt}</Moment>
+                                            <Moment format="ddd Do MMM, YY | hh:mm:ss a">{n.createdAt}</Moment>
                                         </TableCell>
                                         <TableCell className="text-center hidden sm:table-cell">
                                             {CheckStatus(n.status)}           

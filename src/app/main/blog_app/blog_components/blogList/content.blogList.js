@@ -65,6 +65,7 @@ function Blog(props) {
   }
 
   const getColor = () => !clicked ? '#4d5760' : '#F44336';
+  
 
   return (
     <Paper className={classes.paper} variant="outlined">

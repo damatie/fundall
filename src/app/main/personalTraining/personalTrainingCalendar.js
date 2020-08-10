@@ -18,7 +18,6 @@ import EventDialog from './EventDialog';
 import * as Actions from './store/actions';
 import reducer from './store/reducers';
 import { Link, Redirect } from 'react-router-dom';
-import CalendarHeader from './PersonalTrainingHeader';
 
 const localizer = momentLocalizer(moment);
 
@@ -166,21 +165,12 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-function PersonalTraining(props) {
+function PersonalTrainingCalendar(props) {
 	const dispatch = useDispatch();
 	const events = useSelector(({ personalTraining }) => personalTraining.trainings.events);
 
 	const classes = useStyles(props);
 	const headerEl = useRef(null);
-
-	const event = {
-		id: 5,
-		title: 'Conference',
-		allDay: false,
-		start: new Date(2018, 3, 11),
-		end: new Date(2018, 3, 13),
-		desc: 'Big conference for important people'
-	}
 
 	useEffect(() => {
 		dispatch(Actions.getAllTrainings());
@@ -224,7 +214,6 @@ function PersonalTraining(props) {
 		<div className={clsx(classes.root, 'flex flex-col flex-auto relative')}>
         <Card >
           <CardContent>
-			{/* <CalendarHeader/> */}
 			<div ref={headerEl} />
 			<DragAndDropCalendar
 				className="flex flex-1 container"
@@ -244,7 +233,7 @@ function PersonalTraining(props) {
 				eventPropGetter={eventStyleGetter}
 				// onNavigate={handleNavigate}
 				onSelectEvent={event => {
-					// console.log(event);
+					console.log(event);
 					dispatch(Actions.openEditEventDialog(event));
 				}}
                 // onSelectSlot={slotInfo =>
@@ -276,7 +265,7 @@ function PersonalTraining(props) {
 	);
 }
 
-export default withReducer('personalTraining', reducer)(PersonalTraining);
+export default PersonalTrainingCalendar;
 
 /*
 IE 11 Fix

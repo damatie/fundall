@@ -24,6 +24,30 @@ const trainingsReducer = (state = initialState, action) => {
 				events: action.events,
 				trainings: action.trainings
 			};
+		case Actions.CREATE_TRAINING_SUCCESS:
+			return {
+				...state,
+				loading: false,
+				success: true,
+			};
+		case Actions.CREATE_TRAINING_ERROR:
+			return {
+				...state,
+				loading: false,
+				success: false
+			};
+		case Actions.UPDATE_TRAINING_SUCCESS:
+			return {
+				...state,
+				loading: false,
+				success: true,
+			};
+		case Actions.UPDATE_TRAINING_ERROR:
+			return {
+				...state,
+				loading: false,
+				success: false
+			};
 		default: {
 			return state;
 		}

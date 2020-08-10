@@ -26,7 +26,7 @@ export function submitLogin(data) {
 		}).then(res => res.json()).then(
 			user => {
 				if(user.success) {
-					// console.log(user)
+					console.log(user)
 					Swal.fire({
 						title: 'Login',
 						text: user.message,
@@ -40,9 +40,11 @@ export function submitLogin(data) {
 						id: user.id,
 						data: {
 							displayName: `${user.firstName} ${user.lastName}`,
-							photoURL: 'assets/images/avatars/Velazquez.jpg',
+							photoURL: user.employee.profilePicture,
 							email: user.email,
-							shortcuts: ['loan_request', 'request_leave', 'blog_list', 'todo']
+							shortcuts: ['loan_request', 'request_leave', 'blog_list', 'todo'],
+							department: user.employee.department,
+							details: user.employee.info
 						}
 					};
 					dispatch(UserActions.setUserData(userState));

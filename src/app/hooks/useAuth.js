@@ -1,27 +1,31 @@
 export const useAuth = () => {
   const auth = localStorage.getItem('jwt_access_token');
-  const id = localStorage.getItem('user_data');
+  const data = localStorage.getItem('user_data');
   let token = '';
-  let userId = '';
+  let userData = '';
   if(auth) {
     token = auth;
   } else {
     token = '';
   }
-  if(id) {
-    userId = JSON.parse(id);
+  if(data) {
+    userData = JSON.parse(data);
   } else {
-    userId = '';
+    userData = '';
   }
   const getToken = () => {
     return token;
   }
   const getId = () => {
-    return userId.id;
+    return userData.id;
+  }
+  const getUserData = () => {
+    return userData
   }
 
   return {
     getToken: getToken(),
     getId: getId(),
+    getUserData: getUserData()
   };
 };

@@ -48,10 +48,14 @@ const useStyles = makeStyles(theme => ({
 
 function TrainingManagement(props) {
 	const dispatch = useDispatch();
+	const approvedTrainings = useSelector(({ TrainingManagement }) => TrainingManagement.trainings.approvedTrainings);
+	const rejectedTrainings = useSelector(({ TrainingManagement }) => TrainingManagement.trainings.rejectedTrainings);
+	const pendingTrainings = useSelector(({ TrainingManagement }) => TrainingManagement.trainings.pendingTrainings);
 	const approvedCourses = useSelector(({ TrainingManagement }) => TrainingManagement.courses.approvedCourses);
 	const rejectedCourses = useSelector(({ TrainingManagement }) => TrainingManagement.courses.rejectedCourses);
 	const pendingCourses = useSelector(({ TrainingManagement }) => TrainingManagement.courses.pendingCourses);
 	const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
+	const totalTrainings = approvedTrainings.concat(rejectedTrainings).concat(pendingTrainings);
 	const totalCourses = approvedCourses.concat(rejectedCourses).concat(pendingCourses);
 
 	const classes = useStyles(props);
@@ -59,6 +63,9 @@ function TrainingManagement(props) {
 	const [tabValue, setTabValue] = useState(0);
 
 	useEffect(() => {
+		dispatch(Actions.getApprovedTraining());
+		dispatch(Actions.getRejectedTraining());
+		dispatch(Actions.getPendingTraining());
 		dispatch(Actions.getApprovedCourses());
 		dispatch(Actions.getPendingCourses());
 		dispatch(Actions.getRejectedCourses());
@@ -273,16 +280,16 @@ function TrainingManagement(props) {
 						}}
 					>
 						<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
-							<CardWidget count={12} title={"Total"} color="blue" />
+							<CardWidget count={totalTrainings.length} title={"Total"} color="blue" />
 						</div>
 						<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
-							<CardWidget count={11} title={"Pending"} color="yellow" />
+							<CardWidget count={pendingTrainings.length} title={"Pending"} color="yellow" />
 						</div>
 						<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
-							<CardWidget count={11} title={"Approved"} color="green" />
+							<CardWidget count={approvedTrainings.length} title={"Approved"} color="green" />
 						</div>
 						<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
-							<CardWidget count={33} title={"Rejected"} color="red" />
+							<CardWidget count={rejectedTrainings.length} title={"Rejected"} color="red" />
 						</div>
 						<div className="widget flex w-full p-12">
 							<TableWidget title={"Training Requests"} type="default" columns={columns} rows={rows}/>

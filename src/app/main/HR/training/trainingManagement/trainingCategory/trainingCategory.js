@@ -1,3 +1,4 @@
+//@flow
 import FuseAnimateGroup from '@fuse/core/FuseAnimateGroup';
 import FusePageSimple from '@fuse/core/FusePageSimple';
 import Hidden from '@material-ui/core/Hidden';
