@@ -14,6 +14,7 @@ import deleteOneBlogPost from './deleteOneBlogPost.reducer';
 import updateAComment from './updateAComment.reducer';
 import deleteComment from './deleteComment.reducer';
 import getAllCommentsForAPost from './getAllCommentsForAPost.reducer';
+import showEmployeeModal from './showEmployeeDialog.reducer'
 
 const blogReducers = combineReducers({
 	postBlog,
@@ -31,6 +32,7 @@ const blogReducers = combineReducers({
 	updateAComment,
 	deleteComment,
 	getAllCommentsForAPost,
+	showEmployeeModal,
 });
 
 export default blogReducers;

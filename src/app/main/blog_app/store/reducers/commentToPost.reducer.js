@@ -8,12 +8,18 @@ const initialState = {
 
 const CommentToPost = (state = initialState, action) => {
 	switch (action.type) {
+		case Actions.COMMENT_TO_POST_LOADING: {
+			return {
+				...initialState,
+				success: false,
+				loading: true
+			};
+		}
 		case Actions.COMMENT_TO_POST_SUCCESS: {
 			return {
 				...initialState,
 				success: true,
 				loading: false,
-				data: action.payload
 			};
 		}
 		case Actions.COMMENT_TO_POST_ERROR: {
@@ -22,13 +28,6 @@ const CommentToPost = (state = initialState, action) => {
 				success: false,
 				error: action.payload,
 				loading: false
-			};
-		}
-		case Actions.COMMENT_TO_POST_LOADING: {
-			return {
-				...initialState,
-				success: false,
-				loading: true
 			};
 		}
 		default: {

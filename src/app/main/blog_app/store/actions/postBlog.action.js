@@ -8,7 +8,19 @@ export const BlogPost_LOADING = 'BlogPost_LOADING';
 
 const header = fetchHeaders();
 
-export function submitBlogPost(formdata) {
+const Toast = Swal.mixin({
+  toast: true,
+  position: 'bottom-end',
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+  onOpen: (toast) => {
+    toast.addEventListener('mouseenter', Swal.stopTimer)
+    toast.addEventListener('mouseleave', Swal.resumeTimer)
+  }
+})
+
+export function submitBlogPost(formdata, history) {
 	return dispatch => {
 		dispatch({
 			type: BlogPost_LOADING
@@ -24,24 +36,20 @@ export function submitBlogPost(formdata) {
 		}).then(res => res.json()).then(
 			post => {
 				if(post.message === 'Created!') {
-					console.log(post)
-					Swal.fire({
-						title: 'Blog Post was sucessful',
-						text: post.message,
-						icon: 'success',
-						timer: 3000,
-					});
+					history.push(`/blog/blog_detail/${post.data.id}`)
+					Toast.fire({
+            icon: 'success',
+            title: 'Blog post was successfull'
+          })
 					return dispatch({
 						type: BlogPost_SUCCESS
 					});
 				} else {
 					console.log(post);
-					Swal.fire({
-						title: 'BlogPost',
-						text: post.message,
-						icon: 'error',
-						timer: 3000,
-					})
+					Toast.fire({
+            icon: 'success',
+            title: 'Failed to post blog'
+          })
 					return dispatch({
 						type: BlogPost_ERROR,
 						payload: ''

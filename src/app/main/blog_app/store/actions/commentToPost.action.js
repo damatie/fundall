@@ -23,7 +23,6 @@ export function submitBlogComment(data) {
 		}).then(res => res.json()).then(
 			comment => {
 				if(comment.success === true) {
-					// console.log(comment)
 					dispatch(autoGetAllCommentsForAPost(data.postId));
 					dispatch(autoGetOneBlogPost(data.postId))
 					return dispatch({
