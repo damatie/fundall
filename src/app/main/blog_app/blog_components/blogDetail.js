@@ -13,6 +13,7 @@ import SingleComment from './comment_section/singleComment';
 import CommentInput from './comment_section/commentInput';
 import UserAvatar from '../userAvatar';
 import ReplyComment from './comment_section/replyComment';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import BlogTags from './blogTags';
 import Facebook from 'react-sharingbuttons/dist/buttons/Facebook'
@@ -72,6 +73,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     justifyContent: 'center',
     [theme.breakpoints.down('xs')]: {
+      display: 'none',
       flexDirection: 'row',
       marginTop: 16,
     }
@@ -84,8 +86,14 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
   },
   previousBtn: {
-    marginBottom: 32,
+    marginBottom: 24,
     alignSelf: 'center',
+  },
+  circular: {
+    position: 'fixed',
+    top: '50%',
+    left: '40%',
+    height: '100vh'
   },
 }));
 
@@ -102,6 +110,8 @@ function BlogDetail({ match }) {
   const author = useSelector(state => state.blog.getOneBlogPost.data.author);
   const comments = useSelector(state => state.blog.getAllCommentsForAPost.data);
   const userId = useSelector(state => state.auth.user.id);
+  const loadingCommentToPost = useSelector(state => state.blog.commentToPost.loading);
+  const showDialog = useSelector(state => state.blog.showEmployeeModal.show);
 
   const history = useHistory();
 
@@ -129,26 +139,28 @@ function BlogDetail({ match }) {
 
   useEffect(() => {
     if (blogPost) {
-      let isLiked; 
-      if(blogPost.employees.length <= 0) {
-        isLiked = false;
-      }else {
-        isLiked = blogPost.employees.every(employee => employee.id !== userId);
+      if(blogPost.employees.length > 0) {
+        const isLiked = blogPost.employees.every(employee => employee.id !== userId);
         if (!isLiked) setIsLikedPost(!isLiked);
       } 
     }
   }, [blogPost]);
 
-  // set number of like when ever there is a changes in the blogpost store
   useEffect(() => {
     if(blogPost) {
       setNumberOfLikedPost(blogPost.employees.length);
     }
   }, [blogPost])
 
-  const handleLikes = (id) => {
+  const handleInputChange = (value) => {
+    setContent(value);
+    dispatch(blogActions.showEmployeeDialog(value));
+  }
+
+  const handleLikes = () => {
     setIsLikedPost(prevState => prevState = !prevState);
-    dispatch(blogActions.likeAndUnlikeBlogPost({id}));
+    isLikedPost ? setNumberOfLikedPost(prev => prev - 1) : setNumberOfLikedPost(prev => prev + 1);
+    dispatch(blogActions.likeAndUnlikeBlogPost({postId}));
   };
 
   const handleSubmit = () => {
@@ -174,7 +186,7 @@ function BlogDetail({ match }) {
                   </IconButton>
                 </div>
                 <div className={classes.alignCenter}>
-                  <IconButton aria-label="like" onClick={() => handleLikes(blogPost.id)} style={{color: getColor()}} component="span">
+                  <IconButton aria-label="like" onClick={() => handleLikes()} style={{color: getColor()}} component="span">
                     {!isLikedPost ? <FavoriteBorder /> : <Favorite />}
                   </IconButton>
                   <Typography style={{textAlign: 'center'}}>{numberOflikedpost}</Typography>
@@ -194,7 +206,7 @@ function BlogDetail({ match }) {
               </div>
             </Grid>
             <Grid item xs={12} sm={7}>
-              <Paper variant="outlined">
+              <Paper variant="outlined" style={{marginBottom: 16}}>
                 {blogPost.images.length > 0 && <img src={blogPost.images[0].url} alt="" className={classes.img}></img>}
                 <div className={classes.paper}>
                   <ThemeProvider theme={theme}>
@@ -215,7 +227,8 @@ function BlogDetail({ match }) {
                 <CommentInput
                   onClick={() => handleSubmit()}
                   value={content}
-                  onChange={value => setContent(value)}
+                  showDialog={showDialog}
+                  onChange={value => handleInputChange(value)}
                 />
                 {(comments.length > 0) && commentState.map((comment, index) => {
                   return (
@@ -234,6 +247,9 @@ function BlogDetail({ match }) {
                   )
                 })}
               </Paper>
+              <div style={{display: `${loadingCommentToPost ? '' : 'none'}`}} >
+                <CircularProgress color="primary" className={classes.circular} />
+              </div>
             </Grid>
             <Grid item xs={12} sm={4}>
               <div style={{margin: '0 32px 0 0'}}>

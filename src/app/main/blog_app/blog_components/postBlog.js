@@ -133,7 +133,7 @@ function PostBlog() {
               <Button color="primary" component="span" className={classes.upload}>
                 Uplaod image(s)
               </Button>
-              <Typography variant="body1" component='span' style={{margin: '2px 0 0 12px'}}>
+              <Typography variant="body1" component='span' style={{margin: '4px 0 0 12px'}}>
                 {images.length === 0 ? 'No image choosen' : names}
               </Typography>
             </label>
