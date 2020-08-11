@@ -10,7 +10,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import Checkbox from '@material-ui/core/Checkbox';
 import * as blogActions from '../store/actions';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import ProgressBtn from '../../../shared/progressBtn'
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
     padding: 16,
   },
   blogContent: {
-    minHeight: 500,
+    minHeight: 300,
     fontSize: 16,
     padding: 16,
     minWidth: '100%',
@@ -69,12 +69,14 @@ function PostBlog() {
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
   const [images, setImages] = useState([]);
-  const [tags, setTags] = useState([]);
+  const [tags] = useState([]);
   const [names, setNames] = useState('');
+
+  const loading = useSelector(state => state.blog.postBlog.loading);
 
   const setImage = (event) => {
     const nameArray = Object.values(event.target.files);
-    nameArray.forEach((item, index, array) => {
+    nameArray.forEach((item, i, array) => {
       if (array.length <= 1) setNames(`${item.name}`);
       else setNames(`${array.length} files`);
     })
@@ -109,7 +111,7 @@ function PostBlog() {
   return (
     <Grid container className={classes.root}>
       <Grid item xs={12} sm={3} className={classes.addPostBtn}>
-        <ProgressBtn onClick={handleSubmit} content="Add new blog post" />
+        <ProgressBtn onClick={handleSubmit} loading={loading} content="Add new blog post" />
       </Grid>
       <Grid item container spacing={3}>
         <Grid item xs={12} sm={8}>

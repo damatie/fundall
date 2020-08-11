@@ -1,6 +1,6 @@
 import Swal from 'sweetalert2';
 import { fetchHeaders } from 'app/shared/fetchHeaders';
-// import { redirectUrl } from '../../redirectUrl';
+import { getBaseUrl } from 'app/shared/getBaseUrl';
 
 export const BlogPost_ERROR = 'BlogPost_ERROR';
 export const BlogPost_SUCCESS = 'BlogPost_SUCCESS';
@@ -28,7 +28,7 @@ export function submitBlogPost(formdata, history) {
 		for (var pair of formdata.entries()) {
       console.log(pair[0]+ ', ' + pair[1]); 
     }
-		fetch('https://hris-cbit.herokuapp.com/api/v1/posts/', {
+		fetch(`${getBaseUrl()}/posts/`, {
 			...header.fdHeader(
 				'POST',
 				formdata

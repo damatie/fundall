@@ -1,5 +1,6 @@
 import Swal from 'sweetalert2';
 import { fetchHeaders } from 'app/shared/fetchHeaders';
+import { getBaseUrl } from 'app/shared/getBaseUrl';
 
 export const DELETE_COMMENT_ERROR = 'DELETE_COMMENT_ERROR';
 export const DELETE_COMMENT_SUCCESS = 'DELETE_COMMENT_SUCCESS';
@@ -22,7 +23,7 @@ export function deleteComment(id) {
 				dispatch({
 					type: DELETE_COMMENT_LOADING
 				})
-				fetch(`https://hris-cbit.herokuapp.com/api/v1/comment/one/${id}`, {
+				fetch(`${getBaseUrl()}/comment/one/${id}`, {
 					...header.delHeader()
 				}).then(res => res.json()).then(
 					comment => {

@@ -70,8 +70,10 @@ const useStyles = makeStyles((theme) => ({
   },
   iconButton: {
     display: 'flex',
+    position: 'fixed',
     flexDirection: 'column',
     justifyContent: 'center',
+    marginLeft: 28,
     [theme.breakpoints.down('xs')]: {
       display: 'none',
       flexDirection: 'row',

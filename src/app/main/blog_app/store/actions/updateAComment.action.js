@@ -1,6 +1,6 @@
 import Swal from 'sweetalert2';
 import { fetchHeaders } from 'app/shared/fetchHeaders';
-// import { redirectUrl } from '../../redirectUrl';
+import { getBaseUrl } from 'app/shared/getBaseUrl';
 
 export const UPDATE_A_COMMENT_ERROR = 'UPDATE_A_COMMENT_ERROR';
 export const UPDATE_A_COMMENT_SUCCESS = 'UPDATE_A_COMMENT_SUCCESS';
@@ -13,7 +13,7 @@ export function updateAComment({id, content}) {
 		dispatch({
 			type: UPDATE_A_COMMENT_LOADING
 		})
-		fetch(`https://hris-cbit.herokuapp.com/api/v1/comment/update/${id}`, {
+		fetch(`${getBaseUrl()}/comment/update/${id}`, {
 			...header.reqHeader(
 				'PATCH',
 				{content}

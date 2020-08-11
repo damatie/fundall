@@ -1,5 +1,6 @@
 import Swal from 'sweetalert2';
 import { fetchHeaders } from 'app/shared/fetchHeaders';
+import { getBaseUrl } from 'app/shared/getBaseUrl';
 
 export const DELETE_ONE_BLOGPOST_ERROR = 'DELETE_ONE_BLOGPOST_ERROR';
 export const DELETE_ONE_BLOGPOST_SUCCESS = 'DELETE_ONE_BLOGPOST_SUCCESS';
@@ -22,7 +23,7 @@ export function deleteOneBlogPost(id) {
         dispatch({
           type: DELETE_ONE_BLOGPOST_LOADING
         })
-        fetch(`https://hris-cbit.herokuapp.com/api/v1/posts/${id}`, {
+        fetch(`${getBaseUrl()}/posts/${id}`, {
           ...header.delHeader()
         }).then(res => res.json()).then(
           post => {

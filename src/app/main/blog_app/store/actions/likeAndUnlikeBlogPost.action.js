@@ -1,5 +1,6 @@
 import Swal from 'sweetalert2';
 import { fetchHeaders } from 'app/shared/fetchHeaders';
+import { getBaseUrl } from 'app/shared/getBaseUrl';
 
 export const LIKE_AND_UNLIKE_BLOGPOST_ERROR = 'LIKE_AND_UNLIKE_BLOGPOST_ERROR';
 export const LIKE_AND_UNLIKE_BLOGPOST_SUCCESS = 'LIKE_AND_UNLIKE_BLOGPOST_SUCCESS';
@@ -8,7 +9,7 @@ const header = fetchHeaders();
 
 export function likeAndUnlikeBlogPost({postId, employeeId}) {
 	return dispatch => {
-		fetch(`https://hris-cbit.herokuapp.com/api/v1/posts/post/like/${postId}`, {
+		fetch(`${getBaseUrl()}/posts/post/like/${postId}`, {
 			...header.reqHeader(
 				'PATCH',
 			)

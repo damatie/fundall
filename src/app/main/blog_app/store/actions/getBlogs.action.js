@@ -1,4 +1,5 @@
 import { fetchHeaders } from 'app/shared/fetchHeaders';
+import { getBaseUrl } from 'app/shared/getBaseUrl';
 
 export const GETBLOGS_ERROR = 'GETBLOGS_ERROR';
 export const GETBLOGS_SUCCESS = 'GETBLOGS_SUCCESS';
@@ -14,8 +15,8 @@ export function getBlogPost(auto) {
 			})
 		}
 		
-		// fetch('https://hris-cbit.herokuapp.com/api/v1/posts/all/paginate?limit=10&offset=0', {
-		fetch('https://hris-cbit.herokuapp.com/api/v1/posts/', {
+		// fetch(`${getBaseUrl()}/posts/all/paginate?limit=10&offset=0`, {
+		fetch(`${getBaseUrl()}/posts/`, {
 			...header.getRegHeader()
 		}).then(res => res.json()).then(
 			post => {
