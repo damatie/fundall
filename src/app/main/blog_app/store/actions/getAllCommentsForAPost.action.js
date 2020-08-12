@@ -1,4 +1,5 @@
 import { fetchHeaders } from 'app/shared/fetchHeaders';
+import { getBaseUrl } from 'app/shared/getBaseUrl';
 
 export const GET_ALL_COMMENTS_FOR_A_POST_ERROR = 'GET_ALL_COMMENTS_FOR_A_POST_ERROR';
 export const GET_ALL_COMMENTS_FOR_A_POST_SUCCESS = 'GET_ALL_COMMENTS_FOR_A_POST_SUCCESS';
@@ -11,7 +12,7 @@ export function getAllCommentsForAPost(id) {
 		dispatch({
 			type: GET_ALL_COMMENTS_FOR_A_POST_LOADING
 		})
-		fetch(`https://hris-cbit.herokuapp.com/api/v1/comment/all/${id}`, {
+		fetch(`${getBaseUrl()}/comment/all/${id}`, {
 			...header.getRegHeader()
 		}).then(res => res.json()).then(
 			post => {

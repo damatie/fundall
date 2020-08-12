@@ -1,4 +1,5 @@
 import { fetchHeaders } from 'app/shared/fetchHeaders';
+import { getBaseUrl } from 'app/shared/getBaseUrl';
 
 export const SEARCH_POST_ERROR = 'SEARCH_POST_ERROR';
 export const SEARCH_POST_SUCCESS = 'SEARCH_POST_SUCCESS';
@@ -11,7 +12,7 @@ export function submitSearch(term) {
 		dispatch({
 			type: SEARCH_POST_LOADING
 		})
-		fetch(`https://hris-cbit.herokuapp.com/api/v1/posts/all/search?term=${term}`, {
+		fetch(`${getBaseUrl()}/posts/all/search?term=${term}`, {
 			...header.getRegHeader()
 		}).then(res => res.json()).then(
 			post => {

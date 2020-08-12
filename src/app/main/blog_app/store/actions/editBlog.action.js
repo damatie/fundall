@@ -1,6 +1,6 @@
 import Swal from 'sweetalert2';
 import { fetchHeaders } from 'app/shared/fetchHeaders';
-// import { redirectUrl } from '../../redirectUrl';
+import { getBaseUrl } from 'app/shared/getBaseUrl';
 
 export const EDITBLOG_ERROR = 'EDITBLOG_ERROR';
 export const EDITBLOG_SUCCESS = 'EDITBLOG_SUCCESS';
@@ -17,7 +17,7 @@ export function editBlogPost(data, id) {
 		for (var pair of data.entries()) {
 			console.log(pair[0]+ ', ' + pair[1]); 
 		}
-		fetch(`https://hris-cbit.herokuapp.com/api/v1/posts/${id}`, {
+		fetch(`${getBaseUrl()}/posts/${id}`, {
 			...header.fdHeader(
 				'PUT',
 				data

@@ -1,4 +1,5 @@
 import { fetchHeaders } from 'app/shared/fetchHeaders';
+import { getBaseUrl } from 'app/shared/getBaseUrl';
 
 export const SHOW_EMPLOYEE_DIALOG_ERROR = 'SHOW_EMPLOYEE_DIALOG_ERROR';
 export const SHOW_EMPLOYEE_DIALOG_SUCCESS = 'SHOW_EMPLOYEE_DIALOG_SUCCESS';
@@ -26,7 +27,7 @@ export function showEmployeeDialog(value) {
       dispatch({
         type: SHOW_EMPLOYEE_DIALOG_LOADING
       })
-      fetch('https://hris-cbit.herokuapp.com/api/v1/auth/employee', {
+      fetch(`${getBaseUrl()}/auth/employee`, {
         ...header.getRegHeader()
       }).then(res => res.json()).then(
         post => {
