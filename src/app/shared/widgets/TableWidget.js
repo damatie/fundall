@@ -23,7 +23,10 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogActions from '@material-ui/core/DialogActions';
 import Button from '@material-ui/core/Button';
 import clsx from 'clsx';
-import moment from 'moment';
+import Moment from 'react-moment';
+import RejectIcon from '@material-ui/icons/Cancel';
+import ApproveIcon from '@material-ui/icons/Check';
+import Grid from '@material-ui/core/Grid';
 import WidgetModal from './WidgetModal';
 const useStyles = makeStyles({
 	table: {
@@ -113,6 +116,24 @@ const TableWidget = (props) =>{
                     </Typography>
                 )
                 break;
+            case "reviewed":
+                return (
+                    <Typography
+                            className={'bg-yellow text-white inline text-11 font-500 px-8 py-4 rounded-4'}
+                        >
+                            {status}
+                    </Typography>
+                )
+                break;
+            case "completed":
+                return (
+                    <Typography
+                            className={'bg-black text-white inline text-11 font-500 px-8 py-4 rounded-4'}
+                        >
+                            {status}
+                    </Typography>
+                )
+                break;
 
             default:
                 return (
@@ -148,43 +169,85 @@ const TableWidget = (props) =>{
             <React.Fragment>
                 <div>
                 <Dialog open={open} onClose={handleClose} fullWidth={true} maxWidth={'sm'} aria-labelledby="form-dialog-title">
-                    <DialogTitle id="form-dialog-title">Add New Document</DialogTitle>
+                    <DialogTitle id="form-dialog-title">Training Request Details</DialogTitle>
                     <DialogContent>
                     <table className={clsx(classes.table, 'w-full text-justify')}>
                         <tbody>
-                            <tr className="type">
-                                <th>Type</th>
-                                <td>{selected.docUrl}</td>
+                            
+                            <tr className="employee">
+                                <th>Employee Name</th>
+                                <td>{(selected.training) ? selected.training.employee.firstName+ ' '+selected.training.employee.lastName : ''}</td>
                             </tr>
 
-                            <tr className="size">
-                                <th>Size</th>
-                                <td>{selected.owner}</td>
+                            <tr className="cost">
+                                <th>Cost</th>
+                                <td>{(selected.training) ? selected.training.trainingCourse.cost : ''}</td>
                             </tr>
 
                             <tr className="location">
                                 <th>Location</th>
-                                <td><div style={{ 
-                                    wordWrap: "break-word",
-                                    wordBreak: "break-all" }}>{selected.docUrl}</div></td>
+                                <td>{(selected.training) ? selected.training.trainingCourse.location : ''}</td>
                             </tr>
 
-                            <tr className="owner">
-                                <th>Owner</th>
-                                <td>{selected.uploaderName}</td>
+                            <tr className="cert">
+                                <th>Certification</th>
+                                <td>{((selected.training) ? selected.training.trainingCourse.certification : '') ? "Yes" : "No"}</td>
+                            </tr>
+                            
+                            <tr className="duration">
+                                <th>Duration</th>
+                                <td>{(selected.training) ? selected.training.trainingCourse.duration : ''}</td>
                             </tr>
 
-                            <tr className="modified">
-                                <th>Modified</th>
-                                <td>{selected.dd}</td>
+                            <tr className="catergory">
+                                <th>Category</th>
+                                <td>{(selected.training) ? selected.training.trainingCourse.category : ''}</td>
+                            </tr>
+
+                            <tr className="dept">
+                                <th>Department</th>
+                                <td>{(selected.training) ? selected.training.trainingCourse.department : ''}</td>
+                            </tr>
+
+
+                            <tr className="startDate">
+                                <th>Training Starts</th>
+                                <td>{ (selected.training) ? selected.training.startDate : '' } </td>
+                            </tr>
+                            <tr className="endDate">
+                                <th>Training Ends</th>
+                                <td>{(selected.training) ? selected.training.endDate : '' }</td>
                             </tr>
 
                             <tr className="created">
                                 <th>Created</th>
-                                <td>{selected.ood}</td>
+                                <td>{ (selected.training) ? <Moment format="ddd Do MMM, YYYY | hh:mm:ss a">{selected.training.createdAt}</Moment> : '' } </td>
+                            </tr>
+                            <tr className="updated">
+                                <th>Updated</th>
+                                <td>{(selected.training) ? <Moment format="ddd Do MMM, YYYY | hh:mm:ss a">{selected.training.updatedAt}</Moment> : '' }</td>
                             </tr>
                         </tbody>
                     </table>
+                        {((selected.training) ? (selected.training.status === 'pending' || selected.training.status === 'reviewed') : false && props.allowAuth) ? 
+                            <Grid container className="items-center w-full pt-20" justify="center" alignItems="center">
+                                <Button className="bg-red text-white" 
+                                startIcon={<RejectIcon />} onClick={ev => {props.handleReject(ev, selected.training.id); handleClose(); }} 
+                                >
+                                    Reject
+                                </Button>
+                                &nbsp;
+                                <Button className="bg-green text-white" 
+                                startIcon={<ApproveIcon />} onClick={ev => {props.handleApprove(ev, selected.training.id); handleClose(); }} 
+                                >
+                                    Approve
+                                </Button>
+                            </Grid>
+                        : 
+                            <Grid container className="items-center w-full pt-20" justify="center" alignItems="center">
+                                {(selected.training) ? CheckStatus(selected.training.status) : ''}
+                            </Grid>
+                    }
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={handleClose} color="primary">
@@ -280,23 +343,23 @@ const TableWidget = (props) =>{
 								.map(n => {
 								return (
 									<TableRow
-										key={n.id}
+										key={n.training.id}
 										hover
 										onClick={event => {handleItemClick(event, n); setOpen(true) }}
 										// selected={n.id === selectedItemId}
 										className="cursor-pointer"
 									>
 										<TableCell className="text-center hidden sm:table-cell">
-											{n.name}
+											{n.training.employee.firstName} {n.training.employee.lastName}
 										</TableCell>
-										<TableCell>{n.type}</TableCell>
-										<TableCell className="text-center hidden sm:table-cell">{n.owner}</TableCell>
+										<TableCell>{n.training.trainingCourse.name}</TableCell>
+										<TableCell className="text-center hidden sm:table-cell">{n.training.trainingCourse.cost}</TableCell>
 										<TableCell className="text-center hidden sm:table-cell">
-											{n.category}
+											{n.training.startDate}
 										</TableCell>
-										<TableCell className="text-center hidden sm:table-cell">{n.modified}</TableCell>
+										<TableCell className="text-center hidden sm:table-cell">{n.training.startDate}</TableCell>
                                         <TableCell className="text-center hidden sm:table-cell">
-                                            {CheckStatus(n.status)}           
+                                            {CheckStatus(n.training.status)}           
                                         </TableCell>
 									</TableRow>
 								);

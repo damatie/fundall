@@ -43,27 +43,28 @@ function DeptTraining(props) {
 	const approvedTrainings = useSelector(({ DeptTraining }) => DeptTraining.trainings.approvedTrainings);
 	const rejectedTrainings = useSelector(({ DeptTraining }) => DeptTraining.trainings.rejectedTrainings);
 	const pendingTrainings = useSelector(({ DeptTraining }) => DeptTraining.trainings.pendingTrainings);
+	const completedTrainings = useSelector(({ DeptTraining }) => DeptTraining.trainings.completedTrainings);
+	const reviewedTrainings = useSelector(({ DeptTraining }) => DeptTraining.trainings.reviewedTrainings);
 	const approvedCourses = useSelector(({ DeptTraining }) => DeptTraining.courses.approvedCourses);
 	const rejectedCourses = useSelector(({ DeptTraining }) => DeptTraining.courses.rejectedCourses);
 	const pendingCourses = useSelector(({ DeptTraining }) => DeptTraining.courses.pendingCourses);
 	const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
-	const totalTrainings = approvedTrainings.concat(rejectedTrainings).concat(pendingTrainings);
+    const totalTrainings = approvedTrainings.concat(rejectedTrainings)
+    .concat(pendingTrainings).concat(completedTrainings).concat(reviewedTrainings);
 	const totalCourses = approvedCourses.concat(rejectedCourses).concat(pendingCourses);
 
 	const classes = useStyles(props);
 	const pageLayout = useRef(null);
 	const [tabValue, setTabValue] = useState(0);
-	const [selectedProject, setSelectedProject] = useState({
-		id: 1,
-		menuEl: null
-    });
     
 	const userData = useAuth().getUserData;
 
 	useEffect(() => {
+		dispatch(Actions.getReviewedTraining());
 		dispatch(Actions.getApprovedTraining());
 		dispatch(Actions.getRejectedTraining());
 		dispatch(Actions.getPendingTraining());
+		dispatch(Actions.getCompletedTraining());
 		dispatch(Actions.getApprovedCourses());
 		dispatch(Actions.getPendingCourses());
 		dispatch(Actions.getRejectedCourses());
@@ -77,12 +78,24 @@ function DeptTraining(props) {
         return (userData.role.upperCase() === 'HR')
     }
 
-    function handleReject(ev, id){
+    function checkHODRole() {
+        return (userData.role.upperCase() === 'HEAD OF DEPARTMENT')
+    }
+
+    function handleCourseReject(ev, id){
         dispatch(Actions.rejectCourse(id));
     }
 
-    function handleApprove(ev, id){
+    function handleCourseApprove(ev, id){
         dispatch(Actions.approveCourse(id));
+    }
+
+    function handleTrainingReject(ev, id){
+        dispatch(Actions.rejectTraining(id));
+    }
+
+    function handleTrainingApprove(ev, id){
+        dispatch(Actions.approveTraining(id));
     }
 
     const columns = [
@@ -94,31 +107,31 @@ function DeptTraining(props) {
             sort: true
         },
         {
-            id: 'type',
+            id: 'course_name',
             align: 'center',
             disablePadding: false,
-            label: 'Type',
+            label: 'Course Name',
             sort: true
         },
         {
-            id: 'owner',
+            id: 'cost',
             align: 'center',
             disablePadding: false,
-            label: 'Owner',
+            label: 'Cost',
             sort: true
         },
         {
-            id: 'category',
+            id: 'start_date',
             align: 'center',
             disablePadding: false,
-            label: 'Category',
+            label: 'Start Date',
             sort: true
         },
         {
-            id: 'modified',
+            id: 'end_date',
             align: 'center',
             disablePadding: false,
-            label: 'Modified',
+            label: 'End Date',
             sort: true
         },
         {
@@ -173,35 +186,7 @@ function DeptTraining(props) {
             sort: true
         }
     ];
-    const rows = [
-        {
-            id: 1,
-            name: "mike",
-            type: "ghdhhbs",
-            owner: "jsdbjcbkdsvnknkf",
-            category: "skejdckjds",
-            modified: "jhgfdf",
-            status: "pending"
-        },
-        {
-            id: 2,
-            name: "test ttge",
-            type: "ghdhhbs",
-            owner: "jsdbjcbkdsvnknkf",
-            category: "skejdckjds",
-            modified: "jhgfdf",
-            status: "approved"
-        },
-        {
-            id: 3,
-            name: "test ttge",
-            type: "ghdhhbs",
-            owner: "jsdbjcbkdsvnknkf",
-            category: "skejdckjds",
-            modified: "jhgfdf",
-            status: "rejected"
-        }
-    ];
+    
 	return (
         <ThemeProvider theme={mainTheme}>
 		<FusePageSimple
@@ -255,20 +240,26 @@ function DeptTraining(props) {
 								animation: 'transition.slideUpBigIn'
 							}}
 						>
-							<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
+							<div className="widget flex w-full sm:w-1/2 md:w-1/6 p-12">
 								<CardWidget count={totalTrainings.length} title={"Total"} color="blue" />
 							</div>
-							<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
+							<div className="widget flex w-full sm:w-1/2 md:w-1/6 p-12">
 								<CardWidget count={pendingTrainings.length} title={"Pending"} color="yellow" />
 							</div>
-							<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
+							<div className="widget flex w-full sm:w-1/2 md:w-1/6 p-12">
 								<CardWidget count={approvedTrainings.length} title={"Approved"} color="green" />
 							</div>
-							<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
+							<div className="widget flex w-full sm:w-1/2 md:w-1/6 p-12">
 								<CardWidget count={rejectedTrainings.length} title={"Rejected"} color="red" />
 							</div>
+							<div className="widget flex w-full sm:w-1/2 md:w-1/6 p-12">
+								<CardWidget count={reviewedTrainings.length} title={"Reviewed"} color="orange" />
+							</div>
+							<div className="widget flex w-full sm:w-1/2 md:w-1/6 p-12">
+								<CardWidget count={completedTrainings.length} title={"Completed"} color="black" />
+							</div>
                             <div className="widget flex w-full p-12">
-								<TableWidget title={"Department Training Requests"} type="default" columns={columns} rows={rows}/>
+								<TableWidget title={"Department Training Requests"} type="default" columns={columns} allowAuth={checkHODRole} handleReject={handleTrainingReject} handleApprove={handleTrainingApprove} rows={totalTrainings}/>
 							</div>
 						</FuseAnimateGroup>
 					)}
@@ -292,7 +283,10 @@ function DeptTraining(props) {
 								<CardWidget count={rejectedCourses.length} title={"Rejected"} color="red" />
 							</div>
                             <div className="widget flex w-full p-12">
-								<CoursesTableWidget title={"Department Course Management"} allowClick={true} allowAuth={checkRole} handleReject={handleReject} handleApprove={handleApprove} type="default" columns={coursesColumn} rows={totalCourses}/>
+                                <CoursesTableWidget title={"Department Course Management"} allowClick={true}
+                                 allowAuth={checkRole} handleReject={handleCourseReject}
+                                  handleApprove={handleCourseApprove} type="default" 
+                                  columns={coursesColumn} rows={totalCourses}/>
 							</div>
 						</FuseAnimateGroup>
 					)}

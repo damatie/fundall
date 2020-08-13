@@ -24,6 +24,12 @@ export function submitBlogComment(data) {
 			comment => {
 				if(comment.success === true) {
 					// console.log(comment)
+					Swal.fire({
+						title: 'COMMENT TO POST',
+						text: comment.message,
+						icon: 'success',
+						timer: 3000,
+					})
 					dispatch(autoGetAllCommentsForAPost(data.postId));
 					dispatch(autoGetOneBlogPost(data.postId))
 					return dispatch({
@@ -32,6 +38,12 @@ export function submitBlogComment(data) {
 					});
 				} else {
 					// console.log(comment);
+					Swal.fire({
+						title: 'COMMENT TO POST',
+						text: comment.message,
+						icon: 'error',
+						timer: 3000,
+					})
 					return dispatch({
 						type: COMMENT_TO_POST_ERROR,
 						payload: ''

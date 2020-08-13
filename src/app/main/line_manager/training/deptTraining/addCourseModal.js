@@ -19,6 +19,7 @@ import ProgressBtn from 'app/shared/progressBtn';
 import Grid from '@material-ui/core/Grid';
 import * as Actions from './store/actions';
 import FuseAnimate from '@fuse/core/FuseAnimate';
+import { useAuth } from 'app/hooks/useAuth';
 
 export default function AddCourseModal(props) {
     const dispatch = useDispatch();
@@ -28,6 +29,7 @@ export default function AddCourseModal(props) {
     const [open, setOpen] = React.useState(false);
     const [isFormValid, setIsFormValid] = useState(true);
     const [agree, setAgree] = useState(false);
+    const userData = useAuth().getUserData;
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -47,7 +49,7 @@ export default function AddCourseModal(props) {
 	}
 
 	function handleSubmit(model) {
-        model.department = "IT";
+        model.department = userData.department.departmentName;
         model.hrManager = 4;
         console.log(model);
         dispatch(Actions.createCourse(model));

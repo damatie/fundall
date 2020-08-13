@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import _ from '@lodash/index';
+import _ from '@lodash';
 import Typography from '@material-ui/core/Typography';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
-import BlogListContent from './content.blogList';
-import * as blogActions from '../../store/actions';
+import BlogListContent from './blogListContent';
+import * as blogActions from '../store/actions';
 import { useDispatch, useSelector } from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
@@ -33,41 +33,32 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function BlogListHeader(props) {
+function BlogList(props) {
   const classes = useStyles();
   const dispatch = useDispatch();
   
-  const blogPost = useSelector(state => state.blog.getBlogs.data.map(blog => blog.post));
-  const blogAuthor = useSelector(state => state.blog.getBlogs.data.map(blog => blog.author));
+//   const blogPost = useSelector(state => state.blog.getBlogs.data.map(blog => blog.post));
+//   const blogAuthor = useSelector(state => state.blog.getBlogs.data.map(blog => blog.author));
   
   const [tabValue, setTabValue] = useState(0);
   // const [sortedPosts, setSortedPosts] = useState([]);
   const [search, setSearch] = useState('');
-  const [data, setData] = useState(blogPost);
-
-  useEffect(() => {
-    dispatch(blogActions.getBlogByLimit());
-  }, [dispatch]);
+  const [data, setData] = useState(props.posts);
+  const blogPost = data.map(blog => {return blog.post });
+  const blogAuthor = data.map(blog => {return blog.author });
 
   function handleSearch(event){
     setSearch(event.target.value);
-    if(event.target.value.length >= 2){
-     setData(blogPost.filter(post => {
-        return post.title.toLowerCase() === search.toLowerCase();
-      }));
-    }else{
-      setData(blogPost);
-    }
   }
   
   function handleChangeTab(event, value) {
     setTabValue(value);
-    if (tabValue === 4) dispatch(blogActions.getBlogPost());
   }
 
   const week = blogPost.filter(blog => {
     const weekAgo = new Date();
     weekAgo.setDate(weekAgo.getDate() - 7);
+    console.log(blog)
     return new Date(blog.createdAt) >= weekAgo;
   })
 
@@ -94,10 +85,6 @@ function BlogListHeader(props) {
   return (
     <>
       <div className={classes.root}>
-        <div className={classes.header}>
-          <Typography variant="h6" className={classes.title}>Posts</Typography>
-          <input type="text" onChange={ev => handleSearch(ev)} value={search} className={classes.search} placeholder="Search post..." />
-        </div>
         <Tabs
           value={tabValue}
           onChange={handleChangeTab}
@@ -115,10 +102,11 @@ function BlogListHeader(props) {
           <Tab className="h-16 normal-case" style={{minWidth: 64 }} label="Latest" />
         </Tabs>
       </div>
-      {
+      {useMemo(
+            () => (
         <div className={classes.content}>
           {tabValue === 0 && (
-            !blogPost ? <h1>Loading...</h1> 
+            blogPost ? <h1>Loading...</h1> 
             : blogPost.map((blog, i) => <BlogListContent blog={blog} author={blogAuthor[i]} key={i} tags={props.tags} />)
           )}
           {tabValue === 1 && (
@@ -138,9 +126,10 @@ function BlogListHeader(props) {
             : blogPost.map((blog, i) => <BlogListContent blog={blog} author={blogAuthor[i]} key={i} tags={props.tags} />)
           )}
         </div>
-      }
+            ), [data, search, tabValue]
+      )}
     </>
   )
 }
 
-export default BlogListHeader;
+export default BlogList;

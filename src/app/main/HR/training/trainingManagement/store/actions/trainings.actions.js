@@ -6,6 +6,7 @@ export const LOADING_TRAINIING = 'LOADING TRAINING';
 export const GET_APPROVED_TRAINING = 'GET APPROVED TRAINING';
 export const GET_REJECTED_TRAINING = 'GET REJECTED TRAINING';
 export const GET_PENDING_TRAINING = 'GET PENDING TRAINING';
+export const GET_REVIEWED_TRAINING = 'GET REVIEWED TRAINING';
 export const APPROVE_TRAINING_SUCCESS = 'APPROVE TRAINING SUCCESS';
 export const APPROVE_TRAINING_ERROR = 'APPROVE TRAINING ERROR';
 export const REJECT_TRAINING_SUCCESS = 'REJECT TRAINING SUCCESS';
@@ -20,7 +21,7 @@ export function getApprovedTraining() {
 		});
 		fetch(`${basUrl()}/training/all/approved`, {...headers.getRegHeader()})
 		.then(res => res.json()).then(async data => {
-			console.log(data.data);
+			console.log(data);
 			data.success ? 
 				(data.data) ? 
 					dispatch({
@@ -59,7 +60,7 @@ export function getRejectedTraining() {
 		});
 		fetch(`${basUrl()}/training/all/rejected`, {...headers.getRegHeader()})
 		.then(res => res.json()).then(async data => {
-			console.log(data.data);
+			console.log(data);
 			data.success ? 
 			(data.data) ? 
 				dispatch({
@@ -98,7 +99,7 @@ export function getPendingTraining() {
 		});
 		fetch(`${basUrl()}/training/all/pending`, {...headers.getRegHeader()})
 		.then(res => res.json()).then(async data => {
-			console.log(data.data);
+			console.log(data);
 			data.success ? 
 			(data.data) ? 
 				dispatch({
@@ -113,6 +114,45 @@ export function getPendingTraining() {
 			:
 				dispatch({
 					type: GET_PENDING_TRAINING,
+					payload: []
+				})
+		}).catch(err => {
+			console.log(err);
+			// swal.fire(
+            //     'Oops!',
+            //     'something went wrong',
+            //     'error'
+			//   )
+			dispatch({
+				type: GET_PENDING_TRAINING,
+				payload: []
+			})
+		})
+	}
+}
+
+export function getReviewedTraining() {
+	return dispatch => {
+		dispatch({
+			type: LOADING_TRAINIING
+		});
+		fetch(`${basUrl()}/training/all/reviewed`, {...headers.getRegHeader()})
+		.then(res => res.json()).then(async data => {
+			console.log(data);
+			data.success ? 
+			(data.data) ? 
+				dispatch({
+					type: GET_REVIEWED_TRAINING,
+					payload: data.data
+				})
+			:
+				dispatch({
+					type: GET_REVIEWED_TRAINING,
+					payload: []
+				})
+			:
+				dispatch({
+					type: GET_REVIEWED_TRAINING,
 					payload: []
 				})
 		}).catch(err => {
@@ -147,7 +187,7 @@ export function approveTraining(id){
 		confirmButtonText: 'Yes, approve it!',
 		showLoaderOnConfirm: true,
 		preConfirm: () => [
-		  fetch(`${basUrl()}/training/hod/approve/${id}`, {...headers.delHeader()})
+		  fetch(`${basUrl()}/training/hr/approve/${id}`, { ...headers.reqHeader('PATCH', '') })
 		  .then(res => res.json()).then(async data => {
 			  if(data.success) {
 				swal.fire(
@@ -155,9 +195,15 @@ export function approveTraining(id){
 				  'Training request has been approved.',
 				  'success'
 				);
-				return dispatch({
-				  type: APPROVE_TRAINING_SUCCESS,
-				//   payload: await getCategory()
+				Promise.all([
+					dispatch({
+						type: APPROVE_TRAINING_SUCCESS
+					})
+				]).then(() => {
+					dispatch(getPendingTraining());
+					dispatch(getApprovedTraining());
+					dispatch(getRejectedTraining());
+					dispatch(getReviewedTraining());
 				})
 			  } else {
 				swal.fire(
@@ -203,7 +249,7 @@ export function rejectTraining(id){
 		confirmButtonText: 'Yes, reject it!',
 		showLoaderOnConfirm: true,
 		preConfirm: () => [
-		  fetch(`${basUrl()}/training/hod/reject/${id}`, {...headers.delHeader()})
+		  fetch(`${basUrl()}/training/hr/reject/${id}`, { ...headers.reqHeader('PATCH', '') })
 		  .then(res => res.json()).then(async data => {
 			  if(data.success) {
 				swal.fire(
@@ -211,9 +257,15 @@ export function rejectTraining(id){
 				  'Training request has been approved.',
 				  'success'
 				);
-				return dispatch({
-				  type: REJECT_TRAINING_SUCCESS,
-				//   payload: await getCategory()
+				Promise.all([
+					dispatch({
+						type: REJECT_TRAINING_SUCCESS
+					})
+				]).then(() => {
+					dispatch(getPendingTraining());
+					dispatch(getApprovedTraining());
+					dispatch(getRejectedTraining());
+					dispatch(getReviewedTraining());
 				})
 			  } else {
 				swal.fire(

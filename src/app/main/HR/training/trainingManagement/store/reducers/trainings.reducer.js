@@ -6,6 +6,7 @@ const initialState = {
 	approvedTrainings: [],
 	rejectedTrainings: [],
 	pendingTrainings: [],
+	reviewedTrainings: [],
 	success: false
 };
 
@@ -34,6 +35,12 @@ const trainingsReducer = (state = initialState, action) => {
 				...state,
 				loading: false,
 				pendingTrainings: action.payload
+			};
+		case Actions.GET_REVIEWED_TRAINING:
+			return {
+				...state,
+				loading: false,
+				reviewedTrainings: action.payload
 			};
 		default:
 			return state;

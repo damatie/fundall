@@ -21,6 +21,7 @@ import CardWidget from 'app/shared/widgets/CardWidget';
 import TableWidget from 'app/shared/widgets/TableWidget';
 import CoursesTableWidget from 'app/shared/widgets/CoursesTableWidget';
 import FuseAnimate from '@fuse/core/FuseAnimate';
+import { useAuth } from 'app/hooks/useAuth';
 
 const useStyles = makeStyles(theme => ({
 	content: {
@@ -51,18 +52,22 @@ function TrainingManagement(props) {
 	const approvedTrainings = useSelector(({ TrainingManagement }) => TrainingManagement.trainings.approvedTrainings);
 	const rejectedTrainings = useSelector(({ TrainingManagement }) => TrainingManagement.trainings.rejectedTrainings);
 	const pendingTrainings = useSelector(({ TrainingManagement }) => TrainingManagement.trainings.pendingTrainings);
+	const reviewedTrainings = useSelector(({ TrainingManagement }) => TrainingManagement.trainings.reviewedTrainings);
 	const approvedCourses = useSelector(({ TrainingManagement }) => TrainingManagement.courses.approvedCourses);
 	const rejectedCourses = useSelector(({ TrainingManagement }) => TrainingManagement.courses.rejectedCourses);
 	const pendingCourses = useSelector(({ TrainingManagement }) => TrainingManagement.courses.pendingCourses);
 	const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
-	const totalTrainings = approvedTrainings.concat(rejectedTrainings).concat(pendingTrainings);
+	const totalTrainings = approvedTrainings.concat(rejectedTrainings).concat(pendingTrainings).concat(reviewedTrainings);
 	const totalCourses = approvedCourses.concat(rejectedCourses).concat(pendingCourses);
 
 	const classes = useStyles(props);
 	const pageLayout = useRef(null);
 	const [tabValue, setTabValue] = useState(0);
 
+	const userData = useAuth().getUserData;
+
 	useEffect(() => {
+		dispatch(Actions.getReviewedTraining());
 		dispatch(Actions.getApprovedTraining());
 		dispatch(Actions.getRejectedTraining());
 		dispatch(Actions.getPendingTraining());
@@ -75,13 +80,29 @@ function TrainingManagement(props) {
 		setTabValue(value);
 	}
 
-    function handleReject(event, id){
-        dispatch(Actions.rejectCourse(id))
+	function checkRole() {
+        return (userData.role.upperCase() === 'HR')
+	}
+	
+    function checkHODRole() {
+        return (userData.role.upperCase() === 'HEAD OF DEPARTMENT')
     }
 
-    function handleApprove(event, id){
-		dispatch(Actions.approveCourse(id))
-	}
+    function handleCourseReject(ev, id){
+        dispatch(Actions.rejectCourse(id));
+    }
+
+    function handleCourseApprove(ev, id){
+        dispatch(Actions.approveCourse(id));
+    }
+
+    function handleTrainingReject(ev, id){
+        dispatch(Actions.rejectTraining(id));
+    }
+
+    function handleTrainingApprove(ev, id){
+        dispatch(Actions.approveTraining(id));
+    }
 
     const columns = [
         {
@@ -92,31 +113,31 @@ function TrainingManagement(props) {
             sort: true
         },
         {
-            id: 'type',
+            id: 'course_name',
             align: 'center',
             disablePadding: false,
-            label: 'Type',
+            label: 'Course Name',
             sort: true
         },
         {
-            id: 'owner',
+            id: 'cost',
             align: 'center',
             disablePadding: false,
-            label: 'Owner',
+            label: 'Cost',
             sort: true
         },
         {
-            id: 'category',
+            id: 'start_date',
             align: 'center',
             disablePadding: false,
-            label: 'Category',
+            label: 'Start Date',
             sort: true
         },
         {
-            id: 'modified',
+            id: 'end_date',
             align: 'center',
             disablePadding: false,
-            label: 'Modified',
+            label: 'End Date',
             sort: true
         },
         {
@@ -170,67 +191,8 @@ function TrainingManagement(props) {
             label: 'Status',
             sort: true
         }
-    ];
-    const rows = [
-		{
-		  "employeeId": 17,
-		  "trainingCourseId": 1,
-		  "departmentHead": 7,
-		  "hrManager": null,
-		  "status": "approved",
-		  "startDate": "24-07-2020",
-		  "endDate": "23-10-2020",
-		  "createdAt": "2020-07-23T18:26:25.831Z",
-		  "updatedAt": "2020-07-23T19:04:16.718Z",
-		  "employee": {
-			"firstName": "sidney",
-			"lastName": "sid"
-		  },
-		  "trainingCourse": {
-			"id": 1,
-			"name": "system architecture",
-			"certification": true,
-			"cost": "$250",
-			"location": "Online",
-			"duration": " 3 months",
-			"category": "external",
-			"department": "IT",
-			"hrManager": 4,
-			"status": "approved",
-			"createdAt": "2020-07-23T16:53:52.080Z",
-			"updatedAt": "2020-07-23T16:55:47.428Z"
-		  }
-		},
-		{
-		  "employeeId": 17,
-		  "trainingCourseId": 1,
-		  "departmentHead": 7,
-		  "hrManager": 4,
-		  "status": "approved",
-		  "startDate": "24-07-2020",
-		  "endDate": "23-10-2020",
-		  "createdAt": "2020-07-23T18:28:32.211Z",
-		  "updatedAt": "2020-07-23T19:04:16.718Z",
-		  "employee": {
-			"firstName": "sidney",
-			"lastName": "sid"
-		  },
-		  "trainingCourse": {
-			"id": 1,
-			"name": "system architecture",
-			"certification": true,
-			"cost": "$250",
-			"location": "Online",
-			"duration": " 3 months",
-			"category": "external",
-			"department": "IT",
-			"hrManager": 4,
-			"status": "approved",
-			"createdAt": "2020-07-23T16:53:52.080Z",
-			"updatedAt": "2020-07-23T16:55:47.428Z"
-		  }
-		}
-	  ];
+	];
+	
 	return (
         <ThemeProvider theme={mainTheme}>
 		<FusePageSimple
@@ -279,20 +241,25 @@ function TrainingManagement(props) {
 							animation: 'transition.slideUpBigIn'
 						}}
 					>
-						<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
+						<div className="widget flex w-full sm:w-1/2 md:w-1/5 p-12">
 							<CardWidget count={totalTrainings.length} title={"Total"} color="blue" />
 						</div>
-						<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
+						<div className="widget flex w-full sm:w-1/2 md:w-1/5 p-12">
+							<CardWidget count={reviewedTrainings.length} title={"Reviewed"} color="sky-blue" />
+						</div>
+						<div className="widget flex w-full sm:w-1/2 md:w-1/5 p-12">
 							<CardWidget count={pendingTrainings.length} title={"Pending"} color="yellow" />
 						</div>
-						<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
+						<div className="widget flex w-full sm:w-1/2 md:w-1/5 p-12">
 							<CardWidget count={approvedTrainings.length} title={"Approved"} color="green" />
 						</div>
-						<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
+						<div className="widget flex w-full sm:w-1/2 md:w-1/5 p-12">
 							<CardWidget count={rejectedTrainings.length} title={"Rejected"} color="red" />
 						</div>
 						<div className="widget flex w-full p-12">
-							<TableWidget title={"Training Requests"} type="default" columns={columns} rows={rows}/>
+							<TableWidget title={"Training Requests"} type="default" 
+							columns={columns} rows={totalTrainings} allowAuth={checkHODRole} 
+							handleReject={handleTrainingReject} handleApprove={handleTrainingApprove}/>
 						</div>
 					</FuseAnimateGroup>
 					)}
@@ -317,7 +284,7 @@ function TrainingManagement(props) {
 							</div>
                             <div className="widget flex w-full p-12">
 								<CoursesTableWidget title={"Course list"} allowClick={true} 
-								handleApprove={handleApprove} handleReject={handleReject} 
+								handleApprove={handleCourseApprove} handleReject={handleCourseReject} 
 								type="default" columns={coursesColumn} rows={totalCourses}
 								/>
 							</div>

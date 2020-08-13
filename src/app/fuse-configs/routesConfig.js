@@ -34,6 +34,7 @@ import TrainingConfig from 'app/main/line_manager/training/trainingConfig';
 import HrTrainingConfig from 'app/main/HR/training/hrTrainingConfig';
 import PersonalTrainingConfig from 'app/main/personalTraining/personalTrainingConfig';
 import CreatePersonalTrainingConfig from 'app/main/personalTraining/createPersonalTraining/CreatePersonalTrainingConfig';
+import MainBlogConfig from 'app/main/blog/blogConfig';
 
 const routeConfigs = [
 	// ExampleConfig,
@@ -67,7 +68,8 @@ const routeConfigs = [
 	TrainingConfig,
 	HrTrainingConfig,
 	CreatePersonalTrainingConfig,
-	PersonalTrainingConfig
+	PersonalTrainingConfig,
+	MainBlogConfig
 ];
 
 const checkIfLoggedIn = () => {

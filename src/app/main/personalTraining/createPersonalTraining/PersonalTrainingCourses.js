@@ -237,7 +237,7 @@ function PersonalTrainingCourses(props) {
 															</AppBar>
 															<form noValidate onSubmit={handleSubmit}>
 																<DialogContent classes={{ root: 'p-16 pb-0 sm:p-24 sm:pb-0' }}>
-																	{setId(course.id)}
+																	
 																	<DateTimePicker
 																		label="Start"
 																		inputVariant="outlined"
@@ -268,7 +268,10 @@ function PersonalTrainingCourses(props) {
 															type="button"
 															className="justify-start px-32"
 															color="secondary"
-															onClick={handleOpen}
+															onClick={(ev) => {
+																handleOpen();
+																setId(course.id);
+															}}
 														>
 															START
 														</Button>

@@ -50,11 +50,15 @@ function EventDialog(props) {
 	const courses = useSelector(({ personalTraining }) => personalTraining.courses.courses);
 	const eventDialog = useSelector(({ personalTraining }) => personalTraining.events.eventDialog);
 	const { form, handleChange, setForm, setInForm } = useForm(defaultFormState);
-	const start = moment(form.start, 'MM/DD/YYYY');
-	const end = moment(form.end, 'MM/DD/YYYY');
+	const [start, setStart ] = useState(moment(new Date(), 'MM/DD/YYYY'));
+	const [end, setEnd] = useState(moment(new Date(), 'MM/DD/YYYY'));
     const classes = useStyles();
-	const [category, setCategory] = useState('');
+	const [courseId, setCourseId] = useState(0);
 	const [edit, setEdit] = useState(false);
+	const [color, setColor] = useState('');
+	const [course, setCourse] = useState({});
+	const [title, setTitle] = useState('');
+	const [id, setId] = useState(0);
 
 	const initDialog = useCallback(() => {
 		/**
@@ -62,14 +66,13 @@ function EventDialog(props) {
 		 */
 		if (eventDialog.type === 'edit' && eventDialog.data) {
 			console.log(eventDialog.data);
-			setForm({ 
-				id: eventDialog.data.id,
-				color: eventDialog.data.color,
-				courseId:  eventDialog.data.course.id,
-				course: eventDialog.data.course,
-				start: eventDialog.data.start,
-				end: eventDialog.data.end
-			});
+			setCourseId(eventDialog.data.course.id);
+			setColor(eventDialog.data.color);
+			setStart(moment(eventDialog.data.start, 'MM/DD/YYYY'));
+			setEnd(moment(eventDialog.data.end, 'MM/DD/YYYY'));
+			setCourse(eventDialog.data.course);
+			setTitle(eventDialog.data.title);
+			setId(eventDialog.data.id);
 		}
 
 		/**
@@ -101,24 +104,27 @@ function EventDialog(props) {
 	}
 
 	function canBeSubmitted() {
-		return form.courses != '';
+		return courseId != '';
 	}
 
 	function handleSubmit(event) {
 		event.preventDefault();
 		const payload = {
-			trainingCourseId: form.courseId,
+			trainingCourseId: courseId,
 			departmentHead:7,
 			hrManager:4,
-			startDate: moment(form.start).format("DD-MM-YYYY"),
-			endDate: moment(form.end).format("DD-MM-YYYY")
+			startDate: moment(start).format("DD-MM-YYYY"),
+			endDate: moment(end).format("DD-MM-YYYY")
 		}
-		dispatch(Actions.updateTraining(payload, form.id));
+		console.log(payload);
+		console.log(id);
+		dispatch(Actions.updateTraining(payload, id));
 		closeComposeDialog();
 	}
 
 	function handleRemove() {
-		dispatch(Actions.removeEvent(form.id));
+		console.log(id);
+		dispatch(Actions.deleteTrainingRequest(id))
 		closeComposeDialog();
 	}
 
@@ -128,10 +134,10 @@ function EventDialog(props) {
 
 	return (
 		<Dialog {...eventDialog.props} onClose={closeComposeDialog} fullWidth maxWidth="xs" component="form">
-				<AppBar position="static" style={{backgroundColor: form.color, color: 'white'}}>
+				<AppBar position="static" style={{backgroundColor: color, color: 'white'}}>
 					<Toolbar className="flex w-full">
 						<Typography variant="subtitle1" color="inherit">
-							{(!edit) ? 'View Training Request' : 'Edit Training Request'}
+							{(!edit) ? title : 'Edit Training Request'}
 						</Typography>
 					</Toolbar>
 				</AppBar>
@@ -143,8 +149,8 @@ function EventDialog(props) {
 						<FormControl variant="outlined" className="mt-8 mb-16 w-full">
 							<InputLabel htmlFor="outlined-age-native-simple">Courses</InputLabel>
 							<Select
-							value={form.courseId}
-							onChange={handleChange}
+							value={courseId}
+							onChange={ev => setCourseId(ev.target.value)}
 							label="Courses"
 							inputProps={{
 								name: 'courses',
@@ -164,7 +170,7 @@ function EventDialog(props) {
 							label="Start"
 							inputVariant="outlined"
 							value={start}
-							onChange={date => setInForm('start', date)}
+							onChange={date => setStart(date)}
 							className="mt-8 mb-16 w-full"
 							maxDate={end}
 						/>
@@ -173,7 +179,7 @@ function EventDialog(props) {
 							label="End"
 							inputVariant="outlined"
 							value={end}
-							onChange={date => setInForm('end', date)}
+							onChange={date => setEnd(date)}
 							className="mt-8 mb-16 w-full"
 							minDate={start}
 						/>
@@ -207,45 +213,45 @@ function EventDialog(props) {
 							<tbody>
 								<tr className="cost">
 									<th>Cost</th>
-									<td>{form.course.cost}</td>
+									<td>{course.cost}</td>
 								</tr>
 
 								<tr className="location">
 									<th>Location</th>
-									<td>{form.course.location}</td>
+									<td>{course.location}</td>
 								</tr>
 
 								<tr className="cert">
 									<th>Certification</th>
-									<td>{(form.course.certification) ? "Yes" : "No"}</td>
+									<td>{(course.certification) ? "Yes" : "No"}</td>
 								</tr>
 
 								<tr className="catergory">
 									<th>Category</th>
-									<td>{form.course.category}</td>
+									<td>{course.category}</td>
 								</tr>
 
 								<tr className="dept">
 									<th>Department</th>
-									<td>{form.course.department}</td>
+									<td>{course.department}</td>
 								</tr>
 
 								<tr className="deptHead">
 									<th>Department Head</th>
-									<td>{form.course.departmentHeadId}</td>
+									<td>{course.departmentHeadId}</td>
 								</tr>
 
 								<tr className="hrManager">
 									<th>HR Manager</th>
-									<td>{form.course.hrManager}</td>
+									<td>{course.hrManager}</td>
 								</tr>
 								<tr className="created">
 									<th>Created</th>
-									<td><Moment format="ddd Do MMM, YYYY | hh:mm:ss a">{form.course.createdAt}</Moment></td>
+									<td><Moment format="ddd Do MMM, YYYY | hh:mm:ss a">{course.createdAt}</Moment></td>
 								</tr>
 								<tr className="updated">
 									<th>Updated</th>
-									<td><Moment format="ddd Do MMM, YYYY | hh:mm:ss a">{form.course.updatedAt}</Moment></td>
+									<td><Moment format="ddd Do MMM, YYYY | hh:mm:ss a">{course.updatedAt}</Moment></td>
 								</tr>
 							</tbody>
 						</table>

@@ -1,10 +1,10 @@
-export const useAuth = () => {
+export const useAuth = item => {
   const auth = localStorage.getItem('jwt_access_token');
   const data = localStorage.getItem('user_data');
   let token = '';
   let userData = '';
   if(auth) {
-    token = auth;
+    token = JSON.parse(auth);
   } else {
     token = '';
   }
@@ -12,6 +12,10 @@ export const useAuth = () => {
     userData = JSON.parse(data);
   } else {
     userData = '';
+  }
+
+  const setItems = itemName => {
+    localStorage.setItem(itemName, item)
   }
   const getToken = () => {
     return token;

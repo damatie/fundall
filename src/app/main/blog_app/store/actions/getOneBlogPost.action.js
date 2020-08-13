@@ -16,6 +16,7 @@ export function getOneBlogPost(id) {
 			...header.getRegHeader()
 		}).then(res => res.json()).then(
 			post => {
+				console.log(post);
 				if(post.message === 'Success') {
 					return dispatch({
 						type: GETONEBLOGPOST_SUCCESS,

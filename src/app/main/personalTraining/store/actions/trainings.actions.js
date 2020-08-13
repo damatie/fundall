@@ -4,7 +4,7 @@ import { useAuth } from 'app/hooks/useAuth';
 import swal from 'sweetalert2';
 import moment from 'moment';
 import { fetchHeaders } from 'app/shared/fetchHeaders'
-import { amber, blue, blueGrey, lightGreen, green, grey, red } from '@material-ui/core/colors';
+import { amber, blue, orange, blueGrey, lightGreen, green, grey, red } from '@material-ui/core/colors';
 
 export const LOADING_TRAININGS = 'LOADING TRAININGS';
 export const GET_TRAININGS = 'GET TRAININGS';
@@ -29,7 +29,7 @@ export function getAllTrainings() {
 		});
 		fetch(`${basUrl()}/training/all/employee/request`, { ...headers.getRegHeader() })
 			.then(res => res.json()).then(async data => {
-				// console.log(data.data);
+				console.log(data.data);
 				if (data.success && data.data) {
 					trainings = data.data.map(d => { return d.training; })
 					console.log(trainings);
@@ -42,7 +42,7 @@ export function getAllTrainings() {
 								start: moment(t.startDate, "DD-MM-YYYY").toDate(),
 								end: moment(t.endDate, "DD-MM-YYYY").toDate(),
 								course: t.trainingCourse,
-								color: (t.status === 'pending') ? blue[500] : (t.status === 'approved') ? lightGreen[500] : (t.status === 'rejected') ? red[500] : (t.status === 'completed') ? green[500] : amber[500]
+								color: (t.status === 'pending') ? blue[500] : (t.status === 'approved') ? lightGreen[500] : (t.status === 'rejected') ? red[500] : (t.status === 'completed') ? green[500] : (t.status === 'reviewed') ? orange[500] : amber[500]
 							}
 						})
 					}
@@ -95,9 +95,9 @@ export function createTraining(model) {
 				swal.fire({
 					title: 'Create Training',
 					text: (data.message) ? data.message : data.error,
-					// timer: 3000,
+					timer: 3000,
 					icon: 'success'
-				},
+				}).then(
 				function(){
 				  window.location.href = "/training/personal";
 				});
@@ -128,7 +128,10 @@ export function createTraining(model) {
 }
 
 export function updateTraining(model, id) {
+	console.log(id);
 	console.log(model);
+	swal.fire("Processing ...");
+	swal.showLoading();
 	return dispatch => {
 		dispatch({
 			type: LOADING_TRAININGS
@@ -137,8 +140,6 @@ export function updateTraining(model, id) {
 		).then(res => res.json()).then(async data => {
 			// let data = response.data;
 			if (data.success) {
-				const response = await getTraining();
-				console.log(response);
 				//   dispatch({
 				// 	type: UPDATE_TRAINING_SUCCESS,
 				// 	payload: response.data,
@@ -180,6 +181,67 @@ export function updateTraining(model, id) {
 			})
 		})
 	}
+}
+
+export function deleteTrainingRequest(id) {
+	console.log(id);
+	return dispatch => {
+
+		dispatch({
+			type: LOADING_TRAININGS
+		});
+
+		swal.fire({
+			title: 'Are you sure?',
+			text: "You won't be able to revert this!",
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			confirmButtonText: 'Yes, delete it!',
+			showLoaderOnConfirm: true,
+			preConfirm: () => [
+				fetch(`${basUrl()}/training/${id}`, { ...headers.delHeader() })
+					.then(res => res.json()).then(async data => {
+						if (data.success) {
+							swal.fire(
+								'DELETE!',
+								'Training request has been deleted.',
+								'success'
+							)
+							Promise.all([
+								dispatch({
+									type: DELETE_TRAINING_SUCCESS
+								})
+							]).then(() => {
+								dispatch(getAllTrainings())
+							})
+						} else {
+							swal.fire(
+								'Deleted!',
+								'something went wrong',
+								'error'
+							)
+							return dispatch({
+								type: DELETE_TRAINING_ERROR
+							})
+						}
+					}
+					).catch(e => {
+						console.error(e);
+						swal.fire(
+							'Oops!',
+							'something went wrong',
+							'error'
+						)
+						return dispatch({
+							type: DELETE_TRAINING_ERROR
+						})
+					})
+			]
+		})
+	}
+
 }
 
 export function getTraining() {
