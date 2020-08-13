@@ -7,6 +7,9 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Divider from '@material-ui/core/Divider';
 import FormControl from '@material-ui/core/FormControl';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
 import Icon from '@material-ui/core/Icon';
 import InputLabel from '@material-ui/core/InputLabel';
 import LinearProgress from '@material-ui/core/LinearProgress';
@@ -19,12 +22,15 @@ import Typography from '@material-ui/core/Typography';
 import withReducer from 'app/store/withReducer';
 import clsx from 'clsx';
 import React, { useEffect, useMemo, useState } from 'react';
+import { DateTimePicker } from '@material-ui/pickers';
+import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useParams } from 'react-router-dom';
 import * as Actions from '../store/actions';
 import reducer from '../store/reducers';
 import { amber, blue, blueGrey, green } from '@material-ui/core/colors';
 import Moment from 'react-moment';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
 
 const useStyles = makeStyles(theme => ({
 	header: {
@@ -43,18 +49,21 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-function Courses(props) {
+function PersonalTrainingCourses(props) {
 	const dispatch = useDispatch();
 	const courses = useSelector(({ academyApp }) => academyApp.courses.courses);
 	const categories = useSelector(({ academyApp }) => academyApp.courses.categories);
 	const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
 
 	const classes = useStyles(props);
-	const params = useParams();
 	const theme = useTheme();
-	const [filteredData, setFilteredData] = useState(null);
-	const [searchText, setSearchText] = useState('');
-	const [selectedCategory, setSelectedCategory] = useState('all');
+    const [data, setData] = useState(courses);
+	const [open, setOpen] = useState(false);
+    const [filter, setFilter] = useState('all');
+    const [search, setSearch] = useState('');
+	const [start, setStart] = useState(moment(new Date(), 'MM/DD/YYYY'));
+	const [end, setEnd] = useState(moment(new Date(), 'MM/DD/YYYY'));
+	const [id, setId] = useState('');
 
 	useEffect(() => {
 		dispatch(Actions.getApprovedCourses());
@@ -62,41 +71,53 @@ function Courses(props) {
 	}, [dispatch]);
 
 	useEffect(() => {
-		function getFilteredArray() {
-			if (searchText.length === 0 && selectedCategory === 'all') {
-				return courses;
-			}
-
-			return _.filter(courses, item => {
-				if (selectedCategory !== 'all' && item.category !== selectedCategory) {
-					return false;
-				}
-				return item.name.toLowerCase().includes(searchText.toLowerCase());
-			});
+		if (search.length >= 2) {
+			setData(_.filter(courses, row => row.name.toLowerCase().includes(search.toLowerCase())));
+		} else {
+			setData(courses);
 		}
-
-		if (courses) {
-			setFilteredData(getFilteredArray());
+    }, [courses, search]);
+    
+    useEffect(() => {
+		if (filter !== 'all') {
+			setData(_.filter(courses, row => row.category.toLowerCase() === filter.toLowerCase()));
+		} else {
+			setData(courses);
 		}
-	}, [courses, searchText, selectedCategory]);
+	}, [courses, filter]);
 
-	function handleSelectedCategory(event) {
-		setSelectedCategory(event.target.value);
+	function handleSearch(event){
+        setSearch(event.target.value);
+    }
+
+    function handleFilter(event){
+        setFilter(event.target.value);
+    }
+
+	function canBeSubmitted() {
+		return (start != '' || end != '');
 	}
 
-	function handleSearchText(event) {
-		setSearchText(event.target.value);
+	function handleSubmit(event) {
+		event.preventDefault();
+		const payload = {
+			trainingCourseId: id,
+			departmentHead: 13,
+			hrManager: 4,
+			startDate: moment(start).format("DD-MM-YYYY"),
+			endDate: moment(end).format("DD-MM-YYYY")
+	   }
+	   console.log(payload);
+		dispatch(Actions.createTraining(payload));
+		setOpen(false);
 	}
 
-	function buttonStatus(course) {
-		switch (course.activeStep) {
-			case course.totalSteps:
-				return 'COMPLETED';
-			case 0:
-				return 'START';
-			default:
-				return 'CONTINUE';
-		}
+	function handleClose(){
+		setOpen(false);
+	}
+
+	function handleOpen(){
+		setOpen(true);
 	}
 
 	return (
@@ -121,11 +142,11 @@ function Courses(props) {
 							label="Search for a course"
 							placeholder="Enter a keyword..."
 							className="flex w-full sm:w-320 mb-16 sm:mb-0 mx-16"
-							value={searchText}
+							value={search}
 							inputProps={{
 								'aria-label': 'Search'
 							}}
-							onChange={handleSearchText}
+							onChange={handleSearch}
 							variant="outlined"
 							InputLabelProps={{
 								shrink: true
@@ -134,8 +155,8 @@ function Courses(props) {
 						<FormControl className="flex w-full sm:w-320 mx-16" variant="outlined">
 							<InputLabel htmlFor="category-label-placeholder"> Category </InputLabel>
 							<Select
-								value={selectedCategory}
-								onChange={handleSelectedCategory}
+								value={filter}
+								onChange={handleFilter}
 								input={
 									<OutlinedInput
 										labelWidth={'category'.length * 9}
@@ -157,16 +178,15 @@ function Courses(props) {
 					</div>
 					{useMemo(
 						() =>
-							filteredData &&
-							(filteredData.length > 0 ? (
+							data &&
+							(data.length > 0 ? (
 								<FuseAnimateGroup
 									enter={{
 										animation: 'transition.slideUpBigIn'
 									}}
 									className="flex flex-wrap py-24"
 								>
-									{filteredData.map(course => {
-										const category =  _.filter(categories, _cat => { return _cat.id === course.categoryId });
+									{data.map(course => {
 										return (
 											<div className="w-full pb-24 sm:w-1/2 lg:w-1/3 sm:p-16" key={course.id}>
 												<Card elevation={1} className="flex flex-col h-256">
@@ -178,7 +198,7 @@ function Courses(props) {
 														}}
 													>
 														<Typography className="font-medium truncate" color="inherit">
-															{category.name}
+															{course.category}
 														</Typography>
 														<div className="flex items-center justify-center opacity-75">
 															<Icon className="text-20 mx-8" color="inherit">
@@ -207,14 +227,53 @@ function Courses(props) {
 														</Typography>
 													</CardContent>
 													<Divider />
+														<Dialog open={open} onClose={handleClose} fullWidth maxWidth="xs">
+															<AppBar position="static">
+																<Toolbar className="flex w-full">
+																	<Typography variant="subtitle1" color="inherit">
+																		{'New Training Request'}
+																	</Typography>
+																</Toolbar>
+															</AppBar>
+															<form noValidate onSubmit={handleSubmit}>
+																<DialogContent classes={{ root: 'p-16 pb-0 sm:p-24 sm:pb-0' }}>
+																	
+																	<DateTimePicker
+																		label="Start"
+																		inputVariant="outlined"
+																		value={start}
+																		onChange={date => setStart(date)}
+																		className="mt-8 mb-16 w-full"
+																		maxDate={end}
+																	/>
+
+																	<DateTimePicker
+																		label="End"
+																		inputVariant="outlined"
+																		value={end}
+																		onChange={date => setEnd(date)}
+																		className="mt-8 mb-16 w-full"
+																		minDate={start}
+																	/>
+																</DialogContent>
+																<DialogActions className="justify-between px-8 sm:px-16">
+																	<Button variant="contained" color="primary" type="submit" disabled={!canBeSubmitted()}>
+																		Add
+																</Button>
+																</DialogActions>
+															</form>
+														</Dialog>
 													<CardActions className="justify-center">
 														<Button
-															to={`/training/personal/courses/${course.id}/${course.name}/${params.startDate}/${params.endDate}`}
-															component={Link}
+															type="button"
 															className="justify-start px-32"
 															color="secondary"
+															onClick={(ev) => {
+																handleOpen();
+																setId(course.id);
+															}}
 														>
-															{"START"}
+															START
 														</Button>
 													</CardActions>
 													<LinearProgress
@@ -229,13 +288,13 @@ function Courses(props) {
 									})}
 								</FuseAnimateGroup>
 							) : (
-								<div className="flex flex-1 items-center justify-center">
-									<Typography color="textSecondary" className="text-24 my-24">
-										No courses found!
+									<div className="flex flex-1 items-center justify-center">
+										<Typography color="textSecondary" className="text-24 my-24">
+											No courses found!
 									</Typography>
-								</div>
-							)),
-						[categories, filteredData, theme.palette]
+									</div>
+								)),
+						[categories, data, open, id, start, end, theme.palette]
 					)}
 				</div>
 			</div>
@@ -243,4 +302,4 @@ function Courses(props) {
 	);
 }
 
-export default withReducer('academyApp', reducer)(Courses);
+export default withReducer('academyApp', reducer)(PersonalTrainingCourses);

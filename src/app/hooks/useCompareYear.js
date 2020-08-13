@@ -8,7 +8,7 @@ export const useCompareYear = data => {
       setResult(0);
     } else {
       for(const i of data) {
-        if(i.allotedYear == new Date().getFullYear()) {
+        if(i.allotedYear === new Date().getFullYear()) {
           setResult(i)
         }
       }

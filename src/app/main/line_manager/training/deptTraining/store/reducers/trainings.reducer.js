@@ -6,10 +6,12 @@ const initialState = {
 	approvedTrainings: [],
 	rejectedTrainings: [],
 	pendingTrainings: [],
+	completedTrainings: [],
+	reviewedTrainings: [],
 	success: false
 };
 
-const projectsReducer = (state = initialState, action) => {
+const trainingsReducer = (state = initialState, action) => {
 	switch (action.type) {
 		case Actions.LOADING_TRAINIING: {
 			return {
@@ -35,9 +37,21 @@ const projectsReducer = (state = initialState, action) => {
 				loading: false,
 				pendingTrainings: action.payload
 			};
+		case Actions.GET_COMPLETED_TRAINING:
+			return {
+				...state,
+				loading: false,
+				completedTrainings: action.payload
+			};
+		case Actions.GET_REVIEWED_TRAINING:
+			return {
+				...state,
+				loading: false,
+				reviewedTrainings: action.payload
+			};
 		default:
 			return state;
 	}
 };
 
-export default projectsReducer;
+export default trainingsReducer;

@@ -1,0 +1,236 @@
+import { getBaseUrl } from 'app/shared/getBaseUrl';
+import swal from 'sweetalert2';
+import {fetchHeaders} from 'app/shared/fetchHeaders'
+
+export const GET_POSTS = 'GET POSTS';
+export const GET_ONE_POST = 'GET ONE POST';
+export const LOADING_POSTS = 'LOADING POSTS';
+export const CREATE_POST_SUCCESS = 'CREATE POST SUCCESS';
+export const CREATE_POST_ERROR = 'CREATE POST ERROR';
+export const LIKE_OR_UNLIKE_POST_SUCCESS = 'LIKE OR UNLIKE POST SUCCESS';
+export const LIKE_OR_UNLIKE_POST_ERROR = 'LIKE OR UNLIKE POST ERROR';
+export const DELETE_POST_SUCCESS = 'DELETE POST SUCCESS';
+export const DELETE_POST_ERROR = 'DELETE POST ERROR';
+
+const basUrl = getBaseUrl;
+const headers = fetchHeaders();
+export function getPosts(limit = 10, offset= 0) {
+	return dispatch => {
+		dispatch({
+			type: LOADING_POSTS
+		});
+		fetch(`${basUrl()}/posts/all/paginate?limit=${limit}&offset=${offset}`, {...headers.getRegHeader()})
+		.then(res => res.json()).then(async data => {
+			console.log(data);
+			data.message === 'Success' ? 
+				(data.data) ?
+					dispatch({
+						type: GET_POSTS,
+						payload: data.data
+					})
+				:
+					dispatch({
+						type: GET_POSTS,
+						payload: []
+					})
+			:
+				dispatch({
+					type: GET_POSTS,
+					payload: []
+				})
+		}).catch(err => {
+			console.log(err);
+			dispatch({
+				type: GET_POSTS,
+				payload: []
+			})
+		})
+	}
+}
+
+export function getPostById(id){
+	console.log(id);
+	return dispatch => {
+		dispatch({
+			type: LOADING_POSTS
+		});
+		fetch(`${basUrl()}/posts/${id}`, {...headers.getRegHeader()})
+		.then(res => res.json()).then(async data => {
+			console.log(data);
+			data.message === 'Success' ? 
+				(data.data) ?
+					dispatch({
+						type: GET_ONE_POST,
+						payload: data.data
+					})
+				:
+					dispatch({
+						type: GET_ONE_POST,
+						payload: []
+					})
+			:
+				dispatch({
+					type: GET_ONE_POST,
+					payload: []
+				})
+		}).catch(err => {
+			console.log(err);
+			dispatch({
+				type: GET_ONE_POST,
+				payload: []
+			})
+		})
+	}
+}
+
+export function createPost(payload){
+	swal.fire("Processing ...");
+	swal.showLoading();
+	return dispatch => {
+		dispatch({
+			type: LOADING_POSTS
+		})
+		fetch(`${basUrl()}/posts/`, { ...headers.reqHeader('POST', payload) }
+		).then(res => res.json()).then(async data => {
+			// let data = response.data;
+			if (data.success) {
+				Promise.all([
+					dispatch({
+						type: CREATE_POST_SUCCESS
+					})
+				]).then(() => {
+					dispatch(getPosts())
+				})
+				swal.fire({
+					title: 'Create Blog Post',
+					text: (data.message) ? data.message : data.error,
+					// timer: 3000,
+					icon: 'success'
+				},
+				function(){
+				  window.location.href = "/main/blogs";
+				});
+			} else {
+				swal.fire({
+					title: 'Create Blog Post',
+					text: (data.message) ? data.message : data.error,
+					timer: 3000,
+					icon: 'error'
+				})
+				dispatch({
+					type: CREATE_POST_ERROR
+				})
+			}
+		}).catch(e => {
+			console.error(e);
+			swal.fire({
+				title: 'Create Blog Post',
+				text: 'Oops! an error occurred. Kindly check network and try again',
+				timer: 3000,
+				icon: 'error'
+			})
+			dispatch({
+				type: CREATE_POST_ERROR
+			})
+		})
+	}
+}
+
+export function likeAndUnlike(id){
+	console.log(id);
+	return dispatch => {
+		dispatch({
+			type: LOADING_POSTS
+		})
+		fetch(`${basUrl()}/posts/post/like/${id}`, { ...headers.reqHeader('PATCH', '') }
+		).then(res => res.json()).then(async data => {
+			// let data = response.data;
+			console.log(data)
+			if (data.success) {
+				Promise.all([
+					dispatch({
+						type: LIKE_OR_UNLIKE_POST_SUCCESS
+					})
+				]).then(() => dispatch(getPosts()))
+			} else {
+				dispatch({
+					type: LIKE_OR_UNLIKE_POST_ERROR
+				})
+			}
+		}).catch(e => {
+			console.error(e);
+			swal.fire({
+				title: 'LIKE OR UNLIKE POST',
+				text: 'Oops! an error occurred. Kindly check network and try again',
+				timer: 3000,
+				icon: 'error'
+			})
+			dispatch({
+				type: LIKE_OR_UNLIKE_POST_ERROR
+			})
+		})
+	}
+}
+
+export function deletePost(id) {
+	console.log(id);
+	return dispatch => {
+
+		dispatch({
+			type: LOADING_POSTS
+		});
+
+		swal.fire({
+			title: 'Are you sure?',
+			text: "You won't be able to revert this!",
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			confirmButtonText: 'Yes, delete it!',
+			showLoaderOnConfirm: true,
+			preConfirm: () => [
+				fetch(`${basUrl()}/posts/${id}`, { ...headers.delHeader() })
+					.then(res => res.json()).then(async data => {
+						if (data.success) {
+							swal.fire(
+								'DELETE!',
+								'Post has been deleted.',
+								'success'
+							)
+							Promise.all([
+								dispatch({
+									type: DELETE_POST_SUCCESS
+								})
+							]).then(() => {
+								dispatch(getPosts())
+							})
+						} else {
+							swal.fire(
+								'Deleted!',
+								'something went wrong',
+								'error'
+							)
+							return dispatch({
+								type: DELETE_POST_ERROR
+							})
+						}
+					}
+					).catch(e => {
+						console.error(e);
+						swal.fire(
+							'Oops!',
+							'something went wrong',
+							'error'
+						)
+						return dispatch({
+							type: DELETE_POST_ERROR
+						})
+					})
+			]
+		})
+	}
+
+}
+
+

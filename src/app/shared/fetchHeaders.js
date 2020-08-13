@@ -30,14 +30,24 @@ export const fetchHeaders = () => {
 
   // post, put, patch request header
   const reqHeader = (method, body) => {
-    return {
-      method: method,
-      headers: {
-        ...auth,
-        'Content-type': 'application/json'
-      },
-      body: JSON.stringify(body)
-    };
+    if(body !== ''){
+      return {
+        method: method,
+        headers: {
+          ...auth,
+          'Content-type': 'application/json'
+        },
+        body: JSON.stringify(body)
+      };
+    }else{
+      return {
+        method: method,
+        headers: {
+          ...auth,
+          'Content-type': 'application/json'
+        }
+      };
+    }
   };
 
   const fdHeader = (method, body) => {

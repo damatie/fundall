@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import _ from '@lodash/index';
 import Typography from '@material-ui/core/Typography';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
@@ -43,10 +44,23 @@ function BlogListHeader(props) {
   
   const [tabValue, setTabValue] = useState(0);
   // const [sortedPosts, setSortedPosts] = useState([]);
+  const [search, setSearch] = useState('');
+  const [data, setData] = useState(blogPost);
 
   useEffect(() => {
-    dispatch(blogActions.getBlogPost());
-  }, []);
+    dispatch(blogActions.getBlogByLimit());
+  }, [dispatch]);
+
+  function handleSearch(event){
+    setSearch(event.target.value);
+    if(event.target.value.length >= 2){
+     setData(blogPost.filter(post => {
+        return post.title.toLowerCase() === search.toLowerCase();
+      }));
+    }else{
+      setData(blogPost);
+    }
+  }
   
   function handleChangeTab(event, value) {
     setTabValue(value);

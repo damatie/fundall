@@ -1,18 +1,17 @@
 export const useAuth = item => {
   const auth = localStorage.getItem('jwt_access_token');
-  const id = localStorage.getItem('user_data');
+  const data = localStorage.getItem('user_data');
   let token = '';
-  let userId = '';
+  let userData = '';
   if(auth) {
     token = JSON.parse(auth);
   } else {
     token = '';
   }
-
-  if(id) {
-    userId = JSON.parse(id);
+  if(data) {
+    userData = JSON.parse(data);
   } else {
-    userId = '';
+    userData = '';
   }
 
   const setItems = itemName => {
@@ -22,12 +21,15 @@ export const useAuth = item => {
     return token;
   }
   const getId = () => {
-    return userId.id;
+    return userData.id;
+  }
+  const getUserData = () => {
+    return userData
   }
 
   return {
     getToken: getToken(),
     getId: getId(),
-    setItems: setItems,
+    getUserData: getUserData()
   };
 };

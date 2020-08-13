@@ -88,6 +88,7 @@ export default function FileModal() {
                     validations={{
                       minLength: 1
                     }}
+                    required
                     validationErrors={{
                       minLength: 'Min character length is 1'
                     }}
@@ -122,6 +123,7 @@ export default function FileModal() {
                     type="file"
                     name="docFile"
                     label="Document File"
+                    required
                     InputProps={{
                       endAdornment: (
                         <InputAdornment position="end">
@@ -132,8 +134,8 @@ export default function FileModal() {
                       )
                     }}
                     variant="outlined"
-                              required
-                              onChange={fileChange}
+                    required
+                    onChange={fileChange}
                   />
                   <DialogActions>
                     <Grid container spacing={2}>

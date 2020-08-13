@@ -69,7 +69,6 @@ function FileList(props) {
 		direction: 'asc',
 		id: null
 	});
-	const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
 
 	useEffect(() => {
 		dispatch(Actions.getCategories());
@@ -78,10 +77,12 @@ function FileList(props) {
 
 	useEffect(() => {
 		if (searchText.length >= 2) {
+			console.log(searchText);
 			setData(
 				_.filter(files, 
 					item => { 
-						item.docName.toLowerCase().includes(searchText.toLowerCase()) || item.employee.firstName.toLowerCase().includes(searchText.toLowerCase()) || item.item.employee.lastName.toLowerCase().includes(searchText.toLowerCase())
+						console.log(item);
+						item.docName.toLowerCase().includes(searchText.toLowerCase())
 				})
 			);
 			setPage(0);
@@ -138,6 +139,7 @@ function FileList(props) {
 	}
 
 	function handleOpenSideBar(event, payload){
+		console.log(payload);
 		dispatch(Actions.setSelectedItem(payload.id, payload));
 		props.pageLayout.current.toggleRightSidebar()
 	}

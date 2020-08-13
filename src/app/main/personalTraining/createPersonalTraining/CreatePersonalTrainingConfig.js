@@ -5,13 +5,13 @@ const CreatePersonalTraining = {
 		layout: {}
 	},
 	routes: [
-		{
-			path: '/training/personal/courses/:startDate/:endDate',
-			component: React.lazy(() => import('./courses/Courses'))
-		},
+		// {
+		// 	path: '/training/personal/courses/:startDate/:endDate',
+		// 	component: React.lazy(() => import('./courses/Courses'))
+		// },
 		{
 			path: '/training/personal/courses',
-			component: React.lazy(() => import('./courses/Courses'))
+			component: React.lazy(() => import('./PersonalTrainingCourses'))
 		}
 	]
 };

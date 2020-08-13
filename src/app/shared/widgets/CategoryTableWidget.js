@@ -160,9 +160,9 @@ const CategoryTableWidget = (props) =>{
                                         <TableCell className="text-center hidden sm:table-cell">
 											{(n.name) ? n.name : n.categoryName}
 										</TableCell>
-										<TableCell className="text-center hidden sm:table-cell"><Moment format="ddd MMM, YY | hh:mm:ss a">{n.createdAt}</Moment></TableCell>
+										<TableCell className="text-center hidden sm:table-cell"><Moment format="ddd Do MMM, YY | hh:mm:ss a">{n.createdAt}</Moment></TableCell>
                                         <TableCell className="text-center hidden sm:table-cell">
-                                        <Moment format="ddd MMM, YY | hh:mm:ss a">{n.updatedAt}</Moment>           
+                                        <Moment format="ddd Do MMM, YY | hh:mm:ss a">{n.updatedAt}</Moment>           
                                         </TableCell>
                                             { (props.showEdit)?
                                                 <TableCell className="text-center hidden sm:table-cell">

@@ -44,3 +44,34 @@ export function getBlogPost(auto) {
 		});
 	}
 }
+
+export function getBlogByLimit(limit = 10, offest = 0){
+	return dispatch => {
+		// fetch('https://hris-cbit.herokuapp.com/api/v1/posts/all/paginate?limit=10&offset=0', {
+		fetch(`${getBaseUrl()}/posts/all/paginate?limit=${limit}&offset=${offest}`, { ...header.getRegHeader()
+		}).then(res => res.json()).then(
+			post => {
+					console.log(post);
+				if(post.message === 'Success') {
+					return dispatch({
+						type: GETBLOGS_SUCCESS,
+						payload: post.data
+					});
+				} else {
+					console.log(post)
+					return dispatch({
+						type: GETBLOGS_ERROR,
+						payload: ''
+					});
+				}
+			}
+		)
+		.catch(error => {
+			console.log(error)
+			return dispatch({
+				type: GETBLOGS_ERROR,
+				payload: error
+			});
+		});
+	}
+}

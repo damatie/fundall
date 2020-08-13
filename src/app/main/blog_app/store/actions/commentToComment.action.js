@@ -23,11 +23,23 @@ export function submitBlogCommentReply(data, id) {
 		}).then(res => res.json()).then(
 			comment => {
 				if(comment.success === true) {
+					Swal.fire({
+						title: 'COMMENT TO A COMMENT',
+						text: comment.message,
+						icon: 'success',
+						timer: 3000,
+					})
 					return dispatch({
 						type: COMMENT_TO_COMMENT_SUCCESS,
 						payload: comment.data
 					});
 				} else {
+					Swal.fire({
+						title: 'COMMENT TO A COMMENT',
+						text: comment.message,
+						icon: 'error',
+						timer: 3000,
+					})
 					return dispatch({
 						type: COMMENT_TO_COMMENT_ERROR,
 						payload: ''

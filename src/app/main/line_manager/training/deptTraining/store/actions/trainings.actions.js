@@ -6,6 +6,8 @@ export const LOADING_TRAINIING = 'LOADING TRAINING';
 export const GET_APPROVED_TRAINING = 'GET APPROVED TRAINING';
 export const GET_REJECTED_TRAINING = 'GET REJECTED TRAINING';
 export const GET_PENDING_TRAINING = 'GET PENDING TRAINING';
+export const GET_COMPLETED_TRAINING = 'GET COMPLETED TRAINING';
+export const GET_REVIEWED_TRAINING = 'GET REVIEWED TRAINING';
 export const APPROVE_TRAINING_SUCCESS = 'APPROVE TRAINING SUCCESS';
 export const APPROVE_TRAINING_ERROR = 'APPROVE TRAINING ERROR';
 export const REJECT_TRAINING_SUCCESS = 'REJECT TRAINING SUCCESS';
@@ -130,6 +132,84 @@ export function getPendingTraining() {
 	}
 }
 
+export function getCompletedTraining() {
+	return dispatch => {
+		dispatch({
+			type: LOADING_TRAINIING
+		});
+		fetch(`${basUrl()}/training/all/dept/completed`, {...headers.getRegHeader()})
+		.then(res => res.json()).then(async data => {
+			console.log(data.data);
+			data.success ? 
+			(data.data) ? 
+				dispatch({
+					type: GET_COMPLETED_TRAINING,
+					payload: data.data
+				})
+			:
+				dispatch({
+					type: GET_COMPLETED_TRAINING,
+					payload: []
+				})
+			:
+				dispatch({
+					type: GET_COMPLETED_TRAINING,
+					payload: []
+				})
+		}).catch(err => {
+			console.log(err);
+			// swal.fire(
+            //     'Oops!',
+            //     'something went wrong',
+            //     'error'
+			//   )
+			dispatch({
+				type: GET_COMPLETED_TRAINING,
+				payload: []
+			})
+		})
+	}
+}
+
+export function getReviewedTraining() {
+	return dispatch => {
+		dispatch({
+			type: LOADING_TRAINIING
+		});
+		fetch(`${basUrl()}/training/all/dept/reviewed`, {...headers.getRegHeader()})
+		.then(res => res.json()).then(async data => {
+			console.log(data.data);
+			data.success ? 
+			(data.data) ? 
+				dispatch({
+					type: GET_REVIEWED_TRAINING,
+					payload: data.data
+				})
+			:
+				dispatch({
+					type: GET_REVIEWED_TRAINING,
+					payload: []
+				})
+			:
+				dispatch({
+					type: GET_REVIEWED_TRAINING,
+					payload: []
+				})
+		}).catch(err => {
+			console.log(err);
+			// swal.fire(
+            //     'Oops!',
+            //     'something went wrong',
+            //     'error'
+			//   )
+			dispatch({
+				type: GET_REVIEWED_TRAINING,
+				payload: []
+			})
+		})
+	}
+}
+
 export function approveTraining(id){
 	console.log(id);
 	return dispatch => {
@@ -147,8 +227,9 @@ export function approveTraining(id){
 		confirmButtonText: 'Yes, approve it!',
 		showLoaderOnConfirm: true,
 		preConfirm: () => [
-		  fetch(`${basUrl()}/training/hod/approve/${id}`, {...headers.delHeader()})
+		  fetch(`${basUrl()}/training/hod/approve/${id}`, { ...headers.reqHeader('PATCH', '') })
 		  .then(res => res.json()).then(async data => {
+			  console.log(data);
 			  if(data.success) {
 				swal.fire(
 				  'Approved!',
@@ -203,8 +284,9 @@ export function rejectTraining(id){
 		confirmButtonText: 'Yes, reject it!',
 		showLoaderOnConfirm: true,
 		preConfirm: () => [
-		  fetch(`${basUrl()}/training/hod/reject/${id}`, {...headers.delHeader()})
+		  fetch(`${basUrl()}/training/hod/reject/${id}`, { ...headers.reqHeader('PATCH', '') })
 		  .then(res => res.json()).then(async data => {
+			console.log(data);
 			  if(data.success) {
 				swal.fire(
 				  'Rejected!',

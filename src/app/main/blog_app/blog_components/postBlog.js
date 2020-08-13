@@ -145,6 +145,8 @@ function PostBlog() {
               placeholder='Blog content'
               className={classes.blogContent}
               onChange={event => setBody(event.target.value)}
+              rows={5}
+              style={{resize: "none"}}
             />
           </Paper>
         </Grid>

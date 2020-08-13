@@ -7,13 +7,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import Moment from 'react-moment';
 import * as Actions from './store/actions';
 import FileUpdateModal from './FileUpdateModal';
-import DownloadLink from "react-download-link";
 import { useAuth } from 'app/hooks/useAuth';
 
 function DetailSidebarHeader(props) {
 	const dispatch = useDispatch();
 	const selectedItem = useSelector(({ fileManagerApp }) => fileManagerApp.selectedItemId.selectedItem);
-	const linkRef = React.createRef();
 	const userId = useAuth().getId;
 
 	if (!selectedItem) {
@@ -25,8 +23,6 @@ function DetailSidebarHeader(props) {
 	}
 
 	function downloadFile(){
-		// Actions.downloadDocument(selectedItem.docUrl, selectedItem.docName);
-		// const url = window.URL.createObjectURL(new Blob([blob]));
 		const link = document.createElement('a');
 		link.href = selectedItem.docUrl;
 		link.setAttribute('target', '_blank');
@@ -46,10 +42,10 @@ function DetailSidebarHeader(props) {
 		  )
 		}else{
 			return (
-				<></>
+				<i></i>
 			)
 		}
-	  }
+	}
 
 	return (
 		<div className="flex flex-col justify-between h-full p-4 sm:p-12">

@@ -95,7 +95,7 @@ function Blog(props) {
           </Typography>
   });
 
-  const getColor = () => !clicked ? '#4d5760' : '#F44336'; // #4d5760 = initial Color, #F44336 = liked color
+  const getColor = () => !clicked ? '#4d5760' : '#F44336';
 
   return (
     <Paper className={classes.paper} variant="outlined">

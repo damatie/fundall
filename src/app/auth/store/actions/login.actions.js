@@ -30,7 +30,7 @@ export function submitLogin(data) {
 		}).then(res => res.json()).then(
 			user => {
 				if(user.success) {
-					// console.log(user)
+					console.log(user)
 					Swal.fire({
 						title: 'Login',
 						text: user.message,
@@ -39,18 +39,20 @@ export function submitLogin(data) {
 					});
 					localStorage.setItem('jwt_access_token', JSON.stringify(user.token));
 					const userState = {
-						role: user.role,
-						redirectUrl: redirectUrl(user.role),
-						id: user.id,
+						role: user.data.role.name,
+						redirectUrl: redirectUrl(user.data.role.name),
+						id: user.data.id,
 						data: {
-							displayName: `${user.firstName} ${user.lastName}`,
-							photoURL: 'assets/images/avatars/Velazquez.jpg',
-							email: user.email,
-							shortcuts: ['loan_request', 'request_leave', 'blog_list', 'todo']
+							displayName: `${user.data.firstName} ${user.data.lastName}`,
+							photoURL: user.data.profilePicture,
+							email: user.data.email,
+							shortcuts: ['loan_request', 'request_leave', 'blog_list', 'todo'],
+							department: user.data.department,
+							details: user.data.info
 						}
 					};
 					localStorage.setItem('user_data', JSON.stringify(userState));
-					dispatch(getProfile(user.id, user.token));
+					dispatch(getProfile(user.data.id, user.token));
 					dispatch(UserActions.setUserData(userState));
 					dispatch(getNotification(user.token));
 					return dispatch({
@@ -98,7 +100,7 @@ const getProfile = (id, token) => {
 			data => {
 				dispatch({
 					type: GET_EMPLOYEE_PROFILE,
-					payload: data.data
+					payload: (data.data) ? data.data : []
 				})
 			}
 		)
@@ -119,7 +121,7 @@ const getNotification = token => {
 				console.log(data)
 				dispatch({
 					type: GET_NOTIFICATIONS,
-					payload: data.data
+					payload: (data.data) ? data.data : []
 				})
 			}
 		)

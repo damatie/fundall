@@ -111,19 +111,22 @@ function PersonalTraining(props) {
                     animation: 'transition.slideUpBigIn'
                 }}
             >
-                <div className="widget flex w-full sm:w-1/2 md:w-1/5 p-12">
+                <div className="widget flex w-full sm:w-1/2 md:w-1/6 p-12">
                     <CardWidget count={trainings.length} title={"Total"} color="yellow" />
                 </div>
-                <div className="widget flex w-full sm:w-1/2 md:w-1/5 p-12">
+                <div className="widget flex w-full sm:w-1/2 md:w-1/6 p-12">
                     <CardWidget count={trainings.filter(t => t.status==='pending').length} title={"Pending"} color="blue" />
                 </div>
-                <div className="widget flex w-full sm:w-1/2 md:w-1/5 p-12">
+                <div className="widget flex w-full sm:w-1/2 md:w-1/6 p-12">
                     <CardWidget count={trainings.filter(t => t.status==='approved').length} title={"Approved"} color="green" />
                 </div>
-                <div className="widget flex w-full sm:w-1/2 md:w-1/5 p-12">
+                <div className="widget flex w-full sm:w-1/2 md:w-1/6 p-12">
                     <CardWidget count={trainings.filter(t => t.status==='rejected').length} title={"Rejected"} color="red" />
                 </div>
-                <div className="widget flex w-full sm:w-1/2 md:w-1/5 p-12">
+                <div className="widget flex w-full sm:w-1/2 md:w-1/6 p-12">
+                    <CardWidget count={trainings.filter(t => t.status==='reviewed').length} title={"Reviewed"} color="orange" />
+                </div>
+                <div className="widget flex w-full sm:w-1/2 md:w-1/6 p-12">
                     <CardWidget count={trainings.filter(t => t.status==='completed').length} title={"Completed"} color="black" />
                 </div>
                 <div className="widget flex w-full p-12">

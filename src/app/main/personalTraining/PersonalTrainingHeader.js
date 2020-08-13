@@ -105,36 +105,36 @@ const viewNamesObj = {
 };
 
 class PersonalTrainingHeader extends Toolbar {
-	viewButtons() {
-		const viewNames = this.props.views;
-		const { view } = this.props;
+	// viewButtons() {
+	// 	const viewNames = this.props.views;
+	// 	const { view } = this.props;
 
-		if (viewNames.length > 1) {
-			return viewNames.map(name => (
-				<Tooltip title={viewNamesObj[name].title} key={name}>
-					<div>
-						<FuseAnimate animation="transition.expandIn" delay={500}>
-							<IconButton
-								aria-label={name}
-								onClick={() => this.props.onView(name)}
-								disabled={view === name}
-							>
-								<Icon>{viewNamesObj[name].icon}</Icon>
-							</IconButton>
-						</FuseAnimate>
-					</div>
-				</Tooltip>
-			));
-		}
-		return null;
-	}
+	// 	if (viewNames.length > 1) {
+	// 		return viewNames.map(name => (
+	// 			<Tooltip title={viewNamesObj[name].title} key={name}>
+	// 				<div>
+	// 					<FuseAnimate animation="transition.expandIn" delay={500}>
+	// 						<IconButton
+	// 							aria-label={name}
+	// 							onClick={() => this.props.onView(name)}
+	// 							disabled={view === name}
+	// 						>
+	// 							<Icon>{viewNamesObj[name].icon}</Icon>
+	// 						</IconButton>
+	// 					</FuseAnimate>
+	// 				</div>
+	// 			</Tooltip>
+	// 		));
+	// 	}
+	// 	return null;
+	// }
 
 	render() {
 		const { classes, mainThemeDark, label, date } = this.props;
 
 		return (
 			<ThemeProvider theme={mainThemeDark}>
-				<div className={clsx(classes.root, 'flex h-200 min-h-200 relative', moment(date).format('MMM'))}>
+				{/* <div className={clsx(classes.root, 'flex h-200 min-h-200 relative', moment(date).format('MMM'))}>
 					<div className="flex flex-1 flex-col p-12 justify-between z-10 container">
 						<div className="flex flex-col items-center justify-between sm:flex-row">
 							<div className="flex items-center my-16 sm:mb-0">
@@ -160,7 +160,7 @@ class PersonalTrainingHeader extends Toolbar {
 								</Tooltip>
 								{this.viewButtons()}
 							</div>
-						</div>
+						</div> */}
 
 						<FuseAnimate delay={500}>
 							<div className="flex items-center justify-center">
@@ -184,8 +184,8 @@ class PersonalTrainingHeader extends Toolbar {
 								</Tooltip>
 							</div>
 						</FuseAnimate>
-					</div>
-				</div>
+					{/* </div>
+				</div> */}
 			</ThemeProvider>
 		);
 	}

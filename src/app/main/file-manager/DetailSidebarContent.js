@@ -29,6 +29,10 @@ const useStyles = makeStyles({
 			content: "'insert_chart'",
 			color: '#4CAF50'
 		},
+		'&.pdf:before': {
+			content: "'picture_as_pdf'",
+			color: '#F40F02'
+		},
 		'&.image:before': {
 			content: "'image'",
 			color: '#4CAF50'
@@ -69,12 +73,6 @@ function DetailSidebarContent(props) {
 		}
 	}
 
-	function getSize(url){
-		remote(url, function(err, size) {
-		setFileSize(formatBytes(size));
-	  });
-	  return fileSize;
-	}
 	function formatBytes(a,b=2){
 		if(0===a)return"0 Bytes";
 		const c=0>b?0:b,d=Math.floor(Math.log(a)/Math.log(1024));
@@ -87,28 +85,35 @@ function DetailSidebarContent(props) {
 
 	function getIcon(url){
 		let ext = getExt(url);
-		if(ext === 'image'){
-			return (
-				<div style={{height: "200px", width: "200px"}}>
-					<img src={url}/>
-				</div>
-			);
-		}else if(ext === 'pdf'){
-			return (
-				<Icon className={clsx(classes.typeIcon, getExt('pdf'), 'text-48')} />
-			);
-		}else if(ext === 'document'){
-			return (
-				<Icon className={clsx(classes.typeIcon, getExt('document'), 'text-48')} />
-			);
-		}else if(ext === 'spreadsheet'){
-			return (
-				<Icon className={clsx(classes.typeIcon, getExt('spreadsheet'), 'text-48')} />
-			);
-		}else{
-			return (
-				<Icon className={clsx(classes.typeIcon, getExt(url), 'text-48')} />
-			);
+		switch (ext) {
+			case 'image':
+				return (
+					<div style={{height: "200px", width: "200px"}}>
+						<img src={url}/>
+					</div>
+				);
+				break;
+			case 'pdf':
+				return (
+					<Icon className={clsx(classes.typeIcon, getExt('pdf'), 'text-48')} />
+				);
+				break;
+			case 'document':
+				return (
+					<Icon className={clsx(classes.typeIcon, getExt('document'), 'text-48')} />
+				);
+				break;
+			case 'spreadsheet':
+				return (
+					<Icon className={clsx(classes.typeIcon, getExt('spreadsheet'), 'text-48')} />
+				);
+				break;
+		
+			default:
+				return (
+					<Icon className={clsx(classes.typeIcon, getExt(url), 'text-48')} />
+				);
+				break;
 		}
 	}
 

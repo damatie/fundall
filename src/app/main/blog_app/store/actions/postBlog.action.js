@@ -1,7 +1,6 @@
 import Swal from 'sweetalert2';
 import { fetchHeaders } from 'app/shared/fetchHeaders';
 import { getBaseUrl } from 'app/shared/getBaseUrl';
-
 export const BlogPost_ERROR = 'BlogPost_ERROR';
 export const BlogPost_SUCCESS = 'BlogPost_SUCCESS';
 export const BlogPost_LOADING = 'BlogPost_LOADING';
@@ -60,7 +59,7 @@ export function submitBlogPost(formdata, history) {
 		.catch(error => {
 			console.log(error);
 			Swal.fire({
-				title: 'Blog post was unseccessful',
+				title: 'Blog post was unsuccessful',
 				text: 'Service unavailable',
 				icon: 'error',
 				timer: 3000,
