@@ -1,6 +1,6 @@
 import Swal from 'sweetalert2';
 import { fetchHeaders } from 'app/shared/fetchHeaders';
-// import { redirectUrl } from '../../redirectUrl';
+import { getBaseUrl } from 'app/shared/getBaseUrl';
 
 export const DELETE_COMMENT_REPLY_ERROR = 'COMMENTTOPOST_ERROR';
 export const DELETE_COMMENT_REPLY_SUCCESS = 'COMMENTTOPOST_SUCCESS';
@@ -13,7 +13,7 @@ export function deleteCommentReply({replyId, commentId}) {
 		dispatch({
 			type: DELETE_COMMENT_REPLY_LOADING
 		})
-		fetch(`https://hris-cbit.herokuapp.com/api/v1/comment/reply/one/${replyId}`, {
+		fetch(`${getBaseUrl()}/comment/reply/one/${replyId}`, {
 			...header.delHeader()
 		}).then(res => res.json()).then(
 			comment => {

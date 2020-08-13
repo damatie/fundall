@@ -34,7 +34,7 @@ function ReplyComment(props) {
       { props.reply && noOfReply !== 0 &&
         <>
           <Button className={classes.btn} onClick={() => setViewAllComments(!viewAllComments)}>
-            { !viewAllComments ? `View more ${noOfReply - 1} comments` : 'Hide comments'}
+            { !viewAllComments ? 'View more comments' : 'Hide comments'}
           </Button>
           {!viewAllComments 
             ?

@@ -1,4 +1,5 @@
 import { fetchHeaders } from 'app/shared/fetchHeaders';
+import { getBaseUrl } from 'app/shared/getBaseUrl';
 import { autoGetAllCommentsForAPost } from './getAllCommentsForAPost.action';
 import { autoGetOneBlogPost } from './getOneBlogPost.action';
 
@@ -9,12 +10,11 @@ export const LIKE_A_COMMENT_LOADING = 'COMMENTTOPOST_LOADING';
 const header = fetchHeaders();
 
 export function likeAComment(id, userId, postId) {
-	console.log(postId)
 	return dispatch => {
 		dispatch({
 			type: LIKE_A_COMMENT_LOADING
 		})
-		fetch('https://hris-cbit.herokuapp.com/api/v1/comment/likes/new', {
+		fetch(`${getBaseUrl()}/comment/likes/new`, {
 			...header.reqHeader(
 				'POST',
 			{commentId: id}

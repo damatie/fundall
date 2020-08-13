@@ -66,10 +66,10 @@ function UpdateBlog({ match }) {
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
   const [images, setImages] = useState([]);
-  const [tags, setTags] = useState([]);
+  const [tags] = useState([]);
   const [names, setNames] = useState('');
 
-  const blogPost = useSelector(state => state.blog.getOneBlogPost.data);
+  const blogPost = useSelector(state => state.blog.getOneBlogPost.data.postData);
 
   const id = +match.params.blog_id;
 
@@ -78,9 +78,11 @@ function UpdateBlog({ match }) {
   }, []);
 
   useEffect(() => {
-    setTitle(blogPost.title);
-    setBody(blogPost.body);
-    setImages(blogPost.images);
+    if (blogPost) {
+      setTitle(blogPost.title);
+      setBody(blogPost.body);
+      setImages(blogPost.images);
+    }
   }, [blogPost])
 
   const setImage = (event) => {
@@ -128,6 +130,7 @@ function UpdateBlog({ match }) {
             <input
               placeholder='Blog title'
               className={classes.blogTitle}
+              value={title}
               onChange={event => setTitle(event.target.value)}
             />
           </Paper>
@@ -144,7 +147,7 @@ function UpdateBlog({ match }) {
               <Button color="primary" component="span" className={classes.upload}>
                 Uplaod image(s)
               </Button>
-              <Typography variant="body1" component='span' style={{margin: '2px 0 0 12px'}}>
+              <Typography variant="body1" component='span' style={{margin: '4px 0 0 12px'}}>
                 {images && images.length === 0 ? 'No image choosen' : names}
               </Typography>
             </label>
@@ -153,6 +156,7 @@ function UpdateBlog({ match }) {
             <textarea
               placeholder='Blog content'
               className={classes.blogContent}
+              value={body}
               onChange={event => setBody(event.target.value)}
             />
           </Paper>

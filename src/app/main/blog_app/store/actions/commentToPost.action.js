@@ -1,5 +1,6 @@
 import Swal from 'sweetalert2';
 import { fetchHeaders } from 'app/shared/fetchHeaders';
+import { getBaseUrl } from 'app/shared/getBaseUrl';
 import { autoGetAllCommentsForAPost } from './getAllCommentsForAPost.action';
 import { autoGetOneBlogPost } from './getOneBlogPost.action';
 // import { redirectUrl } from '../../redirectUrl';
@@ -15,7 +16,7 @@ export function submitBlogComment(data) {
 		dispatch({
 			type: COMMENT_TO_POST_LOADING
 		})
-		fetch('https://hris-cbit.herokuapp.com/api/v1/comment/new', {
+		fetch(`${getBaseUrl()}/comment/new`, {
 			...header.reqHeader(
 				'post',
 				data
@@ -23,13 +24,6 @@ export function submitBlogComment(data) {
 		}).then(res => res.json()).then(
 			comment => {
 				if(comment.success === true) {
-					// console.log(comment)
-					Swal.fire({
-						title: 'COMMENT TO POST',
-						text: comment.message,
-						icon: 'success',
-						timer: 3000,
-					})
 					dispatch(autoGetAllCommentsForAPost(data.postId));
 					dispatch(autoGetOneBlogPost(data.postId))
 					return dispatch({

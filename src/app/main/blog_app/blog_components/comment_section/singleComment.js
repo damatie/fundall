@@ -9,7 +9,7 @@ import CommentInput from './commentInput';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import SectionHeader from '../../sectionHeader';
 import * as blogActions from '../../store/actions';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -60,6 +60,8 @@ function BlogComment(props) {
   const [employeeDetails, setEmployeeDetails] = useState({});
   const [value, setValue] = useState('');
 
+  const showDialog = useSelector(state => state.blog.showEmployeeModal.show);
+
   useEffect(() => {
     if (props.comment) {
       setContent(props.comment.content);
@@ -84,6 +86,7 @@ function BlogComment(props) {
     if(value === true) {
       setShowInput(value)
     } else {
+      dispatch(blogActions.showEmployeeDialog(value));
       setInput(value);
       setContent(value);
     }
@@ -180,6 +183,7 @@ function BlogComment(props) {
               value={input}
               onClick={() => handleSubmitReply()}
               onChange={value => handleChange(value)}
+              showDialog={showDialog}
             />
         }
       </div>

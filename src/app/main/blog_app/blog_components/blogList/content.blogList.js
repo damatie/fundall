@@ -7,7 +7,7 @@ import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
 import Favorite from '@material-ui/icons/Favorite';
 import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
 import * as blogActions from '../../store/actions';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 import SectionHeader from '../../sectionHeader';
@@ -27,7 +27,7 @@ theme.typography.h4 = {
 const useStyles = makeStyles((theme) => ({
   paper: {
     padding: theme.spacing(2),
-    borderRadius: theme.spacing(.5),
+    borderRadius: theme.spacing(.8),
     marginBottom: theme.spacing(2),
     [theme.breakpoints.down('xs')]: {
       marginBottom: 0,
@@ -58,10 +58,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const formatData = data => {
-  const result = data.map(i => i.postLike);
-}
-
 function Blog(props) {
   const classes = useStyles();
   const dispatch = useDispatch()
@@ -69,16 +65,18 @@ function Blog(props) {
   const [clicked, setClicked] = React.useState(false);
   const [numberOflikedpost, setNumberOfLikedPost] = React.useState();
 
-  React.useEffect(() => {
-    const result = props.blog.employees.map(i => i.postLike);
-    setClicked(checkIfUserLikedComment(!result ? [] : result));
-    setNumberOfLikedPost(result.length);
-  }, [props.blog])
+  const userId = useSelector(state => state.auth.user.id);
 
-  const handleLike = (id) => {
+  React.useEffect(() => {
+    const isLiked = props.blog.employees.every(employee => employee.id !== userId);
+    if (!isLiked) setClicked(!isLiked);
+    setNumberOfLikedPost(props.blog.employees.length);
+  }, [])
+
+  const handleLike = (postId) => {
     setClicked(prevState => prevState = !prevState);
-    numberOflikedpost ? setNumberOfLikedPost(prev => prev - 1) : setNumberOfLikedPost(prev => prev + 1);
-    dispatch(blogActions.likeAndUnlikeBlogPost({id, employeeId: props.userId}));
+    clicked ? setNumberOfLikedPost(prev => prev - 1) : setNumberOfLikedPost(prev => prev + 1);
+    dispatch(blogActions.likeAndUnlikeBlogPost({postId, userId}));
   }
 
   const handleDelete = (value) => {
@@ -98,14 +96,13 @@ function Blog(props) {
   });
 
   const getColor = () => !clicked ? '#4d5760' : '#F44336';
-  
 
   return (
     <Paper className={classes.paper} variant="outlined">
       <SectionHeader
         fullName={`${props.author.firstName} ${props.author.lastName}`}
         dp={props.author.profilePicture}
-        time={props.blog.updatedAt}
+        time={props.blog.createdAt}
         id={props.blog.id}
         blogPoster={props.blog.employeeId}
         buttonContent={['Edit post', 'Delete post']}

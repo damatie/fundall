@@ -34,12 +34,16 @@ export default function UserAvatar(props) {
   return (
     <div>
       <div className={classes.root}>
-        <Avatar className={classes.avatar} src={props.src}></Avatar>
+        <Avatar
+          className={classes.avatar}
+          src={props.src}
+          style={{width: `${props.size}`, height: `${props.size}`,}}
+        />
         <div className={classes.userName}>
           {props.fullName && <Typography variant="body1" className={classes.name}>
             {props.fullName}
           </Typography>}
-          {props.fullName && <LensIcon style={{ fontSize: 4, marginRight: 8 }} />}
+          {props.time && <LensIcon style={{ fontSize: 4, marginRight: 8 }} />}
         {props.time && <Typography variant="caption" component="span" style={{color: 'grey', fontSize: 14}}>
           {timeAgo.fromNow()}
         </Typography>}

@@ -30,6 +30,8 @@ const useStyles = makeStyles((theme) => ({
     width: '300px',
     padding: '16px 8px',
     marginLeft: '16px',
+    border: '1px rgba(0, 0, 0, 0.12) solid',
+    borderRadius: theme.spacing(.8),
   }
 }));
 
@@ -83,6 +85,24 @@ function BlogListHeader(props) {
     return new Date(blog.createdAt) >= yearAgo;
   });
 
+  // const debounce = (fn, delay) => {
+  //   let timeoutID;
+  //   return function(...args) {
+  //     if (timeoutID) clearTimeout(timeoutID);
+  //     timeoutID = setTimeout(() => {
+  //       fn(...args);
+  //     }, delay)
+  //   }
+  // }
+
+  const handleSearch = (event) => {
+    // console.log(event.target.value)
+    // debounce((event) => {
+    //   console.log(event.target.value)
+      dispatch(blogActions.submitSearch(event.target.value));
+    // }, 2000)
+  };
+
   const NoPost = () => {
     return (
       <>
@@ -96,7 +116,12 @@ function BlogListHeader(props) {
       <div className={classes.root}>
         <div className={classes.header}>
           <Typography variant="h6" className={classes.title}>Posts</Typography>
-          <input type="text" onChange={ev => handleSearch(ev)} value={search} className={classes.search} placeholder="Search post..." />
+          <input
+            type="text"
+            className={classes.search}
+            placeholder="Search post..."
+            onChange={event => handleSearch(event)} 
+          />
         </div>
         <Tabs
           value={tabValue}

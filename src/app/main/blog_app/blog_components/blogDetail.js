@@ -13,6 +13,8 @@ import SingleComment from './comment_section/singleComment';
 import CommentInput from './comment_section/commentInput';
 import UserAvatar from '../userAvatar';
 import ReplyComment from './comment_section/replyComment';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Skeleton from '@material-ui/lab/Skeleton';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import BlogTags from './blogTags';
 import Facebook from 'react-sharingbuttons/dist/buttons/Facebook'
@@ -40,14 +42,21 @@ theme.typography.body1 = {
 };
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    marginTop: 16,
+    [theme.breakpoints.down('xs')]: {
+      marginTop: 0,
+    }
+  },
   img: {
     width: '100%',
     // height: '40vh',
   },
   paper: {
-    padding: theme.spacing(4),
+    padding: theme.spacing(3,4,4,4),
+    marginBottom: theme.spacing(2),
     [theme.breakpoints.down('xs')]: {
-      padding: theme.spacing(2)
+      padding: theme.spacing(2),
     },
   },
   replyComment: {
@@ -56,6 +65,11 @@ const useStyles = makeStyles((theme) => ({
       padding: theme.spacing(1)
     },
     marginTop: theme.spacing(4),
+  },
+  side: {
+    [theme.breakpoints.down('xs')]: {
+      display: 'none',
+    }
   },
   sidePaper: {
     padding: theme.spacing(2),
@@ -67,25 +81,55 @@ const useStyles = makeStyles((theme) => ({
   title: {
     fontWeight: 'bold',
   },
+  category: {
+    margin: '16px 0',
+  },
   iconButton: {
     display: 'flex',
+    position: 'fixed',
+    width: '8.3%',
     flexDirection: 'column',
     justifyContent: 'center',
     [theme.breakpoints.down('xs')]: {
+      position: 'fixed',
+      bottom: 0,
       flexDirection: 'row',
       marginTop: 16,
+      background: '#fff',
+      zIndex: 100,
+      width: '100vw',
+      margin: 0,
+      borderTop: '1px solid rgba(0,0,0,.15)'
     }
   },
   alignCenter: {
     alignSelf: 'center',
     marginBottom: 16,
+    [theme.breakpoints.down('xs')]: {
+      display: 'flex',
+      margin: 0,
+      padding: theme.spacing(1,1),
+    }
+  },
+  iconValue: {
+    textAlign: 'center',
+    alignSelf: 'center',
   },
   dFlex: {
     display: 'flex',
   },
   previousBtn: {
-    marginBottom: 32,
+    marginBottom: 24,
     alignSelf: 'center',
+    [theme.breakpoints.down('xs')]: {
+      display: 'none',
+    }
+  },
+  circular: {
+    position: 'fixed',
+    top: '50%',
+    left: '40%',
+    height: '100vh'
   },
 }));
 
@@ -102,6 +146,8 @@ function BlogDetail({ match }) {
   const author = useSelector(state => state.blog.getOneBlogPost.data.author);
   const comments = useSelector(state => state.blog.getAllCommentsForAPost.data);
   const userId = useSelector(state => state.auth.user.id);
+  const loadingCommentToPost = useSelector(state => state.blog.commentToPost.loading);
+  const showDialog = useSelector(state => state.blog.showEmployeeModal.show);
 
   const history = useHistory();
 
@@ -129,26 +175,28 @@ function BlogDetail({ match }) {
 
   useEffect(() => {
     if (blogPost) {
-      let isLiked; 
-      if(blogPost.employees.length <= 0) {
-        isLiked = false;
-      }else {
-        isLiked = blogPost.employees.every(employee => employee.id !== userId);
+      if(blogPost.employees.length > 0) {
+        const isLiked = blogPost.employees.every(employee => employee.id !== userId);
         if (!isLiked) setIsLikedPost(!isLiked);
       } 
     }
   }, [blogPost]);
 
-  // set number of like when ever there is a changes in the blogpost store
   useEffect(() => {
     if(blogPost) {
       setNumberOfLikedPost(blogPost.employees.length);
     }
   }, [blogPost])
 
-  const handleLikes = (id) => {
+  const handleInputChange = (value) => {
+    setContent(value);
+    dispatch(blogActions.showEmployeeDialog(value));
+  }
+
+  const handleLikes = () => {
     setIsLikedPost(prevState => prevState = !prevState);
-    dispatch(blogActions.likeAndUnlikeBlogPost({id}));
+    isLikedPost ? setNumberOfLikedPost(prev => prev - 1) : setNumberOfLikedPost(prev => prev + 1);
+    dispatch(blogActions.likeAndUnlikeBlogPost({postId}));
   };
 
   const handleSubmit = () => {
@@ -163,9 +211,16 @@ function BlogDetail({ match }) {
 
   return (
     <>
-      {!blogPost
-        ? 'Loading...'
-        : <Grid container spacing={2} style={{marginTop: 16}}>
+      {!blogPost ? (
+        <Grid container spacing={2} className={classes.root}>
+          <Grid item xs={12} sm={1}></Grid>
+          <Grid item xs={12} sm={7}>
+            <Skeleton variant="rect" animation="wave" height={250} style={{marginBottom: '16px' }} />
+            <Skeleton variant="rect" height={300} style={{marginBottom: '16px' }} />
+          </Grid>
+          <Grid item xs={12} sm={4}></Grid>
+        </Grid>
+      ) : <Grid container spacing={2} className={classes.root}>
             <Grid item xs={12} sm={1}>
               <div className={classes.iconButton}>
                 <div className={classes.previousBtn}>
@@ -174,16 +229,16 @@ function BlogDetail({ match }) {
                   </IconButton>
                 </div>
                 <div className={classes.alignCenter}>
-                  <IconButton aria-label="like" onClick={() => handleLikes(blogPost.id)} style={{color: getColor()}} component="span">
+                  <IconButton aria-label="like" onClick={() => handleLikes()} style={{color: getColor()}} component="span">
                     {!isLikedPost ? <FavoriteBorder /> : <Favorite />}
                   </IconButton>
-                  <Typography style={{textAlign: 'center'}}>{numberOflikedpost}</Typography>
+                  <Typography className={classes.iconValue}>{numberOflikedpost}</Typography>
                 </div>
                 <div className={classes.alignCenter}>
                   <IconButton aria-label="like" component="span">
                     <ChatBubbleOutlineIcon />
                   </IconButton>
-                  <Typography style={{textAlign: 'center'}}>{comments.length}</Typography>
+                  <Typography className={classes.iconValue}>{comments.length}</Typography>
                 </div>
                 <div className={classes.alignCenter}>
 							    <Facebook url={url} />
@@ -194,19 +249,17 @@ function BlogDetail({ match }) {
               </div>
             </Grid>
             <Grid item xs={12} sm={7}>
-              <Paper variant="outlined">
+              <Paper variant="outlined" className={classes.paper}>
                 {blogPost.images.length > 0 && <img src={blogPost.images[0].url} alt="" className={classes.img}></img>}
-                <div className={classes.paper}>
-                  <ThemeProvider theme={theme}>
-                    <Typography variant="h2" className={classes.title}>{blogPost && blogPost.title}</Typography>
-                  </ThemeProvider>
-                  <BlogTags tags={user.tags} />
-                  <ThemeProvider theme={theme}>
-                    <Typography variant="body1" component='p'>
-                      { blogPost && blogPost.body }
-                    </Typography>
-                  </ThemeProvider>
-                </div>
+                <ThemeProvider theme={theme}>
+                  <Typography variant="h2" className={classes.title}>{blogPost && blogPost.title}</Typography>
+                </ThemeProvider>
+                <Typography variant="body1" className={classes.category}>Category: Business</Typography>
+                <ThemeProvider theme={theme}>
+                  <Typography variant="body1" component='p'>
+                    { blogPost && blogPost.body }
+                  </Typography>
+                </ThemeProvider>
               </Paper>
               <Paper className={classes.paper} variant="outlined">
                 <Typography variant="h6" component='h2' style={{marginBottom: 12}}>
@@ -215,7 +268,8 @@ function BlogDetail({ match }) {
                 <CommentInput
                   onClick={() => handleSubmit()}
                   value={content}
-                  onChange={value => setContent(value)}
+                  showDialog={showDialog}
+                  onChange={value => handleInputChange(value)}
                 />
                 {(comments.length > 0) && commentState.map((comment, index) => {
                   return (
@@ -234,8 +288,11 @@ function BlogDetail({ match }) {
                   )
                 })}
               </Paper>
+              <div style={{display: `${loadingCommentToPost ? '' : 'none'}`}} >
+                <CircularProgress color="primary" className={classes.circular} />
+              </div>
             </Grid>
-            <Grid item xs={12} sm={4}>
+            <Grid item xs={12} sm={4} className={classes.side}>
               <div style={{margin: '0 32px 0 0'}}>
                 <Paper className={classes.sidePaper} variant="outlined">
                   <ThemeProvider theme={theme}>

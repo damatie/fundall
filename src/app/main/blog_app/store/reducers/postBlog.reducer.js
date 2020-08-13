@@ -10,14 +10,14 @@ const BlogPost = (state = initialState, action) => {
 	switch (action.type) {
 		case Actions.BlogPost_SUCCESS: {
 			return {
-				...initialState,
+				...state,
 				success: true,
 				loading: false
 			};
 		}
 		case Actions.BlogPost_ERROR: {
 			return {
-				...initialState,
+				...state,
 				success: false,
 				error: action.payload,
 				loading: false

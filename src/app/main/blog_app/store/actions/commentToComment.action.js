@@ -3,7 +3,6 @@ import { fetchHeaders } from 'app/shared/fetchHeaders';
 import { autoGetAllCommentsForAPost } from './getAllCommentsForAPost.action';
 import { getBaseUrl } from 'app/shared/getBaseUrl';
 import { submitBlogComment } from './commentToPost.action';
-// import { redirectUrl } from '../../redirectUrl';
 
 export const COMMENT_TO_COMMENT_ERROR = 'COMMENTTOPOST_ERROR';
 export const COMMENT_TO_COMMENT_SUCCESS = 'COMMENTTOPOST_SUCCESS';
