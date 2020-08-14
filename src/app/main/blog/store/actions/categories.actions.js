@@ -22,6 +22,7 @@ const headers = fetchHeaders();
 	  dispatch({
 		type: LOADING_CATEGORIES
 	  })
+	  console.log(model)
 	  fetch(`${basUrl()}/post/category/`, {...headers.reqHeader('post', model)}
       ).then(res => res.json()).then( async data => {
         //   console.log(data);
