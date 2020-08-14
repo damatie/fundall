@@ -16,7 +16,6 @@ import CommentInput from '../comments/commentInput';
 import UserAvatar from './userAvatar';
 import ReplyComment from '../comments/replyComment';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
-import BlogTags from '../blogTags';
 import Facebook from 'react-sharingbuttons/dist/buttons/Facebook'
 import Twitter from 'react-sharingbuttons/dist/buttons/Twitter'
 import { useDispatch, useSelector } from 'react-redux';
@@ -43,14 +42,22 @@ theme.typography.body1 = {
 };
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    marginTop: 16,
+    [theme.breakpoints.down('xs')]: {
+      marginTop: 0,
+      marginBottom: 24,
+    }
+  },
   img: {
     width: '100%',
     // height: '40vh',
   },
   paper: {
     padding: theme.spacing(4),
+    marginBottom: theme.spacing(2),
     [theme.breakpoints.down('xs')]: {
-      padding: theme.spacing(2)
+      padding: theme.spacing(2),
     },
   },
   replyComment: {
@@ -60,6 +67,11 @@ const useStyles = makeStyles((theme) => ({
     },
     marginTop: theme.spacing(4),
   },
+  side: {
+    [theme.breakpoints.down('xs')]: {
+      display: 'none',
+    }
+  },
   sidePaper: {
     padding: theme.spacing(2),
     marginBottom: '16px',
@@ -67,28 +79,52 @@ const useStyles = makeStyles((theme) => ({
   sidePaperPadding: {
     padding: 12,
   },
+  category: {
+    margin: '16px 0',
+  },
   title: {
     fontWeight: 'bold',
   },
   iconButton: {
     display: 'flex',
+    position: 'fixed',
+    width: '8.3%',
     flexDirection: 'column',
     justifyContent: 'center',
     [theme.breakpoints.down('xs')]: {
+      position: 'fixed',
+      bottom: 0,
       flexDirection: 'row',
       marginTop: 16,
+      background: '#fff',
+      zIndex: 100,
+      width: '100vw',
+      margin: 0,
+      borderTop: '1px solid rgba(0,0,0,.15)'
     }
   },
   alignCenter: {
     alignSelf: 'center',
     marginBottom: 16,
+    [theme.breakpoints.down('xs')]: {
+      display: 'flex',
+      margin: 0,
+      padding: theme.spacing(1,1),
+    }
+  },
+  iconValue: {
+    textAlign: 'center',
+    alignSelf: 'center',
   },
   dFlex: {
     display: 'flex',
   },
   previousBtn: {
-    marginBottom: 32,
+    marginBottom: 24,
     alignSelf: 'center',
+    [theme.breakpoints.down('xs')]: {
+      display: 'none',
+    }
   },
 }));
 
@@ -173,7 +209,7 @@ function BlogPostDetail({ match }) {
     <>
       {blogPost === ''
         ? 'Loading...'
-        : <Grid container spacing={2} style={{marginTop: 16}}>
+        : <Grid container spacing={2} className={classes.root}>
             <Grid item xs={12} sm={1}>
               <div className={classes.iconButton}>
                 <div className={classes.previousBtn}>
@@ -185,13 +221,13 @@ function BlogPostDetail({ match }) {
                   <IconButton aria-label="like" onClick={() => handleLikes(blogPost.id)} style={{color: getColor()}} component="span">
                     {!isLikedPost ? <FavoriteBorder /> : <Favorite />}
                   </IconButton>
-                  <Typography style={{textAlign: 'center'}}>{numberOflikedpost}</Typography>
+                  <Typography className={classes.iconValue}>{numberOflikedpost}</Typography>
                 </div>
                 <div className={classes.alignCenter}>
                   <IconButton aria-label="like" component="span">
                     <ChatBubbleOutlineIcon />
                   </IconButton>
-                  <Typography style={{textAlign: 'center'}}>{(comments) ? comments.length : 0}</Typography>
+                  <Typography className={classes.iconValue}>{(comments) ? comments.length : 0}</Typography>
                 </div>
                 <div className={classes.alignCenter}>
 							    <Facebook url={url} />
@@ -201,14 +237,16 @@ function BlogPostDetail({ match }) {
                 </div>
               </div>
             </Grid>
-            <Grid item xs={12} sm={7}>
-              <Paper variant="outlined">
+            <Grid item xs={12} sm={7} className={classes.paper}>
+              <Paper variant="outlined" style={{marginBottom: 16}}>
                 {(blogPost && blogPost.images.length > 0) && <img src={blogPost.images[0].url} alt="" className={classes.img}></img>}
                 <div className={classes.paper}>
                   <ThemeProvider theme={theme}>
                     <Typography variant="h2" className={classes.title}>{blogPost && blogPost.title}</Typography>
                   </ThemeProvider>
-                  <BlogTags tags={user.tags} />
+                  <Typography variant="body1" component='p' className={classes.category}>
+                    Category: Business
+                  </Typography>
                   <ThemeProvider theme={theme}>
                     <Typography variant="body1" component='p'>
                       { blogPost && blogPost.body }
@@ -243,7 +281,7 @@ function BlogPostDetail({ match }) {
                 })}
               </Paper>
             </Grid>
-            <Grid item xs={12} sm={4}>
+            <Grid item xs={12} sm={4} className={classes.side}>
               <div style={{margin: '0 32px 0 0'}}>
                 {(author) ? 
                 <Paper className={classes.sidePaper} variant="outlined">
