@@ -61,7 +61,7 @@ function PersonalTrainingCourses(props) {
 	const [open, setOpen] = useState(false);
     const [filter, setFilter] = useState('all');
     const [search, setSearch] = useState('');
-	const [start, setStart] = useState(moment(new Date(), 'MM/DD/YYYY'));
+	const [start, setStart] = useState(moment(new Date(), 'MM/DD/YYYY').add(1, 'days'));
 	const [end, setEnd] = useState(moment(new Date(), 'MM/DD/YYYY'));
 	const [id, setId] = useState('');
 
@@ -116,7 +116,9 @@ function PersonalTrainingCourses(props) {
 		setOpen(false);
 	}
 
-	function handleOpen(){
+	function handleOpen(duration){
+		duration = duration.trim();
+		setEnd(end.add(parseInt(duration.split(' ')[0]), duration.split(' ')[1]))
 		setOpen(true);
 	}
 
@@ -244,7 +246,8 @@ function PersonalTrainingCourses(props) {
 																		value={start}
 																		onChange={date => setStart(date)}
 																		className="mt-8 mb-16 w-full"
-																		maxDate={end}
+																		minDate={start}
+																		format={'MMMM Do, YYYY hh:mm a'}
 																	/>
 
 																	<DateTimePicker
@@ -253,7 +256,9 @@ function PersonalTrainingCourses(props) {
 																		value={end}
 																		onChange={date => setEnd(date)}
 																		className="mt-8 mb-16 w-full"
+																		format={'MMMM Do, YYYY hh:mm a'}
 																		minDate={start}
+																		maxDate={end}
 																	/>
 																</DialogContent>
 																<DialogActions className="justify-between px-8 sm:px-16">
@@ -269,7 +274,7 @@ function PersonalTrainingCourses(props) {
 															className="justify-start px-32"
 															color="secondary"
 															onClick={(ev) => {
-																handleOpen();
+																handleOpen(course.duration);
 																setId(course.id);
 															}}
 														>

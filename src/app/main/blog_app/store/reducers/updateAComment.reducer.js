@@ -15,6 +15,13 @@ const updateAComment = (state = initialState, action) => {
 				loading: false
 			};
 		}
+		case Actions.UPDATE_A_COMMENT_REPLY_SUCCESS: {
+			return {
+				...initialState,
+				success: true,
+				loading: false
+			};
+		}
 		case Actions.UPDATE_A_COMMENT_ERROR: {
 			return {
 				...initialState,
@@ -25,7 +32,14 @@ const updateAComment = (state = initialState, action) => {
 		}
 		case Actions.UPDATE_A_COMMENT_LOADING: {
 			return {
-				...initialState,
+				...state,
+				success: false,
+				loading: true
+			};
+		}
+		case Actions.UPDATE_A_COMMENT_REPLY_LOADING: {
+			return {
+				...state,
 				success: false,
 				loading: true
 			};

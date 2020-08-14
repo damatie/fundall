@@ -51,16 +51,16 @@ function BlogListHeader(props) {
     dispatch(blogActions.getBlogByLimit());
   }, [dispatch]);
 
-  // function handleSearch(event){
-  //   setSearch(event.target.value);
-  //   if(event.target.value.length >= 2){
-  //    setData(blogPost.filter(post => {
-  //       return post.title.toLowerCase() === search.toLowerCase();
-  //     }));
-  //   }else{
-  //     setData(blogPost);
-  //   }
-  // }
+  function handleSearch(event){
+    setSearch(event.target.value);
+    if(event.target.value.length >= 2){
+     setData(blogPost.filter(post => {
+        return post.title.toLowerCase() === search.toLowerCase();
+      }));
+    }else{
+      setData(blogPost);
+    }
+  }
   
   function handleChangeTab(event, value) {
     setTabValue(value);
@@ -84,24 +84,6 @@ function BlogListHeader(props) {
     yearAgo.setDate(yearAgo.getDate() - 365);
     return new Date(blog.createdAt) >= yearAgo;
   });
-
-  // const debounce = (fn, delay) => {
-  //   let timeoutID;
-  //   return function(...args) {
-  //     if (timeoutID) clearTimeout(timeoutID);
-  //     timeoutID = setTimeout(() => {
-  //       fn(...args);
-  //     }, delay)
-  //   }
-  // }
-
-  const handleSearch = (event) => {
-    // console.log(event.target.value)
-    // debounce((event) => {
-    //   console.log(event.target.value)
-      dispatch(blogActions.submitSearch(event.target.value));
-    // }, 2000)
-  };
 
   const NoPost = () => {
     return (

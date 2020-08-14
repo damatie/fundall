@@ -27,9 +27,14 @@ export const useAuth = item => {
     return userData
   }
 
+  const getUserDetails = () => {
+    return userData.data
+  }
+
   return {
     getToken: getToken(),
     getId: getId(),
-    getUserData: getUserData()
+    getUserData: getUserData(),
+    getUserDetails: getUserDetails()
   };
 };

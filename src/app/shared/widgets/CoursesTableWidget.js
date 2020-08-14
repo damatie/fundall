@@ -208,7 +208,8 @@ const CoursesTableWidget = (props) =>{
                             </tr>
                         </tbody>
                     </table>
-                        {(selected.status === 'pending' && props.allowAuth) ? 
+                        {(selected.status === 'pending') ? 
+                            (props.allowAuth) ?
                             <Grid container className="items-center w-full pt-20" justify="center" alignItems="center">
                                 <Button className="bg-red text-white" 
                                 startIcon={<RejectIcon />} onClick={ev => {props.handleReject(ev, selected.id); handleClose(); }} 
@@ -221,6 +222,10 @@ const CoursesTableWidget = (props) =>{
                                 >
                                     Approve
                                 </Button>
+                            </Grid>
+                            :
+                            <Grid container className="items-center w-full pt-20" justify="center" alignItems="center">
+                                {CheckStatus(selected.status)}
                             </Grid>
                         : 
                             <Grid container className="items-center w-full pt-20" justify="center" alignItems="center">
