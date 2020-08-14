@@ -29,7 +29,8 @@ const businessUnitReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: true,
-        error: null
+        error: null,
+        success: false
       }
     }
     case Actions.BUSINESS_UNIT_ERROR: {
@@ -38,6 +39,13 @@ const businessUnitReducer = (state = initialState, action) => {
         loading: false,
         error: action.payload
 			};
+    }
+    case Actions.UPDATE_ENTITY: {
+      return {
+        ...state,
+        loading: false,
+        success: true,
+      }
     }
 		default: {
 			return state;

@@ -2,7 +2,7 @@ import * as Actions from '../actions';
 
 const initialState = {
   loading: false,
-  data: null,
+  data: {},
   error: null,
   success: false,
 };
@@ -40,6 +40,13 @@ const departmentReducer = (state = initialState, action) => {
         error: action.payload,
         success: false
 			};
+    }
+    case Actions.UPDATE_DEPARTMENT: {
+      return {
+        ...state,
+        loading: false,
+        success: true
+      }
     }
 		default: {
 			return state;

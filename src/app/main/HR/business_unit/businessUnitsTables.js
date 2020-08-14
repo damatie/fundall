@@ -135,11 +135,11 @@ function BusinessUnitsTable(props) {
 										onClick={event => handleClick(n)}
 									>
 										<TableCell className="w-64 text-center" padding="none">
-											<Checkbox
+											{/* <Checkbox
 												checked={isSelected}
 												onClick={event => event.stopPropagation()}
 												onChange={event => handleCheck(event, n.id)}
-											/>
+											/> */}
 										</TableCell>
 
 										<TableCell component="th" scope="row">

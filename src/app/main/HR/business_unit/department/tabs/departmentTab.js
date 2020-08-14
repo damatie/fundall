@@ -8,6 +8,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect } from 'react-router';
 import { useParams } from 'react-router-dom';
+import ProgressBtn from 'app/shared/progressBtn';
 
 function DepartmentTab(props) {
 	const dispatch = useDispatch();
@@ -17,14 +18,11 @@ function DepartmentTab(props) {
 	const [isFormValid, setIsFormValid] = useState(true);
 	const formRef = useRef(null);
 
+	const { departmentId } = useParams();
+
 	useEffect(() => {
-		// if (register.error && (register.error.username || register.error.password || register.error.email)) {
-		// 	formRef.current.updateInputsWithError({
-		// 		...register.error
-		// 	});
-		// 	disableButton();
-		// }
-	}, []);
+		console.log(department);
+	}, [department]);
 
 	function disableButton() {
 		setIsFormValid(false);
@@ -35,13 +33,24 @@ function DepartmentTab(props) {
 	}
 
 	function handleSubmit(model) {
-		dispatch(Actions.saveDepartment(model, params.id));
+		if(departmentId) {
+			dispatch(Actions.updateDepartment(departmentId, {
+				...model,
+				entityId: department.data.entityId
+			}));
+		} else {
+			dispatch(Actions.saveDepartment(model, params.id));
+		}
+		
 	}
 
 	if(department.success) {
-		return (
-			<Redirect to={`/hr/business_unit/details/${params.id}`} />
-		);
+		if(!departmentId) {
+			return (
+				<Redirect to={`/hr/business_unit/details/${params.id}`} />
+			);
+		}
+		
 	}
 
 	return (
@@ -58,7 +67,7 @@ function DepartmentTab(props) {
 					type="text"
 					name="departmentName"
 					label="Department name"
-					// value={params.id ? 'value' : ''}
+					value={departmentId ? department.data.departmentName : ''}
 					validations={{
 						minLength: 1
 					}}
@@ -83,7 +92,7 @@ function DepartmentTab(props) {
 					type="text"
 					name="departmentCode"
 					label="Department code"
-					// value={params.id ? 'value' : ''}
+					value={departmentId ? department.data.departmentCode : ''}
 					validations={{
 						minLength: 1
 					}}
@@ -108,7 +117,7 @@ function DepartmentTab(props) {
 					type="text"
 					name="departmentHead"
 					label="Department head"
-					// value={params.id ? 'value' : ''}
+					value={departmentId ? department.data.departmentHead : ''}
 					validations={{
 						minLength: 1
 					}}
@@ -134,7 +143,7 @@ function DepartmentTab(props) {
 					name="startedOn"
 					label="Started On"
 					variant="outlined"
-					// value={params.id ? new Date().toISOString().substring(0, 10) : '' }
+					value={departmentId ? department.data.startedOn : '' }
 					required
 				/>
 
@@ -143,7 +152,7 @@ function DepartmentTab(props) {
 					type="text"
 					name="location"
 					label="Location"
-					// value={params.id ? 'value' : ''}
+					value={departmentId ? department.data.location : ''}
 					validations={{
 						minLength: 1
 					}}
@@ -170,7 +179,7 @@ function DepartmentTab(props) {
           label="Description"
           multiline
 					rows='5'
-					// value={params.id ? 'value' : ''}
+					value={departmentId ? department.data.description : ''}
 					validations={{
 						minLength: 1
 					}}
@@ -190,17 +199,7 @@ function DepartmentTab(props) {
 					required
 				/>
 
-				<Button
-					type="submit"
-					variant="contained"
-					color="primary"
-					className="w-full mx-auto mt-16 normal-case"
-					aria-label="REGISTER"
-					disabled={!isFormValid || department.loading}
-					value="legacy"
-				>
-					save
-				</Button>
+				<ProgressBtn success={department.success} loading={department.loading} content={departmentId ? 'Update' : 'Save'} disable={!isFormValid}/>
 			</Formsy>
 		</div>
 	);

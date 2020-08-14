@@ -11,7 +11,7 @@ const BusinessUnitsConfig = {
 			component: React.lazy(() => import('./department/department'))
 		},
 		{
-			path: '/hr/business_unit/department/details/:id',
+			path: '/hr/business_unit/department/details/:departmentId',
 			component: React.lazy(() => import('./department/department_details/departmentDetails'))
 		},
 		{

@@ -65,6 +65,8 @@ function Department(props) {
 	
 	const params = useParams();
 
+	const { id } = useParams();
+
   const classes = useStyles(props);
   
   function handleChangeTab(event, value) {
