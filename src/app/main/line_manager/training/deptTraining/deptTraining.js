@@ -31,11 +31,11 @@ const useStyles = makeStyles(theme => ({
 			maxHeight: '100%'
 		}
 	},
-    root: {
-        '& > * + *': {
-          marginTop: theme.spacing(2),
-        },
-    }
+	root: {
+		'& > * + *': {
+			marginTop: theme.spacing(2)
+		}
+	}
 }));
 
 function DeptTraining(props) {
@@ -49,16 +49,30 @@ function DeptTraining(props) {
 	const rejectedCourses = useSelector(({ DeptTraining }) => DeptTraining.courses.rejectedCourses);
 	const pendingCourses = useSelector(({ DeptTraining }) => DeptTraining.courses.pendingCourses);
 	const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
-    const totalTrainings = approvedTrainings.concat(rejectedTrainings)
-    .concat(pendingTrainings).concat(completedTrainings).concat(reviewedTrainings);
-	const totalCourses = approvedCourses.concat(rejectedCourses).concat(pendingCourses);
+
+	//Appending All trainings into one array of object
+	let totalTrainings = approvedTrainings
+		.concat(rejectedTrainings)
+		.concat(pendingTrainings)
+		.concat(completedTrainings)
+		.concat(reviewedTrainings);
+	//Sorting the appended Trainings
+	totalTrainings = totalTrainings.sort((a, b) => {
+		return new Date(b.createdAt) - new Date(a.createdAt);
+	});
+
+	//Appending All courses into one array of object
+	let totalCourses = approvedCourses.concat(rejectedCourses).concat(pendingCourses);
+	//Sorting the appended courses
+	totalCourses = totalCourses.sort((a, b) => {
+		return new Date(b.createdAt) - new Date(a.createdAt);
+	});
 
 	const classes = useStyles(props);
 	const pageLayout = useRef(null);
 	const [tabValue, setTabValue] = useState(0);
-    
-	const userData = useAuth().getUserData;
 
+	const userData = useAuth().getUserData;
 	useEffect(() => {
 		dispatch(Actions.getReviewedTraining());
 		dispatch(Actions.getApprovedTraining());
@@ -72,229 +86,285 @@ function DeptTraining(props) {
 
 	function handleChangeTab(event, value) {
 		setTabValue(value);
-    }
-    
-    function checkRole() {
-        return (userData.role.upperCase() === 'HR')
-    }
+	}
 
-    function checkHODRole() {
-        return (userData.role.upperCase() === 'HEAD OF DEPARTMENT')
-    }
+	function checkRole() {
+		return userData.role.toUpperCase() === 'HR';
+	}
 
-    function handleCourseReject(ev, id){
-        dispatch(Actions.rejectCourse(id));
-    }
+	function checkHODRole() {
+		return userData.role.toUpperCase() === 'HEAD OF DEPARTMENT';
+	}
 
-    function handleCourseApprove(ev, id){
-        dispatch(Actions.approveCourse(id));
-    }
+	function handleCourseReject(ev, id) {
+		dispatch(Actions.rejectCourse(id));
+	}
 
-    function handleTrainingReject(ev, id){
-        dispatch(Actions.rejectTraining(id));
-    }
+	function handleCourseApprove(ev, id) {
+		dispatch(Actions.approveCourse(id));
+	}
 
-    function handleTrainingApprove(ev, id){
-        dispatch(Actions.approveTraining(id));
-    }
+	function handleTrainingReject(ev, id) {
+		dispatch(Actions.rejectTraining(id));
+	}
 
-    const columns = [
-        {
-            id: 'name',
-            align: 'center',
-            disablePadding: false,
-            label: 'Name',
-            sort: true
-        },
-        {
-            id: 'course_name',
-            align: 'center',
-            disablePadding: false,
-            label: 'Course Name',
-            sort: true
-        },
-        {
-            id: 'cost',
-            align: 'center',
-            disablePadding: false,
-            label: 'Cost',
-            sort: true
-        },
-        {
-            id: 'start_date',
-            align: 'center',
-            disablePadding: false,
-            label: 'Start Date',
-            sort: true
-        },
-        {
-            id: 'end_date',
-            align: 'center',
-            disablePadding: false,
-            label: 'End Date',
-            sort: true
-        },
-        {
-            id: 'status',
-            align: 'center',
-            disablePadding: false,
-            label: 'Status',
-            sort: true
-        }
+	function handleTrainingApprove(ev, id) {
+		dispatch(Actions.approveTraining(id));
+	}
+
+	const columns = [
+		{
+			id: 'name',
+			align: 'center',
+			disablePadding: false,
+			label: 'Name',
+			sort: true
+		},
+		{
+			id: 'course_name',
+			align: 'center',
+			disablePadding: false,
+			label: 'Course Name',
+			sort: true
+		},
+		{
+			id: 'cost',
+			align: 'center',
+			disablePadding: false,
+			label: 'Cost',
+			sort: true
+		},
+		{
+			id: 'start_date',
+			align: 'center',
+			disablePadding: false,
+			label: 'Start Date',
+			sort: true
+		},
+		{
+			id: 'end_date',
+			align: 'center',
+			disablePadding: false,
+			label: 'End Date',
+			sort: true
+		},
+		{
+			id: 'status',
+			align: 'center',
+			disablePadding: false,
+			label: 'Status',
+			sort: true
+		}
 	];
 	const coursesColumn = [
-        {
-            id: 'name',
-            align: 'center',
-            disablePadding: false,
-            label: 'Name',
-            sort: true
-        },
-        {
-            id: 'cost',
-            align: 'center',
-            disablePadding: false,
-            label: 'Cost',
-            sort: true
-        },
-        {
-            id: 'duration',
-            align: 'center',
-            disablePadding: false,
-            label: 'Duration',
-            sort: true
-        },
-        {
-            id: 'category',
-            align: 'center',
-            disablePadding: false,
-            label: 'Category',
-            sort: true
-        },
-        {
-            id: 'created',
-            align: 'center',
-            disablePadding: false,
-            label: 'Created',
-            sort: true
-        },
-        {
-            id: 'status',
-            align: 'center',
-            disablePadding: false,
-            label: 'Status',
-            sort: true
-        }
-    ];
-    
+		{
+			id: 'name',
+			align: 'center',
+			disablePadding: false,
+			label: 'Name',
+			sort: true
+		},
+		{
+			id: 'cost',
+			align: 'center',
+			disablePadding: false,
+			label: 'Cost',
+			sort: true
+		},
+		{
+			id: 'duration',
+			align: 'center',
+			disablePadding: false,
+			label: 'Duration',
+			sort: true
+		},
+		{
+			id: 'category',
+			align: 'center',
+			disablePadding: false,
+			label: 'Category',
+			sort: true
+		},
+		{
+			id: 'created',
+			align: 'center',
+			disablePadding: false,
+			label: 'Created',
+			sort: true
+		},
+		{
+			id: 'status',
+			align: 'center',
+			disablePadding: false,
+			label: 'Status',
+			sort: true
+		}
+	];
+
 	return (
-        <ThemeProvider theme={mainTheme}>
-		<FusePageSimple
-			classes={{
-				root: 'bg-red',
-				header: 'h-96 min-h-96 sm:h-160 sm:min-h-160',
-				sidebarHeader: 'h-96 min-h-96 sm:h-160 sm:min-h-160',
-                rightSidebar: 'w-320',
-				toolbar: 'min-h-48 h-48',
-				content: classes.content
-			}}
-			header={
-				<ThemeProvider theme={mainTheme}>
-					<div className="flex flex-col items-center justify-between flex-1 px-24 pt-24">
-                        <div className="flex items-center w-full">
-                            <FuseAnimate animation="transition.expandIn" delay={300}>
-                                <Icon className="text-32">school</Icon>
-                            </FuseAnimate>
-                            <FuseAnimate animation="transition.slideLeftIn" delay={300}>
-                                <span className="text-24 mx-16">Department Training Management</span>
-                            </FuseAnimate>
-						<div className="flex flex-1 items-center justify-between px-12">
-							<FuseAnimate animation="transition.slideRightIn" delay={300}>
-								<AddCourseModal />
-							</FuseAnimate>
+		<ThemeProvider theme={mainTheme}>
+			<FusePageSimple
+				classes={{
+					root: 'bg-red',
+					header: 'h-96 min-h-96 sm:h-160 sm:min-h-160',
+					sidebarHeader: 'h-96 min-h-96 sm:h-160 sm:min-h-160',
+					rightSidebar: 'w-320',
+					toolbar: 'min-h-48 h-48',
+					content: classes.content
+				}}
+				header={
+					<ThemeProvider theme={mainTheme}>
+						<div className="flex flex-col items-center justify-between flex-1 px-24 pt-24">
+							<div className="flex items-center w-full">
+								<FuseAnimate animation="transition.expandIn" delay={300}>
+									<Icon className="text-32">school</Icon>
+								</FuseAnimate>
+								<FuseAnimate animation="transition.slideLeftIn" delay={300}>
+									<span className="text-24 mx-16">Department Training Management</span>
+								</FuseAnimate>
+								{checkHODRole() ? (
+									<div className="flex flex-1 items-center justify-between px-12">
+										<FuseAnimate animation="transition.slideRightIn" delay={300}>
+											<AddCourseModal />
+										</FuseAnimate>
+									</div>
+								) : (
+									<div></div>
+								)}
+							</div>
 						</div>
-                        </div>
-                    </div>
-                </ThemeProvider>
-			}
-			contentToolbar={
-				<Tabs
-					value={tabValue}
-					onChange={handleChangeTab}
-					indicatorColor="primary"
-					textColor="primary"
-					variant="scrollable"
-					scrollButtons="off"
-					className="w-full border-b-1 px-24"
-				>
-					<Tab className="text-14 font-600 normal-case" label="Department Training" />
-					<Tab className="text-14 font-600 normal-case" label="Course Management" />
-				</Tabs>
-			}
-			content={
-				<div className="p-12">
-					{tabValue === 0 && (
-						<FuseAnimateGroup
-							className="flex flex-wrap"
-							enter={{
-								animation: 'transition.slideUpBigIn'
-							}}
-						>
-							<div className="widget flex w-full sm:w-1/2 md:w-1/6 p-12">
-								<CardWidget count={totalTrainings.length} title={"Total"} color="blue" />
-							</div>
-							<div className="widget flex w-full sm:w-1/2 md:w-1/6 p-12">
-								<CardWidget count={pendingTrainings.length} title={"Pending"} color="yellow" />
-							</div>
-							<div className="widget flex w-full sm:w-1/2 md:w-1/6 p-12">
-								<CardWidget count={approvedTrainings.length} title={"Approved"} color="green" />
-							</div>
-							<div className="widget flex w-full sm:w-1/2 md:w-1/6 p-12">
-								<CardWidget count={rejectedTrainings.length} title={"Rejected"} color="red" />
-							</div>
-							<div className="widget flex w-full sm:w-1/2 md:w-1/6 p-12">
-								<CardWidget count={reviewedTrainings.length} title={"Reviewed"} color="orange" />
-							</div>
-							<div className="widget flex w-full sm:w-1/2 md:w-1/6 p-12">
-								<CardWidget count={completedTrainings.length} title={"Completed"} color="black" />
-							</div>
-                            <div className="widget flex w-full p-12">
-								<TableWidget title={"Department Training Requests"} type="default" columns={columns} allowAuth={checkHODRole} handleReject={handleTrainingReject} handleApprove={handleTrainingApprove} rows={totalTrainings}/>
-							</div>
-						</FuseAnimateGroup>
-					)}
-						{tabValue === 1 && (
-							<FuseAnimateGroup
-							className="flex flex-wrap"
-							enter={{
-								animation: 'transition.slideUpBigIn'
-							}}
-						>
-							<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
-								<CardWidget count={totalCourses.length} title={"Total"} color="blue" />
-							</div>
-							<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
-								<CardWidget count={pendingCourses.length} title={"Pending"} color="yellow" />
-							</div>
-							<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
-								<CardWidget count={approvedCourses.length} title={"Approved"} color="green" />
-							</div>
-							<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
-								<CardWidget count={rejectedCourses.length} title={"Rejected"} color="red" />
-							</div>
-                            <div className="widget flex w-full p-12">
-                                <CoursesTableWidget title={"Department Course Management"} allowClick={true}
-                                 allowAuth={checkRole} handleReject={handleCourseReject}
-                                  handleApprove={handleCourseApprove} type="default" 
-                                  columns={coursesColumn} rows={totalCourses}/>
-							</div>
-						</FuseAnimateGroup>
-					)}
-				</div>
-			}
-			ref={pageLayout}
-		/>
-        </ThemeProvider>
+					</ThemeProvider>
+				}
+				contentToolbar={
+					<Tabs
+						value={tabValue}
+						onChange={handleChangeTab}
+						indicatorColor="primary"
+						textColor="primary"
+						variant="scrollable"
+						scrollButtons="off"
+						className="w-full border-b-1 px-24"
+					>
+						{checkHODRole() ? <Tab className="text-14 font-600 normal-case" label="Department Training" /> : null}
+						<Tab className="text-14 font-600 normal-case" label="Course Management" />
+					</Tabs>
+				}
+				content={
+					checkHODRole() ? (
+						<div className="p-12">
+							{tabValue === 0 && (
+								<FuseAnimateGroup
+									className="flex flex-wrap"
+									enter={{
+										animation: 'transition.slideUpBigIn'
+									}}
+								>
+									<div className="widget flex w-full sm:w-1/2 md:w-1/6 p-12">
+										<CardWidget count={totalTrainings.length} title={'Total'} color="yellow" />
+									</div>
+									<div className="widget flex w-full sm:w-1/2 md:w-1/6 p-12">
+										<CardWidget count={pendingTrainings.length} title={'Pending'} color="blue" />
+									</div>
+									<div className="widget flex w-full sm:w-1/2 md:w-1/6 p-12">
+										<CardWidget count={approvedTrainings.length} title={'Approved'} color="green" />
+									</div>
+									<div className="widget flex w-full sm:w-1/2 md:w-1/6 p-12">
+										<CardWidget count={rejectedTrainings.length} title={'Rejected'} color="red" />
+									</div>
+									<div className="widget flex w-full sm:w-1/2 md:w-1/6 p-12">
+										<CardWidget count={reviewedTrainings.length} title={'Reviewed'} color="orange" />
+									</div>
+									<div className="widget flex w-full sm:w-1/2 md:w-1/6 p-12">
+										<CardWidget count={completedTrainings.length} title={'Completed'} color="black" />
+									</div>
+									<div className="widget flex w-full p-12">
+										<TableWidget
+											title={'Department Training Requests'}
+											type="default"
+											columns={columns}
+											allowAuth={checkHODRole()}
+											handleReject={handleTrainingReject}
+											handleApprove={handleTrainingApprove}
+											rows={totalTrainings}
+										/>
+									</div>
+								</FuseAnimateGroup>
+							)}
+							{tabValue === 1 && (
+								<FuseAnimateGroup
+									className="flex flex-wrap"
+									enter={{
+										animation: 'transition.slideUpBigIn'
+									}}
+								>
+									<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
+										<CardWidget count={totalCourses.length} title={'Total'} color="yellow" />
+									</div>
+									<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
+										<CardWidget count={pendingCourses.length} title={'Pending'} color="blue" />
+									</div>
+									<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
+										<CardWidget count={approvedCourses.length} title={'Approved'} color="green" />
+									</div>
+									<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
+										<CardWidget count={rejectedCourses.length} title={'Rejected'} color="red" />
+									</div>
+									<div className="widget flex w-full p-12">
+										<CoursesTableWidget
+											title={'Department Course Management'}
+											allowClick={true}
+											allowAuth={checkRole()}
+											handleReject={handleCourseReject}
+											handleApprove={handleCourseApprove}
+											type="default"
+											columns={coursesColumn}
+											rows={totalCourses}
+										/>
+									</div>
+								</FuseAnimateGroup>
+							)}
+						</div>
+					) : (
+						<div className="p-12">
+							{tabValue === 0 && (
+								<FuseAnimateGroup
+									className="flex flex-wrap"
+									enter={{
+										animation: 'transition.slideUpBigIn'
+									}}
+								>
+									<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
+										<CardWidget count={totalCourses.length} title={'Total'} color="yellow" />
+									</div>
+									<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
+										<CardWidget count={pendingCourses.length} title={'Pending'} color="blue" />
+									</div>
+									<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
+										<CardWidget count={approvedCourses.length} title={'Approved'} color="green" />
+									</div>
+									<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
+										<CardWidget count={rejectedCourses.length} title={'Rejected'} color="red" />
+									</div>
+									<div className="widget flex w-full p-12">
+										<CoursesTableWidget
+											title={'Department Course Management'}
+											allowClick={true}
+											allowAuth={checkRole()}
+											handleReject={handleCourseReject}
+											handleApprove={handleCourseApprove}
+											type="default"
+											columns={coursesColumn}
+											rows={totalCourses}
+										/>
+									</div>
+								</FuseAnimateGroup>
+							)}
+						</div>
+					)
+				}
+				ref={pageLayout}
+			/>
+		</ThemeProvider>
 	);
 }
 

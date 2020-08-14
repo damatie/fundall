@@ -57,8 +57,22 @@ function TrainingManagement(props) {
 	const rejectedCourses = useSelector(({ TrainingManagement }) => TrainingManagement.courses.rejectedCourses);
 	const pendingCourses = useSelector(({ TrainingManagement }) => TrainingManagement.courses.pendingCourses);
 	const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
-	const totalTrainings = approvedTrainings.concat(rejectedTrainings).concat(pendingTrainings).concat(reviewedTrainings);
-	const totalCourses = approvedCourses.concat(rejectedCourses).concat(pendingCourses);
+
+	//Appending All trainings into one array of object
+	let totalTrainings = approvedTrainings.concat(rejectedTrainings)
+	.concat(pendingTrainings).concat(reviewedTrainings);
+
+	 //Sorting the appended Trainings
+	 totalTrainings = totalTrainings.sort((a, b) => {
+        return new Date(b.createdAt) - new Date(a.createdAt);
+	});
+	
+	//Appending All courses into one array of object
+    let totalCourses = approvedCourses.concat(rejectedCourses).concat(pendingCourses);
+    //Sorting the appended courses
+    totalCourses = totalCourses.sort((a, b) => {
+        return new Date(b.createdAt) - new Date(a.createdAt);
+    });
 
 	const classes = useStyles(props);
 	const pageLayout = useRef(null);
@@ -242,13 +256,13 @@ function TrainingManagement(props) {
 						}}
 					>
 						<div className="widget flex w-full sm:w-1/2 md:w-1/5 p-12">
-							<CardWidget count={totalTrainings.length} title={"Total"} color="blue" />
+							<CardWidget count={totalTrainings.length} title={"Total"} color="yellow" />
 						</div>
 						<div className="widget flex w-full sm:w-1/2 md:w-1/5 p-12">
 							<CardWidget count={reviewedTrainings.length} title={"Reviewed"} color="sky-blue" />
 						</div>
 						<div className="widget flex w-full sm:w-1/2 md:w-1/5 p-12">
-							<CardWidget count={pendingTrainings.length} title={"Pending"} color="yellow" />
+							<CardWidget count={pendingTrainings.length} title={"Pending"} color="blue" />
 						</div>
 						<div className="widget flex w-full sm:w-1/2 md:w-1/5 p-12">
 							<CardWidget count={approvedTrainings.length} title={"Approved"} color="green" />
@@ -271,10 +285,10 @@ function TrainingManagement(props) {
 							}}
 						>
 							<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
-								<CardWidget count={totalCourses.length} title={"Total"} color="blue" />
+								<CardWidget count={totalCourses.length} title={"Total"} color="yellow" />
 							</div>
 							<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
-								<CardWidget count={pendingCourses.length} title={"Pending"} color="yellow" />
+								<CardWidget count={pendingCourses.length} title={"Pending"} color="blue" />
 							</div>
 							<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
 								<CardWidget count={approvedCourses.length} title={"Approved"} color="green" />
