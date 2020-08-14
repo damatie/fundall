@@ -146,7 +146,9 @@ function BlogDetail({ match }) {
   const author = useSelector(state => state.blog.getOneBlogPost.data.author);
   const comments = useSelector(state => state.blog.getAllCommentsForAPost.data);
   const userId = useSelector(state => state.auth.user.id);
-  const loadingCommentToPost = useSelector(state => state.blog.commentToPost.loading);
+  const isCommenting = useSelector(state => state.blog.commentToPost.loading);
+  const isReplying = useSelector(state => state.blog.commentToComment.loading);
+  const isUpdating = useSelector(state => state.blog.updateAComment.loading);
   const showDialog = useSelector(state => state.blog.showEmployeeModal.show);
 
   const history = useHistory();
@@ -288,7 +290,7 @@ function BlogDetail({ match }) {
                   )
                 })}
               </Paper>
-              <div style={{display: `${loadingCommentToPost ? '' : 'none'}`}} >
+              <div style={{display: `${(isCommenting || isUpdating || isReplying) ? '' : 'none'}`}} >
                 <CircularProgress color="primary" className={classes.circular} />
               </div>
             </Grid>

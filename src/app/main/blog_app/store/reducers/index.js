@@ -5,7 +5,6 @@ import getBlogs from './getBlogs.reducer';
 import commentToPost from './commentToPost.reducer';
 import commentToComment from './commentToComment.reducer';
 import getReplyToComment from './getReplyToComment.reducer';
-import updateACommentReply from './updateACommentReply.reducer';
 import deleteCommentReply from './deleteCommentReply.reducer';
 import likeAComment from './likeAComment.reducer';
 import getOneBlogPost from './getOneBlogPost.reducer';
@@ -23,7 +22,6 @@ const blogReducers = combineReducers({
 	commentToPost,
 	commentToComment,
 	getReplyToComment,
-	updateACommentReply,
 	deleteCommentReply,
 	likeAComment,
 	getOneBlogPost,
