@@ -84,7 +84,7 @@ const navigationConfig = [
 				id: 'blog_post',
 				title: 'Blog post',
 				type: 'item',
-				url: '/blog/post',
+				url: '/main/blog/post',
 				icon: 'add_comment',
 				auth: authRoles.admin,
 			},
@@ -92,7 +92,7 @@ const navigationConfig = [
 				id: 'blog_list',
 				title: 'Blog list',
 				type: 'item',
-				url: '/blog/list',
+				url: '/main/blogs/',
 				icon: 'chrome_reader_mode',
 				auth: authRoles.staff,
 			}

@@ -24,6 +24,7 @@ import departmentReducer from '../store/reducers';
 import * as employeeActions from 'app/store/actions';
 import employeeReducer from 'app/store/reducers';
 import DepartmentDetailsTable from './departmentDetailsTable';
+import * as Actions from '../store/actions';
 
 const useStyles = makeStyles(theme => ({
 	productImageFeaturedStar: {
@@ -65,7 +66,7 @@ function DepartmentDetails(props) {
   const theme = useTheme();
   const [tabValue, setTabValue] = useState(0);
   
-  const { id } = useParams();
+  const { departmentId } = useParams();
 
   const classes = useStyles(props);
   
@@ -74,13 +75,10 @@ function DepartmentDetails(props) {
 	}
 
 	useEffect(() => {
-		// if (register.error && (register.error.username || register.error.password || register.error.email)) {
-		// 	formRef.current.updateInputsWithError({
-		// 		...register.error
-		// 	});
-		// 	disableButton();
-    // }
-    dispatch(employeeActions.getDepartmentEmployees(id))
+		if(departmentId) {
+			dispatch(Actions.getOneDepartment(departmentId));
+		}
+    dispatch(employeeActions.getDepartmentEmployees(departmentId))
 	}, []);
 
 	return (

@@ -30,7 +30,6 @@ export function submitLogin(data) {
 		}).then(res => res.json()).then(
 			user => {
 				if(user.success) {
-					console.log(user)
 					Swal.fire({
 						title: 'Login',
 						text: user.message,

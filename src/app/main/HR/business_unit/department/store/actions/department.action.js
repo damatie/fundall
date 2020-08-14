@@ -2,12 +2,15 @@ import axios from 'axios';
 import swal from 'sweetalert2';
 import { useAuth } from 'app/hooks/useAuth';
 import { fetchHeaders } from 'app/shared/fetchHeaders';
+import { getBaseUrl } from 'app/shared/getBaseUrl';
+import { handleResponse } from 'app/auth/handleRes';
 
 
 export const GET_DEPARTMENT = 'GET_DEPARTMENT';
 export const SAVE_DEPARTMENT = 'SAVE_DEPARTMENT';
 export const DEPARTMENT_LOADING = 'DEPARTMENT_LOADING';
 export const DEPARTMENT_ERROR = 'DEPARTMENT_ERROR';
+export const UPDATE_DEPARTMENT = 'UPDATE DEPARTMENT';
 
 export function saveDepartment(data, id) {
   return dispatch => {
@@ -19,7 +22,7 @@ export function saveDepartment(data, id) {
       entityId: id
     }
 
-    const request = axios.post('https://hris-cbit.herokuapp.com/api/v1/department/new', newData, {
+    const request = axios.post(`${getBaseUrl()}/department/new`, newData, {
       headers: {
         Authorization: `JWT ${useAuth().getToken}`
       }
@@ -70,14 +73,51 @@ export const getOneDepartment = id => {
     dispatch({
       type: DEPARTMENT_LOADING
     })
-    fetch(`https://hris-cbit.herokuapp.com/api/v1/department/one/${id}`, {
+    fetch(`${getBaseUrl()}/department/one/${id}`, {
       ...header.getRegHeader()
     }).then(res => res.json()).then(
       data => {
+        console.log(data)
         dispatch({
           type: GET_DEPARTMENT,
           payload: data.data
         })
+      }
+    ).catch(e => console.error(e));
+  }
+}
+
+export const updateDepartment = (id, model) => {
+  return dispatch => {
+    dispatch({
+      type: DEPARTMENT_LOADING
+    })
+    fetch(`${getBaseUrl()}/department/update/${id}`, {
+      ...header.reqHeader(
+        'PATCH',
+        model
+      )
+    }).then(res => handleResponse(res)).then(
+      data => {
+        if(data.success) {
+          swal.fire(
+            'UPDATE DEPARTMENT',
+            'Department updated successfully',
+            'success',
+            2500
+          );
+          dispatch({
+            type: UPDATE_DEPARTMENT
+          });
+        } else {
+          swal.fire(
+            'UPDATE DEPARTMENT',
+            'Unable to update department',
+            'error',
+            2000
+          );
+
+        }
       }
     ).catch(e => console.error(e));
   }

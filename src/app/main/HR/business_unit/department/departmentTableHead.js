@@ -86,11 +86,11 @@ function DepartmentTableHead(props) {
 		<TableHead>
 			<TableRow className="h-64">
 				<TableCell padding="none" className="relative w-64 text-center">
-					<Checkbox
+					{/* <Checkbox
 						indeterminate={props.numSelected > 0 && props.numSelected < props.rowCount}
 						checked={props.numSelected === props.rowCount}
 						onChange={props.onSelectAllClick}
-					/>
+					/> */}
 					{props.numSelected > 0 && (
 						<div
 							className={clsx(

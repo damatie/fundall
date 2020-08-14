@@ -8,6 +8,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect } from 'react-router';
 import { useParams } from 'react-router-dom';
+import ProgressBtn from 'app/shared/progressBtn';
 
 function BusinessUnitTab(props) {
 	const dispatch = useDispatch();
@@ -35,7 +36,12 @@ function BusinessUnitTab(props) {
 	}
 
 	function handleSubmit(model) {
-		dispatch(Actions.saveBusinessUnit(model));
+		if(!params.id) {
+			dispatch(Actions.saveBusinessUnit(model));
+		} else {
+			dispatch(Actions.updateEntity(params.id, model));
+		}
+		
 	}
 
 	if(businessUnit.success) {
@@ -169,17 +175,8 @@ function BusinessUnitTab(props) {
 					required
 				/>
 
-				<Button
-					type="submit"
-					variant="contained"
-					color="primary"
-					className="w-full mx-auto mt-16 normal-case"
-					aria-label="REGISTER"
-					disabled={!isFormValid || businessUnit.loading}
-					value="legacy"
-				>
-					{params.id ? 'Update' : 'Save'}
-				</Button>
+				<ProgressBtn success={businessUnit.success} loading={businessUnit.loading} content={params.id ? 'Update' : 'Save'} disable={!isFormValid}/>
+				
 			</Formsy>
 		</div>
 	);
