@@ -10,14 +10,14 @@ const CommentToComment = (state = initialState, action) => {
 	switch (action.type) {
 		case Actions.COMMENT_TO_COMMENT_SUCCESS: {
 			return {
-				...initialState,
+				...state,
 				success: true,
 				loading: false
 			};
 		}
 		case Actions.COMMENT_TO_COMMENT_ERROR: {
 			return {
-				...initialState,
+				...state,
 				success: false,
 				error: action.payload,
 				loading: false
@@ -25,7 +25,7 @@ const CommentToComment = (state = initialState, action) => {
 		}
 		case Actions.COMMENT_TO_COMMENT_LOADING: {
 			return {
-				...initialState,
+				...state,
 				success: false,
 				loading: true
 			};

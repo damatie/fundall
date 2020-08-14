@@ -85,24 +85,6 @@ function BlogListHeader(props) {
     return new Date(blog.createdAt) >= yearAgo;
   });
 
-  // const debounce = (fn, delay) => {
-  //   let timeoutID;
-  //   return function(...args) {
-  //     if (timeoutID) clearTimeout(timeoutID);
-  //     timeoutID = setTimeout(() => {
-  //       fn(...args);
-  //     }, delay)
-  //   }
-  // }
-
-  const handleSearch = (event) => {
-    // console.log(event.target.value)
-    // debounce((event) => {
-    //   console.log(event.target.value)
-      dispatch(blogActions.submitSearch(event.target.value));
-    // }, 2000)
-  };
-
   const NoPost = () => {
     return (
       <>
