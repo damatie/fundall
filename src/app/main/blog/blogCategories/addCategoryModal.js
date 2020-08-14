@@ -46,9 +46,8 @@ export default function AddCategoryModal() {
 	}
 
 	function handleSubmit(model) {
-    // console.log(model);
-      dispatch(Actions.createCategory);
-      handleClose()
+    dispatch(Actions.createCategory(model));
+    handleClose()
   }
 
   return (
@@ -79,9 +78,8 @@ export default function AddCategoryModal() {
         <TextFieldFormsy
 					className="mb-16"
 					type="text"
-					name="categoryName"
+					name="name"
           label="Category Name"
-          onChange={event => console.log(event.target.value)}
 					validations={{
 						minLength: 1
 					}}

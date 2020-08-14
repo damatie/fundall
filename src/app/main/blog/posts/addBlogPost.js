@@ -195,7 +195,7 @@ function AddBlogPost(props) {
 								const labelId = `category-label-${category.name}`;
 								return (
 									<ListItem
-										style={{ padding: '0 16px 32px 16px' }}
+										style={{ padding: '0 16px 16px 16px' }}
 										key={category.id}
 										// role={undefined}
 										dense
