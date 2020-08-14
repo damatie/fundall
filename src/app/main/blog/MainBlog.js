@@ -18,6 +18,7 @@ import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import BlogListContent from './posts/blogListContent';
 import SideNavBar from './posts/sideNav';
+import { useAuth } from 'app/hooks/useAuth';
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -59,6 +60,8 @@ const useStyles = makeStyles(theme => ({
 function MainBlog() {
 	const classes = useStyles();
 	const dispatch = useDispatch();
+
+	const userData = useAuth().getUserData;
 
 	const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
 	const posts = useSelector(({ MainBlog }) => MainBlog.posts.data);
@@ -138,6 +141,10 @@ function MainBlog() {
 		);
 	};
 
+	function checkRole() {
+		return (userData.role.toUpperCase() === 'HR');
+	}
+
 	return (
 		<ThemeProvider theme={mainTheme}>
 			<FusePageSimple
@@ -179,7 +186,8 @@ function MainBlog() {
 									</FuseAnimate>
 								</div>
 							</div>
-							<div className="flex flex-1 items-end">
+							{ checkRole() && 
+							(<div className="flex flex-1 items-end">
 								<FuseAnimate animation="transition.expandIn" delay={600}>
 									<Fab
 										color="secondary"
@@ -190,7 +198,8 @@ function MainBlog() {
 										<Icon>add</Icon>
 									</Fab>
 								</FuseAnimate>
-							</div>
+							</div>)
+							}
 						</div>
 					</ThemeProvider>
 				}

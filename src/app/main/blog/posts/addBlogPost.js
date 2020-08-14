@@ -14,6 +14,7 @@ import reducer from '../store/reducers';
 import withReducer from 'app/store/withReducer';
 import { useDispatch, useSelector } from 'react-redux';
 import ProgressBtn from '../../../shared/progressBtn';
+import AddCategory from '../blogCategories/addCategoryModal';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
@@ -56,7 +57,10 @@ const useStyles = makeStyles(theme => ({
 		color: 'rgba(0,0,0,.25)',
 		fontWeight: 'bold',
 		fontSize: 16
-	}
+	},
+	list: {
+		paddingBottom: 32,
+	},
 }));
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
@@ -191,28 +195,29 @@ function AddBlogPost(props) {
 								const labelId = `category-label-${category.name}`;
 								return (
 									<ListItem
-										style={{ padding: '0 16px' }}
+										style={{ padding: '0 16px 32px 16px' }}
 										key={category.id}
 										// role={undefined}
 										dense
 										button
-                                        onClick={handleToggle(category.id)}
+										onClick={handleToggle(category.id)}
 									>
 										<ListItemIcon>
 											<Checkbox
 												edge="start"
 												// checked={category === category.id}
-                                                tabIndex={-1}
-                                                value={category}
+                        tabIndex={-1}
+                        value={category}
 												disableRipple
-                                                onChange={validForm}
-                                                inputProps={{ 'aria-labelledby': labelId }}
+                        onChange={validForm}
+                        inputProps={{ 'aria-labelledby': labelId }}
 											/>
 										</ListItemIcon>
 										<ListItemText id={labelId} primary={category.name} />
 									</ListItem>
 								);
 							})}
+							<AddCategory />
 						</List>
 					</Paper>
 				</Grid>
