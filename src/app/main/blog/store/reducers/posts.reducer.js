@@ -1,7 +1,7 @@
 import * as Actions from '../actions';
 
 const initialState = {
-	loading: true,
+	loading: false,
 	data: [],
 	post: [],
 	success: false
@@ -35,6 +35,18 @@ const postsReducer = (state = initialState, action) => {
 				success: true
 			};
 		case Actions.CREATE_POST_ERROR:
+			return {
+				...state,
+				loading: false,
+				success: false
+			};
+		case Actions.UPDATE_POST_SUCCESS:
+			return {
+				...state,
+				loading: false,
+				success: true
+			};
+		case Actions.UPDATE_POST_ERROR:
 			return {
 				...state,
 				loading: false,
