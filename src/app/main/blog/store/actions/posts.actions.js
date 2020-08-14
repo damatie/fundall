@@ -7,6 +7,8 @@ export const GET_ONE_POST = 'GET ONE POST';
 export const LOADING_POSTS = 'LOADING POSTS';
 export const CREATE_POST_SUCCESS = 'CREATE POST SUCCESS';
 export const CREATE_POST_ERROR = 'CREATE POST ERROR';
+export const UPDATE_POST_SUCCESS = 'UPDATE POST SUCCESS';
+export const UPDATE_POST_ERROR = 'UPDATE POST ERROR';
 export const LIKE_OR_UNLIKE_POST_SUCCESS = 'LIKE OR UNLIKE POST SUCCESS';
 export const LIKE_OR_UNLIKE_POST_ERROR = 'LIKE OR UNLIKE POST ERROR';
 export const DELETE_POST_SUCCESS = 'DELETE POST SUCCESS';
@@ -90,24 +92,23 @@ export function createPost(payload){
 		dispatch({
 			type: LOADING_POSTS
 		})
-		fetch(`${basUrl()}/posts/`, { ...headers.reqHeader('POST', payload) }
+		fetch(`${basUrl()}/posts/`, { ...headers.fdHeader('POST', payload) }
 		).then(res => res.json()).then(async data => {
-			// let data = response.data;
-			if (data.success) {
+			console.log(data);
+			if (data.success || data.message === 'Created!') {
 				Promise.all([
 					dispatch({
 						type: CREATE_POST_SUCCESS
 					})
 				]).then(() => {
 					dispatch(getPosts())
-				})
+				});
 				swal.fire({
 					title: 'Create Blog Post',
 					text: (data.message) ? data.message : data.error,
-					// timer: 3000,
+					timer: 3000,
 					icon: 'success'
-				},
-				function(){
+				}).then(function(){
 				  window.location.href = "/main/blogs";
 				});
 			} else {
@@ -131,6 +132,59 @@ export function createPost(payload){
 			})
 			dispatch({
 				type: CREATE_POST_ERROR
+			})
+		})
+	}
+}
+
+export function updatePost(payload, id){
+	swal.fire("Processing ...");
+	swal.showLoading();
+	return dispatch => {
+		dispatch({
+			type: LOADING_POSTS
+		})
+		fetch(`${basUrl()}/posts/${id}`, { ...headers.fdHeader('PUT', payload) }
+		).then(res => res.json()).then(async data => {
+			console.log(data);
+			if (data.success || data.message === 'Updated!') {
+				Promise.all([
+					dispatch({
+						type: UPDATE_POST_SUCCESS
+					})
+				]).then(() => {
+					dispatch(getPosts())
+					dispatch(getPostById(id))
+				});
+				swal.fire({
+					title: 'Update Blog Post',
+					text: (data.message) ? data.message : data.error,
+					timer: 3000,
+					icon: 'success'
+				}).then(function(){
+				  window.location.href = "/main/blogs";
+				});
+			} else {
+				swal.fire({
+					title: 'Update Blog Post',
+					text: (data.message) ? data.message : data.error,
+					timer: 3000,
+					icon: 'error'
+				})
+				dispatch({
+					type: UPDATE_POST_ERROR
+				})
+			}
+		}).catch(e => {
+			console.error(e);
+			swal.fire({
+				title: 'Update Blog Post',
+				text: 'Oops! an error occurred. Kindly check network and try again',
+				timer: 3000,
+				icon: 'error'
+			})
+			dispatch({
+				type: UPDATE_POST_ERROR
 			})
 		})
 	}
