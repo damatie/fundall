@@ -51,16 +51,16 @@ function BlogListHeader(props) {
     dispatch(blogActions.getBlogByLimit());
   }, [dispatch]);
 
-  function handleSearch(event){
-    setSearch(event.target.value);
-    if(event.target.value.length >= 2){
-     setData(blogPost.filter(post => {
-        return post.title.toLowerCase() === search.toLowerCase();
-      }));
-    }else{
-      setData(blogPost);
-    }
-  }
+  // function handleSearch(event){
+  //   setSearch(event.target.value);
+  //   if(event.target.value.length >= 2){
+  //    setData(blogPost.filter(post => {
+  //       return post.title.toLowerCase() === search.toLowerCase();
+  //     }));
+  //   }else{
+  //     setData(blogPost);
+  //   }
+  // }
   
   function handleChangeTab(event, value) {
     setTabValue(value);

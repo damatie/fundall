@@ -3,14 +3,14 @@ import React from 'react';
 const BlogConfig = {
 	settings: {},
 	routes: [
-		// {
-		// 	path: '/main/blog/post',
-		// 	component: React.lazy(() => import('./blog_components/postBlog.js')),
-		// },
-		// {
-		// 	path: '/main/blog/update_blog/:blog_id',
-		// 	component: React.lazy(() => import('./blog_components/updateBlog.js')),
-		// },
+		{
+			path: '/main/blog/post/edit/:post_id',
+			component: React.lazy(() => import('./posts/addBlogPost')),
+		},
+		{
+			path: '/main/blog/post',
+			component: React.lazy(() => import('./posts/addBlogPost')),
+		},
 		{
 			path: '/main/blogs',
 			component: React.lazy(() => import('./MainBlog')),
