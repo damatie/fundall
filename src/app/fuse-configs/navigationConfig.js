@@ -395,7 +395,7 @@ const navigationConfig = [
 				type: 'item',
 				url: '/training/dept',
 				icon: 'group',
-				auth: authRoles.managers,
+				auth: authRoles.hod,
 			},
 			{
 				id: 'personalTraining',

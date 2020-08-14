@@ -29,8 +29,8 @@ export default function AddCourseModal(props) {
     const [open, setOpen] = React.useState(false);
     const [isFormValid, setIsFormValid] = useState(true);
     const [agree, setAgree] = useState(false);
-    const userData = useAuth().getUserData;
-
+    const [cat, setCat] = useState('');
+    const userData = useAuth().getUserDetails;
     const handleClickOpen = () => {
         setOpen(true);
     };
@@ -191,10 +191,11 @@ export default function AddCourseModal(props) {
                     className="mb-16 w-full"
                     name="category"
                     label="Course Category"
-                    value=""
-                    validationError="requried"
+                    value={cat}
+                    // validationError="requried"
                     variant="outlined"
                     required
+                    onChange={ev => setCat(ev.target.value)}
                 >
                         {courseCategories.sort().map(item => (
                             <MenuItem value={item.name} key={item.id}>{item.name}</MenuItem>

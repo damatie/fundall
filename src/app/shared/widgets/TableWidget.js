@@ -119,7 +119,7 @@ const TableWidget = (props) =>{
             case "reviewed":
                 return (
                     <Typography
-                            className={'bg-yellow text-white inline text-11 font-500 px-8 py-4 rounded-4'}
+                            className={'bg-black text-white inline text-11 font-500 px-8 py-4 rounded-4'}
                         >
                             {status}
                     </Typography>
