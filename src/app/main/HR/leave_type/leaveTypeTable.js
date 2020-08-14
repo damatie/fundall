@@ -16,7 +16,9 @@ import LeaveTypeTableHead from './leaveTypeTableHead';
 
 function LeaveTypeTable(props) {
 	const dispatch = useDispatch();
+
 	const leaveTypes = useSelector(({ leaveTypes }) => leaveTypes.leaveTypes.data);
+
 	const searchText = useSelector(({ leaveTypes }) => leaveTypes.leaveTypes.searchText);
 
 	const [selected, setSelected] = useState([]);
@@ -29,8 +31,10 @@ function LeaveTypeTable(props) {
 	});
 
 	useEffect(() => {
-    dispatch(Actions.getLeaveTypes());
-    console.log(leaveTypes);
+		dispatch(Actions.getLeaveTypes());
+		
+		console.log(leaveTypes);
+		
 	}, [dispatch]);
 
 	useEffect(() => {
@@ -87,11 +91,11 @@ function LeaveTypeTable(props) {
 
 	function handleChangePage(event, value) {
 		setPage(value);
-	}
+	};
 
 	function handleChangeRowsPerPage(event) {
 		setRowsPerPage(event.target.value);
-	}
+	};
 
 	return (
 		<div className="w-full flex flex-col">
@@ -144,11 +148,11 @@ function LeaveTypeTable(props) {
 										</TableCell>
 
 										<TableCell component="th" scope="row">
-                      {n.leaveType}
+                      {n.type}
 										</TableCell>
 
 										<TableCell component="th" scope="row">
-											{n.leaveShortCode}
+											{n.shortCode}
 										</TableCell>
 
 										<TableCell component="th" scope="row">

@@ -1,5 +1,6 @@
 import swal from 'sweetalert2';
 import { useAuth } from 'app/hooks/useAuth';
+import { getBaseUrl } from 'app/shared/getBaseUrl';
 
 export const ALLOCATE_LEAVE = 'ALLOCATE LEAVE';
 export const ALLOCATING = 'ALLOCATING';
@@ -8,12 +9,11 @@ export const ALLOCATE_LEAVE_ERROR = 'ALLOCATE LEAVE ERROR';
 
 const auth = useAuth;
 export const allocateLeave = data => {
-  console.log(JSON.stringify(data));
   return dispatch => {
     dispatch({
       type: ALLOCATING
     })
-    fetch(`https://hris-cbit.herokuapp.com/api/v1/allot-leave/`, {
+    fetch(`${getBaseUrl()}/allot-leave/`, {
       method: 'POST',
       headers: {
         Authorization: `JWT ${auth().getToken}`,
@@ -53,4 +53,4 @@ export const allocateLeave = data => {
     })
    
   }
-}
+};
