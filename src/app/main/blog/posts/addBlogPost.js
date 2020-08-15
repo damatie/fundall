@@ -187,7 +187,7 @@ function AddBlogPost(props) {
 							Post settings
 						</Typography>
 						<Divider />
-						<Typography variant="caption" component="h3" style={{ padding: '16px 16px 0 16px' }}>
+						<Typography variant="body1" component="h3" style={{ padding: '16px 16px 8px 16px', color: 'grey' }}>
 							Categories
 						</Typography>
 						<List style={{ padding: 0 }}>
@@ -195,7 +195,7 @@ function AddBlogPost(props) {
 								const labelId = `category-label-${category.name}`;
 								return (
 									<ListItem
-										style={{ padding: '0 16px 16px 16px' }}
+										style={{ padding: '0 16px' }}
 										key={category.id}
 										// role={undefined}
 										dense
@@ -217,6 +217,7 @@ function AddBlogPost(props) {
 									</ListItem>
 								);
 							})}
+              <div style={{padding: '16px'}}></div>
 							<AddCategory />
 						</List>
 					</Paper>

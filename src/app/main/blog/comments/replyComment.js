@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import Paper from '@material-ui/core/Paper';
 import SingleComment from './singleComment';
 
 const useStyles = makeStyles(theme => ({
@@ -27,17 +26,23 @@ function ReplyComment(props) {
 	const classes = useStyles();
 
 	const [viewAllComments, setViewAllComments] = useState(false);
-	const [noOfReply] = useState(props.reply.length);
+	const [numberOfReplies, setNumberOfReplies] = useState(0);
+
+	useEffect(() => {
+		setNumberOfReplies(props.reply.length)
+	}, [props.reply])
 
 	const replyContent = ['Edit reply', 'Delete reply'];
 
 	return (
 		<>
-			{props.reply && noOfReply !== 0 && (
+			{props.reply && numberOfReplies !== 0 && (
 				<>
-					<Button className={classes.btn} onClick={() => setViewAllComments(!viewAllComments)}>
-						{!viewAllComments ? `View more ${noOfReply - 1} comments` : 'Hide comments'}
-					</Button>
+					{ numberOfReplies === 1 ? <div style={{padding: '8px 0'}}></div> :
+						<Button className={classes.btn} onClick={() => setViewAllComments(!viewAllComments)}>
+							{!viewAllComments ? `View more ${numberOfReplies - 1} comments` : 'Hide comments'}
+						</Button>
+					}
 					{!viewAllComments ? (
 						<SingleComment
 							comment={props.reply[0]}

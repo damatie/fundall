@@ -92,6 +92,9 @@ export function createPost(payload){
 		dispatch({
 			type: LOADING_POSTS
 		})
+		for (var pair of payload.entries()) {
+			console.log(pair[0]+ ', ' + pair[1]); 
+		}
 		fetch(`${basUrl()}/posts/`, { ...headers.fdHeader('POST', payload) }
 		).then(res => res.json()).then(async data => {
 			console.log(data);
@@ -109,7 +112,7 @@ export function createPost(payload){
 					timer: 3000,
 					icon: 'success'
 				}).then(function(){
-				  window.location.href = "/main/blogs";
+				//   window.location.href = "/main/blogs";
 				});
 			} else {
 				swal.fire({
@@ -190,22 +193,19 @@ export function updatePost(payload, id){
 	}
 }
 
-export function likeAndUnlike(id){
-	console.log(id);
+export function likeAndUnlike(postId, employeeId){
 	return dispatch => {
 		dispatch({
 			type: LOADING_POSTS
 		})
-		fetch(`${basUrl()}/posts/post/like/${id}`, { ...headers.reqHeader('PATCH', '') }
+		fetch(`${basUrl()}/posts/post/like/${postId}`, { ...headers.reqHeader('PATCH', '') }
 		).then(res => res.json()).then(async data => {
-			// let data = response.data;
 			console.log(data)
 			if (data.success) {
-				Promise.all([
-					dispatch({
-						type: LIKE_OR_UNLIKE_POST_SUCCESS
-					})
-				]).then(() => dispatch(getPosts()))
+				dispatch({
+					type: LIKE_OR_UNLIKE_POST_SUCCESS,
+					payload: {...data.result, employeeId}
+				})
 			} else {
 				dispatch({
 					type: LIKE_OR_UNLIKE_POST_ERROR
@@ -213,12 +213,6 @@ export function likeAndUnlike(id){
 			}
 		}).catch(e => {
 			console.error(e);
-			swal.fire({
-				title: 'LIKE OR UNLIKE POST',
-				text: 'Oops! an error occurred. Kindly check network and try again',
-				timer: 3000,
-				icon: 'error'
-			})
 			dispatch({
 				type: LIKE_OR_UNLIKE_POST_ERROR
 			})

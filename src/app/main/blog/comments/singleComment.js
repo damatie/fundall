@@ -83,6 +83,7 @@ function BlogComment(props) {
 	const handleChange = value => {
 		if (value === true) {
 			setShowInput(value);
+			setInput('');
 		} else {
 			setInput(value);
 			setContent(value);
