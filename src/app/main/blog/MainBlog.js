@@ -70,8 +70,8 @@ function MainBlog() {
 	const [search, setSearch] = useState('');
 	const [data, setData] = useState(posts);
 	const [rowsPerPage, setRowsPerPage] = useState(10);
-	const tags = ['Games', 'Sports', 'JavaScript'];
-	const blogPost = data
+	console.log(data);
+	const blogPost = data.length > 0
 		? data.map(blog => {
 				return blog.post;
 		  })
@@ -232,7 +232,7 @@ function MainBlog() {
 												<h1>Loading...</h1>
 											) : (
 												blogPost.map((blog, i) => (
-													<BlogListContent blog={blog} author={blogAuthor[i]} key={i} tags={tags} />
+													<BlogListContent blog={blog} author={blogAuthor[i]} key={i} />
 												))
 											))}
 										{tabValue === 1 &&
@@ -240,7 +240,7 @@ function MainBlog() {
 												<NoPost />
 											) : (
 												week.map((blog, i) => (
-													<BlogListContent blog={blog} author={blogAuthor[i]} key={i} tags={tags} />
+													<BlogListContent blog={blog} author={blogAuthor[i]} key={i} />
 												))
 											))}
 										{tabValue === 2 &&
@@ -248,7 +248,7 @@ function MainBlog() {
 												<NoPost />
 											) : (
 												month.map((blog, i) => (
-													<BlogListContent blog={blog} author={blogAuthor[i]} key={i} tags={tags} />
+													<BlogListContent blog={blog} author={blogAuthor[i]} key={i} />
 												))
 											))}
 										{tabValue === 3 &&
@@ -256,7 +256,7 @@ function MainBlog() {
 												<NoPost />
 											) : (
 												year.map((blog, i) => (
-													<BlogListContent blog={blog} author={blogAuthor[i]} key={i} tags={tags} />
+													<BlogListContent blog={blog} author={blogAuthor[i]} key={i} />
 												))
 											))}
 										{tabValue === 4 &&
@@ -264,7 +264,7 @@ function MainBlog() {
 												<h1>Loading...</h1>
 											) : (
 												blogPost.map((blog, i) => (
-													<BlogListContent blog={blog} author={blogAuthor[i]} key={i} tags={tags} />
+													<BlogListContent blog={blog} author={blogAuthor[i]} key={i} />
 												))
 											))}
 									</div>

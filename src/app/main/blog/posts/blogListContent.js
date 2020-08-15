@@ -58,20 +58,20 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-const formatData = data => {
-	const result = data.map(i => i.postLike);
-};
+// const formatData = data => {
+// 	const result = data.map(i => i.postLike);
+// };
 const userId = useAuth().getId;
 
-function checkIfUserLikedComment(data) {
-	if (userId && data) {
-		for (const i of data) {
-			if (i.employeeId === userId) {
-				return true;
-			}
-		}
-	}
-}
+// function checkIfUserLikedComment(data) {
+// 	if (userId && data) {
+// 		for (const i of data) {
+// 			if (i.employeeId === userId) {
+// 				return true;
+// 			}
+// 		}
+// 	}
+// }
 
 function BlogListContent(props) {
 	const classes = useStyles();
@@ -81,15 +81,15 @@ function BlogListContent(props) {
 	const [numberOflikedpost, setNumberOfLikedPost] = React.useState();
 
 	React.useEffect(() => {
-		const result = props.blog.employees.map(i => i.postLike);
-		setClicked(checkIfUserLikedComment(!result ? [] : result));
-		setNumberOfLikedPost(result.length);
+		const isLiked = props.blog.employees.every(employee => employee.id !== userId);
+		if (!isLiked) setClicked(!isLiked);
+		setNumberOfLikedPost(props.blog.employees.length);
 	}, [props.blog]);
 
-	const handleLike = id => {
+	const handleLike = postId => {
 		setClicked(prevState => (prevState = !prevState));
-		numberOflikedpost ? setNumberOfLikedPost(prev => prev - 1) : setNumberOfLikedPost(prev => prev + 1);
-		dispatch(Actions.likeAndUnlike(id, props.userId));
+		clicked ? setNumberOfLikedPost(prev => prev - 1) : setNumberOfLikedPost(prev => prev + 1);
+		dispatch(Actions.likeAndUnlike(postId, userId));
 	};
 
 	const handleDelete = value => {
@@ -100,19 +100,21 @@ function BlogListContent(props) {
 		}
 	};
 
-	const blogTags = () =>
-		props.tags.map((tag, i) => {
-			return (
-				<Typography key={i} variant="caption" className={classes.tag}>
-					{`#${tag}`}
-				</Typography>
-			);
-		});
+	// const blogTags = () =>
+	// 	props.tags.map((tag, i) => {
+	// 		return (
+	// 			<Typography key={i} variant="caption" className={classes.tag}>
+	// 				{`#${tag}`}
+	// 			</Typography>
+	// 		);
+	// 	});
 
 	const getColor = () => (!clicked ? '#4d5760' : '#F44336');
 
 	return (
-		<Paper className={classes.paper} variant="outlined">
+		<>
+		{ (props.author) &&
+		(<Paper className={classes.paper} variant="outlined">
 			<SectionHeader
 				fullName={`${props.author.firstName} ${props.author.lastName}`}
 				dp={props.author.profilePicture}
@@ -130,7 +132,12 @@ function BlogListContent(props) {
 						</Typography>
 					</Link>
 				</ThemeProvider>
-				<div className={classes.dFlex}>{blogTags()}</div>
+				{/* <div className={classes.dFlex}>{blogTags()}</div> */}
+				<div className={classes.dFlex}>
+				<Typography variant="body1" className={classes.tag}>
+					Category: {props.blog.category ? props.blog.category.name : 'Business'}
+				</Typography>
+				</div>
 				<div className={classes.dFlex}>
 					<Button
 						style={{ color: getColor() }}
@@ -151,7 +158,9 @@ function BlogListContent(props) {
 					</Button>
 				</div>
 			</div>
-		</Paper>
+		</Paper>)
+		}
+		</>
 	);
 }
 
