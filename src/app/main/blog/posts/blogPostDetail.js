@@ -136,14 +136,14 @@ function BlogPostDetail({ match }) {
   const classes = useStyles();
   const dispatch = useDispatch();
   const userId = useAuth().getId;
-  const [commentState, setCommentState] = useState([]);
+  
   const blogPost = useSelector(({BlogPostDetail}) => BlogPostDetail.posts.post.postData);
   const author = useSelector(({BlogPostDetail}) => BlogPostDetail.posts.post.author);
   const comments = useSelector(({BlogPostDetail}) => BlogPostDetail.comments.data);
 
-
   const history = useHistory();
 
+  const [commentState, setCommentState] = useState([]);
   const [isLikedPost, setIsLikedPost] = useState(false);
   const [content, setContent] = useState('');
   const [numberOflikedpost, setNumberOfLikedPost] = useState(0);
@@ -158,9 +158,9 @@ function BlogPostDetail({ match }) {
   }
 
   useEffect(() => {
-  dispatch(Actions.getPostById(postId));
-  dispatch(Actions.getPostComments(postId));
-}, [dispatch]);
+    dispatch(Actions.getPostById(postId));
+    dispatch(Actions.getPostComments(postId));
+  }, [dispatch]);
 
   useEffect(() => {
     if(comments) {
@@ -173,11 +173,8 @@ function BlogPostDetail({ match }) {
 
   useEffect(() => {
     if (blogPost) {
-      let isLiked; 
-      if(blogPost.employees.length <= 0) {
-        isLiked = false;
-      }else {
-        isLiked = blogPost.employees.every(employee => employee.id !== userId);
+      if(blogPost.employees.length > 0) {
+        const isLiked = blogPost.employees.every(employee => employee.id !== userId);
         if (!isLiked) setIsLikedPost(!isLiked);
       } 
     }
@@ -190,9 +187,10 @@ function BlogPostDetail({ match }) {
     }
   }, [blogPost])
 
-  const handleLikes = (id) => {
+  const handleLikes = () => {
     setIsLikedPost(prevState => prevState = !prevState);
-    dispatch(Actions.likeAndUnlike(id));
+    isLikedPost ? setNumberOfLikedPost(prev => prev - 1) : setNumberOfLikedPost(prev => prev + 1);
+    dispatch(Actions.likeAndUnlike(postId, userId));
   };
 
   const handleSubmit = () => {
@@ -245,7 +243,7 @@ function BlogPostDetail({ match }) {
                     <Typography variant="h2" className={classes.title}>{blogPost && blogPost.title}</Typography>
                   </ThemeProvider>
                   <Typography variant="body1" component='p' className={classes.category}>
-                    Category: Business
+                    Category: {blogPost && blogPost.category.name}
                   </Typography>
                   <ThemeProvider theme={theme}>
                     <Typography variant="body1" component='p'>
