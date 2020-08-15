@@ -243,7 +243,7 @@ function BlogPostDetail({ match }) {
                     <Typography variant="h2" className={classes.title}>{blogPost && blogPost.title}</Typography>
                   </ThemeProvider>
                   <Typography variant="body1" component='p' className={classes.category}>
-                    Category: {blogPost && blogPost.category.name}
+                    {(blogPost && blogPost.category !== null) && `Category: ${blogPost.category.name}`}
                   </Typography>
                   <ThemeProvider theme={theme}>
                     <Typography variant="body1" component='p'>
