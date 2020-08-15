@@ -75,14 +75,14 @@ function MainBlog() {
 		? data.map(blog => {
 				return blog.post;
 		  })
-		: posts.map(blog => {
+		: Array.from(posts).map(blog => {
 				return blog.post;
 		  });
 	const blogAuthor = data
-		? data.map(blog => {
+		? Array.from(data).map(blog => {
 				return blog.author;
 		  })
-		: posts.map(blog => {
+		: Array.from(posts).map(blog => {
 				return blog.author;
 		  });
 
