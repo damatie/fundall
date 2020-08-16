@@ -18,6 +18,7 @@ import { CircularProgress } from '@material-ui/core';
 import ProgressBtn from 'app/shared/progressBtn';
 import Grid from '@material-ui/core/Grid';
 import * as Actions from '../store/actions/categories.actions';
+import Tooltip from '@material-ui/core/Tooltip';
 
 export default function AddCategoryModal() {
     const dispatch = useDispatch();
@@ -52,14 +53,16 @@ export default function AddCategoryModal() {
 
   return (
     <div>
-        <Fab
-            color="secondary"
-            aria-label="add"
-            className="absolute bottom-0 ltr:left-0 rtl:right-0 mx-16 -mb-28 z-999"
-            onClick={handleClickOpen}
-        >
-            <Icon>add</Icon>
-        </Fab>
+        <Tooltip title="Add Category">
+          <Fab
+              color="secondary"
+              aria-label="add"
+              className="absolute bottom-0 ltr:left-0 rtl:right-0 mx-16 -mb-28 z-999"
+              onClick={handleClickOpen}
+          >
+              <Icon>add</Icon>
+          </Fab>
+        </Tooltip>
       {/* <Button variant="outlined" color="primary" onClick={handleClickOpen}>
         Open form dialog
       </Button> */}
