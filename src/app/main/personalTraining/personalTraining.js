@@ -18,7 +18,7 @@ import EventDialog from './EventDialog';
 import * as Actions from './store/actions';
 import reducer from './store/reducers';
 import CardWidget from 'app/shared/widgets/CardWidget';
-import TableWidget from 'app/shared/widgets/TableWidget';
+import TableWidget from 'app/shared/widgets/TrainingTableWidget';
 
 const localizer = momentLocalizer(moment);
 

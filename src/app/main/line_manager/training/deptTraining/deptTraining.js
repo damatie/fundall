@@ -19,7 +19,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as Actions from './store/actions';
 import reducer from './store/reducers';
 import CardWidget from 'app/shared/widgets/CardWidget';
-import TableWidget from 'app/shared/widgets/TableWidget';
+import TrainingTableWidget from 'app/shared/widgets/TrainingTableWidget';
 import CoursesTableWidget from 'app/shared/widgets/CoursesTableWidget';
 import FuseAnimate from '@fuse/core/FuseAnimate';
 import AddCourseModal from './addCourseModal';
@@ -278,7 +278,7 @@ function DeptTraining(props) {
 										<CardWidget count={completedTrainings.length} title={'Completed'} color="black" />
 									</div>
 									<div className="widget flex w-full p-12">
-										<TableWidget
+										<TrainingTableWidget
 											title={'Department Training Requests'}
 											type="default"
 											columns={columns}

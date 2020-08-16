@@ -52,7 +52,7 @@ function EventDialog(props) {
 	const { form, handleChange, setForm, setInForm } = useForm(defaultFormState);
 	const [start, setStart ] = useState(moment(new Date(), 'MM/DD/YYYY'));
 	const [end, setEnd] = useState(moment(new Date(), 'MM/DD/YYYY'));
-    const classes = useStyles();
+  const classes = useStyles();
 	const [courseId, setCourseId] = useState(0);
 	const [edit, setEdit] = useState(false);
 	const [color, setColor] = useState('');

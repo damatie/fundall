@@ -18,7 +18,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as Actions from './store/actions';
 import reducer from './store/reducers';
 import CardWidget from 'app/shared/widgets/CardWidget';
-import TableWidget from 'app/shared/widgets/TableWidget';
+import TrainingTableWidget from 'app/shared/widgets/TrainingTableWidget';
 import CoursesTableWidget from 'app/shared/widgets/CoursesTableWidget';
 import FuseAnimate from '@fuse/core/FuseAnimate';
 import { useAuth } from 'app/hooks/useAuth';
@@ -95,11 +95,11 @@ function TrainingManagement(props) {
 	}
 
 	function checkRole() {
-        return (userData.role.upperCase() === 'HR')
+        return (userData.role.toUpperCase() === 'HR')
 	}
 	
     function checkHODRole() {
-        return (userData.role.upperCase() === 'HEAD OF DEPARTMENT')
+        return (userData.role.toUpperCase() === 'HEAD OF DEPARTMENT')
     }
 
     function handleCourseReject(ev, id){
@@ -271,8 +271,8 @@ function TrainingManagement(props) {
 							<CardWidget count={rejectedTrainings.length} title={"Rejected"} color="red" />
 						</div>
 						<div className="widget flex w-full p-12">
-							<TableWidget title={"Training Requests"} type="default" 
-							columns={columns} rows={totalTrainings} allowAuth={checkHODRole} 
+							<TrainingTableWidget title={"Training Requests"} type="default" 
+							columns={columns} rows={totalTrainings} allowAuth={checkRole()} 
 							handleReject={handleTrainingReject} handleApprove={handleTrainingApprove}/>
 						</div>
 					</FuseAnimateGroup>
