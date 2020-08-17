@@ -271,7 +271,7 @@ function MainBlog() {
 								}
 							</Grid>
 							<Grid item xs={12} sm={4} className={classes.aSide}>
-								<SideNavBar />
+								<SideNavBar blog={blogPost} />
 							</Grid>
 						</Grid>
 						<div className={classes.pagination}>

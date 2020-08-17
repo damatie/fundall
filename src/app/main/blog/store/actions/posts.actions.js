@@ -204,7 +204,7 @@ export function likeAndUnlike(postId, employeeId){
 			if (data.success) {
 				dispatch({
 					type: LIKE_OR_UNLIKE_POST_SUCCESS,
-					payload: {...data.result, employeeId}
+					payload: {...data, employeeId}
 				})
 			} else {
 				dispatch({
