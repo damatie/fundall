@@ -54,21 +54,17 @@ const postsReducer = (state = initialState, action) => {
 			};
 		case Actions.LIKE_OR_UNLIKE_POST_SUCCESS:{
       let newData;
-      if (action.payload.like) {
+      if (action.payload.result.like) {
         newData = state.data.map((blog) => {
           if (blog.post.id === action.payload.postId) {
-            return { author: blog.author, post: {...blog.post, employees: [...blog.post.employees, action.payload]}};
+            return { author: blog.author, post: {...blog.post, employees: [...action.payload.employees]}};
           }
           return blog;
         })
       } else {
-        const removeLike = (post) => {
-          if (post.length === 1) return [];
-          return post.filter(employee => employee.employeeId !== action.payload.employeeId )
-        }
         newData = state.data.map(blog => {
           if (blog.post.id === action.payload.postId) {
-            return {author: blog.author, post: {...blog.post, employees: removeLike(blog.post.employees)}};
+            return {author: blog.author, post: {...blog.post, employees: [...action.payload.result.employees]}};
           }
           return blog;
         })
