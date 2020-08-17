@@ -17,6 +17,8 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 import GridSystem from 'app/shared/gridSystem';
 import { useFormValues } from 'app/hooks/useFromValues';
 import { getOneInput } from '../getOneInput';
+import employeesReducers from 'app/main/HR/employee_management/store/reducers';
+import * as employeesActions from 'app/main/HR/employee_management/store/actions';
 
 const useStyles = makeStyles(theme => ({
 	grid: {
@@ -50,9 +52,16 @@ const getData = (id, type) => {
 const matchRole = (data, role) => {
 	const arr = [];
 	for(const i of data) {
-		if(i.role.name === role) {
-			arr.push(i);
+		if(role !== 'Head of department') {
+			if(i.role.name.toLowerCase() === role.toLowerCase()) {
+				arr.push(i);
+			}
+		}else {
+			if(i.role.name.toLowerCase() === 'line managers' || i.role.name.toLowerCase() === 'line manager' || i.role.name.toLowerCase() === role.toLowerCase()) {
+				arr.push(i);
+			}
 		}
+		
 	}
 	return arr;
 }
@@ -74,10 +83,12 @@ function RequestLoanTab(props) {
 	const loan = useSelector(({ loan }) => loan.loan);
 	const profile = useSelector(({ profile }) => profile);
 	const employeeList = useSelector(({ employeeList }) => employeeList);
+	const employees = useSelector(({ employees}) => employees.employees.data )
 
 	useEffect(() => {
 		if(!profile.loading) {
 			dispatch(employeeActions.getDepartmentEmployees(profile.data.departmentId));
+			dispatch(employeesActions.getEmployees());
 		}
 	}, [profile.data]);
 
@@ -85,7 +96,6 @@ function RequestLoanTab(props) {
 		if(id) {
 			dispatch(Actions.getLoan(id));
 		}
-		console.log(id)
 	}, [id])
 
 	function disableButton() {
@@ -128,7 +138,7 @@ function RequestLoanTab(props) {
 					type="number"
 					name="annualPay"
 					label="Annual Pay"
-					value={id ? loan.data.annualPay : ''}
+					value={id ? loan.data.loanData.annualPay : ''}
 					ref={annualRef}
 					validations={{
 						minLength: 1
@@ -136,7 +146,9 @@ function RequestLoanTab(props) {
 					validationErrors={{
 						minLength: 'Min character length is 1'
 					}}
+					error={annualPay > 3000000}
 					onChange={e => setAnnualPay(e.target.value)}
+					helperText={annualPay > 3000000 ? `Please you have exceed you maximum amount of ${Intl.NumberFormat().format(3000000)}` : ''}
 					InputProps={{
 						endAdornment: (
 							<InputAdornment position="end">
@@ -158,13 +170,13 @@ function RequestLoanTab(props) {
 						name="amountRequested"
 						label="Amount requested"
 						step="1"
-						value={id ? loan.data.amountRequested : ''}
+						value={id ? loan.data.loanData.amountRequested : ''}
 						validations={{
 							// matchRegexp: /^([1-20])$/
 							// isGreaterThan: annualRef.current ? annualRef.current.state.value : 1
 						}}
-						error={amountRequested > annualPay * 30 / 100}
-						helperText={amountRequested > annualPay * 30 / 100 ? 'Please you can not request for an amount that is greater than 30% of your annual payment' : `Max Amount: ${new Intl.NumberFormat().format(annualPay * 30 / 100)}`}
+						error={amountRequested > annualPay * 20 / 100}
+						helperText={amountRequested > annualPay * 20 / 100 ? 'Please you can not request for an amount that is greater than 20% of your annual payment' : `Max Amount: ${new Intl.NumberFormat().format(annualPay * 20 / 100)}`}
 						onChange={e => {
 							setAmountRequested(e.target.value)
 						}}
@@ -188,7 +200,7 @@ function RequestLoanTab(props) {
 					type="text"
 					name="workLocation"
 					label="Work location"
-					value={id ? loan.data.workLocation : ''}
+					value={id ? loan.data.loanData.workLocation : ''}
 					validations={{
 						minLength: 1
 					}}
@@ -213,7 +225,7 @@ function RequestLoanTab(props) {
 					type="number"
 					name="phoneNumber"
 					label="Phone number"
-					// value={id ? loan.data.amountRequested : ''}
+					value={id ? loan.data.loanData.phoneNumber : ''}
 					validations={{
 						minLength: 1
 					}}
@@ -238,7 +250,7 @@ function RequestLoanTab(props) {
 					type="text"
 					name="residentialAddress"
 					label="Residential address"
-					// value={id ? loan.data.amountRequested : ''}
+					value={id ? loan.data.loanData.residentialAddress : ''}
 					validations={{
 						minLength: 1
 					}}
@@ -262,7 +274,7 @@ function RequestLoanTab(props) {
           className="my-16"
           name="duration"
           label="Purpose Duration"
-          value={id ? loan.data.duration : 'none'}
+          value={id ? loan.data.loanData.duration : 'none'}
           // validations="not-equals:none"
           validationError="requried"
           variant="outlined"
@@ -275,24 +287,9 @@ function RequestLoanTab(props) {
 
 				<SelectFormsy
           className="my-16"
-          name="financeManager"
-          label="Finance manager"
-          value={id ? loan.data.financeManager : 'none'}
-          // validations="not-equals:none"
-          validationError="requried"
-          variant="outlined"
-					required
-        >
-					{matchRole(employeeList.data, 'Finance manager').map(item => (
-						<MenuItem value={item.id} key={item.id}>{`${item.firstName} ${item.lastName}`}</MenuItem>
-					))}
-        </SelectFormsy>
-
-				<SelectFormsy
-          className="my-16"
           name="departmentHead"
-          label="Head of department"
-          value={id ? loan.data.departmentHead : 'none'}
+          label="Line manager"
+          value={id ? loan.data.loanData.departmentHead : 'none'}
           // validations="not-equals:none"
           validationError="requried"
           variant="outlined"
@@ -305,15 +302,29 @@ function RequestLoanTab(props) {
 
 				<SelectFormsy
           className="my-16"
-          name="hrManager"
-          label="HR manager"
-          value={id ? loan.data.hrManager : 'none'}
+          name="supportDirector"
+          label="Director of support service"
+          value={id ? loan.data.loanData.supportDirector : 'none'}
           // validations="not-equals:none"
           validationError="requried"
           variant="outlined"
 					required
         >
 					{matchRole(employeeList.data, 'HR').map(item => (
+						<MenuItem value={item.id} key={item.id}>{`${item.firstName} ${item.lastName}`}</MenuItem>
+					))}
+        </SelectFormsy>
+				<SelectFormsy
+          className="my-16"
+          name="financeManager"
+          label="Finance manager"
+          value={id ? loan.data.loanData.financeManager : 'none'}
+          // validations="not-equals:none"
+          validationError="requried"
+          variant="outlined"
+					required
+        >
+					{matchRole(employeeList.data, 'Finance manager').map(item => (
 						<MenuItem value={item.id} key={item.id}>{`${item.firstName} ${item.lastName}`}</MenuItem>
 					))}
         </SelectFormsy>
@@ -324,7 +335,7 @@ function RequestLoanTab(props) {
           label="Purpose"
           rows='5'
 					multiline
-					value={id ? loan.data.purpose : ''}
+					value={id ? loan.data.loanData.purpose : ''}
 					validations={{
 						minLength: 1
 					}}
@@ -350,4 +361,5 @@ function RequestLoanTab(props) {
 
 
 withReducer('employeeList', employeeReducer)(RequestLoanTab);
+withReducer('employees', employeesReducers)(RequestLoanTab)
 export default RequestLoanTab;

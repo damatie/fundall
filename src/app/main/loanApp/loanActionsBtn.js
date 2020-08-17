@@ -117,7 +117,7 @@ const LoanActionsBtn = props => {
 				break;
 			}
 			case 'reviewed': {
-				approve(`${getBaseUrl()}/loan/approve/hr/`, {});
+				approve(`${getBaseUrl()}/loan/approve/support/`, {});
 				break;
 			}
 			case 'approved': {
@@ -137,7 +137,7 @@ const LoanActionsBtn = props => {
 				break;
 			}
 			case 'reviewed': {
-				reject(`${getBaseUrl()}/loan/approve/hr/reject/`);
+				reject(`${getBaseUrl()}/loan/approve/support/reject/`);
 				break;
 			}
 			case 'approved': {
@@ -224,40 +224,44 @@ const LoanActionsBtn = props => {
 	
 	const handelReturnLeave = () => {
 		setLoading3(true);
-		fetch(`${getBaseUrl()}/loan/approve/close/${id}`, {
-			...header.reqHeader(
-				'PATCH',
-				{
-					
-				}
-			)
-		}).then(res => res.json()).then(
-			data => {
-				setLoading3(false);
-				if(data.success) {
-					swal.fire({
-						title: 'Return Loan',
-						text: data.message,
-						icon: 'success',
-						timer: 3000
-					})
-					setSuccess3(true);
-					history.push({
-						pathname: '/loan/review/list'
-					})
-				} else {
-					swal.fire({
-						title: 'Return Loan',
-						text: data.message,
-						icon: 'error',
-						timer: 3000
-					})
-					setSuccess3(true);
-				}
-			}
-		).catch(e => {
-			setLoading3(false);
-			console.error(e)});
+		console.log(props.form)
+		if(props.form.amountApproved === 0 || props.form.deductableAmount) {
+			
+		}
+		// fetch(`${getBaseUrl()}/loan/approve/finance/${id}`, {
+		// 	...header.reqHeader(
+		// 		'PATCH',
+		// 		{
+		// 			...props.form
+		// 		}
+		// 	)
+		// }).then(res => res.json()).then(
+		// 	data => {
+		// 		setLoading3(false);
+		// 		if(data.success) {
+		// 			swal.fire({
+		// 				title: 'Return Loan',
+		// 				text: data.message,
+		// 				icon: 'success',
+		// 				timer: 3000
+		// 			})
+		// 			setSuccess3(true);
+		// 			history.push({
+		// 				pathname: '/loan/review/list'
+		// 			})
+		// 		} else {
+		// 			swal.fire({
+		// 				title: 'Return Loan',
+		// 				text: data.message,
+		// 				icon: 'error',
+		// 				timer: 3000
+		// 			})
+		// 			setSuccess3(true);
+		// 		}
+		// 	}
+		// ).catch(e => {
+		// 	setLoading3(false);
+		// 	console.error(e)});
 	}
 
 	const handelAcceptLoan = () => {
@@ -300,7 +304,7 @@ const LoanActionsBtn = props => {
 
   return (
     <div className="flex items-center justify-evenly">
-      {loan.loanData.status !== 'open' && loan.loanData.status !== 'closed' && loan.loanData.status !== 'corrected' ? 
+      {loan.loanData.status !== 'open' && loan.loanData.status !== 'closed' && loan.loanData.status !== 'corrected' && props.type === 'final' ? 
       <>
 				{props.form.amountApproved < loan.loanData.amountRequested ? <ProgressBtn loading={loading3} success={success3} color='primary' onClick={handelReturnLeave} content='Return Loan'/> :
 
@@ -309,7 +313,13 @@ const LoanActionsBtn = props => {
 				}
         <ProgressBtn loading={loading2} success={success2} color='red' onClick={handleReject} content='Reject Loan' />
       </>
-      : <></>}
+      : <>
+				{loan.loanData.status !== 'open' && loan.loanData.status !== 'closed' && loan.loanData.status !== 'corrected' ? 
+					<>
+					<ProgressBtn loading={loading3} success={success3} color='primary' onClick={handleApproveLeave} content='Approve Loan'/>
+					<ProgressBtn loading={loading2} success={success2} color='red' onClick={handleReject} content='Reject Loan' /> </> : <></>
+				}
+			</>}
 
       {loan.loanData.status === 'open' ? 
       <>
