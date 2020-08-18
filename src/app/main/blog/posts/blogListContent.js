@@ -58,20 +58,7 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-// const formatData = data => {
-// 	const result = data.map(i => i.postLike);
-// };
 const userId = useAuth().getId;
-
-// function checkIfUserLikedComment(data) {
-// 	if (userId && data) {
-// 		for (const i of data) {
-// 			if (i.employeeId === userId) {
-// 				return true;
-// 			}
-// 		}
-// 	}
-// }
 
 function BlogListContent(props) {
 	const classes = useStyles();
@@ -81,8 +68,10 @@ function BlogListContent(props) {
 	const [numberOflikedpost, setNumberOfLikedPost] = React.useState();
 
 	React.useEffect(() => {
+		console.log(props.blog.employees);
+		console.log(userId);
 		const isLiked = props.blog.employees.every(employee => employee.id !== userId);
-		if (!isLiked) setClicked(!isLiked);
+		if (!isLiked) setClicked(true);
 		setNumberOfLikedPost(props.blog.employees.length);
 	}, [props.blog]);
 
@@ -99,15 +88,6 @@ function BlogListContent(props) {
 			window.location = `/main/blog/post/edit/${props.blog.id}`;
 		}
 	};
-
-	// const blogTags = () =>
-	// 	props.tags.map((tag, i) => {
-	// 		return (
-	// 			<Typography key={i} variant="caption" className={classes.tag}>
-	// 				{`#${tag}`}
-	// 			</Typography>
-	// 		);
-	// 	});
 
 	const getColor = () => (!clicked ? '#4d5760' : '#F44336');
 

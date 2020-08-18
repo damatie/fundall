@@ -3,12 +3,12 @@ import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Divider from '@material-ui/core/Divider';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
-import Checkbox from '@material-ui/core/Checkbox';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControl from '@material-ui/core/FormControl';
+import FormLabel from '@material-ui/core/FormLabel';
 import * as Actions from '../store/actions';
 import reducer from '../store/reducers';
 import withReducer from 'app/store/withReducer';
@@ -16,11 +16,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import ProgressBtn from '../../../shared/progressBtn';
 import AddCategory from '../blogCategories/addCategoryModal';
 import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
-import CheckBoxIcon from '@material-ui/icons/CheckBox';
-import { useHistory } from 'react-router';
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -63,57 +58,54 @@ const useStyles = makeStyles(theme => ({
 	},
 }));
 
-const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
-const checkedIcon = <CheckBoxIcon fontSize="small" />;
-
 function AddBlogPost(props) {
 	const classes = useStyles();
 	const dispatch = useDispatch();
-    const loading = useSelector(({ AddBlogPost }) => AddBlogPost.posts.loading);
-    const categories = useSelector(({AddBlogPost}) => AddBlogPost.categories.categories);
-    const posts = useSelector(({AddBlogPost}) => AddBlogPost.posts.data);
-    const post = posts.postData;
+	const loading = useSelector(({ AddBlogPost }) => AddBlogPost.posts.loading);
+	const categories = useSelector(({AddBlogPost}) => AddBlogPost.categories.categories);
+	const posts = useSelector(({AddBlogPost}) => AddBlogPost.posts.data);
+	const post = posts.postData;
 
-    const postId = props.match.params.post_id;
-	const [checked, setChecked] = useState([0]);
-    const [title, setTitle] = useState('');
+	const postId = props.match.params.post_id;
+	const [title, setTitle] = useState('');
 	const [body, setBody] = useState('');
 	const [images, setImages] = useState({});
-	const [tags, setTags] = useState([]);
-    const [names, setNames] = useState('');
-    const [canSubmit, setCanSubmit] = useState(false);
-    const [category, setCategory] = useState(0);
+	const [names, setNames] = useState('');
+	const [canSubmit, setCanSubmit] = useState(false);
+	const [category, setCategory] = useState('');
+	const [categoryId, setCategoryId] = useState(null);
 
-    // console.log(props);
-    useEffect(() => {
-        dispatch(Actions.getCategories());
-        if(postId){
-            dispatch(Actions.getPostById(postId));
-        }
-    }, [dispatch])
+	// console.log(props);
+	useEffect(() => {
+		dispatch(Actions.getCategories());
+		if(postId){
+			dispatch(Actions.getPostById(postId));
+		}
+	}, [dispatch])
     
-    useEffect(() => {
-        if(postId){
-            setTitle((post) ? post.title : '');
-            setBody((post) ? post.body : '');
-            setCategory((post) ? post.categoryId : 0);
-            setCanSubmit(true);
-        }
-    }, [post])
+	useEffect(() => {
+		if(postId){
+			setTitle((post) ? post.title : '');
+			setBody((post) ? post.body : '');
+			setCategory((post) ? post.category.name : '');
+			setCanSubmit(true);
+		}
+	}, [post])
 
-    const validForm = () => {
-        if(title !== '' && body !== '' && category !== 0){
-            setCanSubmit(true);
-        }else{
-            setCanSubmit(false);
-        }
-    }
-
-	const handleToggle = value => () => {
-        setCategory(value);
-        validForm();
-    };
-    
+	const validForm = () => {
+		if (title !== '' && body !== '' && categoryId !== null) {
+			setCanSubmit(true);
+		}else{
+			setCanSubmit(false);
+		}
+	}
+		
+	const handleChange = (event) => {
+		const currentCategory = categories.find(category => category.name === event.target.value);
+		setCategoryId(currentCategory.id);
+		setCategory(currentCategory.name);
+		validForm()
+  };
 
 	function imageChange(event) {
 		setNames(event.target.files[0].name);
@@ -126,17 +118,20 @@ function AddBlogPost(props) {
 		formData.append('title', title);
 		formData.append('body', body);
 		formData.append('images', images.file);
-		formData.append('categoryId', category);
-		// formData.append('tags', tags);
+		formData.append('categoryId', categoryId);
 		// for (let i = 0; i < images.length; i++) {
 		//   formData.append('images', images[i]);
-        // }
-        if(postId){
-            dispatch(Actions.updatePost(formData, postId));
-        }else{
-            dispatch(Actions.createPost(formData));
-        }
+		// }
+		if(postId){
+			dispatch(Actions.updatePost(formData, postId));
+		}else{
+			dispatch(Actions.createPost(formData));
+		}
 	};
+
+	const postCategories = categories.map(category => {
+		return <FormControlLabel value={category.name} key={category.id} control={<Radio />} label={category.name} />
+	})
 
 	return (
 		<Grid container className={classes.root}>
@@ -148,8 +143,8 @@ function AddBlogPost(props) {
 					<Paper variant="outlined" elevation={3}>
 						<input
 							placeholder="Blog title"
-                            className={classes.blogTitle}
-                            value={title}
+							className={classes.blogTitle}
+							value={title}
 							onChange={event => {setTitle(event.target.value); validForm();}}
 						/>
 					</Paper>
@@ -175,65 +170,31 @@ function AddBlogPost(props) {
 							placeholder="Blog content"
 							className={classes.blogContent}
 							onChange={event => {setBody(event.target.value); validForm();}}
-                            rows={5}
-                            value={body}
+													rows={5}
+													value={body}
 							style={{ resize: 'none' }}
 						/>
 					</Paper>
 				</Grid>
 				<Grid item xs={12} sm={4}>
-					<Paper variant="outlined" elevation={3}>
+					<Paper variant="outlined" elevation={3} style={{position: 'relative'}}>
 						<Typography variant="subtitle2" align="center" style={{ padding: 16 }}>
-							Post settings
+							Select Category
 						</Typography>
 						<Divider />
-						<Typography variant="body1" component="h3" style={{ padding: '16px 16px 8px 16px', color: 'grey' }}>
-							Categories
-						</Typography>
-						<List style={{ padding: 0 }}>
-							{categories.map(category => {
-								const labelId = `category-label-${category.name}`;
-								return (
-									<ListItem
-										style={{ padding: '0 16px' }}
-										key={category.id}
-										// role={undefined}
-										dense
-										button
-										onClick={handleToggle(category.id)}
-									>
-										<ListItemIcon>
-											<Checkbox
-												edge="start"
-												// checked={category === category.id}
-                        tabIndex={-1}
-                        value={category}
-												disableRipple
-                        onChange={validForm}
-                        inputProps={{ 'aria-labelledby': labelId }}
-											/>
-										</ListItemIcon>
-										<ListItemText id={labelId} primary={category.name} />
-									</ListItem>
-								);
-							})}
-              <div style={{padding: '16px'}}></div>
-							<AddCategory />
-						</List>
+						<FormControl component="fieldset" style={{ padding: 16 }}>
+							<FormLabel component="legend" style={{ padding: '16px 0 0' }}>Category</FormLabel>
+							<RadioGroup aria-label="category" value={category} onChange={event => handleChange(event)}>
+								{ postCategories }
+							</RadioGroup>
+						</FormControl>
+						<div style={{paddingTop: 20}}></div>
+						<AddCategory />
 					</Paper>
 				</Grid>
 			</Grid>
 		</Grid>
 	);
 }
-
-const tagList = [
-	{ title: 'sport', year: 1994 },
-	{ title: 'Education', year: 1972 },
-	{ title: 'Javascript', year: 1974 },
-	{ title: 'Sales', year: 2008 },
-	{ title: 'Jobs', year: 1957 },
-	{ title: 'Some random tag', year: 1993 }
-];
 
 export default withReducer('AddBlogPost', reducer)(AddBlogPost);

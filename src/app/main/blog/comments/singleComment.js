@@ -59,6 +59,7 @@ function BlogComment(props) {
 	const [likes, setLikes] = useState([]);
 	const [employeeDetails, setEmployeeDetails] = useState({});
 	const [value, setValue] = useState('');
+	const [inputError, setInputError] = useState(false);
 
 	useEffect(() => {
 		if (props.comment) {
@@ -87,6 +88,7 @@ function BlogComment(props) {
 		} else {
 			setInput(value);
 			setContent(value);
+			setInputError(false);
 		}
 	};
 
@@ -103,10 +105,14 @@ function BlogComment(props) {
 	}
 
 	const handleSubmitReply = () => {
-		setShowInput(true);
-		const model = { commentId: props.comment.id, content };
-		dispatch(Actions.submitBlogCommentReply(model, props.postId));
-		setContent('');
+		if (input.length > 0) {
+			setShowInput(true);
+			const model = { commentId: props.comment.id, content };
+			dispatch(Actions.submitBlogCommentReply(model, props.postId));
+			setInput('');
+		} else {
+			setInputError(true);
+		}
 	};
 
 	const handleCommentEdit = () => {
@@ -209,6 +215,7 @@ function BlogComment(props) {
 					<CommentInput
 						cancel="Cancel"
 						value={input}
+						error={inputError}
 						onClick={() => handleSubmitReply()}
 						onChange={value => handleChange(value)}
 					/>

@@ -112,7 +112,7 @@ export function createPost(payload){
 					timer: 3000,
 					icon: 'success'
 				}).then(function(){
-				//   window.location.href = "/main/blogs";
+				  window.location.href = "/main/blogs";
 				});
 			} else {
 				swal.fire({
