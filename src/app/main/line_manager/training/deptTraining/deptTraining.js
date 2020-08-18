@@ -51,22 +51,18 @@ function DeptTraining(props) {
 	const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
 
 	//Appending All trainings into one array of object
-	let totalTrainings = approvedTrainings
-		.concat(rejectedTrainings)
-		.concat(pendingTrainings)
-		.concat(completedTrainings)
-		.concat(reviewedTrainings);
+	let totalTrainings =  sortArray(pendingTrainings)
+		.concat(sortArray(reviewedTrainings))
+		.concat(sortArray(approvedTrainings))
+		.concat(sortArray(rejectedTrainings))
+		.concat(sortArray(completedTrainings));
 	//Sorting the appended Trainings
-	totalTrainings = totalTrainings.sort((a, b) => {
-		return new Date(b.createdAt) - new Date(a.createdAt);
-	});
+	totalTrainings = sortArray(totalTrainings);
 
 	//Appending All courses into one array of object
 	let totalCourses = approvedCourses.concat(rejectedCourses).concat(pendingCourses);
 	//Sorting the appended courses
-	totalCourses = totalCourses.sort((a, b) => {
-		return new Date(b.createdAt) - new Date(a.createdAt);
-	});
+	totalCourses = sortArray(totalCourses);
 
 	const classes = useStyles(props);
 	const pageLayout = useRef(null);
@@ -90,6 +86,12 @@ function DeptTraining(props) {
 
 	function checkRole() {
 		return userData.role.toUpperCase() === 'HR';
+	}
+
+	function sortArray(array = []) {
+		return array.sort((a, b) => {
+			return new Date(b.createdAt) - new Date(a.createdAt);
+		})
 	}
 
 	function checkHODRole() {
@@ -245,122 +247,85 @@ function DeptTraining(props) {
 						scrollButtons="off"
 						className="w-full border-b-1 px-24"
 					>
-						{checkHODRole() ? <Tab className="text-14 font-600 normal-case" label="Department Training" /> : null}
+						<Tab className="text-14 font-600 normal-case" label="Department Training" />
 						<Tab className="text-14 font-600 normal-case" label="Course Management" />
 					</Tabs>
 				}
 				content={
-					checkHODRole() ? (
-						<div className="p-12">
-							{tabValue === 0 && (
-								<FuseAnimateGroup
-									className="flex flex-wrap"
-									enter={{
-										animation: 'transition.slideUpBigIn'
-									}}
-								>
-									<div className="widget flex w-full sm:w-1/2 md:w-1/6 p-12">
-										<CardWidget count={totalTrainings.length} title={'Total'} color="yellow" />
-									</div>
-									<div className="widget flex w-full sm:w-1/2 md:w-1/6 p-12">
-										<CardWidget count={pendingTrainings.length} title={'Pending'} color="blue" />
-									</div>
-									<div className="widget flex w-full sm:w-1/2 md:w-1/6 p-12">
-										<CardWidget count={approvedTrainings.length} title={'Approved'} color="green" />
-									</div>
-									<div className="widget flex w-full sm:w-1/2 md:w-1/6 p-12">
-										<CardWidget count={rejectedTrainings.length} title={'Rejected'} color="red" />
-									</div>
-									<div className="widget flex w-full sm:w-1/2 md:w-1/6 p-12">
-										<CardWidget count={reviewedTrainings.length} title={'Reviewed'} color="orange" />
-									</div>
-									<div className="widget flex w-full sm:w-1/2 md:w-1/6 p-12">
-										<CardWidget count={completedTrainings.length} title={'Completed'} color="black" />
-									</div>
-									<div className="widget flex w-full p-12">
-										<TrainingTableWidget
-											title={'Department Training Requests'}
-											type="default"
-											columns={columns}
-											allowAuth={checkHODRole()}
-											handleReject={handleTrainingReject}
-											handleApprove={handleTrainingApprove}
-											rows={totalTrainings}
-										/>
-									</div>
-								</FuseAnimateGroup>
-							)}
-							{tabValue === 1 && (
-								<FuseAnimateGroup
-									className="flex flex-wrap"
-									enter={{
-										animation: 'transition.slideUpBigIn'
-									}}
-								>
-									<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
-										<CardWidget count={totalCourses.length} title={'Total'} color="yellow" />
-									</div>
-									<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
-										<CardWidget count={pendingCourses.length} title={'Pending'} color="blue" />
-									</div>
-									<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
-										<CardWidget count={approvedCourses.length} title={'Approved'} color="green" />
-									</div>
-									<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
-										<CardWidget count={rejectedCourses.length} title={'Rejected'} color="red" />
-									</div>
-									<div className="widget flex w-full p-12">
-										<CoursesTableWidget
-											title={'Department Course Management'}
-											allowClick={true}
-											allowAuth={checkRole()}
-											handleReject={handleCourseReject}
-											handleApprove={handleCourseApprove}
-											type="default"
-											columns={coursesColumn}
-											rows={totalCourses}
-										/>
-									</div>
-								</FuseAnimateGroup>
-							)}
-						</div>
-					) : (
-						<div className="p-12">
-							{tabValue === 0 && (
-								<FuseAnimateGroup
-									className="flex flex-wrap"
-									enter={{
-										animation: 'transition.slideUpBigIn'
-									}}
-								>
-									<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
-										<CardWidget count={totalCourses.length} title={'Total'} color="yellow" />
-									</div>
-									<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
-										<CardWidget count={pendingCourses.length} title={'Pending'} color="blue" />
-									</div>
-									<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
-										<CardWidget count={approvedCourses.length} title={'Approved'} color="green" />
-									</div>
-									<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
-										<CardWidget count={rejectedCourses.length} title={'Rejected'} color="red" />
-									</div>
-									<div className="widget flex w-full p-12">
-										<CoursesTableWidget
-											title={'Department Course Management'}
-											allowClick={true}
-											allowAuth={checkRole()}
-											handleReject={handleCourseReject}
-											handleApprove={handleCourseApprove}
-											type="default"
-											columns={coursesColumn}
-											rows={totalCourses}
-										/>
-									</div>
-								</FuseAnimateGroup>
-							)}
-						</div>
-					)
+					<div className="p-12">
+						{tabValue === 0 && (
+							<FuseAnimateGroup
+								className="flex flex-wrap"
+								enter={{
+									animation: 'transition.slideUpBigIn'
+								}}
+							>
+								<div className="widget flex w-full sm:w-1/2 md:w-1/6 p-12">
+									<CardWidget count={totalTrainings.length} title={'Total'} color="yellow" />
+								</div>
+								<div className="widget flex w-full sm:w-1/2 md:w-1/6 p-12">
+									<CardWidget count={pendingTrainings.length} title={'Pending'} color="blue" />
+								</div>
+								<div className="widget flex w-full sm:w-1/2 md:w-1/6 p-12">
+									<CardWidget count={approvedTrainings.length} title={'Approved'} color="green" />
+								</div>
+								<div className="widget flex w-full sm:w-1/2 md:w-1/6 p-12">
+									<CardWidget count={rejectedTrainings.length} title={'Rejected'} color="red" />
+								</div>
+								<div className="widget flex w-full sm:w-1/2 md:w-1/6 p-12">
+									<CardWidget count={reviewedTrainings.length} title={'Reviewed'} color="orange" />
+								</div>
+								<div className="widget flex w-full sm:w-1/2 md:w-1/6 p-12">
+									<CardWidget count={completedTrainings.length} title={'Completed'} color="black" />
+								</div>
+								<div className="widget flex w-full p-12">
+									<TrainingTableWidget
+										title={'Department Training Requests'}
+										type="default"
+										columns={columns}
+										allowAuth={checkHODRole()}
+										isHR={checkRole()}
+										handleReject={handleTrainingReject}
+										handleApprove={handleTrainingApprove}
+										rows={totalTrainings}
+									/>
+								</div>
+							</FuseAnimateGroup>
+						)}
+						{tabValue === 1 && (
+							<FuseAnimateGroup
+								className="flex flex-wrap"
+								enter={{
+									animation: 'transition.slideUpBigIn'
+								}}
+							>
+								<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
+									<CardWidget count={totalCourses.length} title={'Total'} color="yellow" />
+								</div>
+								<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
+									<CardWidget count={pendingCourses.length} title={'Pending'} color="blue" />
+								</div>
+								<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
+									<CardWidget count={approvedCourses.length} title={'Approved'} color="green" />
+								</div>
+								<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
+									<CardWidget count={rejectedCourses.length} title={'Rejected'} color="red" />
+								</div>
+								<div className="widget flex w-full p-12">
+									<CoursesTableWidget
+										title={'Department Course Management'}
+										allowClick={true}
+										allowAuth={checkRole()}
+										handleReject={handleCourseReject}
+										handleApprove={handleCourseApprove}
+										type="default"
+										columns={coursesColumn}
+										rows={totalCourses}
+									/>
+								</div>
+							</FuseAnimateGroup>
+						)}
+					</div>
 				}
 				ref={pageLayout}
 			/>
