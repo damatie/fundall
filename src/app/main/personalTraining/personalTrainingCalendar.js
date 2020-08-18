@@ -171,7 +171,7 @@ function PersonalTrainingCalendar(props) {
 
 	const classes = useStyles(props);
 	const headerEl = useRef(null);
-	console.log(events);
+	
 	useEffect(() => {
 		dispatch(Actions.getAllTrainings());
 	}, [dispatch]);

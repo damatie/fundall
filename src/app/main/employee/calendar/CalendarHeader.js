@@ -214,17 +214,31 @@ const useStyles2 = makeStyles(theme => ({
 }));
 
 
+const compareYear = (data) => {
+	let result = 0;
+	for(const i of data) {
+		if(i.allotedYear == new Date().getFullYear()) {
+			return result = {
+				...i
+			}
+		}
+	}
+}
 
 const LeaveDays = () => {
 
 	const dispatch = useDispatch();
 	const leaveDays = useSelector(({ calendarApp }) => calendarApp.leaveDays);
 
-	const { result } = useCompareYear(leaveDays.data)
+	const result = compareYear(leaveDays.data);
 
 	useEffect(() => {
 		dispatch(Actions.getLeaveDays());
 	}, [dispatch]);
+
+	if(!result) {
+		return <>loading...</>
+	}
 
 	return (
 		<div className="flex items-center">

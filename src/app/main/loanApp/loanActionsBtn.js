@@ -5,12 +5,23 @@ import swal from 'sweetalert2';
 import { useParams, Link, useHistory, Redirect } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getBaseUrl } from 'app/shared/getBaseUrl';
+import AppBar from '@material-ui/core/AppBar';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import { TextField } from '@material-ui/core';
+import { useForm } from '@fuse/hooks';
+import * as Actions from './store/actions';
 
 const LoanActionsBtn = props => {
   const header = fetchHeaders();
 	const [selectedTab, setSelectedTab] = useState(0);
 	const [success1, setSuccess1] = useState(false);
 	const [loading1, setLoading1] = useState(false);
+	const [open, setOpen] = useState(false);
 
 	const [success2, setSuccess2] = useState(false);
 	const [loading2, setLoading2] = useState(false);
@@ -121,8 +132,9 @@ const LoanActionsBtn = props => {
 				break;
 			}
 			case 'approved': {
-				approve(`${getBaseUrl()}/loan/approve/finance/`, {...props.form});
-				break;
+				// approve(`${getBaseUrl()}/loan/approve/finance/`, {...props.form});
+				setOpen(true);
+				break;	
 			}
 			default: {
 				return 'hello';
@@ -226,7 +238,7 @@ const LoanActionsBtn = props => {
 		setLoading3(true);
 		console.log(props.form)
 		if(props.form.amountApproved === 0 || props.form.deductableAmount) {
-			
+
 		}
 		// fetch(`${getBaseUrl()}/loan/approve/finance/${id}`, {
 		// 	...header.reqHeader(
@@ -304,15 +316,12 @@ const LoanActionsBtn = props => {
 
   return (
     <div className="flex items-center justify-evenly">
-      {loan.loanData.status !== 'open' && loan.loanData.status !== 'closed' && loan.loanData.status !== 'corrected' && props.type === 'final' ? 
+      {loan.loanData.status !== 'open' && loan.loanData.status !== 'closed' && loan.loanData.status !== 'corrected' ? 
       <>
-				{props.form.amountApproved < loan.loanData.amountRequested ? <ProgressBtn loading={loading3} success={success3} color='primary' onClick={handelReturnLeave} content='Return Loan'/> :
-
-				props.form.amountApproved > loan.loanData.amountRequested ? '' : <ProgressBtn loading={loading3} success={success3} color='primary' onClick={handleApproveLeave} content='Approve Loan'/>
-
-				}
+				<ProgressBtn loading={loading3} success={success3} color='primary' onClick={handleApproveLeave} content='Approve Loan'/>
         <ProgressBtn loading={loading2} success={success2} color='red' onClick={handleReject} content='Reject Loan' />
       </>
+
       : <>
 				{loan.loanData.status !== 'open' && loan.loanData.status !== 'closed' && loan.loanData.status !== 'corrected' ? 
 					<>
@@ -336,8 +345,85 @@ const LoanActionsBtn = props => {
       </> :
       <></>
       }
+
+			<ApproveLoan open={open} setOpen={setOpen}/>
     </div>
-  );
+	);
+	
+	
 };
+
+const ApproveLoan = props => {
+
+	const loan = useSelector(({ loan }) => loan.loan.data);
+	const loans = useSelector(({ loan }) => loan.loan);
+	const { id } = useParams();
+
+	const dispatch = useDispatch();
+
+	const { handleChange, form, setForm} = useForm({
+		amountApproved: 0,
+	});
+
+
+	const handleClose = () => {
+		props.setOpen(false);
+	};
+
+	const handleSubmit = e => {
+		e.preventDefault();
+		const params = {
+			...form,
+			deductableAmount: `${form.amountApproved / loan.loanData.duration}`
+		}
+		dispatch(Actions.approveLoan(id, params))
+	};
+
+
+	return (
+		<Dialog open={props.open} fullWidth maxWidth="xs" onClose={handleClose}>
+			<AppBar position="static">
+				<Toolbar className="flex w-full">
+					<Typography variant="subtitle1" color="inherit">
+						Approve Employee Personal Loan
+					</Typography>
+				</Toolbar>
+			</AppBar>
+			<form onSubmit={handleSubmit}>
+			<DialogContent classes={{ root: 'p-16 pb-0 sm:p-24 sm:pb-0' }}>
+				<Typography variant="subtitle1" color="inherit">
+					{`Amount Requested: ${Intl.NumberFormat().format(loan.loanData.amountRequested)}`}
+				</Typography>
+
+				<TextField 
+					className='my-16 w-full' 
+					name='amountApproved' 
+					onChange={handleChange} 
+					error={parseInt(form.amountApproved) > loan.loanData.amountRequested} 
+					helperText={parseInt(form.amountApproved) > loan.loanData.amountRequested ? 'Please you can not approve amount that is greater than the requested amount' : ''} 
+					variant='outlined' 
+					label='Amount approved' 
+					type='number'
+				/>
+
+				<TextField 
+					className='my-16 w-full' 
+					name='deductableAmount' 
+					onChange={handleChange} 
+					value={form.amountApproved / loan.loanData.duration} 
+					disabled 
+					label='Deductable amount' 
+					variant='outlined'
+				/>
+
+
+			<DialogActions className="justify-between px-8 sm:px-16">
+				<ProgressBtn content={parseInt(form.amountApproved) < loan.loanData.amountRequested ? 'Return loan' : 'Approve loan'} disable={parseInt(form.amountApproved) > loan.loanData.amountRequested ||  parseInt(form.amountApproved) === 0} loading={loans.loadings} success={loans.success}/>
+			</DialogActions>
+			</DialogContent>
+			</form>
+		</Dialog>
+	)
+}
 
 export default LoanActionsBtn;

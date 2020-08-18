@@ -25,6 +25,7 @@ export const loanReducer = (state = initialState, actions) => {
         ...state,
         loading: true,
         loadings: true,
+        success: false
       }
     }
     case Actions.LOAN_ERROR: {

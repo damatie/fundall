@@ -87,15 +87,11 @@ function LoanDetailsTab({setValue}) {
 								<div className="mb-24">
 									<Typography className="font-bold mb-4 text-15">Amount Approved</Typography>
 									<Typography>{`₦ ${Intl.NumberFormat().format(loan.loanData.amountApproved)}`}</Typography>
-									{loan.loanData.status !== 'open' ? <><TextField error={form.amountApproved > loan.loanData.amountRequested} name='amountApproved' type='number' className='w-full' variant='outlined' onChange={handleChange}/>
-									<Typography variant="subtitle1" color="initial">{`₦ ${Intl.NumberFormat().format(form.amountApproved)}`}</Typography></> : ''}
 								</div> 
 
 								<div className="mb-24">
 									<Typography className="font-bold mb-4 text-15">Deductable Amount</Typography>
 									<Typography>{`₦ ${Intl.NumberFormat().format(loan.loanData.deductableAmount)}`}</Typography>
-									{loan.loanData.status !== 'open' ? <><TextField error={form.deductableAmount < 0} name='deductableAmount' type='number' className='w-full' variant='outlined' onChange={handleChange} required/>
-									<Typography variant="subtitle1" color="initial">{`₦ ${Intl.NumberFormat().format(form.deductableAmount)}`}</Typography></> : ''}
 								</div>
 
 								{/* <div className="mb-24">
@@ -145,7 +141,7 @@ function LoanDetailsTab({setValue}) {
 								<Typography className="font-bold mb-4 text-15">Purpose</Typography>
 								<Typography>{loan.loanData.purpose}</Typography>
 							</div>
-							{loan.loanData.status === 'approved' || loan.loanData.status === 'open' || loan.loanData.status === 'closed'  ? '' : profile.role.name === 'Finance manager' ? <LoanActionsBtn form={form} type='final'/> : <LoanActionsBtn form={form}/>}
+							{loan.loanData.status === 'approved' || loan.loanData.status === 'open' || loan.loanData.status === 'closed'  ? '' : <LoanActionsBtn />}
 						</CardContent>
 					</Card>
 
@@ -199,7 +195,7 @@ function LoanDetailsTab({setValue}) {
 								{/* <Typography>{leaveRequestDetails.reason}</Typography> */}
 							</div>
 
-							{profile.role.name === 'Finance manager' ? <LoanActionsBtn form={form} type='final'/> : <LoanActionsBtn form={form}/>}
+							<LoanActionsBtn/>
 
 
 						</CardContent>

@@ -23,6 +23,7 @@ import { useAuth } from 'app/hooks/useAuth';
 import MenuItem from '@material-ui/core/MenuItem';
 import ProgressBtn from 'app/shared/progressBtn';
 import { useState } from 'react';
+import { getBaseUrl } from 'app/shared/getBaseUrl';
 
 const defaultFormState = {
 	// id: FuseUtils.generateGUID(),
@@ -51,7 +52,7 @@ function EventDialog(props) {
 	const [days, setDays] = useState(0);
 
 	useEffect(() => {
-		Axios.get('https://hris-cbit.herokuapp.com/api/v1/leave-type/', {
+		Axios.get(`${getBaseUrl()}/leave-type/`, {
 			headers: { Authorization: `JWT ${auth().getToken}` }
 		}).then(data => {
 			setLeaveType(data.data.data);
