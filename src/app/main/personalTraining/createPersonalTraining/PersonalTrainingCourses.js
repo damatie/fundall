@@ -18,6 +18,7 @@ import OutlinedInput from '@material-ui/core/OutlinedInput';
 import Select from '@material-ui/core/Select';
 import { makeStyles, useTheme, ThemeProvider } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 import Typography from '@material-ui/core/Typography';
 import withReducer from 'app/store/withReducer';
 import clsx from 'clsx';
@@ -31,6 +32,8 @@ import { amber, blue, blueGrey, green } from '@material-ui/core/colors';
 import Moment from 'react-moment';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
+import { useAuth } from 'app/hooks/useAuth';
+import { authRoles } from 'app/auth';
 
 const useStyles = makeStyles(theme => ({
 	header: {
@@ -53,21 +56,37 @@ function PersonalTrainingCourses(props) {
 	const dispatch = useDispatch();
 	const courses = useSelector(({ academyApp }) => academyApp.courses.courses);
 	const categories = useSelector(({ academyApp }) => academyApp.courses.categories);
+	const employees = useSelector(({ academyApp }) => academyApp.employees.employees);
 	const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
 
 	const classes = useStyles(props);
 	const theme = useTheme();
-    const [data, setData] = useState(courses);
+	const [data, setData] = useState(courses);
 	const [open, setOpen] = useState(false);
-    const [filter, setFilter] = useState('all');
-    const [search, setSearch] = useState('');
+	const [filter, setFilter] = useState('all');
+	const [search, setSearch] = useState('');
 	const [start, setStart] = useState(moment(new Date(), 'MM/DD/YYYY').add(1, 'days'));
-	const [end, setEnd] = useState(moment(new Date(), 'MM/DD/YYYY'));
+	const [end, setEnd] = useState(moment(new Date(), 'MM/DD/YYYY').add(1, 'days'));
+	const [duration, setDuration] = useState('');
 	const [id, setId] = useState('');
+	const [hod, setHod] = useState(0);
+	const userData = useAuth().getUserData;
+	const userId = useAuth().getId;
+	const employeeHOD = useAuth().getUserDetails.department.departmentHeadId;
+	const [filterEmployees, setFilterEmployees] = useState(
+		employees.filter(f => {
+			return (f.firstName !== null || f.lastName !== null || f.role.name.toLowerCase() !== 'employee' || f.roleId !== 8);
+		}).sort((a, b) => {
+			if(a.firstName +" "+a.lastName < b.firstName +" "+b.lastName) { return -1; }
+    		if(a.firstName +" "+a.lastName > b.firstName +" "+b.lastName) { return 1; }
+    		return 0;
+		})
+	);
 
 	useEffect(() => {
 		dispatch(Actions.getApprovedCourses());
 		dispatch(Actions.getCourseCategories());
+		dispatch(Actions.getEmployees());
 	}, [dispatch]);
 
 	useEffect(() => {
@@ -76,9 +95,9 @@ function PersonalTrainingCourses(props) {
 		} else {
 			setData(courses);
 		}
-    }, [courses, search]);
-    
-    useEffect(() => {
+	}, [courses, search]);
+
+	useEffect(() => {
 		if (filter !== 'all') {
 			setData(_.filter(courses, row => row.category.toLowerCase() === filter.toLowerCase()));
 		} else {
@@ -86,40 +105,78 @@ function PersonalTrainingCourses(props) {
 		}
 	}, [courses, filter]);
 
-	function handleSearch(event){
-        setSearch(event.target.value);
-    }
+	useEffect(() => {
+		if (employees.length > 0) {
+			setFilterEmployees(_.filter(employees, em => em.id !== userId && em.firstName !== null));
+		}
+	}, [employees]);
 
-    function handleFilter(event){
-        setFilter(event.target.value);
-    }
+	function handleSearch(event) {
+		setSearch(event.target.value);
+	}
+
+	function handleFilter(event) {
+		setFilter(event.target.value);
+	}
 
 	function canBeSubmitted() {
-		return (start != '' || end != '');
+		return start != '';
+	}
+
+	//Check if the logged in user has management role
+	function checkRole() {
+		return (authRoles.managers.includes(userData.role));
 	}
 
 	function handleSubmit(event) {
 		event.preventDefault();
+		// console.log(duration);
+		//let Trim the duration value to remove white space
+		let durations = duration.trim();
+		//let Split the duration to get first part of the array as the number and convert it to interger
+		let number = parseInt(durations.split(' ')[0]);
+		//let split the duration and get the second part of the array.
+		let months = durations.split(' ')[1].toLowerCase().includes('s')
+			? durations.split(' ')[1].toLowerCase()
+			: durations.split(' ')[1].toLowerCase() + 's';
+
+		//constructing our training request payload
 		const payload = {
 			trainingCourseId: id,
-			departmentHead: 13,
+			departmentHead: hod === 0 ? (employeeHOD != null ? employeeHOD : 13) : hod,
 			hrManager: 4,
-			startDate: moment(start).format("DD-MM-YYYY"),
-			endDate: moment(end).format("DD-MM-YYYY")
-	   }
-	   console.log(payload);
+			startDate: start.format('DD-MM-YYYY'),
+			endDate: end.add(number, months).format('DD-MM-YYYY')
+		};
+		console.log(payload);
 		dispatch(Actions.createTraining(payload));
 		setOpen(false);
 	}
 
-	function handleClose(){
+	function handleDateChange(date) {
+		setStart(date);
+		setEnd(date);
+	}
+
+	function handleClose() {
 		setOpen(false);
 	}
 
-	function handleOpen(duration){
-		duration = duration.trim();
-		setEnd(end.add(parseInt(duration.split(' ')[0]), duration.split(' ')[1]))
+	function handleOpen() {
 		setOpen(true);
+	}
+
+	const CaptializeFirstLetter = (word) => {
+		return word.charAt(0).toUpperCase() + word.slice(1);
+	}
+
+	function handleSelectChange(name) {
+		console.log(name);
+		let hodDetails = filterEmployees.find(em => {
+			return em.firstName.toLowerCase() + ' ' + em.lastName.toLowerCase() === name.toLowerCase();
+		});
+		setHod(hodDetails.id);
+		console.log(hodDetails)
 	}
 
 	return (
@@ -160,11 +217,7 @@ function PersonalTrainingCourses(props) {
 								value={filter}
 								onChange={handleFilter}
 								input={
-									<OutlinedInput
-										labelWidth={'category'.length * 9}
-										name="category"
-										id="category-label-placeholder"
-									/>
+									<OutlinedInput labelWidth={'category'.length * 9} name="category" id="category-label-placeholder" />
 								}
 							>
 								<MenuItem value="all">
@@ -206,100 +259,105 @@ function PersonalTrainingCourses(props) {
 															<Icon className="text-20 mx-8" color="inherit">
 																access_time
 															</Icon>
-															<div className="text-16 whitespace-no-wrap">
-																{course.duration}
-															</div>
+															<div className="text-16 whitespace-no-wrap">{course.duration}</div>
 														</div>
 													</div>
 													<CardContent className="flex flex-col flex-auto items-center justify-center">
-														<Typography className="text-center text-20 font-400">
-															{course.name}
+														<Typography className="text-center text-20 font-400">{course.name}</Typography>
+														<Typography className="text-center text-16 font-600" color="textSecondary">
+															{course.certification ? 'Certificate Available' : 'Certificate Not Available'}
 														</Typography>
-														<Typography
-															className="text-center text-16 font-600"
-															color="textSecondary"
-														>
-															{(course.certification) ? "Certificate Available" : "Certificate Not Available"}
-														</Typography>
-														<Typography
-															className="text-center text-13 font-600 mt-4"
-															color="textSecondary"
-														>
+														<Typography className="text-center text-13 font-600 mt-4" color="textSecondary">
 															<Moment format="MMM DD, YYYY">{course.createdAt}</Moment>
 														</Typography>
 													</CardContent>
 													<Divider />
-														<Dialog open={open} onClose={handleClose} fullWidth maxWidth="xs">
-															<AppBar position="static">
-																<Toolbar className="flex w-full">
-																	<Typography variant="subtitle1" color="inherit">
-																		{'New Training Request'}
-																	</Typography>
-																</Toolbar>
-															</AppBar>
-															<form noValidate onSubmit={handleSubmit}>
-																<DialogContent classes={{ root: 'p-16 pb-0 sm:p-24 sm:pb-0' }}>
-																	
-																	<DateTimePicker
-																		label="Start"
-																		inputVariant="outlined"
-																		value={start}
-																		onChange={date => setStart(date)}
-																		className="mt-8 mb-16 w-full"
-																		minDate={start}
-																		format={'MMMM Do, YYYY hh:mm a'}
-																	/>
+													<Dialog open={open} onClose={handleClose} fullWidth maxWidth="xs">
+														<AppBar position="static">
+															<Toolbar className="flex w-full">
+																<Typography variant="subtitle1" color="inherit">
+																	{'New Training Request'}
+																</Typography>
+															</Toolbar>
+														</AppBar>
+														<form noValidate onSubmit={ev => handleSubmit(ev)}>
+															<DialogContent classes={{ root: 'p-16 pb-0 sm:p-24 sm:pb-0' }}>
+																<Autocomplete
+																	hidden={!checkRole()}
+																	freeSolo
+																	options={
+																		filterEmployees &&
+																		filterEmployees.map(option => CaptializeFirstLetter(option.firstName) + ' ' + CaptializeFirstLetter(option.lastName))
+																	}
+																	onChange={(ev, value) => handleSelectChange(value)}
+																	renderInput={params => (
+																		<TextField
+																			{...params}
+																			label="Head Of Department"
+																			margin="normal"
+																			variant="outlined"
+																		/>
+																	)}
+																/>
 
-																	<DateTimePicker
+																<DateTimePicker
+																	label="Start"
+																	inputVariant="outlined"
+																	value={start}
+																	onChange={date => handleDateChange(date)}
+																	className="mt-8 mb-16 w-full"
+																	minDate={start}
+																	format={'MMMM Do, YYYY hh:mm a'}
+																/>
+
+																{/* <DateTimePicker
 																		label="End"
 																		inputVariant="outlined"
 																		value={end}
+																		hidden={true}
 																		onChange={date => setEnd(date)}
 																		className="mt-8 mb-16 w-full"
 																		format={'MMMM Do, YYYY hh:mm a'}
 																		minDate={start}
-																		maxDate={end}
-																	/>
-																</DialogContent>
-																<DialogActions className="justify-between px-8 sm:px-16">
-																	<Button variant="contained" color="primary" type="submit" disabled={!canBeSubmitted()}>
-																		Add
+																		// maxDate={end}
+																	/> */}
+															</DialogContent>
+															<DialogActions className="justify-between px-8 sm:px-16">
+																<Button variant="contained" color="primary" type="submit" disabled={!canBeSubmitted()}>
+																	Add
 																</Button>
-																</DialogActions>
-															</form>
-														</Dialog>
+															</DialogActions>
+														</form>
+													</Dialog>
 													<CardActions className="justify-center">
 														<Button
 															type="button"
 															className="justify-start px-32"
 															color="secondary"
-															onClick={(ev) => {
-																handleOpen(course.duration);
+															onClick={ev => {
+																handleOpen();
 																setId(course.id);
+																setDuration(course.duration);
+																setStart(moment(new Date(), 'MM/DD/YYYY').add(1, 'days'));
 															}}
 														>
 															START
 														</Button>
 													</CardActions>
-													<LinearProgress
-														className="w-full"
-														variant="determinate"
-														value={100}
-														color="secondary"
-													/>
+													<LinearProgress className="w-full" variant="determinate" value={100} color="secondary" />
 												</Card>
 											</div>
 										);
 									})}
 								</FuseAnimateGroup>
 							) : (
-									<div className="flex flex-1 items-center justify-center">
-										<Typography color="textSecondary" className="text-24 my-24">
-											No courses found!
+								<div className="flex flex-1 items-center justify-center">
+									<Typography color="textSecondary" className="text-24 my-24">
+										No courses found!
 									</Typography>
-									</div>
-								)),
-						[categories, data, open, id, start, end, theme.palette]
+								</div>
+							)),
+						[categories, data, employees, filterEmployees, open, id, start, end, hod, theme.palette]
 					)}
 				</div>
 			</div>

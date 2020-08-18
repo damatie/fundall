@@ -145,6 +145,7 @@ function BlogPostDetail({ match }) {
 
   const [commentState, setCommentState] = useState([]);
   const [isLikedPost, setIsLikedPost] = useState(false);
+  const [inputError, setInputError] = useState(false);
   const [content, setContent] = useState('');
   const [numberOflikedpost, setNumberOfLikedPost] = useState(0);
 
@@ -194,9 +195,13 @@ function BlogPostDetail({ match }) {
   };
 
   const handleSubmit = () => {
-    const model = {postId, content};
-    dispatch(Actions.createComment(model));
-    setContent('');
+    if (content.length > 0) {
+      const model = {postId, content};
+      dispatch(Actions.createComment(model));
+      setContent('');
+    } else {
+      setInputError(true)
+    }
   }
 
   const getColor = () => !isLikedPost ? '#4d5760' : '#F44336';
@@ -258,8 +263,9 @@ function BlogPostDetail({ match }) {
                 </Typography>
                 <CommentInput
                   onClick={() => handleSubmit()}
+                  error={inputError}
                   value={content}
-                  onChange={value => setContent(value)}
+                  onChange={value => {setContent(value); setInputError(false)}}
                 />
                 {(comments) && commentState.map((comment, index) => {
                   return (
