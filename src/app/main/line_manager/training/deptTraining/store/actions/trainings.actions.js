@@ -236,9 +236,16 @@ export function approveTraining(id){
 				  'Training request has been approved.',
 				  'success'
 				);
-				return dispatch({
-				  type: APPROVE_TRAINING_SUCCESS,
-				//   payload: await getCategory()
+				Promise.all([
+					dispatch({
+						type: APPROVE_TRAINING_SUCCESS
+					})
+				]).then(() => {
+					dispatch(getPendingTraining());
+					dispatch(getApprovedTraining());
+					dispatch(getCompletedTraining());
+					dispatch(getRejectedTraining());
+					dispatch(getReviewedTraining());
 				})
 			  } else {
 				swal.fire(
@@ -293,9 +300,16 @@ export function rejectTraining(id){
 				  'Training request has been approved.',
 				  'success'
 				);
-				return dispatch({
-				  type: REJECT_TRAINING_SUCCESS,
-				//   payload: await getCategory()
+				Promise.all([
+					dispatch({
+						type: REJECT_TRAINING_SUCCESS
+					})
+				]).then(() => {
+					dispatch(getPendingTraining());
+					dispatch(getApprovedTraining());
+					dispatch(getCompletedTraining());
+					dispatch(getRejectedTraining());
+					dispatch(getReviewedTraining());
 				})
 			  } else {
 				swal.fire(
