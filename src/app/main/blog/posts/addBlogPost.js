@@ -84,16 +84,22 @@ function AddBlogPost(props) {
 	}, [dispatch])
     
 	useEffect(() => {
-		if(postId){
+		if(post){
 			setTitle((post) ? post.title : '');
 			setBody((post) ? post.body : '');
-			setCategory((post) ? post.category.name : '');
+			setCategory(post.category ? post.category.name : '');
 			setCanSubmit(true);
 		}
 	}, [post])
 
+	console.log(post);
+	useEffect(() => {
+		validForm()
+	}, [title, body, category])
+
 	const validForm = () => {
-		if (title !== '' && body !== '' && categoryId !== null) {
+		console.log(category, categoryId);
+		if (title !== '' && body !== '' && category !== '') {
 			setCanSubmit(true);
 		}else{
 			setCanSubmit(false);
@@ -104,7 +110,6 @@ function AddBlogPost(props) {
 		const currentCategory = categories.find(category => category.name === event.target.value);
 		setCategoryId(currentCategory.id);
 		setCategory(currentCategory.name);
-		validForm()
   };
 
 	function imageChange(event) {
@@ -145,7 +150,7 @@ function AddBlogPost(props) {
 							placeholder="Blog title"
 							className={classes.blogTitle}
 							value={title}
-							onChange={event => {setTitle(event.target.value); validForm();}}
+							onChange={event => setTitle(event.target.value)}
 						/>
 					</Paper>
 					<Paper variant="outlined" elevation={3}>
@@ -169,7 +174,7 @@ function AddBlogPost(props) {
 						<textarea
 							placeholder="Blog content"
 							className={classes.blogContent}
-							onChange={event => {setBody(event.target.value); validForm();}}
+							onChange={event => setBody(event.target.value)}
 													rows={5}
 													value={body}
 							style={{ resize: 'none' }}
@@ -184,7 +189,7 @@ function AddBlogPost(props) {
 						<Divider />
 						<FormControl component="fieldset" style={{ padding: 16 }}>
 							<FormLabel component="legend" style={{ padding: '16px 0 0' }}>Category</FormLabel>
-							<RadioGroup aria-label="category" value={category} onChange={event => handleChange(event)}>
+							<RadioGroup aria-label="category" value={category} onChange={handleChange}>
 								{ postCategories }
 							</RadioGroup>
 						</FormControl>

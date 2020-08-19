@@ -2,7 +2,9 @@ import * as Actions from '../actions';
 
 const initialState = {
 	data: [],
-	searchText: ''
+	searchText: '',
+	loading: false,
+	success: false,
 };
 
 const leaveOptionsReducer = (state = initialState, action) => {
@@ -10,8 +12,16 @@ const leaveOptionsReducer = (state = initialState, action) => {
 		case Actions.GET_LEAVE_OPTIONS: {
 			return {
 				...state,
-				data: action.payload
+				data: action.payload,
+				loading: false,
+				success: true
 			};
+		}
+		case Actions.LOADING_LEAVE_OPTIONS: {
+			return {
+				...state,
+				loading: true
+			}
 		}
 		case Actions.SET_LEAVE_OPTIONS_SEARCH_TEXT: {
 			return {

@@ -153,6 +153,9 @@ export function updatePost(payload, id){
 		dispatch({
 			type: LOADING_POSTS
 		})
+		for (var pair of payload.entries()) {
+			console.log(pair[0]+ ', ' + pair[1]); 
+		}
 		fetch(`${basUrl()}/posts/${id}`, { ...headers.fdHeader('PUT', payload) }
 		).then(res => res.json()).then(async data => {
 			console.log(data);

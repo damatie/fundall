@@ -68,8 +68,6 @@ function BlogListContent(props) {
 	const [numberOflikedpost, setNumberOfLikedPost] = React.useState();
 
 	React.useEffect(() => {
-		console.log(props.blog.employees);
-		console.log(userId);
 		const isLiked = props.blog.employees.every(employee => employee.id !== userId);
 		if (!isLiked) setClicked(true);
 		setNumberOfLikedPost(props.blog.employees.length);
@@ -98,7 +96,7 @@ function BlogListContent(props) {
 			<SectionHeader
 				fullName={`${props.author.firstName} ${props.author.lastName}`}
 				dp={props.author.profilePicture}
-				time={props.blog.updatedAt}
+				time={props.blog.createdAt}
 				id={props.blog.id}
 				blogPoster={props.blog.employeeId}
 				buttonContent={['Edit post', 'Delete post']}
