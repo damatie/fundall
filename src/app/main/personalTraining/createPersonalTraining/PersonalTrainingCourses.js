@@ -34,6 +34,8 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import { useAuth } from 'app/hooks/useAuth';
 import { authRoles } from 'app/auth';
+import ArrowBackIcon from '@material-ui/icons/ArrowBackIosRounded';
+import IconButton from '@material-ui/core/IconButton';
 
 const useStyles = makeStyles(theme => ({
 	header: {
@@ -49,7 +51,16 @@ const useStyles = makeStyles(theme => ({
 		width: 512,
 		height: 512,
 		pointerEvents: 'none'
-	}
+	},
+	previousBtn: {
+		marginBottom: 10,
+		alignSelf: 'left',
+		[theme.breakpoints.down('xs')]: {
+		  display: 'none',
+		},
+		color: 'white',
+		fontSize: 20
+	},
 }));
 
 function PersonalTrainingCourses(props) {
@@ -120,7 +131,11 @@ function PersonalTrainingCourses(props) {
 	}
 
 	function canBeSubmitted() {
-		return start != '';
+		if(checkRole()){
+			return (start !== '' && hod !== 0);
+		}else{
+			return start !== '';
+		}
 	}
 
 	//Check if the logged in user has management role
@@ -158,6 +173,10 @@ function PersonalTrainingCourses(props) {
 		setEnd(date);
 	}
 
+	const goToPreviousRoute = () => {
+		window.location = '/training/personal';
+	}
+
 	function handleClose() {
 		setOpen(false);
 	}
@@ -187,13 +206,18 @@ function PersonalTrainingCourses(props) {
 						classes.header,
 						'relative overflow-hidden flex flex-col flex-shrink-0 items-center justify-center text-center p-16 sm:p-24 h-100 sm:h-188'
 					)}
-				>
+				>	
 					<FuseAnimate animation="transition.slideUpIn" duration={400} delay={100}>
 						<Typography color="inherit" className="text-24 sm:text-40 font-light">
 							COURSE LIST
 						</Typography>
 					</FuseAnimate>
 					<Icon className={classes.headerIcon}> school </Icon>
+				</div>
+				<div className={classes.header}>
+					<IconButton className={classes.previousBtn} aria-label="go back" component="span" onClick={goToPreviousRoute}>
+						<ArrowBackIcon />
+					</IconButton>
 				</div>
 				<div className="flex flex-col flex-1 max-w-2xl w-full mx-auto px-8 sm:px-16 py-24">
 					<div className="flex flex-col flex-shrink-0 sm:flex-row items-center justify-between py-24">
@@ -287,7 +311,7 @@ function PersonalTrainingCourses(props) {
 																	freeSolo
 																	options={
 																		filterEmployees &&
-																		filterEmployees.map(option => CaptializeFirstLetter(option.firstName) + ' ' + CaptializeFirstLetter(option.lastName))
+																		filterEmployees.map(option => option && (CaptializeFirstLetter(option.firstName) + ' ' + CaptializeFirstLetter(option.lastName)) )
 																	}
 																	onChange={(ev, value) => handleSelectChange(value)}
 																	renderInput={params => (
@@ -296,6 +320,7 @@ function PersonalTrainingCourses(props) {
 																			label="Head Of Department"
 																			margin="normal"
 																			variant="outlined"
+																			required
 																		/>
 																	)}
 																/>
