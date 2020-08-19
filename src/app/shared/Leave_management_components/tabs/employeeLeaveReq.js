@@ -90,7 +90,7 @@ function EmployeeLeaveReq({user}) {
         </FuseAnimateGroup>
 			</div>
 
-			{role.role !== 'HR' ?<div className="flex flex-col md:w-320">
+			{role.role === 'HR' ? <div className="flex flex-col md:w-320">
 				<DepartmentLeave />
 				<LeaveHistory />
 			</div> : <></>}
