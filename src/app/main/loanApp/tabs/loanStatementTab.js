@@ -19,25 +19,20 @@ import { TextField } from '@material-ui/core';
 import { fetchHeaders } from 'app/shared/fetchHeaders';
 import { useParams } from 'react-router';
 import { getBaseUrl } from 'app/shared/getBaseUrl';
+import moment from 'moment'
 
 const headers = fetchHeaders();
 function LoanStatementTab() {
   const [statements, setStatements] = useState([]);
   const { id } = useParams();
-  useEffect(() => {
-    fetch(`${getBaseUrl()}/loan/statements/all/${id}`).then(res => res.json()).then(
-      data => {
-        console.log(data)
-        if(data.message) {
-          setStatements(data.statements)
-        }
-      }
-    ).catch(e => {
-      console.error(e);
-      setStatements([]);
-    })
-  }, []);
+  const loan = useSelector(({ loan }) => loan.loan.data);
 
+  useEffect(() => {
+    if(loan.loanData) {
+      setStatements(loan.loanData.loanStatements);
+    }
+    
+  }, [loan])
 	return (
 		<div className="md:flex">
 			<div className="flex flex-col flex-1 md:ltr:pr-32 md:rtl:pl-32">
@@ -54,19 +49,20 @@ function LoanStatementTab() {
                       Date
                     </Typography>
                     <Typography className="font-bold m-4 text-15">
-                      {item.createdAt}
+                      {moment(item.createdAt).format('LLL')}
                     </Typography>
                   </Toolbar>
                 </AppBar>
 
                 <CardContent>
                   <div className="mb-24">
-                    <Typography className="font-bold mb-4 text-15">Amount paid</Typography>
-                    <Typography>{item.amountPaid}</Typography>
+                    <Typography 
+                    className="font-bold mb-4 text-15">Amount paid</Typography>
+                    <Typography>{Intl.NumberFormat().format(item.amountPaid)}</Typography>
                   </div>
                   <div className="mb-24">
                     <Typography className="font-bold mb-4 text-15">Balance</Typography>
-                    <Typography>{item.balance}</Typography>
+                    <Typography>{Intl.NumberFormat().format(item.balance)}</Typography>
                   </div>
                 </CardContent>
               </Card>

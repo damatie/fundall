@@ -172,6 +172,7 @@ function CalendarApp(props) {
 
 	useEffect(() => {
 		dispatch(Actions.getEvents());
+		console.log(events)
 	}, [dispatch]);
 
 	function moveEvent({ event, start, end }) {

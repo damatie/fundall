@@ -73,13 +73,14 @@ function LoanReqTable(props) {
 	}, []);
 
 	useEffect(() => {
-		console.log()
-		if(props.type !== 'returned') {
-			const x = loanHistory.loanHistory.filter(i => i.status !== 'corrected')
-			setData(x);
-		} else {
-			const x = loanHistory.loanHistory.filter(i => i.status === 'corrected')
-			setData(x);
+		if(loanHistory.loanHistory) {
+			if(props.type !== 'returned') {
+				const x = loanHistory.loanHistory.filter(i => i.status !== 'corrected')
+				setData(x);
+			} else {
+				const x = loanHistory.loanHistory.filter(i => i.status === 'corrected')
+				setData(x);
+			}
 		}
 	}, [loanHistory])
 
@@ -199,13 +200,13 @@ function LoanReqTable(props) {
 										</TableCell>
 
 										<TableCell component="th" scope="row" align='left'>
-                      {n.amountRequested}
+                      {Intl.NumberFormat().format(n.amountRequested)}
 										</TableCell>
                     <TableCell component="th" scope="row" align='left'>
-                      {n.deductableAmount}
+                      {Intl.NumberFormat().format(n.deductableAmount)}
 										</TableCell>
                     <TableCell component="th" scope="row" align='left'>
-                      {n.duration}
+                      {`${n.duration} Months`}
 										</TableCell>
                     <TableCell component="th" scope="row" align='left'>
                       {n.purpose}

@@ -17,15 +17,15 @@ export const CLOSED_SUCCESS = 'CLOSED SUCCESS';
 
 const header = fetchHeaders();
 
-export const approveLoan = id => {
+export const approveLoan = (id, body) => {
   return dispatch => {
     dispatch({
       type: LOADING_LOAN
     })
-    fetch(`${getBaseUrl()}/loan/approve/hr/${id}`, {
+    fetch(`${getBaseUrl()}/loan/approve/support/${id}`, {
       ...header.reqHeader(
-        'patch',
-        {}
+        'PATCH',
+        body
       )
     }).then(res => res.json()).then(
       data => {

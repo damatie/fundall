@@ -12,7 +12,7 @@ export const leaveReducers = (state = initialState, actions) => {
     case Actions.GET_LEAVE_DAYS: {
       return {
         ...state,
-        data: actions.payload,
+        data: [...state.data, ...actions.payload],
         loading: false,
       }
     }
