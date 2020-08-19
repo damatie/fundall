@@ -16,6 +16,28 @@ import { withRouter, useParams } from 'react-router-dom';
 import DepartmentTableHead from './promotionHistoryTableHead';
 import PromotionDialog from './promotionDialog';
 import swal from 'sweetalert2';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import AppBar from '@material-ui/core/AppBar';
+
+const PromotionHistory = (props) => {
+	return (
+		<Card className="w-full mb-16">
+			<AppBar position="static" elevation={0}>
+				<Toolbar className="px-8">
+					<Typography variant="subtitle1" color="inherit" className="flex-1 px-12">
+						Employee promotion history
+					</Typography>
+				</Toolbar>
+			</AppBar>
+			<CardContent>
+				<DepartmentTable />
+			</CardContent>
+		</Card>
+	)
+};
 
 function DepartmentTable(props) {
 	const dispatch = useDispatch();
@@ -37,20 +59,6 @@ function DepartmentTable(props) {
 		id: null
   });
   const [open, setOpen] = React.useState(false);
-
-
-	// useEffect(() => {
-	// 	dispatch(Actions.getDepartments(params.id));
-	// }, [dispatch]);
-
-	// useEffect(() => {
-	// 	if (searchText.length !== 0) {
-	// 		setData(_.filter(departments, item => item.entity.toLowerCase().includes(searchText.toLowerCase())));
-	// 		setPage(0);
-	// 	} else {
-	// 		setData(departments);
-	// 	}
-	// }, [departments, searchText]);
 
 	function handleRequestSort(event, property) {
 		const id = property;
@@ -200,6 +208,6 @@ function DepartmentTable(props) {
 			/>
 		</div>
 	);
-}
+};
 
-export default withRouter(DepartmentTable);
+export default withRouter(PromotionHistory);

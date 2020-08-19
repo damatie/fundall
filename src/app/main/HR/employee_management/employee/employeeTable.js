@@ -111,7 +111,11 @@ function EmployeesTable(props) {
 	}
 
 	function handleClick(item) {
-		props.history.push(`/hr/employee_management/employee_details`);
+		dispatch(Actions.getEmployeeInfo({
+			...item
+		}));
+		dispatch(Actions.getEmployeeDetails(item.id));
+		props.history.push(`/hr/employee_management/employee_details/${item.id}`);
 	}
 
 	function handleCheck(event, id) {
