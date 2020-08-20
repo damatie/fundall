@@ -297,7 +297,7 @@ export function rejectTraining(id){
 			  if(data.success) {
 				swal.fire(
 				  'Rejected!',
-				  'Training request has been approved.',
+				  'Training request has been rejected.',
 				  'success'
 				);
 				Promise.all([

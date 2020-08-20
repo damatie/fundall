@@ -4,6 +4,7 @@ const initialState = {
 	loading: false,
 	data: [],
 	post: [],
+	totalNo: 0,
 	success: false
 };
 
@@ -19,7 +20,8 @@ const postsReducer = (state = initialState, action) => {
 			return {
 				...state,
 				loading: false,
-				data: action.payload
+				data: action.payload,
+				totalNo: action.totalNo,
 			};
 		case Actions.GET_ONE_POST:
 			return {

@@ -169,7 +169,7 @@ export function approveCourse(id){
 		confirmButtonText: 'Yes, approve!',
 		showLoaderOnConfirm: true,
 		preConfirm: () => [
-		  fetch(`${basUrl()}/training/courses/approve/${id}`, {...headers.delHeader()})
+		  fetch(`${basUrl()}/training/courses/approve/${id}`, {...headers.reqHeader('PATCH', '')})
 		  .then(res => res.json()).then(async data => {
 			  console.log(data);
 			  if(data.success) {
@@ -178,11 +178,14 @@ export function approveCourse(id){
 				  'Training request has been approved.',
 				  'success'
 				);
-				return dispatch({
-				  type: APPROVE_COURSES_SUCCESS,
-				  approved: await getAproved(),
-				  rejected: await getRejected(),
-				  pending: await getPending()
+				Promise.all([
+					dispatch({
+						type: APPROVE_COURSES_SUCCESS
+					})
+				]).then(() => {
+					dispatch(getApprovedCourses());
+					dispatch(getPendingCourses());
+					dispatch(getRejectedCourses());
 				})
 			  } else {
 				swal.fire(
@@ -228,7 +231,7 @@ export function rejectCourse(id){
 		confirmButtonText: 'Yes, reject!',
 		showLoaderOnConfirm: true,
 		preConfirm: () => [
-		  fetch(`${basUrl()}/training/courses/reject/${id}`, {...headers.delHeader()})
+		  fetch(`${basUrl()}/training/courses/reject/${id}`, {...headers.reqHeader('PATCH', '')})
 		  .then(res => res.json()).then(async data => {
 			console.log(data);
 			  if(data.success) {
@@ -237,11 +240,14 @@ export function rejectCourse(id){
 				  'Course request has been rejected.',
 				  'success'
 				);
-				return dispatch({
-				  type: REJECT_COURSES_SUCCESS,
-				  approved: await getAproved(),
-				  rejected: await getRejected(),
-				  pending: await getPending()
+				Promise.all([
+					dispatch({
+						type: REJECT_COURSES_SUCCESS
+					})
+				]).then(() => {
+					dispatch(getApprovedCourses());
+					dispatch(getPendingCourses());
+					dispatch(getRejectedCourses());
 				})
 			  } else {
 				swal.fire(
@@ -268,31 +274,4 @@ export function rejectCourse(id){
 		  ]
 	  })
 	}	
-}
-
-function getAproved(){
-	return fetch(`${basUrl()}/training/courses/all/approved`, {...headers.getRegHeader()})
-	.then(res => res.json()).then(async data => {
-		return data.success ? (data.data) ? data.data : [] : [];
-	}).catch(err => {
-		return [];
-	});
-}
-
-function getRejected(){
-	return fetch(`${basUrl()}/training/courses/all/rejected`, {...headers.getRegHeader()})
-	.then(res => res.json()).then(async data => {
-		return data.success ? (data.data) ? data.data : [] : [];
-	}).catch(err => {
-		return [];
-	});
-}
-
-function getPending(){
-	return fetch(`${basUrl()}/training/courses/all/pending`, {...headers.getRegHeader()})
-	.then(res => res.json()).then(async data => {
-		return data.success ? (data.data) ? data.data : [] : [];
-	}).catch(err => {
-		return [];
-	});
 }

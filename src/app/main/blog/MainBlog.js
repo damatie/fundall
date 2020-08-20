@@ -18,6 +18,7 @@ import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import BlogListContent from './posts/blogListContent';
 import SideNavBar from './posts/sideNav';
+import { animateScroll as scroll } from "react-scroll";
 import { useAuth } from 'app/hooks/useAuth';
 
 const useStyles = makeStyles(theme => ({
@@ -65,6 +66,7 @@ function MainBlog() {
 
 	const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
 	const posts = useSelector(({ MainBlog }) => MainBlog.posts.data);
+	const totalNo = useSelector(({ MainBlog }) => MainBlog.posts.totalNo);
 	const [tabValue, setTabValue] = useState(0);
 	const [page, setPage] = useState(1);
 	const [search, setSearch] = useState('');
@@ -87,7 +89,7 @@ function MainBlog() {
 		  });
 
 	useEffect(() => {
-		dispatch(Actions.getPosts());
+		dispatch(Actions.getPosts(rowsPerPage, 0));
 	}, [dispatch]);
 
 	useEffect(() => {
@@ -111,7 +113,11 @@ function MainBlog() {
 		window.location = '/main/blog/post';
 	}
 
-	const handleChange = (event, value) => {
+	const handleChangePage = (event, value) => {
+		console.log(value);
+		let newPage = value-1;
+		dispatch(Actions.getPosts(rowsPerPage, newPage*rowsPerPage));
+		scroll.scrollToTop();
 		setPage(value);
 	};
 
@@ -275,7 +281,7 @@ function MainBlog() {
 							</Grid>
 						</Grid>
 						<div className={classes.pagination}>
-							<Pagination count={data.length} page={page} onChange={handleChange} color="primary" />
+							<Pagination count={Math.round(totalNo/rowsPerPage)} page={page} onChange={handleChangePage} color="primary" />
 						</div>
 					</div>
 				}
