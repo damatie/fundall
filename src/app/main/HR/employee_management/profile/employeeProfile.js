@@ -105,7 +105,7 @@ function EmployeeProfile() {
 			content={
 				<div className="p-16 sm:p-24">
 					{selectedTab === 0 && <AboutTab />}
-					{selectedTab === 1 && <EmployeementInfoTab />}
+					{selectedTab === 1 && data.info && <EmployeementInfoTab /> }
 					{selectedTab === 2 && <PromotionHistory />}
 				</div>
 			}
