@@ -35,6 +35,7 @@ import HrTrainingConfig from 'app/main/HR/training/hrTrainingConfig';
 import PersonalTrainingConfig from 'app/main/personalTraining/personalTrainingConfig';
 import CreatePersonalTrainingConfig from 'app/main/personalTraining/createPersonalTraining/CreatePersonalTrainingConfig';
 import MainBlogConfig from 'app/main/blog/blogConfig';
+import ContactsAppConfig from 'app/main/contact_list/ContactsAppConfig';
 
 const routeConfigs = [
 	// ExampleConfig,
@@ -69,7 +70,8 @@ const routeConfigs = [
 	HrTrainingConfig,
 	CreatePersonalTrainingConfig,
 	PersonalTrainingConfig,
-	MainBlogConfig
+	MainBlogConfig,
+	ContactsAppConfig,
 ];
 
 const checkIfLoggedIn = () => {

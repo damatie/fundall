@@ -70,7 +70,14 @@ const navigationConfig = [
 					},
 				]
 			},
-		
+			{
+				id: 'Telephone_directory',
+				title: 'Telephone Directory',
+				type: 'item',
+				url: '/contacts/all',
+				icon: 'account_box',
+				auth: authRoles.admin,
+			},
 		]
 	},
 	// Blog navigations
@@ -374,6 +381,7 @@ const navigationConfig = [
 			}
 		]
 	},
+	
 	// Training navigations
 	{
 		id: 'training',
@@ -429,13 +437,6 @@ const navigationConfig = [
 				type: 'item',
 				url: '/employee/profile',
 				icon: 'settings_applications',
-			},
-			{
-				id: 'signature',
-				title: 'Signature',
-				type: 'item',
-				url: '/employee/signature',
-				icon: 'edit',
 			}
 		]
 	},

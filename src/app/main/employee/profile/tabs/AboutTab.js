@@ -23,6 +23,8 @@ import ProgressBtn from 'app/shared/progressBtn';
 import * as profileActions from 'app/store/actions';
 import { useAuth } from 'app/hooks/useAuth';
 import GridSystem from 'app/shared/gridSystem';
+import { useParams, useHistory } from 'react-router';
+import employee from 'app/main/HR/employee_management/employee/employee';
 
 const img = [
 	'assets/images/avatars/jane.jpg',
@@ -33,33 +35,58 @@ const img = [
 	'assets/images/avatars/carl.jpg',
 ]
 function AboutTab() {
-	React.useEffect(() => {
-		// dispatch(Actions.getEmployeeProfile());
-		dispatch(regionActions.getCountries());
-	}, []);
+	const { id } = useParams();
 
 	const formRef = useRef(null);
 
 	const dispatch = useDispatch();
 
-	const id = useAuth().getId;
+	const history = useHistory();
 
+	const userId = useAuth().getId;
 	//REDUX STORE
 	const regions = useSelector(({ regions }) => regions);
-	const profile = useSelector(({ profile }) => profile.data);
-	const profileState = useSelector(({ profile }) => profile);
+	const myProfile = useSelector(({ profile }) => profile.data);
+	const myProfileState = useSelector(({ profile }) => profile);
+	const EmployeeProfileState = useSelector(({ employeesDetails }) => employeesDetails);
 
-	const aboutInfo = [
-		{label: 'First name', name: 'firstName', value: profile.firstName, type: 'text'},
-		{label: 'Last name', name: 'lastName', value: profile.lastName, type: 'text'},
-		{label: 'Middle name', name: 'middleName', value: profile.middleName, type: 'text'},
-		{label: 'Email address', name: 'email', value: profile.email, type: 'email'},
-		{label: 'Phone number', name: 'phoneNumber', value: profile.phoneNumber, type: 'number'},
-		{label: 'Residential address', name: 'residentialAddress', value: profile.residentialAddress, type: 'text'},
-		{label: 'Nationality', name: 'country', value: profile.country, type: 'select', data: regions.countries, field: 'name'},
-	];
+	const [profile, setProfile] = useState({});
+	const [profileState, setProfileState] = useState({});
+	const [edit, setEdit] = useState(true);
+	const [fields, setFields] = useState([]);
 
-	const TextField = aboutInfo.map((info) => {
+	React.useEffect(() => {
+		// dispatch(Actions.getEmployeeProfile());
+		dispatch(regionActions.getCountries());
+	}, []);
+
+	React.useEffect(() => {
+		if(id) {
+			if(Object.entries(EmployeeProfileState.employee.info).length !== 0) {
+				setProfile(EmployeeProfileState.employee.info);
+			} else {
+				history.push('/hr/employee_management/');
+			}
+		} else {
+			setProfile(myProfile);
+			setProfileState(myProfileState);
+		}
+	}, []);
+
+	useEffect(() => {
+		setFields([
+			{label: 'First name', name: 'firstName', value: profile.firstName, type: 'text' , disabled: edit },
+			{label: 'Last name', name: 'lastName', value: profile.lastName, type: 'text', disabled: edit},
+			{label: 'Middle name', name: 'middleName', value: profile.middleName, type: 'text', disabled: edit},
+			{label: 'Email address', name: 'email', value: profile.email, type: 'email', disabled: edit},
+			{label: 'Phone number', name: 'phoneNumber', value: profile.phoneNumber, type: 'number', disabled: edit},
+			{label: 'Residential address', name: 'residentialAddress', value: profile.residentialAddress, type: 'text', disabled: edit},
+			{label: 'Nationality', name: 'country', value: profile.country, type: 'select', data: regions.countries, field: 'name', disabled: edit},
+		]);
+	}, [profile, edit, regions.countries]);
+
+
+	const TextField = fields.map((info) => {
 		return (
 			<div className="mb-24">
 				<Typography className="font-bold mb-4 text-15">{info.label}</Typography>
@@ -70,13 +97,7 @@ function AboutTab() {
 					type={info.type}
 					name={info.name}
 					value={info.value}
-					// validations={{
-					//   minLength: 1,
-					// }}
-					// validationErrors={{
-					//   minLength: 'Min character length is 1',
-					// }}
-					// required
+					disabled={info.disabled}
 				/> :
 				<></>}
 				{info.type === 'select' ?
@@ -84,8 +105,10 @@ function AboutTab() {
 					className="mb-16 w-full"
 					name={info.name}
 					value={info.value}
-					variant='filled'
+					variant='outlined'
 					// required
+					disabled={info.disabled}
+					label=''
 				>
 					{info.data.map((item, i) => (
 					<MenuItem value={item.id} key={i}>
@@ -99,7 +122,7 @@ function AboutTab() {
 	});
 
 	const handleSubmit = model => {
-		dispatch(profileActions.updateEmployeeProfile(id, model));
+		dispatch(profileActions.updateEmployeeProfile(userId, model));
 	};
 
 	return (
@@ -116,9 +139,9 @@ function AboutTab() {
 								<Typography variant="subtitle1" color="inherit" className="flex-1 px-12">
 									General Information
 								</Typography>
-								<Button className="normal-case" color="inherit" size="small">
-									update
-								</Button>
+								{!id ? <Button className="normal-case" color="inherit" variant='outlined' color="secondary" size="medium" onClick={e => setEdit(!edit)}>
+									{edit ? 'update' : 'Cancel'}
+								</Button> : <></>}
 							</Toolbar>
 						</AppBar>
 
@@ -136,7 +159,7 @@ function AboutTab() {
 								{TextField}
 								</GridSystem>
 								
-								<ProgressBtn content='Update Profile' success={profileState.success} loading={profileState.updating}/>
+								{!edit && !id ? <ProgressBtn content='Update Profile' success={profileState.success} loading={profileState.updating}/> : <></>}
 							</Formsy>
 							
 						</CardContent>

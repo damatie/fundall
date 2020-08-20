@@ -27,11 +27,13 @@ function SelectFormsy(props) {
 		'renderValue',
 		'SelectDisplayProps',
 		'value',
-		'variant'
+		'variant',
+		'disabled'
 	]);
 
 	// An error message is returned only if the component is invalid
-	const { errorMessage, value } = props;
+	const { errorMessage } = props;
+	const value = props.value || '';
 
 	function input() {
 		switch (importedProps.variant) {
