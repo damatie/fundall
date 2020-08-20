@@ -76,6 +76,7 @@ const TableWidget = (props) =>{
     }
 
     function handleFilter(event){
+        console.log(event.target.value);
         setFilter(event.target.value);
     }
 
@@ -148,7 +149,8 @@ const TableWidget = (props) =>{
       };
     useEffect(() => {
 		if (search.length >= 2) {
-			setData(_.filter(props.rows, row => row.name.toLowerCase().includes(search.toLowerCase())));
+            setData(_.filter(props.rows, row => row.training.employee.firstName.toLowerCase().includes(search.toLowerCase()) 
+            || row.training.employee.lastName.toLowerCase().includes(search.toLowerCase()) || row.training.employee.firstName.toLowerCase().includes(search.toLowerCase())));
 			setPage(0);
 		} else {
 			setData(props.rows);
@@ -157,7 +159,7 @@ const TableWidget = (props) =>{
     
     useEffect(() => {
 		if (filter !== '') {
-			setData(_.filter(props.rows, row => row.status.toLowerCase() === filter.toLowerCase()));
+            setData(_.filter(props.rows, row => row.training.status.toLowerCase() === filter.toLowerCase()));
 			setPage(0);
 		} else {
 			setData(props.rows);

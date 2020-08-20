@@ -189,6 +189,7 @@ export function approveTraining(id){
 		preConfirm: () => [
 		  fetch(`${basUrl()}/training/hr/approve/${id}`, { ...headers.reqHeader('PATCH', '') })
 		  .then(res => res.json()).then(async data => {
+			  console.log(data);
 			  if(data.success) {
 				swal.fire(
 				  'Approved!',
@@ -254,7 +255,7 @@ export function rejectTraining(id){
 			  if(data.success) {
 				swal.fire(
 				  'Rejected!',
-				  'Training request has been approved.',
+				  'Training request has been rejected.',
 				  'success'
 				);
 				Promise.all([

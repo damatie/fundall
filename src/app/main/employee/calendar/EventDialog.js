@@ -23,6 +23,17 @@ import { useAuth } from 'app/hooks/useAuth';
 import MenuItem from '@material-ui/core/MenuItem';
 import ProgressBtn from 'app/shared/progressBtn';
 import { useState } from 'react';
+import { getBaseUrl } from 'app/shared/getBaseUrl';
+import clsx from 'clsx';
+import makeStyles from '@material-ui/core/styles/makeStyles';
+
+const useStyles = makeStyles({
+	table: {
+		'& th': {
+			padding: '16px 0'
+		}
+	}
+});
 
 const defaultFormState = {
 	// id: FuseUtils.generateGUID(),
@@ -40,6 +51,7 @@ const defaultFormState = {
 
 function EventDialog(props) {
 	const dispatch = useDispatch();
+	const [edit, setEdit] = useState();
 	const eventDialog = useSelector(({ calendarApp }) => calendarApp.events.eventDialog);
 	const leaveRequest = useSelector(({ calendarApp }) => calendarApp.leaveRequest)
 	const { form, handleChange, setForm, setInForm } = useForm(defaultFormState);
@@ -51,11 +63,11 @@ function EventDialog(props) {
 	const [days, setDays] = useState(0);
 
 	useEffect(() => {
-		Axios.get('https://hris-cbit.herokuapp.com/api/v1/leave-type/', {
+		Axios.get(`${getBaseUrl()}/leave-type/`, {
 			headers: { Authorization: `JWT ${auth().getToken}` }
 		}).then(data => {
 			setLeaveType(data.data.data);
-		}).catch(e => console.error(e))
+		}).catch(e => console.error(e));
 	}, []);
 
 	useEffect(() => {
@@ -77,6 +89,7 @@ function EventDialog(props) {
 		 */
 		if (eventDialog.type === 'edit' && eventDialog.data) {
 			setForm({ ...eventDialog.data });
+			setEdit(true);
 		}
 
 		/**
@@ -117,16 +130,20 @@ function EventDialog(props) {
 		// 	days: days
 		// })
 
-		// if (eventDialog.type === 'new') {
-		// 	dispatch(Actions.addEvent(form));
-		// } else {
-		// 	dispatch(Actions.updateEvent(form));
-		// }
-		dispatch(Actions.requestLeave({
-			...form,
-			days: days,
-			allotedYear: new Date().getFullYear()
-		}));
+		if (eventDialog.type === 'new') {
+			dispatch(Actions.requestLeave({
+				...form,
+				days: days,
+				allotedYear: new Date().getFullYear()
+			}));
+		} else {
+			dispatch(Actions.updateLeave(
+				{
+					id: eventDialog.data.id,
+					body: form
+				}
+			))
+		}
 	}
 
 	function handleRemove() {
@@ -134,140 +151,248 @@ function EventDialog(props) {
 		closeComposeDialog();
 	}
 
+	function CheckStatus(status) {
+		switch (status) {
+			case 'in progress':
+				return (
+					<Typography className={'bg-blue text-white inline text-11 font-500 px-8 py-4 rounded-4'}>{status}</Typography>
+				);
+				break;
+
+			case 'approved':
+				return (
+					<Typography className={'bg-green text-white inline text-11 font-500 px-8 py-4 rounded-4'}>
+						{status}
+					</Typography>
+				);
+				break;
+
+			case 'rejected':
+				return (
+					<Typography className={'bg-red text-white inline text-11 font-500 px-8 py-4 rounded-4'}>{status}</Typography>
+				);
+				break;
+			case 'reviewed':
+				return (
+					<Typography className={'bg-orange text-bold text-white inline text-11 font-500 px-8 py-4 rounded-4'}>
+						{status}
+					</Typography>
+				);
+				break;
+			case 'completed':
+				return (
+					<Typography className={'bg-black text-white inline text-11 font-500 px-8 py-4 rounded-4'}>
+						{status}
+					</Typography>
+				);
+				break;
+
+			default:
+				return { status };
+				break;
+		}
+	}
+
+	const classes = useStyles();
+
 	return (
 		<Dialog {...eventDialog.props} onClose={closeComposeDialog} fullWidth maxWidth="xs" component="form">
 			<AppBar position="static">
 				<Toolbar className="flex w-full">
 					<Typography variant="subtitle1" color="inherit">
-						{eventDialog.type === 'new' ? 'New Leave Request' : 'Edit Event'}
+						{eventDialog.type === 'new' ? 'New Leave Request' : 'Leave Details'}
 					</Typography>
 				</Toolbar>
 			</AppBar>
 
 			<form noValidate onSubmit={handleSubmit}>
 				<DialogContent classes={{ root: 'p-16 pb-0 sm:p-24 sm:pb-0' }}>
+					{
+						eventDialog.type === 'New' || !edit ?
+						(
+							<>
+								<TextField
+									id="title"
+									label="Leave type"
+									select
+									className="mt-8 mb-16"
+									InputLabelProps={{
+										shrink: true
+									}}
+									name="leaveType"
+									defaultValue={form.leaveType}
+									onChange={handleChange}
+									variant="outlined"
+									autoFocus
+									required
+									fullWidth
+								>
+									{leaveType.map(item => (
+									<MenuItem value={item.type}>
+										{item.type}
+									</MenuItem>))}
+								</TextField>
+			
+								<TextField
+									id="title"
+									label="Leave for"
+									className="mt-8 mb-16"
+									InputLabelProps={{
+										shrink: true
+									}}
+									name="leaveFor"
+									defaultValue={form.leaveFor}
+									onChange={handleChange}
+									variant="outlined"
+									autoFocus
+									required
+									fullWidth
+								/>
+			
+								<DatePicker
+									label="From date"
+									inputVariant="outlined"
+									value={start}
+									onChange={date => setInForm('fromDate', date)}
+									className="mt-8 mb-16 w-full"
+									maxDate={end}
+								/>
+			
+								<DatePicker
+									label="To date"
+									inputVariant="outlined"
+									value={end}
+									onChange={date => setInForm('toDate', date)}
+									className="mt-8 mb-16 w-full"
+									minDate={start}
+								/>
+			
+								<TextField
+									id="title"
+									label="Line manager"
+									select
+									className="mt-8 mb-16"
+									InputLabelProps={{
+										shrink: true
+									}}
+									name="lineManagerId"
+									defaultValue={form.lineManagerId}
+									onChange={ e => {
+										handleChange(e)
+									}}
+									variant="outlined"
+									autoFocus
+									required
+									fullWidth
+								>
+									{[{name: 'David Chinweike', id: 10}].map(item => (
+									<MenuItem value={item.id}>
+										{item.name}
+									</MenuItem>))}
+								</TextField>
+			
+								<TextField
+									id="title"
+									label="Backup employee"
+									select
+									className="mt-8 mb-16"
+									InputLabelProps={{
+										shrink: true
+									}}
+									name="backUpEmployee"
+									defaultValue={form.backUpEmployee}
+									onChange={handleChange}
+									variant="outlined"
+									autoFocus
+									required
+									fullWidth
+								>
+									{[{name: 'Matthew Nate', id: 7}].map(item => (
+									<MenuItem value={item.id}>
+										{item.name}
+									</MenuItem>))}
+								</TextField>
+								
+								<FormControlLabel
+									className="mt-8 mb-16"
+									label="Apply for leave allowance"
+									control={<Switch disabled={isTrue}  id="allDay" name="allowance" onChange={handleChange} defaultValue={form.allowance}/>}
+								/>
+			
+								<TextField
+									className="mt-8 mb-16"
+									id="desc"
+									label="Leave reasons"
+									type="text"
+									name="reason"
+									defaultValue={form.reason}
+									onChange={handleChange}
+									multiline
+									rows={5}
+									variant="outlined"
+									fullWidth
+								/>
+							</>
+						) : (
+							<>
+							{
+								eventDialog.data ? 
+								<table className={clsx(classes.table, 'w-full text-justify')}>
+									<tbody>
+									<tr className="cost">
+										<th>Leave type</th>
+										<td>{eventDialog.data.leaveType}</td>
+									</tr>
 
-					<TextField
-						id="title"
-						label="Leave type"
-						select
-						className="mt-8 mb-16"
-						InputLabelProps={{
-							shrink: true
-						}}
-						name="leaveType"
-						defaultValue={form.leaveType}
-						onChange={handleChange}
-						variant="outlined"
-						autoFocus
-						required
-						fullWidth
-					>
-						{leaveType.map(item => (
-						<MenuItem value={item.type}>
-							{item.type}
-						</MenuItem>))}
-					</TextField>
+									<tr className="location">
+										<th>Leave for</th>
+										<td>{eventDialog.data.leaveFor}</td>
+									</tr>
 
-					<TextField
-						id="title"
-						label="Leave for"
-						className="mt-8 mb-16"
-						InputLabelProps={{
-							shrink: true
-						}}
-						name="leaveFor"
-						defaultValue={form.leaveFor}
-						onChange={handleChange}
-						variant="outlined"
-						autoFocus
-						required
-						fullWidth
-					/>
+									<tr className="cert">
+										<th>Leave Days</th>
+										<td>{eventDialog.data.days}</td>
+									</tr>
 
-					<DatePicker
-						label="From date"
-						inputVariant="outlined"
-						value={start}
-						onChange={date => setInForm('fromDate', date)}
-						className="mt-8 mb-16 w-full"
-						maxDate={end}
-					/>
+									<tr className="catergory">
+										<th>Start Date</th>
+										<td>{eventDialog.data.fromDate}</td>
+									</tr>
 
-					<DatePicker
-						label="To date"
-						inputVariant="outlined"
-						value={end}
-						onChange={date => setInForm('toDate', date)}
-						className="mt-8 mb-16 w-full"
-						minDate={start}
-					/>
+									<tr className="dept">
+										<th>Return Date</th>
+										<td>{eventDialog.data.toDate}</td>
+									</tr>
 
-					<TextField
-						id="title"
-						label="Line manager"
-						select
-						className="mt-8 mb-16"
-						InputLabelProps={{
-							shrink: true
-						}}
-						name="lineManagerId"
-						defaultValue={form.leaveType}
-						onChange={ e => {
-							handleChange(e)
-						}}
-						variant="outlined"
-						autoFocus
-						required
-						fullWidth
-					>
-						{[{name: 'David Chinweike', id: 10}].map(item => (
-						<MenuItem value={item.id}>
-							{item.name}
-						</MenuItem>))}
-					</TextField>
+									<tr className="deptHead">
+										<th>Leave Allowance</th>
+										<td>{(eventDialog.data.allowance) ? 'Yes' : 'No'}</td>
+									</tr>
 
-					<TextField
-						id="title"
-						label="Backup employee"
-						select
-						className="mt-8 mb-16"
-						InputLabelProps={{
-							shrink: true
-						}}
-						name="backUpEmployee"
-						defaultValue={form.leaveType}
-						onChange={handleChange}
-						variant="outlined"
-						autoFocus
-						required
-						fullWidth
-					>
-						{[{name: 'Matthew Nate', id: 7}].map(item => (
-						<MenuItem value={item.id}>
-							{item.name}
-						</MenuItem>))}
-					</TextField>
-					
-					<FormControlLabel
-						className="mt-8 mb-16"
-						label="Apply for leave allowance"
-						control={<Switch disabled={isTrue}  id="allDay" name="allowance" onChange={handleChange} />}
-					/>
+									<tr className="hrManager">
+										<th>Leave Reason</th>
+										<td>{eventDialog.data.leaveReason}</td>
+									</tr>
+									<tr className="created">
+										<th>Backup Employee</th>
+										<td>{eventDialog.data.backUpEmployeeName}</td>
+									</tr>
+									<tr className="updated">
+										<th>Line Manager</th>
+										<td>{eventDialog.data.lineManagerName}</td>
+									</tr>
 
-					<TextField
-						className="mt-8 mb-16"
-						id="desc"
-						label="Leave reasons"
-						type="text"
-						name="reason"
-						defaultValue={form.desc}
-						onChange={handleChange}
-						multiline
-						rows={5}
-						variant="outlined"
-						fullWidth
-					/>
+									<tr className="updated">
+										<th>Status</th>
+										<td>{CheckStatus(eventDialog.data.status)}</td>
+									</tr>
+								</tbody>
+								</table> : <></>
+							}
+							</>
+						)
+					}
+
 
 
 				</DialogContent>
@@ -281,9 +406,9 @@ function EventDialog(props) {
 					</DialogActions>
 				) : (
 					<DialogActions className="justify-between px-8 sm:px-16">
-						<Button variant="contained" color="primary" type="submit" disabled={!canBeSubmitted()}>
-							Save
-						</Button>
+						{edit ? <Button variant="contained" color="primary" type="submit" onClick={e => setEdit(false)}>
+							Edit
+						</Button> : <ProgressBtn content='Save' succcess={leaveRequest.update} loading={leaveRequest.loading} disabled={!canBeSubmitted()}/>}
 						<IconButton onClick={handleRemove}>
 							<Icon>delete</Icon>
 						</IconButton>

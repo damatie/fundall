@@ -41,6 +41,14 @@ const useStyles = makeStyles(theme => ({
 	},
 	avatar: {
 		backgroundColor: theme.palette.primary[500]
+	},
+	grid: {
+		display: 'grid',
+		gridTemplateColumns: '1fr 1fr 1fr',
+		alignItems: 'center',
+		[theme.breakpoints.down('xs')]: {
+			gridTemplateColumns: '1fr'
+		}
 	}
 }));
 
@@ -59,7 +67,7 @@ const EmployeeTab = props => {
 			dense
 		>
 			<div className="flex flex-1 flex-col relative overflow-hidden">
-				<div className="flex items-center justify-between px-16 pb-8">
+				<div className={classes.grid}>
 					<div className="flex items-center">
 						<Avatar alt={'props.data.name'} src={props.data.profilePicture} /> 
 						<Typography variant="subtitle1" className="mx-8">
@@ -106,7 +114,7 @@ const AllocateLeave = ({id}) => {
 	const leaveDays = useSelector(({ allocate }) => allocate.leaveDays);
 	const [userId, setUserId] = useState(null);
 
-	const { result } = useCompareYear(leaveDays.data);
+	const { result } = useCompareYear(leaveDays.data, id);
 	
 	const dispatch = useDispatch();
 
@@ -134,10 +142,11 @@ const AllocateLeave = ({id}) => {
 	
 	useEffect(() => {
 		if(!allocate.loading) {
-			setUserId(null)
+			setUserId(null);
 		}
 	}, [allocate.loading]);
 
+	if(leaveDays.loading) return <>Loading...</>
 	return (
 			<Formsy
 				onValidSubmit={handleSubmit}
@@ -153,7 +162,7 @@ const AllocateLeave = ({id}) => {
 				label="Leave days"
 				variant='outlined'
 				required
-				value={result.originalAllocatedDays}
+				value={result}
 				size='small'
 			/>
 			<ProgressBtn success={userId === id ? allocate.success : false} loading={userId === id ? allocate.loading : false} content='Allocate' disable={!isFormValid} onClick={e => {

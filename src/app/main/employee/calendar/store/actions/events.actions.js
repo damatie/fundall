@@ -1,5 +1,8 @@
 import axios from 'axios';
 import {events} from './db';
+import { fetchHeaders } from 'app/shared/fetchHeaders';
+import { getBaseUrl } from 'app/shared/getBaseUrl';
+import { handleResponse } from 'app/auth/handleRes';
 
 export const GET_EVENTS = '[CALENDAR APP] GET EVENTS';
 export const OPEN_NEW_EVENT_DIALOG = '[CALENDAR APP] OPEN NEW EVENT DIALOG';
@@ -10,18 +13,37 @@ export const ADD_EVENT = '[CALENDAR APP] ADD EVENT';
 export const UPDATE_EVENT = '[CALENDAR APP] UPDATE EVENT';
 export const REMOVE_EVENT = '[CALENDAR APP] REMOVE EVENT';
 
+const headers = fetchHeaders();
+
+const dataFormat = (data) => {
+	const arr = [];
+	for(const i of data) {
+		arr.push({
+			...i,
+			title: `${i.leaveType} Leave`,
+			start: new Date(i.fromDate),
+			end: new Date(i.toDate)
+		});
+	}
+	return arr;
+};
+
 export function getEvents() {
-	// const request = axios.get('/api/calendar-app/events');
 
 	return dispatch => {
-		dispatch({
-			type: GET_EVENTS,
-			payload: events
-		})
+		const res = fetch(`${getBaseUrl()}/employee-leave/user`, {
+			...headers.getRegHeader(),
+		});
+		res.then(res => handleResponse(res)).then(
+			data => {
+				dispatch({
+					type: GET_EVENTS,
+					payload: dataFormat(data.data)
+				})
+			}
+		)
+		
 	}
-		// request.then(response =>
-			
-		// );
 }
 
 export function openNewEventDialog(data) {

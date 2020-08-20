@@ -31,9 +31,11 @@ export function getAllTrainings() {
 			.then(res => res.json()).then(async data => {
 				console.log(data.data);
 				if (data.success && data.data) {
+					//Filter the result to get all trainings
 					trainings = data.data.map(d => { return d.training; })
 					console.log(trainings);
 					if (trainings) {
+						//Format the Trainings to match the events for the Calendar
 						events = trainings.map(t => {
 							return {
 								id: t.id,

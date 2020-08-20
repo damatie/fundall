@@ -1,5 +1,6 @@
 import swal from 'sweetalert2';
 import { fetchHeaders } from 'app/shared/fetchHeaders';
+import { getBaseUrl } from 'app/shared/getBaseUrl';
 
 export const GET_LEAVE_DAYS = 'GET LEAVE DAYS';
 export const LEAVE_DAYS_LOADING = 'LEAVE DAYS LOADING';
@@ -13,7 +14,7 @@ export const getLeaveDays = id => {
     dispatch({
       type: LEAVE_DAYS_LOADING
     });
-    fetch(`https://hris-cbit.herokuapp.com/api/v1/allot-leave/one-employee/${id}`, {
+    fetch(`${getBaseUrl()}/allot-leave/one-employee/${id}`, {
       ...header.getRegHeader()
     }).then(res => res.json()).then(data => {
       if(data.success) {

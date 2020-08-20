@@ -27,12 +27,22 @@ const DepartmentLeave = ({id}) => {
   {
     name: 'Samuel Chidiebere',
     toDate: '20/8/2020',
-    profilePicture: 'assets/images/avatars/Velazquez.jpg'
+    profilePicture: 'assets/images/avatars/alice.jpg'
   },
   {
-    name: 'Kalu eke eme',
-    toDate: '20/8/2020',
-    profilePicture: 'assets/images/avatars/Velazquez.jpg'
+    name: 'Andrew obi',
+    toDate: '20/11/2020',
+    profilePicture: 'assets/images/avatars/andrew.jpg'
+  },
+  {
+    name: 'Helen paul',
+    toDate: '21/11/2020',
+    profilePicture: 'assets/images/avatars/helen.jpg'
+  },
+  {
+    name: 'James Andrew',
+    toDate: '20/12/2020',
+    profilePicture: 'assets/images/avatars/james.jpg'
   }
 ]);
 

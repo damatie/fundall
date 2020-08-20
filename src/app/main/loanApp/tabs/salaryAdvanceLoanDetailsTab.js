@@ -66,7 +66,23 @@ function SALoanDetailsTab({setValue}) {
 								<Typography>{`₦ ${Intl.NumberFormat().format(salaryAdvanceDetails.details.netSalary)}`}</Typography>
 							</div>
 
+							<div className="mb-24">
+								<Typography className="font-bold mb-4 text-15">Supervisor</Typography>
+								<Typography>{salaryAdvanceDetails.details.supervisor}</Typography>
+							</div>
+
+							<div className="mb-24">
+								<Typography className="font-bold mb-4 text-15">Director of support service</Typography>
+								<Typography>{salaryAdvanceDetails.details.supportDirector}</Typography>
+							</div>
+
+							<div className="mb-24">
+								<Typography className="font-bold mb-4 text-15">Finance Manager</Typography>
+								<Typography>{salaryAdvanceDetails.details.financeManager}</Typography>
+							</div>
+
 							{salaryAdvanceDetails.details.status !== 'approved' ? <SalaryAdvanceActionBtn /> : <></>}
+
 						</CardContent>
 					</Card>
 
@@ -82,34 +98,21 @@ function SALoanDetailsTab({setValue}) {
 
 						<CardContent>
 							<div className="mb-24">
-								<Typography className="font-bold mb-4 text-15">Hr Manager</Typography>
-								<Typography>{salaryAdvanceDetails.details.hrManager}</Typography>
-							</div>
-
-							<div className="mb-24">
-								<Typography className="font-bold mb-4 text-15">Hr Manager Approval Date</Typography>
-								<Typography>{moment(salaryAdvanceDetails.details.hrManagerApprovalDate).format('LL')}</Typography>
-							</div>
-
-							<div className="mb-24">
-								<Typography className="font-bold mb-4 text-15">Finance Manager</Typography>
-								<Typography>{salaryAdvanceDetails.details.financeManager}</Typography>
-							</div>
-
-              <div className="mb-24">
-								<Typography className="font-bold mb-4 text-15">Finance Manager Approval Date</Typography>
-								<Typography>{moment(salaryAdvanceDetails.details.financeManagerApprovalDate).format('LL')}</Typography>
-							</div>
-
-              <div className="mb-24">
-								<Typography className="font-bold mb-4 text-15">Supervisor</Typography>
-								<Typography>{salaryAdvanceDetails.details.supervisor}</Typography>
-							</div>
-
-              <div className="mb-24">
-								<Typography className="font-bold mb-4 text-15">Supervisor Approval Date</Typography>
+								<Typography className="font-bold mb-4 text-15">Supervisor Approved Date</Typography>
 								<Typography>{moment(salaryAdvanceDetails.details.supervisorApprovalDate).format('LL')}</Typography>
 							</div>
+
+							<div className="mb-24">
+								<Typography className="font-bold mb-4 text-15">Director of support service Approved Date</Typography>
+								<Typography>{moment(salaryAdvanceDetails.details.supervisorApprovalDate).format('LL')}</Typography>
+							</div>
+
+              <div className="mb-24">
+								<Typography className="font-bold mb-4 text-15">Finance Manager Approved Date</Typography>
+								<Typography>{!salaryAdvanceDetails.details.financeManagerApprovalDate ? 'Not approved yet' :  moment(salaryAdvanceDetails.details.financeManagerApprovalDate).format('LL')}</Typography>
+							</div>
+
+              
 							<SalaryAdvanceActionBtn />
 						</CardContent>
 				</Card> 

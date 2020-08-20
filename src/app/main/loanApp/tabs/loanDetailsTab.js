@@ -68,29 +68,30 @@ function LoanDetailsTab({setValue}) {
 							</div>
 
 							<div className="mb-24">
+									<Typography className="font-bold mb-4 text-15">Annual Pay</Typography>
+									<Typography>{loan.loanData.annualPay}</Typography>
+								</div>
+
+							<div className="mb-24">
 								<Typography className="font-bold mb-4 text-15">Amount Requested</Typography>
 								<Typography>{`₦ ${Intl.NumberFormat().format(loan.loanData.amountRequested)}`}</Typography>
 							</div>
 
-							<div className="mb-24">
+							{/* <div className="mb-24">
 								<Typography className="font-bold mb-4 text-15">Amount Available</Typography>
 								<Typography>{`₦ ${Intl.NumberFormat().format(1000)}`}</Typography>
-							</div>
+							</div> */}
 
 							{profile.role.name === 'Finance manager' ? 
 								<>
 								<div className="mb-24">
 									<Typography className="font-bold mb-4 text-15">Amount Approved</Typography>
 									<Typography>{`₦ ${Intl.NumberFormat().format(loan.loanData.amountApproved)}`}</Typography>
-									{loan.loanData.status !== 'open' ? <><TextField error={form.amountApproved > loan.loanData.amountRequested} name='amountApproved' type='number' className='w-full' variant='outlined' onChange={handleChange}/>
-									<Typography variant="subtitle1" color="initial">{`₦ ${Intl.NumberFormat().format(form.amountApproved)}`}</Typography></> : ''}
 								</div> 
 
 								<div className="mb-24">
 									<Typography className="font-bold mb-4 text-15">Deductable Amount</Typography>
 									<Typography>{`₦ ${Intl.NumberFormat().format(loan.loanData.deductableAmount)}`}</Typography>
-									{loan.loanData.status !== 'open' ? <><TextField error={form.deductableAmount < 0} name='deductableAmount' type='number' className='w-full' variant='outlined' onChange={handleChange} required/>
-									<Typography variant="subtitle1" color="initial">{`₦ ${Intl.NumberFormat().format(form.deductableAmount)}`}</Typography></> : ''}
 								</div>
 
 								{/* <div className="mb-24">
@@ -122,14 +123,29 @@ function LoanDetailsTab({setValue}) {
 							</div>
 
 							<div className="mb-24">
+								<Typography className="font-bold mb-4 text-15">Director of support service </Typography>
+								<Typography>{loan.departmentHead}</Typography>
+							</div>
+
+							<div className="mb-24">
+								<Typography className="font-bold mb-4 text-15">Director of support service </Typography>
+								<Typography>{loan.supportDirector}</Typography>
+							</div>
+
+							<div className="mb-24">
+								<Typography className="font-bold mb-4 text-15">Finance Manager</Typography>
+								<Typography>{loan.financeManager}</Typography>
+							</div>
+
+							<div className="mb-24">
 								<Typography className="font-bold mb-4 text-15">Purpose</Typography>
 								<Typography>{loan.loanData.purpose}</Typography>
 							</div>
-							{loan.loanData.status === 'approved' ? '' : <LoanActionsBtn form={form}/>}
+							{loan.loanData.status === 'approved' || loan.loanData.status === 'open' || loan.loanData.status === 'closed'  ? '' : <LoanActionsBtn />}
 						</CardContent>
 					</Card>
 
-					{loan.loanData.status === 'approved' ? <Card className="w-full mb-16">
+					{loan.loanData.status === 'approved' || loan.loanData.status === 'open' ? <Card className="w-full mb-16">
 						<AppBar position="static" elevation={0}>
 							<Toolbar className="px-8">
 								<Typography variant="subtitle1" color="inherit" className="flex-1 px-12">
@@ -139,22 +155,20 @@ function LoanDetailsTab({setValue}) {
 						</AppBar>
 
 						<CardContent>
+							
 							<div className="mb-24">
-								<Typography className="font-bold mb-4 text-15">Hr Manager Approval</Typography>
-								<Typography>{loan.hrManager}</Typography>
+								<Typography className="font-bold mb-4 text-15">Head of department Approver Date</Typography>
+								<Typography>{loan.loanData.departmentHeadApprovalDate}</Typography>
 							</div>
 
 							<div className="mb-24">
-								<Typography className="font-bold mb-4 text-15">Hr Manager Approval Date</Typography>
-								<Typography>{loan.loanData.hrManagerApprovalDate}</Typography>
+								<Typography className="font-bold mb-4 text-15">Director of support service Approver Date</Typography>
+								<Typography>{loan.loanData.supportDirectorApprovalDate}</Typography>
 							</div>
 
+							{loan.loanData.status === 'open' ? 
+							<>
 							<div className="mb-24">
-								<Typography className="font-bold mb-4 text-15">Finance Manager Approval</Typography>
-								<Typography>{loan.financeManager}</Typography>
-							</div>
-
-              <div className="mb-24">
 								<Typography className="font-bold mb-4 text-15">Loan Disbursed On</Typography>
 								<Typography>{loan.loanData.loanDisbursedOn}</Typography>
 							</div>
@@ -167,18 +181,23 @@ function LoanDetailsTab({setValue}) {
               <div className="mb-24">
 								<Typography className="font-bold mb-4 text-15">Number Of Installements</Typography>
 								<Typography>{loan.loanData.numberOfInstallements}</Typography>
-							</div>
+							</div> 
+							</>
+							: null}
 
 							<div className="mb-24">
-								<Typography className="font-bold mb-4 text-15">Payment Mode</Typography>
-								<Typography>{loan.loanData.paymentMode}</Typography>
+								{/* <Typography className="font-bold mb-4 text-15">Payment Mode</Typography>
+								<Typography>{loan.loanData.paymentMode}</Typography> */}
 							</div>
 
               <div className="mb-24">
 								{/* <Typography className="font-bold mb-4 text-15">Payment Mode</Typography> */}
 								{/* <Typography>{leaveRequestDetails.reason}</Typography> */}
 							</div>
-							<LoanActionsBtn form={form}/>
+
+							<LoanActionsBtn/>
+
+
 						</CardContent>
 				</Card> : <></> }
         {/* </FuseAnimateGroup> */}

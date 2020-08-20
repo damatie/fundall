@@ -4,6 +4,7 @@ const initialState = {
   success: false,
   loading: false,
   error: false,
+  update: false,
 }
 
 export const leaveRequestReducers = (state = initialState, actions) => {
@@ -11,7 +12,7 @@ export const leaveRequestReducers = (state = initialState, actions) => {
     case Actions.LOADING_REQUEST: {
       return {
         ...state,
-        loading: true
+        loading: true,
       }
     }
     case Actions.REQUEST_LEAVE_SUCCESS: {
@@ -27,6 +28,13 @@ export const leaveRequestReducers = (state = initialState, actions) => {
         loading: false,
         success: false,
         error: true
+      }
+    }
+    case Actions.UPDATE_LEAVE_REQUEST: {
+      return {
+        ...state,
+        update: true,
+        loading: false,
       }
     }
     default: {

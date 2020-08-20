@@ -49,7 +49,7 @@ function NewLeaveOptionTab(props) {
 	}
 
 	const getDepartments = id => {
-		departmentActions.getDepartments(id);
+		dispatch(departmentActions.getDepartments(id));
 	}
 
 	if(leaveOption.success) {

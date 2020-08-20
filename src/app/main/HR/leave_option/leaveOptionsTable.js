@@ -30,7 +30,6 @@ function LeaveOptionsTable(props) {
 
 	useEffect(() => {
     dispatch(Actions.getLeaveOptions());
-    console.log(leaveOptions);
 	}, [dispatch]);
 
 	useEffect(() => {

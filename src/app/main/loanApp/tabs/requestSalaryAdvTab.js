@@ -82,11 +82,11 @@ function RequestSalaryAdvTab(props) {
   }
   
 
-	// if(leaveOption.success) {
-	// 	return (
-	// 		<Redirect to='/hr/leave_options' />
-	// 	);
-	// }
+	if(Object.entries(details).length === 0) {
+		return (
+			<>Loading...</>
+		);
+	}
 
 	return (
 		<div className="w-full">
@@ -162,7 +162,7 @@ function RequestSalaryAdvTab(props) {
 					<TextFieldFormsy
 						className="mb-16 w-full"
 						type="date"
-						// value={id ? details.repaymentDate : ''}
+						value={id ? details.repaymentDate : ''}
 						name="repaymentDate"
 						// label="Repayment Date"
 						variant="outlined"
@@ -173,20 +173,7 @@ function RequestSalaryAdvTab(props) {
 					/>
 				</div>
 
-				<SelectFormsy
-          className="my-16"
-          name="financeManager"
-          label="Finance manager"
-          value={id ? details.financeManager : 'none'}
-          // validations="not-equals:none"
-          validationError="requried"
-          variant="outlined"
-					required
-        >
-					{matchRole(employeeList.data, 'Finance manager').map(item => (
-						<MenuItem value={item.id} key={item.id}>{`${item.firstName} ${item.lastName}`}</MenuItem>
-					))}
-        </SelectFormsy>
+				
 
 				<SelectFormsy
           className="my-16"
@@ -205,9 +192,9 @@ function RequestSalaryAdvTab(props) {
 
 				<SelectFormsy
           className="my-16"
-          name="hrManager"
-          label="HR manager"
-          value={id ? details.hrManager : 'none'}
+          name="supportDirector"
+          label="Director of support service"
+          value={id ? details.supportDirector : 'none'}
           // validations="not-equals:none"
           validationError="requried"
           variant="outlined"
@@ -217,8 +204,24 @@ function RequestSalaryAdvTab(props) {
 						<MenuItem value={item.id} key={item.id}>{`${item.firstName} ${item.lastName}`}</MenuItem>
 					))}
         </SelectFormsy>
+
+				<SelectFormsy
+          className="my-16"
+          name="financeManager"
+          label="Finance manager"
+          value={id ? details.financeManager : 'none'}
+          // validations="not-equals:none"
+          validationError="requried"
+          variant="outlined"
+					required
+        >
+					{matchRole(employeeList.data, 'Finance manager').map(item => (
+						<MenuItem value={item.id} key={item.id}>{`${item.firstName} ${item.lastName}`}</MenuItem>
+					))}
+        </SelectFormsy>
+
 				</GridSystem>
-				{id ?<ProgressBtn success={salaryAdvance.success} loading={salaryAdvance.loading} content='Update Request' disable={!isFormValid}/> : <ProgressBtn success={salaryAdvance.success} loading={salaryAdvance.loading} content='Request' disable={!isFormValid}/>}
+				{id ? <ProgressBtn success={salaryAdvance.success} loading={salaryAdvance.loading} content='Update Request' disable={!isFormValid}/> : <ProgressBtn success={salaryAdvance.success} loading={salaryAdvance.loading} content='Request' disable={!isFormValid}/>}
 			</Formsy>
 		</div>
 	);

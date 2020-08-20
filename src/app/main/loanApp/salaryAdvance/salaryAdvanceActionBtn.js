@@ -100,7 +100,7 @@ const SalaryAdvanceActionBtn = () => {
 				break;
 			}
 			case 'reviewed': {
-				approve(`${getBaseUrl()}/salary-advance/approve/hr/`);
+				approve(`${getBaseUrl()}/salary-advance/approve/support/`);
 				break;
 			}
 			case 'approved': {
