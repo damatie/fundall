@@ -186,7 +186,10 @@ function PersonalTrainingCourses(props) {
 	}
 
 	const CaptializeFirstLetter = (word) => {
+		if(word){
 		return word.charAt(0).toUpperCase() + word.slice(1);
+		}
+		return '';
 	}
 
 	function handleSelectChange(name) {
