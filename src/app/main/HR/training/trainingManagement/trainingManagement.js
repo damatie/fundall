@@ -59,7 +59,7 @@ function TrainingManagement(props) {
 	const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
 
 	//Appending All trainings into one array of object
-	let totalTrainings = approvedTrainings.concat(rejectedTrainings).concat(pendingTrainings).concat(reviewedTrainings);
+	let totalTrainings = reviewedTrainings.concat(pendingTrainings).concat(approvedTrainings).concat(rejectedTrainings);
 
 	//Sorting the appended Trainings
 	totalTrainings = totalTrainings.sort((a, b) => {
@@ -80,12 +80,12 @@ function TrainingManagement(props) {
 	const userData = useAuth().getUserData;
 
 	useEffect(() => {
+		dispatch(Actions.getPendingTraining());
 		dispatch(Actions.getReviewedTraining());
 		dispatch(Actions.getApprovedTraining());
 		dispatch(Actions.getRejectedTraining());
-		dispatch(Actions.getPendingTraining());
-		dispatch(Actions.getApprovedCourses());
 		dispatch(Actions.getPendingCourses());
+		dispatch(Actions.getApprovedCourses());
 		dispatch(Actions.getRejectedCourses());
 	}, [dispatch]);
 

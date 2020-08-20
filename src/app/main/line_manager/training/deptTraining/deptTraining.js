@@ -248,10 +248,11 @@ function DeptTraining(props) {
 						className="w-full border-b-1 px-24"
 					>
 						<Tab className="text-14 font-600 normal-case" label="Department Training" />
-						<Tab className="text-14 font-600 normal-case" label="Course Management" />
+						{checkHODRole() ? <Tab className="text-14 font-600 normal-case" label="Course Management" /> : null}
 					</Tabs>
 				}
 				content={
+					checkHODRole() ? (
 					<div className="p-12">
 						{tabValue === 0 && (
 							<FuseAnimateGroup
@@ -326,6 +327,49 @@ function DeptTraining(props) {
 							</FuseAnimateGroup>
 						)}
 					</div>
+					): (
+						<div className="p-12">
+						{tabValue === 0 && (
+							<FuseAnimateGroup
+								className="flex flex-wrap"
+								enter={{
+									animation: 'transition.slideUpBigIn'
+								}}
+							>
+								<div className="widget flex w-full sm:w-1/2 md:w-1/6 p-12">
+									<CardWidget count={totalTrainings.length} title={'Total'} color="yellow" />
+								</div>
+								<div className="widget flex w-full sm:w-1/2 md:w-1/6 p-12">
+									<CardWidget count={pendingTrainings.length} title={'Pending'} color="blue" />
+								</div>
+								<div className="widget flex w-full sm:w-1/2 md:w-1/6 p-12">
+									<CardWidget count={approvedTrainings.length} title={'Approved'} color="green" />
+								</div>
+								<div className="widget flex w-full sm:w-1/2 md:w-1/6 p-12">
+									<CardWidget count={rejectedTrainings.length} title={'Rejected'} color="red" />
+								</div>
+								<div className="widget flex w-full sm:w-1/2 md:w-1/6 p-12">
+									<CardWidget count={reviewedTrainings.length} title={'Reviewed'} color="orange" />
+								</div>
+								<div className="widget flex w-full sm:w-1/2 md:w-1/6 p-12">
+									<CardWidget count={completedTrainings.length} title={'Completed'} color="black" />
+								</div>
+								<div className="widget flex w-full p-12">
+									<TrainingTableWidget
+										title={'Department Training Requests'}
+										type="default"
+										columns={columns}
+										allowAuth={checkHODRole()}
+										isHR={checkRole()}
+										handleReject={handleTrainingReject}
+										handleApprove={handleTrainingApprove}
+										rows={totalTrainings}
+									/>
+								</div>
+							</FuseAnimateGroup>
+						)}
+					</div>
+					)
 				}
 				ref={pageLayout}
 			/>

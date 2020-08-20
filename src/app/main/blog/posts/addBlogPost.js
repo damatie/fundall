@@ -51,7 +51,8 @@ const useStyles = makeStyles(theme => ({
 		paddingLeft: 16,
 		color: 'rgba(0,0,0,.25)',
 		fontWeight: 'bold',
-		fontSize: 16
+		fontSize: 16,
+		minWidth: '23%'
 	},
 	list: {
 		paddingBottom: 32,
@@ -69,7 +70,7 @@ function AddBlogPost(props) {
 	const postId = props.match.params.post_id;
 	const [title, setTitle] = useState('');
 	const [body, setBody] = useState('');
-	const [images, setImages] = useState({});
+	const [images, setImages] = useState([]);
 	const [names, setNames] = useState('');
 	const [canSubmit, setCanSubmit] = useState(false);
 	const [category, setCategory] = useState('');
@@ -84,24 +85,26 @@ function AddBlogPost(props) {
 	}, [dispatch])
     
 	useEffect(() => {
-		if(post){
+		if (postId && !post === false) {
 			setTitle((post) ? post.title : '');
 			setBody((post) ? post.body : '');
+			setNames(post.images.length > 0 ? post.images[0].url : '');
 			setCategory(post.category ? post.category.name : '');
+			setCategoryId(post.categoryId ? post.categoryId : '');
 			setCanSubmit(true);
 		}
 	}, [post])
 
 	console.log(post);
+
 	useEffect(() => {
 		validForm()
 	}, [title, body, category])
 
 	const validForm = () => {
-		console.log(category, categoryId);
 		if (title !== '' && body !== '' && category !== '') {
 			setCanSubmit(true);
-		}else{
+		} else {
 			setCanSubmit(false);
 		}
 	}
@@ -112,21 +115,36 @@ function AddBlogPost(props) {
 		setCategory(currentCategory.name);
   };
 
-	function imageChange(event) {
-		setNames(event.target.files[0].name);
-		setImages({ images: event.target.files[0] });
-	}
+  const imageChange = (event) => {
+    const nameArray = Object.values(event.target.files);
+    nameArray.forEach((item, i, array) => {
+      if (array.length <= 1) setNames(`${item.name}`);
+      else setNames(`${array.length} files`);
+    })
+    setImages(event.target.files);
+  };
+
+	// function srcToFile(src, fileName, mimeType) {
+	// 	return fetch(src)
+	// 		.then(function (res) {
+	// 			return res.arrayBuffer();
+	// 		})
+	// 		.then(function (buf) {
+	// 			return new File([buf], fileName, { type: mimeType });
+	// 	});
+	// }
+
+	// src = file url, mimeType = image/jpg or image/png, fileName= thankgod;
 
 	const handleSubmit = () => {
 		let formData = new FormData();
-		console.log(category);
+		console.log(images);
 		formData.append('title', title);
 		formData.append('body', body);
-		formData.append('images', images.file);
 		formData.append('categoryId', categoryId);
-		// for (let i = 0; i < images.length; i++) {
-		//   formData.append('images', images[i]);
-		// }
+		for (let i = 0; i < images.length; i++) {
+		  formData.append('images', images[i]);
+		}
 		if(postId){
 			dispatch(Actions.updatePost(formData, postId));
 		}else{
@@ -161,12 +179,12 @@ function AddBlogPost(props) {
 							onChange={imageChange}
 							type="file"
 						/>
-						<label htmlFor="contained-button-file">
+						<label htmlFor="contained-button-file" style={{display: 'flex'}}>
 							<Button color="primary" component="span" className={classes.upload}>
 								Upload image
 							</Button>
-							<Typography variant="body1" component="span" style={{ margin: '4px 0 0 12px' }}>
-								{images.length === 0 ? 'No image choosen' : names}
+							<Typography variant="body1" component="span" style={{ padding: '12px 0 0 12px' }}>
+								{!names === true ? 'No image choosen' : names}
 							</Typography>
 						</label>
 					</Paper>

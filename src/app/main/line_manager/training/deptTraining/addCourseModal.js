@@ -51,6 +51,7 @@ export default function AddCourseModal(props) {
 	function handleSubmit(model) {
         model.department = userData.department.departmentName;
         model.hrManager = 4;
+        model.duration = `${model.duration} days`
         console.log(model);
         dispatch(Actions.createCourse(model));
         setOpen(false);
@@ -139,7 +140,7 @@ export default function AddCourseModal(props) {
                     <Grid container item sm={6} md={6} lg={6} lx={6} alignItems="center">
                         <TextFieldFormsy
                             className="mb-16 w-full"
-                            type="text"
+                            type="number"
                             name="duration"
                             label="Duration"
                             validations={{
@@ -151,9 +152,7 @@ export default function AddCourseModal(props) {
                             InputProps={{
                                 endAdornment: (
                                     <InputAdornment position="end">
-                                        <Icon className="text-20" color="action">
-                                            timeline
-                                        </Icon>
+                                        Days
                                     </InputAdornment>
                                 )
                             }}

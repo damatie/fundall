@@ -52,9 +52,6 @@ const projectsReducer = (state = initialState, action) => {
 			return {
 				...state,
 				loading: false,
-				approvedCourses: action.approved,
-				rejectedCourses: action.rejected,
-				pendingCourses: action.pending,
 				success: true
 			};
 		case Actions.APPROVE_COURSES_ERROR:
@@ -67,9 +64,6 @@ const projectsReducer = (state = initialState, action) => {
 			return {
 				...state,
 				loading: false,
-				approvedCourses: action.approved,
-				rejectedCourses: action.rejected,
-				pendingCourses: action.pending,
 				success: true
 			};
 		case Actions.REJECT_COURSES_ERROR:
