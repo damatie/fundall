@@ -52,7 +52,8 @@ const useStyles = makeStyles(theme => ({
 		color: 'rgba(0,0,0,.25)',
 		fontWeight: 'bold',
 		fontSize: 16,
-		minWidth: '23%'
+		minWidth: '23%',
+		maxHeight: '56px',
 	},
 	list: {
 		paddingBottom: 32,
@@ -134,6 +135,7 @@ function AddBlogPost(props) {
     reader.readAsDataURL(event.target.files[0]);
   };
 
+	// window.URL.createObjectURL(this.files[0]) //preview file
 	// function srcToFile(src, fileName, mimeType) {
 	// 	return fetch(src)
 	// 		.then(function (res) {
