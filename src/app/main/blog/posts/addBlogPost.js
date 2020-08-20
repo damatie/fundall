@@ -72,6 +72,7 @@ function AddBlogPost(props) {
 	const [body, setBody] = useState('');
 	const [images, setImages] = useState([]);
 	const [names, setNames] = useState('');
+	const [src, setSrc] = useState('');
 	const [canSubmit, setCanSubmit] = useState(false);
 	const [category, setCategory] = useState('');
 	const [categoryId, setCategoryId] = useState(null);
@@ -88,7 +89,7 @@ function AddBlogPost(props) {
 		if (postId && !post === false) {
 			setTitle((post) ? post.title : '');
 			setBody((post) ? post.body : '');
-			setNames(post.images.length > 0 ? post.images[0].url : '');
+			setSrc(post.images.length > 0 ? post.images[0].url : '');
 			setCategory(post.category ? post.category.name : '');
 			setCategoryId(post.categoryId ? post.categoryId : '');
 			setCanSubmit(true);
@@ -116,12 +117,21 @@ function AddBlogPost(props) {
   };
 
   const imageChange = (event) => {
+		loadFile(event);
     const nameArray = Object.values(event.target.files);
     nameArray.forEach((item, i, array) => {
       if (array.length <= 1) setNames(`${item.name}`);
       else setNames(`${array.length} files`);
     })
     setImages(event.target.files);
+	};
+	
+	const loadFile = function(event) {
+    const reader = new FileReader();
+    reader.onload = function(){
+      setSrc(reader.result);
+    };
+    reader.readAsDataURL(event.target.files[0]);
   };
 
 	// function srcToFile(src, fileName, mimeType) {
@@ -183,9 +193,12 @@ function AddBlogPost(props) {
 							<Button color="primary" component="span" className={classes.upload}>
 								Upload image
 							</Button>
-							<Typography variant="body1" component="span" style={{ padding: '12px 0 0 12px' }}>
-								{!names === true ? 'No image choosen' : names}
-							</Typography>
+							{/* { !names === true */}
+                <img src={src} style={{width: 150}} />
+                {/* : <Typography variant="body1" component="span" style={{ margin: '4px 0 0 12px' }}>
+                    {names}
+                  </Typography> */}
+              {/* } */}
 						</label>
 					</Paper>
 					<Paper variant="outlined" elevation={3}>
