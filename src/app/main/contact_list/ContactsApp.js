@@ -30,11 +30,16 @@ function ContactsApp(props) {
 	const classes = useStyles(props);
 	const pageLayout = useRef(null);
 	const routeParams = useParams();
+	const { id } = useParams();
+
 
 	useDeepCompareEffect(() => {
-		dispatch(Actions.getContacts(routeParams));
-		dispatch(Actions.getUserData());
-	}, [dispatch, routeParams]);
+		if(!id) {
+			dispatch(Actions.getContacts(routeParams));
+			dispatch(Actions.getUserData());
+		}
+		
+	}, [dispatch]);
 
 	return (
 		<>

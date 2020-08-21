@@ -1,7 +1,11 @@
 import { getUserData } from './user.actions';
 import axios from 'axios';
+import { fetchHeaders } from 'app/shared/fetchHeaders';
+import { getBaseUrl } from 'app/shared/getBaseUrl';
+import { handleResponse } from 'app/auth/handleRes';
 
 export const GET_CONTACTS = '[CONTACTS APP] GET CONTACTS';
+export const GET_CONTACT = '[CONTACTS APP] GET CONTACT';
 export const SET_SEARCH_TEXT = '[CONTACTS APP] SET SEARCH TEXT';
 export const OPEN_NEW_CONTACT_DIALOG = '[CONTACTS APP] OPEN NEW CONTACT DIALOG';
 export const CLOSE_NEW_CONTACT_DIALOG = '[CONTACTS APP] CLOSE NEW CONTACT DIALOG';
@@ -14,6 +18,7 @@ export const REMOVE_CONTACTS = '[CONTACTS APP] REMOVE CONTACTS';
 export const TOGGLE_STARRED_CONTACT = '[CONTACTS APP] TOGGLE STARRED CONTACT';
 export const TOGGLE_STARRED_CONTACTS = '[CONTACTS APP] TOGGLE STARRED CONTACTS';
 export const SET_CONTACTS_STARRED = '[CONTACTS APP] SET CONTACTS STARRED ';
+export const LOADING_CONTACT = 'LOADING CONTACT';
 
 const contacts = [
 	{
@@ -367,15 +372,68 @@ const contacts = [
 		notes: ''
 	}
 ];
-export function getContacts(routeParams) {
 
+const formatData = item => {
+	const arr = [];
+	item.forEach((data, i) => {
+		arr.push({
+			id: i++,
+			firstName: data.firstName,
+			lastName: data.lastName,
+			profilePicture: data.profilePicture ? data.profilePicture : 'assets/images/avatars/Abbott.jpg',
+			phoneNumber: data.phoneNumber ? data.phoneNumber : 'User have no number yet',
+			officeNumber: data.info ? data.info.officialNo : 'No Office number yet',
+			officeExtention: data.info ? data.info.officeExtension : 'No Office extention yet',
+			entity: data.entity ? data.entity.entityName : 'user have no entity',
+			department: data.department ? data.department.departmentName : 'user have no department'
+		});
+	});
+	return arr;
+}
+
+const headers = fetchHeaders();
+export function getContacts(routeParams) {
 	return dispatch => {
 		dispatch({
+			type: LOADING_CONTACT
+		});
+		fetch(`${getBaseUrl()}/contact-list/`, {
+			...headers.getRegHeader(),
+		}).then(res => handleResponse(res)).then(
+			data => {
+				if(data.success) {
+					dispatch({
+						type: GET_CONTACTS,
+						payload: formatData(data.data),
+						// payload: contacts,
+						routeParams
+					})
+					dispatch({
+						type: GET_CONTACT,
+						payload: formatData(data.data),
+						// payload: contacts,
+						routeParams
+					})
+				}
+			}
+		)
+	}
+}
+
+export const sortContactList = (name, data, routeParams) => {
+	return dispatch => {
+		const entity = Object.keys(data).map(item => data[item]);
+
+		const result = entity.filter(item => item.entity === name);
+
+		dispatch({
 			type: GET_CONTACTS,
-			payload: contacts,
+			payload: result,
+			// payload: contacts,
 			routeParams
 		})
 	}
+	
 }
 
 export function setSearchText(event) {
