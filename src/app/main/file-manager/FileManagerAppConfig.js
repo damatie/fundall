@@ -13,9 +13,12 @@ const FileManagerAppConfig = {
 		},
 		{
 			path: '/library/documents',
-			component: React.lazy(() => import('./FileManagerApp'))
+			component: React.lazy(() => import('./FilesByCategories'))
+		},
+		{
+			path: '/library/document/:id',
+			component: React.lazy(() => import('./files/FileManagerApp'))
 		}
-		
 	]
 };
 

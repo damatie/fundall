@@ -52,19 +52,20 @@ const useStyles = makeStyles(theme => ({
 		color: 'rgba(0,0,0,.25)',
 		fontWeight: 'bold',
 		fontSize: 16,
-		minWidth: '23%'
+		minWidth: '23%',
+		maxHeight: '56px',
 	},
 	list: {
-		paddingBottom: 32,
-	},
+		paddingBottom: 32
+	}
 }));
 
 function AddBlogPost(props) {
 	const classes = useStyles();
 	const dispatch = useDispatch();
 	const loading = useSelector(({ AddBlogPost }) => AddBlogPost.posts.loading);
-	const categories = useSelector(({AddBlogPost}) => AddBlogPost.categories.categories);
-	const posts = useSelector(({AddBlogPost}) => AddBlogPost.posts.data);
+	const categories = useSelector(({ AddBlogPost }) => AddBlogPost.categories.categories);
+	const posts = useSelector(({ AddBlogPost }) => AddBlogPost.posts.data);
 	const post = posts.postData;
 
 	const postId = props.match.params.post_id;
@@ -72,6 +73,7 @@ function AddBlogPost(props) {
 	const [body, setBody] = useState('');
 	const [images, setImages] = useState([]);
 	const [names, setNames] = useState('');
+	const [src, setSrc] = useState('');
 	const [canSubmit, setCanSubmit] = useState(false);
 	const [category, setCategory] = useState('');
 	const [categoryId, setCategoryId] = useState(null);
@@ -79,27 +81,27 @@ function AddBlogPost(props) {
 	// console.log(props);
 	useEffect(() => {
 		dispatch(Actions.getCategories());
-		if(postId){
+		if (postId) {
 			dispatch(Actions.getPostById(postId));
 		}
-	}, [dispatch])
-    
+	}, [dispatch]);
+
 	useEffect(() => {
 		if (postId && !post === false) {
 			setTitle((post) ? post.title : '');
 			setBody((post) ? post.body : '');
-			setNames(post.images.length > 0 ? post.images[0].url : '');
+			setSrc(post.images.length > 0 ? post.images[0].url : '');
 			setCategory(post.category ? post.category.name : '');
 			setCategoryId(post.categoryId ? post.categoryId : '');
 			setCanSubmit(true);
 		}
-	}, [post])
+	}, [post]);
 
 	console.log(post);
 
 	useEffect(() => {
-		validForm()
-	}, [title, body, category])
+		validForm();
+	}, [title, body, category]);
 
 	const validForm = () => {
 		if (title !== '' && body !== '' && category !== '') {
@@ -107,23 +109,33 @@ function AddBlogPost(props) {
 		} else {
 			setCanSubmit(false);
 		}
-	}
-		
-	const handleChange = (event) => {
+	};
+
+	const handleChange = event => {
 		const currentCategory = categories.find(category => category.name === event.target.value);
 		setCategoryId(currentCategory.id);
 		setCategory(currentCategory.name);
-  };
+	};
 
   const imageChange = (event) => {
+		loadFile(event);
     const nameArray = Object.values(event.target.files);
     nameArray.forEach((item, i, array) => {
       if (array.length <= 1) setNames(`${item.name}`);
       else setNames(`${array.length} files`);
     })
     setImages(event.target.files);
+	};
+	
+	const loadFile = function(event) {
+    const reader = new FileReader();
+    reader.onload = function(){
+      setSrc(reader.result);
+    };
+    reader.readAsDataURL(event.target.files[0]);
   };
 
+	// window.URL.createObjectURL(this.files[0]) //preview file
 	// function srcToFile(src, fileName, mimeType) {
 	// 	return fetch(src)
 	// 		.then(function (res) {
@@ -143,23 +155,28 @@ function AddBlogPost(props) {
 		formData.append('body', body);
 		formData.append('categoryId', categoryId);
 		for (let i = 0; i < images.length; i++) {
-		  formData.append('images', images[i]);
+			formData.append('images', images[i]);
 		}
-		if(postId){
+		if (postId) {
 			dispatch(Actions.updatePost(formData, postId));
-		}else{
+		} else {
 			dispatch(Actions.createPost(formData));
 		}
 	};
 
 	const postCategories = categories.map(category => {
-		return <FormControlLabel value={category.name} key={category.id} control={<Radio />} label={category.name} />
-	})
+		return <FormControlLabel value={category.name} key={category.id} control={<Radio />} label={category.name} />;
+	});
 
 	return (
 		<Grid container className={classes.root}>
 			<Grid item xs={12} sm={3} className={classes.addPostBtn}>
-				<ProgressBtn onClick={handleSubmit} loading={loading} disable={!canSubmit} content={(postId) ? "Edit Blog Post" :"Add new blog post"} />
+				<ProgressBtn
+					onClick={handleSubmit}
+					loading={loading}
+					disable={!canSubmit}
+					content={postId ? 'Edit Blog Post' : 'Add new blog post'}
+				/>
 			</Grid>
 			<Grid item container spacing={3}>
 				<Grid item xs={12} sm={8}>
@@ -179,13 +196,16 @@ function AddBlogPost(props) {
 							onChange={imageChange}
 							type="file"
 						/>
-						<label htmlFor="contained-button-file" style={{display: 'flex'}}>
+						<label htmlFor="contained-button-file" style={{ display: 'flex' }}>
 							<Button color="primary" component="span" className={classes.upload}>
 								Upload image
 							</Button>
-							<Typography variant="body1" component="span" style={{ padding: '12px 0 0 12px' }}>
-								{!names === true ? 'No image choosen' : names}
-							</Typography>
+							{/* { !names === true */}
+                <img src={src} style={{width: 150}} />
+                {/* : <Typography variant="body1" component="span" style={{ margin: '4px 0 0 12px' }}>
+                    {names}
+                  </Typography> */}
+              {/* } */}
 						</label>
 					</Paper>
 					<Paper variant="outlined" elevation={3}>
@@ -193,25 +213,27 @@ function AddBlogPost(props) {
 							placeholder="Blog content"
 							className={classes.blogContent}
 							onChange={event => setBody(event.target.value)}
-													rows={5}
-													value={body}
+							rows={5}
+							value={body}
 							style={{ resize: 'none' }}
 						/>
 					</Paper>
 				</Grid>
 				<Grid item xs={12} sm={4}>
-					<Paper variant="outlined" elevation={3} style={{position: 'relative'}}>
+					<Paper variant="outlined" elevation={3} style={{ position: 'relative' }}>
 						<Typography variant="subtitle2" align="center" style={{ padding: 16 }}>
 							Select Category
 						</Typography>
 						<Divider />
 						<FormControl component="fieldset" style={{ padding: 16 }}>
-							<FormLabel component="legend" style={{ padding: '16px 0 0' }}>Category</FormLabel>
+							<FormLabel component="legend" style={{ padding: '16px 0 0' }}>
+								Category
+							</FormLabel>
 							<RadioGroup aria-label="category" value={category} onChange={handleChange}>
-								{ postCategories }
+								{postCategories}
 							</RadioGroup>
 						</FormControl>
-						<div style={{paddingTop: 20}}></div>
+						<div style={{ paddingTop: 20 }}></div>
 						<AddCategory />
 					</Paper>
 				</Grid>

@@ -17,16 +17,17 @@ import Formsy from 'formsy-react';
 import { CircularProgress } from '@material-ui/core';
 import ProgressBtn from 'app/shared/progressBtn';
 import Grid from '@material-ui/core/Grid';
-import * as Actions from './store/actions';
+import * as Actions from '../store/actions';
+import SharedDropzone from 'app/shared/sharedDropZone';
 
 export default function FileModal() {
     const dispatch = useDispatch();
-    const categories = useSelector(({ fileManagerApp }) => fileManagerApp.categories.categories);
-    const loading = useSelector(({ fileManagerApp }) => fileManagerApp.files.loading);
-    const success = useSelector(({ fileManagerApp }) => fileManagerApp.files.success);
+    const categories = useSelector(({ filesByCategories }) => filesByCategories.categories.categories);
+    const loading = useSelector(({ filesByCategories }) => filesByCategories.files.loading);
+    const success = useSelector(({ filesByCategories }) => filesByCategories.files.success);
     const [open, setOpen] = React.useState(false);
     const [isFormValid, setIsFormValid] = useState(true);
-    const [file, setFile] = useState({});
+    const [file, setFile] = useState('');
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -46,7 +47,9 @@ export default function FileModal() {
 	}
 
 	function handleSubmit(model) {
-    dispatch(Actions.createDocument(model, file));
+    console.log(model);
+    console.log(file[0]);
+    dispatch(Actions.createDocument(model, file[0]));
     handleClose();
   }
 
@@ -109,16 +112,17 @@ export default function FileModal() {
                     className="my-16"
                     name="documentCategoryId"
                     label="Document Category"
-                    value=""
+                    value="none"
                     validationError="requried"
                     variant="outlined"
                     required
                   >
+                    <MenuItem value="none"></MenuItem>
                     {categories.map(item => (
                       <MenuItem value={item.id} key={item.id}>{item.categoryName}</MenuItem>
                     ))}
                   </SelectFormsy>
-                  <TextField
+                  {/* <TextField
                     className="mb-16"
                     type="file"
                     name="docFile"
@@ -136,11 +140,12 @@ export default function FileModal() {
                     variant="outlined"
                     required
                     onChange={fileChange}
-                  />
+                  /> */}
+                  <SharedDropzone name={"Document File"} setValue={setFile}/>
                   <DialogActions>
                     <Grid container spacing={2}>
                         <Grid item xs>
-                            <ProgressBtn  success={success} loading={loading} content='Create' disable={!isFormValid}/>
+                            <ProgressBtn  success={success} loading={loading} content='Upload' disable={!isFormValid}/>
                         </Grid>
                     </Grid>
                   </DialogActions>

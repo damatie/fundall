@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useAuth } from 'app/hooks/useAuth';
 import { getBaseUrl } from 'app/shared/getBaseUrl';
 import swal from 'sweetalert2';
-import { fetchHeaders } from 'app/shared/fetchHeaders'
+import { fetchHeaders } from 'app/shared/fetchHeaders';
 
 export const GET_FILES = 'GET FILES';
 export const LOADING_FILES = 'LOADING FILES';
@@ -22,172 +22,166 @@ export function createDocument(model, file) {
 	let payload = new FormData();
 	payload.append('docName', model.docName);
 	payload.append('documentCategoryId', model.documentCategoryId);
-	payload.append('anydoc', file.file);
+	payload.append('anydoc', file);
 	const auth = useAuth;
 	return dispatch => {
-		// swal.fire("Processing ...");
-		// swal.showLoading();
+		swal.fire('Processing ...');
+		swal.showLoading();
 		dispatch({
 			type: LOADING_FILES
-		})
-		fetch(`${basUrl()}/library/new-doc`, { ...headers.fdHeader('post', payload) }
-		).then(res => res.json()).then(async data => {
-			// let data = response.data;
-			// console.log(data)
-			if (data.success) {
-				dispatch({
-					type: CREATE_FILE_SUCCESS,
-					payload: await getFile()
-				})
+		});
+		fetch(`${basUrl()}/library/new-doc`, { ...headers.fdHeader('post', payload) })
+			.then(res => res.json())
+			.then(async data => {
+				// let data = response.data;
+				// console.log(data)
+				if (data.success) {
+					dispatch({
+						type: CREATE_FILE_SUCCESS,
+						payload: await getFile()
+					});
+					swal.fire({
+						title: 'Create Document',
+						text: data.message,
+						timer: 3000,
+						icon: 'success'
+					});
+				} else {
+					swal.fire({
+						title: 'Create Document',
+						text: data.error,
+						timer: 3000,
+						icon: 'error'
+					});
+					dispatch({
+						type: CREATE_FILE_ERROR
+					});
+				}
+			})
+			.catch(e => {
+				console.error(e);
 				swal.fire({
 					title: 'Create Document',
-					text: data.message,
-					timer: 3000,
-					icon: 'success'
-				})
-			} else {
-				swal.fire({
-					title: 'Create Document',
-					text: data.error,
+					text: 'Oops! an error occurred. Kindly check network and try again',
 					timer: 3000,
 					icon: 'error'
-				})
+				});
 				dispatch({
 					type: CREATE_FILE_ERROR
-				})
-			}
-		}).catch(e => {
-			console.error(e);
-			swal.fire({
-				title: 'Create Document',
-				text: 'Oops! an error occurred. Kindly check network and try again',
-				timer: 3000,
-				icon: 'error'
-			})
-			dispatch({
-				type: CREATE_FILE_ERROR
-			})
-		})
-	}
-};
+				});
+			});
+	};
+}
 
-export function updateDocument(model, id) {
+export function updateDocument(model, id, categoryID) {
 	return dispatch => {
+		swal.fire('Processing ...');
+		swal.showLoading();
 		dispatch({
 			type: LOADING_FILES
-		})
-		fetch(`${basUrl()}/library/update-doc/${id}`, { ...headers.reqHeader('PATCH', model) }
-		).then(res => res.json()).then(async data => {
-			// let data = response.data;
-			if (data.success) {
-				dispatch({
-					type: UPDATE_FILE_SUCCESS,
-					payload: await getFile()
-				})
+		});
+		fetch(`${basUrl()}/library/update-doc/${id}`, { ...headers.reqHeader('PATCH', model) })
+			.then(res => res.json())
+			.then(async data => {
+				// let data = response.data;
+				if (data.success) {
+					Promise.all([
+						dispatch({
+							type: UPDATE_FILE_SUCCESS
+						})
+					]).then(() => {
+						dispatch(getFileByCategoryId(categoryID));
+					});
+					swal.fire({
+						title: 'Update Document',
+						text: data.message,
+						timer: 3000,
+						icon: 'success'
+					});
+				} else {
+					swal.fire({
+						title: 'Update Document',
+						text: data.error,
+						timer: 3000,
+						icon: 'error'
+					});
+					dispatch({
+						type: UPDATE_FILE_ERROR
+					});
+				}
+			})
+			.catch(e => {
+				console.error(e);
 				swal.fire({
 					title: 'Update Document',
-					text: data.message,
-					timer: 3000,
-					icon: 'success'
-				})
-			} else {
-				swal.fire({
-					title: 'Update Document',
-					text: data.error,
+					text: 'Oops! an error occurred. Kindly check network and try again',
 					timer: 3000,
 					icon: 'error'
-				})
+				});
 				dispatch({
 					type: UPDATE_FILE_ERROR
-				})
-			}
-		}).catch(e => {
-			console.error(e);
-			swal.fire({
-				title: 'Update Document',
-				text: 'Oops! an error occurred. Kindly check network and try again',
-				timer: 3000,
-				icon: 'error'
-			})
-			dispatch({
-				type: UPDATE_FILE_ERROR
-			})
-		})
-	}
-};
+				});
+			});
+	};
+}
 
 export function getFiles() {
 	return dispatch => {
 		dispatch({
 			type: LOADING_FILES
-		})
+		});
 		fetch(`${basUrl()}/library/all-docs`, { ...headers.getRegHeader() })
-			.then(res => res.json()).then(async data => {
+			.then(res => res.json())
+			.then(async data => {
 				console.log(data);
-				data.success ?
-					dispatch({
-						type: GET_FILES,
-						payload: data.data
-					})
-					:
-					dispatch({
-						type: GET_FILES,
-						payload: {
-
-						}
-					})
-			}).catch(err => {
+				data.success
+					? dispatch({
+							type: GET_FILES,
+							payload: data.data
+					  })
+					: dispatch({
+							type: GET_FILES,
+							payload: {}
+					  });
+			})
+			.catch(err => {
 				console.log(err);
-				swal.fire(
-					'Oops!',
-					'something went wrong',
-					'error'
-				)
+				swal.fire('Oops!', 'something went wrong', 'error');
 			});
-	}
+	};
 }
 
-export function getFileById(id) {
-	const request = axios.get(`${basUrl()}/library/doc-one/${id}`, {
-		headers: {
-			Authorization: `JWT ${auth().getToken}`
-		}
-	});
-
+export function getFileByCategoryId(id) {
 	return dispatch => {
 		dispatch({
 			type: LOADING_FILES
-		})
-		request.then(response => {
-			response.data.success ?
-				dispatch({
-					type: GET_FILES,
-					payload: response.data.data
-				})
-
-				:
-				dispatch({
-					type: GET_FILES,
-					payload: {
-
-					}
-				})
-		}).catch(err => {
-			console.log(err);
-			swal.fire(
-				'Oops!',
-				'something went wrong',
-				'error'
-			)
 		});
-	}
+		fetch(`${basUrl()}/library/category?documentCategoryId=${id}`, { ...headers.getRegHeader() })
+			.then(res => res.json())
+			.then(async data => {
+				console.log(data);
+				data.success
+					? dispatch({
+							type: GET_FILES,
+							payload: data.data
+					  })
+					: dispatch({
+							type: GET_FILES,
+							payload: {}
+					  });
+			})
+			.catch(err => {
+				console.log(err);
+				swal.fire('Oops!', 'something went wrong', 'error');
+			});
+	};
 }
 
-
-export function deleteDocument(id) {
+export function deleteDocument(id, categoryID) {
 	console.log(id);
-	let done = false;
 	return dispatch => {
+		swal.fire('Processing ...');
+		swal.showLoading();
 
 		dispatch({
 			type: LOADING_FILES
@@ -204,44 +198,34 @@ export function deleteDocument(id) {
 			showLoaderOnConfirm: true,
 			preConfirm: () => [
 				fetch(`${basUrl()}/library/delete-one/${id}`, { ...headers.delHeader() })
-					.then(res => res.json()).then(async data => {
+					.then(res => res.json())
+					.then(async data => {
 						if (data.success) {
-							done = true;
-							swal.fire(
-								'Deleted!',
-								'Your document has been deleted.',
-								'success'
-							)
-							return dispatch({
-								type: DELETE_FILE_SUCCESS,
-								payload: await getFile()
-							})
+							swal.fire('Deleted!', 'Your document has been deleted.', 'success');
+							Promise.all([
+								dispatch({
+									type: DELETE_FILE_SUCCESS
+								})
+							]).then(() => {
+								dispatch(getFileByCategoryId(categoryID));
+							});
 						} else {
-							swal.fire(
-								'Deleted!',
-								'something went wrong',
-								'error'
-							)
+							swal.fire('Deleted!', 'something went wrong', 'error');
 							return dispatch({
 								type: DELETE_FILE_ERROR
-							})
+							});
 						}
-					}
-					).catch(e => {
+					})
+					.catch(e => {
 						console.log(e);
-						swal.fire(
-							'Oops!',
-							'something went wrong',
-							'error'
-						)
+						swal.fire('Oops!', 'something went wrong', 'error');
 						return dispatch({
 							type: DELETE_FILE_ERROR
-						})
+						});
 					})
 			]
-		})
-	}
-
+		});
+	};
 }
 
 export function setFileSearchText(event) {
@@ -249,7 +233,7 @@ export function setFileSearchText(event) {
 		type: SET_FILE_SEARCH_TEXT,
 		searchText: event.target.value
 	};
-};
+}
 
 export function getFile() {
 	const request = axios.get(`${basUrl()}/library/all-docs`, {
@@ -258,10 +242,11 @@ export function getFile() {
 		}
 	});
 
-	return request.then(response => {
-		return response.data.success ? response.data.data : [];
-	}).catch(err => {
-		return []
-	});
+	return request
+		.then(response => {
+			return response.data.success ? response.data.data : [];
+		})
+		.catch(err => {
+			return [];
+		});
 }
-
