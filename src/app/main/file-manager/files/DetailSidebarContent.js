@@ -88,30 +88,38 @@ function DetailSidebarContent(props) {
 		switch (ext) {
 			case 'image':
 				return (
-					<div style={{height: "200px", width: "200px"}}>
-						<img src={url}/>
+					<div style={{height: "300px", width: "300px"}}>
+						<img src={url} width={300} height={300} />
 					</div>
 				);
 				break;
 			case 'pdf':
 				return (
-					<Icon className={clsx(classes.typeIcon, getExt('pdf'), 'text-48')} />
+					<div>
+						<Icon className={clsx(classes.typeIcon, getExt('pdf'), 'text-48')} />
+					</div>
 				);
 				break;
 			case 'document':
 				return (
-					<Icon className={clsx(classes.typeIcon, getExt('document'), 'text-48')} />
+					<div>
+						<Icon className={clsx(classes.typeIcon, getExt('document'), 'text-48')} />
+					</div>
 				);
 				break;
 			case 'spreadsheet':
 				return (
-					<Icon className={clsx(classes.typeIcon, getExt('spreadsheet'), 'text-48')} />
+					<div>
+						<Icon className={clsx(classes.typeIcon, getExt('spreadsheet'), 'text-48')} />
+					</div>
 				);
 				break;
 		
 			default:
 				return (
-					<Icon className={clsx(classes.typeIcon, getExt(url), 'text-48')} />
+					<div>
+						<Icon className={clsx(classes.typeIcon, getExt(url), 'text-48')} />
+					</div>
 				);
 				break;
 		}
@@ -151,17 +159,17 @@ function DetailSidebarContent(props) {
 
 						<tr className="owner">
 							<th>Owner</th>
-							<td>{selectedItem.employee.firstName +' '+selectedItem.employee.lastName}</td>
+							<td>{(selectedItem.employee) ? (selectedItem.employee.firstName +' '+selectedItem.employee.lastName) : ''}</td>
 						</tr>
 
 						<tr className="modified">
 							<th>Modified</th>
-							<td><Moment format="ddd MMM, YY | hh:mm:ss a">{selectedItem.updatedAt}</Moment></td>
+							<td><Moment format="ddd do MMM, YY | hh:mm:ss a">{selectedItem.updatedAt}</Moment></td>
 						</tr>
 
 						<tr className="created">
 							<th>Created</th>
-							<td><Moment format="ddd MMM, YY | hh:mm:ss a">{selectedItem.createdAt}</Moment></td>
+							<td><Moment format="ddd do MMM, YY | hh:mm:ss a">{selectedItem.createdAt}</Moment></td>
 						</tr>
 					</tbody>
 				</table>

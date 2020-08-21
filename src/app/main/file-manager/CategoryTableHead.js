@@ -24,31 +24,10 @@ const columns = [
 		sort: true
 	},
 	{
-		id: 'type',
+		id: 'created',
 		align: 'center',
 		disablePadding: false,
-		label: 'Type',
-		sort: true
-	},
-	{
-		id: 'size',
-		align: 'left',
-		disablePadding: false,
-		label: 'Size',
-		sort: true
-	},
-	{
-		id: 'owner',
-		align: 'left',
-		disablePadding: false,
-		label: 'Owner',
-		sort: true
-	},
-	{
-		id: 'category',
-		align: 'left',
-		disablePadding: false,
-		label: 'Category',
+		label: 'Created',
 		sort: true
 	},
 	{
@@ -85,7 +64,6 @@ function FileTableHead(props) {
 	return (
 		<TableHead>
 			<TableRow className="h-64">
-            <TableCell className="max-w-64 w-64 p-0 text-center"> </TableCell>
 				{columns.map(row => {
 					return (
 						<TableCell
