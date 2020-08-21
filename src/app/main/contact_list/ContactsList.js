@@ -39,13 +39,13 @@ function ContactsList(props) {
 			{
 				Header: 'First name',
 				accessor: 'firstName',
-				className: 'font-bold',
+				// className: 'font-bold',
 				sortable: true
 			},
 			{
 				Header: 'Last name',
 				accessor: 'lastName',
-				className: 'font-bold',
+				// className: 'font-bold',
 				sortable: true
 			},
 			{
@@ -56,7 +56,7 @@ function ContactsList(props) {
 			{
 				Header: 'Entity',
 				accessor: 'entity',
-				className: 'font-bold',
+				// className: 'font-bold',
 				sortable: true
 			},
 			{
