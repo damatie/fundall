@@ -3,6 +3,7 @@ import * as Actions from '../actions';
 
 const initialState = {
 	entities: null,
+	entity: null,
 	searchText: '',
 	routeParams: {},
 	contactDialog: {
@@ -11,7 +12,8 @@ const initialState = {
 			open: false
 		},
 		data: null
-	}
+	},
+	loading: false,
 };
 
 const contactsReducer = (state = initialState, action) => {
@@ -20,8 +22,23 @@ const contactsReducer = (state = initialState, action) => {
 			return {
 				...state,
 				entities: _.keyBy(action.payload, 'id'),
-				routeParams: action.routeParams
+				routeParams: action.routeParams,
+				loading: false,
 			};
+		}
+		case Actions.GET_CONTACT: {
+			return {
+				...state,
+				entity: _.keyBy(action.payload, 'id'),
+				routeParams: action.routeParams,
+				loading: false,
+			};
+		}
+		case Actions.LOADING_CONTACT: {
+			return {
+				...state,
+				loading: true,
+			}
 		}
 		case Actions.SET_SEARCH_TEXT: {
 			return {
