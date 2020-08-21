@@ -1,10 +1,15 @@
 import * as Actions from '../actions';
+import { actions } from 'react-table';
 
 const initialState = {
   loading: false,
   data: null,
   error: null,
   success: false,
+  loadingInfo: false,
+  loadingDetails: false,
+  info: {},
+  details: {},
 };
 
 const employeeReducer = (state = initialState, action) => {
@@ -39,6 +44,32 @@ const employeeReducer = (state = initialState, action) => {
         error: action.payload
 			};
     }
+    case Actions.LOADING_EMPLOYEE_DETAILS: {
+      return {
+        ...state,
+        loadingDetails: true,
+      };
+    }
+    case Actions.LOADING_EMPLOYEE_INFO: {
+      return {
+        ...state,
+        loadingInfo: true,
+      };
+    }
+    case Actions.EMPLOYEE_DETAILS: {
+      return {
+        ...state,
+        loadingDetails: false,
+        details: action.payload
+      }
+    };
+    case Actions.EMPLOYEE_INFO: {
+      return {
+        ...state,
+        loadingInfo: false,
+        info: action.payload
+      }
+    };
 		default: {
 			return state;
 		}

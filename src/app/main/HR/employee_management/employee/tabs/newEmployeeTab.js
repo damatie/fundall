@@ -12,6 +12,7 @@ import * as entityActions from 'app/main/HR/business_unit/store/actions';
 import * as departmentActions from 'app/main/HR/business_unit/department/store/actions';
 import * as rolesActions from 'app/main/HR/roles/store/actions';
 import ProgressBtn from 'app/shared/progressBtn';
+import GridSystem from 'app/shared/gridSystem';
 
 function NewEmployeeTab(props) {
 	const dispatch = useDispatch();
@@ -65,7 +66,7 @@ function NewEmployeeTab(props) {
 				ref={formRef}
 				className="flex flex-col justify-center w-full"
 			>
-
+				<GridSystem>
 				<TextFieldFormsy
 					className="mb-16"
 					type="text"
@@ -132,6 +133,9 @@ function NewEmployeeTab(props) {
 						<MenuItem value={item.id} key={item.id}>{item.name}</MenuItem>
 					))}
 				</SelectFormsy>
+				</GridSystem>
+
+				
 				<ProgressBtn success={employee.success} loading={employee.loading} content='Save' disable={!isFormValid} />
 			</Formsy>
 		</div>

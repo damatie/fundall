@@ -18,7 +18,7 @@ import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import BlogListContent from './posts/blogListContent';
 import SideNavBar from './posts/sideNav';
-import { animateScroll as scroll } from "react-scroll";
+// import { animateScroll as scroll } from "react-scroll";
 import { useAuth } from 'app/hooks/useAuth';
 
 const useStyles = makeStyles(theme => ({
@@ -117,8 +117,10 @@ function MainBlog() {
 		console.log(value);
 		let newPage = value-1;
 		dispatch(Actions.getPosts(rowsPerPage, newPage*rowsPerPage));
-		scroll.scrollToTop();
+		// scroll.scrollToTop();
 		setPage(value);
+		// window.scrollTo(0,0);
+		// alert('hello')
 	};
 
 	const week = blogPost.filter(blog => {

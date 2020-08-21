@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Badge from '@material-ui/core/Badge';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -7,9 +7,24 @@ import PhotoCamera from '@material-ui/icons/PhotoCamera';
 import { useSelector, useDispatch } from 'react-redux';
 import * as  Actions from 'app/store/actions';
 import { useAuth } from 'app/hooks/useAuth';
+import { useParams } from 'react-router';
 
 const ProfilePicture = () => {
-  const profile = useSelector(({ profile }) => profile.data);
+  const picture = useSelector(({ profile }) => profile.data);
+  const employeePic = useSelector(({ employeesDetails }) => employeesDetails);
+
+  const [profile, setProfile] = useState({});
+
+  const { id } = useParams();
+
+  useEffect(() => {
+    if(id) {
+      setProfile(employeePic.employee.info.profilePicture);
+    } else {
+      setProfile(picture.profilePicture);
+    }
+  }, []);
+
   return (
     <Badge
     overlap="circle"
@@ -17,9 +32,9 @@ const ProfilePicture = () => {
       vertical: 'bottom',
       horizontal: 'right',
     }}
-    badgeContent={<UploadBtn />}
+    badgeContent={!id ? <UploadBtn /> : <></>}
     >
-      <Avatar className="w-96 h-96" alt="Travis Howard" src={profile.profilePicture} />
+      <Avatar className="w-96 h-96" alt="Travis Howard" src={profile} />
     </Badge>
   );
 };
