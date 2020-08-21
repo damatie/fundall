@@ -34,7 +34,7 @@ function ContactsApp(props) {
 
 
 	useDeepCompareEffect(() => {
-		if(!id) {
+		if(id === 'all') {
 			dispatch(Actions.getContacts(routeParams));
 			dispatch(Actions.getUserData());
 		}

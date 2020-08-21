@@ -51,7 +51,6 @@ function ContactsSidebarContent(props) {
 			const entity = Object.keys(contacts).map(item => contacts[item].entity);
 			setFilteredData([...filteredData, ...entity]);
 		}
-		
 	}, [contacts]);
 
 	return (
