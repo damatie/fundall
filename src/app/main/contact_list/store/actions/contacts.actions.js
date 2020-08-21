@@ -380,6 +380,7 @@ const formatData = item => {
 			id: i++,
 			firstName: data.firstName,
 			lastName: data.lastName,
+			email: data.email,
 			profilePicture: data.profilePicture ? data.profilePicture : 'assets/images/avatars/Abbott.jpg',
 			phoneNumber: data.phoneNumber ? data.phoneNumber : 'User have no number yet',
 			officeNumber: data.info ? data.info.officialNo : 'No Office number yet',
