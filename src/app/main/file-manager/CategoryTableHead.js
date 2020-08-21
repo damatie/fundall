@@ -18,21 +18,21 @@ import React, { useState } from 'react';
 const columns = [
 	{
 		id: 'name',
-		align: 'center',
+		align: 'left',
 		disablePadding: false,
 		label: 'Name',
 		sort: true
 	},
 	{
 		id: 'created',
-		align: 'center',
+		align: 'left',
 		disablePadding: false,
 		label: 'Created',
 		sort: true
 	},
 	{
 		id: 'modified',
-		align: 'center',
+		align: 'left',
 		disablePadding: false,
 		label: 'Modified',
 		sort: true

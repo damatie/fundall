@@ -365,7 +365,7 @@ const navigationConfig = [
 		children: [
 			{
 				id: 'documents',
-				title: 'Documents',
+				title: 'Documents library',
 				type: 'item',
 				url: '/library/documents',
 				icon: 'folder',
