@@ -28,34 +28,24 @@ function ContactsList(props) {
 						selectedFlatRows.length > 0 && <ContactsMultiSelectMenu selectedContactIds={selectedRowIds} />
 					);
 				},
-				accessor: 'avatar',
+				accessor: 'profilePicture',
 				Cell: ({ row }) => {
-					return <Avatar className="mx-8" alt={row.original.name} src={row.original.avatar} />;
+					return <Avatar className="mx-8" alt={row.original.firstName} src={row.original.profilePicture} />;
 				},
 				className: 'justify-center',
 				width: 64,
 				sortable: false
 			},
 			{
-				Header: 'First Name',
-				accessor: 'name',
-				className: 'font-bold',
+				Header: 'First name',
+				accessor: 'firstName',
+				// className: 'font-bold',
 				sortable: true
 			},
 			{
-				Header: 'Last Name',
+				Header: 'Last name',
 				accessor: 'lastName',
-				className: 'font-bold',
-				sortable: true
-			},
-			{
-				Header: 'Company',
-				accessor: 'company',
-				sortable: true
-			},
-			{
-				Header: 'Job Title',
-				accessor: 'jobTitle',
+				// className: 'font-bold',
 				sortable: true
 			},
 			{
@@ -64,10 +54,21 @@ function ContactsList(props) {
 				sortable: true
 			},
 			{
-				Header: 'Phone',
-				accessor: 'phone',
+				Header: 'Entity',
+				accessor: 'entity',
+				// className: 'font-bold',
 				sortable: true
 			},
+			{
+				Header: 'Department',
+				accessor: 'department',
+				sortable: true
+			},
+			{
+				Header: 'Phone Number',
+				accessor: 'phoneNumber',
+				sortable: true
+			}
 		],
 		[dispatch, user.starred]
 	);

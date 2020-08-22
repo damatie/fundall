@@ -1,7 +1,7 @@
 import _ from '@lodash';
 import * as Actions from '../actions';
 const initialState = {
-	loading: true,
+	loading: false,
 	data: [],
 	success: true,
 	searchText: ''
@@ -37,8 +37,7 @@ const filesReducer = (state = initialState, action) => {
 			return {
 				...state,
 				loading: false,
-				success: true,
-				data: action.payload
+				success: true
 			};
 		case Actions.UPDATE_FILE_ERROR:
 			return {
@@ -51,7 +50,6 @@ const filesReducer = (state = initialState, action) => {
 				...state,
 				loading: false,
 				success: true,
-				data: action.payload
 			};	
 		case Actions.DELETE_FILE_ERROR:
 			return {

@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Moment from 'react-moment';
-import * as Actions from './store/actions';
+import * as Actions from '../store/actions';
 import FileUpdateModal from './FileUpdateModal';
 import { useAuth } from 'app/hooks/useAuth';
 
@@ -18,11 +18,11 @@ function DetailSidebarHeader(props) {
 		return null;
 	}
 
-	function deleteFile(){
-		dispatch(Actions.deleteDocument(selectedItem.id));
+	function deleteFile() {
+		dispatch(Actions.deleteDocument(selectedItem.id, selectedItem.documentCategoryId));
 	}
 
-	function downloadFile(){
+	function downloadFile() {
 		const link = document.createElement('a');
 		link.href = selectedItem.docUrl;
 		link.setAttribute('target', '_blank');
@@ -33,17 +33,15 @@ function DetailSidebarHeader(props) {
 		link.parentNode.removeChild(link);
 	}
 
-	function HiddenBtn(){
-		if(userId === selectedItem.employeeId){
-		  return (
-			<IconButton onClick={deleteFile}>
-				<Icon>delete</Icon>
-			</IconButton>
-		  )
-		}else{
+	function HiddenBtn() {
+		if (userId === selectedItem.employeeId) {
 			return (
-				<i></i>
-			)
+				<IconButton onClick={deleteFile}>
+					<Icon>delete</Icon>
+				</IconButton>
+			);
+		} else {
+			return <i></i>;
 		}
 	}
 
@@ -59,7 +57,7 @@ function DetailSidebarHeader(props) {
 					</IconButton>
 				</FuseAnimate>
 				<FuseAnimate animation="transition.expandIn" delay={200}>
-					<FileUpdateModal/>
+					<FileUpdateModal pageLayout={props.pageLayout}/>
 				</FuseAnimate>
 			</div>
 
@@ -72,7 +70,9 @@ function DetailSidebarHeader(props) {
 				<FuseAnimate delay={300}>
 					<Typography variant="caption" className="">
 						<span>Edited</span>
-						<span>: <Moment format="ddd MMM, YY | hh:mm:ss a">{selectedItem.updatedAt}</Moment></span>
+						<span>
+							: <Moment format="ddd MMM, YY | hh:mm:ss a">{selectedItem.updatedAt}</Moment>
+						</span>
 					</Typography>
 				</FuseAnimate>
 			</div>

@@ -17,17 +17,14 @@ import * as Actions from './store/actions';
 
 const defaultFormState = {
 	id: '',
-	name: '',
+	firstName: '',
 	lastName: '',
-	avatar: 'assets/images/avatars/profile.jpg',
-	nickname: '',
-	company: '',
-	jobTitle: '',
-	email: '',
-	phone: '',
-	address: '',
-	birthday: '',
-	notes: ''
+	profilePicture: 'assets/images/avatars/profile.jpg',
+	phoneNumber: '',
+	officeNumber: '',
+	officeExtention: '',
+	entity: '',
+	department: '',
 };
 
 function ContactDialog(props) {
@@ -108,11 +105,16 @@ function ContactDialog(props) {
 					</Typography>
 				</Toolbar>
 				<div className="flex flex-col items-center justify-center pb-24">
-					<Avatar className="w-96 h-96" alt="contact avatar" src={form.avatar} />
+					<Avatar className="w-96 h-96" alt="contact avatar" src={form.profilePicture} />
 					{contactDialog.type === 'edit' && (
+						<>
 						<Typography variant="h6" color="inherit" className="pt-8">
-							{form.name}
+							{`${form.firstName} ${form.lastName}`}
 						</Typography>
+						<Typography variant="subtitle1" color="inherit" className="pt-8">
+						{form.email}
+						</Typography>
+					</>
 					)}
 				</div>
 			</AppBar>
@@ -122,14 +124,13 @@ function ContactDialog(props) {
 						<div className="min-w-48 pt-20">
 							<Icon color="action">account_circle</Icon>
 						</div>
-
 						<TextField
 							className="mb-24"
-							label="Name"
+							label="First name"
 							autoFocus
-							id="name"
-							name="name"
-							value={form.name}
+							id="firstName"
+							name="firstName"
+							value={form.firstName}
 							onChange={handleChange}
 							variant="outlined"
 							required
@@ -137,22 +138,24 @@ function ContactDialog(props) {
 							disabled
 						/>
 					</div>
-
 					<div className="flex">
-						<div className="min-w-48 pt-20" />
+						<div className="min-w-48 pt-20">
+							<Icon color="action">account_circle</Icon>
+						</div>
 						<TextField
 							className="mb-24"
 							label="Last name"
-							id="lastName"
-							name="lastName"
-							value={form.lastName}
+							autoFocus
+							id="LastName"
+							name="LastName"
+							value={form.LastName}
 							onChange={handleChange}
 							variant="outlined"
+							required
 							fullWidth
 							disabled
 						/>
 					</div>
-
 					<div className="flex">
 						<div className="min-w-48 pt-20">
 							<Icon color="action">email</Icon>
@@ -177,12 +180,13 @@ function ContactDialog(props) {
 						<TextField
 							className="mb-24"
 							label="Phone number"
-							id="phone"
-							name="phone"
-							value={form.phone}
+							id="phoneNumber"
+							name="phoneNumber"
+							value={form.phoneNumber}
 							onChange={handleChange}
 							variant="outlined"
 							fullWidth
+							disabled
 						/>
 					</div>
 
@@ -193,12 +197,13 @@ function ContactDialog(props) {
 						<TextField
 							className="mb-24"
 							label="Official Phone number"
-							id="phone"
-							name="phone"
-							value={form.phone}
+							id="officeNumber"
+							name="officeNumber"
+							value={form.officeNumber}
 							onChange={handleChange}
 							variant="outlined"
 							fullWidth
+							disabled
 						/>
 					</div>
 
@@ -209,12 +214,13 @@ function ContactDialog(props) {
 						<TextField
 							className="mb-24"
 							label="Office extension"
-							id="phone"
-							name="phone"
-							value={form.phone}
+							id="officeExtention"
+							name="officeExtention"
+							value={form.officeExtention}
 							onChange={handleChange}
 							variant="outlined"
 							fullWidth
+							disabled
 						/>
 					</div>
 
@@ -225,9 +231,9 @@ function ContactDialog(props) {
 						<TextField
 							className="mb-24"
 							label="Entity"
-							id="company"
-							name="company"
-							value={form.company}
+							id="entity"
+							name="entity"
+							value={form.entity}
 							onChange={handleChange}
 							variant="outlined"
 							fullWidth
@@ -242,26 +248,9 @@ function ContactDialog(props) {
 						<TextField
 							className="mb-24"
 							label="Department"
-							id="jobTitle"
-							name="jobTitle"
-							value={form.jobTitle}
-							onChange={handleChange}
-							variant="outlined"
-							fullWidth
-							disabled
-						/>
-					</div>
-
-					<div className="flex">
-						<div className="min-w-48 pt-20">
-							<Icon color="action">home</Icon>
-						</div>
-						<TextField
-							className="mb-24"
-							label="Address"
-							id="address"
-							name="address"
-							value={form.address}
+							id="department"
+							name="department"
+							value={form.department}
 							onChange={handleChange}
 							variant="outlined"
 							fullWidth
@@ -269,39 +258,6 @@ function ContactDialog(props) {
 						/>
 					</div>
 				</DialogContent>
-
-				{contactDialog.type === 'new' ? (
-					<DialogActions className="justify-between p-8">
-						<div className="px-16">
-							<Button
-								variant="contained"
-								color="primary"
-								onClick={handleSubmit}
-								type="submit"
-								disabled={!canBeSubmitted()}
-							>
-								Add
-							</Button>
-						</div>
-					</DialogActions>
-				) : (
-					<DialogActions className="justify-between p-8">
-						<div className="px-16">
-							<Button
-								variant="contained"
-								color="primary"
-								type="submit"
-								onClick={handleSubmit}
-								disabled={!canBeSubmitted()}
-							>
-								Save
-							</Button>
-						</div>
-						{/* <IconButton onClick={handleRemove}>
-							<Icon>delete</Icon>
-						</IconButton> */}
-					</DialogActions>
-				)}
 			</form>
 		</Dialog>
 	);
