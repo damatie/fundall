@@ -8,6 +8,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Typography from '@material-ui/core/Typography';
 import React, { useState, useEffect } from 'react';
 import AboutTab from './tabs/AboutTab';
+import SettingsTab from './tabs/settingsTab';
 import PhotosVideosTab from './tabs/PhotosVideosTab';
 import TimelineTab from './tabs/TimelineTab';
 import withReducer from 'app/store/withReducer';
@@ -95,12 +96,19 @@ function ProfilePage() {
 						}}
 						label="Employeement information"
 					/>
+					<Tab
+						classes={{
+							root: 'h-64'
+						}}
+						label="Settings"
+					/>
 				</Tabs>
 			}
 			content={
 				<div className="p-16 sm:p-24">
 					{selectedTab === 0 && <AboutTab />}
 					{selectedTab === 1 && <EmployeementInfoTab />}
+					{selectedTab === 2 && <SettingsTab />}
 				</div>
 			}
 		/>

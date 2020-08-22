@@ -16,6 +16,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import ProgressBtn from '../../../shared/progressBtn';
 import AddCategory from '../blogCategories/addCategoryModal';
 import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -97,8 +99,6 @@ function AddBlogPost(props) {
 		}
 	}, [post])
 
-	console.log(post);
-
 	useEffect(() => {
 		validForm()
 	}, [title, body, category])
@@ -164,8 +164,19 @@ function AddBlogPost(props) {
 		}
 	};
 
+	// const handleDeleteCategory = (categoryId) => {
+	// 	dispatch(Actions.deleteCategory(categoryId))
+	// }
+
 	const postCategories = categories.map(category => {
-		return <FormControlLabel value={category.name} key={category.id} control={<Radio />} label={category.name} />
+		return (
+			<div style={{display: 'flex', justifyContent: 'space-between' }}>
+				<FormControlLabel value={category.name} key={category.id} control={<Radio />} label={category.name} />
+				{/* <IconButton aria-label="delete" onClick={() => handleDeleteCategory(category.id)}>
+        	<DeleteIcon color='error' />
+      	</IconButton> */}
+			</div>
+		)
 	})
 
 	return (
@@ -195,12 +206,7 @@ function AddBlogPost(props) {
 							<Button color="primary" component="span" className={classes.upload}>
 								Upload image
 							</Button>
-							{/* { !names === true */}
                 <img src={src} style={{width: 150}} />
-                {/* : <Typography variant="body1" component="span" style={{ margin: '4px 0 0 12px' }}>
-                    {names}
-                  </Typography> */}
-              {/* } */}
 						</label>
 					</Paper>
 					<Paper variant="outlined" elevation={3}>
@@ -220,12 +226,12 @@ function AddBlogPost(props) {
 							Select Category
 						</Typography>
 						<Divider />
-						<FormControl component="fieldset" style={{ padding: 16 }}>
-							<FormLabel component="legend" style={{ padding: '16px 0 0' }}>Category</FormLabel>
-							<RadioGroup aria-label="category" value={category} onChange={handleChange}>
-								{ postCategories }
-							</RadioGroup>
-						</FormControl>
+							<FormControl component="fieldset" style={{ padding: 16, width: '100%' }}>
+								<FormLabel component="legend" style={{ padding: '16px 0 0' }}>Category</FormLabel>
+								<RadioGroup aria-label="category" value={category} onChange={handleChange}>
+									{ postCategories }
+								</RadioGroup>
+							</FormControl>
 						<div style={{paddingTop: 20}}></div>
 						<AddCategory />
 					</Paper>
