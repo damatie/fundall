@@ -73,6 +73,7 @@ function LeaveManagement(props) {
 	}
 
 	useEffect(() => {
+		
 	}, []);
 
 	return (

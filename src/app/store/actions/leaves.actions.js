@@ -1,4 +1,5 @@
 import { fetchHeaders } from "app/shared/fetchHeaders";
+import { useAuth } from "app/hooks/useAuth"
 
 
 export const LOADING_LEAVE_REQUEST = 'LOADING LEAVES';
@@ -9,15 +10,19 @@ export const LEAVE_REQUEST_SUCCESS = 'LEAVE REQUEST SUCCESS';
 export const LEAVE_REQUEST_ERROR = 'LEAVE REQUEST ERROR';
 
 const header = fetchHeaders();
+const token = useAuth;
 export const getPendingLeaveReq = () => {
   return dispatch => {
     dispatch({
       type: LOADING_LEAVE_REQUEST
     })
-    fetch('https://hris-cbit.herokuapp.com/api/v1/employee-leave/pending/all', {
-      ...header.getRegHeader()
+    fetch(`https://hris-cbit.herokuapp.com/api/v1/employee-leave/pending/all`, {
+      headers: {
+        Authorization: `JWT ${token().getToken}`
+      }
     }).then(res => res.json()).then(
-      data => {
+      async data => {
+        console.log(data);
         dispatch({
           type: GET_PENDING_LEAVE_REQUEST,
           payload: data.data
@@ -36,7 +41,9 @@ export const getApprovedLeaveReq = () => {
       type: LOADING_LEAVE_REQUEST
     })
     fetch('https://hris-cbit.herokuapp.com/api/v1/employee-leave/approved/all', {
-      ...header.getRegHeader()
+      headers: {
+        Authorization: `JWT ${token().getToken}`
+      }
     }).then(res => res.json()).then(
       data => {
         dispatch({
@@ -57,7 +64,9 @@ export const getReviewedLeaveReq = () => {
       type: LOADING_LEAVE_REQUEST
     })
     fetch('https://hris-cbit.herokuapp.com/api/v1/employee-leave/reviewed/all', {
-      ...header.getRegHeader()
+      headers: {
+        Authorization: `JWT ${token().getToken}`
+      }
     }).then(res => res.json()).then(
       data => {
         dispatch({

@@ -66,6 +66,7 @@ function ProjectDashboardApp(props) {
 		menuEl: null
 	});
 
+
 	useEffect(() => {
 		dispatch(Actions.getWidgets());
 		dispatch(Actions.getProjects());

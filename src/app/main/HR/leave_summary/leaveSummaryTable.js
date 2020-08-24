@@ -12,6 +12,10 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import SharedTableHead from 'app/shared/sharedTableHead';
+import * as Actions from './store/actions';
+import moment from 'moment';
+import Typography from '@material-ui/core/Typography';
+import LeaveDialog from './leaveDetails';
 
 const rows = [
 	{
@@ -21,11 +25,25 @@ const rows = [
 		label: 'Employee name',
 		sort: true
 	},
+	// {
+	// 	id: 'email',
+	// 	align: 'left',
+	// 	disablePadding: false,
+	// 	label: 'email',
+	// 	sort: true
+	// },
 	{
 		id: 'leave_type',
 		align: 'left',
 		disablePadding: false,
 		label: 'Leave type',
+		sort: true
+	},
+	{
+		id: 'leave_days',
+		align: 'left',
+		disablePadding: false,
+		label: 'Leave days',
 		sort: true
 	},
 	{
@@ -58,47 +76,28 @@ const rows = [
 	}
 ];
 
-const dummy = [
-  {
-    name: 'David chinweike',
-    leaveType: 'Medical leave',
-    fromDate: '06 july 2020',
-    toDate: '20 july 2020',
-    appliedOn: '01 july 2020',
-    status: 'pending'
-  },
-  {
-    name: 'Samuel Jobs',
-    leaveType: 'Vacation leave',
-    fromDate: '10 july 2020',
-    toDate: '20 july 2020',
-    appliedOn: '06 july 2020',
-    status: 'approved'
-  },
-  {
-    name: 'Maxwell sweeter',
-    leaveType: 'Maternity leave',
-    fromDate: '01 july 2020',
-    toDate: '30 july 2020',
-    appliedOn: '01 june 2020',
-    status: 'rejected'
-  }
-]
 
 function LeaveSummaryTable(props) {
 	const dispatch = useDispatch();
 
+	const leaveSummary = useSelector(({ leaveSummary }) => leaveSummary.leaveSummary)
+
 	const [selected, setSelected] = useState([]);
-	const [data, setData] = useState(dummy);
+	const [data, setData] = useState([]);
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(10);
+	const [open, setOpen] = useState(false);
 	const [order, setOrder] = useState({
 		direction: 'asc',
 		id: null
 	});
 
 	useEffect(() => {
-		// dispatch(Actions.getBusinessUnits());
+		setData(leaveSummary.data)
+	}, [leaveSummary.data])
+
+	useEffect(() => {
+		dispatch(Actions.getLeaveSummary());
 	}, [dispatch]);
 
 	function handleRequestSort(event, property) {
@@ -125,6 +124,8 @@ function LeaveSummaryTable(props) {
 
 	function handleClick(item) {
 		// props.history.push(`/hr/business_unit/details/${item.id}`);
+		setOpen(true);
+		dispatch(Actions.getOneLeaveSummary(item))
 	}
 
 	function handleCheck(event, id) {
@@ -205,23 +206,31 @@ function LeaveSummaryTable(props) {
 										</TableCell>
 
 										<TableCell component="th" scope="row" align="left">
-                      {n.name}
+                      {`${n.employee.firstName} ${n.employee.lastName}`}
 										</TableCell>
+
+										{/* <TableCell component="th" scope="row" align="left">
+                      {`${n.employee.email}`}
+										</TableCell> */}
 
 										<TableCell component="th" scope="row" align="left">
 											{n.leaveType}
 										</TableCell>
 
+										<TableCell component="th" scope="row" align="left">
+											{`${n.days} days`}
+										</TableCell>
+
 										<TableCell className="truncate" component="th" scope="row" align="left">
-											{n.fromDate}
+											{moment(n.fromDate).format('LLL')}
 										</TableCell>
 
 										<TableCell component="th" scope="row" align="right">
-											{n.toDate}
+											{moment(n.toDate).format('LLL')}
 										</TableCell>
 
 										<TableCell component="th" scope="row" align="right">
-											{n.appliedOn}
+											{moment(n.createdAt).format('LLL')}
 										</TableCell>
 
                     <TableCell component="th" scope="row" align="right">
@@ -249,20 +258,29 @@ function LeaveSummaryTable(props) {
 				onChangePage={handleChangePage}
 				onChangeRowsPerPage={handleChangeRowsPerPage}
 			/>
+			<LeaveDialog open={open} setOpen={setOpen} />
 		</div>
 	);
 };
 
-const Status = ({status}) => {
+
+export const Status = ({status}) => {
   switch(status) {
-    case 'pending': {
-      return <Icon className="text-yellow text-20">check_circle</Icon>
+    case 'in progress': {
+      return <Typography className={'bg-blue text-white inline text-11 font-500 px-8 py-4 rounded-4'}>{status}</Typography>
     }
     case 'approved': {
-      return <Icon className="text-green text-20">check_circle</Icon>
+      return <Typography className={'bg-green text-white inline text-11 font-500 px-8 py-4 rounded-4'}>
+			{status}
+		</Typography>
     }
-    case 'rejected': {
-      return <Icon className="text-red text-20">check_circle</Icon>
+    case 'cancelled': {
+      return <Typography className={'bg-red text-white inline text-11 font-500 px-8 py-4 rounded-4'}>{status}</Typography>
+		}
+		case 'reviewed': {
+      return <Typography className={'bg-orange text-bold text-white inline text-11 font-500 px-8 py-4 rounded-4'}>
+			{status}
+		</Typography>
     }
     default: {
       return null;

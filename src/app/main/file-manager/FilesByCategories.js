@@ -18,6 +18,7 @@ function FilesByCategories(props) {
 	const dispatch = useDispatch();
 	const searchText = useSelector(({ filesByCategories }) => filesByCategories.files.searchText);
 	const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
+	
 	const pageLayout = useRef(null);
 
 	return (

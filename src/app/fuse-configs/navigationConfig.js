@@ -56,7 +56,7 @@ const navigationConfig = [
 				children: [
 					{
 						id: 'employee_list',
-						title: 'Employes management',
+						title: 'Employee management',
 						type: 'item',
 						url: '/hr/employee_management',
 						exact: true

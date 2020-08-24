@@ -6,10 +6,24 @@ import Button from '@material-ui/core/Button';
 import { inputStyles } from '../../EmployeeFormInput';
 import Checkbox from '@material-ui/core/Checkbox';
 import MenuBookRoundedIcon from "@material-ui/icons/MenuBookRounded";
+import { useParams } from 'react-router';
+import { useForm } from '@fuse/hooks';
+
+const initialState = {
+  ethicsAndBusinessConductPolicyStatement: false,
+  harassmentFreeWorkplacePolicy: false,
+  drivingAndSeatBeltPolicy: false,
+  nonDisclosureConfidentialityPolicyForm: false,
+  substanceAbuseStandard: false,
+};
 
 const CompanyPolicyAcknowledgementForm = () => {
   //styles
   const card = inputStyles();
+
+  const { id } = useParams();
+
+  const { setForm, form, handleChange } = useForm(initialState);
 
   return (
     <Formsy>
