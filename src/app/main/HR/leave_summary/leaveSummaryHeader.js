@@ -48,9 +48,9 @@ function LeaveSummaryHeader(props) {
 					{/* </FuseAnimate> */}
 				</ThemeProvider>
 			</div>
-			<FuseAnimate animation="transition.slideRightIn" delay={300}>
+			{/* <FuseAnimate animation="transition.slideRightIn" delay={300}>
 				<FilterLeaveSummary />
-			</FuseAnimate>
+			</FuseAnimate> */}
 		</div>
 	);
 }

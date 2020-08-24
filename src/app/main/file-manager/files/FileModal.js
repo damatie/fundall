@@ -25,6 +25,7 @@ export default function FileModal() {
     const categories = useSelector(({ filesByCategories }) => filesByCategories.categories.categories);
     const loading = useSelector(({ filesByCategories }) => filesByCategories.files.loading);
     const success = useSelector(({ filesByCategories }) => filesByCategories.files.success);
+    const role = useSelector(({ profile }) => profile.data.role.name);
     const [open, setOpen] = React.useState(false);
     const [isFormValid, setIsFormValid] = useState(true);
     const [file, setFile] = useState('');
@@ -54,15 +55,16 @@ export default function FileModal() {
   }
 
   function fileChange(event){
-      setFile({"file": event.target.files[0]});
+    setFile({"file": event.target.files[0]});
   }
 
   useEffect(() => {
-      dispatch(Actions.getCategories());
+    dispatch(Actions.getCategories());
   },[dispatch] )
 
   return (
     <div>
+        {role.toLowerCase() === 'hr' ?  
         <Fab
             color="secondary"
             aria-label="add"
@@ -70,7 +72,7 @@ export default function FileModal() {
             onClick={handleClickOpen}
         >
             <Icon>add</Icon>
-        </Fab>
+        </Fab> : <></>}
         <Dialog open={open} onClose={handleClose} fullWidth maxWidth={'sm'} aria-labelledby="form-dialog-title">
           <DialogTitle id="form-dialog-title">Add New Document</DialogTitle>
             <DialogContent>

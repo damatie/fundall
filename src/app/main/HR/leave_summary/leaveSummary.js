@@ -3,6 +3,7 @@ import withReducer from 'app/store/withReducer';
 import React from 'react';
 import LeaveSummaryHeader from './leaveSummaryHeader';
 import LeaveSummaryTable from './leaveSummaryTable';
+import reducers from './store/reducers';
 
 function LeaveSummary() {
 	return (
@@ -16,6 +17,6 @@ function LeaveSummary() {
 			innerScroll
 		/>
 	);
-}
+};
 
-export default withReducer()(LeaveSummary);
+export default withReducer('leaveSummary', reducers)(LeaveSummary);

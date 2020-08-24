@@ -30,8 +30,8 @@ export default function FormDialog(props) {
         <DialogTitle id="form-dialog-title">Promote Employee</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            To subscribe to this website, please enter your email address here. We will send updates
-            occasionally.
+            {/* To subscribe to this website, please enter your email address here. We will send updates
+            occasionally. */}
           </DialogContentText>
           <Formsy
             className="flex flex-col justify-center w-full"
@@ -40,7 +40,7 @@ export default function FormDialog(props) {
               className="mb-16"
               type="date"
               name="date"
-              label="Date"
+              // label="Date"
               value={currentDate()}
               InputProps={{
                 endAdornment: (
@@ -102,8 +102,8 @@ export default function FormDialog(props) {
           <Button onClick={props.handleClose} color="primary">
             cancel
           </Button>
-          <Button onClick={props.handleClose} color="primary">
-            Promote this employee
+          <Button onClick={props.handleSave} color="primary">
+            submit
           </Button>
         </DialogActions>
       </Dialog>

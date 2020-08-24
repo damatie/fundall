@@ -38,7 +38,7 @@ const useStyles = makeStyles({
 const defaultFormState = {
 	// id: FuseUtils.generateGUID(),
 	leaveType: '',
-	leaveFor: '',
+	leaveFor: 'Leave',
 	fromDate: moment(new Date(), 'MM/DD/YYYY'),
 	toDate: moment(new Date(), 'MM/DD/YYYY'),
 	lineManagerId: '',
@@ -120,7 +120,7 @@ function EventDialog(props) {
 	}
 
 	function canBeSubmitted() {
-		// return form.leaveType.length > 0;
+		return form.leaveType.length > 0;
 	}
 
 	function handleSubmit(event) {
@@ -133,7 +133,7 @@ function EventDialog(props) {
 		if (eventDialog.type === 'new') {
 			dispatch(Actions.requestLeave({
 				...form,
-				days: days,
+				days: Math.round(days),
 				allotedYear: new Date().getFullYear()
 			}));
 		} else {
@@ -233,7 +233,7 @@ function EventDialog(props) {
 									</MenuItem>))}
 								</TextField>
 			
-								<TextField
+								{/* <TextField
 									id="title"
 									label="Leave for"
 									className="mt-8 mb-16"
@@ -247,7 +247,7 @@ function EventDialog(props) {
 									autoFocus
 									required
 									fullWidth
-								/>
+								/> */}
 			
 								<DatePicker
 									label="From date"

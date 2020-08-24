@@ -53,12 +53,12 @@ function ContactsList(props) {
 				accessor: 'email',
 				sortable: true
 			},
-			{
-				Header: 'Entity',
-				accessor: 'entity',
-				// className: 'font-bold',
-				sortable: true
-			},
+			// {
+			// 	Header: 'Entity',
+			// 	accessor: 'entity',
+			// 	// className: 'font-bold',
+			// 	sortable: true
+			// },
 			{
 				Header: 'Department',
 				accessor: 'department',
