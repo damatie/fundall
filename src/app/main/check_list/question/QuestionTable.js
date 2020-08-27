@@ -1,6 +1,7 @@
 import FormControl from '@material-ui/core/FormControl';
 import Icon from '@material-ui/core/Icon';
 import _ from '@lodash';
+import IconButton from '@material-ui/core/IconButton';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import Paper from '@material-ui/core/Paper';
@@ -17,8 +18,10 @@ import Typography from '@material-ui/core/Typography';
 import Input from '@material-ui/core/Input';
 import React, {useState, useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import EditDisciplinaryCaseModal from './editDisciplinaryCaseModal';
+import * as Actions from '../store/actions';
+import { useDispatch } from 'react-redux';
 import Moment from 'react-moment';
+
 const useStyles = makeStyles({
 	table: {
 		'& th': {
@@ -26,10 +29,10 @@ const useStyles = makeStyles({
 		}
 	}
 });
-const DisciplinaryTable = (props) =>{
+const QuestionTable = (props) =>{
+    const dispatch = useDispatch();
     const [data, setData] = useState(props.rows);
     const [open, setOpen] = useState(false);
-    const [filter, setFilter] = useState('');
     const classes = useStyles();
     const [page, setPage] = useState(0);
     const [search, setSearch] = useState('');
@@ -39,6 +42,7 @@ const DisciplinaryTable = (props) =>{
 		id: null
     });
     const [selected, setSelected] = useState({});
+    let j = 0;
 
 	const createSortHandler = property => event =>  {
 		const id = property;
@@ -71,61 +75,23 @@ const DisciplinaryTable = (props) =>{
         setSelected(item);
         setOpen(true);
     }
-    
-    function CheckStatus(status){
-        switch (status) {
-            case "Close":
-                return (
-                    <Typography
-                            className={'bg-red text-white inline text-11 font-500 px-8 py-4 rounded-4'}
-                        >
-                            {status}
-                    </Typography>
-                )
-                break;
-            
-            case "Open":
-                return (
-                    <Typography
-                            className={'bg-green text-white inline text-11 font-500 px-8 py-4 rounded-4'}
-                        >
-                            {status}
-                    </Typography>
-                )
-                break;
-            default:
-                return (
-                    {status}
-                )
-                break;
-        }
-    }
 
     const handleClose = () => {
         setOpen(false);
     };
+
     useEffect(() => {
 		if (search.length >= 2) {
-            setData(_.filter(props.rows, row => row.accusedName.toLowerCase().includes(search.toLowerCase()) 
-            || row.accuserName.toLowerCase().includes(search.toLowerCase()) || row.caseNo.toLowerCase().includes(search.toLowerCase())));
+            setData(_.filter(props.rows, row => row.question.toLowerCase().includes(search.toLowerCase())));
 			setPage(0);
 		} else {
 			setData(props.rows);
 		}
     }, [props.rows, search]);
     
-    useEffect(() => {
-		if (filter !== '') {
-            setData(_.filter(props.rows, row => row.training.status.toLowerCase() === filter.toLowerCase()));
-			setPage(0);
-		} else {
-			setData(props.rows);
-		}
-	}, [props.rows, filter]);
-    
 	return (
 		<Paper className="w-full rounded-8 shadow-none border-1">
-            <EditDisciplinaryCaseModal open={open} handleClose={handleClose} selectedItem={selected}/>
+            {/* <EditDisciplinaryCaseModal open={open} handleClose={handleClose} selectedItem={selected}/> */}
 			<div className="flex items-center justify-between px-16 h-64 border-b-1">
 				<Typography className="text-16">{props.title}</Typography>
                     <div className="flex items-center">
@@ -208,8 +174,9 @@ const DisciplinaryTable = (props) =>{
 								],
 								[order.direction]
 							)
-								.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
 								.map(n => {
+                                    (j++)
 								return (
 									<TableRow
 										key={n.id}
@@ -218,14 +185,12 @@ const DisciplinaryTable = (props) =>{
 										// selected={n.id === selectedItemId}
 										className="cursor-pointer"
 									>
-										<TableCell className="text-left">
-											{n.caseNo}
+                                        <TableCell className="text-left">
+											{j}
 										</TableCell>
 										<TableCell className="text-left">
-											{n.accuserName}
+											{n.question}
 										</TableCell>
-										<TableCell className="text-left">{n.accusedName}</TableCell>
-										<TableCell className="text-left">{n.caseDescription}</TableCell>
 										<TableCell className="text-left">
                                             <Moment format="ddd Do MMM, YY | hh:mm:ss a">{n.createdAt}</Moment>
 										</TableCell>
@@ -233,7 +198,13 @@ const DisciplinaryTable = (props) =>{
                                             <Moment format="ddd Do MMM, YY | hh:mm:ss a">{n.updatedAt}</Moment>
                                         </TableCell>
 										<TableCell className="text-left">
-                                            {n.status}
+                                            <IconButton onClick={ev => props.handleEdit(ev, n)}>
+												<Icon>edit</Icon>
+											</IconButton>
+                                            
+                                            <IconButton onClick={ev => props.handleDelete(ev, n.id)}>
+												<Icon>delete</Icon>
+											</IconButton>
                                         </TableCell>
 									</TableRow>
 								);
@@ -265,4 +236,4 @@ const DisciplinaryTable = (props) =>{
 	);
 }
 
-export default React.memo(DisciplinaryTable);
+export default React.memo(QuestionTable);

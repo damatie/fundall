@@ -19,7 +19,7 @@ export function getEmployees() {
 		});
 		fetch(`${basUrl()}/auth/employee/`, {...headers.getRegHeader()})
 		.then(res => res.json()).then(async data => {
-			console.log(data.data);
+			// console.log(data.data);
 			data.success ? 
 				(data.data) ?
 					dispatch({

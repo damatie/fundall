@@ -230,14 +230,14 @@ export function updateCourse(model, id){
 				dispatch(getPendingCourses())
 			})
 		  swal.fire({
-			title: 'Create Course',
+			title: 'Update Course',
 			text: (data.message) ? data.message : data.error,
 			timer: 3000,
 			icon: 'success'
 		  })
 		} else {
 		  swal.fire({
-			title: 'Create Course',
+			title: 'Update Course',
 			text: (data.message) ? data.message : data.error,
 			timer: 3000,
 			icon: 'error'
@@ -249,7 +249,7 @@ export function updateCourse(model, id){
 	  }).catch(e => {
 		console.error(e);
 		swal.fire({
-			title: 'Create Course',
+			title: 'Update Course',
 			text: 'Oops! an error occurred. Kindly check network and try again',
 			timer: 3000,
 			icon: 'error'

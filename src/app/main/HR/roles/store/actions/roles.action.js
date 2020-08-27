@@ -53,6 +53,7 @@ export const deleteRoles = id => {
             Authorization: `JWT ${auth().getToken}`
           }
         }).then(res => res.json()).then(data => {
+          console.log(data);
           if(data.success) {
             Swal.fire(
               'Deleted!',
@@ -69,6 +70,13 @@ export const deleteRoles = id => {
               'error'
             )
           }
+        }).catch(err => {
+          console.log(err);
+          Swal.fire(
+            'Deleted!',
+            'Something went wrong.',
+            'error'
+          )
         })
       }
       

@@ -14,18 +14,19 @@ import LocalAtmRoundedIcon from '@material-ui/icons/SchoolRounded';
 import Divider from '@material-ui/core/Divider';
 import reducer from '../store/reducers';
 import Checkbox from '@material-ui/core/Checkbox';
-import ProgressBtn from 'app/shared/progressBtn';
+import ProgressBtn from 'app/shared/progressBtn';;
 
 const PreLearningForm = () => {
 	const classes = inputStyles();
 	const dispatch = useDispatch();
-	const questions = useSelector(({ preLearningForm }) => preLearningForm.checkListForm.data);
+	const questions = useSelector(({ preLearningForm }) => preLearningForm.question.data);
 	const [isFormValid, setIsFormValid] = useState(false);
 	const formRef = useRef(null);
 	const [sign, setSign] = useState(false);
+	const userData = useAuth().getUserDetails;
 
 	useEffect(() => {
-		dispatch(Actions.getAllQuestions());
+		dispatch(Actions.getAllQuestions(1));
 	}, [dispatch]);
 
 	function disableButton() {
@@ -50,10 +51,14 @@ const PreLearningForm = () => {
 			});
 		})
 		let payload = {
-			trainingId: 0,
+			trainingId: 1,
+			managerId: userData.department.departmentHeadId,
+			delegateName: userData.displayName,
+			delegateSignature: userData.details.signature,
+			checklistId:1,
 			data: data
 		}
-		// console.log(payload);
+		console.log(payload);
 	}
 
 	return (

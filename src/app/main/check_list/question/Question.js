@@ -9,59 +9,50 @@ import withReducer from 'app/store/withReducer';
 import { ThemeProvider } from '@material-ui/core/styles';
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import AddDisciplinaryCaseModal from './addDisciplinaryCaseModal';
-import DisciplinaryTable from './DisciplinaryTable';
-import * as Actions from './store/actions';
-import reducer from './store/reducers';
+import AddQuestionModal from './addQuestionModal';
+import QuestionTable from './QuestionTable';
+import * as Actions from '../store/actions';
+import reducer from '../store/reducers';
+import { Link, useParams } from 'react-router-dom';
+import Typography from '@material-ui/core/Typography';
 
-function DisciplinaryCase() {
+function Question(props) {
 	const dispatch = useDispatch();
 	const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
-	const rows = useSelector(({ disciplinaryCase }) => disciplinaryCase.disciplinaryCase.data);
-	const pageLayout = useRef(null);
+	const rows = useSelector(({ checkList }) => checkList.question.data);
+    const pageLayout = useRef(null);
+    const checkListID = parseInt(props.match.params.id);
+    const checkListType = props.match.params.type;
 
     useEffect(() => {
-        dispatch(Actions.getDisciplinaryCase());
+        dispatch(Actions.getAllQuestions(checkListID));
     }, [dispatch]);
     
 	function handleDelete(event, id){
-        // dispatch(Actions.DisciplinaryCase(id))
+        dispatch(Actions.deleteQuestion(id, checkListID));
     }
 
     function handleEdit(event, model){
-        console.log(model)
-        // dispatch(Actions.updateDisciplinaryCase(model, model.id));
+        let payload = {};
+        payload.question = model.question;
+        payload.checkListId = checkListID;
+        console.log(payload);
+        dispatch(Actions.updateQuestion(payload, model.id));
     }
-
-    console.log(rows);
 
     const columns = [
         {
             id: 's/n',
             align: 'left',
             disablePadding: false,
-            label: 'Case No',
+            label: 'S/N',
             sort: true
         },
         {
-            id: 'accuser',
+            id: 'question',
             align: 'left',
             disablePadding: false,
-            label: 'Accuser',
-            sort: true
-        },
-        {
-            id: 'accused',
-            align: 'left',
-            disablePadding: false,
-            label: 'Accused',
-            sort: true
-        },
-        {
-            id: 'description',
-            align: 'left',
-            disablePadding: false,
-            label: 'Description',
+            label: 'Question',
             sort: true
         },
         {
@@ -79,11 +70,11 @@ function DisciplinaryCase() {
             sort: true
         },
         {
-            id: 'status',
+            id: 'option',
             align: 'left',
             disablePadding: false,
-            label: 'Status',
-            sort: true
+            label: 'Option',
+            sort: false
         }
     ];
 	return (
@@ -102,22 +93,33 @@ function DisciplinaryCase() {
                                 <Icon className="text-32">announcement</Icon>
                             </FuseAnimate>
                             <FuseAnimate animation="transition.slideLeftIn" delay={300}>
-                                <span className="text-24 mx-16">Disciplinary Case Management</span>
+                                <span className="text-24 mx-16">{checkListType} Questions</span>
                             </FuseAnimate>
-                        </div>
 						<div className="flex flex-1 items-end">
 							<FuseAnimate animation="transition.expandIn" delay={600}>
-								<AddDisciplinaryCaseModal />
+								<AddQuestionModal id={checkListID}/>
 							</FuseAnimate>
 						</div>
+                        </div>
+						<Typography
+							className="absolute bottom-0 ltr:left-0 rtl:right-0 mx-16 mt-10 z-999"
+							component={Link}
+							role="button"
+							to="/training/checklist"
+							color="inherit"
+						>
+							<span className="mx-10">
+								<Icon className="text-20">{'arrow_back_ios'}</Icon> Back
+							</span>
+						</Typography>
 					</div>
 			</ThemeProvider>
 			}
-			content={<DisciplinaryTable title={"Disciplinary Cases"} type="default" handleDelete={handleDelete} handleEdit={handleEdit} columns={columns} rows={rows} showEdit={true} showDesc={true}/>}
+			content={<QuestionTable title={""} type="default" handleDelete={handleDelete} handleEdit={handleEdit} columns={columns} rows={rows} props={props}/>}
 			ref={pageLayout}
 			innerScroll
 		/>
 	);
 }
 
-export default withReducer('disciplinaryCase', reducer)(DisciplinaryCase);
+export default withReducer('checkList', reducer)(Question);
