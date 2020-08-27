@@ -157,6 +157,17 @@ function FileList(props) {
 		props.pageLayout.current.toggleRightSidebar();
 	}
 
+	function downloadFile(payload) {
+		const link = document.createElement('a');
+		link.href = payload.docUrl;
+		link.setAttribute('target', '_blank');
+		link.download = payload.docName;
+		link.setAttribute('download', payload.docName);
+		document.body.appendChild(link);
+		link.click();
+		link.parentNode.removeChild(link);
+	}
+
 	return (
 		<FuseAnimate animation="transition.slideUpIn" delay={300}>
 			<FuseScrollbars className="flex-grow overflow-x-auto">
@@ -187,29 +198,31 @@ function FileList(props) {
 										<TableRow
 											key={n.id}
 											hover
-											onClick={event => handleOpenSideBar(event, n)}
+											
 											selected={n.id === selectedItemId}
 											className="cursor-pointer"
 										>
-											<TableCell className="max-w-64 w-64 p-0 text-center">
+											<TableCell className="max-w-64 w-64 p-0 text-center" onClick={event => handleOpenSideBar(event, n)}>
 												<Icon className={clsx(classes.typeIcon, getExt(n.docUrl))} />
 											</TableCell>
-											<TableCell>{n.docName}</TableCell>
-											<TableCell className="text-left hidden sm:table-cell">{getExt(n.docUrl)}</TableCell>
-											<TableCell className="max-w-64 w-64 p-0 text-center">
+											<TableCell onClick={event => handleOpenSideBar(event, n)}>{n.docName}</TableCell>
+											<TableCell className="text-left hidden sm:table-cell" onClick={event => handleOpenSideBar(event, n)}>{getExt(n.docUrl)}</TableCell>
+											<TableCell className="max-w-64 w-64 p-0 text-center" onClick={event => handleOpenSideBar(event, n)}>
 												{formatBytes(n.size) === '' || !formatBytes(n.size) ? '-' : formatBytes(n.size)}
 											</TableCell>
-											<TableCell className="text-left hidden sm:table-cell">
+											<TableCell className="text-left hidden sm:table-cell" onClick={event => handleOpenSideBar(event, n)}>
 												{n.employee ? n.employee.firstName + ' ' + n.employee.lastName : ''}
 											</TableCell>
-											<TableCell className="text-left hidden sm:table-cell">
+											<TableCell className="text-left hidden sm:table-cell" onClick={event => handleOpenSideBar(event, n)}>
 												{category ? category.categoryName : ''}
 											</TableCell>
-											<TableCell className="hidden sm:table-cell">
+											<TableCell className="hidden sm:table-cell" onClick={event => handleOpenSideBar(event, n)}>
 												<Moment format="ddd do MMM, YY | hh:mm:ss a">{n.updatedAt}</Moment>
 											</TableCell>
 											<TableCell className="hidden sm:table-cell">
-												
+											<IconButton onClick={ev => downloadFile(n)}>
+												<Icon>cloud_download</Icon>
+											</IconButton>
 											</TableCell>
 										</TableRow>
 									);

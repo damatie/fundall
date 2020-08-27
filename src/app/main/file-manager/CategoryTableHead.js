@@ -25,7 +25,7 @@ const columns = [
 	},
 	{
 		id: 'description',
-		align: 'center',
+		align: 'left',
 		disablePadding: false,
 		label: 'Description',
 		sort: true
