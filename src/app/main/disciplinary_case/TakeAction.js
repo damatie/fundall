@@ -34,36 +34,37 @@ const CaptializeFirstLetter = word => {
 };
 export default function TakeAction(props) {
 	const dispatch = useDispatch();
-	const selected = props.selectedItem;
-	const loading = useSelector(({ disciplinaryCase }) => disciplinaryCase.disciplinaryCase.loading);
+    const selected = props.selectedItem;
+    const actions = props.actions;
+	// const disciplinaryAction = useSelector(({ disciplinaryCase }) => disciplinaryCase.disciplinaryAction.data);
 	const success = useSelector(({ disciplinaryCase }) => disciplinaryCase.disciplinaryCase.success);
 	const [value, setValue] = React.useState('female');
 	const [isFormValid, setIsFormValid] = useState(true);
 	const [form, setForm] = useState({
 		actionType: '',
 		description: '',
-		status: '',
         recommendation: '',
         disciplinaryCaseId: 0
-	});
-	useEffect(() => {
-	}, [dispatch]);
-
-
+    });
+    
+	// useEffect(() => {
+    //     console.log(selected.id);
+    //     dispatch(Actions.getDisciplinaryAction(selected.id));
+    // }, [dispatch]);
+    
 	useEffect(() => {
 		setForm({
-			actionType: '',
-            description: '',
-            status: 'open',
-            recommendation: '',
-            disciplinaryCaseId: selected.id
+			actionType: actions.actionType,
+            description: actions.description,
+            recommendation: actions.recommendation,
+            disciplinaryCaseId: actions.disciplinaryCaseId
 		});
-	}, [selected])
+    }, [actions]);
+    
 
 	const handleChange = (event) => {
 		setValue(event.target.value);
 	};
-
 	const formRef = useRef(null);
 
 	const disableButton = () => {
@@ -77,7 +78,7 @@ export default function TakeAction(props) {
 
 	const handleSubmit = () => {
 		console.log(form);
-		dispatch(Actions.createDisciplinaryAction(form));
+		// dispatch(Actions.createDisciplinaryAction(form));
 		props.handleClose();
 	};
 
@@ -94,7 +95,8 @@ export default function TakeAction(props) {
                             className="mb-16 w-full"
                             type="text"
                             name="actionType"
-                            // value={selected.caseDescription}
+                            // disabled={true}
+                            value={actions.actionType}
                             onChange={ev => {form.actionType = ev.target.value; setForm(form)}}
                             label="Action Type"
                             InputProps={{
@@ -114,7 +116,7 @@ export default function TakeAction(props) {
                             className="mb-16 w-full"
                             type="text"
                             name="description"
-                            // value={selected.caseDescription}
+                            value={actions.description}
                             onChange={ev => {form.description = ev.target.value; setForm(form)}}
                             label="Description"
                             InputProps={{
@@ -134,7 +136,7 @@ export default function TakeAction(props) {
                             className="mb-16 w-full"
                             type="text"
                             name="recommendation"
-                            // value={selected.caseDescription}
+                            value={actions.recommendation}
                             onChange={ev => {form.recommendation = ev.target.value; setForm(form)}}
                             label="Recommendation"
                             InputProps={{
@@ -157,9 +159,15 @@ export default function TakeAction(props) {
 								<Grid item xs={6}>
 									<Button variant="contained" className="w-full" color="secondary" type="button" onClick={props.handleClose}>Cancel</Button>
 								</Grid>
+                                {(actions.id) ?
 								<Grid item xs={6}>
-									<Button variant="contained" className="w-full" color="primary" type="button" onClick={handleSubmit}>Apply</Button>
+									<Button variant="contained" className="w-full" color="primary" type="button" disabled={(selected.status) ? selected.status.toLowerCase() !== 'open' : false} onClick={handleSubmit}>{'Edit'}</Button>
 								</Grid>
+                                :
+								<Grid item xs={6}>
+									<Button variant="contained" className="w-full" color="primary" type="button" disabled={(selected.status) ? selected.status.toLowerCase() !== 'open' : false} onClick={handleSubmit}>{'Apply'}</Button>
+								</Grid>
+                                }
 							</Grid>
 						</DialogActions>
 						<br></br>

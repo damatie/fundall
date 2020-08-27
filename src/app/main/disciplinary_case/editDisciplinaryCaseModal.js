@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -36,17 +36,17 @@ export default function EditDisciplinaryCaseModal(props) {
 	const [open, setOpen] = useState(false);
 	const [accused, setAccused] = useState('');
 	const [accuser, setAccuser] = useState('');
-	const [value, setValue] = React.useState('female');
+	const [description, setDescription] = useState('');
 	const [start, setStart] = useState(moment(new Date(), 'MM/DD/YYYY'));
 	const [isFormValid, setIsFormValid] = useState(true);
 	const [edit, setEdit] = useState(false);
 	const [form, setForm] = useState({
 		accusedId: 0,
 		accuserId: 0,
-		date: moment(new Date(), 'MM/DD/YYYY'),
-		caseDescription: '',
+		date: moment(new Date(), 'MM/DD/YYYY').format('DD MMMM YYYY'),
 		caseNo: '',
-		modeOfLodging: 'selected.modeOfLodging'
+		caseDescription: '',
+		modeOfLodging: ''
 	});
 	const [filterEmployees, setFilterEmployees] = useState(
 		employees
@@ -63,9 +63,19 @@ export default function EditDisciplinaryCaseModal(props) {
 				return 0;
 			})
 	);
+	const initDialog = useCallback(() => {
+		setForm({
+			accusedId: props.selectedItem.accusedId,
+			accuserId: props.selectedItem.accuserId,
+			date: props.selectedItem.date,
+			caseNo: props.selectedItem.caseNo,
+			caseDescription: props.selectedItem.caseDescription,
+			modeOfLodging: props.selectedItem.modeOfLodging
+		});
+	}, [props.selectedItem]);
+
 	useEffect(() => {
 		dispatch(Actions.getEmployees());
-		dispatch(Actions.getDisciplinaryAction());
 	}, [dispatch]);
 
 	useEffect(() => {
@@ -79,17 +89,15 @@ export default function EditDisciplinaryCaseModal(props) {
 	}, [employees]);
 
 	useEffect(() => {
-		setForm({
-			accusedId: selected.accusedId,
-			accuserId: selected.accuserId,
-			date: selected.date,
-			caseNo: selected.caseNo,
-			caseDescription: selected.caseDescription,
-			modeOfLodging: selected.modeOfLodging
-		});
+		if(selected){
+			initDialog();
+		}
+		if(selected.id){
+			dispatch(Actions.getDisciplinaryAction(selected.id));
+		}
 	}, [selected])
 
-	const DeleteButton = withStyles((theme) => ({
+	const CloseButton = withStyles((theme) => ({
 		root: {
 		  color: theme.palette.getContrastText(red[500]),
 		  backgroundColor: red[500],
@@ -97,7 +105,7 @@ export default function EditDisciplinaryCaseModal(props) {
 			backgroundColor: red[700],
 		  },
 		},
-	  }))(Button)
+	  }))(Button);
 
 	const ActionButton = withStyles((theme) => ({
 		root: {
@@ -107,15 +115,13 @@ export default function EditDisciplinaryCaseModal(props) {
 			backgroundColor: yellow[900],
 			},
 		},
-	}))(Button)
+	}))(Button);
 
 	const handleClickOpen = () => {
-		props.handleClose();
-		setOpen(true);
-	};
-
-	const handleChange = (event) => {
-		setValue(event.target.value);
+		// setTimeout(() => {
+			props.handleClose();
+			setOpen(true);
+		// }, 700)
 	};
 
 	const handleClose = () => {
@@ -133,16 +139,27 @@ export default function EditDisciplinaryCaseModal(props) {
 	};
 
 	const handleDateChange = date => {
+		console.log(date);
 		setStart(date);
 		form.date = moment(date).format('DD MMMM YYYY');
 		setForm(form);
 	};
 
+	const handleFormValueChange = (el, value) =>{
+		console.log(el);
+		console.log(value);
+		if(value){
+			form[el] = value;
+			setForm(form);
+			console.log(form);
+		}
+	}
+
 	const handleSubmit = (id) => {
 		console.log(form);
 		console.log(id);
-		dispatch(Actions.updateDisciplinaryCase(form, id));
-		props.handleClose();
+		// dispatch(Actions.updateDisciplinaryCase(form, id));
+		// props.handleClose();
 	};
 
 	const handleDelete = (id) => {
@@ -150,26 +167,31 @@ export default function EditDisciplinaryCaseModal(props) {
 		props.handleClose();
 	}
 
+	const handleCloseCase = (id) => {
+		dispatch(Actions.closeDisciplinaryCase(id));
+		props.handleClose();
+	}
+
 	const handleAccusedChange = name => {
-		console.log(name);
-		let hodDetails = filterEmployees.find(em => {
-			return em.firstName.toLowerCase() + ' ' + em.lastName.toLowerCase() === name.toLowerCase();
-		});
-		setAccused(hodDetails.id);
-		form.accusedId = hodDetails.id
-		setForm(form);
-		console.log(hodDetails);
+		if(name){
+			let hodDetails = filterEmployees.find(em => {
+				return em.firstName.toLowerCase() + ' ' + em.lastName.toLowerCase() === name.toLowerCase();
+			});
+			setAccused(hodDetails.id);
+			form.accusedId = hodDetails.id
+			setForm(form);
+		}
 	};
 
 	const handleAccuserChange = name => {
-		console.log(name);
-		let hodDetails = filterEmployees.find(em => {
-			return em.firstName.toLowerCase() + ' ' + em.lastName.toLowerCase() === name.toLowerCase();
-		});
-		setAccuser(hodDetails.id);
-		form.accuserId = hodDetails.id
-		setForm(form);
-		console.log(hodDetails);
+		if(name){
+			let hodDetails = filterEmployees.find(em => {
+				return em.firstName.toLowerCase() + ' ' + em.lastName.toLowerCase() === name.toLowerCase();
+			});
+			setAccuser(hodDetails.id);
+			form.accuserId = hodDetails.id
+			setForm(form);
+		}
 	};
 
 	function handleShowEdit(){
@@ -228,8 +250,8 @@ export default function EditDisciplinaryCaseModal(props) {
 									className="mb-16 w-full"
 									type="text"
 									name="caseDescription"
-									value={selected.caseDescription}
-									onChange={ev => {form.caseDescription = (ev.target.value) ? ev.target.value : selected.caseDescription; setForm(form)}}
+									value={form.caseDescription}
+									onChange={ev => {form.caseDescription = ev.target.value; setForm(form)}}
 									label="Case Description"
 									disabled={!edit}
 									InputProps={{
@@ -252,7 +274,8 @@ export default function EditDisciplinaryCaseModal(props) {
 									type="text"
 									name="modeOfLodging"
 									label="Mode Of Lodging"
-									value={selected.modeOfLodging}
+									value={form.modeOfLodging}
+									onChange={ev => {form.modeOfLodging = ev.target.value; setForm(form)}}
 									disabled={!edit}
 									InputProps={{
 										endAdornment: (
@@ -273,12 +296,12 @@ export default function EditDisciplinaryCaseModal(props) {
 						<DateTimePicker
 							label="Start"
 							inputVariant="outlined"
-							value={moment(selected.date, 'DD MMMM YYYY')}
+							value={moment(form.date, 'DD MMMM YYYY')}
 							margin="normal"
 							disabled={!edit}
 							onChange={date => handleDateChange(date)}
 							className="mt-8 mb-16 w-full"
-							minDate={moment(selected.date, 'DD MMMM YYYY')}
+							// minDate={moment(new Date(), 'DD MMMM YYYY')}
 							format={'MMMM Do, YYYY hh:mm a'}
 						/>
 						{(edit) ?
@@ -288,12 +311,12 @@ export default function EditDisciplinaryCaseModal(props) {
 									<Button variant="contained" className="w-full" color="secondary" type="button" onClick={props.handleClose}>Cancel</Button>
 								</Grid>
 								<Grid item xs={12} md={4} lg={4} lx={4}>
-									<ActionButton variant="contained" className="w-full" color="primary" onClick={handleClickOpen}>Take Disciplinary Action</ActionButton>
+									<ActionButton variant="contained" className="w-full" color="primary" onClick={ev => {handleClickOpen(selected.id)}} disabled={(selected.status) ? (selected.status.toLowerCase() !== 'open') : false}>{(selected.status) ? (selected.status.toLowerCase() !== 'open') ? 'Take Disciplinary Action' : 'View Disciplinary Action' : 'Take Disciplinary Action'} </ActionButton>
 								</Grid>
-								<Grid item xs={12} md={3} lg={3} lx={3}>
-									<DeleteButton variant="contained" className="w-full" color="primary" onClick={ev => {handleDelete(selected.id)}}>
-										Remove Case
-									</DeleteButton>
+								<Grid item xs={12} md={3} lg={3} lx={3} hidden={(selected.status) ? selected.status.toLowerCase() !== 'open' : false}>
+									<CloseButton variant="contained" className="w-full" color="primary" onClick={ev => {handleCloseCase(selected.id)}}>
+										Close Case
+									</CloseButton>
 								</Grid>
 								
 								<Grid item xs={12} md={2} lg={2} lx={2}>
@@ -308,16 +331,16 @@ export default function EditDisciplinaryCaseModal(props) {
 									<Button variant="contained" className="w-full" color="secondary" type="button" onClick={props.handleClose}>Cancel</Button>
 								</Grid>
 								<Grid item  xs={12} md={4} lg={4} lx={4}>
-									<ActionButton variant="contained" className="w-full" color="primary" onClick={handleClickOpen}>Take Disciplinary Action</ActionButton>
+									<ActionButton variant="contained" className="w-full" color="primary" onClick={handleClickOpen} disabled={(selected.status) ? (selected.status.toLowerCase() !== 'open') : false}>{(selected.status) ? (selected.status.toLowerCase() !== 'open') ? 'Take Disciplinary Action' : 'View Disciplinary Action' : 'Take Disciplinary Action'} </ActionButton>
 								</Grid>
-								<Grid item xs={12} md={3} lg={3} lx={3}>
-									<DeleteButton variant="contained" className="w-full" color="primary" onClick={ev => {handleDelete(selected.id)}}>
-										Remove Case
-									</DeleteButton>
+								<Grid item xs={12} md={3} lg={3} lx={3} hidden={(selected.status) ? selected.status.toLowerCase() !== 'open' : false}>
+									<CloseButton variant="contained" className="w-full" color="primary" onClick={ev => {handleCloseCase(selected.id)}}>
+										Close Case
+									</CloseButton>
 								</Grid>
 								
 								<Grid item xs={12} md={2} lg={2} lx={2}>
-								<Button variant="contained" className="w-full" color="primary" type="button" onClick={handleShowEdit} >Edit</Button>
+									<Button variant="contained" className="w-full" color="primary" type="button" onClick={handleShowEdit} disabled={(selected.status) ? (selected.status.toLowerCase() !== 'open') : false}>Edit</Button>
 								</Grid>
 							</Grid>
 						</DialogActions>
@@ -329,7 +352,7 @@ export default function EditDisciplinaryCaseModal(props) {
 			</Dialog>
 
 			{/* Modal to handle list of Action from the Database */}
-			<TakeAction handleClose={handleClose} open={open} selectedItem={selected}/>
+			<TakeAction handleClose={handleClose} open={open} selectedItem={props.selectedItem} actions={actions}/>
 		</div>
 	);
 }

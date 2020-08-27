@@ -12,6 +12,8 @@ export const UPDATE_DISCIPLINARY_CASE_SUCCESS = 'UPDATE DISCIPLINARY CASE SUCCES
 export const UPDATE_DISCIPLINARY_CASE_ERROR = 'UPDATE DISCIPLINARY CASE ERROR';
 export const DELETE_DISCIPLINARY_CASE_SUCCESS = 'DELETE DISCIPLINARY CASE SUCCESS';
 export const DELETE_DISCIPLINARY_CASE_ERROR = 'DELETE DISCIPLINARY CASE ERROR';
+export const CLOSE_DISCIPLINARY_CASE_SUCCESS = 'CLOSE DISCIPLINARY CASE SUCCESS';
+export const CLOSE_DISCIPLINARY_CASE_ERROR = 'CLOSE DISCIPLINARY CASE ERROR';
 const auth = useAuth;
 const basUrl = getBaseUrl;
 const headers = fetchHeaders();
@@ -23,7 +25,7 @@ return dispatch =>{
         })
     fetch(`${basUrl()}/disciplinary/`, {...headers.getRegHeader()})
     .then(res => res.json()).then(async data => {
-        console.log(data.data);
+        // console.log(data.data);
         data.success ? 
             (data.data) ?
                 dispatch({
@@ -208,6 +210,67 @@ export function deleteDisciplinaryCase(id){
                 type: DELETE_DISCIPLINARY_CASE_ERROR
             })
         })
+            ]
+        })
+    }
+};
+
+export function closeDisciplinaryCase(id){
+	swal.fire("Processing ...");
+	swal.showLoading();
+	// console.log(id);
+    return dispatch => {
+        dispatch({
+            type: LOADING_DISCIPLINARY_CASE
+            });
+        swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, close it!',
+        showLoaderOnConfirm: true,
+        preConfirm: () => [
+            fetch(`${basUrl()}/disciplinary/${id}`, {...headers.delHeader()})
+            .then(res => res.json()).then(async data => {
+                if(data.success) {
+                    swal.fire(
+                        'Closes!',
+                        'Your case has been closed.',
+                        'success'
+                    )
+                    
+                    Promise.all([
+                        dispatch({
+                            type: CLOSE_DISCIPLINARY_CASE_SUCCESS
+                        })
+                    ]).then(() => {
+                        dispatch(getDisciplinaryCase())
+                    })
+                } else {
+                    swal.fire(
+                        'Close!',
+                        'something went wrong',
+                        'error'
+                    )
+                    return dispatch({
+                        type: CLOSE_DISCIPLINARY_CASE_ERROR
+                    })
+                }
+            }
+            ).catch(e => {
+                console.log(e);
+                swal.fire(
+                'Oops!',
+                'something went wrong',
+                'error'
+                )
+                return dispatch({
+                    type: CLOSE_DISCIPLINARY_CASE_ERROR
+                })
+            })
             ]
         })
     }

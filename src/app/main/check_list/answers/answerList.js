@@ -1,37 +1,43 @@
 import FuseAnimate from '@fuse/core/FuseAnimate';
 import FusePageSimple from '@fuse/core/FusePageSimple';
 import Input from '@material-ui/core/Input';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
+import FormControl from '@material-ui/core/FormControl';
 import Paper from '@material-ui/core/Paper';
 import Fab from '@material-ui/core/Fab';
 import Icon from '@material-ui/core/Icon';
 import IconButton from '@material-ui/core/IconButton';
 import withReducer from 'app/store/withReducer';
 import { ThemeProvider } from '@material-ui/core/styles';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import AddDisciplinaryCaseModal from './addDisciplinaryCaseModal';
-import DisciplinaryTable from './DisciplinaryTable';
-import * as Actions from './store/actions';
-import reducer from './store/reducers';
+import AnswerTable from './answerTable';
+import * as Actions from '../store/actions';
+import reducer from '../store/reducers';
 
-function DisciplinaryCase() {
+function AnswerList(props) {
 	const dispatch = useDispatch();
 	const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
-	const rows = useSelector(({ disciplinaryCase }) => disciplinaryCase.disciplinaryCase.data);
+	const rows = useSelector(({ checkList }) => checkList.checkList.data);
 	const pageLayout = useRef(null);
+	const [filter, setFilter] = useState('');
 
     useEffect(() => {
-        dispatch(Actions.getDisciplinaryCase());
+        dispatch(Actions.getAllPendingAnswers());
     }, [dispatch]);
     
 	function handleDelete(event, id){
-        // dispatch(Actions.DisciplinaryCase(id))
+        // dispatch(Actions.deleteCheckList(id))
     }
 
     function handleEdit(event, model){
         console.log(model)
-        // dispatch(Actions.updateDisciplinaryCase(model, model.id));
+        // dispatch(Actions.updateCheckList(model, model.id));
     }
+	function handleFilter(event) {
+		setFilter(event.target.value);
+	}
 
     console.log(rows);
 
@@ -40,28 +46,14 @@ function DisciplinaryCase() {
             id: 's/n',
             align: 'left',
             disablePadding: false,
-            label: 'Case No',
+            label: 'S/N',
             sort: true
         },
         {
-            id: 'accuser',
+            id: 'type',
             align: 'left',
             disablePadding: false,
-            label: 'Accuser',
-            sort: true
-        },
-        {
-            id: 'accused',
-            align: 'left',
-            disablePadding: false,
-            label: 'Accused',
-            sort: true
-        },
-        {
-            id: 'description',
-            align: 'left',
-            disablePadding: false,
-            label: 'Description',
+            label: 'Type',
             sort: true
         },
         {
@@ -79,11 +71,11 @@ function DisciplinaryCase() {
             sort: true
         },
         {
-            id: 'status',
+            id: 'option',
             align: 'left',
             disablePadding: false,
-            label: 'Status',
-            sort: true
+            label: 'Option',
+            sort: false
         }
     ];
 	return (
@@ -102,22 +94,34 @@ function DisciplinaryCase() {
                                 <Icon className="text-32">announcement</Icon>
                             </FuseAnimate>
                             <FuseAnimate animation="transition.slideLeftIn" delay={300}>
-                                <span className="text-24 mx-16">Disciplinary Case Management</span>
+                                <span className="text-24 mx-16">Answer List</span>
                             </FuseAnimate>
                         </div>
 						<div className="flex flex-1 items-end">
-							<FuseAnimate animation="transition.expandIn" delay={600}>
-								<AddDisciplinaryCaseModal />
-							</FuseAnimate>
+							{/* <FuseAnimate animation="transition.expandIn" delay={600}>
+								<AddCheckListModal />
+							</FuseAnimate> */}
 						</div>
+                        <div className="">
+                            <FormControl className="">
+                                <Select value={filter} onChange={ev => handleFilter(ev)} name="filter" className="w-full">
+                                    <MenuItem value="">
+                                        <em>Filter by</em>
+                                    </MenuItem>
+                                    <MenuItem value="approved">Approved</MenuItem>
+                                    <MenuItem value="rejected">Rejected</MenuItem>
+                                    <MenuItem value="pending">Pending</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </div>
 					</div>
 			</ThemeProvider>
 			}
-			content={<DisciplinaryTable title={"Disciplinary Cases"} type="default" handleDelete={handleDelete} handleEdit={handleEdit} columns={columns} rows={rows} showEdit={true} showDesc={true}/>}
+			content={<AnswerTable title={""} type="default" handleDelete={handleDelete} handleEdit={handleEdit} columns={columns} rows={rows} props={props}/>}
 			ref={pageLayout}
 			innerScroll
 		/>
 	);
 }
 
-export default withReducer('disciplinaryCase', reducer)(DisciplinaryCase);
+export default withReducer('checkList', reducer)(AnswerList);
