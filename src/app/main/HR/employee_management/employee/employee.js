@@ -87,7 +87,7 @@ function Employee(props) {
 									<Icon className="text-20">
 										{theme.direction === 'ltr' ? 'arrow_back' : 'arrow_forward'}
 									</Icon>
-									<span className="mx-4">Employees</span>
+									<span className="mx-4">Employee</span>
 								</Typography>
 							</FuseAnimate>
 

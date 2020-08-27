@@ -1,8 +1,9 @@
 import { fetchHeaders } from "app/shared/fetchHeaders";
 import { handleResponse } from "app/auth/handleRes";
 import { getBaseUrl } from "app/shared/getBaseUrl";
+import { useAuth } from "app/hooks/useAuth";
 
-
+const token = useAuth;
 export const GET_ALL_PENDING_LOAN = 'GET ALL PENDING LOAN';
 export const GET_ALL_APPROVED_LOAN = 'GET ALL APPROVED LOAN';
 export const EMPLOYEE_LOAN_HISTORY = 'GET EMPLOYEE LOAN HISTORY';
@@ -19,7 +20,9 @@ export const getPendingLoan = () => {
       type: LOADING_LOANS
     })
     fetch(`${getBaseUrl()}/loan/all/department/request`, {
-      ...header.getRegHeader()
+      headers: {
+        Authorization: `JWT ${token().getToken}`
+      }
     }).then(res => res.json()).then(
       data => {
         if(data) {
@@ -36,7 +39,9 @@ export const getPendingLoan = () => {
 export const getReviewedLoan = () => {
   return dispatch => {
     fetch(`${getBaseUrl()}/loan/all/reviewed`, {
-      ...header.getRegHeader()
+      headers: {
+        Authorization: `JWT ${token().getToken}`
+      }
     }).then(res => handleResponse(res)).then(
       data => {
         if(data){
@@ -56,7 +61,9 @@ export const getApprovedLoan = () => {
       type: LOADING_LOANS
     })
     fetch(`${getBaseUrl()}/loan/all/approved`, {
-      ...header.getRegHeader()
+      headers: {
+        Authorization: `JWT ${token().getToken}`
+      }
     }).then(res => res.json()).then(
       data => {
         if(data) {
@@ -76,7 +83,9 @@ export const getReturnedLoan = () => {
       type: LOADING_LOANS
     })
     fetch(`${getBaseUrl()}/loan/all/approved`, {
-      ...header.getRegHeader()
+      headers: {
+        Authorization: `JWT ${token().getToken}`
+      }
     }).then(res => res.json()).then(
       data => {
         if(data) {
@@ -96,7 +105,9 @@ export const getOpenLoan = () => {
       type: LOADING_LOANS
     })
     fetch(`${getBaseUrl()}/loan/all/open`, {
-      ...header.getRegHeader()
+      headers: {
+        Authorization: `JWT ${token().getToken}`
+      }
     }).then(res => res.json()).then(
       data => {
         if(data.success) {
@@ -116,7 +127,9 @@ export const getClosedLoan = () => {
       type: LOADING_LOANS
     })
     fetch(`${getBaseUrl()}/loan/all/closed`, {
-      ...header.getRegHeader()
+      headers: {
+        Authorization: `JWT ${token().getToken}`
+      }
     }).then(res => res.json()).then(
       data => {
         if(data) {
@@ -136,7 +149,9 @@ export const getEmployeeLoan = () => {
       type: LOADING_LOANS
     })
     fetch(`${getBaseUrl()}/loan/all/log`, {
-      ...header.getRegHeader()
+      headers: {
+        Authorization: `JWT ${token().getToken}`
+      }
     }).then(res => res.json()).then(
       data => {
         if(data.success) {

@@ -28,7 +28,7 @@ export function submitLogin(data) {
 				data
 			)
 		}).then(res => res.json()).then(
-			user => {
+			async user => {
 				if(user.success) {
 					Swal.fire({
 						title: 'Login',
@@ -36,7 +36,7 @@ export function submitLogin(data) {
 						icon: 'success',
 						timer: 3000,
 					});
-					localStorage.setItem('jwt_access_token', JSON.stringify(user.token));
+					await localStorage.setItem('jwt_access_token', JSON.stringify(user.token));
 					const userState = {
 						role: user.data.role.name,
 						redirectUrl: redirectUrl(user.data.role.name),
@@ -50,7 +50,7 @@ export function submitLogin(data) {
 							details: user.data.info
 						}
 					};
-					localStorage.setItem('user_data', JSON.stringify(userState));
+					await localStorage.setItem('user_data', JSON.stringify(userState));
 					dispatch(getProfile(user.data.id, user.token));
 					dispatch(UserActions.setUserData(userState));
 					dispatch(getNotification(user.token));

@@ -47,10 +47,10 @@ function EmployeeLeaveReq({user}) {
 								<Typography>{leaveRequestDetails.leaveType}</Typography>
 							</div>
 
-							<div className="mb-24">
+							{/* <div className="mb-24">
 								<Typography className="font-bold mb-4 text-15">Leave for</Typography>
 								<Typography>{leaveRequestDetails.leaveFor}</Typography>
-							</div>
+							</div> */}
 
 							<div className="mb-24">
 								<Typography className="font-bold mb-4 text-15">From date</Typography>

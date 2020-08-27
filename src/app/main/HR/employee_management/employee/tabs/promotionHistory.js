@@ -117,6 +117,10 @@ function DepartmentTable(props) {
 	
 	const handleClose = () => {
 		setOpen(false);
+	}
+
+	const handleSave = () => {
+		setOpen(false);
 		setTimeout(() => {
 			swal.fire({
 				title: 'Promotion history',
@@ -131,7 +135,7 @@ function DepartmentTable(props) {
 		<div className="w-full flex flex-col">
 			<FuseScrollbars className="flex-grow overflow-x-auto">
         <Button variant="contained" className="mb-16" color="primary" onClick={handleClickOpen} disableElevation>
-          Promote employee
+          add Promotion history
         </Button>
         <PromotionDialog open={open} handleClose={handleClose}/>
 				<Table className="min-w-xl" aria-labelledby="tableTitle">

@@ -337,9 +337,9 @@ const CoursesTableWidget = (props) =>{
 										<TableCell className="text-center">
 											{n.name}
 										</TableCell>
-										<TableCell>{n.cost}</TableCell>
-										<TableCell className="text-center">{n.duration}</TableCell>
-										<TableCell className="text-center">
+										<TableCell className='text-center'>{n.cost}</TableCell>
+										<TableCell className="text-center hidden sm:table-cell">{n.duration}</TableCell>
+										<TableCell className="text-center hidden sm:table-cell">
 											{n.category}
 										</TableCell>
 										<TableCell className="text-center">

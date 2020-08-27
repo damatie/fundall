@@ -149,13 +149,12 @@ function CategoryList(props) {
 										selected={n.id === selectedItemId}
 										className="cursor-pointer"
 									>
-										<TableCell className="text-center hidden sm:table-cell">{n.categoryName}</TableCell>
-										<TableCell className="text-center hidden sm:table-cell">{n.description}</TableCell>
-										<TableCell className="text-center hidden sm:table-cell">
-											<Moment format="ddd Do MMM, YY | hh:mm:ss a">{n.createdAt}</Moment>
+										<TableCell className="text-left hidden sm:table-cell">{n.categoryName}</TableCell>
+										<TableCell className="text-left hidden sm:table-cell">
+											<Moment format="ddd do MMM, YY | hh:mm:ss a">{n.createdAt}</Moment>
 										</TableCell>
-										<TableCell className="text-center hidden sm:table-cell">
-											<Moment format="ddd Do MMM, YY | hh:mm:ss a">{n.updatedAt}</Moment>
+										<TableCell className="text-left hidden sm:table-cell">
+											<Moment format="ddd do MMM, YY | hh:mm:ss a">{n.updatedAt}</Moment>
 										</TableCell>
 									</TableRow>
 								);

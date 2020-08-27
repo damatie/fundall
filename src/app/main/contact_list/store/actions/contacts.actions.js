@@ -377,9 +377,10 @@ const formatData = item => {
 	const arr = [];
 	item.forEach((data, i) => {
 		arr.push({
-			id: i++,
+			id: i+=1,
 			firstName: data.firstName,
 			lastName: data.lastName,
+			email: data.email,
 			profilePicture: data.profilePicture ? data.profilePicture : 'assets/images/avatars/Abbott.jpg',
 			phoneNumber: data.phoneNumber ? data.phoneNumber : 'User have no number yet',
 			officeNumber: data.info ? data.info.officialNo : 'No Office number yet',

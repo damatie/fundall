@@ -14,6 +14,7 @@ import { withRouter, useParams } from 'react-router-dom';
 import SharedTableHead from 'app/shared/sharedTableHead';
 import moment from 'moment';
 import { desSort } from 'app/shared/sortData';
+import * as Actions from 'app/store/actions';
 
 const rows = [
 	{
@@ -22,7 +23,14 @@ const rows = [
 		disablePadding: false,
 		label: 'Employee name',
 		sort: true
-  },
+	},
+	{
+		id: 'email',
+		align: 'right',
+		disablePadding: false,
+		label: 'Email',
+		sort: true
+	},
   {
 		id: 'leave_type',
 		align: 'left',
@@ -44,20 +52,13 @@ const rows = [
 		label: 'To date',
 		sort: true
   },
-  {
-		id: 'leaveFor',
-		align: 'right',
-		disablePadding: false,
-		label: 'Leave for',
-		sort: true
-	},
-	{
-		id: 'email',
-		align: 'right',
-		disablePadding: false,
-		label: 'Email',
-		sort: true
-	}
+  // {
+	// 	id: 'leaveFor',
+	// 	align: 'right',
+	// 	disablePadding: false,
+	// 	label: 'Leave for',
+	// 	sort: true
+	// },
 ];
 
 function LeaveTableTab(props) {
@@ -71,6 +72,12 @@ function LeaveTableTab(props) {
 		direction: 'asc',
 		id: null
 	});
+
+	useEffect(() => {
+    dispatch(Actions.getPendingLeaveReq());
+    dispatch(Actions.getApprovedLeaveReq());
+    dispatch(Actions.getReviewedLeaveReq());
+  }, [dispatch]);
 
 	useEffect(() => {
 		setData(props.data ? desSort(props.data) : props.data)
@@ -105,8 +112,6 @@ function LeaveTableTab(props) {
 			props.history.push(`/hr/leave_review/employee/${item.id}`);
 		}
   }
-  
-
 
 	function handleCheck(event, id) {
 		const selectedIndex = selected.indexOf(id);
@@ -187,7 +192,10 @@ function LeaveTableTab(props) {
 										</TableCell>
 
 										<TableCell component="th" scope="row" align='left'>
-                      {n.employeeName}
+                      {`${n.employee.firstName} ${n.employee.lastName}`}
+										</TableCell>
+										<TableCell component="th" scope="row" align='right'>
+                      {n.employee.email}
 										</TableCell>
                     <TableCell component="th" scope="row" align='left'>
                       {n.leaveType}
@@ -198,12 +206,10 @@ function LeaveTableTab(props) {
                     <TableCell component="th" scope="row" align='left'>
                       {moment(new Date(n.toDate)).format("dddd, MMMM Do YYYY")}
 										</TableCell>
-                    <TableCell component="th" scope="row" align='right'>
+                    {/* <TableCell component="th" scope="row" align='right'>
                       {n.leaveFor}
-										</TableCell>
-										<TableCell component="th" scope="row" align='right'>
-                      employee@test.co
-										</TableCell>
+										</TableCell> */}
+										
 									</TableRow>
 								);
 							})}

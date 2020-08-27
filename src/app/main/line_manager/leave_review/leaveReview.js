@@ -8,9 +8,9 @@ const LeaveReview = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(Actions.getPendingLeaveReq());
-    dispatch(Actions.getApprovedLeaveReq());
-    dispatch(Actions.getReviewedLeaveReq());
+    // dispatch(Actions.getPendingLeaveReq());
+    // dispatch(Actions.getApprovedLeaveReq());
+    // dispatch(Actions.getReviewedLeaveReq());
   }, [dispatch]);
 
   const config = {
