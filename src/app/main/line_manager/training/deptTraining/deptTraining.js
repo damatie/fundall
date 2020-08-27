@@ -95,7 +95,7 @@ function DeptTraining(props) {
 	}
 
 	function checkHODRole() {
-		return userData.role.toUpperCase() === 'HEAD OF DEPARTMENT';
+		return (userData.role.toUpperCase() === 'HEAD OF DEPARTMENT' || userData.role.toUpperCase() === 'LINE MANAGERS');
 	}
 
 	function handleCourseReject(ev, id) {

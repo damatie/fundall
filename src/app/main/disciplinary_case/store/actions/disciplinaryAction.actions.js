@@ -16,12 +16,13 @@ const auth = useAuth;
 const basUrl = getBaseUrl;
 const headers = fetchHeaders();
 
-export function getDisciplinaryAction() {
+export function getDisciplinaryAction(id = 1) {
 return dispatch =>{
+    console.log(id);
     dispatch({
         type: LOADING_DISCIPLINARY_ACTION
         })
-    fetch(`${basUrl()}/disciplinary/action`, {...headers.getRegHeader()})
+    fetch(`${basUrl()}/disciplinary/action/${id}`, {...headers.getRegHeader()})
     .then(res => res.json()).then(async data => {
         console.log(data.data);
         data.success ? 
@@ -72,7 +73,7 @@ export function createDisciplinaryAction (model){
                     type: CREATE_DISCIPLINARY_ACTION_SUCCESS
                 })
             ]).then(() => {
-                dispatch(getDisciplinaryAction())
+                dispatch(getDisciplinaryAction(model.disciplinaryCaseId))
             })
         } else {
             swal.fire({

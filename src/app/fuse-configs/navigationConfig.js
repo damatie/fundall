@@ -420,6 +420,14 @@ const navigationConfig = [
 				url: '/hr/training/category',
 				icon: 'category',
 				auth: authRoles.admin,
+			},
+			{
+				id: 'checkList',
+				title: 'Check List',
+				type: 'item',
+				url: '/training/checklist',
+				icon: 'category',
+				auth: authRoles.admin,
 			}
 		]
 	},
