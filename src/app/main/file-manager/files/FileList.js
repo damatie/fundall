@@ -208,6 +208,9 @@ function FileList(props) {
 											<TableCell className="hidden sm:table-cell">
 												<Moment format="ddd do MMM, YY | hh:mm:ss a">{n.updatedAt}</Moment>
 											</TableCell>
+											<TableCell className="hidden sm:table-cell">
+												
+											</TableCell>
 										</TableRow>
 									);
 								})
@@ -224,7 +227,7 @@ function FileList(props) {
 							<TablePagination
 								className="overflow-hidden"
 								// component="div"
-								colSpan={7}
+								colSpan={8}
 								count={data.length}
 								rowsPerPage={rowsPerPage}
 								page={page}

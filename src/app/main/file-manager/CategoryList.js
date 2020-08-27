@@ -150,11 +150,12 @@ function CategoryList(props) {
 										className="cursor-pointer"
 									>
 										<TableCell className="text-center hidden sm:table-cell">{n.categoryName}</TableCell>
+										<TableCell className="text-center hidden sm:table-cell">{n.description}</TableCell>
 										<TableCell className="text-center hidden sm:table-cell">
-											<Moment format="ddd do MMM, YY | hh:mm:ss a">{n.createdAt}</Moment>
+											<Moment format="ddd Do MMM, YY | hh:mm:ss a">{n.createdAt}</Moment>
 										</TableCell>
 										<TableCell className="text-center hidden sm:table-cell">
-											<Moment format="ddd do MMM, YY | hh:mm:ss a">{n.updatedAt}</Moment>
+											<Moment format="ddd Do MMM, YY | hh:mm:ss a">{n.updatedAt}</Moment>
 										</TableCell>
 									</TableRow>
 								);

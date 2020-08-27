@@ -278,7 +278,7 @@ function EmployeementInfoTab() {
             }
 
             {info.type === 'file' ?
-              <SharedDropzone name={info.name} setValue={setFile}/> :
+              <SharedDropzone name={info.name} allowedTypes={'image/*'} setValue={setFile}/> :
               <></>
             }
 				</div>

@@ -36,6 +36,7 @@ import { useAuth } from 'app/hooks/useAuth';
 import { authRoles } from 'app/auth';
 import ArrowBackIcon from '@material-ui/icons/ArrowBackIosRounded';
 import IconButton from '@material-ui/core/IconButton';
+import Pagination from '@material-ui/lab/Pagination';
 
 const useStyles = makeStyles(theme => ({
 	header: {
@@ -51,6 +52,12 @@ const useStyles = makeStyles(theme => ({
 		width: 512,
 		height: 512,
 		pointerEvents: 'none'
+	},
+	pagination: {
+		display: 'flex',
+		justifyContent: 'center',
+		marginBottom: '32px',
+		marginTop: '30px'
 	},
 	previousBtn: {
 		marginBottom: 10,
@@ -68,6 +75,7 @@ function PersonalTrainingCourses(props) {
 	const courses = useSelector(({ academyApp }) => academyApp.courses.courses);
 	const categories = useSelector(({ academyApp }) => academyApp.courses.categories);
 	const employees = useSelector(({ academyApp }) => academyApp.employees.employees);
+	const totalNo = useSelector(({ academyApp }) => academyApp.courses.totalNo);
 	const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
 
 	const classes = useStyles(props);
@@ -81,6 +89,8 @@ function PersonalTrainingCourses(props) {
 	const [duration, setDuration] = useState('');
 	const [id, setId] = useState('');
 	const [hod, setHod] = useState(0);
+	const [page, setPage] = useState(1);
+	const [rowsPerPage, setRowsPerPage] = useState(8);
 	const userData = useAuth().getUserData;
 	const userId = useAuth().getId;
 	const employeeHOD = useAuth().getUserDetails.department.departmentHeadId;
@@ -137,6 +147,15 @@ function PersonalTrainingCourses(props) {
 			return start !== '';
 		}
 	}
+
+	const handleChangePage = (event, value) => {
+		console.log(value);
+		let newPage = value-1;
+		dispatch(Actions.getApprovedCourses(rowsPerPage, newPage*rowsPerPage));
+		setPage(value);
+		window.scrollTo(0,0);
+		// alert('hello')
+	};
 
 	//Check if the logged in user has management role
 	function checkRole() {
@@ -262,6 +281,7 @@ function PersonalTrainingCourses(props) {
 						() =>
 							data &&
 							(data.length > 0 ? (
+								<div>
 								<FuseAnimateGroup
 									enter={{
 										animation: 'transition.slideUpBigIn'
@@ -378,6 +398,10 @@ function PersonalTrainingCourses(props) {
 										);
 									})}
 								</FuseAnimateGroup>
+									<div className={classes.pagination}>
+										<Pagination count={Math.round(totalNo/rowsPerPage)} page={page} onChange={handleChangePage} color="primary" />
+									</div>
+								</div>
 							) : (
 								<div className="flex flex-1 items-center justify-center">
 									<Typography color="textSecondary" className="text-24 my-24">
@@ -385,7 +409,7 @@ function PersonalTrainingCourses(props) {
 									</Typography>
 								</div>
 							)),
-						[categories, data, employees, filterEmployees, open, id, start, end, hod, theme.palette]
+						[categories, data, employees, filterEmployees, open, id, start, end, hod, page, theme.palette]
 					)}
 				</div>
 			</div>

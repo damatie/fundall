@@ -154,19 +154,24 @@ const CategoryTableWidget = (props) =>{
 										// selected={n.id === selectedItemId}
 										className="cursor-pointer"
 									>
-										<TableCell className="text-center hidden sm:table-cell">
+										<TableCell className="text-center">
 											{count}
 										</TableCell>
-                                        <TableCell className="text-center hidden sm:table-cell">
+                                        <TableCell className="text-center">
 											{(n.name) ? n.name : n.categoryName}
 										</TableCell>
-										<TableCell className="text-center hidden sm:table-cell"><Moment format="ddd Do MMM, YY | hh:mm:ss a">{n.createdAt}</Moment></TableCell>
-                                        <TableCell className="text-center hidden sm:table-cell">
+                                       {(props.showDesc) ? (
+                                        <TableCell className="text-center">
+											{n.description}
+										</TableCell>
+                                       ) : null}
+										<TableCell className="text-center"><Moment format="ddd Do MMM, YY | hh:mm:ss a">{n.createdAt}</Moment></TableCell>
+                                        <TableCell className="text-center">
                                         <Moment format="ddd Do MMM, YY | hh:mm:ss a">{n.updatedAt}</Moment>           
                                         </TableCell>
                                             { (props.showEdit)?
-                                                <TableCell className="text-center hidden sm:table-cell">
-                                                    <Icon onClick={ev => props.handleEdit(ev, n)} className="text-yellow text-20" color="action">
+                                                <TableCell className="text-center">
+                                                    <Icon onClick={ev => props.handleEdit(ev, n)} className="text-blue text-20" color="action">
                                                         edit
                                                     </Icon>
                                                     &nbsp;
@@ -176,7 +181,7 @@ const CategoryTableWidget = (props) =>{
                                                     </Icon>
                                                 </TableCell>
                                             : 
-                                                <TableCell className="text-center hidden sm:table-cell">
+                                                <TableCell className="text-center">
                                                     <Icon onClick={ev => props.handleDelete(ev, n.id)} className="text-red text-20" color="action">
                                                         delete
                                                     </Icon>

@@ -141,7 +141,7 @@ export default function FileModal() {
                     required
                     onChange={fileChange}
                   /> */}
-                  <SharedDropzone name={"Document File"} setValue={setFile}/>
+                  <SharedDropzone name={"Document File"} allowedTypes={'image/*, application/*'} setValue={setFile}/>
                   <DialogActions>
                     <Grid container spacing={2}>
                         <Grid item xs>

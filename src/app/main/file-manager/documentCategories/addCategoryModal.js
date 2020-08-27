@@ -62,7 +62,7 @@ export default function AddCategoryModal() {
       {/* <Button variant="outlined" color="primary" onClick={handleClickOpen}>
         Open form dialog
       </Button> */}
-      <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+      <Dialog open={open} onClose={handleClose} fullWidth={true} maxWidth={'sm'} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Add New Category</DialogTitle>
         <DialogContent>
           <div className="w-full">
@@ -90,6 +90,30 @@ export default function AddCategoryModal() {
 							<InputAdornment position="end">
 								<Icon className="text-20" color="action">
                   folder
+								</Icon>
+							</InputAdornment>
+						)
+					}}
+					variant="outlined"
+					required
+				/>
+
+        <TextFieldFormsy
+					className="mb-16"
+					type="text"
+					name="description"
+					label="Category Description"
+					validations={{
+						minLength: 1
+					}}
+					validationErrors={{
+						minLength: 'Min character length is 1'
+					}}
+					InputProps={{
+						endAdornment: (
+							<InputAdornment position="end">
+								<Icon className="text-20" color="action">
+                  info
 								</Icon>
 							</InputAdornment>
 						)

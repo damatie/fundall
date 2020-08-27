@@ -4,6 +4,7 @@ const initialState = {
 	loading: true,
 	courses: [],
 	categories: [],
+	totalNo: 0,
 	success: false
 };
 
@@ -25,7 +26,8 @@ const coursesReducer = (state = initialState, action) => {
 			return {
 				...state,
 				loading: false,
-				courses: action.payload
+				courses: action.payload,
+				totalNo: action.totalNo
 			};
 		case Actions.GET_COURSE_CATEGORIES:
 			return {

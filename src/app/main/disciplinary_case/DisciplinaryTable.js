@@ -17,18 +17,8 @@ import Typography from '@material-ui/core/Typography';
 import Input from '@material-ui/core/Input';
 import React, {useState, useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Dialog from '@material-ui/core/Dialog';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogActions from '@material-ui/core/DialogActions';
-import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
-import clsx from 'clsx';
+import EditDisciplinaryCaseModal from './editDisciplinaryCaseModal';
 import Moment from 'react-moment';
-import RejectIcon from '@material-ui/icons/Cancel';
-import ApproveIcon from '@material-ui/icons/Check';
-import { green, red } from '@material-ui/core/colors';
-
 const useStyles = makeStyles({
 	table: {
 		'& th': {
@@ -36,7 +26,7 @@ const useStyles = makeStyles({
 		}
 	}
 });
-const CoursesTableWidget = (props) =>{
+const DisciplinaryTable = (props) =>{
     const [data, setData] = useState(props.rows);
     const [open, setOpen] = useState(false);
     const [filter, setFilter] = useState('');
@@ -49,7 +39,6 @@ const CoursesTableWidget = (props) =>{
 		id: null
     });
     const [selected, setSelected] = useState({});
-    const [show, setShow] = useState(true);
 
 	const createSortHandler = property => event =>  {
 		const id = property;
@@ -78,16 +67,16 @@ const CoursesTableWidget = (props) =>{
     }
 
     function handleFilter(event){
+        console.log(event.target.value);
         setFilter(event.target.value);
     }
 
     function handleItemClick(event, item){
-        if(props.allowClick){
-            setSelected(item);
-            setOpen(true);
-        }
+        console.log(item);
+        setSelected(item);
+        setOpen(true);
     }
-
+    
     function CheckStatus(status){
         switch (status) {
             case "pending":
@@ -119,6 +108,24 @@ const CoursesTableWidget = (props) =>{
                     </Typography>
                 )
                 break;
+            case "reviewed":
+                return (
+                    <Typography
+                            className={'bg-black text-white inline text-11 font-500 px-8 py-4 rounded-4'}
+                        >
+                            {status}
+                    </Typography>
+                )
+                break;
+            case "completed":
+                return (
+                    <Typography
+                            className={'bg-black text-white inline text-11 font-500 px-8 py-4 rounded-4'}
+                        >
+                            {status}
+                    </Typography>
+                )
+                break;
 
             default:
                 return (
@@ -130,16 +137,11 @@ const CoursesTableWidget = (props) =>{
 
     const handleClose = () => {
         setOpen(false);
-        handleShow();
     };
-
-    const handleShow = () => {
-        setShow(false);
-    };
-
     useEffect(() => {
 		if (search.length >= 2) {
-			setData(_.filter(props.rows, row => row.name.toLowerCase().includes(search.toLowerCase())));
+            setData(_.filter(props.rows, row => row.accusedName.toLowerCase().includes(search.toLowerCase()) 
+            || row.accuserName.toLowerCase().includes(search.toLowerCase()) || row.caseNo.toLowerCase().includes(search.toLowerCase())));
 			setPage(0);
 		} else {
 			setData(props.rows);
@@ -148,7 +150,7 @@ const CoursesTableWidget = (props) =>{
     
     useEffect(() => {
 		if (filter !== '') {
-			setData(_.filter(props.rows, row => row.status.toLowerCase() === filter.toLowerCase()));
+            setData(_.filter(props.rows, row => row.training.status.toLowerCase() === filter.toLowerCase()));
 			setPage(0);
 		} else {
 			setData(props.rows);
@@ -157,90 +159,7 @@ const CoursesTableWidget = (props) =>{
     
 	return (
 		<Paper className="w-full rounded-8 shadow-none border-1">
-            <React.Fragment>
-                <div>
-                <Dialog open={open} onClose={handleClose} fullWidth={true} maxWidth={'sm'} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">{selected.name}</DialogTitle>
-                    <DialogContent>
-                    <table className={clsx(classes.table, 'w-full text-justify')}>
-                        <tbody>
-                            <tr className="cost">
-                                <th>Cost</th>
-                                <td>{selected.cost}</td>
-                            </tr>
-
-                            <tr className="location">
-                                <th>Location</th>
-                                <td>{selected.location}</td>
-                            </tr>
-
-                            <tr className="cert">
-                                <th>Certification</th>
-                                <td>{(selected.certification) ? "Yes" : "No"}</td>
-                            </tr>
-
-                            <tr className="catergory">
-                                <th>Category</th>
-                                <td>{selected.category}</td>
-                            </tr>
-
-                            <tr className="dept">
-                                <th>Department</th>
-                                <td>{selected.department}</td>
-                            </tr>
-
-                            <tr className="deptHead">
-                                <th>Department Head</th>
-                                <td>{selected.departmentHeadId}</td>
-                            </tr>
-
-                            <tr className="hrManager">
-                                <th>HR Manager</th>
-                                <td>{selected.hrManager}</td>
-                            </tr>
-                            <tr className="created">
-                                <th>Created</th>
-                                <td><Moment format="ddd Do MMM, YYYY | hh:mm:ss a">{selected.createdAt}</Moment></td>
-                            </tr>
-                            <tr className="updated">
-                                <th>Updated</th>
-                                <td><Moment format="ddd Do MMM, YYYY | hh:mm:ss a">{selected.updatedAt}</Moment></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                        {(selected.status === 'pending') ? 
-                            (props.allowAuth) ?
-                            <Grid container className="items-center w-full pt-20" justify="center" alignItems="center">
-                                <Button className="bg-red text-white" 
-                                startIcon={<RejectIcon />} onClick={ev => {props.handleReject(ev, selected.id); handleClose(); }} 
-                                >
-                                    Reject
-                                </Button>
-                                &nbsp;
-                                <Button className="bg-green text-white" 
-                                startIcon={<ApproveIcon />} onClick={ev => {props.handleApprove(ev, selected.id); handleClose(); }} 
-                                >
-                                    Approve
-                                </Button>
-                            </Grid>
-                            :
-                            <Grid container className="items-center w-full pt-20" justify="center" alignItems="center">
-                                {CheckStatus(selected.status)}
-                            </Grid>
-                        : 
-                            <Grid container className="items-center w-full pt-20" justify="center" alignItems="center">
-                                {CheckStatus(selected.status)}
-                            </Grid>
-                    }
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleClose} color="primary">
-                            Close
-                        </Button>
-                    </DialogActions>
-                </Dialog>
-                </div>
-            </React.Fragment>
+            <EditDisciplinaryCaseModal open={open} handleClose={handleClose} selectedItem={selected}/>
 			<div className="flex items-center justify-between px-16 h-64 border-b-1">
 				<Typography className="text-16">{props.title}</Typography>
                     <div className="flex items-center">
@@ -261,7 +180,7 @@ const CoursesTableWidget = (props) =>{
                     </div>
                 <div className="flex">
                     <div className="flex flex-2 items-center">
-                        <FormControl className="">
+                        {/* <FormControl className="">
                             <Select value={filter} onChange={ev => handleFilter(ev)} displayEmpty name="filter" className="">
                                 <MenuItem value="">
                                     <em>Filter by</em>
@@ -270,7 +189,7 @@ const CoursesTableWidget = (props) =>{
                                 <MenuItem value="rejected">Rejected</MenuItem>
                                 <MenuItem value="pending">Pending</MenuItem>
                             </Select>
-                        </FormControl>
+                        </FormControl> */}
                     </div>
                 </div>
 			</div>
@@ -323,30 +242,29 @@ const CoursesTableWidget = (props) =>{
 								],
 								[order.direction]
 							)
-                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                .sort()
+								.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
 								.map(n => {
 								return (
 									<TableRow
 										key={n.id}
 										hover
-										onClick={event => {handleItemClick(event, n)}}
+										onClick={event => {handleItemClick(event, n); setOpen(true) }}
 										// selected={n.id === selectedItemId}
 										className="cursor-pointer"
 									>
 										<TableCell className="text-center">
-											{n.name}
+											{n.caseNo}
 										</TableCell>
-										<TableCell>{n.cost}</TableCell>
-										<TableCell className="text-center">{n.duration}</TableCell>
 										<TableCell className="text-center">
-											{n.category}
+											{n.accuserName}
 										</TableCell>
+										<TableCell className="text-center">{n.accusedName}</TableCell>
+										<TableCell className="text-center">{n.caseDescription}</TableCell>
 										<TableCell className="text-center">
                                             <Moment format="ddd Do MMM, YY | hh:mm:ss a">{n.createdAt}</Moment>
-                                        </TableCell>
-                                        <TableCell className="text-center">
-                                            {CheckStatus(n.status)}           
+										</TableCell>
+										<TableCell className="text-center">
+                                            <Moment format="ddd Do MMM, YY | hh:mm:ss a">{n.updatedAt}</Moment>
                                         </TableCell>
 									</TableRow>
 								);
@@ -378,4 +296,4 @@ const CoursesTableWidget = (props) =>{
 	);
 }
 
-export default React.memo(CoursesTableWidget);
+export default React.memo(DisciplinaryTable);

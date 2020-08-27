@@ -9,43 +9,52 @@ import withReducer from 'app/store/withReducer';
 import { ThemeProvider } from '@material-ui/core/styles';
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import AddCategoryModal from './addCategoryModal';
-import CategoryTable from 'app/shared/widgets/CategoryTableWidget'
-import * as Actions from '../store/actions';
-import reducer from '../store/reducers';
+import AddDisciplinaryCaseModal from './addDisciplinaryCaseModal';
+import DisciplinaryTable from './DisciplinaryTable';
+import * as Actions from './store/actions';
+import reducer from './store/reducers';
 
-function DocumentCategories() {
+function DisciplinaryCase() {
 	const dispatch = useDispatch();
 	const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
-	const rows = useSelector(({ documentCategories }) => documentCategories.categories.categories);
+	const rows = useSelector(({ disciplinaryCase }) => disciplinaryCase.disciplinaryCase.data);
 	const pageLayout = useRef(null);
 
     useEffect(() => {
-        dispatch(Actions.getCategories());
+        dispatch(Actions.getDisciplinaryCase());
     }, [dispatch]);
     
 	function handleDelete(event, id){
-        dispatch(Actions.deleteCategory(id))
+        // dispatch(Actions.DisciplinaryCase(id))
     }
 
     function handleEdit(event, model){
         console.log(model)
-        dispatch(Actions.updateCategory(model, model.id));
+        // dispatch(Actions.updateDisciplinaryCase(model, model.id));
     }
+
+    console.log(rows);
 
     const columns = [
         {
             id: 's/n',
             align: 'center',
             disablePadding: false,
-            label: 'S/N',
+            label: 'Case No',
             sort: true
         },
         {
-            id: 'name',
+            id: 'accuser',
             align: 'center',
             disablePadding: false,
-            label: 'Name',
+            label: 'Accuser',
+            sort: true
+        },
+        {
+            id: 'accused',
+            align: 'center',
+            disablePadding: false,
+            label: 'Accused',
             sort: true
         },
         {
@@ -68,13 +77,6 @@ function DocumentCategories() {
             disablePadding: false,
             label: 'Updated Time',
             sort: true
-        },
-        {
-            id: 'option',
-            align: 'center',
-            disablePadding: false,
-            label: 'Option',
-            sort: true
         }
     ];
 	return (
@@ -90,25 +92,25 @@ function DocumentCategories() {
 					<div className="flex flex-col flex-1 p-8 sm:p-12 relative">
                         <div className="flex items-center w-full">
                             <FuseAnimate animation="transition.expandIn" delay={300}>
-                                <Icon className="text-32">folder</Icon>
+                                <Icon className="text-32">announcement</Icon>
                             </FuseAnimate>
                             <FuseAnimate animation="transition.slideLeftIn" delay={300}>
-                                <span className="text-24 mx-16">Document Category</span>
+                                <span className="text-24 mx-16">Disciplinary Case Management</span>
                             </FuseAnimate>
                         </div>
 						<div className="flex flex-1 items-end">
 							<FuseAnimate animation="transition.expandIn" delay={600}>
-								<AddCategoryModal />
+								<AddDisciplinaryCaseModal />
 							</FuseAnimate>
 						</div>
 					</div>
 			</ThemeProvider>
 			}
-			content={<CategoryTable title={"Category List"} type="default" handleDelete={handleDelete} handleEdit={handleEdit} columns={columns} rows={rows} showEdit={true} showDesc={true}/>}
+			content={<DisciplinaryTable title={"Disciplinary Cases"} type="default" handleDelete={handleDelete} handleEdit={handleEdit} columns={columns} rows={rows} showEdit={true} showDesc={true}/>}
 			ref={pageLayout}
 			innerScroll
 		/>
 	);
 }
 
-export default withReducer('documentCategories', reducer)(DocumentCategories);
+export default withReducer('disciplinaryCase', reducer)(DisciplinaryCase);

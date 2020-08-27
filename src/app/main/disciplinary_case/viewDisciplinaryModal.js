@@ -36,55 +36,9 @@ const useStyles = makeStyles({
 	}
 });
 const TableWidget = (props) =>{
-    const [data, setData] = useState(props.rows);
-    const [open, setOpen] = useState(false);
-    const [filter, setFilter] = useState('');
+    const [open, setOpen] = useState(props.open);
     const classes = useStyles();
-    const [page, setPage] = useState(0);
-    const [search, setSearch] = useState('');
-	const [rowsPerPage, setRowsPerPage] = useState(10);
-	const [order, setOrder] = useState({
-		direction: 'asc',
-		id: null
-    });
-    const [selected, setSelected] = useState({});
-
-	const createSortHandler = property => event =>  {
-		const id = property;
-		let direction = 'desc';
-
-		if (order.id === property && order.direction === 'desc') {
-			direction = 'asc';
-		}
-
-		setOrder({
-			direction,
-			id
-		});
-	}
-
-    function handleChangePage(event, value) {
-		setPage(value);
-	}
-
-	function handleChangeRowsPerPage(event) {
-		setRowsPerPage(event.target.value);
-    }
-
-    function handleSearch(event){
-        setSearch(event.target.value);
-    }
-
-    function handleFilter(event){
-        console.log(event.target.value);
-        setFilter(event.target.value);
-    }
-
-    function handleItemClick(event, item){
-        console.log(item);
-        setSelected(item);
-        setOpen(true);
-    }
+    const [selected, setSelected] = useState(props.selected);
     
     function CheckStatus(status){
         switch (status) {
@@ -147,27 +101,8 @@ const TableWidget = (props) =>{
     const handleClose = () => {
         setOpen(false);
       };
-    useEffect(() => {
-		if (search.length >= 2) {
-            setData(_.filter(props.rows, row => row.training.employee.firstName.toLowerCase().includes(search.toLowerCase()) 
-            || row.training.employee.lastName.toLowerCase().includes(search.toLowerCase()) || row.training.employee.firstName.toLowerCase().includes(search.toLowerCase())));
-			setPage(0);
-		} else {
-			setData(props.rows);
-		}
-    }, [props.rows, search]);
-    
-    useEffect(() => {
-		if (filter !== '') {
-            setData(_.filter(props.rows, row => row.training.status.toLowerCase() === filter.toLowerCase()));
-			setPage(0);
-		} else {
-			setData(props.rows);
-		}
-	}, [props.rows, filter]);
     
 	return (
-		<Paper className="w-full rounded-8 shadow-none border-1">
             <React.Fragment>
                 <div>
                 <Dialog open={open} onClose={handleClose} fullWidth={true} maxWidth={'sm'} aria-labelledby="form-dialog-title">
@@ -259,137 +194,7 @@ const TableWidget = (props) =>{
                 </Dialog>
                 </div>
             </React.Fragment>
-			<div className="flex items-center justify-between px-16 h-64 border-b-1">
-				<Typography className="text-16">{props.title}</Typography>
-                    <div className="flex items-center">
-                        <Paper className="flex items-center w-full px-8 py-4 rounded-8">
-                            <Icon color="action">search</Icon>
-                            <Input
-                                placeholder="Search"
-                                className="flex flex-1 mx-8"
-                                disableUnderline
-                                fullWidth
-                                value={search}
-                                inputProps={{
-                                    'aria-label': 'Search'
-                                }}
-                                onChange={ev => handleSearch(ev)}
-                            />
-                        </Paper>
-                    </div>
-                <div className="flex">
-                    <div className="flex flex-2 items-center">
-                        <FormControl className="">
-                            <Select value={filter} onChange={ev => handleFilter(ev)} displayEmpty name="filter" className="">
-                                <MenuItem value="">
-                                    <em>Filter by</em>
-                                </MenuItem>
-                                <MenuItem value="approved">Approved</MenuItem>
-                                <MenuItem value="rejected">Rejected</MenuItem>
-                                <MenuItem value="pending">Pending</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </div>
-                </div>
-			</div>
-			<div className="table-responsive">
-				<Table className="w-full min-w-full">
-					<TableHead>
-                        <TableRow className="h-64">
-                            {props.columns.map(column => {
-                                return (
-                                    <TableCell
-                                        key={column.id}
-                                        align={column.align}
-                                        padding={column.disablePadding ? 'none' : 'default'}
-                                        sortDirection={order.id === column.id ? order.direction : false}
-                                    >
-                                        {column.sort && (
-                                            <Tooltip
-                                                title="Sort"
-                                                placement={column.align === 'right' ? 'bottom-end' : 'bottom-start'}
-                                                enterDelay={300}
-                                            >
-                                                <TableSortLabel
-                                                    active={order.id === column.id}
-                                                    direction={order.direction}
-                                                    onClick={createSortHandler(column.id)}
-                                                >
-                                                    {column.label}
-                                                </TableSortLabel>
-                                            </Tooltip>
-                                        )}
-                                    </TableCell>
-                                );
-                            }, this)}
-                        </TableRow>
-					</TableHead>
-					<TableBody>
-						{_.orderBy(
-								data,
-								[
-									o => {
-										switch (order.id) {
-											case 'categories': {
-												return o.categories[0];
-											}
-											default: {
-												return o[order.id];
-											}
-										}
-									}
-								],
-								[order.direction]
-							)
-								.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-								.map(n => {
-								return (
-									<TableRow
-										key={n.training.id}
-										hover
-										onClick={event => {handleItemClick(event, n); setOpen(true) }}
-										// selected={n.id === selectedItemId}
-										className="cursor-pointer"
-									>
-										<TableCell className="text-center">
-											{n.training.employee.firstName} {n.training.employee.lastName}
-										</TableCell>
-										<TableCell>{n.training.trainingCourse.name}</TableCell>
-										<TableCell className="text-center">{n.training.trainingCourse.cost}</TableCell>
-										<TableCell className="text-center">
-											{n.training.startDate}
-										</TableCell>
-										<TableCell className="text-center">{n.training.startDate}</TableCell>
-                                        <TableCell className="text-center">
-                                            {CheckStatus(n.training.status)}           
-                                        </TableCell>
-									</TableRow>
-								);
-							})}
-						</TableBody>
-				    <TableFooter>
-                        <TableRow>
-                            <TablePagination
-                                className="overflow-hidden"
-                                // component="div"
-                                count={data.length}
-                                colSpan={props.columns.length}
-                                rowsPerPage={rowsPerPage}
-                                page={page}
-                                backIconButtonProps={{
-                                    'aria-label': 'Previous Page'
-                                }}
-                                nextIconButtonProps={{
-                                    'aria-label': 'Next Page'
-                                }}
-                                onChangePage={handleChangePage}
-                                onChangeRowsPerPage={handleChangeRowsPerPage}
-                            />
-                        </TableRow>
-                    </TableFooter>
-				</Table>
-			</div>
-		</Paper>
+			
 	);
 }
 

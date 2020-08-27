@@ -10,35 +10,39 @@ export const GET_COURSE_CATEGORIES = 'GET COURSE CATEGORIES';
 
 const basUrl = getBaseUrl;
 const headers = fetchHeaders();
-export function getApprovedCourses() {
+export function getApprovedCourses(limit=8, offset=0) {
 	return dispatch => {
 		dispatch({
 			type: LOADING_COURSES
 		});
-		fetch(`${basUrl()}/training/courses/all/approved`, {...headers.getRegHeader()})
+		fetch(`${basUrl()}/training/courses/all/approved?limit=${limit}&offset=${offset}`, {...headers.getRegHeader()})
 		.then(res => res.json()).then(async data => {
-			// console.log(data.data);
+			console.log(data);
 			data.success ? 
 				(data.data) ?
 					dispatch({
 						type: GET_COURSES,
-						payload: data.data
+						payload: data.data,
+						totalNo: data.totalNumber
 					})
 				:
 					dispatch({
 						type: GET_COURSES,
-						payload: []
+						payload: [],
+						totalNo: 0
 					})
 			:
 				dispatch({
 					type: GET_COURSES,
-					payload: []
+					payload: [],
+					totalNo: 0
 				})
 		}).catch(err => {
 			console.log(err);
 			dispatch({
 				type: GET_COURSES,
-				payload: []
+				payload: [],
+				totalNo: 0
 			})
 		})
 	}

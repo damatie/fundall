@@ -423,6 +423,24 @@ const navigationConfig = [
 			}
 		]
 	},
+
+	// Disciplinary Case navigations
+	{
+		id: 'disciplinaryCase',
+		title: 'Disciplinary Case',
+		translate: 'disciplinary case',
+		type: 'group',
+		children: [
+			{
+				id: 'disciplinaryCaseManagement',
+				title: 'Disciplinary Case Management',
+				type: 'item',
+				url: '/hr/disciplinary/case',
+				icon: 'announcement',
+				auth: authRoles.admin,
+			},
+		]
+	},
 	// Settings navigations
 	{
 		id: 'settings',

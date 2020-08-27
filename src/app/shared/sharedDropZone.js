@@ -73,7 +73,7 @@ export default function SharedDropzone(props) {
     isDragAccept,
     isDragReject
   } = useDropzone({
-    accept: 'image/*',
+    accept: props.allowedTypes,
     onDrop: acceptedFiles => {
       setFiles(acceptedFiles.map(file => Object.assign(file, {
         preview: URL.createObjectURL(file)
