@@ -334,7 +334,7 @@ const CoursesTableWidget = (props) =>{
 										// selected={n.id === selectedItemId}
 										className="cursor-pointer"
 									>
-										<TableCell className="text-center hidden sm:table-cell">
+										<TableCell className="text-center">
 											{n.name}
 										</TableCell>
 										<TableCell className='text-center'>{n.cost}</TableCell>
@@ -342,10 +342,10 @@ const CoursesTableWidget = (props) =>{
 										<TableCell className="text-center hidden sm:table-cell">
 											{n.category}
 										</TableCell>
-										<TableCell className="text-center hidden sm:table-cell">
+										<TableCell className="text-center">
                                             <Moment format="ddd Do MMM, YY | hh:mm:ss a">{n.createdAt}</Moment>
                                         </TableCell>
-                                        <TableCell className="text-center hidden sm:table-cell">
+                                        <TableCell className="text-center">
                                             {CheckStatus(n.status)}           
                                         </TableCell>
 									</TableRow>

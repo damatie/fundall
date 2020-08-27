@@ -15,14 +15,20 @@ import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import Input from '@material-ui/core/Input';
-import Button from  '@material-ui/core/Button';
 import React, {useState, useEffect} from 'react';
-import Moment from 'react-moment';
-import WidgetModal from './WidgetModal';
-
-const CategoryTableWidget = (props) =>{
+import { makeStyles } from '@material-ui/core/styles';
+const useStyles = makeStyles({
+	table: {
+		'& th': {
+			padding: '16px 0'
+		}
+	}
+});
+const ActionTable = (props) =>{
     const [data, setData] = useState(props.rows);
     const [open, setOpen] = useState(false);
+    const [filter, setFilter] = useState('');
+    const classes = useStyles();
     const [page, setPage] = useState(0);
     const [search, setSearch] = useState('');
 	const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -31,7 +37,6 @@ const CategoryTableWidget = (props) =>{
 		id: null
     });
     const [selected, setSelected] = useState({});
-    let count = 0;
 
 	const createSortHandler = property => event =>  {
 		const id = property;
@@ -59,23 +64,100 @@ const CategoryTableWidget = (props) =>{
         setSearch(event.target.value);
     }
 
+    function handleFilter(event){
+        console.log(event.target.value);
+        setFilter(event.target.value);
+    }
+
+    function handleItemClick(event, item){
+        console.log(item);
+        setSelected(item);
+        setOpen(true);
+    }
+    
+    function CheckStatus(status){
+        switch (status) {
+            case "pending":
+                return (
+                    <Typography
+                            className={'bg-blue text-white inline text-11 font-500 px-8 py-4 rounded-4'}
+                        >
+                            {status}
+                    </Typography>
+                )
+                break;
+            
+            case "approved":
+                return (
+                    <Typography
+                            className={'bg-green text-white inline text-11 font-500 px-8 py-4 rounded-4'}
+                        >
+                            {status}
+                    </Typography>
+                )
+                break;
+            
+            case "rejected":
+                return (
+                    <Typography
+                            className={'bg-red text-white inline text-11 font-500 px-8 py-4 rounded-4'}
+                        >
+                            {status}
+                    </Typography>
+                )
+                break;
+            case "reviewed":
+                return (
+                    <Typography
+                            className={'bg-black text-white inline text-11 font-500 px-8 py-4 rounded-4'}
+                        >
+                            {status}
+                    </Typography>
+                )
+                break;
+            case "completed":
+                return (
+                    <Typography
+                            className={'bg-black text-white inline text-11 font-500 px-8 py-4 rounded-4'}
+                        >
+                            {status}
+                    </Typography>
+                )
+                break;
+
+            default:
+                return (
+                    {status}
+                )
+                break;
+        }
+    }
+
     const handleClose = () => {
         setOpen(false);
     };
-
     useEffect(() => {
 		if (search.length >= 2) {
-			setData(_.filter(props.rows, row => ( (row.name) ? row.name.toLowerCase() : row.categoryName.toLowerCase()).includes(search.toLowerCase())));
+            setData(_.filter(props.rows, row => row.accusedName.toLowerCase().includes(search.toLowerCase()) 
+            || row.accuserName.toLowerCase().includes(search.toLowerCase()) || row.caseNo.toLowerCase().includes(search.toLowerCase())));
 			setPage(0);
 		} else {
 			setData(props.rows);
 		}
     }, [props.rows, search]);
     
+    useEffect(() => {
+		if (filter !== '') {
+            setData(_.filter(props.rows, row => row.training.status.toLowerCase() === filter.toLowerCase()));
+			setPage(0);
+		} else {
+			setData(props.rows);
+		}
+	}, [props.rows, filter]);
     
 	return (
 		<Paper className="w-full rounded-8 shadow-none border-1">
-        <WidgetModal open={open} handleClose={handleClose} item={selected}/>
+            
 			<div className="flex items-center justify-between px-16 h-64 border-b-1">
 				<Typography className="text-16">{props.title}</Typography>
                     <div className="flex items-center">
@@ -94,6 +176,20 @@ const CategoryTableWidget = (props) =>{
                             />
                         </Paper>
                     </div>
+                <div className="flex">
+                    <div className="flex flex-2 items-center">
+                        {/* <FormControl className="">
+                            <Select value={filter} onChange={ev => handleFilter(ev)} displayEmpty name="filter" className="">
+                                <MenuItem value="">
+                                    <em>Filter by</em>
+                                </MenuItem>
+                                <MenuItem value="approved">Approved</MenuItem>
+                                <MenuItem value="rejected">Rejected</MenuItem>
+                                <MenuItem value="pending">Pending</MenuItem>
+                            </Select>
+                        </FormControl> */}
+                    </div>
+                </div>
 			</div>
 			<div className="table-responsive">
 				<Table className="w-full min-w-full">
@@ -146,47 +242,26 @@ const CategoryTableWidget = (props) =>{
 							)
 								.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
 								.map(n => {
-                                    count++;
 								return (
 									<TableRow
 										key={n.id}
 										hover
+										onClick={event => {handleItemClick(event, n); setOpen(true) }}
 										// selected={n.id === selectedItemId}
 										className="cursor-pointer"
 									>
-										<TableCell className="text-center">
-											{count}
+										<TableCell className="text-center hidden sm:table-cell">
+											{n.caseNo}
 										</TableCell>
-                                        <TableCell className="text-center">
-											{(n.name) ? n.name : n.categoryName}
+										<TableCell className="text-center hidden sm:table-cell">
+											{n.accuserName}
 										</TableCell>
-                                       {(props.showDesc) ? (
-                                        <TableCell className="text-center">
-											{n.description}
+										<TableCell>{n.accusedName}</TableCell>
+										<TableCell className="text-center hidden sm:table-cell">{n.caseDescription}</TableCell>
+										<TableCell className="text-center hidden sm:table-cell">
+											{n.createdAt}
 										</TableCell>
-                                       ) : null}
-										<TableCell className="text-center"><Moment format="ddd Do MMM, YY | hh:mm:ss a">{n.createdAt}</Moment></TableCell>
-                                        <TableCell className="text-center">
-                                        <Moment format="ddd Do MMM, YY | hh:mm:ss a">{n.updatedAt}</Moment>           
-                                        </TableCell>
-                                            { (props.showEdit)?
-                                                <TableCell className="text-center">
-                                                    <Icon onClick={ev => props.handleEdit(ev, n)} className="text-blue text-20" color="action">
-                                                        edit
-                                                    </Icon>
-                                                    &nbsp;
-                                                    &nbsp;
-                                                    <Icon onClick={ev => props.handleDelete(ev, n.id)} className="text-red text-20" color="action">
-                                                        delete
-                                                    </Icon>
-                                                </TableCell>
-                                            : 
-                                                <TableCell className="text-center">
-                                                    <Icon onClick={ev => props.handleDelete(ev, n.id)} className="text-red text-20" color="action">
-                                                        delete
-                                                    </Icon>
-                                                </TableCell>
-                                            }
+										<TableCell className="text-center hidden sm:table-cell">{n.updatedAt}</TableCell>
 									</TableRow>
 								);
 							})}
@@ -217,4 +292,4 @@ const CategoryTableWidget = (props) =>{
 	);
 }
 
-export default React.memo(CategoryTableWidget);
+export default React.memo(ActionTable);

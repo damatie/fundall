@@ -57,6 +57,13 @@ const columns = [
 		disablePadding: false,
 		label: 'Modified',
 		sort: true
+	},
+	{
+		id: 'option',
+		align: 'center',
+		disablePadding: false,
+		label: 'Option',
+		sort: true
 	}
 ];
 

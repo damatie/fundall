@@ -70,16 +70,21 @@ const headers = fetchHeaders();
       
       swal.fire({
         title: 'Edit Document Category',
-        input: 'text',
-        inputValue: model.categoryName,
-        inputAttributes: {
-          autocapitalize: 'off'
-        },
+        // input: 'text',
+        // inputValue: model.categoryName,
+        // inputAttributes: {
+        //   autocapitalize: 'off'
+		// },
+		html:
+      `<input id="swal_cat_name" value="${model.categoryName}" class="swal2-input">
+      <input id="swal_cat_desc" value="${model.description}" class="swal2-input">`,
         showCancelButton: true,
         confirmButtonText: 'Edit',
         showLoaderOnConfirm: true,
-        preConfirm: (name) => {
-        model.categoryName = name;
+        preConfirm: () => {
+		model.categoryName = document.getElementById('swal_cat_name').value;
+		model.description = document.getElementById('swal_cat_desc').value;
+		console.log(model);
         return fetch(`${basUrl()}/document_category/${id}`, {...headers.reqHeader('PATCH', model)}
             ).then(res => res.json()).then(async data => {
               // let data = response.data;
@@ -131,7 +136,7 @@ export function getCategories() {
 		  })
         fetch(`${basUrl()}/document_category`, {...headers.getRegHeader()})
 		.then(res => res.json()).then(async data => {
-			// console.log(data.data);
+			console.log(data.data);
 			data.success ? 
 				(data.data) ?
 					dispatch({

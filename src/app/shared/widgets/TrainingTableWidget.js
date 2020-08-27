@@ -416,14 +416,14 @@ const TableWidget = props => {
 										// selected={n.id === selectedItemId}
 										className="cursor-pointer"
 									>
-										<TableCell className="text-center hidden sm:table-cell">
+										<TableCell className="text-center">
 											{n.training.employee.firstName} {n.training.employee.lastName}
 										</TableCell>
 										<TableCell>{n.training.trainingCourse.name}</TableCell>
-										<TableCell className="text-center hidden sm:table-cell">{n.training.trainingCourse.cost}</TableCell>
-										<TableCell className="text-center hidden sm:table-cell">{n.training.startDate}</TableCell>
-										<TableCell className="text-center hidden sm:table-cell">{n.training.startDate}</TableCell>
-										<TableCell className="text-center hidden sm:table-cell">{CheckStatus(n.training.status)}</TableCell>
+										<TableCell className="text-center">{n.training.trainingCourse.cost}</TableCell>
+										<TableCell className="text-center">{n.training.startDate}</TableCell>
+										<TableCell className="text-center">{n.training.startDate}</TableCell>
+										<TableCell className="text-center">{CheckStatus(n.training.status)}</TableCell>
 									</TableRow>
 								);
 							})}

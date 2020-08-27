@@ -19,16 +19,17 @@ import ProgressBtn from 'app/shared/progressBtn';
 import Grid from '@material-ui/core/Grid';
 import * as Actions from '../store/actions';
 import SharedDropzone from 'app/shared/sharedDropZone';
+import { useAuth } from 'app/hooks/useAuth';
 
 export default function FileModal() {
     const dispatch = useDispatch();
     const categories = useSelector(({ filesByCategories }) => filesByCategories.categories.categories);
     const loading = useSelector(({ filesByCategories }) => filesByCategories.files.loading);
     const success = useSelector(({ filesByCategories }) => filesByCategories.files.success);
-    const role = useSelector(({ profile }) => profile.data.role.name);
     const [open, setOpen] = React.useState(false);
     const [isFormValid, setIsFormValid] = useState(true);
     const [file, setFile] = useState('');
+    const userData = useAuth().getUserData;
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -64,7 +65,7 @@ export default function FileModal() {
 
   return (
     <div>
-        {role.toLowerCase() === 'hr' ?  
+        {userData.role.toLowerCase() === 'hr' ?  
         <Fab
             color="secondary"
             aria-label="add"
@@ -143,7 +144,7 @@ export default function FileModal() {
                     required
                     onChange={fileChange}
                   /> */}
-                  <SharedDropzone name={"Document File"} setValue={setFile}/>
+                  <SharedDropzone name={"Document File"} allowedTypes={'image/*, application/*'} setValue={setFile}/>
                   <DialogActions>
                     <Grid container spacing={2}>
                         <Grid item xs>

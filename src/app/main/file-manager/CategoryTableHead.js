@@ -24,6 +24,13 @@ const columns = [
 		sort: true
 	},
 	{
+		id: 'description',
+		align: 'left',
+		disablePadding: false,
+		label: 'Description',
+		sort: true
+	},
+	{
 		id: 'created',
 		align: 'left',
 		disablePadding: false,
