@@ -3,6 +3,7 @@ import { useAuth } from 'app/hooks/useAuth';
 import { getBaseUrl } from 'app/shared/getBaseUrl';
 import swal from 'sweetalert2';
 import {fetchHeaders} from 'app/shared/fetchHeaders'
+import {getDisciplinaryCase} from './disciplinaryCase.actions';
 
 export const GET_DISCIPLINARY_ACTION = 'GET DISCIPLINARY ACTION';
 export const LOADING_DISCIPLINARY_ACTION = 'LOADING DISCIPLINARY ACTION';
@@ -73,12 +74,13 @@ export function createDisciplinaryAction (model){
                     type: CREATE_DISCIPLINARY_ACTION_SUCCESS
                 })
             ]).then(() => {
-                dispatch(getDisciplinaryAction(model.disciplinaryCaseId))
+                dispatch(getDisciplinaryAction(model.disciplinaryCaseId));
+                dispatch(getDisciplinaryCase());
             })
         } else {
             swal.fire({
             title: 'Create Disciplinary Action',
-            text: data.error,
+            text: (data.error) ? data.error : data.message,
             timer: 3000,
             icon: 'error'
             })
@@ -125,12 +127,13 @@ export function updateDisciplinaryAction(model, id) {
                         type: UPDATE_DISCIPLINARY_ACTION_SUCCESS
                     })
                 ]).then(() => {
-                    dispatch(getDisciplinaryAction())
+                    dispatch(getDisciplinaryAction());
+                    dispatch(getDisciplinaryCase());
                 })
             } else {
                 swal.fire({
                     title: 'Update Create Disciplinary Action',
-                    text: data.error,
+                    text: (data.error) ? data.error : data.message,
                     timer: 3000,
                     icon: 'error'
                 })
@@ -150,40 +153,6 @@ export function updateDisciplinaryAction(model, id) {
             type: UPDATE_DISCIPLINARY_ACTION_ERROR
             })
         })
-	}
-}
-
-export function getFileById(id) {
-	return dispatch =>{
-		dispatch({
-			type: LOADING_DISCIPLINARY_ACTION
-		  })
-        fetch(`${basUrl()}/document_category/${id}`, {...headers.getRegHeader()})
-		.then(res => res.json()).then(async data => {
-			// console.log(data.data);
-			data.success ? 
-				(data.data) ?
-					dispatch({
-						type: GET_DISCIPLINARY_ACTION,
-						payload: data.data
-					})
-				:
-					dispatch({
-						type: GET_DISCIPLINARY_ACTION,
-						payload: []
-					})
-			:
-				dispatch({
-					type: GET_DISCIPLINARY_ACTION,
-					payload: []
-				})
-		}).catch(err => {
-			console.log(err);
-			dispatch({
-				type: GET_DISCIPLINARY_ACTION,
-				payload: []
-			})
-		})
 	}
 }
 
@@ -217,12 +186,13 @@ export function deleteDisciplinaryAction(id){
                         type: DELETE_DISCIPLINARY_ACTION_SUCCESS
                     })
                 ]).then(() => {
-                    dispatch(getDisciplinaryAction())
+                    dispatch(getDisciplinaryAction());
+                    dispatch(getDisciplinaryCase());
                 })
                 } else {
                 swal.fire(
                     'Deleted!',
-                    'something went wrong',
+                    (data.error) ? data.error : data.message,
                     'error'
                 )
                 return dispatch({

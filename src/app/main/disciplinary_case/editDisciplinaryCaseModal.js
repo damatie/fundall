@@ -26,6 +26,7 @@ const CaptializeFirstLetter = word => {
 	}
 	return '';
 };
+
 export default function EditDisciplinaryCaseModal(props) {
 	const dispatch = useDispatch();
 	const selected = props.selectedItem;
@@ -48,6 +49,7 @@ export default function EditDisciplinaryCaseModal(props) {
 		caseDescription: '',
 		modeOfLodging: ''
 	});
+
 	const [filterEmployees, setFilterEmployees] = useState(
 		employees
 			.filter(f => {
@@ -63,6 +65,7 @@ export default function EditDisciplinaryCaseModal(props) {
 				return 0;
 			})
 	);
+
 	const initDialog = useCallback(() => {
 		setForm({
 			accusedId: props.selectedItem.accusedId,
@@ -89,6 +92,7 @@ export default function EditDisciplinaryCaseModal(props) {
 	}, [employees]);
 
 	useEffect(() => {
+		setStart(moment(selected.date, 'DD MMMM YYYY'));
 		if(selected){
 			initDialog();
 		}
@@ -118,10 +122,8 @@ export default function EditDisciplinaryCaseModal(props) {
 	}))(Button);
 
 	const handleClickOpen = () => {
-		// setTimeout(() => {
-			props.handleClose();
-			setOpen(true);
-		// }, 700)
+		props.handleClose();
+		setOpen(true);
 	};
 
 	const handleClose = () => {
@@ -158,8 +160,8 @@ export default function EditDisciplinaryCaseModal(props) {
 	const handleSubmit = (id) => {
 		console.log(form);
 		console.log(id);
-		// dispatch(Actions.updateDisciplinaryCase(form, id));
-		// props.handleClose();
+		dispatch(Actions.updateDisciplinaryCase(form, id));
+		props.handleClose();
 	};
 
 	const handleDelete = (id) => {
@@ -251,7 +253,7 @@ export default function EditDisciplinaryCaseModal(props) {
 									type="text"
 									name="caseDescription"
 									value={form.caseDescription}
-									onChange={ev => {form.caseDescription = ev.target.value; setForm(form)}}
+									onChange={ev => {setDescription(ev.target.value); handleFormValueChange('caseDescription', ev.target.value);}}
 									label="Case Description"
 									disabled={!edit}
 									InputProps={{
@@ -275,7 +277,7 @@ export default function EditDisciplinaryCaseModal(props) {
 									name="modeOfLodging"
 									label="Mode Of Lodging"
 									value={form.modeOfLodging}
-									onChange={ev => {form.modeOfLodging = ev.target.value; setForm(form)}}
+									onChange={ev => {setDescription(ev.target.value); handleFormValueChange('modeOfLodging', ev.target.value);}}
 									disabled={!edit}
 									InputProps={{
 										endAdornment: (
@@ -311,7 +313,7 @@ export default function EditDisciplinaryCaseModal(props) {
 									<Button variant="contained" className="w-full" color="secondary" type="button" onClick={props.handleClose}>Cancel</Button>
 								</Grid>
 								<Grid item xs={12} md={4} lg={4} lx={4}>
-									<ActionButton variant="contained" className="w-full" color="primary" onClick={ev => {handleClickOpen(selected.id)}} disabled={(selected.status) ? (selected.status.toLowerCase() !== 'open') : false}>{(selected.status) ? (selected.status.toLowerCase() !== 'open') ? 'Take Disciplinary Action' : 'View Disciplinary Action' : 'Take Disciplinary Action'} </ActionButton>
+									<ActionButton variant="contained" className="w-full" color="primary" onClick={ev => {handleClickOpen(selected.id)}} >{(selected.status) ? (selected.status.toLowerCase() === 'open') ? 'Take Disciplinary Action' : 'View Disciplinary Action' : 'Take Disciplinary Action'} </ActionButton>
 								</Grid>
 								<Grid item xs={12} md={3} lg={3} lx={3} hidden={(selected.status) ? selected.status.toLowerCase() !== 'open' : false}>
 									<CloseButton variant="contained" className="w-full" color="primary" onClick={ev => {handleCloseCase(selected.id)}}>
@@ -331,7 +333,7 @@ export default function EditDisciplinaryCaseModal(props) {
 									<Button variant="contained" className="w-full" color="secondary" type="button" onClick={props.handleClose}>Cancel</Button>
 								</Grid>
 								<Grid item  xs={12} md={4} lg={4} lx={4}>
-									<ActionButton variant="contained" className="w-full" color="primary" onClick={handleClickOpen} disabled={(selected.status) ? (selected.status.toLowerCase() !== 'open') : false}>{(selected.status) ? (selected.status.toLowerCase() !== 'open') ? 'Take Disciplinary Action' : 'View Disciplinary Action' : 'Take Disciplinary Action'} </ActionButton>
+									<ActionButton variant="contained" className="w-full" color="primary" onClick={handleClickOpen} >{(selected.status) ? (selected.status.toLowerCase() === 'open') ? 'Take Disciplinary Action' : 'View Disciplinary Action' : 'Take Disciplinary Action'} </ActionButton>
 								</Grid>
 								<Grid item xs={12} md={3} lg={3} lx={3} hidden={(selected.status) ? selected.status.toLowerCase() !== 'open' : false}>
 									<CloseButton variant="contained" className="w-full" color="primary" onClick={ev => {handleCloseCase(selected.id)}}>

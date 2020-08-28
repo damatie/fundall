@@ -54,10 +54,10 @@ export default function TakeAction(props) {
     
 	useEffect(() => {
 		setForm({
-			actionType: actions.actionType,
-            description: actions.description,
-            recommendation: actions.recommendation,
-            disciplinaryCaseId: actions.disciplinaryCaseId
+			actionType: (actions.actionType) ? actions.actionType : '',
+            description: (actions.description) ? actions.description : '',
+            recommendation: (actions.recommendation) ? actions.recommendation : '',
+            disciplinaryCaseId: (actions.disciplinaryCaseId) ? actions.disciplinaryCaseId : 0
 		});
     }, [actions]);
     
@@ -75,10 +75,19 @@ export default function TakeAction(props) {
 		setIsFormValid(true);
     };
     
+    const handleFormValueChange = (el, value) =>{
+		console.log(el);
+		console.log(value);
+		if(value){
+			form[el] = value;
+			setForm(form);
+			console.log(form);
+		}
+	}
 
 	const handleSubmit = () => {
 		console.log(form);
-		// dispatch(Actions.createDisciplinaryAction(form));
+		dispatch(Actions.createDisciplinaryAction(form));
 		props.handleClose();
 	};
 
@@ -96,8 +105,8 @@ export default function TakeAction(props) {
                             type="text"
                             name="actionType"
                             // disabled={true}
-                            value={actions.actionType}
-                            onChange={ev => {form.actionType = ev.target.value; setForm(form)}}
+                            value={form.actionType}
+                            onChange={ev => {setValue(ev.target.value); handleFormValueChange('actionType', ev.target.value)}}
                             label="Action Type"
                             InputProps={{
                                 endAdornment: (
@@ -116,8 +125,8 @@ export default function TakeAction(props) {
                             className="mb-16 w-full"
                             type="text"
                             name="description"
-                            value={actions.description}
-                            onChange={ev => {form.description = ev.target.value; setForm(form)}}
+                            value={form.description}
+                            onChange={ev => {setValue(ev.target.value); handleFormValueChange('description', ev.target.value);}}
                             label="Description"
                             InputProps={{
                                 endAdornment: (
@@ -136,8 +145,8 @@ export default function TakeAction(props) {
                             className="mb-16 w-full"
                             type="text"
                             name="recommendation"
-                            value={actions.recommendation}
-                            onChange={ev => {form.recommendation = ev.target.value; setForm(form)}}
+                            value={form.recommendation}
+                            onChange={ev => {setValue(ev.target.value); handleFormValueChange('recommendation', ev.target.value);}}
                             label="Recommendation"
                             InputProps={{
                                 endAdornment: (

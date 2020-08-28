@@ -27,7 +27,7 @@ const useStyles = makeStyles({
 	}
 });
 const DisciplinaryTable = (props) =>{
-    const [data, setData] = useState(props.rows);
+    const [data, setData] = useState(sortArray(props.rows));
     const [open, setOpen] = useState(false);
     const [filter, setFilter] = useState('');
     const classes = useStyles();
@@ -52,6 +52,12 @@ const DisciplinaryTable = (props) =>{
 			direction,
 			id
 		});
+    }
+    
+    function sortArray(array = []) {
+		return array.sort((a, b) => {
+			return new Date(b.createdAt) - new Date(a.createdAt);
+		})
 	}
 
     function handleChangePage(event, value) {
@@ -73,8 +79,8 @@ const DisciplinaryTable = (props) =>{
     }
     
     function CheckStatus(status){
-        switch (status) {
-            case "Close":
+        switch (status.toLowerCase()) {
+            case "closed":
                 return (
                     <Typography
                             className={'bg-red text-white inline text-11 font-500 px-8 py-4 rounded-4'}
@@ -84,7 +90,7 @@ const DisciplinaryTable = (props) =>{
                 )
                 break;
             
-            case "Open":
+            case "open":
                 return (
                     <Typography
                             className={'bg-green text-white inline text-11 font-500 px-8 py-4 rounded-4'}
@@ -95,7 +101,11 @@ const DisciplinaryTable = (props) =>{
                 break;
             default:
                 return (
-                    {status}
+                    <Typography
+                            className={'bg-black text-white inline text-11 font-500 px-8 py-4 rounded-4'}
+                        >
+                        {status}
+                    </Typography>
                 )
                 break;
         }
@@ -233,7 +243,7 @@ const DisciplinaryTable = (props) =>{
                                             <Moment format="ddd Do MMM, YY | hh:mm:ss a">{n.updatedAt}</Moment>
                                         </TableCell>
 										<TableCell className="text-left">
-                                            {n.status}
+                                            {CheckStatus((n.status) ? n.status.toLowerCase() : '')}
                                         </TableCell>
 									</TableRow>
 								);
