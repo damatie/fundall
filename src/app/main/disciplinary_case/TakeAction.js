@@ -25,7 +25,6 @@ import moment from 'moment';
 import { DateTimePicker } from '@material-ui/pickers';
 import * as Actions from './store/actions';
 
-
 const CaptializeFirstLetter = word => {
 	if (word) {
 		return word.charAt(0).toUpperCase() + word.slice(1);
@@ -34,8 +33,8 @@ const CaptializeFirstLetter = word => {
 };
 export default function TakeAction(props) {
 	const dispatch = useDispatch();
-    const selected = props.selectedItem;
-    const actions = props.actions;
+	const selected = props.selectedItem;
+	const actions = props.actions;
 	// const disciplinaryAction = useSelector(({ disciplinaryCase }) => disciplinaryCase.disciplinaryAction.data);
 	const success = useSelector(({ disciplinaryCase }) => disciplinaryCase.disciplinaryCase.success);
 	const [value, setValue] = React.useState('female');
@@ -43,26 +42,25 @@ export default function TakeAction(props) {
 	const [form, setForm] = useState({
 		actionType: '',
 		description: '',
-        recommendation: '',
-        disciplinaryCaseId: 0
-    });
-    
+		recommendation: '',
+		disciplinaryCaseId: 0
+	});
+
 	// useEffect(() => {
-    //     console.log(selected.id);
-    //     dispatch(Actions.getDisciplinaryAction(selected.id));
-    // }, [dispatch]);
-    
+	//     console.log(selected.id);
+	//     dispatch(Actions.getDisciplinaryAction(selected.id));
+	// }, [dispatch]);
+
 	useEffect(() => {
 		setForm({
-			actionType: (actions.actionType) ? actions.actionType : '',
-            description: (actions.description) ? actions.description : '',
-            recommendation: (actions.recommendation) ? actions.recommendation : '',
-            disciplinaryCaseId: (actions.disciplinaryCaseId) ? actions.disciplinaryCaseId : 0
+			actionType: actions.actionType ? actions.actionType : '',
+			description: actions.description ? actions.description : '',
+			recommendation: actions.recommendation ? actions.recommendation : '',
+			disciplinaryCaseId: actions.disciplinaryCaseId ? actions.disciplinaryCaseId : props.selectedItem.id
 		});
-    }, [actions]);
-    
+	}, [actions]);
 
-	const handleChange = (event) => {
+	const handleChange = event => {
 		setValue(event.target.value);
 	};
 	const formRef = useRef(null);
@@ -73,114 +71,161 @@ export default function TakeAction(props) {
 
 	const enableButton = () => {
 		setIsFormValid(true);
-    };
-    
-    const handleFormValueChange = (el, value) =>{
+	};
+
+	const handleFormValueChange = (el, value) => {
 		console.log(el);
 		console.log(value);
-		if(value){
+		if (value) {
 			form[el] = value;
 			setForm(form);
 			console.log(form);
 		}
-	}
+	};
 
 	const handleSubmit = () => {
 		console.log(form);
 		dispatch(Actions.createDisciplinaryAction(form));
+		props.handleClose();
+    };
+    
+	const handleEdit = (id) => {
+		console.log(form);
+		dispatch(Actions.updateDisciplinaryAction(form, id));
 		props.handleClose();
 	};
 
 	return (
 		<div>
 			{/* Modal to handle list of Action from the Database */}
-			<Dialog open={props.open} onClose={props.handleClose} fullWidth={true} maxWidth={'xs'} aria-labelledby="form-dialog-title">
+			<Dialog
+				open={props.open}
+				onClose={props.handleClose}
+				fullWidth={true}
+				maxWidth={'xs'}
+				aria-labelledby="form-dialog-title"
+			>
 				<DialogTitle id="form-dialog-title">Disciplinary Actions</DialogTitle>
 				<DialogContent>
 					<div className="w-full">
-					<form noValidate>
-						{/* <Grid container spacing={4}> */}
-						<TextField
-                            className="mb-16 w-full"
-                            type="text"
-                            name="actionType"
-                            // disabled={true}
-                            value={form.actionType}
-                            onChange={ev => {setValue(ev.target.value); handleFormValueChange('actionType', ev.target.value)}}
-                            label="Action Type"
-                            InputProps={{
-                                endAdornment: (
-                                    <InputAdornment position="end">
-                                        <Icon className="text-20" color="action">
-                                            info
-                                        </Icon>
-                                    </InputAdornment>
-                                )
-                            }}
-                            variant="outlined"
-                            margin="normal"
-                            required
-                        />
-                        <TextField
-                            className="mb-16 w-full"
-                            type="text"
-                            name="description"
-                            value={form.description}
-                            onChange={ev => {setValue(ev.target.value); handleFormValueChange('description', ev.target.value);}}
-                            label="Description"
-                            InputProps={{
-                                endAdornment: (
-                                    <InputAdornment position="end">
-                                        <Icon className="text-20" color="action">
-                                            info
-                                        </Icon>
-                                    </InputAdornment>
-                                )
-                            }}
-                            variant="outlined"
-                            margin="normal"
-                            required
-                        />
-                        <TextField
-                            className="mb-16 w-full"
-                            type="text"
-                            name="recommendation"
-                            value={form.recommendation}
-                            onChange={ev => {setValue(ev.target.value); handleFormValueChange('recommendation', ev.target.value);}}
-                            label="Recommendation"
-                            InputProps={{
-                                endAdornment: (
-                                    <InputAdornment position="end">
-                                        <Icon className="text-20" color="action">
-                                            info
-                                        </Icon>
-                                    </InputAdornment>
-                                )
-                            }}
-                            variant="outlined"
-                            margin="normal"
-                            required
-                        />
-						{/* </Grid> */}
-						
-						<DialogActions>
-							<Grid container spacing={4} style={{textAlign: 'center'}}>
-								<Grid item xs={6}>
-									<Button variant="contained" className="w-full" color="secondary" type="button" onClick={props.handleClose}>Cancel</Button>
+						<form noValidate>
+							{/* <Grid container spacing={4}> */}
+							<TextField
+								className="mb-16 w-full"
+								type="text"
+								name="actionType"
+								// disabled={true}
+								value={form.actionType}
+								onChange={ev => {
+									setValue(ev.target.value);
+									handleFormValueChange('actionType', ev.target.value);
+								}}
+								label="Action Type"
+								InputProps={{
+									endAdornment: (
+										<InputAdornment position="end">
+											<Icon className="text-20" color="action">
+												info
+											</Icon>
+										</InputAdornment>
+									)
+								}}
+								variant="outlined"
+								margin="normal"
+								required
+							/>
+							<TextField
+								className="mb-16 w-full"
+								type="text"
+								name="description"
+								value={form.description}
+								onChange={ev => {
+									setValue(ev.target.value);
+									handleFormValueChange('description', ev.target.value);
+								}}
+								label="Description"
+								InputProps={{
+									endAdornment: (
+										<InputAdornment position="end">
+											<Icon className="text-20" color="action">
+												info
+											</Icon>
+										</InputAdornment>
+									)
+								}}
+								variant="outlined"
+								margin="normal"
+								
+							/>
+							<TextField
+								className="mb-16 w-full"
+								type="text"
+								name="recommendation"
+								value={form.recommendation}
+								onChange={ev => {
+									setValue(ev.target.value);
+									handleFormValueChange('recommendation', ev.target.value);
+								}}
+								label="Recommendation"
+								InputProps={{
+									endAdornment: (
+										<InputAdornment position="end">
+											<Icon className="text-20" color="action">
+												info
+											</Icon>
+										</InputAdornment>
+									)
+								}}
+								variant="outlined"
+								margin="normal"
+								required
+							/>
+							{/* </Grid> */}
+
+							<DialogActions>
+								<Grid container spacing={4} style={{ textAlign: 'center' }}>
+									<Grid item xs={6}>
+										<Button
+											variant="contained"
+											className="w-full"
+											color="secondary"
+											type="button"
+											onClick={props.handleClose}
+										>
+											Cancel
+										</Button>
+									</Grid>
+									{actions.id ? (
+										<Grid item xs={6}>
+											<Button
+												variant="contained"
+												className="w-full"
+												color="primary"
+												type="button"
+												disabled={selected.status ? selected.status.toLowerCase() !== 'open' : false}
+												onClick={ev => handleEdit(actions.id)}
+											>
+												{'Edit'}
+											</Button>
+										</Grid>
+									) : (
+										<Grid item xs={6}>
+											<Button
+												variant="contained"
+												className="w-full"
+												color="primary"
+												type="button"
+												disabled={selected.status ? selected.status.toLowerCase() !== 'open' : false}
+												onClick={handleSubmit}
+											>
+												{'Apply'}
+											</Button>
+										</Grid>
+									)}
 								</Grid>
-                                {(actions.id) ?
-								<Grid item xs={6}>
-									<Button variant="contained" className="w-full" color="primary" type="button" disabled={(selected.status) ? selected.status.toLowerCase() !== 'open' : false} onClick={handleSubmit}>{'Edit'}</Button>
-								</Grid>
-                                :
-								<Grid item xs={6}>
-									<Button variant="contained" className="w-full" color="primary" type="button" disabled={(selected.status) ? selected.status.toLowerCase() !== 'open' : false} onClick={handleSubmit}>{'Apply'}</Button>
-								</Grid>
-                                }
-							</Grid>
-						</DialogActions>
-						<br></br>
-					</form>
+							</DialogActions>
+							<br></br>
+						</form>
 					</div>
 				</DialogContent>
 			</Dialog>

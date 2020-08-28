@@ -8,7 +8,7 @@ const CheckListConfig = {
 	},
 	routes: [
 		{
-			path: '/training/checklist/preForm',
+			path: '/training/checklist/form/:checkListID/:trainingID',
 			component: React.lazy(() => import('./forms/PreLearningForm'))
 		},
 		{

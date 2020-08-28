@@ -80,7 +80,7 @@ export function createDisciplinaryCase(model) {
 				} else {
 					swal.fire({
 						title: 'Create Disciplinary Case',
-						text: (data.error) ? data.error : data.message,
+						text: data.error ? data.error : data.message,
 						timer: 3000,
 						icon: 'error'
 					});
@@ -134,7 +134,7 @@ export function updateDisciplinaryCase(model, id) {
 				} else {
 					swal.fire({
 						title: 'Update Create Disciplinary Case',
-						text: (data.error) ? data.error : data.message,
+						text: data.error ? data.error : data.message,
 						timer: 3000,
 						icon: 'error'
 					});
@@ -226,7 +226,7 @@ export function closeDisciplinaryCase(id) {
 			confirmButtonText: 'Yes, close it!',
 			showLoaderOnConfirm: true,
 			preConfirm: () => [
-				fetch(`${basUrl()}/disciplinary/${id}`, { ...headers.reqHeader('PATCH', '') })
+				fetch(`${basUrl()}/disciplinary/${id}`, { ...headers.reqHeader('PUT', '') })
 					.then(res => res.json())
 					.then(async data => {
 						if (data.success) {
