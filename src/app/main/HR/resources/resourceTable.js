@@ -41,7 +41,7 @@ function ResourcesTable(props) {
 	useEffect(() => {
 		setSelected([])
 		dispatch(Actions.getResources());
-	}, [dispatch,resources, resources.isDeleting]);
+	}, [dispatch, resources.isDeleting]);
 
 	useEffect(() => {
 		if (searchText.length !== 0) {

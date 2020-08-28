@@ -30,13 +30,13 @@ const rows = [
 		label: 'Department code',
 		sort: true
   },
-  {
-		id: 'department_head',
-		align: 'left',
-		disablePadding: false,
-		label: 'Department head',
-		sort: true
-	},
+  // {
+	// 	id: 'department_head',
+	// 	align: 'left',
+	// 	disablePadding: false,
+	// 	label: 'Department head',
+	// 	sort: true
+	// },
 	{
 		id: 'started_on',
 		align: 'left',
