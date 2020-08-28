@@ -280,7 +280,7 @@ const TableWidget = props => {
                                 props.isHR &&(
                             (
 								(selected.training
-									? (selected.training.status === 'reviewed')
+									? (selected.training.status === 'reviewed' || selected.training.status === 'pending')
 									: false) && props.isHR
 							) ? (
 								<Grid container className="items-center w-full pt-20" justify="center" alignItems="center">

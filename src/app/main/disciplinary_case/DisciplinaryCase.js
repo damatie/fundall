@@ -20,61 +20,61 @@ function DisciplinaryCase() {
 	const rows = useSelector(({ disciplinaryCase }) => disciplinaryCase.disciplinaryCase.data);
 	const pageLayout = useRef(null);
 
-    useEffect(() => {
-        dispatch(Actions.getDisciplinaryCase());
-    }, [dispatch]);
+	useEffect(() => {
+		dispatch(Actions.getDisciplinaryCase());
+	}, [dispatch]);
 
-    const columns = [
-        {
-            id: 's/n',
-            align: 'left',
-            disablePadding: false,
-            label: 'Case No',
-            sort: true
-        },
-        {
-            id: 'accuser',
-            align: 'left',
-            disablePadding: false,
-            label: 'Accuser',
-            sort: true
-        },
-        {
-            id: 'accused',
-            align: 'left',
-            disablePadding: false,
-            label: 'Accused',
-            sort: true
-        },
-        {
-            id: 'description',
-            align: 'left',
-            disablePadding: false,
-            label: 'Description',
-            sort: true
-        },
-        {
-            id: 'createdAt',
-            align: 'left',
-            disablePadding: false,
-            label: 'Created Time',
-            sort: true
-        },
-        {
-            id: 'updatedAt',
-            align: 'left',
-            disablePadding: false,
-            label: 'Updated Time',
-            sort: true
-        },
-        {
-            id: 'status',
-            align: 'left',
-            disablePadding: false,
-            label: 'Status',
-            sort: true
-        }
-    ];
+	const columns = [
+		{
+			id: 's/n',
+			align: 'left',
+			disablePadding: false,
+			label: 'Case No',
+			sort: true
+		},
+		{
+			id: 'accuser',
+			align: 'left',
+			disablePadding: false,
+			label: 'Accuser',
+			sort: true
+		},
+		{
+			id: 'accused',
+			align: 'left',
+			disablePadding: false,
+			label: 'Accused',
+			sort: true
+		},
+		{
+			id: 'description',
+			align: 'left',
+			disablePadding: false,
+			label: 'Description',
+			sort: true
+		},
+		{
+			id: 'createdAt',
+			align: 'left',
+			disablePadding: false,
+			label: 'Created Time',
+			sort: true
+		},
+		{
+			id: 'updatedAt',
+			align: 'left',
+			disablePadding: false,
+			label: 'Updated Time',
+			sort: true
+		},
+		{
+			id: 'status',
+			align: 'left',
+			disablePadding: false,
+			label: 'Status',
+			sort: true
+		}
+	];
 	return (
 		<FusePageSimple
 			classes={{
@@ -84,25 +84,25 @@ function DisciplinaryCase() {
 				rightSidebar: 'w-320'
 			}}
 			header={
-					<ThemeProvider theme={mainTheme}>
+				<ThemeProvider theme={mainTheme}>
 					<div className="flex flex-col flex-1 p-8 sm:p-12 relative">
-                        <div className="flex items-center w-full">
-                            <FuseAnimate animation="transition.expandIn" delay={300}>
-                                <Icon className="text-32">announcement</Icon>
-                            </FuseAnimate>
-                            <FuseAnimate animation="transition.slideLeftIn" delay={300}>
-                                <span className="text-24 mx-16">Disciplinary Case Management</span>
-                            </FuseAnimate>
-                        </div>
+						<div className="flex items-center w-full">
+							<FuseAnimate animation="transition.expandIn" delay={300}>
+								<Icon className="text-32">announcement</Icon>
+							</FuseAnimate>
+							<FuseAnimate animation="transition.slideLeftIn" delay={300}>
+								<span className="text-24 mx-16">Disciplinary Case Management</span>
+							</FuseAnimate>
+						</div>
 						<div className="flex flex-1 items-end">
 							<FuseAnimate animation="transition.expandIn" delay={600}>
 								<AddDisciplinaryCaseModal />
 							</FuseAnimate>
 						</div>
 					</div>
-			</ThemeProvider>
+				</ThemeProvider>
 			}
-			content={<DisciplinaryTable title={"Disciplinary Cases"} type="default" columns={columns} rows={rows}/>}
+			content={<DisciplinaryTable title={'Disciplinary Cases'} type="default" columns={columns} rows={rows} />}
 			ref={pageLayout}
 			innerScroll
 		/>

@@ -90,7 +90,7 @@ function PersonalTrainingCourses(props) {
 	const [id, setId] = useState('');
 	const [hod, setHod] = useState(0);
 	const [page, setPage] = useState(1);
-	const [rowsPerPage, setRowsPerPage] = useState(8);
+	const [rowsPerPage, setRowsPerPage] = useState(9);
 	const userData = useAuth().getUserData;
 	const userId = useAuth().getId;
 	const employeeHOD = useAuth().getUserDetails.department.departmentHeadId;

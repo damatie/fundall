@@ -19,7 +19,6 @@ import * as Actions from './store/actions';
 import TakeAction from './TakeAction';
 import { yellow, red } from '@material-ui/core/colors';
 
-
 const CaptializeFirstLetter = word => {
 	if (word) {
 		return word.charAt(0).toUpperCase() + word.slice(1);
@@ -93,32 +92,32 @@ export default function EditDisciplinaryCaseModal(props) {
 
 	useEffect(() => {
 		setStart(moment(selected.date, 'DD MMMM YYYY'));
-		if(selected){
+		if (selected) {
 			initDialog();
 		}
-		if(selected.id){
+		if (selected.id) {
 			dispatch(Actions.getDisciplinaryAction(selected.id));
 		}
-	}, [selected])
+	}, [selected]);
 
-	const CloseButton = withStyles((theme) => ({
+	const CloseButton = withStyles(theme => ({
 		root: {
-		  color: theme.palette.getContrastText(red[500]),
-		  backgroundColor: red[500],
-		  '&:hover': {
-			backgroundColor: red[700],
-		  },
-		},
-	  }))(Button);
+			color: theme.palette.getContrastText(red[500]),
+			backgroundColor: red[500],
+			'&:hover': {
+				backgroundColor: red[700]
+			}
+		}
+	}))(Button);
 
-	const ActionButton = withStyles((theme) => ({
+	const ActionButton = withStyles(theme => ({
 		root: {
 			color: 'white',
 			backgroundColor: yellow[700],
 			'&:hover': {
-			backgroundColor: yellow[900],
-			},
-		},
+				backgroundColor: yellow[900]
+			}
+		}
 	}))(Button);
 
 	const handleClickOpen = () => {
@@ -147,214 +146,325 @@ export default function EditDisciplinaryCaseModal(props) {
 		setForm(form);
 	};
 
-	const handleFormValueChange = (el, value) =>{
+	const handleFormValueChange = (el, value) => {
 		console.log(el);
 		console.log(value);
-		if(value){
+		if (value) {
 			form[el] = value;
 			setForm(form);
 			console.log(form);
 		}
-	}
+	};
 
-	const handleSubmit = (id) => {
+	const handleSubmit = id => {
 		console.log(form);
 		console.log(id);
 		dispatch(Actions.updateDisciplinaryCase(form, id));
 		props.handleClose();
 	};
 
-	const handleDelete = (id) => {
-		dispatch(Actions.deleteDisciplinaryCase(id));
+	const handleDelete = id => {
+		dispatch(Actions.deleteDisciplinaryCase(id, form.disciplinaryCaseId));
 		props.handleClose();
-	}
+	};
 
-	const handleCloseCase = (id) => {
+	const handleCloseCase = id => {
 		dispatch(Actions.closeDisciplinaryCase(id));
 		props.handleClose();
-	}
+	};
 
 	const handleAccusedChange = name => {
-		if(name){
+		if (name) {
 			let hodDetails = filterEmployees.find(em => {
 				return em.firstName.toLowerCase() + ' ' + em.lastName.toLowerCase() === name.toLowerCase();
 			});
 			setAccused(hodDetails.id);
-			form.accusedId = hodDetails.id
+			form.accusedId = hodDetails.id;
 			setForm(form);
 		}
 	};
 
 	const handleAccuserChange = name => {
-		if(name){
+		if (name) {
 			let hodDetails = filterEmployees.find(em => {
 				return em.firstName.toLowerCase() + ' ' + em.lastName.toLowerCase() === name.toLowerCase();
 			});
 			setAccuser(hodDetails.id);
-			form.accuserId = hodDetails.id
+			form.accuserId = hodDetails.id;
 			setForm(form);
 		}
 	};
 
-	function handleShowEdit(){
+	function handleShowEdit() {
 		setEdit(true);
 	}
 
 	return (
 		<div>
-			<Dialog open={props.open} onClose={props.handleClose} fullWidth={true} maxWidth={'md'} aria-labelledby="form-dialog-title">
+			<Dialog
+				open={props.open}
+				onClose={props.handleClose}
+				fullWidth={true}
+				maxWidth={'md'}
+				aria-labelledby="form-dialog-title"
+			>
 				<DialogTitle id="form-dialog-title">Edit Disciplinary Case</DialogTitle>
 				<DialogContent>
 					<div className="w-full">
-					<form noValidate>
-						<Grid container spacing={4}>
-							<Grid item xs={12} md={6} lg={6} lx={6}>
-								<Autocomplete
-									freeSolo
-									disabled={!edit}
-									value={selected.accuserName}
-									options={
-										filterEmployees &&
-										filterEmployees.map(
-											option =>
-												option && CaptializeFirstLetter(option.firstName) + ' ' + CaptializeFirstLetter(option.lastName)
-										)
-									}
-									onChange={(ev, value) => handleAccuserChange(value)}
-									renderInput={params => (
-										<TextField {...params} disabled={!edit} value={selected.accuserName} label="Accuser" margin="normal" variant="outlined" required />
-									)}
-								/>
-							</Grid>
-							<Grid item xs={12} md={6} lg={6} lx={6}>
-								<Autocomplete
-									freeSolo
-									disabled={!edit}
-									value={selected.accusedName}
-									options={
-										filterEmployees &&
-										filterEmployees.map(
-											option =>
-												option && CaptializeFirstLetter(option.firstName) + ' ' + CaptializeFirstLetter(option.lastName)
-										)
-									}
-									onChange={(ev, value) => handleAccusedChange(value)}
-									renderInput={params => (
-										<TextField {...params} disabled={!edit} value={selected.accusedName} label="Accused" margin="normal" variant="outlined" required />
-									)}
-								/>
-							</Grid>
-						</Grid>
-						
-						<Grid container spacing={4}>
-							<Grid item xs={12} md={6} lg={6} lx={6}>
-								<TextField
-									className="mb-16 w-full"
-									type="text"
-									name="caseDescription"
-									value={form.caseDescription}
-									onChange={ev => {setDescription(ev.target.value); handleFormValueChange('caseDescription', ev.target.value);}}
-									label="Case Description"
-									disabled={!edit}
-									InputProps={{
-										endAdornment: (
-											<InputAdornment position="end">
-												<Icon className="text-20" color="action">
-													info
-												</Icon>
-											</InputAdornment>
-										)
-									}}
-									variant="outlined"
-									margin="normal"
-									required
-								/>
-							</Grid>
-							<Grid item xs={12} md={6} lg={6} lx={6}>
-								<TextField
-									className="mb-16 w-full"
-									type="text"
-									name="modeOfLodging"
-									label="Mode Of Lodging"
-									value={form.modeOfLodging}
-									onChange={ev => {setDescription(ev.target.value); handleFormValueChange('modeOfLodging', ev.target.value);}}
-									disabled={!edit}
-									InputProps={{
-										endAdornment: (
-											<InputAdornment position="end">
-												<Icon className="text-20" color="action">
-													info
-												</Icon>
-											</InputAdornment>
-										)
-									}}
-									variant="outlined"
-									margin="normal"
-									required
-								/>
-							</Grid>
-						</Grid>
-						
-						<DateTimePicker
-							label="Start"
-							inputVariant="outlined"
-							value={moment(form.date, 'DD MMMM YYYY')}
-							margin="normal"
-							disabled={!edit}
-							onChange={date => handleDateChange(date)}
-							className="mt-8 mb-16 w-full"
-							// minDate={moment(new Date(), 'DD MMMM YYYY')}
-							format={'MMMM Do, YYYY hh:mm a'}
-						/>
-						{(edit) ?
-						<DialogActions>
-							<Grid container spacing={4} style={{float:'right'}}>
-								<Grid item xs={12} md={2} lg={2} lx={2}>
-									<Button variant="contained" className="w-full" color="secondary" type="button" onClick={props.handleClose}>Cancel</Button>
+						<form noValidate>
+							<Grid container spacing={4}>
+								<Grid item xs={12} md={6} lg={6} lx={6}>
+									<Autocomplete
+										freeSolo
+										disabled={!edit}
+										value={selected.accuserName}
+										options={
+											filterEmployees &&
+											filterEmployees.map(
+												option =>
+													option &&
+													CaptializeFirstLetter(option.firstName) + ' ' + CaptializeFirstLetter(option.lastName)
+											)
+										}
+										onChange={(ev, value) => handleAccuserChange(value)}
+										renderInput={params => (
+											<TextField
+												{...params}
+												disabled={!edit}
+												value={selected.accuserName}
+												label="Accuser"
+												margin="normal"
+												variant="outlined"
+												required
+											/>
+										)}
+									/>
 								</Grid>
-								<Grid item xs={12} md={4} lg={4} lx={4}>
-									<ActionButton variant="contained" className="w-full" color="primary" onClick={ev => {handleClickOpen(selected.id)}} >{(selected.status) ? (selected.status.toLowerCase() === 'open') ? 'Take Disciplinary Action' : 'View Disciplinary Action' : 'Take Disciplinary Action'} </ActionButton>
-								</Grid>
-								<Grid item xs={12} md={3} lg={3} lx={3} hidden={(selected.status) ? selected.status.toLowerCase() !== 'open' : false}>
-									<CloseButton variant="contained" className="w-full" color="primary" onClick={ev => {handleCloseCase(selected.id)}}>
-										Close Case
-									</CloseButton>
-								</Grid>
-								
-								<Grid item xs={12} md={2} lg={2} lx={2}>
-									<Button variant="contained" className="w-full" color="primary" type="button"  onClick={ev => {setEdit(false); handleSubmit(selected.id)}}>Save</Button>
+								<Grid item xs={12} md={6} lg={6} lx={6}>
+									<Autocomplete
+										freeSolo
+										disabled={!edit}
+										value={selected.accusedName}
+										options={
+											filterEmployees &&
+											filterEmployees.map(
+												option =>
+													option &&
+													CaptializeFirstLetter(option.firstName) + ' ' + CaptializeFirstLetter(option.lastName)
+											)
+										}
+										onChange={(ev, value) => handleAccusedChange(value)}
+										renderInput={params => (
+											<TextField
+												{...params}
+												disabled={!edit}
+												value={selected.accusedName}
+												label="Accused"
+												margin="normal"
+												variant="outlined"
+												required
+											/>
+										)}
+									/>
 								</Grid>
 							</Grid>
-						</DialogActions>
-						:
-						<DialogActions>
-							<Grid container spacing={4} style={{float:'right'}}>
-								<Grid item xs={12} md={2} lg={2} lx={2}>
-									<Button variant="contained" className="w-full" color="secondary" type="button" onClick={props.handleClose}>Cancel</Button>
+
+							<Grid container spacing={4}>
+								<Grid item xs={12} md={6} lg={6} lx={6}>
+									<TextField
+										className="mb-16 w-full"
+										type="text"
+										name="caseDescription"
+										value={form.caseDescription}
+										onChange={ev => {
+											setDescription(ev.target.value);
+											handleFormValueChange('caseDescription', ev.target.value);
+										}}
+										label="Case Description"
+										disabled={!edit}
+										InputProps={{
+											endAdornment: (
+												<InputAdornment position="end">
+													<Icon className="text-20" color="action">
+														info
+													</Icon>
+												</InputAdornment>
+											)
+										}}
+										variant="outlined"
+										margin="normal"
+										required
+									/>
 								</Grid>
-								<Grid item  xs={12} md={4} lg={4} lx={4}>
-									<ActionButton variant="contained" className="w-full" color="primary" onClick={handleClickOpen} >{(selected.status) ? (selected.status.toLowerCase() === 'open') ? 'Take Disciplinary Action' : 'View Disciplinary Action' : 'Take Disciplinary Action'} </ActionButton>
-								</Grid>
-								<Grid item xs={12} md={3} lg={3} lx={3} hidden={(selected.status) ? selected.status.toLowerCase() !== 'open' : false}>
-									<CloseButton variant="contained" className="w-full" color="primary" onClick={ev => {handleCloseCase(selected.id)}}>
-										Close Case
-									</CloseButton>
-								</Grid>
-								
-								<Grid item xs={12} md={2} lg={2} lx={2}>
-									<Button variant="contained" className="w-full" color="primary" type="button" onClick={handleShowEdit} disabled={(selected.status) ? (selected.status.toLowerCase() !== 'open') : false}>Edit</Button>
+								<Grid item xs={12} md={6} lg={6} lx={6}>
+									<TextField
+										className="mb-16 w-full"
+										type="text"
+										name="modeOfLodging"
+										label="Mode Of Lodging"
+										value={form.modeOfLodging}
+										onChange={ev => {
+											setDescription(ev.target.value);
+											handleFormValueChange('modeOfLodging', ev.target.value);
+										}}
+										disabled={!edit}
+										InputProps={{
+											endAdornment: (
+												<InputAdornment position="end">
+													<Icon className="text-20" color="action">
+														info
+													</Icon>
+												</InputAdornment>
+											)
+										}}
+										variant="outlined"
+										margin="normal"
+										required
+									/>
 								</Grid>
 							</Grid>
-						</DialogActions>
-						}
-						<br></br>
-					</form>
+
+							<DateTimePicker
+								label="Start"
+								inputVariant="outlined"
+								value={moment(form.date, 'DD MMMM YYYY')}
+								margin="normal"
+								disabled={!edit}
+								onChange={date => handleDateChange(date)}
+								className="mt-8 mb-16 w-full"
+								// minDate={moment(new Date(), 'DD MMMM YYYY')}
+								format={'MMMM Do, YYYY hh:mm a'}
+							/>
+							{edit ? (
+								<DialogActions>
+									<Grid container spacing={4} style={{ float: 'right' }}>
+										<Grid item xs={12} md={2} lg={2} lx={2}>
+											<Button
+												variant="contained"
+												className="w-full"
+												color="primary"
+												type="button"
+												onClick={ev => {
+													setEdit(false);
+													handleSubmit(selected.id);
+												}}
+											>
+												Save
+											</Button>
+										</Grid>
+										<Grid item xs={12} md={4} lg={4} lx={4}>
+											<ActionButton
+												variant="contained"
+												className="w-full"
+												color="primary"
+												onClick={ev => {
+													handleClickOpen(selected.id);
+												}}
+											>
+												{selected.status
+													? selected.status.toLowerCase() === 'open'
+														? 'Take Disciplinary Action'
+														: 'View Disciplinary Action'
+													: 'Take Disciplinary Action'}{' '}
+											</ActionButton>
+										</Grid>
+										<Grid
+											item
+											xs={12}
+											md={3}
+											lg={3}
+											lx={3}
+											hidden={selected.status ? selected.status.toLowerCase() !== 'open' : false}
+										>
+											<CloseButton
+												variant="contained"
+												className="w-full"
+												color="primary"
+												onClick={ev => {
+													handleCloseCase(selected.id);
+												}}
+											>
+												Close Case
+											</CloseButton>
+										</Grid>
+										<Grid item xs={12} md={2} lg={2} lx={2}>
+											<Button
+												variant="contained"
+												className="w-full"
+												color="secondary"
+												type="button"
+												onClick={props.handleClose}
+											>
+												Cancel
+											</Button>
+										</Grid>
+									</Grid>
+								</DialogActions>
+							) : (
+								<DialogActions>
+									<Grid container spacing={4} style={{ float: 'right' }}>
+										<Grid item xs={12} md={2} lg={2} lx={2}>
+											<Button
+												variant="contained"
+												className="w-full"
+												color="primary"
+												type="button"
+												onClick={handleShowEdit}
+												disabled={selected.status ? selected.status.toLowerCase() !== 'open' : false}
+											>
+												Edit
+											</Button>
+										</Grid>
+										<Grid item xs={12} md={4} lg={4} lx={4}>
+											<ActionButton variant="contained" className="w-full" color="primary" onClick={handleClickOpen}>
+												{selected.status
+													? (selected.status.toLowerCase() === 'open')
+														? 'Take Disciplinary Action'
+														: 'View Disciplinary Action'
+													: 'Take Disciplinary Action'}{' '}
+											</ActionButton>
+										</Grid>
+										<Grid
+											item
+											xs={12}
+											md={3}
+											lg={3}
+											lx={3}
+											hidden={selected.status ? selected.status.toLowerCase() !== 'open' : false}
+										>
+											<CloseButton
+												variant="contained"
+												className="w-full"
+												color="primary"
+												onClick={ev => {
+													handleCloseCase(selected.id);
+												}}
+											>
+												Close Case
+											</CloseButton>
+										</Grid>
+										<Grid item xs={12} md={2} lg={2} lx={2}>
+											<Button
+												variant="contained"
+												className="w-full"
+												color="secondary"
+												type="button"
+												onClick={props.handleClose}
+											>
+												Cancel
+											</Button>
+										</Grid>
+									</Grid>
+								</DialogActions>
+							)}
+							<br></br>
+						</form>
 					</div>
 				</DialogContent>
 			</Dialog>
 
 			{/* Modal to handle list of Action from the Database */}
-			<TakeAction handleClose={handleClose} open={open} selectedItem={props.selectedItem} actions={actions}/>
+			<TakeAction handleClose={handleClose} open={open} selectedItem={props.selectedItem} actions={actions} />
 		</div>
 	);
 }

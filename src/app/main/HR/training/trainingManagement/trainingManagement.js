@@ -255,10 +255,10 @@ function TrainingManagement(props) {
 								}}
 							>
 								<div className="widget flex w-full sm:w-1/2 md:w-1/5 p-12">
-									<CardWidget count={totalTrainings.length} title={'Total'} color="yellow" />
+									<CardWidget count={totalTrainings.length} title={'Total'} color="black" />
 								</div>
 								<div className="widget flex w-full sm:w-1/2 md:w-1/5 p-12">
-									<CardWidget count={reviewedTrainings.length} title={'Reviewed'} color="sky-blue" />
+									<CardWidget count={reviewedTrainings.length} title={'Reviewed'} color="yellow" />
 								</div>
 								<div className="widget flex w-full sm:w-1/2 md:w-1/5 p-12">
 									<CardWidget count={pendingTrainings.length} title={'Pending'} color="blue" />
