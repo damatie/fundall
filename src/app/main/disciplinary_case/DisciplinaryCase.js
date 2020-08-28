@@ -23,17 +23,6 @@ function DisciplinaryCase() {
     useEffect(() => {
         dispatch(Actions.getDisciplinaryCase());
     }, [dispatch]);
-    
-	function handleDelete(event, id){
-        // dispatch(Actions.DisciplinaryCase(id))
-    }
-
-    function handleEdit(event, model){
-        console.log(model)
-        // dispatch(Actions.updateDisciplinaryCase(model, model.id));
-    }
-
-    console.log(rows);
 
     const columns = [
         {
@@ -113,7 +102,7 @@ function DisciplinaryCase() {
 					</div>
 			</ThemeProvider>
 			}
-			content={<DisciplinaryTable title={"Disciplinary Cases"} type="default" handleDelete={handleDelete} handleEdit={handleEdit} columns={columns} rows={rows} showEdit={true} showDesc={true}/>}
+			content={<DisciplinaryTable title={"Disciplinary Cases"} type="default" columns={columns} rows={rows}/>}
 			ref={pageLayout}
 			innerScroll
 		/>
