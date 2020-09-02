@@ -3,7 +3,9 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
 import Icon from '@material-ui/core/Icon';
 import InputAdornment from '@material-ui/core/InputAdornment';
-// import * as Actions from '../../store/actions';
+import * as Actions from '../store/actions';
+import withReducer from 'app/store/withReducer';
+import reducer from '../store/reducers';
 import Formsy from 'formsy-react';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -16,13 +18,33 @@ import GridSystem from 'app/shared/gridSystem';
 
 function NewOpening(props) {
 	const dispatch = useDispatch();
-	// const employee = useSelector(({ employees }) => employees.employee);
-	// const entity = useSelector(({ entity }) => entity.businessUnits);
+	const entity = useSelector(({ createOpening }) => createOpening.entity.data);
+	const loading = useSelector(({ Recruitment }) => Recruitment.recruitment.loading);
 	// const department = useSelector(({ department }) => department.departments);
 	// const roles = useSelector(({ roles }) => roles.roles);
 
+	const [department, setDepartment] = useState([]);
+	const [country, setCountry] = React.useState([]);
 	const [isFormValid, setIsFormValid] = useState(true);
 	const formRef = useRef(null);
+
+	useEffect(() => {
+		if (country.length > 0) return;
+		fetch('https://restcountries.eu/rest/v2/all')
+			.then(res => res.json())
+			.then(res => {
+				setCountry(res.map(country => country.name));
+			})
+			.catch(err => console.log(err))
+	}, [])
+	
+	const getDepartment = (entityName) => {
+		entity.map(entity => {
+			if(entity.id === entityName) {
+				setDepartment(entity.department);
+			}
+		})
+	}
 
 	useEffect(() => {
 		// if (register.error && (register.error.username || register.error.password || register.error.email)) {
@@ -44,40 +66,41 @@ function NewOpening(props) {
 	}
 
 	function handleSubmit(model) {
-		// dispatch(Actions.saveEmployee(model));
+		dispatch(Actions.createOpening(model));
 	}
 
-	const getDepartments = id => {
-		// dispatch(departmentActions.getDepartments(id));
+	const checkName = (item) => {
+		if (item.entityName) return item.entityName;
+		if (item.departmentName) return item.departmentName;
+		return item;
 	}
 
-	// if(employee.success) {
-	// 	return (
-	// 		<Redirect to='/hr/employee_management' />
-	// 	);
-	// }
+	const checkValue = (item) => {
+		if (item.entityName) return item.id;	
+		if (item.departmentName) return item.id;
+		return item;
+	}
 
-	const [country, setCountry] = React.useState(['a', 'b', 'c']);
-	let state = ['a', 'b', 'c'];
+	let state = ['Abia', 'Akwa ibom', 'Adamawa', 'Bauchi', 'Bayelsa', 'Lagos', 'Ogun', 'Rivers'];
 
 	const formInputs = [
-		{name: 'entityId', label: 'Entity name', validations: '', icon: 'email', type: 'text'},
-		{name: 'departmentId', label: 'Department', validations: '', icon: 'email', type: 'text'},
-		{name: 'jobTitle', label: 'Job title', validations: '', icon: 'email', type: 'text'},
-		{name: 'requiredSkills', label: 'Required skills', validations: '', icon: 'email', type: 'text'},
-		{name: 'employeeStatus', label: 'Employee status', validations: '', icon: 'email', type: 'text'},
-		{name: 'urgency', label: 'Urgency', validations: '', icon: 'email', data: ['Immediately', 'Urgent', 'Not urgent']},
-		{name: 'dueDate', label: 'Due date', validations: '', icon: 'email', type: 'text'},
-		{name: 'state', label: 'State', validations: '', icon: 'email', data: state},
+		{name: 'entityId', label: 'Entity name *', data: entity},
+		{name: 'departmentId', label: 'Department *', data: department},
+		{name: 'jobTitle', label: 'Job title', validations: '', icon: 'account-hard-hat', type: 'text'},
+		{name: 'requiredSkills', label: 'Required skills', validations: '', type: 'text'},
+		{name: 'employeeStatus', label: 'Employee status *', data: ['Full time', 'Contract']},
+		{name: 'urgency', label: 'Urgency *', data: ['Immediately', 'Urgent', 'Not urgent']},
+		{name: 'dueDate', label: 'Due date', validations: '', type: 'date'},
 		{name: 'country', label: 'Country', validations: '', icon: 'email', data: country},
+		{name: 'state', label: 'State', validations: '', icon: 'email', data: state},
 	];
 
 	const recruitmentForm = formInputs.map((input, i) => {
-		if (input.type === 'text') {
+		if (input.type === 'text' || input.type === 'date') {
 			return (
 				<TextFieldFormsy
 					className="mb-16"
-					type="text"
+					type={input.type}
 					name={input.name}
 					label={input.label}
 					// validations="isEmail"
@@ -88,7 +111,7 @@ function NewOpening(props) {
 						endAdornment: (
 							<InputAdornment position="end">
 								<Icon className="text-20" color="action">
-									email
+									{input.icon}
 								</Icon>
 							</InputAdornment>
 						)
@@ -108,11 +131,11 @@ function NewOpening(props) {
 					required
 					requiredError='Must not be None'
 					onChange={e => {
-						getDepartments(e.target.value);
+						getDepartment(e.target.value);
 					}}
 				>
-					{input.data.map(item => (
-						<MenuItem value={item} key={item}>{item}</MenuItem>
+					{input.data.map((item, i) => (
+						<MenuItem value={checkValue(item)} key={i}>{checkName(item)}</MenuItem>
 					))}
 				</SelectFormsy>
 			)
@@ -130,11 +153,11 @@ function NewOpening(props) {
 			>
 				<GridSystem>
 					{ recruitmentForm }
-				</GridSystem>				
-				<ProgressBtn success={false} loading={false} content='Create Opening' disable={!isFormValid} />
+				</GridSystem>
+				<ProgressBtn success={false} loading={loading} content='Create Opening' disable={!isFormValid} />
 			</Formsy>
 		</div>
 	);
 }
 
-export default NewOpening;
+export default withReducer('NewOpening', reducer)(NewOpening);

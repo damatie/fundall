@@ -21,10 +21,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 // import * as Actions from '../store/actions';
 // import reducer from '../store/reducers';
-import NewOpeningTab from './tabs/newOpeningTab';
+import NewCandidateTab from '../tabs/newCandidateTab';
 import entityReducer from 'app/main/HR/business_unit/store/reducers';
 import departmentReducer from 'app/main/HR/business_unit/department/store/reducers';
 import rolesReducer from 'app/main/HR/roles/store/reducers';
+import Header from '../recruitmentHeader';
 
 const useStyles = makeStyles(theme => ({
 	productImageFeaturedStar: {
@@ -74,45 +75,12 @@ function CreateOpening(props) {
 				header: 'min-h-72 h-72 sm:h-136 sm:min-h-136'
 			}}
 			header={
-					<div className="flex flex-1 w-full items-center justify-between">
-						<div className="flex flex-col items-start max-w-full">
-							<FuseAnimate animation="transition.slideRightIn" delay={300}>
-								<Typography
-									className="normal-case flex items-center sm:mb-12"
-									component={Link}
-									role="button"
-									to="/recruitment/"
-									color="inherit"
-								>
-									<Icon className="text-20">
-										{theme.direction === 'ltr' ? 'arrow_back' : 'arrow_forward'}
-									</Icon>
-									<span className="mx-4">Recruitment</span>
-								</Typography>
-							</FuseAnimate>
-
-							<div className="flex items-center max-w-full">
-								
-							</div>
-						</div>
-            <div className="flex items-center max-w-full">
-								<div className="flex flex-col min-w-0 mx-8 sm:mc-16">
-									<FuseAnimate animation="transition.slideLeftIn" delay={300}>
-										<Typography className="text-16 sm:text-20 truncate">
-										  New Opening
-										</Typography>
-									</FuseAnimate>
-									<FuseAnimate animation="transition.slideLeftIn" delay={300}>
-										<Typography variant="caption">Employee Detail</Typography>
-									</FuseAnimate>
-								</div>
-							</div>
-					</div>
+				<Header heading='Add candidate' />
 			}
 			content={
-					<div className=" sm:p-24 ">
-						<NewOpeningTab />
-					</div>
+        <div className=" sm:p-24 ">
+          <NewCandidateTab />
+        </div>
 			}
 			innerScroll
 		/>
