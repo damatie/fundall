@@ -372,7 +372,7 @@ const TableWidget = (props) =>{
                             <TablePagination
                                 className="overflow-hidden"
                                 // component="div"
-                                count={data.length}
+                                // count={data.length}
                                 colSpan={props.columns.length}
                                 rowsPerPage={rowsPerPage}
                                 page={page}

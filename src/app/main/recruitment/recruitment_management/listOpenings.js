@@ -14,17 +14,21 @@ import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
+import Input from '@material-ui/core/Input';
+import Paper from '@material-ui/core/Paper';
 import withReducer from 'app/store/withReducer';
 import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
-// import * as Actions from '../store/actions';
-// import reducer from '../store/reducers';
+import { ThemeProvider } from '@material-ui/core/styles';
+import * as Actions from '../store/actions';
+import reducer from '../store/reducers';
 // import NewEmployeeTab from './tabs/newEmployeeTab';
 import entityReducer from 'app/main/HR/business_unit/store/reducers';
 import departmentReducer from 'app/main/HR/business_unit/department/store/reducers';
 import rolesReducer from 'app/main/HR/roles/store/reducers';
+import Table from '../../../shared/widgets/RecruitmentTable';
 
 const useStyles = makeStyles(theme => ({
 	productImageFeaturedStar: {
@@ -61,11 +65,64 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
+const columns = [
+	{
+			id: 'entityName',
+			align: 'center',
+			disablePadding: false,
+			label: 'Entity Name',
+			sort: true
+	},
+	{
+			id: 'jobTitle',
+			align: 'center',
+			disablePadding: false,
+			label: 'Job title',
+			sort: true
+	},
+	{
+			id: 'employeeStatus',
+			align: 'center',
+			disablePadding: false,
+			label: 'Employee status',
+			sort: true
+	},
+	{
+			id: 'department',
+			align: 'center',
+			disablePadding: false,
+			label: 'Department',
+			sort: true
+	},
+	{
+			id: 'urgency',
+			align: 'center',
+			disablePadding: false,
+			label: 'Urgency',
+			sort: true
+	},
+	{
+			id: 'status',
+			align: 'center',
+			disablePadding: false,
+			label: 'Status',
+			sort: true
+	},
+];
+	
 function Recruitment(props) {
 	const dispatch = useDispatch();
 	const theme = useTheme();
 
 	const classes = useStyles(props);
+	const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
+	const rows = useSelector(({ Recruitment }) => Recruitment.recruitment.data);
+	
+	useEffect(() => {
+		dispatch(Actions.getAllOpenPositions());
+	}, [])
+
+	console.log(rows);
 
 	return (
 		<FusePageCarded
@@ -76,25 +133,40 @@ function Recruitment(props) {
 			header={
 					<div className="flex flex-1 w-full items-center justify-between">
 						<div className="flex flex-col items-start max-w-full">
-							<FuseAnimate animation="transition.slideRightIn" delay={300}>
-								<Typography
-									className="normal-case flex items-center sm:mb-12"
-									component={Link}
-									role="button"
-									to="/recruitment"
-									color="inherit"
-								>
-									<Icon className="text-20">
-										{theme.direction === 'ltr' ? 'arrow_back' : 'arrow_forward'}
-									</Icon>
-									<span className="mx-4">Recruitment</span>
-								</Typography>
-							</FuseAnimate>
-
-							<div className="flex items-center max-w-full">
-								
+							<div className="flex items-center">
+								<FuseAnimate animation="transition.expandIn" delay={300}>
+									<Icon className="text-32">shopping_basket</Icon>
+								</FuseAnimate>
+								<FuseAnimate animation="transition.slideLeftIn" delay={300}>
+									<Typography className="hidden sm:flex mx-0 sm:mx-12" variant="h6">
+										List of Opening
+									</Typography>
+								</FuseAnimate>
 							</div>
 						</div>
+
+						<div className="flex flex-1 items-center justify-center px-12">
+							<ThemeProvider theme={mainTheme}>
+								<FuseAnimate animation="transition.slideDownIn" delay={300}>
+									<Paper className="flex items-center w-full max-w-512 px-8 py-4 rounded-8" elevation={1}>
+										<Icon color="action">search</Icon>
+										<Input
+											placeholder="Search"
+											className="flex flex-1 mx-8"
+											disableUnderline
+											fullWidth
+											value=''
+											inputProps={{
+												'aria-label': 'Search'
+											}}
+											// onChange={ev => dispatch(Actions.setEmployeesSearchText(ev))}
+										/>
+									</Paper>
+								</FuseAnimate>
+							</ThemeProvider>
+						</div>
+
+
             <div className="flex items-center max-w-full">
 								{/* <FuseAnimate animation="transition.expandIn" delay={300}>
 										<img
@@ -123,7 +195,11 @@ function Recruitment(props) {
 			}
 			content={
 					<div className=" sm:p-24 ">
-						<h1>Manage the employee recruitment process here</h1>
+						<Table
+							title='List of Openings'
+							columns={columns}
+							rows={rows}
+						/>
 					</div>
 			}
 			innerScroll
@@ -131,9 +207,4 @@ function Recruitment(props) {
 	);
 }
 
-// withReducer('roles', rolesReducer)(Employee);
-// withReducer('entity', entityReducer)(Employee);
-// withReducer('department', departmentReducer)(Employee);
-// export default withReducer('employees', reducer)(Employee);
-
-export default Recruitment;
+export default withReducer('Recruitment', reducer)(Recruitment);
