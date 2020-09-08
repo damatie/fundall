@@ -7,14 +7,18 @@ const recruitmentConfig = {
 		}
 	},
 	routes: [
-    {
-      path: '/recruitment/create_opening',
+		{
+			path: '/recruitment/create_opening',
       component: React.lazy(() => import('./recruitment_management/createOpening'))
     },
     {
-      path: '/recruitment/add_candidate',
+			path: '/recruitment/add_candidate/:positionId',
       component: React.lazy(() => import('./candidate_management/addCandidate'))
     },
+		{
+			path: '/recruitment/position_details/:positionId',
+			component: React.lazy(() => import('./recruitment_management/positionDetails'))
+		},
 		{
 			path: '/recruitment',
 			component: React.lazy(() => import('./recruitment_management/listOpenings'))
