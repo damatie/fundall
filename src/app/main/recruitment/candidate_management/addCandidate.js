@@ -62,11 +62,13 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-function CreateOpening(props) {
+function CreateOpening({ match }, props) {
 	const dispatch = useDispatch();
 	const theme = useTheme();
 
 	const classes = useStyles(props);
+
+	const positionId = match.params.positionId;
 
 	return (
 		<FusePageCarded
@@ -75,11 +77,11 @@ function CreateOpening(props) {
 				header: 'min-h-72 h-72 sm:h-136 sm:min-h-136'
 			}}
 			header={
-				<Header heading='Add candidate' />
+				<Header heading='Add candidate' positionId={positionId} />
 			}
 			content={
         <div className=" sm:p-24 ">
-          <NewCandidateTab />
+          <NewCandidateTab positionId={positionId} />
         </div>
 			}
 			innerScroll

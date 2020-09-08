@@ -6,7 +6,7 @@ export const LOADING_ENTITIES = 'LOADING ENTITIES';
 export const GET_ENTITIES_SUCCESS = 'GET ENTITIES SUCCESS';
 export const GET_ENTITIES_ERROR = 'GET ENTITIES ERROR';
 
-const basUrl = getBaseUrl;
+const baseUrl = getBaseUrl;
 const headers = fetchHeaders();
 const auth = useAuth;
 
@@ -15,9 +15,8 @@ export function getEntities() {
 		dispatch({
 			type: LOADING_ENTITIES
 		});
-		fetch(`${basUrl()}/entity/all`, { ...headers.getRegHeader() })
+		fetch(`${baseUrl()}/entity/all`, { ...headers.getRegHeader() })
 			.then(res => res.json()).then(async data => {
-				console.log(data);
 				if (data.success && data.data) {
 					dispatch({
 						type: GET_ENTITIES_SUCCESS,

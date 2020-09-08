@@ -2,7 +2,7 @@ import { TextFieldFormsy, SelectFormsy } from '@fuse/core/formsy';
 import Icon from '@material-ui/core/Icon';
 import Typography from '@material-ui/core/Typography';
 import InputAdornment from '@material-ui/core/InputAdornment';
-// import * as Actions from '../../store/actions';
+import * as Actions from '../store/actions';
 import Formsy from 'formsy-react';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -16,11 +16,8 @@ import DropZone from '../../../shared/sharedDropZone';
 
 function AddCandidate(props) {
 	const dispatch = useDispatch();
-	// const employee = useSelector(({ employees }) => employees.employee);
-	// const entity = useSelector(({ entity }) => entity.businessUnits);
-	// const department = useSelector(({ department }) => department.departments);
-	// const roles = useSelector(({ roles }) => roles.roles);
 
+	const [file, setFile] = React.useState();
 	const [isFormValid, setIsFormValid] = useState(true);
 	const formRef = useRef(null);
 
@@ -44,7 +41,14 @@ function AddCandidate(props) {
 	}
 
 	function handleSubmit(model) {
-		// dispatch(Actions.saveEmployee(model));
+		let formData = new FormData();
+		formData.append('candidateName', model.candidateName);
+		formData.append('candidateEmail', model.candidateEmail);
+		formData.append('candidatePhoneNumber', model.candidatePhoneNumber);
+		formData.append('openPositionId', model.openPositionId);
+		formData.append('employeeStatus', model.employeeStatus);
+		formData.append('resume', file);
+		dispatch(Actions.addCandidate(formData, props.positionId));
 	}
 
 	const getDepartments = id => {
@@ -56,10 +60,6 @@ function AddCandidate(props) {
 	// 		<Redirect to='/hr/employee_management' />
 	// 	);
 	// }
-
-  const [value, setValue] = React.useState();
-	const [country, setCountry] = React.useState(['a', 'b', 'c']);
-	let state = ['a', 'b', 'c'];
 
 	const formInputs = [
 		{name: 'candidateName', label: 'Candidate name', validations: '', icon: 'person', type: 'text'},
@@ -108,7 +108,7 @@ function AddCandidate(props) {
 					{ recruitmentForm }
 				</GridSystem>
         <Typography variant='body1' className="mt-16 mb-8">Upload resume</Typography>
-        <DropZone setValue={value => setValue(value)} />
+        <DropZone setValue={value => setFile(value)} />
 				<ProgressBtn success={false} loading={false} content='Create Opening' disable={!isFormValid} />
 			</Formsy>
 		</div>
