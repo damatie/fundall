@@ -44,17 +44,10 @@ const rows = [
 		sort: true
 	},
 	{
-		id: 'mobile',
+		id: 'role',
 		align: 'right',
 		disablePadding: false,
-		label: 'Mobile number',
-		sort: true
-	},
-	{
-		id: 'onboarding_status',
-		align: 'right',
-		disablePadding: false,
-		label: 'Onboarding status',
+		label: 'Role',
 		sort: true
 	}
 ];
@@ -202,27 +195,23 @@ function EmployeesTable(props) {
 										</TableCell>
 
 										<TableCell component="th" scope="row">
-                      {`${n.firstName} ${n.lastName}`}
+                      {n.firstName ? `${n.firstName} ${n.lastName}` : ''}
 										</TableCell>
 
 										<TableCell component="th" scope="row">
 											{n.email}
 										</TableCell>
 
-										<TableCell className="truncate" component="th" scope="row">
-											{/* {!n.department.departmentName ? 'IT' : n.department.departmentName} */}
+										<TableCell className="truncate" component="th" scope="row" align="left">
+											{n.department.departmentName}
 										</TableCell>
 
 										<TableCell component="th" scope="row" align="right">
-											{/* {!n.entity.entityName ? 'C-bit' : n.entity.entityName} */}
+											{!n.entity ? 'Entity' : n.entity.entityName}
 										</TableCell>
 
 										<TableCell component="th" scope="row" align="right">
-											{n.mobile}
-										</TableCell>
-
-										<TableCell component="th" scope="row" align="right">
-											{/* {!n.role.name ? 'employee' : n.role.name} */}
+											{n.role.name}
 										</TableCell>
 									</TableRow>
 								);

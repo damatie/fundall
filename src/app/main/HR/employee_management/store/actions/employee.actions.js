@@ -17,7 +17,7 @@ export const LOADING_EMPLOYEE_DETAILS = 'LOADING EMPLOYEE DETAILS';
 
 const header = fetchHeaders();
 
-export function saveEmployee(data) {
+export function saveEmployee(data, history) {
   const body = {
     email: data.email,
     departmentId: data.departmentId,
@@ -42,10 +42,12 @@ export function saveEmployee(data) {
             icon: 'success',
             timer: 3000,
           })
-          return dispatch({
+
+          dispatch({
             type: SAVE_EMPLOYEE,
             // payload: response.data
           });
+          history.push('/hr/employee_management');
         } else {
           swal.fire({
             title: 'New employee',

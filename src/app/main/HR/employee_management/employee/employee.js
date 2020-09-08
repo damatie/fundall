@@ -96,13 +96,13 @@ function Employee(props) {
 							</div>
 						</div>
             <div className="flex items-center max-w-full">
-								<FuseAnimate animation="transition.expandIn" delay={300}>
+								{/* <FuseAnimate animation="transition.expandIn" delay={300}>
 										<img
 											className="w-32 sm:w-48 rounded"
 											src="public/assets/images/e-commerce/product-image-placeholder.png"
 											alt={'form.name'}
 										/>
-								</FuseAnimate>
+								</FuseAnimate> */}
 								<div className="flex flex-col min-w-0 mx-8 sm:mc-16">
 									<FuseAnimate animation="transition.slideLeftIn" delay={300}>
 										<Typography className="text-16 sm:text-20 truncate">

@@ -15,6 +15,9 @@ import AboutTab from 'app/main/employee/profile/tabs/AboutTab';
 import ProfilePicture from 'app/main/employee/profile/profilePicture';
 import EmployeementInfoTab from 'app/main/employee/profile/tabs/employeementInfoTab';
 import PromotionHistory from '../employee/tabs/promotionHistory';
+import Icon from '@material-ui/core/Icon';
+import { NavLink } from 'react-router-dom';
+import IconButton from '@material-ui/core/IconButton';
 
 
 const useStyles = makeStyles(theme => ({
@@ -25,6 +28,12 @@ const useStyles = makeStyles(theme => ({
 			height: 240,
 			minHeight: 240
 		}
+	},
+	back_btn: {
+		position: 'absolute',
+		top: 20,
+		left: 20,
+		textDecoration: 'none',
 	}
 }));
 
@@ -54,6 +63,13 @@ function EmployeeProfile() {
 			}}
 			header={
 				<div className="p-24 flex flex-1 flex-col items-center justify-center md:flex-column md:items-center">
+					
+					<NavLink to={'/hr/employee_management'} className={classes.back_btn}>
+						<IconButton>
+							<Icon fontSize='medium'>arrow_back</Icon>
+						</IconButton>
+					</NavLink>
+					
 					<div className="flex flex-1 flex-col items-center justify-center md:flex-row md:items-center md:justify-start">
 						<FuseAnimate animation="transition.expandIn" delay={300}>
 							<ProfilePicture />
