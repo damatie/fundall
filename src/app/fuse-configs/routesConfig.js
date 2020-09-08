@@ -35,6 +35,7 @@ import HrTrainingConfig from 'app/main/HR/training/hrTrainingConfig';
 import PersonalTrainingConfig from 'app/main/personalTraining/personalTrainingConfig';
 import CreatePersonalTrainingConfig from 'app/main/personalTraining/createPersonalTraining/CreatePersonalTrainingConfig';
 import MainBlogConfig from 'app/main/blog/blogConfig';
+import RecruitmentConfig from 'app/main/recruitment/recruitmentConfig';
 import ContactsAppConfig from 'app/main/contact_list/ContactsAppConfig';
 import DisciplinaryCaseConfig from 'app/main/disciplinary_case/DisciplinaryCaseConfig';
 import CheckListConfig from 'app/main/check_list/CheckListConfig';
@@ -73,6 +74,7 @@ const routeConfigs = [
 	CreatePersonalTrainingConfig,
 	PersonalTrainingConfig,
 	MainBlogConfig,
+	RecruitmentConfig,
 	ContactsAppConfig,
 	DisciplinaryCaseConfig,
 	CheckListConfig
