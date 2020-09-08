@@ -24,11 +24,8 @@ import { Link, useParams } from 'react-router-dom';
 import { ThemeProvider } from '@material-ui/core/styles';
 import * as Actions from '../store/actions';
 import reducer from '../store/reducers';
-// import NewEmployeeTab from './tabs/newEmployeeTab';
-import entityReducer from 'app/main/HR/business_unit/store/reducers';
-import departmentReducer from 'app/main/HR/business_unit/department/store/reducers';
-import rolesReducer from 'app/main/HR/roles/store/reducers';
 import Table from '../RecruitmentTable';
+import { useAuth } from 'app/hooks/useAuth';
 
 const useStyles = makeStyles(theme => ({
 	productImageFeaturedStar: {
@@ -119,11 +116,12 @@ const columns = [
 	
 function Recruitment(props) {
 	const dispatch = useDispatch();
-	const theme = useTheme();
 
 	const classes = useStyles(props);
 	const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
 	const rows = useSelector(({ Recruitment }) => Recruitment.recruitment.data);
+
+	const userData = useAuth().getUserData;
 
 	const [search, setSearch] = useState('');
 	const [approvedRows, setApprovedRows] = useState([]);
@@ -143,6 +141,8 @@ function Recruitment(props) {
 	function handleChangeTab(event, value) {
 		setTabValue(value);
 	}
+
+	const isLineManager = () => userData.role.toUpperCase() === 'LINE MANAGERS';
 
 	return (
 		<FusePageSimple
@@ -186,25 +186,27 @@ function Recruitment(props) {
 						</ThemeProvider>
 					</div>
 
-					<div className="flex items-center max-w-full">
-						<div className="flex flex-col min-w-0 mx-8 sm:mc-16">
-							<FuseAnimate animation="transition.slideLeftIn" delay={300}>
-								<Typography
-									className="text-16 sm:text-20 truncate"
-									component={Link}
-									to='/recruitment/create_opening'
-									role='button'
-									variant="contained"
-									color="secondary"
-								>
-									Create New Opening
-								</Typography>
-							</FuseAnimate>
-							<FuseAnimate animation="transition.slideLeftIn" delay={300}>
-								<Typography variant="caption">Create a new opening</Typography>
-							</FuseAnimate>
+					{isLineManager() &&
+						<div className="flex items-center max-w-full">
+							<div className="flex flex-col min-w-0 mx-8 sm:mc-16">
+								<FuseAnimate animation="transition.slideLeftIn" delay={300}>
+									<Typography
+										className="text-16 sm:text-20 truncate"
+										component={Link}
+										to='/recruitment/create_opening'
+										role='button'
+										variant="contained"
+										color="secondary"
+									>
+										Create New Opening
+									</Typography>
+								</FuseAnimate>
+								<FuseAnimate animation="transition.slideLeftIn" delay={300}>
+									<Typography variant="caption">Create a new opening</Typography>
+								</FuseAnimate>
+							</div>
 						</div>
-					</div>
+					}
 				</div>
 			}
 			contentToolbar={

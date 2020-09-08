@@ -29,6 +29,7 @@ import RecruitmentDialog from './RecruitmentDialog';
 import UpdatePositionTab from './tabs/updatePositionTab';
 import AssignRecruiterTab from './tabs/assignRecruiterTab';
 import Moment from 'react-moment';
+import { useAuth } from 'app/hooks/useAuth';
 
 const useStyles = makeStyles((theme) => ({
 	table: {
@@ -41,6 +42,8 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.paper,
   },
 }));
+
+const userData = useAuth().getUserData;
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="right" ref={ref} {...props} />;
@@ -139,17 +142,20 @@ const TableWidget = (props) =>{
     dispatch(Actions.deleteOpening(hrId));
   }
 
+  const isHr = () => userData.role.toUpperCase() === 'HR';
+
   const displayButton = () => {
     return (
       <Grid container className="items-center w-full">
         <Typography variant='body2' component='span'>Not assigned</Typography>
-        <Typography
+        { isHr() && <Typography
           onClick={() => setOpenHr(true)}
           className={'bg-green text-white inline text-11 font-500 px-8 py-4 ml-32 rounded-4'}
           style={{cursor: 'pointer'}}
         >
           Assign a recruiter
         </Typography>
+        }
       </Grid>
     )
   }
@@ -257,6 +263,7 @@ const TableWidget = (props) =>{
 					<TableHead>
             <TableRow className="h-64">
                 {props.columns.map(column => {
+                  if (!isHr() && column.label.toLowerCase() === 'actions') return;
                   return (
                     <TableCell
                       key={column.id}
@@ -321,11 +328,11 @@ const TableWidget = (props) =>{
                     <TableCell className="text-center" style={{padding: '0 16px'}}>
                         {CheckStatus(n.status)}
                     </TableCell>
-                    <TableCell className="text-center" style={{padding: '0 16px'}}>
+                    { isHr() && <TableCell className="text-center" style={{padding: '0 16px'}}>
                       <IconButton aria-label="delete" onClick={(event) => handleDeleteOpening(event, n.id)}>
                         <DeleteIcon style={{color: 'red'}} />
                       </IconButton>
-                    </TableCell>
+                    </TableCell>}
 									</TableRow>
 								);
 							})}

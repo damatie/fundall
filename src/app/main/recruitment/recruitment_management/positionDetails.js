@@ -26,6 +26,7 @@ import * as Actions from '../store/actions';
 import reducer from '../store/reducers';
 import PositionDetailsTab from '../tabs/positionDetails';
 import ApplicantsTab from '../tabs/applicantsTab';
+import { useAuth } from 'app/hooks/useAuth';
 
 const useStyles = makeStyles(theme => ({
 	productImageFeaturedStar: {
@@ -61,6 +62,8 @@ const useStyles = makeStyles(theme => ({
 		}
 	}
 }));
+
+const userData = useAuth().getUserData;
 
 const columns = [
 	{
@@ -116,7 +119,6 @@ function PositionDetails({ match }, props) {
 	const position = useSelector(({ PositionDetails }) => PositionDetails.recruitment.onePosition);
 	const rows = useSelector(({ PositionDetails }) => PositionDetails.candidate.data);
 
-	const [search, setSearch] = useState('');
   const [tabValue, setTabValue] = useState(0);
   
   const positionId = match.params.positionId;
@@ -130,6 +132,8 @@ function PositionDetails({ match }, props) {
 		setTabValue(value);
 	}
 
+	const isHr = () => userData.role.toUpperCase() === 'HR';
+
 	return (
 		<FusePageSimple
 			classes={{
@@ -141,7 +145,12 @@ function PositionDetails({ match }, props) {
 					<div className="flex flex-col items-start max-w-full">
 						<div className="flex items-center">
 							<FuseAnimate animation="transition.expandIn" delay={300}>
-								<Icon className="text-32">shopping_basket</Icon>
+								<Icon
+									className="text-24 text-black bg-white rounded-20"
+									component={Link}
+									to="/recruitment"
+            			role="button"
+								>arrow_back</Icon>
 							</FuseAnimate>
 							<FuseAnimate animation="transition.slideLeftIn" delay={300}>
 								<Typography className="hidden sm:flex mx-0 sm:mx-12" variant="h6">
@@ -151,29 +160,8 @@ function PositionDetails({ match }, props) {
 						</div>
 					</div>
 
-					<div className="flex flex-1 items-center justify-center px-12">
-						<ThemeProvider theme={mainTheme}>
-							<FuseAnimate animation="transition.slideDownIn" delay={300}>
-								<Paper className="flex items-center w-full max-w-512 px-8 py-4 rounded-8" elevation={1}>
-									<Icon color="action">search</Icon>
-									<Input
-										placeholder="Search"
-										className="flex flex-1 mx-8"
-										disableUnderline
-										fullWidth
-										value={search}
-										inputProps={{
-											'aria-label': 'Search'
-										}}
-										onChange={ev => setSearch(ev.target.value)}
-									/>
-								</Paper>
-							</FuseAnimate>
-						</ThemeProvider>
-					</div>
-
 					<div className="flex items-center max-w-full">
-						<div className="flex flex-col min-w-0 mx-8 sm:mc-16">
+						{ isHr() && <div className="flex flex-col min-w-0 mx-8 sm:mc-16">
 							<FuseAnimate animation="transition.slideLeftIn" delay={300}>
 								<Typography
 									className="text-16 sm:text-20 truncate"
@@ -189,7 +177,7 @@ function PositionDetails({ match }, props) {
 							<FuseAnimate animation="transition.slideLeftIn" delay={300}>
 								<Typography variant="caption">Create a new applicant</Typography>
 							</FuseAnimate>
-						</div>
+						</div>}
 					</div>
 				</div>
 			}
