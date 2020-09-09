@@ -24,7 +24,8 @@ import { Link, useParams } from 'react-router-dom';
 import { ThemeProvider } from '@material-ui/core/styles';
 import * as Actions from '../store/actions';
 import reducer from '../store/reducers';
-import Table from '../RecruitmentTable';
+import PositionDetailsTab from '../tabs/positionDetails';
+import ApplicantsTab from '../tabs/applicantsTab';
 import { useAuth } from 'app/hooks/useAuth';
 
 const useStyles = makeStyles(theme => ({
@@ -62,33 +63,28 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
+const userData = useAuth().getUserData;
+
 const columns = [
 	{
-			id: 'entityName',
+			id: 'name',
 			align: 'center',
 			disablePadding: false,
-			label: 'Entity Name',
+			label: 'Name',
 			sort: true
 	},
 	{
-			id: 'jobTitle',
+			id: 'email',
 			align: 'center',
 			disablePadding: false,
-			label: 'Job title',
+			label: 'Email',
 			sort: true
 	},
 	{
-			id: 'employeeStatus',
+			id: 'phone',
 			align: 'center',
 			disablePadding: false,
-			label: 'Employee status',
-			sort: true
-	},
-	{
-			id: 'urgency',
-			align: 'center',
-			disablePadding: false,
-			label: 'Urgency',
+			label: 'Phone number',
 			sort: true
 	},
 	{
@@ -114,35 +110,29 @@ const columns = [
 	},
 ];
 	
-function Recruitment(props) {
+function PositionDetails({ match }, props) {
 	const dispatch = useDispatch();
+	const theme = useTheme();
 
 	const classes = useStyles(props);
 	const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
-	const rows = useSelector(({ Recruitment }) => Recruitment.recruitment.data);
+	const position = useSelector(({ PositionDetails }) => PositionDetails.recruitment.onePosition);
+	const rows = useSelector(({ PositionDetails }) => PositionDetails.candidate.data);
 
-	const userData = useAuth().getUserData;
-
-	const [search, setSearch] = useState('');
-	const [approvedRows, setApprovedRows] = useState([]);
-	const [pendingRows, setPendingRows] = useState([]);
-	const [tabValue, setTabValue] = useState(0);
+  const [tabValue, setTabValue] = useState(0);
+  
+  const positionId = match.params.positionId;
 	
 	useEffect(() => {
-		dispatch(Actions.getAllOpenPositions());
-		dispatch(Actions.getEntities());
+		dispatch(Actions.getAllCandidates(positionId));
+		dispatch(Actions.getOneOpenPosition(positionId));
 	}, [])
-
-	useEffect(() => {
-		setApprovedRows(rows.filter(row => row.recruiter !== null));
-		setPendingRows(rows.filter(row => row.recruiter === null));
-	}, [rows]);
 
 	function handleChangeTab(event, value) {
 		setTabValue(value);
 	}
 
-	const isLineManager = () => userData.role.toUpperCase() === 'LINE MANAGERS';
+	const isHr = () => userData.role.toUpperCase() === 'HR';
 
 	return (
 		<FusePageSimple
@@ -155,58 +145,40 @@ function Recruitment(props) {
 					<div className="flex flex-col items-start max-w-full">
 						<div className="flex items-center">
 							<FuseAnimate animation="transition.expandIn" delay={300}>
-								<Icon className="text-32">shopping_basket</Icon>
+								<Icon
+									className="text-24 text-black bg-white rounded-20"
+									component={Link}
+									to="/recruitment"
+            			role="button"
+								>arrow_back</Icon>
 							</FuseAnimate>
 							<FuseAnimate animation="transition.slideLeftIn" delay={300}>
 								<Typography className="hidden sm:flex mx-0 sm:mx-12" variant="h6">
-									List of Opening
+									Position details
 								</Typography>
 							</FuseAnimate>
 						</div>
 					</div>
 
-					<div className="flex flex-1 items-center justify-center px-12">
-						<ThemeProvider theme={mainTheme}>
-							<FuseAnimate animation="transition.slideDownIn" delay={300}>
-								<Paper className="flex items-center w-full max-w-512 px-8 py-4 rounded-8" elevation={1}>
-									<Icon color="action">search</Icon>
-									<Input
-										placeholder="Search"
-										className="flex flex-1 mx-8"
-										disableUnderline
-										fullWidth
-										value={search}
-										inputProps={{
-											'aria-label': 'Search'
-										}}
-										onChange={ev => setSearch(ev.target.value)}
-									/>
-								</Paper>
+					<div className="flex items-center max-w-full">
+						{ isHr() && <div className="flex flex-col min-w-0 mx-8 sm:mc-16">
+							<FuseAnimate animation="transition.slideLeftIn" delay={300}>
+								<Button
+									className="mb-16"
+									component={Link}
+									to={`/recruitment/add_candidate/${positionId}`}
+									role='button'
+									variant="contained"
+									color="secondary"
+								>
+									Add New Candidate
+								</Button>
 							</FuseAnimate>
-						</ThemeProvider>
+							<FuseAnimate animation="transition.slideLeftIn" delay={300}>
+								<Typography variant="caption">Create a new applicant</Typography>
+							</FuseAnimate>
+						</div>}
 					</div>
-
-					{isLineManager() &&
-						<div className="flex items-center max-w-full">
-							<div className="flex flex-col min-w-0 mx-8 sm:mc-16">
-								<FuseAnimate animation="transition.slideLeftIn" delay={300}>
-									<Typography
-										className="text-16 sm:text-20 truncate"
-										component={Link}
-										to='/recruitment/create_opening'
-										role='button'
-										variant="contained"
-										color="secondary"
-									>
-										Create New Opening
-									</Typography>
-								</FuseAnimate>
-								<FuseAnimate animation="transition.slideLeftIn" delay={300}>
-									<Typography variant="caption">Create a new opening</Typography>
-								</FuseAnimate>
-							</div>
-						</div>
-					}
 				</div>
 			}
 			contentToolbar={
@@ -215,37 +187,22 @@ function Recruitment(props) {
 					onChange={handleChangeTab}
 					indicatorColor="primary"
 					textColor="primary"
-					variant="scrollable"
+a					varint="scrollable"
 					scrollButtons="off"
 					className="w-full border-b-1 px-24"
 				>
-					<Tab className="text-14 font-600 normal-case" label="All Openings" />
-					<Tab className="text-14 font-600 normal-case" label="Approved Openings" />
-					<Tab className="text-14 font-600 normal-case" label="Pending Openings" />
+					<Tab className="text-14 font-600 normal-case" label="Details" />
+					<Tab className="text-14 font-600 normal-case" label="List of applicants" />
+					<Tab className="text-14 font-600 normal-case" label="Accepted applicants" />
 				</Tabs>
 			}
 			content={
 				<div className=" sm:px-24 py-16 ">
 					{ tabValue === 0 && (
-						<Table
-							columns={columns}
-							rows={rows}
-							search={search}
-						/>
+						<PositionDetailsTab position={position} />
 					)}
 					{ tabValue === 1 && (
-						<Table
-							columns={columns}
-							rows={approvedRows}
-							search={search}
-						/>
-					)}
-					{ tabValue === 2 && (
-						<Table
-							columns={columns}
-							rows={pendingRows}
-							search={search}
-						/>
+						<ApplicantsTab position={position} columns={columns} rows={rows} />
 					)}
 				</div>
 			}
@@ -254,4 +211,4 @@ function Recruitment(props) {
 	);
 }
 
-export default withReducer('Recruitment', reducer)(Recruitment);
+export default withReducer('PositionDetails', reducer)(PositionDetails);

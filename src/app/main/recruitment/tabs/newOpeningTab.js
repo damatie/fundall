@@ -19,7 +19,7 @@ import GridSystem from 'app/shared/gridSystem';
 function NewOpening(props) {
 	const dispatch = useDispatch();
 	const entity = useSelector(({ createOpening }) => createOpening.entity.data);
-	const loading = useSelector(({ Recruitment }) => Recruitment.recruitment.loading);
+	const loading = useSelector(({ createOpening }) => createOpening.recruitment.loading);
 	// const department = useSelector(({ department }) => department.departments);
 	// const roles = useSelector(({ roles }) => roles.roles);
 

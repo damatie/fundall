@@ -84,9 +84,9 @@ function Details(props) {
 						</AppBar>
 
 						<CardContent>
-							<div className="mb-24">
+							<div className="mb-16">
 								<Typography className="font-bold mb-4 text-15">Recruiter</Typography>
-                <Typography>{recruiter ? recruiter : 'No recruiter assigned'}</Typography>
+                <Typography>{recruiter ? `${recruiter.lastName} ${recruiter.firstName}` : 'No recruiter assigned'}</Typography>
 							</div>
 						</CardContent>
 					</Card>
