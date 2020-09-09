@@ -113,8 +113,20 @@ const TableWidget = (props) =>{
           break;
           
         case "open":
+          const hrStatus = 'pending';
           return (
             <Typography className={'bg-blue text-white inline text-11 font-500 px-8 py-4 rounded-4'}>
+              {isHr() ? hrStatus: status}
+            </Typography>
+          )
+          break;
+
+        case "closed":
+          return (
+            <Typography
+              className={'text-white inline text-11 font-500 px-8 py-4 rounded-4'}
+              style={{backgroundColor: '#22292f'}}
+            >
               {status}
             </Typography>
           )
@@ -199,7 +211,9 @@ const TableWidget = (props) =>{
               </tr>
               <tr className="assignedRecruiter">
                 <th>Recruiter</th>
-                <td>{selected.recruiter ? selected.recruiter : displayButton() }
+                <td>{selected.recruiter
+                  ? `${selected.recruiter.lastName} ${selected.recruiter.firstName}`
+                  : displayButton() }
                 </td>
               </tr>
               <tr className="employeeStatus">
@@ -224,18 +238,16 @@ const TableWidget = (props) =>{
               </tr>
             </tbody>
           </table>
-          {!selected.recruiter && 
-            <Grid container className="items-center w-full pt-20" justify="center" alignItems="center">
-              <Typography
-                component={Link}
-                to={`/recruitment/position_details/${selected.id}`}
-                className={'inline text-14 font-500 px-8 py-4 rounded-4'}
-                style={{cursor: 'pointer', background: '#192d3e', color: '#fff'}}
-              >
-                View full detail
-              </Typography>
-            </Grid>
-          }
+          <Grid container className="items-center w-full pt-20" justify="center" alignItems="center">
+            <Typography
+              component={Link}
+              to={`/recruitment/position_details/${selected.id}`}
+              className={'inline text-13 font-500 px-8 py-4 rounded-4'}
+              style={{cursor: 'pointer', background: '#192d3e', color: '#fff'}}
+            >
+              View full detail
+            </Typography>
+          </Grid>
         </RecruitmentDialog>
         {/* Assign Reecruiter Dialog */}
         <RecruitmentDialog

@@ -432,6 +432,32 @@ const navigationConfig = [
 		]
 	},
 
+	// Recruitment navigations
+	{
+		id: 'recruitment',
+		title: 'Recruitment',
+		translate: 'recruitment',
+		type: 'group',
+		children: [
+			{
+				id: 'listOfOpenings',
+				title: 'List of openings',
+				type: 'item',
+				url: '/recruitment',
+				icon: 'school',
+				auth: authRoles.manager,
+			},
+			{
+				id: 'newOpening',
+				title: 'Create new Opening',
+				type: 'item',
+				url: '/recruitment/create_opening',
+				icon: 'group',
+				auth: authRoles.manager,
+			},
+		]
+	},
+
 	// Disciplinary Case navigations
 	{
 		id: 'disciplinaryCase',

@@ -90,7 +90,7 @@ export function createOpening(model) {
 		dispatch({
 			type: LOADING_POSITIONS
 		});
-		fetch(`${basUrl()}/recruitment/new`, {...headers.fdHeader('post', model)})
+		fetch(`${basUrl()}/recruitment/new`, {...headers.reqHeader('POST', model)})
 			.then(res => res.json()).then(async data => {
 				console.log(data);
 				if (data.success) {
