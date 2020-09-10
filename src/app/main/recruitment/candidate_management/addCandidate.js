@@ -26,6 +26,7 @@ import entityReducer from 'app/main/HR/business_unit/store/reducers';
 import departmentReducer from 'app/main/HR/business_unit/department/store/reducers';
 import rolesReducer from 'app/main/HR/roles/store/reducers';
 import Header from '../recruitmentHeader';
+import reducer from '../store/reducers';
 
 const useStyles = makeStyles(theme => ({
 	productImageFeaturedStar: {
@@ -89,9 +90,4 @@ function CreateOpening({ match }, props) {
 	);
 }
 
-// withReducer('roles', rolesReducer)(Employee);
-// withReducer('entity', entityReducer)(Employee);
-// withReducer('department', departmentReducer)(Employee);
-// export default withReducer('employees', reducer)(Employee);
-
-export default CreateOpening;
+export default withReducer('PositionDetails', reducer)(CreateOpening);
