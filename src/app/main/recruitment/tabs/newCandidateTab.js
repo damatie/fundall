@@ -13,24 +13,17 @@ import * as rolesActions from 'app/main/HR/roles/store/actions';
 import ProgressBtn from 'app/shared/progressBtn';
 import GridSystem from 'app/shared/gridSystem';
 import DropZone from '../../../shared/sharedDropZone';
+import withReducer from 'app/store/withReducer';
+import * as reducers from '../store/reducers';
 
 function AddCandidate(props) {
 	const dispatch = useDispatch();
 
-	const [file, setFile] = React.useState();
+	const [file, setFile] = React.useState('');
 	const [isFormValid, setIsFormValid] = useState(true);
 	const formRef = useRef(null);
 
-	useEffect(() => {
-		// if (register.error && (register.error.username || register.error.password || register.error.email)) {
-		// 	formRef.current.updateInputsWithError({
-		// 		...register.error
-		// 	});
-		// 	disableButton();
-		// }
-		// dispatch(entityActions.getBusinessUnits());
-		// dispatch(rolesActions.getRoles());
-	}, []);
+	const candidate = useSelector(state => state.PositionDetails.candidate)
 
 	function disableButton() {
 		setIsFormValid(false);
@@ -41,31 +34,22 @@ function AddCandidate(props) {
 	}
 
 	function handleSubmit(model) {
-		let formData = new FormData();
-		formData.append('candidateName', model.candidateName);
-		formData.append('candidateEmail', model.candidateEmail);
-		formData.append('candidatePhoneNumber', model.candidatePhoneNumber);
-		formData.append('openPositionId', model.openPositionId);
-		formData.append('employeeStatus', model.employeeStatus);
-		formData.append('resume', file);
-		dispatch(Actions.addCandidate(formData, props.positionId));
+		dispatch(Actions.addCandidate({
+			...model,
+			resume: file[0],
+			openPositionId: props.positionId
+		}, props.positionId));
 	}
 
 	const getDepartments = id => {
 		// dispatch(departmentActions.getDepartments(id));
 	}
 
-	// if(employee.success) {
-	// 	return (
-	// 		<Redirect to='/hr/employee_management' />
-	// 	);
-	// }
-
 	const formInputs = [
 		{name: 'candidateName', label: 'Candidate name', validations: '', icon: 'person', type: 'text'},
 		{name: 'candidateEmail', label: 'Candidate email', validations: 'isEmail', icon: 'email', type: 'text'},
 		{name: 'candidatePhoneNumber', label: 'Candidate phone Number', validations: '', icon: 'phone', type: 'text'},
-		{name: 'openPositionId', label: 'Open position', validations: '', icon: '', type: 'text'},
+		// {name: 'openPositionId', label: 'Open position', validations: '', icon: '', type: 'text'},
 		{name: 'employeeStatus', label: 'Employee status', validations: '', icon: 'email', type: 'text'},
 	];
 
@@ -108,11 +92,11 @@ function AddCandidate(props) {
 					{ recruitmentForm }
 				</GridSystem>
         <Typography variant='body1' className="mt-16 mb-8">Upload resume</Typography>
-        <DropZone setValue={value => setFile(value)} />
-				<ProgressBtn success={false} loading={false} content='Create Opening' disable={!isFormValid} />
+        <DropZone setValue={setFile} />
+				<ProgressBtn success={candidate.success} loading={candidate.loading} content='Create Opening' disable={!isFormValid && file === ''} />
 			</Formsy>
 		</div>
 	);
 }
 
-export default AddCandidate;
+export default withReducer('candidate', reducers)(AddCandidate);

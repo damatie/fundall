@@ -5,6 +5,7 @@ const initialState = {
 	data: [],
 	onePosition: [],
 	success: false,
+	colse: false
 };
 
 const recruitmentReducer = (state = initialState, action) => {
@@ -13,6 +14,13 @@ const recruitmentReducer = (state = initialState, action) => {
 			return {
 				...state,
 				loading: true,
+			}
+		}
+		case Actions.ClOSE_SUCCESS: {
+			return {
+				...state,
+				loading: false,
+				close: true
 			}
 		}
 		case Actions.GET_ALL_OPEN_POSITIONS_SUCCESS: {

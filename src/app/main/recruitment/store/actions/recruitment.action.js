@@ -23,6 +23,8 @@ export const DELETE_OPENING_ERROR = 'DELETE OPENING ERROR';
 export const UPDATE_OPENING_SUCCESS = 'UPDATE OPENING SUCCESS';
 export const UPDATE_OPENING_ERROR = 'UPDATE OPENING ERROR';
 
+export const ClOSE_SUCCESS = 'ClOSE SUCCESS'
+
 const basUrl = getBaseUrl;
 const headers = fetchHeaders();
 const auth = useAuth;
@@ -34,7 +36,6 @@ export function getAllOpenPositions() {
 		});
 		fetch(`${basUrl()}/recruitment/all`, {...headers.getRegHeader()})
 			.then(res => res.json()).then(async data => {
-				console.log(data);
 				if (data.success) {
 					dispatch({
             type: GET_ALL_OPEN_POSITIONS_SUCCESS,
@@ -92,7 +93,6 @@ export function createOpening(model) {
 		});
 		fetch(`${basUrl()}/recruitment/new`, {...headers.reqHeader('POST', model)})
 			.then(res => res.json()).then(async data => {
-				console.log(data);
 				if (data.success) {
 					dispatch({
 						type: CREATE_OPENING_SUCCESS,
@@ -140,12 +140,8 @@ export function assignRecruiter(hrId, formData) {
 		dispatch({
 			type: LOADING_POSITIONS
 		});
-		for (var pair of formData.entries()) {
-			console.log(pair[0]+ ', ' + pair[1]); 
-		}
-		fetch(`${basUrl()}/recruitment/assign/${hrId}`, {...headers.reqHeader('patch', formData)})
+		fetch(`${basUrl()}/recruitment/assign/${hrId}`, {...headers.formDHeader('PATCH', formData)})
 			.then(res => res.json()).then(async data => {
-				console.log(data);
 				if (data.success) {
 					dispatch({
 						type: ASSIGN_RECRUITER_SUCCESS,
@@ -154,7 +150,8 @@ export function assignRecruiter(hrId, formData) {
             title: data.message,
             timer: 3000,
             icon: 'success'
-          })
+					})
+					dispatch(getAllOpenPositions());
 				} else {
           swal.fire({
             title: data.message,
@@ -238,6 +235,62 @@ export function deleteOpening(hrId) {
 
 }
 
+export function closeOpening(id) {
+	return dispatch => {
+		
+
+		swal.fire({
+			title: 'Are you sure?',
+			text: "You won't be able to revert this!",
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			confirmButtonText: 'Yes, delete it!',
+			showLoaderOnConfirm: true,
+			preConfirm: () => [
+				dispatch({
+					type: LOADING_POSITIONS
+				}),
+				fetch(`${basUrl()}/recruitment/close/${id}`, { ...headers.reqHeader('PATCH', {}) })
+					.then(res => res.json()).then(async data => {
+						if (data.success) {
+							dispatch({
+								type: ClOSE_SUCCESS,
+							})
+							swal.fire(
+								'DELETE!',
+								'Postion has been closed.',
+								'success'
+							)
+						} else {
+							swal.fire(
+								'Delete not successful!',
+								'something went wrong',
+								'error'
+							)
+							return dispatch({
+								type: DELETE_OPENING_ERROR
+							})
+						}
+					}
+					).catch(e => {
+						console.error(e);
+						swal.fire(
+							'Oops!',
+							'something went wrong',
+							'error'
+						)
+						return dispatch({
+							type: DELETE_OPENING_ERROR
+						})
+					})
+			]
+		})
+	}
+
+}
+
 export function updateOpening(payload, positionId){
 	swal.fire("Processing ...");
 	swal.showLoading();
@@ -245,7 +298,7 @@ export function updateOpening(payload, positionId){
 		dispatch({
 			type: LOADING_POSITIONS
 		})
-		fetch(`${basUrl()}/recruitment/update/${positionId}`, { ...headers.fdHeader('PATCH', payload) }
+		fetch(`${basUrl()}/recruitment/update/${positionId}`, { ...headers.reqHeader('PATCH', payload) }
 		).then(res => res.json()).then(async data => {
 			console.log(data);
 			if (data.success || data.message === 'OpenPosition update successful') {
@@ -259,6 +312,7 @@ export function updateOpening(payload, positionId){
 					timer: 3000,
 					icon: 'success'
 				})
+				dispatch(getAllOpenPositions());
 			} else {
 				swal.fire({
 					title: 'Update Position',

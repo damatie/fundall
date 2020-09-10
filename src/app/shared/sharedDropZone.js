@@ -88,10 +88,13 @@ export default function SharedDropzone(props) {
   const thumbs = files.map(file => (
     <div style={thumb} key={file.name}>
       <div style={thumbInner}>
-        <img
+        {/* <img
           src={file.preview}
           style={img}
-        />
+        /> */}
+        <embed type={file.type}
+        src={file.preview}
+        style={img}></embed>
       </div>
     </div>
   ));

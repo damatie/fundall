@@ -23,10 +23,7 @@ export function addCandidate(model, positionId) {
 		dispatch({
 			type: LOADING_CANDIDATE
     });
-    for (var pair of model.entries()) {
-			console.log(pair[0]+ ', ' + pair[1]); 
-		}
-		fetch(`${baseUrl()}/recruitment/candidate/new`, {...headers.reqHeader('POST', model)})
+		fetch(`${baseUrl()}/recruitment/candidate/new`, {...headers.formDHeader('POST', model)})
 			.then(res => res.json()).then(async data => {
 				console.log(data);
 				if (data.success) {
@@ -68,17 +65,13 @@ export function addCandidate(model, positionId) {
 	}
 }
 
-export function updateCandidate(model, candidateId) {
+export function updateCandidate(model, candidateId, id) {
 	return dispatch => {
 		dispatch({
 			type: LOADING_CANDIDATE
     });
-    for (var pair of model.entries()) {
-			console.log(pair[0]+ ', ' + pair[1]); 
-		}
-		fetch(`${baseUrl()}/recruitment/candidate/update/${candidateId}`, {...headers.fdHeader('PATCH', model)})
+		fetch(`${baseUrl()}/recruitment/candidate/update/${candidateId}`, {...headers.reqHeader('PATCH', model)})
 			.then(res => res.json()).then(async data => {
-				console.log(data);
 				if (data.success) {
 					dispatch({
 						type: UPDATE_CANDIDATE_SUCCESS,
@@ -88,7 +81,8 @@ export function updateCandidate(model, candidateId) {
             title: data.message,
             timer: 3000,
             icon: 'success'
-          })
+					})
+					dispatch(getAllCandidates(id))
 				} else {
           swal.fire({
             title: 'Candidate update was not successful',
