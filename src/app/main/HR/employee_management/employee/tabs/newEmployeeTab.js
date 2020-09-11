@@ -7,7 +7,7 @@ import * as Actions from '../../store/actions';
 import Formsy from 'formsy-react';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Redirect } from 'react-router';
+import { useHistory } from 'react-router-dom';
 import * as entityActions from 'app/main/HR/business_unit/store/actions';
 import * as departmentActions from 'app/main/HR/business_unit/department/store/actions';
 import * as rolesActions from 'app/main/HR/roles/store/actions';
@@ -23,6 +23,7 @@ function NewEmployeeTab(props) {
 
 	const [isFormValid, setIsFormValid] = useState(true);
 	const formRef = useRef(null);
+	const history = useHistory();
 
 	useEffect(() => {
 		// if (register.error && (register.error.username || register.error.password || register.error.email)) {
@@ -44,17 +45,11 @@ function NewEmployeeTab(props) {
 	}
 
 	function handleSubmit(model) {
-		dispatch(Actions.saveEmployee(model));
+		dispatch(Actions.saveEmployee(model, history));
 	}
 
 	const getDepartments = id => {
 		dispatch(departmentActions.getDepartments(id));
-	}
-
-	if(employee.success) {
-		return (
-			<Redirect to='/hr/employee_management' />
-		);
 	}
 
 	return (

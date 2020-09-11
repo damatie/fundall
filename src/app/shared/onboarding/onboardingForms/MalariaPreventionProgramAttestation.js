@@ -7,6 +7,11 @@ import Formsy from 'formsy-react';
 import { TextFieldFormsy, CheckboxFormsy } from '@fuse/core/formsy';
 import { inputStyles } from '../../EmployeeFormInput';
 import SelectFormsy from '../../selectInput/SelectInput';
+import { useForm } from '@fuse/hooks';
+import { useParams } from 'react-router';
+import { useState } from 'react';
+import { Typography } from '@material-ui/core';
+import SharedDropzone from 'app/shared/sharedDropZone';
 
 const useStyles = makeStyles((theme) => ({
   align: {
@@ -14,12 +19,41 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const MalariaPreventionProgramAttestation = () => {
+const MalariaPreventionProgramAttestation = props => {
+  // initial form data
+  const initialFormData = {
+    employeeName: '',
+    dateOfArrival: '',
+    instructorSignature: '',
+    expectedDurationOfStay: '',
+    preArrivalInformation: '',
+    faceToFaceOrientation: '',
+    malanilPreventiveMedicationReceived: '',
+    malariaKitReceived: '',
+    instructorName: '',
+    date: '',
+    arrivedFrom: '',
+  };
+
   //styles
   const classes = useStyles();
   const card = inputStyles();
 
+  const [data, setData] = useState({});
+  const [instructorSignature, setInstructorSignature] = useState({});
+
   const feed = ['Yes', 'No'];
+
+  const { id } = useParams();
+
+  const { handleChange, form } = useForm(initialFormData);
+
+  const handleOnBlur = () => {
+    props.setFormData({
+      ...form,
+      instructorSignature: instructorSignature
+    });
+  }
 
   return (
     <Formsy>
@@ -55,44 +89,17 @@ const MalariaPreventionProgramAttestation = () => {
           </Grid>
 
           <Grid container spacing="4" alignItems="center">
-            <Grid container item sm="1" md="1" lg="1" xl="1">
-              <p>Name:</p>
-            </Grid>
-            <Grid container item sm="11" md="11" lg="11" xl="11">
+            <Grid container item sm="12" md="6" lg="6" xl="6">
+              <span><strong>Employee name</strong></span>
               <TextFieldFormsy
                 className="mb-16 w-full"
                 type="text"
-                name="name"
-                label="Name"
+                name="employeeName"
+                label="Employee name"
                 variant="outlined"
-              />
-            </Grid>
-          </Grid>
-
-          <Grid container spacing="4" alignItems="center">
-            <Grid container item sm="5" md="5" lg="5" xl="5">
-              <CheckboxFormsy
-                className="mb-16 w-full"
-                name="accept"
-                value={false}
-                label="Sign document"
-                validations={{
-                  equals: true,
-                }}
-                validationErrors={{
-                  equals: "You need to accept"
-                }}
-              />
-            </Grid>
-            <Grid container item sm="1" md="1" lg="1" xl="1">
-              <p>Date:</p>
-            </Grid>
-            <Grid container item sm="5" md="5" lg="5" xl="5">
-              <TextFieldFormsy
-                className="mb-16 w-full"
-                type="date"
-                name="date"
-                variant="outlined"
+                value={data.employeeName}
+                onChange={handleChange}
+                onBlur={handleOnBlur}
               />
             </Grid>
           </Grid>
@@ -105,8 +112,11 @@ const MalariaPreventionProgramAttestation = () => {
               <TextFieldFormsy
                 className="mb-16 w-full"
                 type="date"
-                name="date"
+                name="dateOfArrival"
                 variant="outlined"
+                onChange={handleChange}
+                onBlur={handleOnBlur}
+                value={data.dateOfArrival}
               />
 
             </Grid>
@@ -115,9 +125,12 @@ const MalariaPreventionProgramAttestation = () => {
               <TextFieldFormsy
                 className="mb-16 w-full"
                 type="text"
-                name="arrived_from"
-                label="Arrived from"
+                name="arrivedFrom"
+                // label="Arrived from"
                 variant="outlined"
+                value={data.arrivedFrom}
+                onChange={handleChange}
+                onBlur={handleOnBlur}
               />
             </Grid>
             <Grid container item sm="4" md="4" lg="4" xl="4">
@@ -125,83 +138,92 @@ const MalariaPreventionProgramAttestation = () => {
               <TextFieldFormsy
                 className="mb-16 w-full"
                 type="text"
-                name="expected_stay"
-                label="Expected Duration of Stay"
+                name="expectedDurationOfStay"
+                // label="Expected Duration of Stay"
                 variant="outlined"
+                placeholder='E.g 2 months, 2 years'
+                onChange={handleChange}
+                onBlur={handleOnBlur}
+                value={data.expectedDurationOfStay}
               />
             </Grid>
           </Grid>
 
-          <h4 style={{ margin: '0 0 1rem 0' }}>Select Yes or No</h4>
+          <Typography variant="h6" fontWeight='bold' color="initial" style={{ margin: '2rem 1rem' }}>Select Yes or No</Typography>
 
           <Grid container spacing="4" alignItems="center">
             <Grid container item sm="3" md="3" lg="3" xl="3">
+              <span><strong>Pre Arrival Information</strong></span>
               <SelectFormsy
-                value=""
-                name="pre-arrival"
-                onChange=""
-                label="Pre-arrival information"
+                value={data.preArrivalInformation}
+                name="preArrivalInformation"
+                onChange={handleChange}
+                label=""
                 options={feed}
                 variant="outlined"
+                onBlur={handleOnBlur}
               />
             </Grid>
             <Grid container item sm="3" md="3" lg="3" xl="3">
+              <span><strong>Face To Face Durarion</strong></span>
               <SelectFormsy
                 className="mb-16 w-full"
-                value=""
-                name="face-to-face"
-                onChange=""
-                label="Face-to-Face"
+                value={data.faceToFaceOrientation}
+                name="faceToFaceOrientation"
+                onChange={handleChange}
                 options={feed}
                 variant="outlined"
+                onBlur={handleOnBlur}
+                label=""
               />
             </Grid>
             <Grid container item sm="3" md="3" lg="3" xl="3">
+              <span><strong>Malarone Preventive Medical Received</strong></span>
               <SelectFormsy
                 className="mb-16 w-full"
-                value=""
-                onChange=""
-                name="preventive"
-                label="Malarone (Preventive Med.) Received"
+                value={data.malanilPreventiveMedicationReceived}
+                onChange={handleChange}
+                name="malanilPreventiveMedicationReceived"
+                label=""
                 options={feed}
                 variant="outlined"
+                onBlur={handleOnBlur}
               />
             </Grid>
             <Grid container item sm="3" md="3" lg="3" xl="3">
+              <span><strong>Malaria Kit Received</strong></span>
               <SelectFormsy
                 className="mb-16 w-full"
-                value=""
-                name="kit"
-                onChange=""
-                label="Malaria Kit Received"
+                value={data.malariaKitReceived}
+                name="malariaKitReceived"
+                onChange={handleChange}
                 options={feed}
                 variant="outlined"
+                onBlur={handleOnBlur}
+                label=""
               />
             </Grid>
           </Grid>
 
-          <h4 style={{ margin: '0 0 1rem 0' }}>Instructor</h4>
+          <Typography variant="h6" fontWeight='bold' color="initial" style={{ margin: '2rem 1rem' }}>Instructor</Typography>
 
           <Grid container spacing="4" alignItems="center">
             <Grid container item sm="4" md="4" lg="4" xl="4" alignItems="center">
-              <span><strong>Name</strong></span>
+              <span><strong>Instructor Name</strong></span>
               <TextFieldFormsy
                 className="mb-16 w-full"
                 type="text"
-                name="name"
-                label="Name"
+                name="instructorName"
                 variant="outlined"
+                value={data.instructorName}
+                onChange={handleChange}
+                onBlur={handleOnBlur}
               />
             </Grid>
             <Grid container item sm="4" md="4" lg="4" xl="4" alignItems="center">
               <div className={classes.align}>
                 <span style={{ marginBottom: '0.5rem', display: 'inline-block' }} ><strong>Signature</strong></span>
-                <TextFieldFormsy
-                  className="mb-16 w-full"
-                  type="file"
-                  name="signature"
-                  variant="outlined"
-                />
+                <SharedDropzone setValue={setInstructorSignature} />
               </div>
             </Grid>
             <Grid container item sm="4" md="4" lg="4" xl="4" alignItems="center">
@@ -211,24 +233,13 @@ const MalariaPreventionProgramAttestation = () => {
                 type="date"
                 name="date"
                 variant="outlined"
+                onChange={handleChange}
+                onBlur={handleOnBlur}
+                value={data.data}
               />
             </Grid>
           </Grid>
 
-          <Grid alignItems="center" container item sm="12" md="12" lg="12" xl="12">
-            {/* <div className={card.submit}>
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                className="mx-auto mt-32 mb-80 w-6/12"
-                aria-label="LOG IN"
-              // disabled={!isFormValid}
-              >
-                Submit
-              </Button>
-            </div> */}
-          </Grid>
         </div>
       </div>
     </Formsy>
