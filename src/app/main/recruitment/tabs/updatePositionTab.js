@@ -65,6 +65,7 @@ function NewOpening(props) {
 
 	function handleSubmit(model) {
 		dispatch(Actions.updateOpening(model, props.selectedPosition.id));
+		props.setUpdateOpen(false);
 	}
 
 	const checkName = (item) => {
