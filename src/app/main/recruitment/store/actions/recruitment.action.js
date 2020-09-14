@@ -106,7 +106,7 @@ export function createOpening(model) {
             icon: 'success'
           })
           .then(function(){
-            window.location.href = "/recruitment";
+            window.location.href = "/recruitment/all";
           });
 				} else {
           swal.fire({

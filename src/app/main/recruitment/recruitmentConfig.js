@@ -20,7 +20,7 @@ const recruitmentConfig = {
 			component: React.lazy(() => import('./opening_management/positionDetails'))
 		},
 		{
-			path: '/recruitment',
+			path: '/recruitment/all',
 			component: React.lazy(() => import('./opening_management/listOpenings'))
 		},
 	]
