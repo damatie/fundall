@@ -60,7 +60,6 @@ function AssignRecruiter(props) {
 		// dispatch(entityActions.getBusinessUnits());
 		// dispatch(rolesActions.getRoles());
 	}, []);
-
 	function disableButton() {
 		setIsFormValid(false);
 	}
@@ -85,6 +84,7 @@ function AssignRecruiter(props) {
 			...model,
 			jobDescription: file[0]
 		}));
+		props.setOpenHr(false);
 	}
 
 	const formInputs = [
@@ -149,9 +149,9 @@ function AssignRecruiter(props) {
 				<GridSystem>
 					{ recruitmentForm }
 				</GridSystem>
-        <Typography variant='body1' className="mt-16 mb-8">Upload Job Description</Typography>
+        <Typography variant='body1' className="mt-16 mb-8">Upload Job Description *</Typography>
         <DropZone setValue={value => setFile(value)} />
-				<ProgressBtn success={recruitment.success} loading={recruitment.loading} content='Assign recruiter' disable={!isFormValid && file === ''} />
+				<ProgressBtn success={recruitment.success} loading={recruitment.loading} content='Assign recruiter' disable={!isFormValid || file.length === 0 } />
 			</Formsy>
 		</div>
 	);

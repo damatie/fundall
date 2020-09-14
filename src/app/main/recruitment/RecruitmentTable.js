@@ -264,7 +264,7 @@ const TableWidget = (props) =>{
           onClose={value => setOpenHr(value)}
           onAssign={value => setOpenHr(value)}
         >
-          <AssignRecruiterTab selectedPosition={selected} />
+          <AssignRecruiterTab setOpenHr={setOpenHr}  selectedPosition={selected} />
         </RecruitmentDialog>
         {/* Update Dialog */}
         <RecruitmentDialog
@@ -273,7 +273,7 @@ const TableWidget = (props) =>{
           title='Update Opening'
           onClose={value => setUpdateOpen(value)}
         >
-          <UpdatePositionTab selectedPosition={selected} />
+          <UpdatePositionTab setUpdateOpen={setUpdateOpen} selectedPosition={selected} />
         </RecruitmentDialog>
       </React.Fragment>
 

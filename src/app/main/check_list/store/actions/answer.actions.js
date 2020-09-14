@@ -110,7 +110,7 @@ export function createAnswer(model) {
 					icon: 'success'
 				}).then(
 				function(){
-				//   window.location.href = "/training/personal";
+				  window.location.href = "/training/personal";
 				});
 			} else {
 				swal.fire({

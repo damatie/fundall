@@ -91,9 +91,9 @@ function AddCandidate(props) {
 				<GridSystem>
 					{ recruitmentForm }
 				</GridSystem>
-        <Typography variant='body1' className="mt-16 mb-8">Upload resume</Typography>
+        <Typography variant='body1' className="mt-16 mb-8">Upload resume *</Typography>
         <DropZone setValue={setFile} />
-				<ProgressBtn success={candidate.success} loading={candidate.loading} content='Create Opening' disable={!isFormValid && file === ''} />
+				<ProgressBtn success={candidate.success} loading={candidate.loading} content='Create Opening' disable={!isFormValid || file.length === 0} />
 			</Formsy>
 		</div>
 	);

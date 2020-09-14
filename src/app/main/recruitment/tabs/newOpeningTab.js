@@ -6,10 +6,12 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import * as Actions from '../store/actions';
 import withReducer from 'app/store/withReducer';
 import reducer from '../store/reducers';
+import { DateTimePicker } from '@material-ui/pickers';
 import Formsy from 'formsy-react';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect } from 'react-router';
+import moment from 'moment';
 import * as entityActions from 'app/main/HR/business_unit/store/actions';
 import * as departmentActions from 'app/main/HR/business_unit/department/store/actions';
 import * as rolesActions from 'app/main/HR/roles/store/actions';
@@ -26,6 +28,7 @@ function NewOpening(props) {
 	const [department, setDepartment] = useState([]);
 	const [country, setCountry] = React.useState([]);
 	const [isFormValid, setIsFormValid] = useState(true);
+	const [dueDate, setDueDate] = useState(new Date());
 	const formRef = useRef(null);
 
 	useEffect(() => {
@@ -66,6 +69,8 @@ function NewOpening(props) {
 	}
 
 	function handleSubmit(model) {
+		model.dueDate = moment(dueDate).format('dd-mm-yyyy');
+		console.log(model);
 		dispatch(Actions.createOpening(model));
 	}
 
@@ -91,13 +96,14 @@ function NewOpening(props) {
 		{name: 'employeeStatus', label: 'Employee status *', data: ['Full time', 'Contract']},
 		{name: 'urgency', label: 'Urgency *', data: ['Immediately', 'Urgent', 'Not urgent']},
 		{name: 'dueDate', label: 'Due date', validations: '', type: 'date'},
-		{name: 'country', label: 'Country', validations: '', icon: 'email', data: country},
-		{name: 'state', label: 'State', validations: '', icon: 'email', data: state},
+		{name: 'country', label: 'Country *', validations: '', icon: 'email', data: country},
+		{name: 'state', label: 'State *', validations: '', icon: 'email', data: state},
 	];
 
 	const recruitmentForm = formInputs.map((input, i) => {
-		if (input.type === 'text' || input.type === 'date') {
+		if (input.type === 'text') {
 			return (
+				<>
 				<TextFieldFormsy
 					className="mb-16"
 					type={input.type}
@@ -119,9 +125,58 @@ function NewOpening(props) {
 					variant="outlined"
 					required
 				/>
+				</>
 			)
+		}else if (input.type === 'date') {
+			return (
+				<>
+				{/* <TextFieldFormsy
+					className="mb-16"
+					type={input.type}
+					name={input.name}
+					label={input.label}
+					// validations="isEmail"
+					// validationErrors={{
+					// 	isEmail: 'Please enter a valid email'
+					// }}
+					InputProps={{
+						endAdornment: (
+							<InputAdornment position="end">
+								<Icon className="text-20" color="action">
+									{input.icon}
+								</Icon>
+							</InputAdornment>
+						),
+						shrink: true,
+					}}
+					variant="outlined"
+					required
+				/> */}
+				<DateTimePicker
+					name={input.name}
+					label={input.label}
+					inputVariant="outlined"
+					value={dueDate}
+					hidden={true}
+					onChange={date => setDueDate(date)}
+					className="mt-8 mb-16 w-full"
+					format={'MMMM Do, YYYY hh:mm a'}
+					minDate={new Date()}
+					InputProps={{
+						endAdornment: (
+							<InputAdornment position="end">
+								<Icon className="text-20" color="action">
+									{input.icon}
+								</Icon>
+							</InputAdornment>
+						)
+					}}
+				/>
+				</>
+			)	
 		} else {
 			return (
+				<>
 				<SelectFormsy
 					className="mb-16"
 					name={input.name}
@@ -138,6 +193,7 @@ function NewOpening(props) {
 						<MenuItem value={checkValue(item)} key={i}>{checkName(item)}</MenuItem>
 					))}
 				</SelectFormsy>
+				</>
 			)
 		}
 	})
