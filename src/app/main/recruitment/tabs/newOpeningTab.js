@@ -49,17 +49,6 @@ function NewOpening(props) {
 		})
 	}
 
-	useEffect(() => {
-		// if (register.error && (register.error.username || register.error.password || register.error.email)) {
-		// 	formRef.current.updateInputsWithError({
-		// 		...register.error
-		// 	});
-		// 	disableButton();
-		// }
-		// dispatch(entityActions.getBusinessUnits());
-		// dispatch(rolesActions.getRoles());
-	}, []);
-
 	function disableButton() {
 		setIsFormValid(false);
 	}
@@ -130,28 +119,6 @@ function NewOpening(props) {
 		}else if (input.type === 'date') {
 			return (
 				<>
-				{/* <TextFieldFormsy
-					className="mb-16"
-					type={input.type}
-					name={input.name}
-					label={input.label}
-					// validations="isEmail"
-					// validationErrors={{
-					// 	isEmail: 'Please enter a valid email'
-					// }}
-					InputProps={{
-						endAdornment: (
-							<InputAdornment position="end">
-								<Icon className="text-20" color="action">
-									{input.icon}
-								</Icon>
-							</InputAdornment>
-						),
-						shrink: true,
-					}}
-					variant="outlined"
-					required
-				/> */}
 				<DateTimePicker
 					name={input.name}
 					label={input.label}

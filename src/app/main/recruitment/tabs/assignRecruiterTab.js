@@ -13,14 +13,13 @@ import { getBaseUrl } from 'app/shared/getBaseUrl';
 import { fetchHeaders } from 'app/shared/fetchHeaders'
 import ProgressBtn from 'app/shared/progressBtn';
 import GridSystem from 'app/shared/gridSystem';
-import DropZone from '../../../shared/sharedDropZone';
+import DropZone from '../../../shared/dropZonePdf';
 import * as employeeActions from '../../../store/actions';
 
 function AssignRecruiter(props) {
 	const dispatch = useDispatch();
 
 	const [file, setFile] = React.useState('');
-	const [hrList, setHrList] = useState([]);
 	const [jobTitleList, setJobTitleList] = useState([]);
 	const [isFormValid, setIsFormValid] = useState(true);
 	const formRef = useRef(null);
@@ -50,16 +49,6 @@ function AssignRecruiter(props) {
 			})
 	}, []);
 
-	useEffect(() => {
-		// if (register.error && (register.error.username || register.error.password || register.error.email)) {
-		// 	formRef.current.updateInputsWithError({
-		// 		...register.error
-		// 	});
-		// 	disableButton();
-		// }
-		// dispatch(entityActions.getBusinessUnits());
-		// dispatch(rolesActions.getRoles());
-	}, []);
 	function disableButton() {
 		setIsFormValid(false);
 	}

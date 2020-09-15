@@ -151,7 +151,7 @@ function PositionDetails({ match }, props) {
 								<Icon
 									className="text-24 text-black bg-white rounded-20"
 									component={Link}
-									to="/recruitment"
+									to="/recruitment/all"
             			role="button"
 								>arrow_back</Icon>
 							</FuseAnimate>

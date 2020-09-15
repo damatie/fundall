@@ -72,6 +72,11 @@ const TableWidget = (props) =>{
   const { positionId } = useParams();
 
   const status = useSelector(state => state.PositionDetails.recruitment.onePosition.status);
+  const { success } = useSelector(state => state.PositionDetails.candidate)
+
+  useEffect(() => {
+    if (success === true) setUpdateOpen(false)
+  }, [success])
 
 	const createSortHandler = property => event =>  {
 		const id = property;
@@ -171,7 +176,6 @@ const TableWidget = (props) =>{
     setSearch(event.target.value);
   }
 
-
   useEffect(() => {
 		if (search.length >= 2) {
       setData(_.filter(props.rows, row => row.candidateName.toLowerCase().includes(props.search.toLowerCase())
@@ -231,9 +235,9 @@ const TableWidget = (props) =>{
       <React.Fragment>
         {/* Details Dialog */}
         <RecruitmentDialog
-          title='Detail of Opening'
+          title='Candidate details'
           open={open}
-          update='Update Position'
+          update='Update Candidate'
           onClose={value => setOpen(value)}
           onUpdate={value => setUpdateOpen(value)}
         >
@@ -268,7 +272,7 @@ const TableWidget = (props) =>{
               </tr>
             </tbody>
           </table>
-          {selected.status != 'accepted' ? <Grid container className="items-center w-full pt-20" justify="center" alignItems="center">
+          {selected.status !== 'Accepted' ? <Grid container className="items-center w-full pt-20" justify="center" alignItems="center">
             <Button
               className="bg-red text-white" 
               startIcon={<RejectIcon />}
@@ -290,7 +294,7 @@ const TableWidget = (props) =>{
         <RecruitmentDialog
           open={updateOpen}
           transition={Transition}
-          title='Update Opening'
+          title='Update Candidate'
           onClose={value => setUpdateOpen(value)}
         >
           <UpdateCandidateTab selectedPosition={selected} />

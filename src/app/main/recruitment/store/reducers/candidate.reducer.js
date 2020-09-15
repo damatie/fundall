@@ -11,7 +11,8 @@ const candidateReducer = (state = initialState, action) => {
 		case Actions.LOADING_CANDIDATE: {
 			return {
 			  ...state,
-			  loading: true,
+				loading: true,
+				success: false,
 			}
     }
     case Actions.GET_ALL_CANDIDATE_SUCCESS: {
@@ -40,7 +41,14 @@ const candidateReducer = (state = initialState, action) => {
 				loading: false,
 				success: false
       };
-    }
+		}
+		case Actions.UPDATE_CANDIDATE_SUCCESS: {
+			return {
+				...state,
+				loading: false,
+				success: true,
+			}
+		}
 		default: {
 			return state;
 		}
