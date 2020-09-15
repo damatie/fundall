@@ -40,8 +40,8 @@ export function addCandidate(model, positionId) {
           });
 				} else {
           swal.fire({
-            title: 'Add candidate was not successful',
-            timer: 3000,
+						title: 'Failed to add candidate',
+						text: data.message,
             icon: 'error'
           })
 					dispatch({
@@ -57,8 +57,7 @@ export function addCandidate(model, positionId) {
         })
         swal.fire({
           title: 'Oops!',
-          text: 'Something went wrong.',
-          timer: 3000,
+          text: 'Something went wrong. Please check your connection.',
           icon: 'error'
         })
 			})

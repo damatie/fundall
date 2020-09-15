@@ -151,7 +151,7 @@ function PositionDetails({ match }, props) {
 								<Icon
 									className="text-24 text-black bg-white rounded-20"
 									component={Link}
-									to="/recruitment"
+									to="/recruitment/all"
             			role="button"
 								>arrow_back</Icon>
 							</FuseAnimate>
@@ -190,7 +190,7 @@ function PositionDetails({ match }, props) {
 					onChange={handleChangeTab}
 					indicatorColor="primary"
 					textColor="primary"
-a					varint="scrollable"
+					variant="scrollable"
 					scrollButtons="off"
 					className="w-full border-b-1 px-24"
 				>

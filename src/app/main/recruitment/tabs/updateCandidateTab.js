@@ -8,7 +8,7 @@ import React, { useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ProgressBtn from 'app/shared/progressBtn';
 import GridSystem from 'app/shared/gridSystem';
-import DropZone from '../../../shared/sharedDropZone';
+import DropZone from '../../../shared/dropZonePdf';
 import { useParams } from 'react-router';
 
 function AssignRecruiter(props) {
@@ -36,7 +36,7 @@ function AssignRecruiter(props) {
 		dispatch(Actions.updateCandidate({
 			...model,
 			resume: file[0]
-		}, 
+		},
 		selectedPosition.id, 
 		positionId
 		))

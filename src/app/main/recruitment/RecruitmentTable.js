@@ -20,7 +20,7 @@ import Slide from '@material-ui/core/Slide';
 import React, {useState, useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import * as Actions from './store/actions';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
@@ -64,6 +64,14 @@ const TableWidget = (props) =>{
 		id: null
   });
   const [selected, setSelected] = useState({});
+
+  const recruiter = useSelector(state => state.Recruitment.recruitment.data)
+
+  useEffect(() => {
+    recruiter.map(data => {
+      if (data.id === selected.id) setSelected(data);
+    })
+  }, [recruiter])
 
 	const createSortHandler = property => event =>  {
 		const id = property;
@@ -233,15 +241,15 @@ const TableWidget = (props) =>{
               </tr>
               <tr className="dueDate">
                 <th>Due date</th>
-                <td>{(selected.dueDate) ? selected.dueDate : '' }</td>
+                <td>{(selected.dueDate) ? <Moment format="ddd Do MMM, YYYY">{selected.dueDate}</Moment> : '' }</td>
               </tr>
               <tr className="state">
                 <th>State</th>
                 <td>{ (selected.state) ? selected.state : '' } </td>
               </tr>
               <tr className="country">
-                  <th>Country</th>
-                  <td>{(selected.country) ? selected.country : '' }</td>
+                <th>Country</th>
+                <td>{(selected.country) ? selected.country : '' }</td>
               </tr>
             </tbody>
           </table>

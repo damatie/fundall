@@ -12,7 +12,7 @@ import * as departmentActions from 'app/main/HR/business_unit/department/store/a
 import * as rolesActions from 'app/main/HR/roles/store/actions';
 import ProgressBtn from 'app/shared/progressBtn';
 import GridSystem from 'app/shared/gridSystem';
-import DropZone from '../../../shared/sharedDropZone';
+import DropZone from '../../../shared/dropZonePdf';
 import withReducer from 'app/store/withReducer';
 import * as reducers from '../store/reducers';
 
@@ -41,15 +41,10 @@ function AddCandidate(props) {
 		}, props.positionId));
 	}
 
-	const getDepartments = id => {
-		// dispatch(departmentActions.getDepartments(id));
-	}
-
 	const formInputs = [
 		{name: 'candidateName', label: 'Candidate name', validations: '', icon: 'person', type: 'text'},
 		{name: 'candidateEmail', label: 'Candidate email', validations: 'isEmail', icon: 'email', type: 'text'},
 		{name: 'candidatePhoneNumber', label: 'Candidate phone Number', validations: '', icon: 'phone', type: 'text'},
-		// {name: 'openPositionId', label: 'Open position', validations: '', icon: '', type: 'text'},
 		{name: 'employeeStatus', label: 'Employee status', validations: '', icon: 'email', type: 'text'},
 	];
 
@@ -93,7 +88,7 @@ function AddCandidate(props) {
 				</GridSystem>
         <Typography variant='body1' className="mt-16 mb-8">Upload resume *</Typography>
         <DropZone setValue={setFile} />
-				<ProgressBtn success={candidate.success} loading={candidate.loading} content='Create Opening' disable={!isFormValid || file.length === 0} />
+				<ProgressBtn success={candidate.success} loading={candidate.loading} content='Add candidate' disable={!isFormValid || file.length === 0} />
 			</Formsy>
 		</div>
 	);
