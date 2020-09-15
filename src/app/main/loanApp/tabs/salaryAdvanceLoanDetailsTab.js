@@ -43,32 +43,32 @@ function SALoanDetailsTab({setValue}) {
 						<CardContent>
 							<div className="mb-24">
 								<Typography className="font-bold mb-4 text-15">Email</Typography>
-								<Typography>{salaryAdvanceDetails.details.email}</Typography>
+								<Typography>{salaryAdvanceDetails.details.employee.email}</Typography>
+							</div>
+
+							<div className="mb-24">
+								<Typography className="font-bold mb-4 text-15">Department</Typography>
+								<Typography>{salaryAdvanceDetails.details.department}</Typography>
 							</div>
 
 							<div className="mb-24">
 								<Typography className="font-bold mb-4 text-15">Country</Typography>
-								<Typography>{salaryAdvanceDetails.details.country}</Typography>
+								<Typography>{salaryAdvanceDetails.details.employee.country}</Typography>
 							</div>
 
 							<div className="mb-24">
 								<Typography className="font-bold mb-4 text-15">Residential Address</Typography>
-								<Typography>{salaryAdvanceDetails.details.residentialAddress}</Typography>
+								<Typography>{salaryAdvanceDetails.details.employee.residentialAddress}</Typography>
 							</div>
 
 							<div className="mb-24">
 								<Typography className="font-bold mb-4 text-15">Amount Requested</Typography>
-								<Typography>{`₦ ${Intl.NumberFormat().format(salaryAdvanceDetails.details.amount)}`}</Typography>
+								<Typography>{`₦ ${Intl.NumberFormat().format(salaryAdvanceDetails.details.salaryAdvanceData.amount)}`}</Typography>
 							</div>
 
 							<div className="mb-24">
 								<Typography className="font-bold mb-4 text-15">Net Salary</Typography>
-								<Typography>{`₦ ${Intl.NumberFormat().format(salaryAdvanceDetails.details.netSalary)}`}</Typography>
-							</div>
-
-							<div className="mb-24">
-								<Typography className="font-bold mb-4 text-15">Supervisor</Typography>
-								<Typography>{salaryAdvanceDetails.details.supervisor}</Typography>
+								<Typography>{`₦ ${Intl.NumberFormat().format(salaryAdvanceDetails.details.salaryAdvanceData.netSalary)}`}</Typography>
 							</div>
 
 							<div className="mb-24">

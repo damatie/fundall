@@ -14,13 +14,12 @@ const AutoCompleteInput = ({ data, inputs, handleChange, value, setInput }) => {
     <Autocomplete
       freeSolo
       // disabled={!edit}
-      value={!value ? '' : value}
+      defaultValue={!value ? '' : value}
       getOptionLabel={(option) => option.name}
       options={
         data
       }
       onChange={(ev, values) => {
-        console.log(values);
         if(setInput && values) {
           setInput(values.id);
         }

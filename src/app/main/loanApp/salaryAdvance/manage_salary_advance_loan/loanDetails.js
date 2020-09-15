@@ -62,7 +62,7 @@ function LoanDetails(props) {
 	}, []);
 
 
-	if(salaryAdvanceDetails.loadingDetails) return <>Loading...</>
+	if(Object.entries(salaryAdvanceDetails.details).length === 0) return <>Loading...</>
 
 	return (
 		<FusePageSimple
@@ -93,17 +93,17 @@ function LoanDetails(props) {
 						
 					<div className="flex flex-1 flex-col items-center justify-center md:flex-row md:items-center md:justify-start">
 						<FuseAnimate animation="transition.expandIn" delay={300}>
-							<Avatar className="w-96 h-96" src="assets/images/avatars/Velazquez.jpg" />
+							<Avatar className="w-96 h-96" src={salaryAdvanceDetails.details.employee.profilePicture} />
 						</FuseAnimate>
 						<div>
 						<FuseAnimate animation="transition.slideLeftIn" delay={300}>
 							<Typography className="md:mx-24" variant="h4" color="inherit">
-								{`${salaryAdvanceDetails.details.firstName} ${salaryAdvanceDetails.details.lastName}`}
+								{`${salaryAdvanceDetails.details.employee.firstName} ${salaryAdvanceDetails.details.employee.lastName}`}
 							</Typography>
 							
 						</FuseAnimate>
 						<Typography className="md:mx-24" variant='subtitle1' color="inherit">
-								{salaryAdvanceDetails.details.email}
+								{salaryAdvanceDetails.details.employee.email}
 						</Typography>
 						</div>
 						
