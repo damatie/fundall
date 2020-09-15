@@ -164,7 +164,7 @@ function PositionDetails({ match }, props) {
 						{ isHr() && <div className="flex flex-col min-w-0 mx-8 sm:mc-16">
 							<FuseAnimate animation="transition.slideLeftIn" delay={300}>
 								<Button
-									className="mb-16"
+									className="mb-8"
 									component={Link}
 									to={`/recruitment/add_candidate/${positionId}`}
 									role='button'
@@ -187,7 +187,7 @@ function PositionDetails({ match }, props) {
 					onChange={handleChangeTab}
 					indicatorColor="primary"
 					textColor="primary"
-a					varint="scrollable"
+					variant="scrollable"
 					scrollButtons="off"
 					className="w-full border-b-1 px-24"
 				>
