@@ -17,18 +17,31 @@ function LoanReqHeader(props) {
 	return (
 		<div className="flex flex-1 w-full items-center justify-between">
 			<div className="flex items-center">
-				<FuseAnimate animation="transition.expandIn" delay={300}>
-					<Icon className="text-32">shopping_basket</Icon>
-				</FuseAnimate>
-				<FuseAnimate animation="transition.slideLeftIn" delay={300}>
-					<Typography className="hidden sm:flex mx-0 sm:mx-12" variant="h6">
+				<div>
+					<FuseAnimate animation="transition.slideRightIn" delay={300}>
+						<Typography
+							className="normal-case flex items-center sm:mb-12"
+							component={Link}
+							role="button"
+							to="/loan/request"
+							color="inherit"
+						>
+							<Icon className="text-20">
+							arrow_back
+							</Icon>
+							<Typography className="hidden sm:flex mx-0 sm:mx-12" variant="h6">
 						Loan Request
 					</Typography>
-				</FuseAnimate>
+						</Typography>
+					</FuseAnimate>
+				</div>
 			</div>
 
 			<div className="flex flex-1 items-center justify-center px-12">
-				<ThemeProvider theme={mainTheme}>
+				{/* <ThemeProvider theme={mainTheme}> */}
+				<div>
+					
+				</div>
 					{/* <FuseAnimate animation="transition.slideDownIn" delay={300}>
 						<Paper className="flex items-center w-full max-w-512 px-8 py-4 rounded-8" elevation={1}>
 							<Icon color="action">search</Icon>
@@ -46,7 +59,7 @@ function LoanReqHeader(props) {
 							/>
 						</Paper>
 					</FuseAnimate> */}
-				</ThemeProvider>
+				{/* </ThemeProvider> */}
 			</div>
 			<FuseAnimate animation="transition.slideRightIn" delay={300}>
 				<Button

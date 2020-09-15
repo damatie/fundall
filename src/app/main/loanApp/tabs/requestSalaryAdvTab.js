@@ -16,6 +16,10 @@ import * as employeeActions from 'app/store/actions';
 import Typography from '@material-ui/core/Typography';
 import GridSystem from 'app/shared/gridSystem';
 import { useForm } from '@fuse/hooks';
+import AutoCompleteInput from 'app/shared/TextInput/AutoComplete';
+import { formatDataList } from 'utils/formatData';
+import employeesReducers from 'app/main/HR/employee_management/store/reducers';
+import * as employeesActions from 'app/main/HR/employee_management/store/actions';
 
 const matchRole = (data, role) => {
 	const arr = [];
@@ -30,6 +34,9 @@ const matchRole = (data, role) => {
 function RequestSalaryAdvTab(props) {
 	const dispatch = useDispatch();
 
+	const [supportDirector, setSupportDirector] = useState('');
+	const [financeManager, setFinanceManager] = useState('');
+
 	const [isFormValid, setIsFormValid] = useState(true);
 	const formRef = useRef(null);
 
@@ -37,9 +44,10 @@ function RequestSalaryAdvTab(props) {
 
 	const details = useSelector(({ salaryAdvance }) => salaryAdvance.salaryAdvances.details);
 
-
 	const profile = useSelector(({ profile }) => profile);
 	const employeeList = useSelector(({ employeeList }) => employeeList);
+
+	const employees = useSelector(({ employees}) => employees.employees.data );
 
 	const { id } = useParams();
 
@@ -54,6 +62,7 @@ function RequestSalaryAdvTab(props) {
 			dispatch(employeeActions.getDepartmentEmployees(profile.data.departmentId));
     // }
 		// console.log(salaryAdvance)
+		dispatch(employeesActions.getEmployees());
 	}, [profile.data, dispatch]);
 
 	useEffect(() => {
@@ -76,17 +85,24 @@ function RequestSalaryAdvTab(props) {
 		if(id) {
 			dispatch(Actions.updateSalaryAdvance(id, model));
 		} else {
-			dispatch(Actions.applySalaryAdvance(model));
+			dispatch(Actions.applySalaryAdvance({
+				...model,
+				supportDirector,
+				financeManager,
+				supervisor: 1
+			}));
 		}
 		
-  }
+	}
+	
+	const isInput = () => supportDirector && financeManager;
   
 
-	if(Object.entries(details).length === 0) {
-		return (
-			<>Loading...</>
-		);
-	}
+	// if(Object.entries(details).length === 0) {
+	// 	return (
+	// 		<>Loading...</>
+	// 	);
+	// }
 
 	return (
 		<div className="w-full">
@@ -149,8 +165,8 @@ function RequestSalaryAdvTab(props) {
 								</InputAdornment>
 							)
 						}}
-						error={form.amount > form.netSalary}
-						helperText={form.amount > form.netSalary ? 'Please you can not request for an amount that is greater than your net salary': `Max amount: ${Intl.NumberFormat().format(form.netSalary)}`}
+						error={form.amount > form.netSalary / 2.5}
+						helperText={form.amount > form.netSalary / 2.5 ? 'Please you can not request for an amount that is greater than your net salary': `Max amount: ${Intl.NumberFormat().format(form.netSalary / 2.5)}`}
 						variant="outlined"
 						required
 					/>
@@ -173,52 +189,9 @@ function RequestSalaryAdvTab(props) {
 					/>
 				</div>
 
-				
+				<AutoCompleteInput data={employees && formatDataList(employees)} inputs={{label: 'Director of support service'}} setInput={setSupportDirector} /*value={{name: loan.data.supportDirector, id: loan.data.loanData.supportDirector}}*//>
 
-				<SelectFormsy
-          className="my-16"
-          name="supervisor"
-          label="Head of department"
-          value={id ? details.supervisor : 'none'}
-          // validations="not-equals:none"
-          validationError="requried"
-          variant="outlined"
-					required
-        >
-					{matchRole(employeeList.data, 'Head of department').map(item => (
-						<MenuItem value={item.id} key={item.id}>{`${item.firstName} ${item.lastName}`}</MenuItem>
-					))}
-        </SelectFormsy>
-
-				<SelectFormsy
-          className="my-16"
-          name="supportDirector"
-          label="Director of support service"
-          value={id ? details.supportDirector : 'none'}
-          // validations="not-equals:none"
-          validationError="requried"
-          variant="outlined"
-					required
-        >
-					{matchRole(employeeList.data, 'HR').map(item => (
-						<MenuItem value={item.id} key={item.id}>{`${item.firstName} ${item.lastName}`}</MenuItem>
-					))}
-        </SelectFormsy>
-
-				<SelectFormsy
-          className="my-16"
-          name="financeManager"
-          label="Finance manager"
-          value={id ? details.financeManager : 'none'}
-          // validations="not-equals:none"
-          validationError="requried"
-          variant="outlined"
-					required
-        >
-					{matchRole(employeeList.data, 'Finance manager').map(item => (
-						<MenuItem value={item.id} key={item.id}>{`${item.firstName} ${item.lastName}`}</MenuItem>
-					))}
-        </SelectFormsy>
+				<AutoCompleteInput data={employees && formatDataList(employees)} inputs={{label: 'Finance manager'}} setInput={setFinanceManager} /*value={{name: loan.data.financeManager, id: loan.data.loanData.financeManager}}*//>
 
 				</GridSystem>
 				{id ? <ProgressBtn success={salaryAdvance.success} loading={salaryAdvance.loading} content='Update Request' disable={!isFormValid}/> : <ProgressBtn success={salaryAdvance.success} loading={salaryAdvance.loading} content='Request' disable={!isFormValid}/>}
@@ -229,4 +202,5 @@ function RequestSalaryAdvTab(props) {
 
 
 withReducer('employeeList', employeeReducer)(RequestSalaryAdvTab);
+withReducer('employees', employeesReducers)(RequestSalaryAdvTab)
 export default RequestSalaryAdvTab;

@@ -58,7 +58,7 @@ export const getPendingSA = () => {
           dispatch({
             type: GET_PENDING_SA,
             payload: formateData(data.loanData),
-          })
+          });
         }
       }
     ).catch(e => console.error(e));

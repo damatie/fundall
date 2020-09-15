@@ -143,7 +143,7 @@ function ManageSALoan(props) {
     dispatch(Actions.getApprovedSA());
     dispatch(Actions.getOpenSA());
 		dispatch(Actions.getClosedSA());
-		dispatch(Actions.getReviewedSA());
+		// dispatch(Actions.getReviewedSA());
 	}, [dispatch]);
 
 	useEffect(() => {
@@ -201,8 +201,7 @@ function ManageSALoan(props) {
 					scrollButtons="auto"
 					classes={{ root: 'w-full h-64' }}
 				>
-					{profile.role.name === 'Head of department' ? <Tab className="h-64 normal-case" label="Pending Loan" /> : ''}
-					{profile.role.name === 'HR' ? <Tab className="h-64 normal-case" label="Reviewed Loan" /> : ''}
+					{profile.role.name === 'HR' || profile.role.name === 'Director of support service' ? <Tab className="h-64 normal-case" label="Pending Loan" /> : ''}
 				</Tabs> : 
 
 				<Tabs
@@ -222,18 +221,14 @@ function ManageSALoan(props) {
 			}
 			content={
 				<>
-        {profile.role.name === 'Head of department' ? <div className=" sm:p-24 ">
-          {tabValue === 0 && (<SharedTable data={salaryAdvance.pendingSA} rows={rows} handleClick={handleClick} handleDelete={handleDelete} type='default'/>)}
-				</div> : <></>}
-				
-				{profile.role.name === 'HR' ? <div className=" sm:p-24 ">
-					{tabValue === 0 && (<SharedTable data={salaryAdvance.reviewedSA} rows={rows} handleClick={handleClick} handleDelete={handleDelete} type='default'/>)}
+        {profile.role.name === 'HR' || profile.role.name === 'Director of support service' ? <div className=" sm:p-24 ">
+          {tabValue === 0 && (<SharedTable data={salaryAdvance.pendingSA ? salaryAdvance.pendingSA : []} rows={rows} handleClick={handleClick} handleDelete={handleDelete} type='default'/>)}
 				</div> : <></>}
 				
 				{profile.role.name === 'Finance manager' ? <div className=" sm:p-24 ">
-					{tabValue === 0 && (<SharedTable data={salaryAdvance.approvedSA} rows={rows} handleClick={handleClick} handleDelete={handleDelete} type='default'/>)}
-					{tabValue === 1 && (<SharedTable data={salaryAdvance.openSA} rows={rows} handleClick={handleClick} handleDelete={handleDelete} type='default'/>)}
-					{tabValue === 2 && (<SharedTable data={salaryAdvance.closedSA} rows={rows} handleClick={handleClick} handleDelete={handleDelete} type='default'/>)}
+					{tabValue === 0 && (<SharedTable data={salaryAdvance.approvedSA ? salaryAdvance.approvedSA : []} rows={rows} handleClick={handleClick} handleDelete={handleDelete} type='default'/>)}
+					{tabValue === 1 && (<SharedTable data={salaryAdvance.openSA ? salaryAdvance.openSA : []} rows={rows} handleClick={handleClick} handleDelete={handleDelete} type='default'/>)}
+					{tabValue === 2 && (<SharedTable data={salaryAdvance.closedSA ? salaryAdvance.closedSA : []} rows={rows} handleClick={handleClick} handleDelete={handleDelete} type='default'/>)}
 				</div> : <></>}
 				</>
 			}

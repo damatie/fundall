@@ -39,7 +39,7 @@ export function submitLogin(data) {
 					await localStorage.setItem('jwt_access_token', JSON.stringify(user.token));
 					const userState = {
 						role: user.data.role.name,
-						redirectUrl: redirectUrl(user.data.role.name),
+						redirectUrl: '/employee/dashboard',
 						id: user.data.id,
 						data: {
 							displayName: `${user.data.firstName} ${user.data.lastName}`,

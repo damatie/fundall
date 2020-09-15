@@ -19,6 +19,8 @@ import { useFormValues } from 'app/hooks/useFromValues';
 import { getOneInput } from '../getOneInput';
 import employeesReducers from 'app/main/HR/employee_management/store/reducers';
 import * as employeesActions from 'app/main/HR/employee_management/store/actions';
+import AutoCompleteInput from 'app/shared/TextInput/AutoComplete';
+import { formatDataList } from 'utils/formatData';
 
 const useStyles = makeStyles(theme => ({
 	grid: {
@@ -37,34 +39,6 @@ const durations = [
   {value: '6 months', id: 6},
 ];
 
-const getData = (id, type) => {
-	switch(type) {
-		case 'duration': {
-			for(let i of durations) {
-				if(id === i.id) {
-					return i.value;
-				}
-			}
-		}
-	}
-}
-
-const matchRole = (data, role) => {
-	const arr = [];
-	for(const i of data) {
-		if(role !== 'Head of department') {
-			if(i.role.name.toLowerCase() === role.toLowerCase()) {
-				arr.push(i);
-			}
-		}else {
-			if(i.role.name.toLowerCase() === 'line managers' || i.role.name.toLowerCase() === 'line manager' || i.role.name.toLowerCase() === role.toLowerCase()) {
-				arr.push(i);
-			}
-		}
-		
-	}
-	return arr;
-}
 
 function RequestLoanTab(props) {
 	const classes = useStyles();
@@ -76,11 +50,17 @@ function RequestLoanTab(props) {
 	const [amountRequested, setAmountRequested] = useState(0);
 	const [annualPay, setAnnualPay] = useState(0);
 
+	const [supportDirector, setSupportDirector] = useState('');
+	const [departmentHead, setDepartmentHead] = useState('');
+	const [financeManager, setFinanceManager] = useState('');
+
+	const isInput = () => supportDirector && departmentHead && financeManager;
+
 	const { inputs, setInputs } = useFormValues();
 
 	const { id } = useParams();
 
-	const loan = useSelector(({ loan }) => loan.loan);
+	const loan = useSelector(state => state.loan.loan);
 	const profile = useSelector(({ profile }) => profile);
 	const employeeList = useSelector(({ employeeList }) => employeeList);
 	const employees = useSelector(({ employees}) => employees.employees.data )
@@ -108,7 +88,12 @@ function RequestLoanTab(props) {
 
 	function handleSubmit(model) {
 		console.log(model);
-		dispatch(Actions.applyLoan(model))
+		dispatch(Actions.applyLoan({
+			...model,
+			departmentHead,
+			supportDirector,
+			financeManager
+		}))
 		if(id) {
 			dispatch(Actions.updateLoan(id, model));
 		}
@@ -285,49 +270,12 @@ function RequestLoanTab(props) {
 					))}
         </SelectFormsy>
 
-				<SelectFormsy
-          className="my-16"
-          name="departmentHead"
-          label="Line manager"
-          value={id ? loan.data.loanData.departmentHead : 'none'}
-          // validations="not-equals:none"
-          validationError="requried"
-          variant="outlined"
-					required
-        >
-					{matchRole(employeeList.data, 'Head of department').map(item => (
-						<MenuItem value={item.id} key={item.id}>{`${item.firstName} ${item.lastName}`}</MenuItem>
-					))}
-        </SelectFormsy>
+				<AutoCompleteInput data={employees && formatDataList(employees)} inputs={{label: 'Line manager'}} setInput={setDepartmentHead} value={{name: loan.data.departmentHead, id: loan.data.loanData.departmentHead}}/>
 
-				<SelectFormsy
-          className="my-16"
-          name="supportDirector"
-          label="Director of support service"
-          value={id ? loan.data.loanData.supportDirector : 'none'}
-          // validations="not-equals:none"
-          validationError="requried"
-          variant="outlined"
-					required
-        >
-					{matchRole(employeeList.data, 'HR').map(item => (
-						<MenuItem value={item.id} key={item.id}>{`${item.firstName} ${item.lastName}`}</MenuItem>
-					))}
-        </SelectFormsy>
-				<SelectFormsy
-          className="my-16"
-          name="financeManager"
-          label="Finance manager"
-          value={id ? loan.data.loanData.financeManager : 'none'}
-          // validations="not-equals:none"
-          validationError="requried"
-          variant="outlined"
-					required
-        >
-					{matchRole(employeeList.data, 'Finance manager').map(item => (
-						<MenuItem value={item.id} key={item.id}>{`${item.firstName} ${item.lastName}`}</MenuItem>
-					))}
-        </SelectFormsy>
+				<AutoCompleteInput data={employees && formatDataList(employees)} inputs={{label: 'Director of support service'}} setInput={setSupportDirector} value={{name: loan.data.supportDirector, id: loan.data.loanData.supportDirector}}/>
+
+				<AutoCompleteInput data={employees && formatDataList(employees)} inputs={{label: 'Finance manager'}} setInput={setFinanceManager} value={{name: loan.data.financeManager, id: loan.data.loanData.financeManager}}/>
+				
 				<TextFieldFormsy
 					className="my-16"
 					type="text"
@@ -353,7 +301,7 @@ function RequestLoanTab(props) {
 				</GridSystem>
 				{id ? <></> : <ProgressBtn success={loan.success} loading={loan.loadings} content='Request Loan' disable={!isFormValid}/>}
 
-				{loan.data.status === 'pending' ? <ProgressBtn success={loan.success} loading={loan.updating} content='Update Request' disable={!isFormValid}/> : <></>}
+				{loan.data.loanData.status === 'pending' ? <ProgressBtn success={loan.success} loading={loan.updating} content='Update Request' disable={!isFormValid}/> : <></>}
 			</Formsy>
 		</div>
 	);

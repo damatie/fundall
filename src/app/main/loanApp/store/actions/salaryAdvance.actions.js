@@ -43,6 +43,7 @@ export const getSalaryAdvanceDetails = id => {
       ...headers.getRegHeader()
     }).then(res => handleResponse(res)).then(
       data => {
+        console.log(data);
         if(data.success) {
           dispatch({
             type: GET_SALARY_ADVANCE_DETAILS,
