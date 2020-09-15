@@ -15,13 +15,13 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import Input from '@material-ui/core/Input';
 import Slide from '@material-ui/core/Slide';
 import React, {useState, useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import * as Actions from '../store/actions';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
@@ -31,6 +31,11 @@ import UpdateCandidateTab from './updateCandidateTab';
 import RejectIcon from '@material-ui/icons/Cancel';
 import ApproveIcon from '@material-ui/icons/Check';
 import Moment from 'react-moment';
+import ProgressBtn from 'app/shared/progressBtn';
+import { fetchHeaders } from 'app/shared/fetchHeaders';
+import { getBaseUrl } from 'app/shared/getBaseUrl';
+import { handleResponse } from 'app/auth/handleRes';
+import swal from 'sweetalert2';
 
 const useStyles = makeStyles((theme) => ({
 	table: {
@@ -63,6 +68,10 @@ const TableWidget = (props) =>{
 		id: null
   });
   const [selected, setSelected] = useState({});
+
+  const { positionId } = useParams();
+
+  const status = useSelector(state => state.PositionDetails.recruitment.onePosition.status);
 
 	const createSortHandler = property => event =>  {
 		const id = property;
@@ -98,12 +107,7 @@ const TableWidget = (props) =>{
   }
 
   const handleCandidateUpdate = (model, candidateId) => {
-    let formData = new FormData();
-		formData.append('candidateName', model.candidateName);
-		formData.append('candidateEmail', model.candidateEmail);
-		formData.append('candidatePhoneNumber', model.candidatePhoneNumber);
-		formData.append('status', model.status);
-    dispatch(Actions.updateCandidate(formData, candidateId));
+    dispatch(Actions.updateCandidate(model, candidateId, positionId));
   }
 
   function handleReject(candidateId) {
@@ -118,21 +122,30 @@ const TableWidget = (props) =>{
     
   function CheckStatus(status){
       switch (status) {
-        case "added":
-          return (
-            <Typography className={'bg-green text-white inline text-11 font-500 px-8 py-4 rounded-4'}>
-              pending
-            </Typography>
-          )
-          break;
+
+      case "accepted":
+        return (
+          <Typography className={'bg-green text-white inline text-11 font-500 px-8 py-4 rounded-4'}>
+            {status}
+          </Typography>
+        )
+        break;
           
-        case "open":
-          return (
-            <Typography className={'bg-blue text-white inline text-11 font-500 px-8 py-4 rounded-4'}>
-              {status}
-            </Typography>
-          )
-          break;
+      case "open":
+        return (
+          <Typography className={'bg-blue text-white inline text-11 font-500 px-8 py-4 rounded-4'}>
+            {status}
+          </Typography>
+        )
+        break;
+
+        case "rejected":
+        return (
+          <Typography className={'bg-red text-white inline text-11 font-500 px-8 py-4 rounded-4'}>
+            {status}
+          </Typography>
+        )
+        break;
           
         default:
           return (
@@ -170,6 +183,48 @@ const TableWidget = (props) =>{
 			setData(props.rows);
 		}
   }, [props.rows, search]);
+
+  const [progress, setProgress] = useState({
+    loading: false,
+    success: false,
+  });
+
+  const headers = fetchHeaders();
+
+  const subCandidate = async () => {
+    setProgress({
+      loading: true,
+      success: false,
+    });
+    const result = await fetch(`${getBaseUrl()}/recruitment/to-hr/${positionId}`, {
+      ...headers.reqHeader('PATCH', {})
+    }).then(res => handleResponse(res));
+
+    if(result.success) {
+      setProgress({
+        loading: false,
+        success: true,
+      });
+      dispatch(Actions.getOneOpenPosition(positionId));
+      swal.fire({
+        title: 'Submit Candidates',
+        text: 'Candidates Submitted successfully',
+        timer: 2000,
+        icon: 'success'
+      })
+    } else {
+      setProgress({
+        loading: false,
+        success: false,
+      });
+      swal.fire({
+        title: 'Submit Candidates',
+        text: result.message,
+        timer: 2000,
+        icon: 'error'
+      })
+    }
+  }
         
 	return (
 		<Paper className="w-full rounded-8 shadow-none border-1">
@@ -203,7 +258,7 @@ const TableWidget = (props) =>{
                     className={'bg-blue inline text-11 font-500 px-8 py-4 ml-32 rounded-4'}
                     style={{cursor: 'pointer', color: '#fff'}}
                   >
-                    <a href={selected.resume}>View resume</a>
+                    <a className='color-white' href={selected.resume} target="_blank" rel="noopener noreferrer">View resume</a>
                   </Typography> : '' }
                 </td>
               </tr>
@@ -211,17 +266,9 @@ const TableWidget = (props) =>{
                 <th>Status</th>
                 <td>{(selected.status) ? selected.status : ''}</td>
               </tr>
-              {/* <tr className="state">
-                <th>State</th>
-                <td>{ (selected.state) ? selected.state : '' } </td>
-              </tr>
-              <tr className="country">
-                <th>Country</th>
-                <td>{(selected.country) ? selected.country : '' }</td>
-              </tr> */}
             </tbody>
           </table>
-          <Grid container className="items-center w-full pt-20" justify="center" alignItems="center">
+          {selected.status != 'accepted' ? <Grid container className="items-center w-full pt-20" justify="center" alignItems="center">
             <Button
               className="bg-red text-white" 
               startIcon={<RejectIcon />}
@@ -237,7 +284,7 @@ const TableWidget = (props) =>{
             >
               Accept
             </Button>
-          </Grid>
+          </Grid> : <></>}
         </RecruitmentDialog>
         {/* Update Candidate */}
         <RecruitmentDialog
@@ -330,14 +377,13 @@ const TableWidget = (props) =>{
                     className="cursor-pointer"
 									>
 										<TableCell className="text-center" style={{padding: '0 16px'}}>
-											{n.entity.entityName}
+											{n.candidateName}
 										</TableCell>
-										<TableCell>{n.jobTitle}</TableCell>
-										<TableCell className="text-center" style={{padding: '0 16px'}}>{n.employeeStatus}</TableCell>
-										<TableCell className="text-center" style={{padding: '0 16px'}}>{n.urgency}</TableCell>
+										<TableCell className="text-center">{n.candidateEmail}</TableCell>
+										<TableCell className="text-center" style={{padding: '0 16px'}}>{n.candidatePhoneNumber}</TableCell>
 										<TableCell className="text-center"><Moment format="ddd Do MMM, YY | hh:mm:ss a">{n.createdAt}</Moment></TableCell>
                     <TableCell className="text-center" style={{padding: '0 16px'}}>
-                        {CheckStatus(n.status)}
+                        {CheckStatus(n.status.toLowerCase())}
                     </TableCell>
                     <TableCell className="text-center" style={{padding: '0 16px'}}>
                       <IconButton aria-label="delete" onClick={(event) => handleDeleteOpening(event, n.id)}>
@@ -370,6 +416,8 @@ const TableWidget = (props) =>{
             </TableFooter>
 				</Table>
 			</div>
+
+      {status.toLowerCase() !== 'sent to hr' ? <ProgressBtn content='Submit Candidate' onClick={subCandidate} success={progress.success} loading={progress.loading}/> : <></>}
 		</Paper>
 	);
 }

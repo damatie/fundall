@@ -1,7 +1,7 @@
 import * as Actions from '../actions';
 
 const initialState = {
-	loading: true,
+	loading: false,
 	data: [],
 	success: false
 };

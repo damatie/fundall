@@ -204,9 +204,6 @@ function Recruitment(props) {
 										Create New Opening
 									</Button>
 								</FuseAnimate>
-								<FuseAnimate animation="transition.slideLeftIn" delay={300}>
-									<Typography variant="caption">Create a new opening</Typography>
-								</FuseAnimate>
 							</div>
 						</div>
 					}

@@ -111,11 +111,18 @@ const TableWidget = (props) =>{
             </Typography>
           )
           break;
+        case 'sent to hr': {
+          return (
+            <Typography className={'bg-blue text-white inline text-11 font-500 px-8 py-4 rounded-4'}>
+              {status}
+            </Typography>
+          )
+        }
           
         case "open":
           const hrStatus = 'pending';
           return (
-            <Typography className={'bg-blue text-white inline text-11 font-500 px-8 py-4 rounded-4'}>
+            <Typography className={'bg-orange text-white inline text-11 font-500 px-8 py-4 rounded-4'}>
               {isHr() ? hrStatus: status}
             </Typography>
           )
@@ -257,7 +264,7 @@ const TableWidget = (props) =>{
           onClose={value => setOpenHr(value)}
           onAssign={value => setOpenHr(value)}
         >
-          <AssignRecruiterTab selectedPosition={selected} />
+          <AssignRecruiterTab setOpenHr={setOpenHr}  selectedPosition={selected} />
         </RecruitmentDialog>
         {/* Update Dialog */}
         <RecruitmentDialog
@@ -266,7 +273,7 @@ const TableWidget = (props) =>{
           title='Update Opening'
           onClose={value => setUpdateOpen(value)}
         >
-          <UpdatePositionTab selectedPosition={selected} />
+          <UpdatePositionTab setUpdateOpen={setUpdateOpen} selectedPosition={selected} />
         </RecruitmentDialog>
       </React.Fragment>
 

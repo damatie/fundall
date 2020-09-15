@@ -67,7 +67,7 @@ function BusinessUnitTab(props) {
 					className="mb-16"
 					type="text"
 					name="entityName"
-					label="Business unit"
+					label="Entity"
 					value={params.id ? businessUnit.data.entityName : ''}
 					validations={{
 						minLength: 1

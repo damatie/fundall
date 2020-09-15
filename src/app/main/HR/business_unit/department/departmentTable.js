@@ -152,9 +152,9 @@ function DepartmentTable(props) {
 											{n.departmentCode}
 										</TableCell>
 
-                    <TableCell className="truncate" component="th" scope="row">
+                    {/* <TableCell className="truncate" component="th" scope="row">
 											{n.departmentHead}
-										</TableCell>
+										</TableCell> */}
 
 										<TableCell className="truncate" component="th" scope="row">
 											{n.startedOn}

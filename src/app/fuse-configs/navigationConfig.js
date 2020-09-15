@@ -438,17 +438,18 @@ const navigationConfig = [
 		title: 'Recruitment',
 		translate: 'recruitment',
 		type: 'group',
+		auth: authRoles.manager,
 		children: [
 			{
 				id: 'listOfOpenings',
 				title: 'List of openings',
 				type: 'item',
-				url: '/recruitment',
+				url: '/recruitment/all',
 				icon: 'school',
 				auth: authRoles.manager,
 			},
 			{
-				id: 'newOpening',
+				id: 'createOpening',
 				title: 'Create new Opening',
 				type: 'item',
 				url: '/recruitment/create_opening',
@@ -464,6 +465,7 @@ const navigationConfig = [
 		title: 'Disciplinary Case',
 		translate: 'disciplinary case',
 		type: 'group',
+		auth: authRoles.admin,
 		children: [
 			{
 				id: 'disciplinaryCaseManagement',

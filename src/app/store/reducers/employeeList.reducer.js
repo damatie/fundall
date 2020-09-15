@@ -6,6 +6,7 @@ const initialState = {
   loading: false,
   error: false,
   update: false,
+  employeeList: [],
 }
 
 export const employeeListReducer = (state = initialState, actions) => {
@@ -15,6 +16,13 @@ export const employeeListReducer = (state = initialState, actions) => {
         ...state,
         loading: false,
         data: actions.payload
+      }
+    }
+    case Actions.GET_EMPLOYEE_LIST : {
+      return {
+        ...state,
+        loading: false,
+        employeeList: actions.payload
       }
     }
     case Actions.EMPLOYEE_LOADING: {

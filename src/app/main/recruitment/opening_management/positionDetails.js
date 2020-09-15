@@ -27,6 +27,7 @@ import reducer from '../store/reducers';
 import PositionDetailsTab from '../tabs/positionDetails';
 import ApplicantsTab from '../tabs/applicantsTab';
 import { useAuth } from 'app/hooks/useAuth';
+import ProgressBtn from 'app/shared/progressBtn';
 
 const useStyles = makeStyles(theme => ({
 	productImageFeaturedStar: {
@@ -134,6 +135,8 @@ function PositionDetails({ match }, props) {
 
 	const isHr = () => userData.role.toUpperCase() === 'HR';
 
+	const { loading, close } = useSelector(state => state.PositionDetails.recruitment)
+
 	return (
 		<FusePageSimple
 			classes={{
@@ -163,19 +166,19 @@ function PositionDetails({ match }, props) {
 					<div className="flex items-center max-w-full">
 						{ isHr() && <div className="flex flex-col min-w-0 mx-8 sm:mc-16">
 							<FuseAnimate animation="transition.slideLeftIn" delay={300}>
-								<Button
-									className="mb-8"
-									component={Link}
-									to={`/recruitment/add_candidate/${positionId}`}
-									role='button'
-									variant="contained"
-									color="secondary"
-								>
-									Add New Candidate
-								</Button>
-							</FuseAnimate>
-							<FuseAnimate animation="transition.slideLeftIn" delay={300}>
-								<Typography variant="caption">Create a new applicant</Typography>
+								{position.status !== 'sent to hr' && position.status !== 'closed' ? 
+									<Button
+										className="mb-16"
+										component={Link}
+										to={`/recruitment/add_candidate/${positionId}`}
+										role='button'
+										variant="contained"
+										color="secondary"
+									>
+										Add New Candidate
+									</Button> : 
+									<ProgressBtn success={close} loading={loading} color='red' content='Close Position' onClick={e => dispatch(Actions.closeOpening(positionId))}/>
+									}
 							</FuseAnimate>
 						</div>}
 					</div>
@@ -193,7 +196,7 @@ function PositionDetails({ match }, props) {
 				>
 					<Tab className="text-14 font-600 normal-case" label="Details" />
 					<Tab className="text-14 font-600 normal-case" label="List of applicants" />
-					<Tab className="text-14 font-600 normal-case" label="Accepted applicants" />
+					{/* <Tab className="text-14 font-600 normal-case" label="Accepted applicants" /> */}
 				</Tabs>
 			}
 			content={

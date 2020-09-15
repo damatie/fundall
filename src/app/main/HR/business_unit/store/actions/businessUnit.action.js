@@ -28,7 +28,7 @@ export function saveBusinessUnit(data) {
 		request.then(response => {
       if(response.data.success && response.data.message === 'Entity created successfully') {
         swal.fire({
-          title: 'Business unit',
+          title: 'Entity',
           text: response.data.message,
           icon: 'success',
           timer: 3000,
@@ -39,7 +39,7 @@ export function saveBusinessUnit(data) {
         });
       } else {
         swal.fire({
-          title: 'Business unit',
+          title: 'Entity',
           text: response.data.message,
           icon: 'info',
           timer: 3000,
@@ -51,8 +51,8 @@ export function saveBusinessUnit(data) {
       }
     }).catch(e => {
       swal.fire({
-        title: 'Business unit',
-        text: 'Failed to create business unit',
+        title: 'Entity',
+        text: 'Failed to create Entity',
         icon: 'error',
         timer: 3000,
       })
@@ -84,8 +84,8 @@ export const getOneBusinessUnit = id => {
       }
     }).catch(e => {
       swal.fire({
-        title: 'Business unit',
-        text: 'Failed to get business unit',
+        title: 'Entity',
+        text: 'Failed to get Entity',
         icon: 'error',
         timer: 3000,
       })

@@ -16,7 +16,7 @@ import reducer from '../store/reducers';
 import Checkbox from '@material-ui/core/Checkbox';
 import ProgressBtn from 'app/shared/progressBtn';;
 
-const PreLearningForm = () => {
+const PreLearningForm = (props) => {
 	const classes = inputStyles();
 	const dispatch = useDispatch();
 	const questions = useSelector(({ preLearningForm }) => preLearningForm.question.data);
@@ -24,9 +24,11 @@ const PreLearningForm = () => {
 	const formRef = useRef(null);
 	const [sign, setSign] = useState(false);
 	const userData = useAuth().getUserDetails;
+    const checkListID = parseInt(props.match.params.checkListID);
+    const trainingID = parseInt(props.match.params.trainingID);
 
 	useEffect(() => {
-		dispatch(Actions.getAllQuestions(1));
+		dispatch(Actions.getAllQuestions(checkListID));
 	}, [dispatch]);
 
 	function disableButton() {
@@ -51,14 +53,15 @@ const PreLearningForm = () => {
 			});
 		})
 		let payload = {
-			trainingId: 1,
+			trainingId: checkListID,
 			managerId: userData.department.departmentHeadId,
 			delegateName: userData.displayName,
 			delegateSignature: userData.details.signature,
-			checklistId:1,
+			checklistId: checkListID,
 			data: data
 		}
 		console.log(payload);
+		dispatch(Actions.createAnswer(payload));
 	}
 
 	return (

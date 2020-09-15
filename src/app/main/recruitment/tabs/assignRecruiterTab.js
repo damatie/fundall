@@ -14,30 +14,26 @@ import { fetchHeaders } from 'app/shared/fetchHeaders'
 import ProgressBtn from 'app/shared/progressBtn';
 import GridSystem from 'app/shared/gridSystem';
 import DropZone from '../../../shared/sharedDropZone';
+import * as employeeActions from '../../../store/actions';
 
 function AssignRecruiter(props) {
 	const dispatch = useDispatch();
 
-	const [file, setFile] = React.useState();
+	const [file, setFile] = React.useState('');
 	const [hrList, setHrList] = useState([]);
 	const [jobTitleList, setJobTitleList] = useState([]);
 	const [isFormValid, setIsFormValid] = useState(true);
 	const formRef = useRef(null);
 
+	const employeeList = useSelector(state => state.employeeList.employeeList);
+
+	const recruitment = useSelector(state => state.Recruitment.recruitment);
+
 	const baseUrl = getBaseUrl;
 	const headers = fetchHeaders();
 
 	useEffect(() => {
-		fetch(`${baseUrl()}/auth/hr`, {...headers.getRegHeader()})
-			.then(res => res.json()).then(async data => {
-				if (data.success) {
-					setHrList(data.data.map(hr => hr))
-				} else {
-					console.log(data)
-				}
-			}).catch(err => {
-				console.log(err);
-			})
+		dispatch(employeeActions.getAllEmployee('hr'));
 	}, []);
 
 	useEffect(() => {
@@ -64,7 +60,6 @@ function AssignRecruiter(props) {
 		// dispatch(entityActions.getBusinessUnits());
 		// dispatch(rolesActions.getRoles());
 	}, []);
-
 	function disableButton() {
 		setIsFormValid(false);
 	}
@@ -85,16 +80,15 @@ function AssignRecruiter(props) {
 	}
 
 	function handleSubmit(model) {
-		let formData = new FormData();
-		formData.append('numberOfScreen', model.numberOfScreen);
-		formData.append('cvReviewBy', model.cvReviewBy);
-		formData.append('employeeId', model.employeeId);
-		formData.append('jobDescription', file);
-		dispatch(Actions.assignRecruiter(props.selectedPosition.id, formData));
+		dispatch(Actions.assignRecruiter(props.selectedPosition.id, {
+			...model,
+			jobDescription: file[0]
+		}));
+		props.setOpenHr(false);
 	}
 
 	const formInputs = [
-		{name: 'employeeId', label: 'Name of Recruiter', icon: 'person', data: hrList},
+		{name: 'employeeId', label: 'Name of Recruiter', icon: 'person', data: employeeList},
 		{name: 'cvReviewBy', label: 'Job title', icon: 'person', data: jobTitleList},
 		{name: 'numberOfScreen', label: 'Number of screens', type: 'number'},
   ];
@@ -155,9 +149,9 @@ function AssignRecruiter(props) {
 				<GridSystem>
 					{ recruitmentForm }
 				</GridSystem>
-        <Typography variant='body1' className="mt-16 mb-8">Upload Job Description</Typography>
+        <Typography variant='body1' className="mt-16 mb-8">Upload Job Description *</Typography>
         <DropZone setValue={value => setFile(value)} />
-				<ProgressBtn success={false} loading={false} content='Assign recruiter' disable={!isFormValid} />
+				<ProgressBtn success={recruitment.success} loading={recruitment.loading} content='Assign recruiter' disable={!isFormValid || file.length === 0 } />
 			</Formsy>
 		</div>
 	);
