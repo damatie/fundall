@@ -120,7 +120,7 @@ function RequestSalaryAdvTab(props) {
 						type="number"
 						name="netSalary"
 						label="Net Salary"
-						value={id ? details.netSalary : ''}
+						value={id ? details.salaryAdvanceData.netSalary : ''}
 						onChange={handleChange}
 						validations={{
 							minLength: 1
@@ -147,7 +147,7 @@ function RequestSalaryAdvTab(props) {
 						className="mb-16 w-full"
 						type="number"
 						name="amount"
-						value={id ? details.amount : ''}
+						// value={id ? details.salaryAdvanceData.amount : ''}
 						label="Amount requested"
 						onChange={handleChange}
 						validations={{
@@ -173,12 +173,12 @@ function RequestSalaryAdvTab(props) {
 					Amount: {new Intl.NumberFormat().format(form.amount)}
 				</div>
 			
-				<div style={{marginTop: '-10px'}}>
+				{/* <div style={{marginTop: '-10px'}}>
 					<Typography variant="subtitle1" color="initial">Repayment Date</Typography>
 					<TextFieldFormsy
 						className="mb-16 w-full"
 						type="date"
-						value={id ? details.repaymentDate : ''}
+						value={id ? details.salaryAdvanceData.repaymentDate : ''}
 						name="repaymentDate"
 						// label="Repayment Date"
 						variant="outlined"
@@ -187,11 +187,11 @@ function RequestSalaryAdvTab(props) {
 						error={new Date(form.repaymentDate) <= new Date()}
 						helperText={new Date(form.repaymentDate) <= new Date() ? 'please enter a date that is greater than todays date' : ''}
 					/>
-				</div>
+				</div> */}
 
-				<AutoCompleteInput data={employees && formatDataList(employees)} inputs={{label: 'Director of support service'}} setInput={setSupportDirector} /*value={{name: loan.data.supportDirector, id: loan.data.loanData.supportDirector}}*//>
+				{/* <AutoCompleteInput data={employees && formatDataList(employees)} inputs={{label: 'Director of support service'}} setInput={setSupportDirector} value={{name: details.supportDirector, id: details.salaryAdvanceData.supportDirector}}/>
 
-				<AutoCompleteInput data={employees && formatDataList(employees)} inputs={{label: 'Finance manager'}} setInput={setFinanceManager} /*value={{name: loan.data.financeManager, id: loan.data.loanData.financeManager}}*//>
+				<AutoCompleteInput data={employees && formatDataList(employees)} inputs={{label: 'Finance manager'}} setInput={setFinanceManager} value={{name: details.financeManager, id: details.salaryAdvanceData.financeManager}}/> */}
 
 				</GridSystem>
 				{id ? <ProgressBtn success={salaryAdvance.success} loading={salaryAdvance.loading} content='Update Request' disable={!isFormValid}/> : <ProgressBtn success={salaryAdvance.success} loading={salaryAdvance.loading} content='Request' disable={!isFormValid}/>}
