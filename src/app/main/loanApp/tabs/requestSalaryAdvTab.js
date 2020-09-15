@@ -120,7 +120,7 @@ function RequestSalaryAdvTab(props) {
 						type="number"
 						name="netSalary"
 						label="Net Salary"
-						value={id ? details.salaryAdvanceData.netSalary : ''}
+						// value={id ? details.salaryAdvanceData.netSalary : ''}
 						onChange={handleChange}
 						validations={{
 							minLength: 1
