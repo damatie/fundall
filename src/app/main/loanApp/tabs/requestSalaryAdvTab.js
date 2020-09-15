@@ -71,7 +71,12 @@ function RequestSalaryAdvTab(props) {
 		}
 	}, [id, dispatch]);
 
-
+	useEffect(() => {
+		if(id && details.salaryAdvanceData) {
+			setSupportDirector(details && details.salaryAdvanceData.supportDirector);
+			setFinanceManager(details && details.salaryAdvanceData.financeManager);
+		}
+	}, [id, details]);
 
 	function disableButton() {
 		setIsFormValid(false);
@@ -83,7 +88,12 @@ function RequestSalaryAdvTab(props) {
 
 	function handleSubmit(model) {
 		if(id) {
-			dispatch(Actions.updateSalaryAdvance(id, model));
+			dispatch(Actions.updateSalaryAdvance(id, {
+				...model,
+				supportDirector,
+				financeManager,
+				supervisor: 1
+			}));
 		} else {
 			dispatch(Actions.applySalaryAdvance({
 				...model,
@@ -98,11 +108,13 @@ function RequestSalaryAdvTab(props) {
 	const isInput = () => supportDirector && financeManager;
   
 
-	// if(Object.entries(details).length === 0) {
-	// 	return (
-	// 		<>Loading...</>
-	// 	);
-	// }
+	if(id) {
+		if(Object.entries(details).length === 0) {
+			return (
+				<>Loading...</>
+			);
+		}
+	}
 
 	return (
 		<div className="w-full">
@@ -120,7 +132,7 @@ function RequestSalaryAdvTab(props) {
 						type="number"
 						name="netSalary"
 						label="Net Salary"
-						value={id ? details.netSalary : ''}
+						value={id ? details.salaryAdvanceData.netSalary : ''}
 						onChange={handleChange}
 						validations={{
 							minLength: 1
@@ -147,7 +159,7 @@ function RequestSalaryAdvTab(props) {
 						className="mb-16 w-full"
 						type="number"
 						name="amount"
-						value={id ? details.amount : ''}
+						value={id ? details.salaryAdvanceData.amount : ''}
 						label="Amount requested"
 						onChange={handleChange}
 						validations={{
@@ -172,26 +184,10 @@ function RequestSalaryAdvTab(props) {
 					/>
 					Amount: {new Intl.NumberFormat().format(form.amount)}
 				</div>
-			
-				<div style={{marginTop: '-10px'}}>
-					<Typography variant="subtitle1" color="initial">Repayment Date</Typography>
-					<TextFieldFormsy
-						className="mb-16 w-full"
-						type="date"
-						value={id ? details.repaymentDate : ''}
-						name="repaymentDate"
-						// label="Repayment Date"
-						variant="outlined"
-						required
-						onChange={handleChange}
-						error={new Date(form.repaymentDate) <= new Date()}
-						helperText={new Date(form.repaymentDate) <= new Date() ? 'please enter a date that is greater than todays date' : ''}
-					/>
-				</div>
+		
+				<AutoCompleteInput data={employees && formatDataList(employees)} inputs={{label: 'Director of support service'}} setInput={setSupportDirector} value={id ? {name: details.supportDirector, id: details.salaryAdvanceData.supportDirector} : {}}/>
 
-				<AutoCompleteInput data={employees && formatDataList(employees)} inputs={{label: 'Director of support service'}} setInput={setSupportDirector} /*value={{name: loan.data.supportDirector, id: loan.data.loanData.supportDirector}}*//>
-
-				<AutoCompleteInput data={employees && formatDataList(employees)} inputs={{label: 'Finance manager'}} setInput={setFinanceManager} /*value={{name: loan.data.financeManager, id: loan.data.loanData.financeManager}}*//>
+				<AutoCompleteInput data={employees && formatDataList(employees)} inputs={{label: 'Finance manager'}} setInput={setFinanceManager} value={ id ? {name: details.financeManager, id: details.salaryAdvanceData.financeManager} : {}}/>
 
 				</GridSystem>
 				{id ? <ProgressBtn success={salaryAdvance.success} loading={salaryAdvance.loading} content='Update Request' disable={!isFormValid}/> : <ProgressBtn success={salaryAdvance.success} loading={salaryAdvance.loading} content='Request' disable={!isFormValid}/>}

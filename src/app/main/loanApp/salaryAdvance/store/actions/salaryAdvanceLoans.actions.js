@@ -50,7 +50,7 @@ export const getPendingSA = () => {
     dispatch({
       type: LOADING_SA
     });
-    fetch(`${getBaseUrl()}/salary-advance/all/department/request`, {
+    fetch(`${getBaseUrl()}/salary-advance/all/pending`, {
       ...headers.getRegHeader(),
     }).then(res => handleResponse(res)).then(
       data => {

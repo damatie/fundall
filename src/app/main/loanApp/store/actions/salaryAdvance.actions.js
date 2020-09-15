@@ -49,8 +49,7 @@ export const getSalaryAdvanceDetails = id => {
             type: GET_SALARY_ADVANCE_DETAILS,
             payload: {
               ...data,
-              ...data.employee,
-              ...data.salaryAdvanceData,
+              
             }
           })
         }

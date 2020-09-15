@@ -5,7 +5,7 @@ const intialState = {
   success: false,
   log: [],
   error: false,
-  details: [],
+  details: {},
   loadingDetails: false,
 };
 

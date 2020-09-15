@@ -8,6 +8,7 @@ export const LOADING_SALARY_REQUEST = 'LOADING SALARY REQUEST';
 export const SALARY_REQUEST_ERROR = 'SALARY REQUEST ERROR';
 export const UPDATE_SALARY_REQUEST = 'UPDATE SALARY REQUEST';
 export const CANCEL_SALARY_REQUEST = 'CANCEL SALARY REQUEST';
+export const SALARY_ADVANCE_REQUEST_ERROR = 'SALARY ADVANCE REQUEST ERROR';
 
 const headers = fetchHeaders();
 export const applySalaryAdvance = body => {
@@ -82,6 +83,16 @@ export const updateSalaryAdvance = (id, body) => {
             text: data.message,
             timer: 3000,
             icon: 'success'
+          })
+        } else {
+          dispatch({
+            type: SALARY_REQUEST_ERROR
+          })
+          Swal.fire({
+            title: 'Updating Salary advance',
+            text: data.message,
+            timer: 3000,
+            icon: 'error'
           })
         }
       }

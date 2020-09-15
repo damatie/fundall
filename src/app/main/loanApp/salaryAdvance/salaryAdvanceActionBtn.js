@@ -44,16 +44,21 @@ const SalaryAdvanceActionBtn = () => {
 					history.push({
 						pathname: '/loan/review/salaryadvance/list'
 					})
-        } 
-        if(data.success === false) {
-					swal.fire({
-						title: 'Approve Salary Advance  ',
-						text: data.message,
-						icon: 'error',
-						timer: 3000
-					})
-					setSuccess3(true);
+        } else {
+					if(data.success === false) {
+						
+					}
+					if(data.error) {
+						swal.fire({
+							title: 'Approve Salary Advance  ',
+							text: data.error,
+							icon: 'error',
+							timer: 3000
+						})
+						setSuccess3(true);
+					}
 				}
+        
 			}
 		).catch(e => {
 			setLoading3(false);
@@ -94,9 +99,9 @@ const SalaryAdvanceActionBtn = () => {
 	};
 
 	const handleApproveLeave = () => {
-		switch(salaryAdvanceDetails.details.status) {
+		switch(salaryAdvanceDetails.details.salaryAdvanceData.status) {
 			case 'pending': {
-				approve(`${getBaseUrl()}/salary-advance/approve/hod/`);
+				approve(`${getBaseUrl()}/salary-advance/approve/support/`);
 				break;
 			}
 			case 'reviewed': {
@@ -154,7 +159,7 @@ const SalaryAdvanceActionBtn = () => {
 					})
 					setSuccess2(true);
 					history.push({
-						pathname: '/loan/review/list'
+						pathname: '/loan/review/salaryadvance/list'
 					})
 				} else {
 					swal.fire({
@@ -172,14 +177,14 @@ const SalaryAdvanceActionBtn = () => {
 	}
   return (
     <div className="flex items-center justify-evenly">
-      {salaryAdvanceDetails.details.status !== 'open' && salaryAdvanceDetails.details.status !== 'closed' ? 
+      {salaryAdvanceDetails.details.salaryAdvanceData.status !== 'open' && salaryAdvanceDetails.details.salaryAdvanceData.status !== 'closed' ? 
       <>
         <ProgressBtn loading={loading3} success={success3} color='primary' onClick={handleApproveLeave} content='Approve Loan'/> 
         <ProgressBtn loading={loading2} success={success2} color='red' onClick={handleReject} content='Reject Loan' /> 
       </>
       : <></>}
 
-      {salaryAdvanceDetails.details.status === 'open' ? 
+      {salaryAdvanceDetails.details.salaryAdvanceData.status === 'open' ? 
       <>
         {/* <ProgressBtn loading={loading3} success={success3} color='primary' onClick={generateLoanStatement} content='Loan statement'/>  */}
         <ProgressBtn loading={loading2} success={success2} color='red' onClick={closeLoan} content='Close Loan' /> 
