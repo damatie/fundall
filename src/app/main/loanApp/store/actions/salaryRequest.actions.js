@@ -32,18 +32,30 @@ export const applySalaryAdvance = body => {
           dispatch({
             type: SALARY_REQUEST
           })
-        } 
-        if(data.success === false) {
-          Swal.fire({
-            title: 'Salary advance request',
-            text: data.message,
-            icon: 'error',
-            timer: 3000
-          })
-          dispatch({
-            type: SALARY_REQUEST_ERROR
-          })
+        } else {
+          if(data.error) {
+            Swal.fire({
+              title: 'Salary advance request',
+              text: data.error,
+              icon: 'error',
+              timer: 3000
+            })
+            dispatch({
+              type: SALARY_REQUEST_ERROR
+            })
+          } else {
+            Swal.fire({
+              title: 'Salary advance request',
+              text: data.message,
+              icon: 'error',
+              timer: 3000
+            })
+            dispatch({
+              type: SALARY_REQUEST_ERROR
+            })
+          }
         }
+        
       }
     ).catch(e => console.error(e));
   }

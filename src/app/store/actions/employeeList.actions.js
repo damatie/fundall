@@ -54,14 +54,13 @@ export const getAllEmployee = role => {
       ...header.getRegHeader()
     }).then(res => res.json()).then(
       data => {
-        console.log(data)
         if(data.success) {
           dispatch({
             type: GET_DEPARTMENT_EMPLOYEE_SUCCESS
           });
           dispatch({
             type: GET_EMPLOYEE_LIST,
-            payload: getEmployeeByRole(data.data, role)
+            payload: !role ? data.data : getEmployeeByRole(data.data, role)
           });
         } else {
           dispatch({
