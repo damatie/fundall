@@ -202,6 +202,8 @@ const TableWidget = (props) =>{
 
   const headers = fetchHeaders();
 
+  const checkStatus = () => (selected.status.toLowerCase() !== 'accepted' && selected.status.toLowerCase() !== 'rejected');
+
   const subCandidate = async () => {
     setProgress({
       loading: true,
@@ -266,7 +268,7 @@ const TableWidget = (props) =>{
                 <th>Resume</th>
                 <td>{selected.resume ? 
                   <Typography
-                    className={'bg-blue inline text-11 font-500 px-8 py-4 ml-32 rounded-4'}
+                    className={'bg-blue inline text-11 font-500 px-8 py-4 rounded-4'}
                     style={{cursor: 'pointer', color: '#fff'}}
                   >
                     <a className='color-white' href={selected.resume} target="_blank" rel="noopener noreferrer">View resume</a>
@@ -279,7 +281,7 @@ const TableWidget = (props) =>{
               </tr>
             </tbody>
           </table>
-          {selected.status !== 'Accepted' ? <Grid container className="items-center w-full pt-20" justify="center" alignItems="center">
+          {selected.status && checkStatus() ? <Grid container className="items-center w-full pt-20" justify="center" alignItems="center">
             <Button
               className="bg-red text-white" 
               startIcon={<RejectIcon />}
