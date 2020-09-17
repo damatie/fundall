@@ -73,6 +73,13 @@ const TableWidget = (props) =>{
 
   const status = useSelector(state => state.PositionDetails.recruitment.onePosition.status);
   const { success } = useSelector(state => state.PositionDetails.candidate)
+  const updated = useSelector(state => state.PositionDetails.recruitment.onePosition.candidate)
+
+  useEffect(() => {
+    updated.map(data => {
+      if (data.id === selected.id) setSelected(data);
+    })
+  }, [updated])
 
   useEffect(() => {
     if (success === true) setUpdateOpen(false)
