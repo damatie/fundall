@@ -13,6 +13,19 @@ import { useDispatch, useSelector } from 'react-redux';
 import { withRouter, useParams, useHistory } from 'react-router-dom';
 import SharedTableHead from 'app/shared/sharedTableHead';
 import * as Actions from '../store/actions';
+import LoanStatus from '../LoanStatus';
+import SharedModal from 'app/shared/modal/SharedModal';
+import { makeStyles } from '@material-ui/core/styles';
+import * as employeeActions from 'app/store/actions';
+import getEmployeeName from 'utils/getEmployeeName';
+import { formatToNaira } from 'utils/formatNumber';
+const useStyles = makeStyles({
+	table: {
+		'& th': {
+			padding: '16px 0',
+		}
+	}
+});
 
 const rows = [
 	{
@@ -21,29 +34,29 @@ const rows = [
 		disablePadding: false,
 		label: 'Amout requested',
 		sort: true
-  },
-  {
+	},
+	{
 		id: 'deductable_amount',
 		align: 'left',
 		disablePadding: false,
 		label: 'Deductable amount',
 		sort: true
-  },
-  {
+	},
+	{
 		id: 'duration',
 		align: 'left',
 		disablePadding: false,
 		label: 'Duration',
 		sort: true
-  },
-  {
+	},
+	{
 		id: 'purpose',
 		align: 'left',
 		disablePadding: false,
 		label: 'Purpose',
 		sort: true
-  },
-  {
+	},
+	{
 		id: 'status',
 		align: 'right',
 		disablePadding: false,
@@ -54,8 +67,10 @@ const rows = [
 
 function LoanReqTable(props) {
 	const dispatch = useDispatch();
+	const classes = useStyles();
 
 	const loanHistory = useSelector(({ loan }) => loan.loans);
+	const employeeList = useSelector(({ employeeList }) => employeeList.employeeList);
 
 	const history = useHistory();
 
@@ -68,13 +83,17 @@ function LoanReqTable(props) {
 		id: null
 	});
 
+	const [loanDetails, setLoanDetails] = useState({});
+	const [open, setOpen] = useState(false);
+
 	useEffect(() => {
 		dispatch(Actions.getEmployeeLoan());
+		dispatch(employeeActions.getAllEmployee());
 	}, []);
 
 	useEffect(() => {
-		if(loanHistory.loanHistory) {
-			if(props.type !== 'returned') {
+		if (loanHistory.loanHistory) {
+			if (props.type !== 'returned') {
 				const x = loanHistory.loanHistory.filter(i => i.status !== 'corrected')
 				setData(x);
 			} else {
@@ -107,18 +126,14 @@ function LoanReqTable(props) {
 	}
 
 	function handleClick(item) {
-		if (props.type !== 'returned') {
-			if(item.status !== 'open') {
-				history.push(`/loan/request/new/${item.id}`)
-			}
-			
+		if (item.status === 'pending') {
+			history.push(`/loan/request/new/${item.id}`)
 		} else {
-			history.push(`/loan/review/list/details/${item.id}`)
+			setOpen(true);
+			setLoanDetails(item);
 		}
+	}
 
-		
-  }
-  
 
 
 	function handleCheck(event, id) {
@@ -150,16 +165,20 @@ function LoanReqTable(props) {
 		// dispatch(Actions.deleteRoles(selected));
 	};
 
+	const handleClose = () => {
+		setOpen(false);
+	};
+
 	return (
 		<div className="w-full flex flex-col">
 			<FuseScrollbars className="flex-grow overflow-x-auto">
 				<Table className="min-w-xl" aria-labelledby="tableTitle">
-				  <SharedTableHead
+					<SharedTableHead
 						numSelected={selected.length}
 						order={order}
 						onSelectAllClick={handleSelectAllClick}
 						onRequestSort={handleRequestSort}
-            rowCount={data.length}
+						rowCount={data.length}
 						rows={rows}
 						handleDelete={handleDelete}
 						success={true}
@@ -195,28 +214,24 @@ function LoanReqTable(props) {
 										selected={isSelected}
 										onClick={event => handleClick(n)}
 									>
-                    <TableCell component="th" scope="row" align='left'>
-                     
+										<TableCell component="th" scope="row" align='left'>
+
 										</TableCell>
 
 										<TableCell component="th" scope="row" align='left'>
-                      {Intl.NumberFormat().format(n.amountRequested)}
+											{formatToNaira(n.amountRequested)}
 										</TableCell>
-                    <TableCell component="th" scope="row" align='left'>
-                      {Intl.NumberFormat().format(n.deductableAmount)}
+										<TableCell component="th" scope="row" align='left'>
+											{formatToNaira(n.deductableAmount)}
 										</TableCell>
-                    <TableCell component="th" scope="row" align='left'>
-                      {`${n.duration} Months`}
+										<TableCell component="th" scope="row" align='left'>
+											{`${n.duration} Months`}
 										</TableCell>
-                    <TableCell component="th" scope="row" align='left'>
-                      {n.purpose}
+										<TableCell component="th" scope="row" align='left'>
+											{n.purpose}
 										</TableCell>
-                    <TableCell component="th" scope="row" align="right">
-											{n.status === 'open' ? (
-												<Icon className="text-green text-20">check_circle</Icon>
-											) : (
-												<Icon className="text-red text-20">remove_circle</Icon>
-											)}
+										<TableCell component="th" scope="row" align="right">
+											<LoanStatus status={n.status} />
 										</TableCell>
 
 									</TableRow>
@@ -241,6 +256,78 @@ function LoanReqTable(props) {
 				onChangePage={handleChangePage}
 				onChangeRowsPerPage={handleChangeRowsPerPage}
 			/>
+
+			<SharedModal open={open} handleClose={handleClose} title={'Loan Details'}>
+				<table className={clsx(classes.table, 'w-full text-justify')}>
+					<tbody>
+						<tr className="type">
+							<th>Amount Requested</th>
+							<td>{formatToNaira(loanDetails.amountRequested)}</td>
+						</tr>
+
+						<tr className="size">
+							<th>Annual Pay</th>
+							<td>{formatToNaira(loanDetails.annualPay)}</td>
+						</tr>
+
+						<tr className="location">
+							<th>Amount Approved</th>
+							<td><div style={{
+								wordWrap: "break-word",
+								wordBreak: "break-all"
+							}}>{(loanDetails.amountApproved) ? formatToNaira(loanDetails.amountApproved) : 'Not Approved Yet'}</div></td>
+						</tr>
+
+						<tr className="owner">
+							<th>Deductable Amount</th>
+							<td>{(loanDetails.deductableAmount) ? formatToNaira(loanDetails.deductableAmount) : 'Not Approved Yet'}</td>
+						</tr>
+
+						<tr className="modified">
+							<th>Payment Mode</th>
+							<td>{loanDetails.paymentMode}</td>
+						</tr>
+
+						<tr className="created">
+							<th>Date Requested</th>
+							<td>{loanDetails.dateRequested}</td>
+						</tr>
+
+						<tr className="created">
+							<th>Duration</th>
+							<td>{`${loanDetails.duration} Months`}</td>
+						</tr>
+
+						<tr className="created">
+							<th>Line manager</th>
+							<td>{getEmployeeName(employeeList, loanDetails.departmentHead)}</td>
+						</tr>
+
+						<tr className="created">
+							<th>Director of support service</th>
+							<td>{getEmployeeName(employeeList, loanDetails.supportDirector)}</td>
+						</tr>
+
+						<tr className="created">
+							<th>Finance Manager</th>
+							<td>{getEmployeeName(employeeList, loanDetails.financeManager)}</td>
+						</tr>
+
+						<tr className="created">
+							<th>Purpose</th>
+							<td><div style={{
+								wordWrap: "break-word",
+								wordBreak: "break-all"
+							}}>{loanDetails.purpose}</div></td>
+						</tr>
+
+						<tr className="created">
+							<th>Status</th>
+							<td><LoanStatus status={loanDetails.status}/></td>
+						</tr>
+					</tbody>
+				</table>
+			</SharedModal>
 		</div>
 	);
 };
