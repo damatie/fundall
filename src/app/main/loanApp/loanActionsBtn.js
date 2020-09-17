@@ -15,6 +15,7 @@ import Typography from '@material-ui/core/Typography';
 import { TextField } from '@material-ui/core';
 import { useForm } from '@fuse/hooks';
 import * as Actions from './store/actions';
+import CurrencyInput from 'app/shared/TextInput/CurrencyInput';
 
 const LoanActionsBtn = props => {
   const header = fetchHeaders();
@@ -73,7 +74,7 @@ const LoanActionsBtn = props => {
 
 	const reject = url => {
 		swal.fire({
-			title: 'Reason for canceling the loan',
+			title: 'Reason for rejecting this loan',
 			input: 'textarea',
 			inputPlaceholder: 'Type your message here...',
 			inputAttributes: {
@@ -86,7 +87,9 @@ const LoanActionsBtn = props => {
 					setLoading2(true);
 					swal.showLoading();
 					fetch(`${url}${id}`, {
-						...header.delHeader()
+						...header.reqHeader('PATCH', {
+							comment: input
+						})
 					}).then(res => res.json()).then(
 						data => {
 							setLoading2(false);
@@ -145,15 +148,15 @@ const LoanActionsBtn = props => {
 	const handleReject = () => {
 		switch(loan.loanData.status) {
 			case 'pending': {
-				reject(`${getBaseUrl()}/loan/approve/hod/reject/`);
+				reject(`${getBaseUrl()}/loan/reject/hod/`);
 				break;
 			}
 			case 'reviewed': {
-				reject(`${getBaseUrl()}/loan/approve/support/reject/`);
+				reject(`${getBaseUrl()}/loan/reject/support/`);
 				break;
 			}
 			case 'approved': {
-				reject(`${getBaseUrl()}/loan/approve/finance/reject/`);
+				reject(`${getBaseUrl()}/loan/reject/finance/`);
 				break;
 			}
 			default: {
@@ -358,12 +361,9 @@ const ApproveLoan = props => {
 	const loan = useSelector(({ loan }) => loan.loan.data);
 	const loans = useSelector(({ loan }) => loan.loan);
 	const { id } = useParams();
+	const [amountApproved, setAmountApproved] = useState('');
 
 	const dispatch = useDispatch();
-
-	const { handleChange, form, setForm} = useForm({
-		amountApproved: 0,
-	});
 
 
 	const handleClose = () => {
@@ -373,8 +373,8 @@ const ApproveLoan = props => {
 	const handleSubmit = e => {
 		e.preventDefault();
 		const params = {
-			...form,
-			deductableAmount: `${form.amountApproved / loan.loanData.duration}`
+			amountApproved,
+			deductableAmount: `${amountApproved / loan.loanData.duration}`
 		}
 		dispatch(Actions.approveLoan(id, params))
 	};
@@ -389,36 +389,26 @@ const ApproveLoan = props => {
 					</Typography>
 				</Toolbar>
 			</AppBar>
-			<form onSubmit={handleSubmit}>
+			<form onSubmit={ e => {
+				e.persist();
+				handleSubmit(e)
+				}}>
 			<DialogContent classes={{ root: 'p-16 pb-0 sm:p-24 sm:pb-0' }}>
-				<Typography variant="subtitle1" color="inherit">
+				<Typography className='my-16' variant="subtitle1" color="inherit">
 					{`Amount Requested: ${Intl.NumberFormat().format(loan.loanData.amountRequested)}`}
 				</Typography>
 
-				<TextField 
-					className='my-16 w-full' 
+				<CurrencyInput 
+					className='my-16 w-full'
 					name='amountApproved' 
-					onChange={handleChange} 
-					error={parseInt(form.amountApproved) > loan.loanData.amountRequested} 
-					helperText={parseInt(form.amountApproved) > loan.loanData.amountRequested ? 'Please you can not approve amount that is greater than the requested amount' : ''} 
-					variant='outlined' 
+					handleChange={e => setAmountApproved(e.target.value)}
+					error={parseInt(amountApproved) > loan.loanData.amountRequested}
+					helperText={parseInt(amountApproved) > loan.loanData.amountRequested ? 'Please you can not approve amount that is greater than the requested amount' : ''}
 					label='Amount approved' 
-					type='number'
 				/>
 
-				<TextField 
-					className='my-16 w-full' 
-					name='deductableAmount' 
-					onChange={handleChange} 
-					value={form.amountApproved / loan.loanData.duration} 
-					disabled 
-					label='Deductable amount' 
-					variant='outlined'
-				/>
-
-
-			<DialogActions className="justify-between px-8 sm:px-16">
-				<ProgressBtn content={parseInt(form.amountApproved) < loan.loanData.amountRequested ? 'Return loan' : 'Approve loan'} disable={parseInt(form.amountApproved) > loan.loanData.amountRequested ||  parseInt(form.amountApproved) === 0} loading={loans.loadings} success={loans.success}/>
+			<DialogActions className="justify-center px-8 sm:px-16">
+				<ProgressBtn content={parseInt(amountApproved) < loan.loanData.amountRequested ? 'Return loan' : 'Approve loan'} disable={parseInt(amountApproved) > loan.loanData.amountRequested ||  parseInt(amountApproved) === 0} loading={loans.loadings} success={loans.success}/>
 			</DialogActions>
 			</DialogContent>
 			</form>

@@ -58,6 +58,8 @@ function SalaryAdvanceTable() {
 	const handleClick = n => {
 		if(n.status === 'pending') {
 			history.push(`/loan/request/salaryadvance_request/new/${n.id}`)
+		} else {
+			history.push(`/loan/review/salaryadvance/list/details/${n.id}`)
 		}
 	}
   

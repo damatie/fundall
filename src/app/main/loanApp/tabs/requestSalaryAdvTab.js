@@ -20,6 +20,7 @@ import AutoCompleteInput from 'app/shared/TextInput/AutoComplete';
 import { formatDataList } from 'utils/formatData';
 import employeesReducers from 'app/main/HR/employee_management/store/reducers';
 import * as employeesActions from 'app/main/HR/employee_management/store/actions';
+import CurrencyInput from 'app/shared/TextInput/CurrencyInput';
 
 const matchRole = (data, role) => {
 	const arr = [];
@@ -90,13 +91,15 @@ function RequestSalaryAdvTab(props) {
 		if(id) {
 			dispatch(Actions.updateSalaryAdvance(id, {
 				...model,
+				...form,
 				supportDirector,
 				financeManager,
-				supervisor: 1
+				supervisor: 1,
 			}));
 		} else {
 			dispatch(Actions.applySalaryAdvance({
 				...model,
+				...form,
 				supportDirector,
 				financeManager,
 				supervisor: 1
@@ -127,62 +130,24 @@ function RequestSalaryAdvTab(props) {
 			>
 				<GridSystem>
 				<div>
-					<TextFieldFormsy
-						className="mb-16 w-full"
-						type="number"
-						name="netSalary"
-						label="Net Salary"
-						value={id ? details.salaryAdvanceData.netSalary : ''}
-						onChange={handleChange}
-						validations={{
-							minLength: 1
-						}}
-						validationErrors={{
-							minLength: 'Min character length is 1'
-						}}
-						InputProps={{
-							endAdornment: (
-								<InputAdornment position="end">
-									<Icon className="text-20" color="action">
-										money
-									</Icon>
-								</InputAdornment>
-							)
-						}}
-						variant="outlined"
-						required
+					<CurrencyInput
+						values={id ? details.salaryAdvanceData.netSalary : ''}
+						handleChange={handleChange}
+						name={"netSalary"}
+						label={"Net Salary"}
+						error={''}
+						helperText={''}
 					/>
-					Amount: {new Intl.NumberFormat().format(form.netSalary)}
 				</div>
 				<div>
-					<TextFieldFormsy
-						className="mb-16 w-full"
-						type="number"
-						name="amount"
-						value={id ? details.salaryAdvanceData.amount : ''}
-						label="Amount requested"
-						onChange={handleChange}
-						validations={{
-							minLength: 1
-						}}
-						validationErrors={{
-							minLength: 'Min character length is 1'
-						}}
-						InputProps={{
-							endAdornment: (
-								<InputAdornment position="end">
-									<Icon className="text-20" color="action">
-										money
-									</Icon>
-								</InputAdornment>
-							)
-						}}
+					<CurrencyInput
+						values={id ? details.salaryAdvanceData.amount : ''}
+						handleChange={handleChange}
+						name={"amount"}
+						label={"Amount requested"}
 						error={form.amount > form.netSalary / 2.5}
 						helperText={form.amount > form.netSalary / 2.5 ? 'Please you can not request for an amount that is greater than your net salary': `Max amount: ${Intl.NumberFormat().format(form.netSalary / 2.5)}`}
-						variant="outlined"
-						required
 					/>
-					Amount: {new Intl.NumberFormat().format(form.amount)}
 				</div>
 		
 				<AutoCompleteInput data={employees && formatDataList(employees)} inputs={{label: 'Director of support service'}} setInput={setSupportDirector} value={id ? {name: details.supportDirector, id: details.salaryAdvanceData.supportDirector} : {}}/>

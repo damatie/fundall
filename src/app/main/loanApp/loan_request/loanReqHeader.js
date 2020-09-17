@@ -30,8 +30,8 @@ function LoanReqHeader(props) {
 							arrow_back
 							</Icon>
 							<Typography className="hidden sm:flex mx-0 sm:mx-12" variant="h6">
-						Loan Request
-					</Typography>
+								Loan Request
+							</Typography>
 						</Typography>
 					</FuseAnimate>
 				</div>

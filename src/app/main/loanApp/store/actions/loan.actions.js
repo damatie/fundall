@@ -2,6 +2,7 @@ import { fetchHeaders } from "app/shared/fetchHeaders";
 import swal from 'sweetalert2';
 import { handleResponse } from "app/auth/handleRes";
 import { getBaseUrl } from "app/shared/getBaseUrl";
+import { getEmployeeLoan } from "./loans.actions";
 
 export const APPROVE_LOAN = 'APPROVE LOAN';
 export const REJECT_LOAN = 'REJECT LOAN';
@@ -90,7 +91,7 @@ export const rejectLoan = id => {
   }
 }
 
-export const applyLoan = body => {
+export const applyLoan = (body, history) => {
   return dispatch => {
     dispatch({
       type: LOADING_LOAN
@@ -112,6 +113,7 @@ export const applyLoan = body => {
           dispatch({
             type: LOAN_SUCCESS
           })
+          history.push('/loan/request/list')
         }
         if(data.success === false) {
           swal.fire({
@@ -248,6 +250,7 @@ export const cancelLoan = (id, history) => {
           dispatch({
             type: CLOSED_SUCCESS
           });
+          dispatch(getEmployeeLoan());
           history.push('/loan/request/list')
         // }
       }
