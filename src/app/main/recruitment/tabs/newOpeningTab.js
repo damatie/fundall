@@ -1,9 +1,11 @@
 import { TextFieldFormsy, SelectFormsy } from '@fuse/core/formsy';
 import MenuItem from '@material-ui/core/MenuItem';
+import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Icon from '@material-ui/core/Icon';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import * as Actions from '../store/actions';
+import * as LocationActions from '../../../store/actions/index';
 import withReducer from 'app/store/withReducer';
 import reducer from '../store/reducers';
 import { DateTimePicker } from '@material-ui/pickers';
@@ -17,28 +19,27 @@ import * as departmentActions from 'app/main/HR/business_unit/department/store/a
 import * as rolesActions from 'app/main/HR/roles/store/actions';
 import ProgressBtn from 'app/shared/progressBtn';
 import GridSystem from 'app/shared/gridSystem';
+import { getBaseUrl } from 'app/shared/getBaseUrl';
+import { fetchHeaders } from 'app/shared/fetchHeaders'
+
+const baseUrl = getBaseUrl;
+const headers = fetchHeaders();
 
 function NewOpening(props) {
 	const dispatch = useDispatch();
 	const entity = useSelector(({ createOpening }) => createOpening.entity.data);
 	const loading = useSelector(({ createOpening }) => createOpening.recruitment.loading);
-	// const department = useSelector(({ department }) => department.departments);
+	const country = useSelector(({ regions }) => regions.countries.map(country => country.name));
+	const state = useSelector(({ regions }) => regions.states.map(state => state.name));
 	// const roles = useSelector(({ roles }) => roles.roles);
 
 	const [department, setDepartment] = useState([]);
-	const [country, setCountry] = React.useState([]);
 	const [isFormValid, setIsFormValid] = useState(true);
-	const [dueDate, setDueDate] = useState(new Date());
+	const [dueDate, setDueDate] = useState();
 	const formRef = useRef(null);
 
 	useEffect(() => {
-		if (country.length > 0) return;
-		fetch('https://restcountries.eu/rest/v2/all')
-			.then(res => res.json())
-			.then(res => {
-				setCountry(res.map(country => country.name));
-			})
-			.catch(err => console.log(err))
+		dispatch(LocationActions.getCountries())
 	}, [])
 	
 	const getDepartment = (entityName) => {
@@ -47,6 +48,10 @@ function NewOpening(props) {
 				setDepartment(entity.department);
 			}
 		})
+	}
+
+	const getState = (country, input) => {
+		if (input === 'country') dispatch(LocationActions.getStates(country));
 	}
 
 	function disableButton() {
@@ -58,7 +63,7 @@ function NewOpening(props) {
 	}
 
 	function handleSubmit(model) {
-		model.dueDate = moment(dueDate).format('dd-mm-yyyy');
+		model.dueDate = dueDate;
 		console.log(model);
 		dispatch(Actions.createOpening(model));
 	}
@@ -74,8 +79,6 @@ function NewOpening(props) {
 		if (item.departmentName) return item.id;
 		return item;
 	}
-
-	let state = ['Abia', 'Akwa ibom', 'Adamawa', 'Bauchi', 'Bayelsa', 'Lagos', 'Ogun', 'Rivers'];
 
 	const formInputs = [
 		{name: 'entityId', label: 'Entity name *', data: entity},
@@ -119,31 +122,38 @@ function NewOpening(props) {
 		}else if (input.type === 'date') {
 			return (
 				<>
-				<DateTimePicker
-					name={input.name}
-					label={input.label}
-					inputVariant="outlined"
-					value={dueDate}
-					hidden={true}
-					onChange={date => setDueDate(date)}
-					className="mt-8 mb-16 w-full"
-					format={'MMMM Do, YYYY hh:mm a'}
-					minDate={new Date()}
-					InputProps={{
-						endAdornment: (
-							<InputAdornment position="end">
-								<Icon className="text-20" color="action">
-									{input.icon}
-								</Icon>
-							</InputAdornment>
-						)
-					}}
-				/>
+					<TextField
+						label={input.label}
+						type={input.type}
+						variant='outlined'
+						onChange={(e) => setDueDate(e.target.value)}
+						InputLabelProps={{
+							shrink: true,
+						}}
+					/>
 				</>
 			)	
+		} else if (input.name === 'country' || input.name === 'state') {
+			return (
+				<SelectFormsy
+					className="mb-16"
+					name={input.name}
+					label={input.label}
+					value=""
+					variant="outlined"
+					required
+					requiredError='Must not be None'
+					onChange={e => {
+						getState(e.target.value, input.name);
+					}}
+				>
+					{input.data.map((item, i) => (
+						<MenuItem value={item} key={i}>{item}</MenuItem>
+					))}
+				</SelectFormsy>
+			)
 		} else {
 			return (
-				<>
 				<SelectFormsy
 					className="mb-16"
 					name={input.name}
@@ -160,7 +170,6 @@ function NewOpening(props) {
 						<MenuItem value={checkValue(item)} key={i}>{checkName(item)}</MenuItem>
 					))}
 				</SelectFormsy>
-				</>
 			)
 		}
 	})

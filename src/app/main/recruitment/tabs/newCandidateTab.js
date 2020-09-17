@@ -7,9 +7,6 @@ import Formsy from 'formsy-react';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect } from 'react-router';
-import * as entityActions from 'app/main/HR/business_unit/store/actions';
-import * as departmentActions from 'app/main/HR/business_unit/department/store/actions';
-import * as rolesActions from 'app/main/HR/roles/store/actions';
 import ProgressBtn from 'app/shared/progressBtn';
 import GridSystem from 'app/shared/gridSystem';
 import DropZone from '../../../shared/dropZonePdf';
@@ -42,23 +39,24 @@ function AddCandidate(props) {
 	}
 
 	const formInputs = [
-		{name: 'candidateName', label: 'Candidate name', validations: '', icon: 'person', type: 'text'},
+		{name: 'candidateName', label: 'Candidate name', validations: {minLength: 2}, icon: 'person', type: 'text'},
 		{name: 'candidateEmail', label: 'Candidate email', validations: 'isEmail', icon: 'email', type: 'text'},
-		{name: 'candidatePhoneNumber', label: 'Candidate phone Number', validations: '', icon: 'phone', type: 'text'},
-		{name: 'employeeStatus', label: 'Employee status', validations: '', icon: 'email', type: 'text'},
+		{name: 'candidatePhoneNumber', label: 'Candidate phone Number', icon: 'phone', type: 'number'},
+		{name: 'employeeStatus', label: 'Employee status', validations: {minLength: 2}, icon: 'email', type: 'text'},
 	];
 
 	const recruitmentForm = formInputs.map((input, i) => {
 			return (
 				<TextFieldFormsy
 					className="mb-16"
-					type="text"
+					type={input.type}
 					name={input.name}
 					label={input.label}
-					// validations="isEmail"
-					// validationErrors={{
-					// 	isEmail: 'Please enter a valid email'
-					// }}
+					validations={input.validations}
+					validationErrors={{
+						isEmail: 'Please enter a valid email',
+						minLength: `${input.label} must be atleast 2 characters`,
+					}}
 					InputProps={{
 						endAdornment: (
 							<InputAdornment position="end">
@@ -69,6 +67,7 @@ function AddCandidate(props) {
 						)
 					}}
 					variant="outlined"
+					requiredError='Field is required'
 					required
 				/>
 			)
