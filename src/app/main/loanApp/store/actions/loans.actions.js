@@ -155,10 +155,17 @@ export const getEmployeeLoan = () => {
     }).then(res => res.json()).then(
       data => {
         if(data.success) {
-          dispatch({
-            type: EMPLOYEE_LOAN_HISTORY,
-            payload: data.loanData
-          })
+          if(data.message === 'No record found') {
+            dispatch({
+              type: EMPLOYEE_LOAN_HISTORY,
+              payload: []
+            })
+          } else {
+            dispatch({
+              type: EMPLOYEE_LOAN_HISTORY,
+              payload: data.loanData
+            })
+          }
         }
       }
     ).catch(e => console.error(e))

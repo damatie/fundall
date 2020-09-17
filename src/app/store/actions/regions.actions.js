@@ -75,13 +75,6 @@ export const getStates = country => {
 
 export const getCitites = (state, name) => {
   return dispatch => {
-    // if(name === 'Nigeria') {
-    //   fetch(`http://locationsng-api.herokuapp.com/api/v1/states/${state}/lgas`).then(res => handleResponse(res)).then(
-    //     data => {
-    //       console.log(data);
-    //     }
-    //   )
-    // }
     getToken().then(token => {
       fetch(`https://www.universal-tutorial.com/api/cities/${state}`, {
         headers: {
