@@ -10,7 +10,7 @@ import Moment from 'react-moment';
 
 function Details(props) {
 
-	const { jobTitle, status, requiredSkills, createdAt, createdBy, recruiter } = props.position;
+	const { jobTitle, status, requiredSkills, createdAt, createdBy, recruiter, jobDescription } = props.position;
 
 	return (
 		<div className="md:flex w-full">
@@ -44,6 +44,21 @@ function Details(props) {
 								<div className="mb-24">
 									<Typography className="font-bold mb-4 text-15">Job title</Typography>
 									<Typography>{jobTitle}</Typography>
+								</div>
+
+								<div className="mb-24">
+									<Typography className="font-bold mb-4 text-15">Job Description</Typography>
+									{jobDescription 
+										? (
+												<Typography
+													className={'bg-blue inline text-white text-11 font-700 px-8 py-4 rounded-4'}
+													style={{cursor: 'pointer'}}
+												>
+													<a className='color-white' href={jobDescription} target="_blank" rel="noopener noreferrer">View Job Description</a>
+												</Typography>
+											)
+										: 'No job description'
+									}
 								</div>
 
 								<div className="mb-24">

@@ -224,6 +224,19 @@ const TableWidget = (props) =>{
                 <th>Job title</th>
                 <td>{(selected.jobTitle) ? selected.jobTitle : ''}</td>
               </tr>
+              { selected.jobDescription && 
+                <tr className="jobDescription">
+                  <th>Job Description</th>
+                  <td>
+                    <Typography
+                      className={'bg-blue inline text-11 font-500 px-8 py-4 rounded-4'}
+                      style={{cursor: 'pointer', color: '#fff'}}
+                    >
+                      <a className='color-white' href={selected.jobDescription} target="_blank" rel="noopener noreferrer">View Job Description</a>
+                    </Typography>
+                  </td>
+                </tr>
+              }
               <tr className="assignedRecruiter">
                 <th>Recruiter</th>
                 <td>{selected.recruiter
