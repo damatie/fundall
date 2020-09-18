@@ -242,7 +242,7 @@ function RequestLoanTab(props) {
 
 					<AutoCompleteInput data={employees && formatDataList(employees)} inputs={{ label: 'Line manager' }} setInput={setDepartmentHead} value={id ? { name: loan.data.departmentHead, id: loan.data.loanData.departmentHead } : {}} />
 
-					<AutoCompleteInput data={employees && formatDataList(employees)} inputs={{ label: 'HR' }} setInput={setSupportDirector} value={id ? { name: loan.data.supportDirector, id: loan.data.loanData.supportDirector } : {}} />
+					<AutoCompleteInput data={employees && formatDataList(employees)} inputs={{ label: 'Director of support service' }} setInput={setSupportDirector} value={id ? { name: loan.data.supportDirector, id: loan.data.loanData.supportDirector } : {}} />
 
 					<AutoCompleteInput data={employees && formatDataList(employees)} inputs={{ label: 'Finance manager' }} setInput={setFinanceManager} value={id ? { name: loan.data.financeManager, id: loan.data.loanData.financeManager } : {}} />
 

@@ -18,6 +18,7 @@ import { useSelector } from 'react-redux';
 import moment from 'moment';
 import LoanHistory from './loanHistory';
 import SalaryAdvanceActionBtn from '../salaryAdvance/salaryAdvanceActionBtn';
+import { formatToNaira } from 'utils/formatNumber';
 
 function SALoanDetailsTab({setValue}) {
 	// const profile = useSelector(({ profile}) => profile.data)
@@ -25,7 +26,7 @@ function SALoanDetailsTab({setValue}) {
 
 	return (
 		<div className="md:flex">
-			<div className="flex flex-col flex-1 md:ltr:pr-32 md:rtl:pl-32">
+			<div className="flex w-full">
 				{/* <FuseAnimateGroup
 					enter={{
 						animation: 'transition.slideUpBigIn'
@@ -63,12 +64,12 @@ function SALoanDetailsTab({setValue}) {
 
 							<div className="mb-24">
 								<Typography className="font-bold mb-4 text-15">Amount Requested</Typography>
-								<Typography>{`₦ ${Intl.NumberFormat().format(salaryAdvanceDetails.details.salaryAdvanceData.amount)}`}</Typography>
+								<Typography>{formatToNaira(salaryAdvanceDetails.details.salaryAdvanceData.amount)}</Typography>
 							</div>
 
 							<div className="mb-24">
 								<Typography className="font-bold mb-4 text-15">Net Salary</Typography>
-								<Typography>{`₦ ${Intl.NumberFormat().format(salaryAdvanceDetails.details.salaryAdvanceData.netSalary)}`}</Typography>
+								<Typography>{formatToNaira(salaryAdvanceDetails.details.salaryAdvanceData.netSalary)}</Typography>
 							</div>
 
 							<div className="mb-24">
@@ -119,10 +120,6 @@ function SALoanDetailsTab({setValue}) {
          : <></> }
       
 			</div>
-
-		  <div className="flex flex-col md:w-320">
-				<LoanHistory />
-			</div> 
 		</div>
 	);
 }

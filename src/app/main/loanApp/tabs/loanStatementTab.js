@@ -35,7 +35,7 @@ function LoanStatementTab() {
   }, [loan])
 	return (
 		<div className="md:flex">
-			<div className="flex flex-col flex-1 md:ltr:pr-32 md:rtl:pl-32">
+			<div className="flex w-full">
           {statements.map(item => (
             <FuseAnimateGroup
             enter={{
@@ -70,9 +70,9 @@ function LoanStatementTab() {
           ))}
 			</div>
 
-		  <div className="flex flex-col md:w-320">
+		  {/* <div className="flex flex-col md:w-320">
 				<LoanHistory />
-			</div> 
+			</div>  */}
 		</div>
 	);
 }

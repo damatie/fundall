@@ -39,6 +39,13 @@ const LoanStatus = (props) => {
         </Typography>
       );
       break;
+    case 'corrected':
+      return (
+        <Typography className={'bg-orange text-bold text-white inline text-11 font-500 px-8 py-4 rounded-4'}>
+          {status}
+        </Typography>
+      );
+      break;
     case 'closed':
       return (
         <Typography className={'bg-black text-white inline text-11 font-500 px-8 py-4 rounded-4'}>
