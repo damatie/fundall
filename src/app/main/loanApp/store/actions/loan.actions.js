@@ -23,7 +23,7 @@ export const approveLoan = (id, body) => {
     dispatch({
       type: LOADING_LOAN
     })
-    fetch(`${getBaseUrl()}/loan/approve/support/${id}`, {
+    fetch(`${getBaseUrl()}/loan/approve/finance/${id}`, {
       ...header.reqHeader(
         'PATCH',
         body
@@ -33,7 +33,7 @@ export const approveLoan = (id, body) => {
         if(data) {
           swal.fire({
             title: 'Approve Loan',
-            text: 'Loan approved successfully',
+            text: data.message,
             icon: 'success',
             timer: 3000
           })
@@ -255,5 +255,40 @@ export const cancelLoan = (id, history) => {
         // }
       }
     ).catch(e => console.error(e));
+  }
+}
+
+export const confrimLoan = (id) => {
+  return async dispatch => {
+    try {
+      swal.showLoading();
+      const result = await fetch(`${getBaseUrl()}/loan/confirm/${id}`, {
+        ...header.reqHeader('PATCH',{})
+      }).then(res => handleResponse(res));
+      if(result.success) {
+        swal.fire({
+          title: 'Accept loan',
+          text: result.message,
+          icon: 'success',
+          timer: 2500
+        });
+        dispatch(getEmployeeLoan());
+      } else {
+        swal.fire({
+          title: 'Accept loan Error',
+          text: result.message,
+          icon: 'error',
+          timer: 2500
+        });
+      }
+    } catch(e) {
+      swal.fire({
+        title: 'Server Error',
+        text: 'Service unavailable',
+        icon: 'error',
+        timer: 2500
+      });
+    }
+    
   }
 }

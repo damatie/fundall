@@ -16,6 +16,7 @@ import { TextField } from '@material-ui/core';
 import { useForm } from '@fuse/hooks';
 import * as Actions from './store/actions';
 import CurrencyInput from 'app/shared/TextInput/CurrencyInput';
+import { formatToNaira } from 'utils/formatNumber';
 
 const LoanActionsBtn = props => {
   const header = fetchHeaders();
@@ -201,7 +202,7 @@ const LoanActionsBtn = props => {
 
 	const closeLoan = () => {
 		setLoading2(true);
-		fetch(`${getBaseUrl()}/loan/approve/close/${id}`, {
+		fetch(`${getBaseUrl()}/loan/close/${id}`, {
 			...header.reqHeader(
 				'PATCH',
 				{
@@ -236,48 +237,6 @@ const LoanActionsBtn = props => {
 			setLoading2(false);
 			console.error(e)});
   }
-	
-	const handelReturnLeave = () => {
-		setLoading3(true);
-		console.log(props.form)
-		if(props.form.amountApproved === 0 || props.form.deductableAmount) {
-
-		}
-		// fetch(`${getBaseUrl()}/loan/approve/finance/${id}`, {
-		// 	...header.reqHeader(
-		// 		'PATCH',
-		// 		{
-		// 			...props.form
-		// 		}
-		// 	)
-		// }).then(res => res.json()).then(
-		// 	data => {
-		// 		setLoading3(false);
-		// 		if(data.success) {
-		// 			swal.fire({
-		// 				title: 'Return Loan',
-		// 				text: data.message,
-		// 				icon: 'success',
-		// 				timer: 3000
-		// 			})
-		// 			setSuccess3(true);
-		// 			history.push({
-		// 				pathname: '/loan/review/list'
-		// 			})
-		// 		} else {
-		// 			swal.fire({
-		// 				title: 'Return Loan',
-		// 				text: data.message,
-		// 				icon: 'error',
-		// 				timer: 3000
-		// 			})
-		// 			setSuccess3(true);
-		// 		}
-		// 	}
-		// ).catch(e => {
-		// 	setLoading3(false);
-		// 	console.error(e)});
-	}
 
 	const handelAcceptLoan = () => {
 		setLoading3(true);
@@ -370,6 +329,12 @@ const ApproveLoan = props => {
 		props.setOpen(false);
 	};
 
+	React.useEffect(() => {
+		if(loan.loanData.amountApproved) {
+			setAmountApproved(loan.loanData.amountApproved)
+		}
+	}, [loan.loanData.amountApproved])
+
 	const handleSubmit = e => {
 		e.preventDefault();
 		const params = {
@@ -395,9 +360,10 @@ const ApproveLoan = props => {
 				}}>
 			<DialogContent classes={{ root: 'p-16 pb-0 sm:p-24 sm:pb-0' }}>
 				<Typography className='my-16' variant="subtitle1" color="inherit">
-					{`Amount Requested: ${Intl.NumberFormat().format(loan.loanData.amountRequested)}`}
+					{`Amount Requested: ${formatToNaira(loan.loanData.amountRequested)}`}
 				</Typography>
 
+				{!loan.loanData.amountApproved ? 
 				<CurrencyInput 
 					className='my-16 w-full'
 					name='amountApproved' 
@@ -405,10 +371,12 @@ const ApproveLoan = props => {
 					error={parseInt(amountApproved) > loan.loanData.amountRequested}
 					helperText={parseInt(amountApproved) > loan.loanData.amountRequested ? 'Please you can not approve amount that is greater than the requested amount' : ''}
 					label='Amount approved' 
-				/>
+				/> : <Typography className='my-16' variant="subtitle1" color="inherit">
+				{`Amount Approved: ${formatToNaira(loan.loanData.amountApproved)}`}
+			</Typography>}
 
 			<DialogActions className="justify-center px-8 sm:px-16">
-				<ProgressBtn content={parseInt(amountApproved) < loan.loanData.amountRequested ? 'Return loan' : 'Approve loan'} disable={parseInt(amountApproved) > loan.loanData.amountRequested ||  parseInt(amountApproved) === 0} loading={loans.loadings} success={loans.success}/>
+				<ProgressBtn content={parseInt(amountApproved) < loan.loanData.amountRequested && !loan.loanData.amountApproved ? 'Return loan' : 'Approve loan'} disable={parseInt(amountApproved) > loan.loanData.amountRequested ||  parseInt(amountApproved) === 0} loading={loans.loadings} success={loans.success}/>
 			</DialogActions>
 			</DialogContent>
 			</form>

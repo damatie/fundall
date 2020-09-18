@@ -7,7 +7,7 @@ import swal from 'sweetalert2';
 import { getBaseUrl } from 'app/shared/getBaseUrl';
 
 const SalaryAdvanceActionBtn = () => {
-  const salaryAdvanceDetails = useSelector(({salaryAdvanceDetails}) => salaryAdvanceDetails.salaryAdvances);
+	const salaryAdvanceDetails = useSelector(({ salaryAdvanceDetails }) => salaryAdvanceDetails.salaryAdvances);
 	const [success1, setSuccess1] = useState(false);
 	const [loading1, setLoading1] = useState(false);
 
@@ -15,14 +15,14 @@ const SalaryAdvanceActionBtn = () => {
 	const [loading2, setLoading2] = useState(false);
 
 	const [success3, setSuccess3] = useState(false);
-  const [loading3, setLoading3] = useState(false);
-  
-  const history = useHistory();
-  const { id } = useParams();
+	const [loading3, setLoading3] = useState(false);
 
-  const header = fetchHeaders();
+	const history = useHistory();
+	const { id } = useParams();
 
-  const approve = url => {
+	const header = fetchHeaders();
+
+	const approve = url => {
 		fetch(`${url}${id}`, {
 			...header.reqHeader(
 				'PATCH',
@@ -32,8 +32,8 @@ const SalaryAdvanceActionBtn = () => {
 			),
 		}).then(res => res.json()).then(
 			data => {
-				
-				if(data.message === 'Approved') {
+
+				if (data.message === 'Approved') {
 					setSuccess3(true);
 					swal.fire({
 						title: 'Approve Salary Advance  ',
@@ -44,11 +44,11 @@ const SalaryAdvanceActionBtn = () => {
 					history.push({
 						pathname: '/loan/review/salaryadvance/list'
 					})
-        } else {
-					if(data.success === false) {
-						
+				} else {
+					if (data.success === false) {
+
 					}
-					if(data.error) {
+					if (data.error) {
 						swal.fire({
 							title: 'Approve Salary Advance  ',
 							text: data.error,
@@ -58,48 +58,69 @@ const SalaryAdvanceActionBtn = () => {
 						setSuccess3(true);
 					}
 				}
-        
+
 			}
 		).catch(e => {
 			setLoading3(false);
-			console.error(e)});
+			console.error(e)
+		});
 	};
 
 	const reject = url => {
-		setLoading2(true);
-		fetch(`${url}${id}`, {
-			...header.delHeader()
-		}).then(res => res.json()).then(
-			data => {
-				setLoading2(false);
-				if(data.success) {
-					swal.fire({
-						title: 'Reject Loan',
-						text: data.message,
-						icon: 'success',
-						timer: 3000
-					})
-					setSuccess2(true);
-					history.push({
-						pathname: '/loan/review/list'
-					})
+		swal.fire({
+			title: 'Reason for rejecting this loan',
+			input: 'textarea',
+			inputPlaceholder: 'Type your message here...',
+			inputAttributes: {
+				'aria-label': 'Type your message here'
+			},
+			showCancelButton: true,
+			confirmButtonText: 'Send',
+			preConfirm: (input) => {
+				if (input) {
+					setLoading2(true);
+					swal.showLoading();
+					fetch(`${url}${id}`, {
+						...header.reqHeader('PATCH', {
+							comment: input
+						})
+					}).then(res => res.json()).then(
+						data => {
+							setLoading2(false);
+							if (data) {
+								swal.fire({
+									title: 'Reject Loan',
+									text: data.message,
+									icon: 'success',
+									timer: 3000
+								})
+								setSuccess2(true);
+								history.push({
+									pathname: '/loan/review/list'
+								})
+							} else {
+								swal.fire({
+									title: 'Reject Loan',
+									text: data.message,
+									icon: 'error',
+									timer: 3000
+								})
+								setSuccess2(true);
+							}
+						}
+					).catch(e => {
+						setLoading2(false);
+						console.error(e)
+					});
 				} else {
-					swal.fire({
-						title: 'Reject Loan',
-						text: data.message,
-						icon: 'error',
-						timer: 3000
-					})
-					setSuccess2(true);
+					swal.showValidationMessage('Please enter your message')
 				}
 			}
-		).catch(e => {
-			setLoading2(false);
-			console.error(e)});
+		})
 	};
 
 	const handleApproveLeave = () => {
-		switch(salaryAdvanceDetails.details.salaryAdvanceData.status) {
+		switch (salaryAdvanceDetails.details.salaryAdvanceData.status) {
 			case 'pending': {
 				approve(`${getBaseUrl()}/salary-advance/approve/support/`);
 				break;
@@ -116,16 +137,12 @@ const SalaryAdvanceActionBtn = () => {
 				return 'hello';
 			}
 		}
-  };
-  
+	};
+
 	const handleReject = () => {
-		switch(salaryAdvanceDetails.details.status) {
+		switch (salaryAdvanceDetails.details.salaryAdvanceData.status) {
 			case 'pending': {
-				reject(`${getBaseUrl()}/salary-advance/hod/reject/`);
-				break;
-			}
-			case 'reviewed': {
-				reject(`${getBaseUrl()}/salary-advance/hr/reject/`);
+				reject(`${getBaseUrl()}/salary-advance/support/reject/`);
 				break;
 			}
 			case 'approved': {
@@ -140,17 +157,17 @@ const SalaryAdvanceActionBtn = () => {
 
 	const closeLoan = () => {
 		setLoading2(true);
-		fetch(`${getBaseUrl()}/loan/approve/close/${id}`, {
+		fetch(`${getBaseUrl()}/salary-advance/close/${id}`, {
 			...header.reqHeader(
 				'PATCH',
 				{
-					
+
 				}
 			)
 		}).then(res => res.json()).then(
 			data => {
 				setLoading2(false);
-				if(data.success) {
+				if (data.success) {
 					swal.fire({
 						title: 'Close Loan',
 						text: data.message,
@@ -173,26 +190,27 @@ const SalaryAdvanceActionBtn = () => {
 			}
 		).catch(e => {
 			setLoading2(false);
-			console.error(e)});
+			console.error(e)
+		});
 	}
-  return (
-    <div className="flex items-center justify-evenly">
-      {salaryAdvanceDetails.details.salaryAdvanceData.status !== 'open' && salaryAdvanceDetails.details.salaryAdvanceData.status !== 'closed' ? 
-      <>
-        <ProgressBtn loading={loading3} success={success3} color='primary' onClick={handleApproveLeave} content='Approve Loan'/> 
-        <ProgressBtn loading={loading2} success={success2} color='red' onClick={handleReject} content='Reject Loan' /> 
-      </>
-      : <></>}
+	return (
+		<div className="flex items-center justify-evenly">
+			{salaryAdvanceDetails.details.salaryAdvanceData.status !== 'open' && salaryAdvanceDetails.details.salaryAdvanceData.status !== 'closed' ?
+				<>
+					<ProgressBtn loading={loading3} success={success3} color='primary' onClick={handleApproveLeave} content='Approve Loan' />
+					<ProgressBtn loading={loading2} success={success2} color='red' onClick={handleReject} content='Reject Loan' />
+				</>
+				: <></>}
 
-      {salaryAdvanceDetails.details.salaryAdvanceData.status === 'open' ? 
-      <>
-        {/* <ProgressBtn loading={loading3} success={success3} color='primary' onClick={generateLoanStatement} content='Loan statement'/>  */}
-        <ProgressBtn loading={loading2} success={success2} color='red' onClick={closeLoan} content='Close Loan' /> 
-      </> :
-      <></>
-      }
-    </div>
-  );
+			{salaryAdvanceDetails.details.salaryAdvanceData.status === 'open' ?
+				<>
+					{/* <ProgressBtn loading={loading3} success={success3} color='primary' onClick={generateLoanStatement} content='Loan statement'/>  */}
+					<ProgressBtn loading={loading2} success={success2} color='red' onClick={closeLoan} content='Close Loan' />
+				</> :
+				<></>
+			}
+		</div>
+	);
 };
 
 export default SalaryAdvanceActionBtn;
