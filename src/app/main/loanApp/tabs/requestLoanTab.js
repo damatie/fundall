@@ -110,7 +110,7 @@ function RequestLoanTab(props) {
 				financeManager,
 				annualPay,
 				amountRequested
-			}));
+			}, history));
 		} else {
 			dispatch(Actions.applyLoan({
 				...model,
@@ -240,11 +240,11 @@ function RequestLoanTab(props) {
 						))}
 					</SelectFormsy>
 
-					<AutoCompleteInput data={employees && formatDataList(employees)} inputs={{ label: 'Line manager' }} setInput={setDepartmentHead} value={id ? { name: loan.data.departmentHead, id: loan.data.loanData.departmentHead } : {}} />
+					<AutoCompleteInput data={employees && formatDataList(employees, 'Line managers')} inputs={{ label: 'Line manager' }} setInput={setDepartmentHead} value={id ? { name: loan.data.departmentHead, id: loan.data.loanData.departmentHead } : {}} />
 
-					<AutoCompleteInput data={employees && formatDataList(employees)} inputs={{ label: 'Director of support service' }} setInput={setSupportDirector} value={id ? { name: loan.data.supportDirector, id: loan.data.loanData.supportDirector } : {}} />
+					<AutoCompleteInput data={employees && formatDataList(employees, 'Director of support service')} inputs={{ label: 'Director of support service' }} setInput={setSupportDirector} value={id ? { name: loan.data.supportDirector, id: loan.data.loanData.supportDirector } : {}} />
 
-					<AutoCompleteInput data={employees && formatDataList(employees)} inputs={{ label: 'Finance manager' }} setInput={setFinanceManager} value={id ? { name: loan.data.financeManager, id: loan.data.loanData.financeManager } : {}} />
+					<AutoCompleteInput data={employees && formatDataList(employees, 'Finance manager')} inputs={{ label: 'Finance manager' }} setInput={setFinanceManager} value={id ? { name: loan.data.financeManager, id: loan.data.loanData.financeManager } : {}} />
 
 					<TextFieldFormsy
 						className="my-16"
