@@ -254,7 +254,7 @@ const navigationConfig = [
 				type: 'item',
 				url: '/loan/review/',
 				icon: 'monetization_on',
-				auth: authRoles.managers,
+				auth: authRoles.loan,
 			},
 			{
 				id: 'loan_request',

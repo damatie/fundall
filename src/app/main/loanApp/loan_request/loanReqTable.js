@@ -176,6 +176,10 @@ function LoanReqTable(props) {
 		dispatch(Actions.cancelLoan(id, history));
 	}
 
+	if(!employeeList) {
+		return <>Loading...</>
+	}
+
 	return (
 		<div className="w-full flex flex-col">
 			<FuseScrollbars className="flex-grow overflow-x-auto">
@@ -265,7 +269,7 @@ function LoanReqTable(props) {
 			/>
 
 			<SharedModal open={open} handleClose={handleClose} title={'Loan Details'}>
-				<table className={clsx(classes.table, 'w-full text-justify')}>
+				{(employeeList ? <table className={clsx(classes.table, 'w-full text-justify')}>
 					<tbody>
 						<tr className="type">
 							<th>Amount Requested</th>
@@ -342,7 +346,7 @@ function LoanReqTable(props) {
 							<td><LoanStatus status={loanDetails.status}/></td>
 						</tr>
 					</tbody>
-				</table>
+				</table> : <></>)}
 				{loanDetails.status === 'corrected' ? 
 					<div className='flex justify-center w-full my-16 mx-auto'>
 						<CustomIconButton onClick={e => handleCancel(loanDetails.id)} icon='cancel' className={'bg-red hover:bg-red-A700 text-white w-1/5 mx-16'}>

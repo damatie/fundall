@@ -15,6 +15,7 @@ export const GET_RETURNED_LOAN = 'GET RETURNED LOAN'
 
 const header = fetchHeaders();
 export const getPendingLoan = () => {
+  const arr = [];
   return dispatch => {
     dispatch({
       type: LOADING_LOANS
@@ -26,9 +27,14 @@ export const getPendingLoan = () => {
     }).then(res => res.json()).then(
       data => {
         if(data) {
+          for(const i of data.data) {
+            if(i.loan.status === 'pending') {
+              arr.push(i);
+            }
+          }
           dispatch({
             type: GET_ALL_PENDING_LOAN,
-            payload: data.data ? data.data : []
+            payload: data.data ? arr : []
           })
         }
       }

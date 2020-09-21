@@ -35,7 +35,7 @@ function LoanStatementTab() {
   }, [loan])
 	return (
 		<div className="md:flex">
-			<div className="flex w-full">
+			<div className="flex w-full flex-wrap justify-between">
           {statements.map(item => (
             <FuseAnimateGroup
             enter={{

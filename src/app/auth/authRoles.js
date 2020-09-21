@@ -8,7 +8,8 @@ const authRoles = {
 	managers: ['HR', 'Line managers', 'Finance manager', 'Head of department', 'Director of support service'],
 	hod: ['Head of department'],
 	user: ['admin', 'staff', 'user'],
-	onlyGuest: []
+	onlyGuest: [],
+	loan: ['Line managers', 'Finance manager', 'Director of support service']
 };
 
 export default authRoles;
