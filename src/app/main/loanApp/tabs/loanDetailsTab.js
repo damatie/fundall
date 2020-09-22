@@ -24,6 +24,7 @@ import useLoanManagement, { useApproveLoan, useLoanStatement } from 'app/hooks/u
 import { formatToNaira } from 'utils/formatNumber';
 import SharedModal from 'app/shared/modal/SharedModal';
 import CurrencyInput from 'app/shared/TextInput/CurrencyInput';
+import { useParams } from 'react-router';
 
 function LoanDetailsTab({ setValue }) {
 	const loan = useSelector(({ loan }) => loan.loan.data);

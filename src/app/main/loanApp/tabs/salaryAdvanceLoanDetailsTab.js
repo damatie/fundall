@@ -19,10 +19,21 @@ import moment from 'moment';
 import LoanHistory from './loanHistory';
 import SalaryAdvanceActionBtn from '../salaryAdvance/salaryAdvanceActionBtn';
 import { formatToNaira } from 'utils/formatNumber';
+import CustomIconButton from 'app/shared/button/CustomIconButton';
+import useSalaryAdvanceMgt from 'app/hooks/useSalaryAdvanceMgt';
+import { useParams } from 'react-router';
 
 function SALoanDetailsTab({setValue}) {
-	// const profile = useSelector(({ profile}) => profile.data)
+	const profile = useSelector(({ profile}) => profile.data)
 	const salaryAdvanceDetails = useSelector(({ salaryAdvanceDetails}) => salaryAdvanceDetails.salaryAdvances);
+
+	const { id } = useParams();
+
+	const { showBtn, showCancelBtn, handleApprove, handleReject, handleCancel } = useSalaryAdvanceMgt({
+		loan: salaryAdvanceDetails.details,
+		userRole: profile.role.name,
+		id,
+	});
 
 	return (
 		<div className="md:flex">
@@ -82,22 +93,6 @@ function SALoanDetailsTab({setValue}) {
 								<Typography>{salaryAdvanceDetails.details.financeManager}</Typography>
 							</div>
 
-							{salaryAdvanceDetails.details.status !== 'approved' ? <SalaryAdvanceActionBtn /> : <></>}
-
-						</CardContent>
-					</Card>
-
-					{salaryAdvanceDetails.details.status === 'approved' ? 
-          <Card className="w-full mb-16">
-						<AppBar position="static" elevation={0}>
-							<Toolbar className="px-8">
-								<Typography variant="subtitle1" color="inherit" className="flex-1 px-12">
-									Loan Request Status
-								</Typography>
-							</Toolbar>
-						</AppBar>
-
-						<CardContent>
 							<div className="mb-24">
 								<Typography className="font-bold mb-4 text-15">Supervisor Approved Date</Typography>
 								<Typography>{moment(salaryAdvanceDetails.details.supervisorApprovalDate).format('LL')}</Typography>
@@ -112,13 +107,30 @@ function SALoanDetailsTab({setValue}) {
 								<Typography className="font-bold mb-4 text-15">Finance Manager Approved Date</Typography>
 								<Typography>{!salaryAdvanceDetails.details.financeManagerApprovalDate ? 'Not approved yet' :  moment(salaryAdvanceDetails.details.financeManagerApprovalDate).format('LL')}</Typography>
 							</div>
+							<div className="flex items-center justify-evenly w-2/4 mx-auto">
+							{showBtn ?
+								<>
+									<CustomIconButton type='success' icon='check' onClick={handleApprove}>
+										Accept
+									</CustomIconButton>
 
-              
-							<SalaryAdvanceActionBtn />
+									<CustomIconButton type='error' icon='cancel' onClick={handleReject}>
+										Reject
+									</CustomIconButton>
+								</>
+							: <></>}
+
+							{showCancelBtn ?
+								<>
+									<CustomIconButton type='error' icon='cancel'onClick={handleCancel} >
+										Close loan
+									</CustomIconButton>
+								</>
+							: <></>}
+						</div>
+
 						</CardContent>
-				</Card> 
-         : <></> }
-      
+					</Card>
 			</div>
 		</div>
 	);
