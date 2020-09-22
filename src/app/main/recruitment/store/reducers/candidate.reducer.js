@@ -49,6 +49,15 @@ const candidateReducer = (state = initialState, action) => {
 				success: true,
 			}
 		}
+		case Actions.DELETE_CANDIDATE_SUCCESS: {
+			const newData = state.data.filter(candidate => candidate.id !== action.payload);
+			return {
+				...state,
+				loading: false,
+				success: true,
+				data: newData,
+			}
+		}
 		default: {
 			return state;
 		}
