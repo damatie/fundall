@@ -153,9 +153,9 @@ function RequestSalaryAdvTab(props) {
 					/>
 				</div>
 		
-				<AutoCompleteInput data={employees && formatDataList(employees)} inputs={{label: 'Director of support service'}} setInput={setSupportDirector} value={id ? {name: details.supportDirector, id: details.salaryAdvanceData.supportDirector} : {}}/>
+				<AutoCompleteInput data={employees && formatDataList(employees, 'Director of support service')} inputs={{label: 'Director of support service'}} setInput={setSupportDirector} value={id ? {name: details.supportDirector, id: details.salaryAdvanceData.supportDirector} : {}}/>
 
-				<AutoCompleteInput data={employees && formatDataList(employees)} inputs={{label: 'Finance manager'}} setInput={setFinanceManager} value={ id ? {name: details.financeManager, id: details.salaryAdvanceData.financeManager} : {}}/>
+				<AutoCompleteInput data={employees && formatDataList(employees, 'Finance manager')} inputs={{label: 'Finance manager'}} setInput={setFinanceManager} value={ id ? {name: details.financeManager, id: details.salaryAdvanceData.financeManager} : {}}/>
 
 				</GridSystem>
 				{id ? <ProgressBtn success={salaryAdvance.success} loading={salaryAdvance.loading} content='Update Request' disable={!isFormValid}/> : <ProgressBtn success={salaryAdvance.success} loading={salaryAdvance.loading} content='Request' disable={!isFormValid}/>}
