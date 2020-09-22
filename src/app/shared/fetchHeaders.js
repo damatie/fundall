@@ -3,17 +3,12 @@ import { useAuth } from "app/hooks/useAuth"
 export const fetchHeaders = () => {
   
   const token = useAuth;
-
-  // authorization
-  const auth = {
-    Authorization: `JWT ${token().getToken}`
-  }
   
   // get request header
   const getRegHeader = () => {
     return {
       headers: {
-        ...auth
+        Authorization: `JWT ${token().getToken}`
       }
     };
   };
@@ -23,7 +18,7 @@ export const fetchHeaders = () => {
     return {
       method: 'delete',
       headers: {
-        ...auth,
+        Authorization: `JWT ${token().getToken}`
       },
     }
   }
@@ -34,7 +29,7 @@ export const fetchHeaders = () => {
       return {
         method: method,
         headers: {
-          ...auth,
+          Authorization: `JWT ${token().getToken}`,
           'Content-type': 'application/json'
         },
         body: JSON.stringify(body)
@@ -43,7 +38,7 @@ export const fetchHeaders = () => {
       return {
         method: method,
         headers: {
-          ...auth,
+          Authorization: `JWT ${token().getToken}`,
           'Content-type': 'application/json'
         }
       };
@@ -54,7 +49,7 @@ export const fetchHeaders = () => {
     return {
       method: method,
       headers: {
-        ...auth,
+        Authorization: `JWT ${token().getToken}`,
       },
       body: body
     };
@@ -70,7 +65,7 @@ export const fetchHeaders = () => {
     return {
       method: method,
       headers: {
-        ...auth,
+        Authorization: `JWT ${token().getToken}`,
       },
       body: formData
     };
