@@ -71,8 +71,10 @@ function SalaryAdvanceTable() {
   }, []);
 
   useEffect(() => {
-    setData(salaryAdvanceLog.log)
-	});
+		if(salaryAdvanceLog) {
+			setData(salaryAdvanceLog.log)
+		}
+	}, [salaryAdvanceLog]);
 
 	const history = useHistory();
 	
@@ -86,6 +88,8 @@ function SalaryAdvanceTable() {
 	}
 
 	const handleClose = () => setOpen(false);
+
+	if(employeeList.length === 0) return <>Loading...</>
   
 	return (
 		<>

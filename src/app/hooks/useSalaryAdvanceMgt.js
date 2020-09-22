@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import * as Actions from 'app/main/loanApp/salaryAdvance/store/actions';
-import { useParams } from 'react-router';
 
 const handleBtnVisibility = ({role, status}) => {
   const ruleOne = role === 'Director of support service' && (status === 'pending' || status !== 'rejected');
