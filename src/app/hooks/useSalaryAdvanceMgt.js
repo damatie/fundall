@@ -3,11 +3,11 @@ import { useDispatch } from 'react-redux';
 import * as Actions from 'app/main/loanApp/salaryAdvance/store/actions';
 
 const handleBtnVisibility = ({role, status}) => {
-  const ruleOne = role === 'Director of support service' && (status === 'pending' || status !== 'rejected');
-  const ruleTwo = role === 'Finance manager' && (status === 'approved' || status !== 'rejected');
-  const ruleThree = status !== 'open' && status !== 'closed' && status !== 'rejected';
+  const ruleOne = role === 'Director of support service' && (status === 'pending');
+  const ruleTwo = role === 'Finance manager' && (status === 'approved');
+  // const ruleThree = status === 'open' && status === 'closed' && status === 'rejected';
 
-  const combineRules = ruleOne || ruleTwo || ruleThree;
+  const combineRules = ruleOne || ruleTwo;
 
   return combineRules;
 };

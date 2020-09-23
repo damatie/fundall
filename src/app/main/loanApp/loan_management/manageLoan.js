@@ -174,7 +174,7 @@ function ManageLoan(props) {
 				<Tab className="h-64 normal-case" label="Approved Loan" />
 				<Tab className="h-64 normal-case" label="Returned Loan" /> 
 				<Tab className="h-64 normal-case" label="Open Loan" /> 
-				<Tab className="h-64 normal-case" label="Close Loan" /> 
+				<Tab className="h-64 normal-case" label="Closed Loan" /> 
 			</Tabs>
 			}
 			content={
