@@ -22,6 +22,7 @@ import * as employeesActions from 'app/main/HR/employee_management/store/actions
 import AutoCompleteInput from 'app/shared/TextInput/AutoComplete';
 import { formatDataList } from 'utils/formatData';
 import CurrencyInput from 'app/shared/TextInput/CurrencyInput';
+import PhoneNumberInput from 'app/shared/TextInput/PhoneNumberInput';
 
 const useStyles = makeStyles(theme => ({
 	grid: {
@@ -46,6 +47,8 @@ function RequestLoanTab(props) {
 	const dispatch = useDispatch();
 	const history = useHistory();
 
+	const [error, setError] = useState(false);
+
 	const [isFormValid, setIsFormValid] = useState(true);
 	const annualRef = useRef(null);
 	const formRef = useRef(null);
@@ -55,6 +58,7 @@ function RequestLoanTab(props) {
 	const [supportDirector, setSupportDirector] = useState('');
 	const [departmentHead, setDepartmentHead] = useState('');
 	const [financeManager, setFinanceManager] = useState('');
+	const [phoneNumber, setPhoneNumber] = useState();
 
 	const isInput = () => supportDirector && departmentHead && financeManager;
 
@@ -87,6 +91,7 @@ function RequestLoanTab(props) {
 			setSupportDirector(loan.data.loanData.supportDirector);
 			setAnnualPay(loan.data.loanData.annualPay);
 			setAmountRequested(loan.data.loanData.amountRequested);
+			setPhoneNumber(loan.data.loanData.phoneNumber)
 		}
 	}, [id, loan.data])
 
@@ -100,6 +105,10 @@ function RequestLoanTab(props) {
 		setIsFormValid(true);
 	}
 
+	const handlePhone = value => {
+		setPhoneNumber(value);
+	}
+
 	function handleSubmit(model) {
 
 		if (id) {
@@ -109,8 +118,9 @@ function RequestLoanTab(props) {
 				supportDirector,
 				financeManager,
 				annualPay,
-				amountRequested
-			}));
+				amountRequested,
+				phoneNumber
+			}, history));
 		} else {
 			dispatch(Actions.applyLoan({
 				...model,
@@ -118,7 +128,8 @@ function RequestLoanTab(props) {
 				supportDirector,
 				financeManager,
 				annualPay,
-				amountRequested
+				amountRequested,
+				phoneNumber
 			}, history))
 		}
 	}
@@ -175,7 +186,7 @@ function RequestLoanTab(props) {
 						required
 					/>
 
-					<TextFieldFormsy
+					{/* <TextFieldFormsy
 						className="mb-16"
 						type="number"
 						name="phoneNumber"
@@ -198,7 +209,9 @@ function RequestLoanTab(props) {
 						}}
 						variant="outlined"
 						required
-					/>
+					/> */}
+
+					<PhoneNumberInput setError={setError} value={id ? loan.data.loanData.phoneNumber : null} onChange={handlePhone} country={'ng'}/>
 
 					<TextFieldFormsy
 						className="mb-16"
@@ -240,11 +253,11 @@ function RequestLoanTab(props) {
 						))}
 					</SelectFormsy>
 
-					<AutoCompleteInput data={employees && formatDataList(employees)} inputs={{ label: 'Line manager' }} setInput={setDepartmentHead} value={id ? { name: loan.data.departmentHead, id: loan.data.loanData.departmentHead } : {}} />
+					<AutoCompleteInput data={employees && formatDataList(employees, 'Line managers')} inputs={{ label: 'Line manager' }} setInput={setDepartmentHead} value={id ? { name: loan.data.departmentHead, id: loan.data.loanData.departmentHead } : {}} />
 
-					<AutoCompleteInput data={employees && formatDataList(employees)} inputs={{ label: 'HR' }} setInput={setSupportDirector} value={id ? { name: loan.data.supportDirector, id: loan.data.loanData.supportDirector } : {}} />
+					<AutoCompleteInput data={employees && formatDataList(employees, 'Director of support service')} inputs={{ label: 'Director of support service' }} setInput={setSupportDirector} value={id ? { name: loan.data.supportDirector, id: loan.data.loanData.supportDirector } : {}} />
 
-					<AutoCompleteInput data={employees && formatDataList(employees)} inputs={{ label: 'Finance manager' }} setInput={setFinanceManager} value={id ? { name: loan.data.financeManager, id: loan.data.loanData.financeManager } : {}} />
+					<AutoCompleteInput data={employees && formatDataList(employees, 'Finance manager')} inputs={{ label: 'Finance manager' }} setInput={setFinanceManager} value={id ? { name: loan.data.financeManager, id: loan.data.loanData.financeManager } : {}} />
 
 					<TextFieldFormsy
 						className="my-16"
@@ -271,7 +284,7 @@ function RequestLoanTab(props) {
 				</GridSystem>
 				{id ? <></> : <ProgressBtn success={loan.success} loading={loan.loadings} content='Request Loan' disable={!isFormValid} />}
 
-				{id && loan.data.loanData.status === 'pending' ? <ProgressBtn success={loan.success} loading={loan.updating} content='Update Request' disable={!isFormValid} /> : <></>}
+				{id && loan.data.loanData.status === 'pending' ? <ProgressBtn success={loan.success} loading={loan.updating} content='Update Request' disable={!isFormValid || error } /> : <></>}
 			</Formsy>
 		</div>
 	);

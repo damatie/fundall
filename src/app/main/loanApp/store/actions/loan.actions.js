@@ -18,12 +18,10 @@ export const CLOSED_SUCCESS = 'CLOSED SUCCESS';
 
 const header = fetchHeaders();
 
-export const approveLoan = (id, body) => {
+export const approveLoan = ({id, body, url}) => {
   return dispatch => {
-    dispatch({
-      type: LOADING_LOAN
-    })
-    fetch(`${getBaseUrl()}/loan/approve/support/${id}`, {
+    swal.showLoading();
+    fetch(`${getBaseUrl()}${url}${id}`, {
       ...header.reqHeader(
         'PATCH',
         body
@@ -33,13 +31,17 @@ export const approveLoan = (id, body) => {
         if(data) {
           swal.fire({
             title: 'Approve Loan',
-            text: 'Loan approved successfully',
+            text: data.message,
             icon: 'success',
             timer: 3000
           })
           dispatch({
             type: LOAN_SUCCESS
           })
+          dispatch(getLoan(id));
+          // history.push({
+          //   pathname: '/loan/review/list'
+          // });
         } else {
           swal.fire({
             title: 'Approve Loan',
@@ -54,42 +56,56 @@ export const approveLoan = (id, body) => {
       }
     ).catch(e => console.error(e))
   }
-}
+};
 
-export const rejectLoan = id => {
+export const rejectLoan = ({id, url}, history) => {
   return dispatch => {
-    dispatch({
-      type: LOADING_LOAN
-    })
-    fetch(`${getBaseUrl()}/loan/${id}`, {
-      ...header.delHeader()
-    }).then(res => res.json()).then(
-      data => {
-        if(data) {
-          swal.fire({
-            title: 'Reject Loan',
-            text: 'Loan rejected successfully',
-            icon: 'success',
-            timer: 3000
-          })
-          dispatch({
-            type: LOAN_SUCCESS
-          })
-        } else {
-          swal.fire({
-            title: 'Reject Loan',
-            text: data.message,
-            icon: 'error',
-            timer: 3000
-          })
-          dispatch({
-            type: LOAN_ERROR
-          })
-        }
-      }
-    ).catch(e => console.error(e))
+    swal.fire({
+			title: 'Reason for rejecting this loan',
+			input: 'textarea',
+			inputPlaceholder: 'Type your message here...',
+			inputAttributes: {
+				'aria-label': 'Type your message here'
+			},
+			showCancelButton: true,
+			confirmButtonText: 'Send',
+			preConfirm: (input) => {
+				if (input) {
+					swal.showLoading();
+					fetch(`${getBaseUrl()}${url}${id}`, {
+						...header.reqHeader('PATCH', {
+							comment: input
+						})
+					}).then(res => res.json()).then(
+						data => {
+							if(data.success) {
+								swal.fire({
+									title: 'Reject Loan',
+									text: data.message,
+									icon: 'success',
+									timer: 3000
+								})
+								history.push({
+									pathname: '/loan/review/list'
+								})
+							} else {
+								swal.fire({
+									title: 'Reject Loan',
+									text: data.message,
+									icon: 'error',
+									timer: 3000
+								})
+							}
+						}
+					).catch(e => {
+						console.error(e)});
+				} else {
+					swal.showValidationMessage('Please enter your message')   
+				}
+			}
+		})
   }
-}
+};
 
 export const applyLoan = (body, history) => {
   return dispatch => {
@@ -130,48 +146,6 @@ export const applyLoan = (body, history) => {
     ).catch(e => console.error(e))
   }
 };
-const loan = {
-    id: 2,
-    employeeId: 3,
-    amountRequested: "100000",
-    purpose: "personal",
-    amountApproved: null,
-    employementType: "full-time",
-    annualPay: "2000000",
-    workLocation: "lagos",
-    paymentMode: "monthly",
-    departmentHead: 3,
-    departmentHeadApproval: null,
-    departmentHeadApprovalDate: "07-Jul-2020",
-    hrManager: 1,
-    hrManagerApproval: null,
-    hrManagerApprovalDate: null,
-    financeManager: 4,
-    financeManagerApproval: null,
-    deductableAmount: "10000",
-    dateRequested: "07-Jul-2020",
-    loanDisbursedOn: null,
-    firstDueDate: null,
-    numberOfInstallements: null,
-    payOffDate: null,
-    duration: 10,
-    status: "pending",
-    createdAt: "2020-07-07T14:31:19.534Z",
-    updatedAt: "2020-07-07T14:33:54.282Z",
-    employee: {
-      id: 3,
-      firstName: "Jane",
-      lastName: "James",
-      email: "samuelchibuike22@gmail.com",
-      country: "Nigeria",
-      cityOfResidence: "Lagos",
-      residentialAddress: "no22 ayodele ayekile dgoy jdd"
-    },
-  departmentHead: "Jane James",
-  hrManager: "John Mary",
-  financeManager: "John Mary",
-  officialNumber: "989398390"
-}
 
 export const getLoan = id => {
   return dispatch => {
@@ -190,18 +164,10 @@ export const getLoan = id => {
         })
       }
     ).catch(e => console.error(e))
-    // dispatch({
-    //   type: GET_LOAN,
-    //   payload: loan
-    // })
   }
-  // dispatch({
-  //   type: GET_LOAN,
-  //   payload: loan
-  // })
 };
 
-export const updateLoan = (id, body) => {
+export const updateLoan = (id, body, history) => {
   return dispatch => {
     dispatch({
       type: UPDATING_LOAN
@@ -223,7 +189,8 @@ export const updateLoan = (id, body) => {
             icon: 'success',
             timer: 2000
           });
-          dispatch(getLoan(id));
+          dispatch(getEmployeeLoan());
+          history.push('/loan/request/list');
 
         // }
       }
@@ -233,14 +200,12 @@ export const updateLoan = (id, body) => {
 
 export const cancelLoan = (id, history) => {
   return dispatch => {
-    dispatch({
-      type: CLOSING_LOAN
-    })
+    swal.showLoading();
     fetch(`${getBaseUrl()}/loan/${id}`, {
       ...header.delHeader(),
     }).then(res => handleResponse(res)).then(
       data => {
-        // if(data.success) {
+        if(data.success) {
           swal.fire({
             title: 'Loan',
             text: data.message,
@@ -252,8 +217,50 @@ export const cancelLoan = (id, history) => {
           });
           dispatch(getEmployeeLoan());
           history.push('/loan/request/list')
-        // }
+        } else {
+          swal.fire({
+            title: 'Loan',
+            text: data.message,
+            icon: 'error',
+            timer: 2000
+          });
+        }
       }
     ).catch(e => console.error(e));
+  }
+}
+
+export const confrimLoan = (id) => {
+  return async dispatch => {
+    try {
+      swal.showLoading();
+      const result = await fetch(`${getBaseUrl()}/loan/confirm/${id}`, {
+        ...header.reqHeader('PATCH',{})
+      }).then(res => handleResponse(res));
+      if(result.success) {
+        swal.fire({
+          title: 'Accept loan',
+          text: result.message,
+          icon: 'success',
+          timer: 2500
+        });
+        dispatch(getEmployeeLoan());
+      } else {
+        swal.fire({
+          title: 'Accept loan Error',
+          text: result.message,
+          icon: 'error',
+          timer: 2500
+        });
+      }
+    } catch(e) {
+      swal.fire({
+        title: 'Server Error',
+        text: 'Service unavailable',
+        icon: 'error',
+        timer: 2500
+      });
+    }
+    
   }
 }

@@ -26,6 +26,10 @@ export const getSalaryAdvance = () => {
           })
         } else {
           dispatch({
+            type: GET_SALARY_ADVANCE,
+            payload: []
+          })
+          dispatch({
             type: SALARY_ADVANCE_ERROR
           })
         }

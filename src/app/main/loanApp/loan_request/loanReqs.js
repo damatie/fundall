@@ -31,13 +31,11 @@ function LoanReq() {
 					classes={{ root: 'w-full h-64' }}
 				>
 					<Tab className="h-64 normal-case" label="Loan History" />
-					<Tab className="h-64 normal-case" label="Returned Loan" /> 
 				</Tabs>
 			}
 			content={
 				<>
 				{tabValue === 0 && (<LoanReqTable type='normal'/>)}
-				{tabValue === 1 && (<LoanReqTable type='returned'/>)}
 				</>
 			}
 			innerScroll

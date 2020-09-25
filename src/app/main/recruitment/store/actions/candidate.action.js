@@ -11,6 +11,9 @@ export const ADD_CANDIDATE_ERROR = 'ADD CANDIDATE ERROR';
 export const UPDATE_CANDIDATE_SUCCESS = 'UPDATE CANDIDATE SUCCESS';
 export const UPDATE_CANDIDATE_ERROR = 'UPDATE CANDIDATE ERROR';
 
+export const DELETE_CANDIDATE_SUCCESS = 'DELETE CANDIDATE SUCCESS';
+export const DELETE_CANDIDATE_ERROR = 'DELETE CANDIDATE ERROR';
+
 export const GET_ALL_CANDIDATE_SUCCESS = 'GET ALL CANDIDATE SUCCESS';
 export const GET_ALL_CANDIDATE_ERROR = 'GET ALL CANDIDATE SUCCESS';
 
@@ -137,3 +140,60 @@ export function getAllCandidates(positionId) {
 			})
 	}
 }
+
+export function deleteCandidate(candidateId) {
+	return dispatch => {
+		dispatch({
+			type: LOADING_CANDIDATE
+		});
+
+		swal.fire({
+			title: 'Delete this candidate?',
+			text: "You won't be able to revert this!",
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			confirmButtonText: 'Yes, delete candidate!',
+			showLoaderOnConfirm: true,
+			preConfirm: () => [
+				fetch(`${baseUrl()}/recruitment/candidate/one/${candidateId}`, { ...headers.delHeader() })
+					.then(res => res.json()).then(async data => {
+						if (data.success) {
+							dispatch({
+								type: DELETE_CANDIDATE_SUCCESS,
+								payload: candidateId,
+							})
+							swal.fire(
+								'CANDIDATE DELETED!',
+								'Candidate has been deleted.',
+								'success'
+							)
+						} else {
+							swal.fire(
+								'Failed to delete Candidate!',
+								'something went wrong',
+								'error'
+							)
+							return dispatch({
+								type: DELETE_CANDIDATE_ERROR
+							})
+						}
+					}
+					).catch(e => {
+						console.error(e);
+						swal.fire(
+							'Oops!',
+							'something went wrong',
+							'error'
+						)
+						return dispatch({
+							type: DELETE_CANDIDATE_ERROR
+						})
+					})
+			]
+		})
+	}
+
+}
+

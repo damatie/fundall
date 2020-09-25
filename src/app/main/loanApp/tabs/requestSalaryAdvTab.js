@@ -5,7 +5,7 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import Formsy from 'formsy-react';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Redirect, useParams } from 'react-router-dom';
+import { Redirect, useHistory, useParams } from 'react-router-dom';
 import MenuItem from '@material-ui/core/MenuItem';
 import withReducer from 'app/store/withReducer';
 import { CircularProgress } from '@material-ui/core';
@@ -21,6 +21,7 @@ import { formatDataList } from 'utils/formatData';
 import employeesReducers from 'app/main/HR/employee_management/store/reducers';
 import * as employeesActions from 'app/main/HR/employee_management/store/actions';
 import CurrencyInput from 'app/shared/TextInput/CurrencyInput';
+import { formatToNaira } from 'utils/formatNumber';
 
 const matchRole = (data, role) => {
 	const arr = [];
@@ -37,6 +38,8 @@ function RequestSalaryAdvTab(props) {
 
 	const [supportDirector, setSupportDirector] = useState('');
 	const [financeManager, setFinanceManager] = useState('');
+	const [amount, setAmount] = useState('');
+	const [netSalary, setNetSalary] = useState('');
 
 	const [isFormValid, setIsFormValid] = useState(true);
 	const formRef = useRef(null);
@@ -52,11 +55,7 @@ function RequestSalaryAdvTab(props) {
 
 	const { id } = useParams();
 
-	const { form, setForm, handleChange } = useForm({
-		amount: 0,
-		netSalary: 0,
-		repaymentDate: '',
-	})
+	const history = useHistory();
 
 	useEffect(() => {
 		// if(!profile.loading) {
@@ -76,6 +75,8 @@ function RequestSalaryAdvTab(props) {
 		if(id && details.salaryAdvanceData) {
 			setSupportDirector(details && details.salaryAdvanceData.supportDirector);
 			setFinanceManager(details && details.salaryAdvanceData.financeManager);
+			setNetSalary(details.salaryAdvanceData.netSalary);
+			setAmount(details.salaryAdvanceData.amount);
 		}
 	}, [id, details]);
 
@@ -91,7 +92,8 @@ function RequestSalaryAdvTab(props) {
 		if(id) {
 			dispatch(Actions.updateSalaryAdvance(id, {
 				...model,
-				...form,
+				amount,
+				netSalary,
 				supportDirector,
 				financeManager,
 				supervisor: 1,
@@ -99,11 +101,12 @@ function RequestSalaryAdvTab(props) {
 		} else {
 			dispatch(Actions.applySalaryAdvance({
 				...model,
-				...form,
+				amount,
+				netSalary,
 				supportDirector,
 				financeManager,
 				supervisor: 1
-			}));
+			}, history));
 		}
 		
 	}
@@ -132,7 +135,7 @@ function RequestSalaryAdvTab(props) {
 				<div>
 					<CurrencyInput
 						values={id ? details.salaryAdvanceData.netSalary : ''}
-						handleChange={handleChange}
+						handleChange={e => setNetSalary(e.target.value)}
 						name={"netSalary"}
 						label={"Net Salary"}
 						error={''}
@@ -142,17 +145,17 @@ function RequestSalaryAdvTab(props) {
 				<div>
 					<CurrencyInput
 						values={id ? details.salaryAdvanceData.amount : ''}
-						handleChange={handleChange}
+						handleChange={e => setAmount(e.target.value)}
 						name={"amount"}
 						label={"Amount requested"}
-						error={form.amount > form.netSalary / 2.5}
-						helperText={form.amount > form.netSalary / 2.5 ? 'Please you can not request for an amount that is greater than your net salary': `Max amount: ${Intl.NumberFormat().format(form.netSalary / 2.5)}`}
+						error={amount > netSalary / 2.5}
+						helperText={amount > netSalary / 2.5 ? 'Please you can not request for an amount that is greater than your net salary': `Max amount: ${formatToNaira(netSalary / 2.5)}`}
 					/>
 				</div>
 		
-				<AutoCompleteInput data={employees && formatDataList(employees)} inputs={{label: 'Director of support service'}} setInput={setSupportDirector} value={id ? {name: details.supportDirector, id: details.salaryAdvanceData.supportDirector} : {}}/>
+				<AutoCompleteInput data={employees && formatDataList(employees, 'Director of support service')} inputs={{label: 'Director of support service'}} setInput={setSupportDirector} value={id ? {name: details.supportDirector, id: details.salaryAdvanceData.supportDirector} : {}}/>
 
-				<AutoCompleteInput data={employees && formatDataList(employees)} inputs={{label: 'Finance manager'}} setInput={setFinanceManager} value={ id ? {name: details.financeManager, id: details.salaryAdvanceData.financeManager} : {}}/>
+				<AutoCompleteInput data={employees && formatDataList(employees, 'Finance manager')} inputs={{label: 'Finance manager'}} setInput={setFinanceManager} value={ id ? {name: details.financeManager, id: details.salaryAdvanceData.financeManager} : {}}/>
 
 				</GridSystem>
 				{id ? <ProgressBtn success={salaryAdvance.success} loading={salaryAdvance.loading} content='Update Request' disable={!isFormValid}/> : <ProgressBtn success={salaryAdvance.success} loading={salaryAdvance.loading} content='Request' disable={!isFormValid}/>}

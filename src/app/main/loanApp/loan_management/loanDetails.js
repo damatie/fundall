@@ -97,7 +97,7 @@ function LoanDetails(props) {
 						
 					<div className="flex flex-1 flex-col items-center justify-center md:flex-row md:items-center md:justify-start">
 						<FuseAnimate animation="transition.expandIn" delay={300}>
-							<Avatar className="w-96 h-96" src="assets/images/avatars/Velazquez.jpg" />
+							<Avatar className="w-96 h-96" src={loan.employee.profilePicture} />
 						</FuseAnimate>
 						<FuseAnimate animation="transition.slideLeftIn" delay={300}>
 							<div>

@@ -2,6 +2,7 @@ import { fetchHeaders } from "app/shared/fetchHeaders";
 import Swal from 'sweetalert2';
 import { getBaseUrl } from "app/shared/getBaseUrl";
 import { handleResponse } from "app/auth/handleRes";
+import { getSalaryAdvance } from "./salaryAdvance.actions";
 
 export const SALARY_REQUEST = 'SALARY REQUEST';
 export const LOADING_SALARY_REQUEST = 'LOADING SALARY REQUEST';
@@ -11,7 +12,7 @@ export const CANCEL_SALARY_REQUEST = 'CANCEL SALARY REQUEST';
 export const SALARY_ADVANCE_REQUEST_ERROR = 'SALARY ADVANCE REQUEST ERROR';
 
 const headers = fetchHeaders();
-export const applySalaryAdvance = body => {
+export const applySalaryAdvance = (body, history) => {
   return dispatch => {
     dispatch({
       type: LOADING_SALARY_REQUEST
@@ -33,28 +34,20 @@ export const applySalaryAdvance = body => {
           dispatch({
             type: SALARY_REQUEST
           })
+          history.push('/loan/request/salaryadvance_request/list');
         } else {
-          if(data.error) {
-            Swal.fire({
-              title: 'Salary advance request',
-              text: data.error,
-              icon: 'error',
-              timer: 3000
-            })
-            dispatch({
-              type: SALARY_REQUEST_ERROR
-            })
-          } else {
-            Swal.fire({
-              title: 'Salary advance request',
-              text: data.message,
-              icon: 'error',
-              timer: 3000
-            })
-            dispatch({
-              type: SALARY_REQUEST_ERROR
-            })
-          }
+          Swal.fire({
+            title: 'Salary advance request',
+            text: data.mesage,
+            icon: 'error',
+            timer: 5000
+          })
+          dispatch({
+            type: SALARY_REQUEST_ERROR
+          })
+          dispatch({
+            type: SALARY_REQUEST_ERROR
+          })
         }
         
       }
@@ -119,6 +112,7 @@ export const cancelSalaryAdvance = (id, history) => {
             icon: 'success',
             timer: 3000
           });
+          dispatch(getSalaryAdvance());
           history.push('/loan/request/salaryadvance_request/list');
         // }
       }

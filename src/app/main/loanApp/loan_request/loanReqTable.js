@@ -19,6 +19,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import * as employeeActions from 'app/store/actions';
 import getEmployeeName from 'utils/getEmployeeName';
 import { formatToNaira } from 'utils/formatNumber';
+import CustomIconButton from 'app/shared/button/CustomIconButton';
+import moment from 'moment';
+
 const useStyles = makeStyles({
 	table: {
 		'& th': {
@@ -93,13 +96,7 @@ function LoanReqTable(props) {
 
 	useEffect(() => {
 		if (loanHistory.loanHistory) {
-			if (props.type !== 'returned') {
-				const x = loanHistory.loanHistory.filter(i => i.status !== 'corrected')
-				setData(x);
-			} else {
-				const x = loanHistory.loanHistory.filter(i => i.status === 'corrected')
-				setData(x);
-			}
+			setData(loanHistory.loanHistory)
 		}
 	}, [loanHistory])
 
@@ -168,6 +165,20 @@ function LoanReqTable(props) {
 	const handleClose = () => {
 		setOpen(false);
 	};
+
+	const handleAccept = id => {
+		handleClose();
+		dispatch(Actions.confrimLoan(id));
+	};
+
+	const handleCancel = id => {
+		handleClose();
+		dispatch(Actions.cancelLoan(id, history));
+	}
+
+	if(!employeeList) {
+		return <>Loading...</>
+	}
 
 	return (
 		<div className="w-full flex flex-col">
@@ -258,7 +269,7 @@ function LoanReqTable(props) {
 			/>
 
 			<SharedModal open={open} handleClose={handleClose} title={'Loan Details'}>
-				<table className={clsx(classes.table, 'w-full text-justify')}>
+				{(employeeList ? <table className={clsx(classes.table, 'w-full text-justify')}>
 					<tbody>
 						<tr className="type">
 							<th>Amount Requested</th>
@@ -290,7 +301,7 @@ function LoanReqTable(props) {
 
 						<tr className="created">
 							<th>Date Requested</th>
-							<td>{loanDetails.dateRequested}</td>
+							<td>{moment(loanDetails.dateRequested).format('LL')}</td>
 						</tr>
 
 						<tr className="created">
@@ -300,17 +311,17 @@ function LoanReqTable(props) {
 
 						<tr className="created">
 							<th>Line manager</th>
-							<td>{getEmployeeName(employeeList, loanDetails.departmentHead)}</td>
+							<td>{`${getEmployeeName(employeeList, loanDetails.departmentHead)} | (${returnResult(loanDetails.departmentHeadApprovalDate)})`}</td>
 						</tr>
 
 						<tr className="created">
 							<th>Director of support service</th>
-							<td>{getEmployeeName(employeeList, loanDetails.supportDirector)}</td>
+							<td>{`${getEmployeeName(employeeList, loanDetails.supportDirector)} | (${returnResult(loanDetails.supportDirectorApprovalDate)})`}</td>
 						</tr>
 
 						<tr className="created">
 							<th>Finance Manager</th>
-							<td>{getEmployeeName(employeeList, loanDetails.financeManager)}</td>
+							<td>{`${getEmployeeName(employeeList, loanDetails.financeManager)} | (${returnResult(loanDetails.financeManagerApprovalDate)})`}</td>
 						</tr>
 
 						<tr className="created">
@@ -321,15 +332,43 @@ function LoanReqTable(props) {
 							}}>{loanDetails.purpose}</div></td>
 						</tr>
 
+						{loanDetails.status === 'rejected' ? 
+						<tr className="created">
+							<th>Comment</th>
+							<td><div style={{
+								wordWrap: "break-word",
+								wordBreak: "break-all"
+							}}>{loanDetails.comment}</div></td>
+						</tr> : <></>}
+
 						<tr className="created">
 							<th>Status</th>
 							<td><LoanStatus status={loanDetails.status}/></td>
 						</tr>
 					</tbody>
-				</table>
+				</table> : <></>)}
+				{loanDetails.status === 'corrected' ? 
+					<div className='flex justify-center w-full my-16 mx-auto'>
+						<CustomIconButton onClick={e => handleCancel(loanDetails.id)} icon='cancel' className={'bg-red hover:bg-red-A700 text-white w-1/5 mx-16'}>
+							Reject
+						</CustomIconButton>
+						<CustomIconButton onClick={e => handleAccept(loanDetails.id)} icon='check_circle_outline' className={'bg-green hover:bg-green-A700 text-white w-1/5 mx-16'}>
+							Accept
+						</CustomIconButton>
+					</div> :
+					<></>
+				}
 			</SharedModal>
 		</div>
 	);
 };
+
+const returnResult = data => {
+	if(data) {
+		return moment(data).format('LL');
+	} else {
+		return 'Not Approved yet';
+	}
+}
 
 export default withRouter(LoanReqTable);

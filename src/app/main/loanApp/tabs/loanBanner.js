@@ -4,11 +4,13 @@ import Icon from '@material-ui/core/Icon';
 import { makeStyles } from '@material-ui/core/styles';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import Typography from '@material-ui/core/Typography';
+import usePermission from 'app/hooks/usePermission';
 import withReducer from 'app/store/withReducer';
 import clsx from 'clsx';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
+import { showMessage } from 'app/store/actions';
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -38,16 +40,11 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function LoanBanner(props) {
-	const dispatch = useDispatch();
 
 	const classes = useStyles(props);
 
-	// useEffect(() => {
-	// 	dispatch(Actions.getBoards());
-	// 	return () => {
-	// 		dispatch(Actions.resetBoards());
-	// 	};
-	// }, [dispatch]);
+	const { handleClick } = usePermission();
+
 
 	return (
 		<div className={clsx(classes.root, 'flex flex-grow flex-shrink-0 flex-col items-center')}>
@@ -68,12 +65,13 @@ function LoanBanner(props) {
 					>
 						<div className="w-224 h-224 p-16">
               <Link
-                to={props.personalUrl}
+                // to={isPermitted ? props.personalUrl : pathname}
                 className={clsx(
                   classes.board,
                   'flex flex-col items-center justify-center w-full h-full rounded py-24'
                 )}
-                role="button"
+								role="button"
+								onClick={ e => handleClick( props.personalUrl)}
               >
                 <Icon className="text-56">attach_money</Icon>
                 <Typography className="text-16 font-300 text-center pt-16 px-32" color="inherit">
@@ -83,12 +81,13 @@ function LoanBanner(props) {
             </div>
 						<div className="w-224 h-224 p-16">
               <Link
-                to={props.salaryUrl}
+                // to={isPermitted ? props.salaryUrl : pathname}
                 className={clsx(
                   classes.board,
                   'flex flex-col items-center justify-center w-full h-full rounded py-24'
                 )}
-                role="button"
+								role="button"
+								onClick={ e => handleClick(props.salaryUrl)}
               >
                 <Icon className="text-56">money</Icon>
                 <Typography className="text-16 font-300 text-center pt-16 px-32" color="inherit">

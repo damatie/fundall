@@ -158,7 +158,7 @@ function ManageLoan(props) {
 					classes={{ root: 'w-full h-64' }}
 				>
 					{profile.role.name === 'Line managers' ? <Tab className="h-64 normal-case" label="Pending Loan" /> : ''}
-					{profile.role.name === 'HR' ? <Tab className="h-64 normal-case" label="Reviewed Loan" /> : ''}
+					{profile.role.name === 'HR' || profile.role.name === 'Director of support service' ? <Tab className="h-64 normal-case" label="Reviewed Loan" /> : ''}
 				</Tabs> : 
 
 				<Tabs
@@ -174,7 +174,7 @@ function ManageLoan(props) {
 				<Tab className="h-64 normal-case" label="Approved Loan" />
 				<Tab className="h-64 normal-case" label="Returned Loan" /> 
 				<Tab className="h-64 normal-case" label="Open Loan" /> 
-				<Tab className="h-64 normal-case" label="Close Loan" /> 
+				<Tab className="h-64 normal-case" label="Closed Loan" /> 
 			</Tabs>
 			}
 			content={
@@ -183,7 +183,7 @@ function ManageLoan(props) {
           {tabValue === 0 && (<LoanReqTab loans={loans.pendingLoan}/>)}
 				</div> : <></>}
 				
-				{profile.role.name === 'HR' ? 	<div className=" sm:p-24 ">
+				{profile.role.name === 'HR' || profile.role.name === 'Director of support service' ? 	<div className=" sm:p-24 ">
 					{tabValue === 0 && (<LoanReqTab loans={loans.reviewedLoan}/>)}
 				</div> : <></>}
 				

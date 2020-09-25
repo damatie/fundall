@@ -15,7 +15,7 @@ export const LOADING_CLOSED_SA = 'LOADING CLOSED SA';
 export const GET_REVIEWED_SA = 'GET REVIEWED SA';
 export const LOADING_REVIEWED_SA = 'LOANDING REVIEWED SA';
 
-const formateData = data => {
+const formateData = (data) => {
   const arr = [];
   for(let i of data) {
     arr.push(
@@ -25,6 +25,23 @@ const formateData = data => {
         ...i.employee
       }
     )
+  }
+  return desSort(arr);
+}
+
+const pendingLoans = (data) => {
+  const arr = [];
+  for(let i of data) {
+    if(i.status === 'pending') {
+      arr.push(
+        {
+          loanId: i.id,
+          ...i,
+          ...i.employee
+        }
+      )
+    }
+    
   }
   return desSort(arr);
 }
@@ -57,7 +74,7 @@ export const getPendingSA = () => {
         if(data.success) {
           dispatch({
             type: GET_PENDING_SA,
-            payload: formateData(data.loanData),
+            payload: pendingLoans(data.loanData),
           });
         }
       }
@@ -138,7 +155,7 @@ export const getClosedSA = () => {
         if(data.success) {
           dispatch({
             type: GET_CLOSED_SA,
-            payload: formateData(data.salaryAdvanceData),
+            payload: formateDatas(data.data),
           })
         }
       }

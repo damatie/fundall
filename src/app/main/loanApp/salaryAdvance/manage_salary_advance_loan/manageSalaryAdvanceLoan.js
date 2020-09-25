@@ -169,25 +169,38 @@ function ManageSALoan(props) {
 			}}
 			header={
 					<div className="flex flex-1 w-full items-center justify-between">
-						<div className="flex flex-col items-start max-w-full">
+            <div className="flex justify-between w-full">
 							<FuseAnimate animation="transition.slideRightIn" delay={300}>
 								<Typography
 									className="normal-case flex items-center sm:mb-12"
+									component={Link}
 									role="button"
+									to="/loan/review/"
 									color="inherit"
 								>
-									<Icon className="text-20">
-                    monetization_on
-									</Icon>
-									<span className="mx-4">Loan Management</span>
+								<Icon className="text-20">
+								arrow_back
+								</Icon>
+									<Typography className="hidden sm:flex mx-0 sm:mx-12" variant="h6">
+										Loan Review
+									</Typography>
 								</Typography>
 							</FuseAnimate>
-
 							<div className="flex items-center max-w-full">
-								
+								<FuseAnimate animation="transition.slideRightIn" delay={300}>
+									<Typography
+										className="normal-case flex items-center sm:mb-12"
+										role="button"
+										color="inherit"
+									>
+										<Icon className="text-20">
+											monetization_on
+										</Icon>
+										<span className="mx-4">Loan Management</span>
+									</Typography>
+								</FuseAnimate>
 							</div>
 						</div>
-            
 					</div>
       }
       contentToolbar={
