@@ -12,6 +12,7 @@ function Details(props) {
 
 	const { jobTitle, status, requiredSkills, createdAt, createdBy, recruiter, jobDescription } = props.position;
 
+
 	return (
 		<div className="md:flex w-full">
 			<div className="flex sm:flex-col w-full">

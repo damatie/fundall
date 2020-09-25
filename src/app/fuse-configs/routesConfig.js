@@ -39,6 +39,7 @@ import RecruitmentConfig from 'app/main/recruitment/recruitmentConfig';
 import ContactsAppConfig from 'app/main/contact_list/ContactsAppConfig';
 import DisciplinaryCaseConfig from 'app/main/disciplinary_case/DisciplinaryCaseConfig';
 import CheckListConfig from 'app/main/check_list/CheckListConfig';
+import SrepConfig from 'app/main/srep/srepConfig'
 
 const routeConfigs = [
 	// ExampleConfig,
@@ -77,7 +78,8 @@ const routeConfigs = [
 	RecruitmentConfig,
 	ContactsAppConfig,
 	DisciplinaryCaseConfig,
-	CheckListConfig
+	CheckListConfig,
+	SrepConfig
 ];
 
 const checkIfLoggedIn = () => {
