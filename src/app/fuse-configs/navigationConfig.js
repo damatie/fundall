@@ -477,6 +477,30 @@ const navigationConfig = [
 			},
 		]
 	},
+
+	// SREP navigations
+	{
+		id: 'srep',
+		title: 'SpringRock Eduction Program',
+		translate: 'SpringRock Eduction Program',
+		type: 'group',
+		children: [
+			{
+				id: 'applySREP',
+				title: 'Apply for Education Program',
+				type: 'item',
+				url: '/srep/apply',
+				icon: 'note_add',
+			},
+			{
+				id: 'listSREP',
+				title: 'All Application',
+				type: 'item',
+				url: '/srep/all',
+				icon: 'list_alt',
+			},
+		]
+	},
 	// Settings navigations
 	{
 		id: 'settings',

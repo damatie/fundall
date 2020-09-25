@@ -72,14 +72,19 @@ const TableWidget = (props) =>{
   const { positionId } = useParams();
 
   const status = useSelector(state => state.PositionDetails.recruitment.onePosition.status);
-  const { success } = useSelector(state => state.PositionDetails.candidate)
-  const updated = useSelector(state => state.PositionDetails.recruitment.onePosition.candidate)
+  const { success } = useSelector(state => state.PositionDetails.candidate);
+  const updated = useSelector(state => state.PositionDetails.recruitment.onePosition.candidate);
+  const deleted = useSelector(state => state.PositionDetails.candidate.data);
 
   useEffect(() => {
     updated.map(data => {
       if (data.id === selected.id) setSelected(data);
     })
-  }, [updated])
+  }, [updated]);
+
+  useEffect(() => {
+    deleted.map(data => setData(data));
+  }, [deleted]);
 
   useEffect(() => {
     if (success === true) setUpdateOpen(false)
@@ -169,14 +174,10 @@ const TableWidget = (props) =>{
       }
   }
 
-  const handleUpdateOpening = (hrId) => {
-    dispatch(Actions.updateOpening(hrId));
-  }
-
-  const handleDeleteOpening = (event, hrId) => {
+  const handleDeleteCandidate = (event, candidateId) => {
     event.stopPropagation();
     setOpen(false);
-    dispatch(Actions.deleteOpening(hrId));
+    dispatch(Actions.deleteCandidate(candidateId));
   }
 
   function handleSearch(event){
@@ -399,7 +400,7 @@ const TableWidget = (props) =>{
                         {CheckStatus(n.status.toLowerCase())}
                     </TableCell>
                     <TableCell className="text-center" style={{padding: '0 16px'}}>
-                      <IconButton aria-label="delete" onClick={(event) => handleDeleteOpening(event, n.id)}>
+                      <IconButton aria-label="delete" onClick={(event) => handleDeleteCandidate(event, n.id)}>
                         <DeleteIcon style={{color: 'red'}} />
                       </IconButton>
                     </TableCell>

@@ -58,8 +58,8 @@ const recruitmentReducer = (state = initialState, action) => {
 		case Actions.CREATE_OPENING_SUCCESS: {
 			return {
 				...state,
-        loading: false,
-        succcess: true,
+				loading: false,
+				succcess: true,
 			};
 		}
 		case Actions.CREATE_OPENING_ERROR: {
