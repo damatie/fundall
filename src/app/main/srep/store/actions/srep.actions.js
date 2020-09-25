@@ -26,7 +26,7 @@ export function getSrep() {
 		dispatch({
 			type: LOADING_SREP
 		});
-		fetch(`${baseUrl()}/api/v1/srep`, { ...headers.getRegHeader() })
+		fetch(`${baseUrl()}/srep`, { ...headers.getRegHeader() })
 			.then(res => res.json()).then(async data => {
                 console.log(data);
 				if (data.success && data.data) {
@@ -55,7 +55,7 @@ export function getSrepByEmployeeID(id) {
 		dispatch({
 			type: LOADING_SREP
 		});
-		fetch(`${baseUrl()}/api/v1/srep/employee/${id}`, { ...headers.getRegHeader() })
+		fetch(`${baseUrl()}/srep/employee/${id}`, { ...headers.getRegHeader() })
 			.then(res => res.json()).then(async data => {
                 console.log(data);
 				if (data.success && data.data) {
@@ -84,7 +84,7 @@ export function getSrepByID(id = 0) {
 		dispatch({
 			type: LOADING_SREP
 		});
-		fetch(`${baseUrl()}/api/v1/srep/${id}`, { ...headers.getRegHeader() })
+		fetch(`${baseUrl()}/srep/${id}`, { ...headers.getRegHeader() })
 		.then(res => res.json()).then(async data => {
 			console.log(data);
 			if (data.success && data.data) {
@@ -115,7 +115,7 @@ export function addSrep(payload){
 		dispatch({
 			type: LOADING_SREP
 		});
-		fetch(`${baseUrl()}/api/v1/srep`, { ...headers.fdHeader('post', payload) })
+		fetch(`${baseUrl()}/srep`, { ...headers.fdHeader('post', payload) })
 		.then(res => res.json()).then(async data => {
 				console.log(data)
 				if (data.success) {
@@ -175,7 +175,7 @@ export function approveSrep(id) {
 			confirmButtonText: 'Yes, approve it!',
 			showLoaderOnConfirm: true,
 			preConfirm: () => [
-				fetch(`${baseUrl()}/api/v1/srep/approve/${id}`, { ...headers.reqHeader('PATCH', '') })
+				fetch(`${baseUrl()}/srep/approve/${id}`, { ...headers.reqHeader('PATCH', '') })
 					.then(res => res.json()).then(async data => {
 						if (data.success) {
 							swal.fire(
@@ -237,7 +237,7 @@ export function rejectSrep(id) {
 			confirmButtonText: 'Yes, reject it!',
 			showLoaderOnConfirm: true,
 			preConfirm: () => [
-				fetch(`${baseUrl()}/api/v1/srep/reject/${id}`, { ...headers.reqHeader('PATCH', '') })
+				fetch(`${baseUrl()}/srep/reject/${id}`, { ...headers.reqHeader('PATCH', '') })
 					.then(res => res.json()).then(async data => {
 						if (data.success) {
 							done = true;
@@ -299,7 +299,7 @@ export function deleteSrep(id) {
 			confirmButtonText: 'Yes, delete it!',
 			showLoaderOnConfirm: true,
 			preConfirm: () => [
-				fetch(`${baseUrl()}/api/v1/srep/${id}`, { ...headers.delHeader() })
+				fetch(`${baseUrl()}/srep/${id}`, { ...headers.delHeader() })
 					.then(res => res.json()).then(async data => {
 						if (data.success) {
 							swal.fire(
@@ -349,7 +349,7 @@ export function sendToFinance(id){
 		dispatch({
 			type: LOADING_SREP
 		});
-		fetch(`${baseUrl()}/api/v1/srep/sendToFinance/${id}`, { ...headers.reqHeader('PATCH', '') })
+		fetch(`${baseUrl()}/srep/sendToFinance/${id}`, { ...headers.reqHeader('PATCH', '') })
 		.then(res => res.json()).then(async data => {
 				console.log(data)
 				if (data.success) {
