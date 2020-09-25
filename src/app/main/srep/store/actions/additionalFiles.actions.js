@@ -24,7 +24,7 @@ export function addEndorsed(payload){
 		dispatch({
 			type: LOADING_SREP
 		});
-		fetch(`${baseUrl()}/api/v1/srep/otherfiles`, { ...headers.fdHeader('post', payload) })
+		fetch(`${baseUrl()}/srep/otherfiles`, { ...headers.fdHeader('post', payload) })
 		.then(res => res.json()).then(async data => {
 			console.log(data)
 			if (data.success) {
@@ -62,7 +62,7 @@ export function addEmailIndemnity(payload){
 		dispatch({
 			type: LOADING_SREP
 		});
-		fetch(`${baseUrl()}/api/v1/srep/otherfiles`, { ...headers.fdHeader('post', payload) })
+		fetch(`${baseUrl()}/srep/otherfiles`, { ...headers.fdHeader('post', payload) })
 		.then(res => res.json()).then(async data => {
 			console.log(data)
 			if (data.success) {
@@ -100,7 +100,7 @@ export function addBoardResolution(payload){
 		dispatch({
 			type: LOADING_SREP
 		});
-		fetch(`${baseUrl()}/api/v1/srep/otherfiles`, { ...headers.fdHeader('post', payload) })
+		fetch(`${baseUrl()}/srep/otherfiles`, { ...headers.fdHeader('post', payload) })
 		.then(res => res.json()).then(async data => {
 			console.log(data)
 			if (data.success) {
