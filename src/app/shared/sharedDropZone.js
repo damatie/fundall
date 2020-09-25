@@ -108,7 +108,11 @@ export default function SharedDropzone(props) {
     <section>
       <Container {...getRootProps({isDragActive, isDragAccept, isDragReject})}>
         <input {...getInputProps()} name={props.name}/>
-        <p>Drag 'n' drop some files here, or click to select files</p>
+        {(props.allowMutliple)? 
+          <p>Drag 'n' drop some files here, or click to select files</p>
+          : <p>Drag 'n' drop a file here, or click to select a file</p>
+        }
+        
       </Container>
       <aside style={thumbsContainer}>
         {thumbs}
