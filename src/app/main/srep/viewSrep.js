@@ -50,7 +50,7 @@ function ViewSrep({ match }, props) {
 	
 	useEffect(() => {
 		dispatch(Actions.getSrepByID(srepId));
-	}, [])
+	}, [dispatch])
 
 	function handleChangeTab(event, value) {
 		setTabValue(value);
@@ -65,10 +65,12 @@ function ViewSrep({ match }, props) {
     };
 
     const handleApprove = () => {
+        dispatch(Actions.approveSrep(srepId));
         setAnchorEl(null);
     };
 
     const handleReject = () => {
+        dispatch(Actions.rejectSrep(srepId));
         setAnchorEl(null);
     };
 
@@ -78,7 +80,7 @@ function ViewSrep({ match }, props) {
 
     const { loading, close } = useSelector(state => state.ViewSrep.srep);
 
-    const status = ['approved', 'rejected', 'completed'];
+    const status = ['approved', 'rejected', 'completed', 'pending'];
 
     const CheckStatus = (status) => {
         switch (status) {

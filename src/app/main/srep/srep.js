@@ -156,6 +156,8 @@ function Srep(props) {
 									columns={columns}
 									rows={srep}
 									props={props}
+									role={userData.role.toUpperCase()}
+									userId={userId}
 								/>
 							</div>
 						</FuseAnimateGroup>

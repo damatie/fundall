@@ -26,7 +26,8 @@ import { useAuth } from 'app/hooks/useAuth';
 
 function AdditionalFileForm(props) {
 	const dispatch = useDispatch();
-	const theme = useTheme();
+    const theme = useTheme();
+    const srepData = useSelector(({ additionalFileForm }) => additionalFileForm.srep.data);
 	const loading = useSelector(({ additionalFileForm }) => additionalFileForm.additionalFiles.loading);
     const success = useSelector(({ additionalFileForm }) => additionalFileForm.additionalFiles.success);
     const endorsedSuccess = useSelector(({ additionalFileForm }) => additionalFileForm.additionalFiles.endorsedSuccess);
@@ -45,8 +46,10 @@ function AdditionalFileForm(props) {
 	const [boardResolution, setBoardResolution] = useState('');
     const formRef = useRef(null);
 
+    let srepId = props.srepId;
+    
+    const files = (props.srepOtherFiles) ? props.srepOtherFiles.filter((f, id, self)=>{return self.indexOf(f) === id;} ).map(d => {return d.fieldname}) : [];
 
-    const files = (props.srepOtherFiles) ? props.srepOtherFiles.map(d => {return d.fieldname}) : [];
 
 	function disableButton() {
 		setIsFormValid(false);
@@ -54,7 +57,7 @@ function AdditionalFileForm(props) {
 
 	function enableButton() {
 		setIsFormValid(true);
-	}
+    }
 
 	function handleSubmit(model) {
 		dispatch(Actions.sendToFinance(parseInt(props.srepId)))
@@ -70,12 +73,16 @@ function AdditionalFileForm(props) {
         if(endorsed.length > 0){
             console.log("Endorsed File Loaded");
             let payload = new FormData();
-            payload.append("id", endorsedId);
-            payload.append("srepId", props.srepId);
+            payload.append("id", (endorsedId) ? endorsedId : 0);
+            payload.append("srepId", srepId);
             payload.append("name", "Endorsed Trust Deed");
             payload.append("fieldname", "endorsed");
-            payload.append("endorsed", endorsed[0], `${props.employee.firstName}${props.employee.lastName}_EndorsedTrustDeed"${moment(new Date()).format('DDMMYY')}.${endorsed[0].name.split('.').pop()}`);
-            dispatch(Actions.addEndorsed(payload));
+            if(props.employee){
+                payload.append("endorsed", endorsed[0], `${props.employee.firstName}${props.employee.lastName}_EndorsedTrustDeed${moment(new Date()).format('DDMMYY')}.${endorsed[0].name.split('.').pop()}`);
+            }else{
+                payload.append("endorsed", endorsed[0], `EndorsedTrustDeed${moment(new Date()).format('DDMMYY')}.${endorsed[0].name.split('.').pop()}`);
+            }
+            dispatch(Actions.addEndorsed(payload, srepId));
         } 
 
     }, [endorsed]);
@@ -85,26 +92,34 @@ function AdditionalFileForm(props) {
         if(emailIndemnity.length > 0){
             console.log("Email Indemnity File Loaded");
             let payload = new FormData();
-            payload.append("id", emailIndemnityId);
-            payload.append("srepId", props.srepId);
+            payload.append("id", (emailIndemnityId) ? emailIndemnityId : 0);
+            payload.append("srepId", srepId);
             payload.append("name", "Endorsed Trust Deed");
             payload.append("fieldname", "EmailIndemnity");
-            payload.append("EmailIndemnity", emailIndemnity[0], `${props.employee.firstName}${props.employee.lastName}_EmailIndemnityLetter"${moment(new Date()).format('DDMMYY')}.${emailIndemnity[0].name.split('.').pop()}`);
-            dispatch(Actions.addEmailIndemnity(payload));
+            if(props.employee){
+                payload.append("EmailIndemnity", emailIndemnity[0], `${props.employee.firstName}${props.employee.lastName}_EmailIndemnityLetter${moment(new Date()).format('DDMMYY')}.${emailIndemnity[0].name.split('.').pop()}`);
+            }else{
+                payload.append("EmailIndemnity", emailIndemnity[0], `EmailIndemnityLetter${moment(new Date()).format('DDMMYY')}.${emailIndemnity[0].name.split('.').pop()}`);
+            }
+            dispatch(Actions.addEmailIndemnity(payload, srepId));
         }
 
     }, [emailIndemnity]);
 
     useEffect(()=> {
-        if(boardResolution.length > 0){
+        if(boardResolution.length > 0 ){
             console.log("Board Resolution File Loaded");
             let payload = new FormData();
-            payload.append("id", boardResolutionId);
-            payload.append("srepId", props.srepId);
+            payload.append("id", (boardResolutionId) ? boardResolutionId : 0);
+            payload.append("srepId", srepId);
             payload.append("name", "Board Resolution of The Company");
             payload.append("fieldname", "boardResolution");
-            payload.append("boardResolution", boardResolution[0], `${props.employee.firstName}${props.employee.lastName}_BoardResolutionCompany"${moment(new Date()).format('DDMMYY')}.${boardResolution[0].name.split('.').pop()}`);
-            dispatch(Actions.addBoardResolution(payload));
+            if(props.employee){
+                payload.append("boardResolution", boardResolution[0], `${props.employee.firstName}${props.employee.lastName}_BoardResolutionCompany${moment(new Date()).format('DDMMYY')}.${boardResolution[0].name.split('.').pop()}`);
+            }else{
+                payload.append("boardResolution", boardResolution[0], `BoardResolutionCompany${moment(new Date()).format('DDMMYY')}.${boardResolution[0].name.split('.').pop()}`);
+            }
+            dispatch(Actions.addBoardResolution(payload, srepId));
         } 
     }, [boardResolution]);
 	
