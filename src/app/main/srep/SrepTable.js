@@ -86,7 +86,7 @@ const SrepTable = (props) =>{
     }
 
     const handleDelete = (event, id) => {
-        dispatch(Actions.deleteSrep(id));
+        dispatch(Actions.deleteSrep(id, props.role, props.userId));
     }
     
     function CheckStatus(status){
@@ -280,8 +280,8 @@ const SrepTable = (props) =>{
                                             {CheckStatus(n.status)}   
                                         </TableCell>
                                         <TableCell className="text-center" style={{padding: '0 16px'}}>
-                                        <IconButton aria-label="delete" onClick={(event) => handleDelete(event, n.id)}>
-                                            <DeleteIcon style={{color: 'red'}} />
+                                        <IconButton aria-label="delete" onClick={(event) => handleDelete(event, n.id)} disabled={parseInt(props.userId) !== n.employeeId}>
+                                            <DeleteIcon style={{color: (parseInt(props.userId) !== n.employeeId) ? 'grey' : 'red'}} />
                                         </IconButton> 
                                         </TableCell>
 									</TableRow>

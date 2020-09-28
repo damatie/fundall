@@ -146,21 +146,22 @@ function Details(props) {
 			case 'pdf':
 				return (
 					<div>
-						<Icon className={(classes.media, clsx(classes.typeIcon, getExt('pdf'), 'text-48'))} />
+                        <CardMedia className={classes.media} image="https://www.pngkey.com/png/detail/98-981538_icono-pdf-vector-pdf-icon-free.png" title={title} />
 					</div>
 				);
 				break;
 			case 'document':
 				return (
+					
 					<div>
-						<Icon className={clsx(classes.typeIcon, getExt('document'), 'text-48')} />
+                        <CardMedia className={classes.media} image="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQrQbDWK6KryJ73eQehYkeqBzfHns7DL-WCmQ&usqp=CAU" title={title} />
 					</div>
 				);
 				break;
 			case 'spreadsheet':
 				return (
 					<div>
-						<Icon className={clsx(classes.typeIcon, getExt('spreadsheet'), 'text-48')} />
+                        <CardMedia className={classes.media} image="https://www.vhv.rs/dpng/d/33-338244_microsoft-excel-logo-hd-png-download.png" title={title} />
 					</div>
 				);
 				break;

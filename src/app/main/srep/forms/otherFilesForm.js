@@ -17,8 +17,8 @@ import Moment from 'react-moment';
 import SkeletonLoader from 'tiny-skeleton-loader-react';
 import JSZip from 'jszip';
 import JSZipUtils from 'jszip-utils';
-import {saveAs} from 'save-as';
-import {formatBytes} from 'app/shared/formatFileSize';
+import { saveAs } from 'save-as';
+import { formatBytes } from 'app/shared/formatFileSize';
 import AdditionalFileForm from './additionalFileForm';
 import ProgressBtn from 'app/shared/progressBtn';
 import Button from '@material-ui/core/Button';
@@ -31,12 +31,12 @@ const useStyles = makeStyles(theme => ({
 	media: {
 		height: 0,
 		paddingTop: '56.25%' // 16:9
-    },
-    downloadAll: {
-        textAlign: 'center',
-        position: 'absolute',
-        left: '40%'
-    },
+	},
+	downloadAll: {
+		textAlign: 'center',
+		position: 'absolute',
+		left: '40%'
+	},
 	typeIcon: {
 		'&.document:before': {
 			content: "'insert_drive_file'",
@@ -54,45 +54,47 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function OtherFiles(props) {
-    const dispatch = useDispatch();
+	const dispatch = useDispatch();
 	const { srepOtherFiles, employee, id, status } = props.srepData;
 
 	const classes = useStyles();
-    
-    const downloadFile = (url) => {
+
+	const downloadFile = url => {
 		const link = document.createElement('a');
 		link.href = url;
 		link.setAttribute('target', '_blank');
 		document.body.appendChild(link);
 		link.click();
 		link.parentNode.removeChild(link);
-    }
-    
-    const downloadAll = () => {
-        let zip = new JSZip();
-        let zipFileName = `${employee.firstName}_${employee.lastName}_additional_documents.zip`;
-        let urls = [];
-        let count = 0;
-        urls = srepOtherFiles.map(file => {return file.url});
-        console.log(urls.length);
-        urls.forEach(function(url){
-            var filename = url.replaceAll('/','').split('SREP_OTHER_DOC')[1];
-            console.log(filename);
-            // loading a file and add it in a zip file
-            JSZipUtils.getBinaryContent(url, function (err, data) {
-               if(err) {
-                  throw err; // or handle the error
-               }
-               zip.file(filename, data, {binary:true});
-               count++;
-               if (count == urls.length) {
-                 zip.generateAsync({type:'blob'}).then(function(content) {
-                    saveAs(content, zipFileName);
-                 });
-              }
-            });
-          });
-    }
+	};
+
+	const downloadAll = () => {
+		let zip = new JSZip();
+		let zipFileName = `${employee.firstName}_${employee.lastName}_additional_documents.zip`;
+		let urls = [];
+		let count = 0;
+		urls = srepOtherFiles.map(file => {
+			return file.url;
+		});
+		console.log(urls.length);
+		urls.forEach(function (url) {
+			var filename = url.replaceAll('/', '').split('SREP_OTHER_DOC')[1];
+			console.log(filename);
+			// loading a file and add it in a zip file
+			JSZipUtils.getBinaryContent(url, function (err, data) {
+				if (err) {
+					throw err; // or handle the error
+				}
+				zip.file(filename, data, { binary: true });
+				count++;
+				if (count == urls.length) {
+					zip.generateAsync({ type: 'blob' }).then(function (content) {
+						saveAs(content, zipFileName);
+					});
+				}
+			});
+		});
+	};
 
 	const getExt = filename => {
 		if (filename) {
@@ -127,21 +129,33 @@ function OtherFiles(props) {
 			case 'pdf':
 				return (
 					<div>
-						<Icon className={(classes.media, clsx(classes.typeIcon, getExt('pdf'), 'text-48'))} />
+						<CardMedia
+							className={classes.media}
+							image="https://www.pngkey.com/png/detail/98-981538_icono-pdf-vector-pdf-icon-free.png"
+							title={title}
+						/>
 					</div>
 				);
 				break;
 			case 'document':
 				return (
 					<div>
-						<Icon className={clsx(classes.typeIcon, getExt('document'), 'text-48')} />
+						<CardMedia
+							className={classes.media}
+							image="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQrQbDWK6KryJ73eQehYkeqBzfHns7DL-WCmQ&usqp=CAU"
+							title={title}
+						/>
 					</div>
 				);
 				break;
 			case 'spreadsheet':
 				return (
 					<div>
-						<Icon className={clsx(classes.typeIcon, getExt('spreadsheet'), 'text-48')} />
+						<CardMedia
+							className={classes.media}
+							image="https://www.vhv.rs/dpng/d/33-338244_microsoft-excel-logo-hd-png-download.png"
+							title={title}
+						/>
 					</div>
 				);
 				break;
@@ -154,11 +168,11 @@ function OtherFiles(props) {
 				);
 				break;
 		}
-    }
-    
-    const sendToFinance = () => {
-        dispatch(Actions.sendToFinance(parseInt(id)))
-    }
+	};
+
+	const sendToFinance = () => {
+		dispatch(Actions.sendToFinance(parseInt(id)));
+	};
 
 	return (
 		<div className="md:flex w-full">
@@ -168,7 +182,6 @@ function OtherFiles(props) {
 						animation: 'transition.slideUpBigIn'
 					}}
 				>
-					
 					<div className="w-full mb-20">
 						<Card className="sm:w-full">
 							<AppBar position="static" elevation={0}>
@@ -178,56 +191,72 @@ function OtherFiles(props) {
 									</Typography>
 								</Toolbar>
 							</AppBar>
-                            {(srepOtherFiles && srepOtherFiles.length >= 3) ?
-                                <CardContent>
-                                    <div className="flex w-full">
-                                        {srepOtherFiles.map((file, i) => {
-                                            return (
-                                                <Card className="w-1/2 mb-16 sm:w-full ml-16">
-                                                    <AppBar position="static" elevation={0}>
-                                                        <Toolbar className="px-8">
-                                                            <Typography variant="subtitle1" color="inherit" className="flex-1 px-12">
-                                                                {file.name}
-                                                            </Typography>
-                                                        </Toolbar>
-                                                    </AppBar>
+							{srepOtherFiles && srepOtherFiles.length >= 3 ? (
+								<CardContent>
+									<div className="flex w-full">
+										{srepOtherFiles.map((file, i) => {
+											return (
+												<Card className="w-1/2 mb-16 sm:w-full ml-16">
+													<AppBar position="static" elevation={0}>
+														<Toolbar className="px-8">
+															<Typography variant="subtitle1" color="inherit" className="flex-1 px-12">
+																{file.name}
+															</Typography>
+														</Toolbar>
+													</AppBar>
 
-                                                    <CardContent>
-                                                        {file.url ? getIcon(file.url, file.name) : <SkeletonLoader height="400px" />}
-                                                        <CardActions>
-                                                            <Typography variant="body1" color="inherit">
-                                                                Size: {formatBytes((file.size))}
-                                                            </Typography>
-                                                            <IconButton aria-label="Download" onClick={ev => {downloadFile(file.url)}}>
-                                                                <DownloadIcon />
-                                                            </IconButton>
-                                                        </CardActions>
-                                                    </CardContent>
-                                                </Card>
-                                            )
-                                        })}
-                                        
-                                    </div>
-                                    {
-                                        (status !== 'pending')?
-                                    <CardActions className='mt-20 mb-20'>
-                                        <IconButton className={classes.downloadAll} aria-label="Download All" onClick={ev => {downloadAll()}}>
-                                            <DownloadIcon /> &nbsp; Download All
-                                        </IconButton>
-                                    </CardActions>
-                                    :
-                                    <CardActions className='mt-20 mb-20'>
-                                        <Button variant="contained" color="primary" className={classes.downloadAll} onClick={ev => { sendToFinance()}}>
-                                             Send to Finance Manager 
-                                        </Button>
-                                    </CardActions>
-                                    }
-                                </CardContent>
-                                : 
-                                <CardContent>
-                                    <AdditionalFileForm employee={employee} srepOtherFiles={srepOtherFiles} srepId={id}/>
-                                </CardContent>
-                            }
+													<CardContent>
+														{file.url ? getIcon(file.url, file.name) : <SkeletonLoader height="400px" />}
+														<CardActions>
+															<Typography variant="body1" color="inherit">
+																Size: {formatBytes(file.size)}
+															</Typography>
+															<IconButton
+																aria-label="Download"
+																onClick={ev => {
+																	downloadFile(file.url);
+																}}
+															>
+																<DownloadIcon />
+															</IconButton>
+														</CardActions>
+													</CardContent>
+												</Card>
+											);
+										})}
+									</div>
+									{status !== 'pending' ? (
+										<CardActions className="mt-20 mb-20">
+											<IconButton
+												className={classes.downloadAll}
+												aria-label="Download All"
+												onClick={ev => {
+													downloadAll();
+												}}
+											>
+												<DownloadIcon /> &nbsp; Download All
+											</IconButton>
+										</CardActions>
+									) : (
+										<CardActions className="mt-20 mb-20">
+											<Button
+												variant="contained"
+												color="primary"
+												className={classes.downloadAll}
+												onClick={ev => {
+													sendToFinance();
+												}}
+											>
+												Send to Finance Manager
+											</Button>
+										</CardActions>
+									)}
+								</CardContent>
+							) : (
+								<CardContent>
+									<AdditionalFileForm employee={employee} srepOtherFiles={srepOtherFiles} srepId={id} />
+								</CardContent>
+							)}
 						</Card>
 					</div>
 				</FuseAnimateGroup>

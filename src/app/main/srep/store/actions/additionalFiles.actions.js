@@ -2,6 +2,7 @@ import { getBaseUrl } from 'app/shared/getBaseUrl';
 import { useAuth } from 'app/hooks/useAuth';
 import { fetchHeaders } from 'app/shared/fetchHeaders';
 import swal from 'sweetalert2';
+import * as Actions from './srep.actions';
 
 export const LOADING_SREP = 'LOADING SREP';
 export const GET_SREP_SUCCESS = 'GET SREP SUCCESS';
@@ -17,23 +18,24 @@ const baseUrl = getBaseUrl;
 const headers = fetchHeaders();
 const auth = useAuth;
 
-export function addEndorsed(payload){
+export function addEndorsed(payload, srepId){
 	return dispatch => {
 		// swal.fire('Processing ...');
 		// swal.showLoading();
-		dispatch({
-			type: LOADING_SREP
-		});
 		fetch(`${baseUrl()}/srep/otherfiles`, { ...headers.fdHeader('post', payload) })
 		.then(res => res.json()).then(async data => {
 			console.log(data)
 			if (data.success) {
-				dispatch({
-					type: ADD_ENDORSED_FILES_SUCCESS,
-					endorsedSuccess: true,
-					loading: false,
-					endorsedId: data.data.id
-				});
+				Promise.all([
+					dispatch({
+						type: ADD_ENDORSED_FILES_SUCCESS,
+						endorsedSuccess: true,
+						loading: false,
+						endorsedId: data.data.id
+					})
+				]).then(() => {
+					dispatch(Actions.getSrepByID(srepId))
+				})
 			} else {
 				dispatch({
 					type: ADD_ENDORSED_FILES_ERROR,
@@ -55,23 +57,24 @@ export function addEndorsed(payload){
 	};
 }
 
-export function addEmailIndemnity(payload){
+export function addEmailIndemnity(payload, srepId){
 	return dispatch => {
 		// swal.fire('Processing ...');
 		// swal.showLoading();
-		dispatch({
-			type: LOADING_SREP
-		});
 		fetch(`${baseUrl()}/srep/otherfiles`, { ...headers.fdHeader('post', payload) })
 		.then(res => res.json()).then(async data => {
 			console.log(data)
 			if (data.success) {
-				dispatch({
-					type: ADD_EMAIL_FILES_SUCCESS,
-					emailSuccess: true,
-					loading: false,
-					emailIndemnityId: data.data.id
-				});
+				Promise.all([
+					dispatch({
+						type: ADD_EMAIL_FILES_SUCCESS,
+						emailSuccess: true,
+						loading: false,
+						emailIndemnityId: data.data.id
+					})
+				]).then(() => {
+					dispatch(Actions.getSrepByID(srepId))
+				})
 			} else {
 				dispatch({
 					type: ADD_EMAIL_FILES_ERROR,
@@ -93,23 +96,24 @@ export function addEmailIndemnity(payload){
 	};
 }
 
-export function addBoardResolution(payload){
+export function addBoardResolution(payload, srepId){
 	return dispatch => {
 		// swal.fire('Processing ...');
 		// swal.showLoading();
-		dispatch({
-			type: LOADING_SREP
-		});
 		fetch(`${baseUrl()}/srep/otherfiles`, { ...headers.fdHeader('post', payload) })
 		.then(res => res.json()).then(async data => {
 			console.log(data)
 			if (data.success) {
-				dispatch({
-					type: ADD_BOARD_FILES_SUCCESS,
-					boardSuccess: true,
-					loading: false,
-					boardResolutionId: data.data.id
-				});
+				Promise.all([
+					dispatch({
+						type: ADD_BOARD_FILES_SUCCESS,
+						boardSuccess: true,
+						loading: false,
+						boardResolutionId: data.data.id
+					})
+				]).then(() => {
+					dispatch(Actions.getSrepByID(srepId))
+				})
 			} else {
 				dispatch({
 					type: ADD_BOARD_FILES_ERROR,

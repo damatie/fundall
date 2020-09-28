@@ -88,19 +88,29 @@ export function getSrepByID(id = 0) {
 		.then(res => res.json()).then(async data => {
 			console.log(data);
 			if (data.success && data.data) {
-				dispatch({
+				return dispatch({
 					type: GET_SREP_SUCCESS,
 					payload: data.data,
 				})
 			} else {
-				dispatch({
+				swal.fire(
+					'Oops!',
+					data.message,
+					'error'
+				)
+				return dispatch({
 					type: GET_SREP_ERROR,
 					payload: [],
 				})
 			}
 		}).catch(err => {
 			console.log(err);
-			dispatch({
+			swal.fire(
+				'Oops!',
+				'something went wrong',
+				'error'
+			)
+			return dispatch({
 				type: GET_SREP_ERROR,
 				payload: [],
 			})
@@ -161,9 +171,8 @@ export function addSrep(payload){
 export function approveSrep(id) {
 	console.log(id);
 	return dispatch => {
-		dispatch({
-			type: LOADING_SREP
-		});
+		swal.fire('Processing ...');
+		swal.showLoading();
 
 		swal.fire({
 			title: 'Are you sure?',
@@ -176,13 +185,13 @@ export function approveSrep(id) {
 			showLoaderOnConfirm: true,
 			preConfirm: () => [
 				fetch(`${baseUrl()}/srep/approve/${id}`, { ...headers.reqHeader('PATCH', '') })
-					.then(res => res.json()).then(async data => {
-						if (data.success) {
-							swal.fire(
-								'APPROVE!',
-								'Application has been approved.',
-								'success'
-							)
+				.then(res => res.json()).then(async data => {
+					if (data.success) {
+						swal.fire(
+							'APPROVE!',
+							'Application has been approved.',
+							'success'
+						).then(function() {
 							Promise.all([
 								dispatch({
 									type: APPROVE_SREP_SUCCESS
@@ -190,28 +199,28 @@ export function approveSrep(id) {
 							]).then(() => {
 								dispatch(getSrepByID(id))
 							})
-						} else {
-							swal.fire(
-								'APPROVE!',
-								'something went wrong',
-								'error'
-							)
-							return dispatch({
-								type: APPROVE_SREP_ERROR
-							})
-						}
-					}
-					).catch(e => {
-						console.log(e);
+						})
+					} else {
 						swal.fire(
-							'Oops!',
+							'APPROVE!',
 							'something went wrong',
 							'error'
 						)
 						return dispatch({
 							type: APPROVE_SREP_ERROR
 						})
+					}
+				}).catch(e => {
+					console.log(e);
+					swal.fire(
+						'Oops!',
+						'something went wrong',
+						'error'
+					)
+					return dispatch({
+						type: APPROVE_SREP_ERROR
 					})
+				})
 			]
 		})
 	}
@@ -220,12 +229,9 @@ export function approveSrep(id) {
 
 export function rejectSrep(id) {
 	console.log(id);
-	let done = false;
 	return dispatch => {
-
-		dispatch({
-			type: LOADING_SREP
-		});
+		swal.fire('Processing ...');
+		swal.showLoading();
 
 		swal.fire({
 			title: 'Are you sure?',
@@ -238,14 +244,13 @@ export function rejectSrep(id) {
 			showLoaderOnConfirm: true,
 			preConfirm: () => [
 				fetch(`${baseUrl()}/srep/reject/${id}`, { ...headers.reqHeader('PATCH', '') })
-					.then(res => res.json()).then(async data => {
-						if (data.success) {
-							done = true;
-							swal.fire(
-								'REJECT!',
-								'Application has been rejected.',
-								'success'
-							)
+				.then(res => res.json()).then(async data => {
+					if (data.success) {
+						swal.fire(
+							'REJECT!',
+							'Application has been rejected.',
+							'success'
+						).then(function(){
 							Promise.all([
 								dispatch({
 									type: REJECT_SREP_SUCCESS
@@ -253,41 +258,39 @@ export function rejectSrep(id) {
 							]).then(() => {
 								dispatch(getSrepByID(id))
 							})
-						} else {
-							swal.fire(
-								'REJECT!',
-								'something went wrong',
-								'error'
-							)
-							return dispatch({
-								type: REJECT_SREP_ERROR
-							})
-						}
-					}
-					).catch(e => {
-						console.log(e);
+						})
+					} else {
 						swal.fire(
-							'Oops!',
+							'REJECT!',
 							'something went wrong',
 							'error'
 						)
 						return dispatch({
 							type: REJECT_SREP_ERROR
 						})
+					}
+				}).catch(e => {
+					console.log(e);
+					swal.fire(
+						'Oops!',
+						'something went wrong',
+						'error'
+					)
+					return dispatch({
+						type: REJECT_SREP_ERROR
 					})
+				})
 			]
 		})
 	}
 
 }
 
-export function deleteSrep(id) {
+export function deleteSrep(id, role, userId) {
 	console.log(id);
 	return dispatch => {
-
-		dispatch({
-			type: LOADING_SREP
-		});
+		swal.fire('Processing ...');
+		swal.showLoading();
 
 		swal.fire({
 			title: 'Are you sure?',
@@ -300,42 +303,46 @@ export function deleteSrep(id) {
 			showLoaderOnConfirm: true,
 			preConfirm: () => [
 				fetch(`${baseUrl()}/srep/${id}`, { ...headers.delHeader() })
-					.then(res => res.json()).then(async data => {
-						if (data.success) {
-							swal.fire(
-								'DELETE!',
-								'Application has been deleted.',
-								'success'
-							)
+				.then(res => res.json()).then(async data => {
+					if (data.success) {
+						swal.fire(
+							'DELETE!',
+							'Application has been deleted.',
+							'success'
+						).then(function(){
 							Promise.all([
 								dispatch({
 									type: DELETE_SREP_SUCCESS
 								})
 							]).then(() => {
-								dispatch(getSrep())
+								if(role === 'EMPLOYEE'){
+									dispatch(getSrepByEmployeeID(userId))
+								}else{
+									dispatch(getSrep())
+								}
 							})
-						} else {
-							swal.fire(
-								'REJECT!',
-								'something went wrong',
-								'error'
-							)
-							return dispatch({
-								type: DELETE_SREP_ERROR
-							})
-						}
-					}
-					).catch(e => {
-						console.error(e);
+						})
+					} else {
 						swal.fire(
-							'Oops!',
+							'REJECT!',
 							'something went wrong',
 							'error'
 						)
 						return dispatch({
 							type: DELETE_SREP_ERROR
 						})
+					}
+				}).catch(e => {
+					console.error(e);
+					swal.fire(
+						'Oops!',
+						'something went wrong',
+						'error'
+					)
+					return dispatch({
+						type: DELETE_SREP_ERROR
 					})
+				})
 			]
 		})
 	}
@@ -346,19 +353,16 @@ export function sendToFinance(id){
 	return dispatch => {
 		swal.fire('Processing ...');
 		swal.showLoading();
-		dispatch({
-			type: LOADING_SREP
-		});
 		fetch(`${baseUrl()}/srep/sendToFinance/${id}`, { ...headers.reqHeader('PATCH', '') })
 		.then(res => res.json()).then(async data => {
-				console.log(data)
-				if (data.success) {
-					swal.fire({
-						title: 'SpringRock Education Plan Application',
-						text: data.message,
-						timer: 3000,
-						icon: 'success'
-					})
+			console.log(data)
+			if (data.success) {
+				swal.fire({
+					title: 'SpringRock Education Plan Application',
+					text: data.message,
+					timer: 3000,
+					icon: 'success'
+				}).then(function() {
 					Promise.all([
 						dispatch({
 							type: SEND_TO_FINANCE_SUCCESS,
@@ -368,25 +372,11 @@ export function sendToFinance(id){
 					]).then(() => {
 						dispatch(getSrepByID(id))
 					})
-				} else {
-					swal.fire({
-						title: 'SpringRock Education Plan Application',
-						text: data.error,
-						timer: 3000,
-						icon: 'error'
-					});
-					dispatch({
-						type: SEND_TO_FINANCE_ERROR,
-						success: false,
-						loading: false
-					});
-				}
-			})
-			.catch(e => {
-				console.error(e);
+				})
+			} else {
 				swal.fire({
 					title: 'SpringRock Education Plan Application',
-					text: 'Oops! an error occurred. Kindly check network and try again',
+					text: data.error,
 					timer: 3000,
 					icon: 'error'
 				});
@@ -395,6 +385,21 @@ export function sendToFinance(id){
 					success: false,
 					loading: false
 				});
+			}
+		})
+		.catch(e => {
+			console.error(e);
+			swal.fire({
+				title: 'SpringRock Education Plan Application',
+				text: 'Oops! an error occurred. Kindly check network and try again',
+				timer: 3000,
+				icon: 'error'
 			});
+			dispatch({
+				type: SEND_TO_FINANCE_ERROR,
+				success: false,
+				loading: false
+			});
+		});
 	};
 }
