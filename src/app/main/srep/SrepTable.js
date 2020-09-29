@@ -280,8 +280,8 @@ const SrepTable = (props) =>{
                                             {CheckStatus(n.status)}   
                                         </TableCell>
                                         <TableCell className="text-center" style={{padding: '0 16px'}}>
-                                        <IconButton aria-label="delete" onClick={(event) => handleDelete(event, n.id)} disabled={parseInt(props.userId) !== n.employeeId}>
-                                            <DeleteIcon style={{color: (parseInt(props.userId) !== n.employeeId) ? 'grey' : 'red'}} />
+                                        <IconButton aria-label="delete" onClick={(event) => handleDelete(event, n.id)} disabled={parseInt(props.userId) !== n.employeeId || n.status !== 'pending'}>
+                                            <DeleteIcon style={{color: (parseInt(props.userId) !== n.employeeId || n.status !== 'pending') ? 'grey' : 'red'}} />
                                         </IconButton> 
                                         </TableCell>
 									</TableRow>

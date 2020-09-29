@@ -121,32 +121,32 @@ function Srep(props) {
 								animation: 'transition.slideUpBigIn'
 							}}
 						>
-							<div className="widget flex w-full sm:w-1/2 md:w-1/6 p-12">
+							<div className="widget flex w-full sm:w-1/2 md:w-1/5 p-12">
 								<CardWidget count={(srep.length > 0) ? srep.length : 0} title={'Total'} color="yellow" />
 							</div>
-							<div className="widget flex w-full sm:w-1/2 md:w-1/6 p-12">
+							<div className="widget flex w-full sm:w-1/2 md:w-1/5 p-12">
 								<CardWidget count={(srep.length > 0) ? srep.filter(t => t.status === 'pending').length : 0} title={'Pending'} color="blue" />
 							</div>
-							<div className="widget flex w-full sm:w-1/2 md:w-1/6 p-12">
+							<div className="widget flex w-full sm:w-1/2 md:w-1/5 p-12">
 								<CardWidget count={(srep.length > 0) ? srep.filter(t => t.status === 'approved').length : 0} title={'Approved'} color="green" />
 							</div>
-							<div className="widget flex w-full sm:w-1/2 md:w-1/6 p-12">
+							<div className="widget flex w-full sm:w-1/2 md:w-1/5 p-12">
 								<CardWidget count={(srep.length > 0) ? srep.filter(t => t.status === 'rejected').length : 0} title={'Rejected'} color="red" />
 							</div>
-							<div className="widget flex w-full sm:w-1/2 md:w-1/6 p-12">
+							<div className="widget flex w-full sm:w-1/2 md:w-1/5 p-12">
 								<CardWidget
 									count={(srep.length > 0) ? srep.filter(t => t.status === 'reviewed').length : 0}
 									title={'Reviewed'}
 									color="orange"
 								/>
 							</div>
-							<div className="widget flex w-full sm:w-1/2 md:w-1/6 p-12">
+							{/* <div className="widget flex w-full sm:w-1/2 md:w-1/6 p-12">
 								<CardWidget
 									count={(srep.length > 0) ? srep.filter(t => t.status === 'completed').length: 0}
 									title={'Completed'}
 									color="black"
 								/>
-							</div>
+							</div> */}
 							<div className="widget flex w-full p-12">
 								<SrepTable
 									title={'SpringRock Education Program list'}

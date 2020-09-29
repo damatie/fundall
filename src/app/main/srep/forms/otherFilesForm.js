@@ -254,7 +254,14 @@ function OtherFiles(props) {
 								</CardContent>
 							) : (
 								<CardContent>
+									{
+										(props.isHr()) ?
 									<AdditionalFileForm employee={employee} srepOtherFiles={srepOtherFiles} srepId={id} />
+									:
+									<Typography variant="subtitle1" color="inherit" className="px-12">
+										No additional file has been uploaded
+									</Typography>
+									}
 								</CardContent>
 							)}
 						</Card>

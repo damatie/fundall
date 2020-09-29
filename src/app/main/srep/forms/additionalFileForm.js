@@ -94,7 +94,7 @@ function AdditionalFileForm(props) {
             let payload = new FormData();
             payload.append("id", (emailIndemnityId) ? emailIndemnityId : 0);
             payload.append("srepId", srepId);
-            payload.append("name", "Endorsed Trust Deed");
+            payload.append("name", "Email Indemnity Letter");
             payload.append("fieldname", "EmailIndemnity");
             if(props.employee){
                 payload.append("EmailIndemnity", emailIndemnity[0], `${props.employee.firstName}${props.employee.lastName}_EmailIndemnityLetter${moment(new Date()).format('DDMMYY')}.${emailIndemnity[0].name.split('.').pop()}`);
@@ -136,19 +136,19 @@ function AdditionalFileForm(props) {
                     className="flex flex-col justify-center w-full"
                 >
                     <GridSystem className="mb-10">
-                        <div hidden={files.includes('endorsed')}>
+                        <div hidden={files.includes('endorsed') || endorsedSuccess}>
                             <Alert severity={(endorsedSuccess) ? "success" : "error"}>
                                 <Typography variant='body1' className="mt-16 mb-8">Endorsed Trust Deed *</Typography>
                                 <DropZone setValue={setEndorsed} allowedTypes='.pdf, .doc, .jpg, .png, .docx, .jpeg' allowMutliple={false} />
                             </Alert>
                         </div>
-                        <div hidden={files.includes('EmailIndemnity')}>
+                        <div hidden={files.includes('EmailIndemnity') || emailSuccess}>
                             <Alert severity={(emailSuccess) ? "success": "error"}>
                                 <Typography variant='body1' className="mt-16 mb-8">Email Indemnity Letter *</Typography>
                                 <DropZone setValue={setEmailIndemnity}  allowedTypes='.pdf, .doc, .jpg, .png, .docx, .jpeg' allowMutliple={false}/>
                             </Alert>
                         </div>
-                        <div hidden={files.includes('boardResolution')}>
+                        <div hidden={files.includes('boardResolution') || boardSuccess}>
                             <Alert severity={(boardSuccess) ? "success" : "error"} className="mb-10">
                                 <Typography variant='body1' className="mt-16 mb-8">Board Resolution of The Company *</Typography>
                                 <DropZone setValue={setBoardResolution}  allowedTypes='.pdf, .doc, .jpg, .png, .docx, .jpeg' allowMutliple={false}/>
