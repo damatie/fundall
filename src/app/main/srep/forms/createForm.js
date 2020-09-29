@@ -171,10 +171,6 @@ function CreateForm(props) {
 									<DropZone setValue={setAdProof}  allowedTypes='.pdf, .doc, .jpg, .png, .docx, .jpeg' allowMutliple={false}/>
 								</div>
 								<div>
-									<Typography variant='body1' className="mt-16 mb-8">Beneficiary Passport Photo *</Typography>
-									<DropZone setValue={setBenPhoto}  allowedTypes='.pdf, .doc, .jpg, .png, .docx, .jpeg' allowMutliple={false}/>
-								</div>
-								<div>
 									<Typography variant='body1' className="mt-16 mb-8">Beneficiary Identity Type *</Typography>
 									<SelectFormsy
 										className="w-full"
@@ -193,6 +189,10 @@ function CreateForm(props) {
 								<div>
 									<Typography variant='body1' className="mt-16 mb-8">Beneficiary Identity File *</Typography>
 									<DropZone setValue={setBenIdentity}  allowedTypes='.pdf, .doc, .jpg, .png, .docx, .jpeg' allowMutliple={false}/>
+								</div>
+								<div>
+									<Typography variant='body1' className="mt-16 mb-8">Beneficiary Passport Photo *</Typography>
+									<DropZone setValue={setBenPhoto}  allowedTypes='.pdf, .doc, .jpg, .png, .docx, .jpeg' allowMutliple={false}/>
 								</div>		
 							</GridSystem>
 							<ProgressBtn success={success} loading={loading} content="Apply" disable={!isFormValid || checkFiles()} />

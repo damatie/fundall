@@ -481,8 +481,8 @@ const navigationConfig = [
 	// SREP navigations
 	{
 		id: 'srep',
-		title: 'SpringRock Eduction Program',
-		translate: 'SpringRock Eduction Program',
+		title: 'SpringRock Education Program',
+		translate: 'SpringRock Education Program',
 		type: 'group',
 		children: [
 			{

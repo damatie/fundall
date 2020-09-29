@@ -75,6 +75,8 @@ function ViewSrep({ match }, props) {
     };
 
     const isHr = () => (userData.role.toUpperCase() === 'HR' || userData.role.toUpperCase() === 'FINANCE MANAGER');
+
+    const isOnlyHr = () => (userData.role.toUpperCase() === 'HR');
     
     const isFinance = () => (userData.role.toUpperCase() === 'FINANCE MANAGER');
 
@@ -224,7 +226,7 @@ function ViewSrep({ match }, props) {
                     <DetailsTab srepData={srepData} />
                 )}
                 { tabValue === 1 && (
-                    <OtherFiles srepData={srepData} />
+                    <OtherFiles srepData={srepData} isHr={isOnlyHr}/>
                 )}
                 </div>
 			}
