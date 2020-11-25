@@ -14,24 +14,24 @@ const usePermission = () => {
 
   // check if user profile is completed
   useEffect(() => {
-    console.log(profile);
     if(profile.info) {
       history.push(link);
     }else {
-      dispatch(
-        showMessage({
-          message     : 'Please complete your profile to continue',//text or html
-          autoHideDuration: 3000,//ms
-          anchorOrigin: {
-              vertical  : 'top',//top bottom
-              horizontal: 'center'//left center right
-          },
-          variant: 'info'//success error info warning null
-        })
-      );
-      if(link !== pathname) {
-        setTimeout(() => history.push('/employee/profile'), 500)
-      }
+      // dispatch(
+      //   showMessage({
+      //     message     : 'Please complete your profile to continue',//text or html
+      //     autoHideDuration: 3000,//ms
+      //     anchorOrigin: {
+      //         vertical  : 'top',//top bottom
+      //         horizontal: 'center'//left center right
+      //     },
+      //     variant: 'info'//success error info warning null
+      //   })
+      // );
+      // if(link !== pathname) {
+      //   setTimeout(() => history.push('/employee/profile'), 500)
+      // }
+      history.push(link);
     }
   }, [profile, link]);
 

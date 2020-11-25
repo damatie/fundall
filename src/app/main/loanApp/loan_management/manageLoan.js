@@ -97,11 +97,11 @@ function ManageLoan(props) {
 	// })
 
 	// useEffect(() => window.location.reload(false), [])
-	if(loans.loading || profileLoading) {
-		return (
-			<div>Loading...</div>
-		)
-	}
+	// if(loans.loading || profileLoading) {
+	// 	return (
+	// 		<div>Loading...</div>
+	// 	)
+	// }
 
 	return (
 		<FusePageCarded
@@ -147,7 +147,7 @@ function ManageLoan(props) {
 					</div>
       }
       contentToolbar={
-				profile.role.name !== 'Finance manager' ? 
+				profile.role?.name !== 'Finance manager' ? 
 				<Tabs
 					value={tabValue}
 					onChange={handleChangeTab}
@@ -157,8 +157,8 @@ function ManageLoan(props) {
 					scrollButtons="auto"
 					classes={{ root: 'w-full h-64' }}
 				>
-					{profile.role.name === 'Line managers' ? <Tab className="h-64 normal-case" label="Pending Loan" /> : ''}
-					{profile.role.name === 'HR' || profile.role.name === 'Director of support service' ? <Tab className="h-64 normal-case" label="Reviewed Loan" /> : ''}
+					{profile.role?.name === 'Line managers' ? <Tab className="h-64 normal-case" label="Pending Loan" /> : ''}
+					{profile.role?.name === 'HR' || profile.role?.name === 'Director of support service' ? <Tab className="h-64 normal-case" label="Reviewed Loan" /> : ''}
 				</Tabs> : 
 
 				<Tabs
@@ -179,15 +179,15 @@ function ManageLoan(props) {
 			}
 			content={
 				<>
-        {profile.role.name === 'Line managers' ? <div className=" sm:p-24 ">
+        {profile.role?.name === 'Line managers' ? <div className=" sm:p-24 ">
           {tabValue === 0 && (<LoanReqTab loans={loans.pendingLoan}/>)}
 				</div> : <></>}
 				
-				{profile.role.name === 'HR' || profile.role.name === 'Director of support service' ? 	<div className=" sm:p-24 ">
+				{profile.role?.name === 'HR' || profile.role?.name === 'Director of support service' ? 	<div className=" sm:p-24 ">
 					{tabValue === 0 && (<LoanReqTab loans={loans.reviewedLoan}/>)}
 				</div> : <></>}
 				
-				{profile.role.name === 'Finance manager' ? <div className=" sm:p-24 ">
+				{profile.role?.name === 'Finance manager' ? <div className=" sm:p-24 ">
 					{tabValue === 0 && (<LoanReqTab loans={loans.approvedLoan}/>)}
 					{tabValue === 1 && (<LoanReqTab loans={loans.approvedLoan}/>)}
 					{tabValue === 2 && (<LoanReqTab loans={loans.openLoan}/>)}
