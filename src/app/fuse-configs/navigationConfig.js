@@ -16,13 +16,13 @@ const navigationConfig = [
 		translate: 'Applications',
 		type: 'group',
 		icon: 'apps',
-		
+
 		children: [
 			{
 				id: 'dashboard',
 				title: 'HR Dashboard',
 				translate: 'Dashboard',
-				type: 'item',
+				// type: 'item',
 				icon: 'dashboard',
 				type: 'collapse',
 				children: [
@@ -44,7 +44,7 @@ const navigationConfig = [
 					},
 				]
 			},
-			
+
 			{
 				id: 'employee_management',
 				title: 'Employee management',
@@ -111,7 +111,7 @@ const navigationConfig = [
 		title: 'Employee onboarding',
 		translate: 'Employee onboarding',
 		type: 'group',
-		
+
 		children: [
 			{
 				id: 'employee_onboarding_list',
@@ -213,7 +213,7 @@ const navigationConfig = [
 					},
 				]
 			},
-		
+
 		]
 	},
 	// Entity & department navigations
@@ -254,7 +254,7 @@ const navigationConfig = [
 				type: 'item',
 				url: '/loan/review/',
 				icon: 'monetization_on',
-				auth: authRoles.loan,
+				// auth: authRoles.loan,
 			},
 			{
 				id: 'loan_request',
@@ -262,7 +262,7 @@ const navigationConfig = [
 				type: 'item',
 				url: '/loan/request',
 				icon: 'monetization_on',
-				auth: authRoles.staff,
+				// auth: authRoles.staff,
 			}
 		]
 	},
@@ -328,7 +328,7 @@ const navigationConfig = [
 				url: '/hr/leave_summary',
 				icon: 'event_available',
 				auth: authRoles.staff,
-				
+
 			},
 			{
 				id: 'request_leave',
@@ -381,7 +381,7 @@ const navigationConfig = [
 			}
 		]
 	},
-	
+
 	// Training navigations
 	{
 		id: 'training',
@@ -389,6 +389,14 @@ const navigationConfig = [
 		translate: 'training',
 		type: 'group',
 		children: [
+			{
+				id: 'trainingManagement',
+				title: 'Training Dashboard',
+				type: 'item',
+				url: '/hr/training/management',
+				icon: 'dashboard',
+				auth: authRoles.admin,
+			},
 			{
 				id: 'trainingManagement',
 				title: 'Training Management',
