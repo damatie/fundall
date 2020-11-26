@@ -249,6 +249,38 @@ const navigationConfig = [
 		type: 'group',
 		children: [
 			{
+				id: 'employee_loan_mgt',
+				title: 'Employee Dashboard',
+				type: 'item',
+				url: '/employee/loan_mgt/',
+				icon: 'monetization_on',
+				// auth: authRoles.loan,
+			},
+			{
+				id: 'hr_loan_mgt',
+				title: 'HR Dashboard',
+				type: 'item',
+				url: '/hr/loan_mgt/',
+				icon: 'monetization_on',
+				// auth: authRoles.loan,
+			},
+			{
+				id: 'line_manager_loan_mgt',
+				title: 'Line Manager Dashboard',
+				type: 'item',
+				url: '/line_manager/loan_mgt/',
+				icon: 'monetization_on',
+				// auth: authRoles.loan,
+			},
+			{
+				id: 'finance_manager_loan_mgt',
+				title: 'Finance Manager Dashboard',
+				type: 'item',
+				url: '/finance_manager/loan_mgt/',
+				icon: 'monetization_on',
+				// auth: authRoles.loan,
+			},
+			{
 				id: 'loan_review',
 				title: 'Loan review',
 				type: 'item',
@@ -426,6 +458,14 @@ const navigationConfig = [
 						url: '/line_manager/training/dashboard',
 						auth: authRoles.staff,
 					},
+					{
+						id: 'finance_manager_dashboard',
+						title: 'Finance Manager Dashboard',
+						type: 'item',
+						icon: 'layers',
+						url: '/finance_manager/training/dashboard',
+						auth: authRoles.staff,
+					},
 				]
 			},
 
@@ -480,6 +520,22 @@ const navigationConfig = [
 		type: 'group',
 		auth: authRoles.manager,
 		children: [
+			{
+				id: 'recruitment_dashboards',
+				title: 'Dashboards',
+				type: 'collapse',
+				icon: 'school',
+				children: [
+					{
+						id: 'hr_recruitment',
+						title: 'HR Dashboard',
+						type: 'item',
+						url: '/hr/recruitment',
+						icon: 'school',
+						auth: authRoles.admin,
+					},
+				]
+			},
 			{
 				id: 'listOfOpenings',
 				title: 'List of openings',
