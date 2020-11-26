@@ -42,6 +42,7 @@ import CheckListConfig from 'app/main/check_list/CheckListConfig';
 import SrepConfig from 'app/main/srep/srepConfig'
 import DashboardConfig from 'app/main/personalTraining/personalTrainingDashboard/DashboardConfig';
 import LineManagerDashboardConfig from 'app/main/line_manager/training/TrainingDashboard/lineManagerDashboardConfig';
+import LeaveMgtConfig from 'app/main/leaveMgt/leaveMgtConfig';
 
 const routeConfigs = [
 	// ExampleConfig,
@@ -83,6 +84,7 @@ const routeConfigs = [
 	CheckListConfig,
 	SrepConfig,
 	DashboardConfig,
+	LeaveMgtConfig,
 	LineManagerDashboardConfig
 ];
 
