@@ -96,6 +96,9 @@ function LMDashboard(props) {
                             <div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
                                 <CardWidget count={[].filter(t => t.status === 'pending').length} title={"UnApproved Loans"} color="yellow" />
                             </div>
+                            <div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
+                                <CardWidget count={[].filter(t => t.status === 'pending').length} title={"Pending Loans"} color="orange" />
+                            </div>
                             <div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12 items-align-end">
                                 <CardWidget count={[].filter(t => t.status === 'approved').length} title={"Rejected Loans"} color="red" />
                             </div>

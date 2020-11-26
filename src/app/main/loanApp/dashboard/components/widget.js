@@ -23,7 +23,7 @@ function Widget(props) {
             <List>
                 {props.widget.data.map(item => (
                     <ListItem key={item.id}>
-                        <ListItemText primary={item.dept} secondary={item.count} />
+                        <ListItemText primary={item.title} secondary={item.status} />
                         <ListItemSecondaryAction>
                             <IconButton aria-label="more">
                                 <Icon>more_vert</Icon>

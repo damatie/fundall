@@ -1,5 +1,5 @@
 {
-    "title": "Departments",
+    "title": "Loan",
     "ranges": [
         "2019",
         "2020"
@@ -7,32 +7,32 @@
     "currrentRange": "2019",
     "data": [
         {
-            "dept": "Computer Techonology",
-            "count": 90
+            "title": "Computer Techonology",
+            "status": "pending"
         },
         {
-            "dept": "Software",
-            "count": 9
+            "title": "Software",
+            "status": "approved"
         },
         {
-            "dept": "Finance",
-            "count": 900
+            "title": "Finance",
+            "status": "in-review"
         },
         {
-            "dept": "Gasoline",
-            "count": 80
+            "title": "Gasoline",
+            "status": "pending"
         },
         {
-            "dept": "Engineering",
-            "count": 19
+            "title": "Engineering",
+            "status": "pending"
         },
         {
-            "dept": "Computer Techonology",
-            "count": 90
+            "title": "Computer Techonology",
+            "status": "approved"
         },
         {
-            "dept": "Computer Techonology",
-            "count": 90
+            "title": "Computer Techonology",
+            "status": "pending"
         }
     ]
 }

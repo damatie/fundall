@@ -90,13 +90,13 @@ function FinanceManager(props) {
                         }}
                     >
                         <div className="widget flex flex-wrap w-full">
-                            <div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
+                            <div className="widget flex w-full sm:w-1/2 md:w-1/3 p-12">
                                 <CardWidget count={[].length} title={"Approved Loans"} color="green" />
                             </div>
-                            <div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
+                            <div className="widget flex w-full sm:w-1/2 md:w-1/3 p-12">
                                 <CardWidget count={[].filter(t => t.status === 'pending').length} title={"UnApproved Loans"} color="yellow" />
                             </div>
-                            <div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12 items-align-end">
+                            <div className="widget flex w-full sm:w-1/2 md:w-1/3 p-12 items-align-end">
                                 <CardWidget count={[].filter(t => t.status === 'approved').length} title={"Rejected Loans"} color="red" />
                             </div>
                         </div>
