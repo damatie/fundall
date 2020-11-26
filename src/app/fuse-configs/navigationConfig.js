@@ -266,13 +266,27 @@ const navigationConfig = [
 			}
 		]
 	},
-	// Leave navigations
+	// Leave mgt navigations
 	{
 		id: 'leave_management',
 		title: 'Leave management',
 		translate: 'Leave management',
 		type: 'group',
 		children: [
+			{
+				id: 'hr_dasboard',
+				title: 'HR leave dashboard',
+				type: 'item',
+				url: '/hr/leave/dashboard',
+				icon: 'dashboard'
+			},
+			{
+				id: 'hr_dasboard',
+				title: 'Line manager leave dashboard',
+				type: 'item',
+				url: '/line_manager/leave/dashboard',
+				icon: 'dashboard'
+			},
 			{
 				id: 'leave_type',
 				title: 'Leave type',
@@ -389,14 +403,6 @@ const navigationConfig = [
 		translate: 'training',
 		type: 'group',
 		children: [
-			{
-				id: 'trainingManagement',
-				title: 'Training Dashboard',
-				type: 'item',
-				url: '/hr/training/management',
-				icon: 'dashboard',
-				auth: authRoles.admin,
-			},
 			{
 				id: 'trainingManagement',
 				title: 'Training Management',

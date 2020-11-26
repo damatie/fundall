@@ -11,7 +11,7 @@ const CardWidget = (props) =>{
         root: "text-72 leading-none text-"+props.color
     }
 	return (
-		<Paper className="w-full rounded-8 shadow-none border-1">
+		<Paper className="w-full rounded-8 shadow-none border-1 flex flex-col justify-center items-center">
 			<div className="text-center pt-12">
 				<Typography className={className.root}>
 					{props.count}
