@@ -3,15 +3,13 @@ import FuseAnimateGroup from '@fuse/core/FuseAnimateGroup';
 import _ from '@lodash';
 import Icon from '@material-ui/core/Icon';
 import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import withReducer from 'app/store/withReducer';
 import clsx from 'clsx';
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import ArrowBackIcon from '@material-ui/icons/ArrowBackIosRounded';
 import IconButton from '@material-ui/core/IconButton';
-import CardWidget from 'app/shared/widgets/CardWidget';
 import useLMTrainingDashboard from './hooks/customHook';
 import Widget from './components/widget';
 import widgets from "./data.json";
@@ -51,20 +49,11 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function EmployeeDashboard(props) {
-    const dispatch = useDispatch();
     const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
 
     const classes = useStyles(props);
-    const [search, setSearch] = useState('');
 
-    const { doughnutChartData, employeeData } = useLMTrainingDashboard();
-
-    // useEffect(() => {
-    // }, [dispatch]);
-
-    // function handleSearch(event) {
-    //     setSearch(event.target.value);
-    // }
+    const { doughnutChartData } = useLMTrainingDashboard();
 
     const goToPreviousRoute = () => {
         window.location = '/training/personal';

@@ -5,16 +5,10 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import Paper from '@material-ui/core/Paper';
-import Select from '@material-ui/core/Select';
-import Typography from '@material-ui/core/Typography';
 import React, { useState } from 'react';
 
 function Widget(props) {
-    const [currentRange, setCurrentRange] = useState(props.widget.currentRange);
 
-    function handleChangeRange(ev) {
-        setCurrentRange(ev.target.value);
-    }
 
     return (
         <Paper className="w-full rounded-8 shadow-none border-1">

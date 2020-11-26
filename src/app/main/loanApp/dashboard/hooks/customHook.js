@@ -1,7 +1,7 @@
 import React from 'react';
 
 const dataOne = {
-    labels: ['Employee on leave', 'Total employee'],
+    labels: ['% Paid Paid', '% Rejected Loans'],
     datasets: [
         {
             data: [30, 150,],

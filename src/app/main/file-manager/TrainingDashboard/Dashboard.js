@@ -13,10 +13,6 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBackIosRounded';
 import IconButton from '@material-ui/core/IconButton';
 import CardWidget from 'app/shared/widgets/CardWidget';
 import PersonalTrainingCalendar from 'app/main/personalTraining/personalTrainingCalendar';
-import CardWidgetWithChart from 'app/shared/widgets/CardWidgetWithChart';
-import useLMTrainingDashboard from '../hooks/customHook';
-import { Paper } from '@material-ui/core';
-import TableComponent from './components/TableComponent';
 import Widget from './components/widget';
 import widgets from "./data.json";
 
@@ -59,8 +55,6 @@ function FinanceManagerDashboard(props) {
 
 	const classes = useStyles(props);
 	const [search, setSearch] = useState('');
-
-	const { doughnutChartData, employeeData } = useLMTrainingDashboard();
 
 	useEffect(() => {
 	}, [dispatch]);

@@ -167,7 +167,7 @@ const useStyles = makeStyles(theme => ({
 
 function PersonalTrainingCalendar(props) {
 	const dispatch = useDispatch();
-	const events = useSelector(({ personalTraining }) => personalTraining.trainings.events);
+	const events = useSelector(({ personalTraining }) => personalTraining?.trainings.events);
 
 	const classes = useStyles(props);
 	const headerEl = useRef(null);

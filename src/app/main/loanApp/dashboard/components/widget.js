@@ -10,16 +10,11 @@ import Typography from '@material-ui/core/Typography';
 import React, { useState } from 'react';
 
 function Widget(props) {
-    const [currentRange, setCurrentRange] = useState(props.widget.currentRange);
-
-    function handleChangeRange(ev) {
-        setCurrentRange(ev.target.value);
-    }
-
     return (
         <Paper className="w-full rounded-8 shadow-none border-1">
             <div className="flex items-center justify-between px-16 h-64 border-b-1">
-                <Typography className="text-16">{props.widget.title}</Typography>            </div>
+                <Typography className="text-16">{props.widget.title}</Typography>
+            </div>
             <List>
                 {props.widget.data.map(item => (
                     <ListItem key={item.id}>

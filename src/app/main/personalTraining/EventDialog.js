@@ -46,9 +46,9 @@ const useStyles = makeStyles({
 
 function EventDialog(props) {
 	const dispatch = useDispatch();
-	const categories = useSelector(({ personalTraining }) => personalTraining.courses.categories);
-	const courses = useSelector(({ personalTraining }) => personalTraining.courses.courses);
-	const eventDialog = useSelector(({ personalTraining }) => personalTraining.events.eventDialog);
+	const categories = useSelector(({ personalTraining }) => personalTraining?.courses.categories);
+	const courses = useSelector(({ personalTraining }) => personalTraining?.courses.courses);
+	const eventDialog = useSelector(({ personalTraining }) => personalTraining?.events.eventDialog);
 	const { form, handleChange, setForm, setInForm } = useForm(defaultFormState);
 	const [start, setStart ] = useState(moment(new Date(), 'MM/DD/YYYY'));
 	const [end, setEnd] = useState(moment(new Date(), 'MM/DD/YYYY'));
@@ -85,7 +85,7 @@ function EventDialog(props) {
 				id: FuseUtils.generateGUID()
 			});
 		}
-	}, [eventDialog.data, eventDialog.type, setForm]);
+	}, [eventDialog?.data, eventDialog.type, setForm]);
 
 	useEffect(() => {
 		/**
