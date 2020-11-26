@@ -40,6 +40,8 @@ import ContactsAppConfig from 'app/main/contact_list/ContactsAppConfig';
 import DisciplinaryCaseConfig from 'app/main/disciplinary_case/DisciplinaryCaseConfig';
 import CheckListConfig from 'app/main/check_list/CheckListConfig';
 import SrepConfig from 'app/main/srep/srepConfig'
+import DashboardConfig from 'app/main/personalTraining/personalTrainingDashboard/DashboardConfig';
+import LineManagerDashboardConfig from 'app/main/line_manager/training/TrainingDashboard/lineManagerDashboardConfig';
 
 const routeConfigs = [
 	// ExampleConfig,
@@ -79,11 +81,13 @@ const routeConfigs = [
 	ContactsAppConfig,
 	DisciplinaryCaseConfig,
 	CheckListConfig,
-	SrepConfig
+	SrepConfig,
+	DashboardConfig,
+	LineManagerDashboardConfig
 ];
 
 const checkIfLoggedIn = () => {
-	if(localStorage.getItem('jwt_access_token')) {
+	if (localStorage.getItem('jwt_access_token')) {
 		return true;
 	} else {
 		return false;
@@ -95,7 +99,7 @@ const routes = [
 	{
 		path: '/',
 		exact: true,
-		component: checkIfLoggedIn() ?  React.lazy(() => import('app/main/employee/dashboard/ProjectDashboardApp')) : () => <Redirect to="/auth/login" />
+		component: checkIfLoggedIn() ? React.lazy(() => import('app/main/employee/dashboard/ProjectDashboardApp')) : () => <Redirect to="/auth/login" />
 	},
 ];
 

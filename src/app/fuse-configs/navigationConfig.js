@@ -390,13 +390,31 @@ const navigationConfig = [
 		type: 'group',
 		children: [
 			{
-				id: 'trainingManagement',
+				id: 'training_Dashboard',
 				title: 'Training Dashboard',
-				type: 'item',
-				url: '/hr/training/management',
+				type: 'collapse',
+				// url: '/hr/training/management',
 				icon: 'dashboard',
-				auth: authRoles.admin,
+				children: [
+					{
+						id: 'staff_dashboard',
+						title: 'Employee Dashboard',
+						type: 'item',
+						icon: 'layers',
+						url: '/employee/training/dashboard',
+						auth: authRoles.staff,
+					},
+					{
+						id: 'line_manager_dashboard',
+						title: 'Line Manager Dashboard',
+						type: 'item',
+						icon: 'layers',
+						url: '/line_manager/training/dashboard',
+						auth: authRoles.staff,
+					},
+				]
 			},
+
 			{
 				id: 'trainingManagement',
 				title: 'Training Management',
