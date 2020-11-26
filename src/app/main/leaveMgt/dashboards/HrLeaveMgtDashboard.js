@@ -18,37 +18,37 @@ const HrLeaveMgtDashboard = () => {
   return (
     <SimplePage title='HR LEAVE MANAGEMENT DASHBOARD'>
       <main>
-      <section className='flex flex-row justify-between item-center'>
-        <CardWidget
-          count={20}
-          title='Total employee on leave'
-          color='blue'
-        />
-        <CardWidgetWithChart data={doughnutChartData}/>
-      </section>
-      <Paper className='p-20'>
-        
-        <Grid container spacing={1} alignItems='center'>
-          <Grid item lg={2}>
-          <SelectTextField
-            value={2020}
-            size='small'
-          >
-            {[2019, 2020].map(item => (
-              <MenuItem value={item}>
-                {item}
-              </MenuItem>
-            ))}
-          </SelectTextField>
+        <section className='flex flex-row justify-between item-center'>
+          <CardWidget
+            count={20}
+            title='Total employee on leave'
+            color='blue'
+          />
+          <CardWidgetWithChart data={doughnutChartData} />
+        </section>
+        <Paper className='p-20'>
+
+          <Grid container spacing={1} alignItems='center'>
+            <Grid item lg={2}>
+              <SelectTextField
+                value={2020}
+                size='small'
+              >
+                {[2019, 2020].map(item => (
+                  <MenuItem value={item}>
+                    {item}
+                  </MenuItem>
+                ))}
+              </SelectTextField>
+            </Grid>
+            <Grid item lg={10}>
+              <Typography variant="subtitle1" color="initial" className='font-semibold text-center'>Total number of employees on leave per department</Typography>
+            </Grid>
           </Grid>
-          <Grid item lg={10}>
-            <Typography variant="subtitle1" color="initial" className='font-semibold text-center'>Total number of employees on leave per department</Typography>
-          </Grid>
-        </Grid>
-        <BarChart data={barChartData}/>
-      </Paper>
-      <TableComponent data={employeeData}/>
-    </main>
+          <BarChart data={barChartData} />
+        </Paper>
+        <TableComponent data={employeeData} />
+      </main>
     </SimplePage>
   );
 };

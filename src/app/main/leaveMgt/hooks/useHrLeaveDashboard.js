@@ -1,19 +1,19 @@
 import React from 'react';
 
 const dataOne = {
-	labels: ['Employee on leave', 'Total employee'],
-	datasets: [
-		{
-			data: [30, 150,],
-			backgroundColor: ['#FF6384', '#36A2EB',],
-			hoverBackgroundColor: ['#FF6384', '#36A2EB',]
-		}
-	]
+  labels: ['Employee on leave', 'Total employee'],
+  datasets: [
+    {
+      data: [30, 150,],
+      backgroundColor: ['#FF6384', '#36A2EB',],
+      hoverBackgroundColor: ['#FF6384', '#36A2EB',]
+    }
+  ]
 };
 
 
 const data = {
-  labels: ['Finance', 'HR', 'IT', 'Finance', 'Production', 'Research and Development','Purchasing', 'Marketing ', 'Purchasing', 'Production', 'Finance', 'Finance'],
+  labels: ['Finance', 'HR', 'IT', 'Finance', 'Production', 'Research and Development', 'Purchasing', 'Marketing ', 'Purchasing', 'Production', 'Finance', 'Finance'],
   datasets: [
     {
       label: 'Departments',

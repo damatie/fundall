@@ -15,6 +15,11 @@ import CardWidget from 'app/shared/widgets/CardWidget';
 import PersonalTrainingCalendar from 'app/main/personalTraining/personalTrainingCalendar';
 import CardWidgetWithChart from 'app/shared/widgets/CardWidgetWithChart';
 import useLMTrainingDashboard from '../hooks/customHook';
+import { Paper } from '@material-ui/core';
+import TableComponent from './components/TableComponent';
+import Widget from './components/widget';
+import widgets from "./data.json";
+
 
 const useStyles = makeStyles(theme => ({
 	header: {
@@ -48,14 +53,14 @@ const useStyles = makeStyles(theme => ({
 	},
 }));
 
-function LineManagerDashboard(props) {
+function FinanceManagerDashboard(props) {
 	const dispatch = useDispatch();
 	const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
 
 	const classes = useStyles(props);
 	const [search, setSearch] = useState('');
 
-	const { doughnutChartData } = useLMTrainingDashboard();
+	const { doughnutChartData, employeeData } = useLMTrainingDashboard();
 
 	useEffect(() => {
 	}, [dispatch]);
@@ -79,7 +84,7 @@ function LineManagerDashboard(props) {
 				>
 					<FuseAnimate animation="transition.slideUpIn" duration={400} delay={100}>
 						<Typography color="inherit" className="text-24 sm:text-40 font-light">
-							LINE MANAGER TRAINING DASHBOARD
+							FINANCE MANAGER TRAINING DASHBOARD
 						</Typography>
 					</FuseAnimate>
 					<Icon className={classes.headerIcon}> school </Icon>
@@ -117,32 +122,21 @@ function LineManagerDashboard(props) {
 					>
 						<div className="widget flex flex-wrap w-full">
 							<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
-								<CardWidget count={[].length} title={"Total Trainings"} color="yellow" />
+								<CardWidget count={[].length} title={"Approved Trainings"} color="yellow" />
 							</div>
 							<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
-								<CardWidget count={[].filter(t => t.status === 'pending').length} title={"Pending Trainings"} color="blue" />
+								<CardWidget count={[].filter(t => t.status === 'pending').length} title={"Upcoming Trainings"} color="blue" />
 							</div>
-							<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
-								<CardWidget count={[].filter(t => t.status === 'approved').length} title={"Approved Trainings"} color="green" />
+							<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12 items-align-end">
+								<CardWidget count={[].filter(t => t.status === 'approved').length} title={"Cost of Trainings"} color="green" />
 							</div>
 						</div>
-						<div className="widget flex  flex-wrap">
-							<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
-								<CardWidget count={[].filter(t => t.status === 'rejected').length} title={"Rejected Trainings"} color="red" />
-							</div>
-							<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
-								<CardWidget count={[].filter(t => t.status === 'reviewed').length} title={"Reviewed Trainings"} color="orange" />
-							</div>
-						</div>
-						<div className="widget flex w-full p-12 m-10">
-							<div style={{ width: "60%" }}>
+						<div className="widget flex w-full p-12 m-10 justify-between">
+							<div style={{ width: "58%" }}>
 								<PersonalTrainingCalendar />
 							</div>
 							<div style={{ width: "40%" }} className="flex justify-center align-center">
-								<CardWidgetWithChart
-									data={doughnutChartData}
-									customStyle={"flex justify-center align-center"}
-								/>
+								<Widget widget={widgets} />
 							</div>
 						</div>
 					</FuseAnimateGroup>
@@ -152,4 +146,4 @@ function LineManagerDashboard(props) {
 	);
 }
 
-export default withReducer('personalTraining', null)(LineManagerDashboard);
+export default withReducer('personalTraining', null)(FinanceManagerDashboard);
