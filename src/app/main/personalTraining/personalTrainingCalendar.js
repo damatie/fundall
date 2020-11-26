@@ -171,7 +171,7 @@ function PersonalTrainingCalendar(props) {
 
 	const classes = useStyles(props);
 	const headerEl = useRef(null);
-	
+
 	useEffect(() => {
 		dispatch(Actions.getAllTrainings());
 	}, [dispatch]);
@@ -197,11 +197,11 @@ function PersonalTrainingCalendar(props) {
 		);
 	}
 
-	function moveToCourses(start, end){
+	function moveToCourses(start, end) {
 		return <Redirect to={`/training/personal/courses/${start}/${end}`} />
 	}
 
-	const eventStyleGetter = (event, start, end, isSelected) =>{
+	const eventStyleGetter = (event, start, end, isSelected) => {
 		var style = {
 			backgroundColor: event.color,
 			color: 'white',
@@ -212,55 +212,55 @@ function PersonalTrainingCalendar(props) {
 	}
 	return (
 		<div className={clsx(classes.root, 'flex flex-col flex-auto relative')}>
-        <Card >
-          <CardContent>
-			<div ref={headerEl} />
-			<DragAndDropCalendar
-				className="flex flex-1 container"
-				selectable
-				localizer={localizer}
-				events={events}
-				onEventDrop={moveEvent}
-				resizable
-				onEventResize={resizeEvent}
-				defaultView={Views.MONTH}
-				defaultDate={new Date()}
-				startAccessor="start"
-				endAccessor="end"
-				views={allViews}
-				step={60}
-				showMultiDayTimes
-				eventPropGetter={eventStyleGetter}
-				// onNavigate={handleNavigate}
-				onSelectEvent={event => {
-					console.log(event);
-					dispatch(Actions.openEditEventDialog(event));
-				}}
-                // onSelectSlot={slotInfo =>
-                //     (slotInfo.start >= new Date()) ?
-				// 	dispatch(
-				// 		Actions.openNewEventDialog({
-				// 			start: slotInfo.start.toLocaleString(),
-				// 			end: slotInfo.end.toLocaleString()
-				// 		})
-                //     )
-                //     : null
-				// }
-			/>
-			<FuseAnimate animation="transition.expandIn" delay={500}>
-				<Fab
-					color="secondary"
-					aria-label="add"
-					className={classes.addButton}
-                    to={'/training/personal/courses'}
-                    component={Link}
-				>
-					<Icon>add</Icon>
-				</Fab>
-			</FuseAnimate>
-			<EventDialog />
-        </CardContent>
-        </Card>
+			<Card >
+				<CardContent>
+					<div ref={headerEl} />
+					<DragAndDropCalendar
+						className="flex flex-1 container"
+						selectable
+						localizer={localizer}
+						events={[]}
+						onEventDrop={moveEvent}
+						resizable
+						onEventResize={resizeEvent}
+						defaultView={Views.MONTH}
+						defaultDate={new Date()}
+						startAccessor="start"
+						endAccessor="end"
+						views={allViews}
+						step={60}
+						showMultiDayTimes
+						eventPropGetter={eventStyleGetter}
+						// onNavigate={handleNavigate}
+						onSelectEvent={event => {
+							console.log(event);
+							dispatch(Actions.openEditEventDialog(event));
+						}}
+					// onSelectSlot={slotInfo =>
+					//     (slotInfo.start >= new Date()) ?
+					// 	dispatch(
+					// 		Actions.openNewEventDialog({
+					// 			start: slotInfo.start.toLocaleString(),
+					// 			end: slotInfo.end.toLocaleString()
+					// 		})
+					//     )
+					//     : null
+					// }
+					/>
+					<FuseAnimate animation="transition.expandIn" delay={500}>
+						<Fab
+							color="secondary"
+							aria-label="add"
+							className={classes.addButton}
+							to={'/training/personal/courses'}
+							component={Link}
+						>
+							<Icon>add</Icon>
+						</Fab>
+					</FuseAnimate>
+					<EventDialog />
+				</CardContent>
+			</Card>
 		</div>
 	);
 }
