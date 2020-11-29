@@ -40,8 +40,13 @@ import ContactsAppConfig from 'app/main/contact_list/ContactsAppConfig';
 import DisciplinaryCaseConfig from 'app/main/disciplinary_case/DisciplinaryCaseConfig';
 import CheckListConfig from 'app/main/check_list/CheckListConfig';
 import SrepConfig from 'app/main/srep/srepConfig'
+import DashboardConfig from 'app/main/personalTraining/personalTrainingDashboard/DashboardConfig';
+import LineManagerDashboardConfig from 'app/main/line_manager/training/TrainingDashboard/lineManagerDashboardConfig';
 import LeaveMgtConfig from 'app/main/leaveMgt/leaveMgtConfig';
 import PerformanceAppraisalConfig from 'app/main/performanceAppraisal/PerformanceAppraisalConfig';
+import FinanceManagerDashboardConfig from 'app/main/file-manager/TrainingDashboard/FinanceManagerDashboardConfig';
+import HRRecruitmentDashboardConfig from 'app/main/recruitment/recruitmentDashboard/DashboardConfig';
+import LoanDashboardConfig from "app/main/loanApp/dashboard/loanDashboardConfig";
 
 const routeConfigs = [
 	// ExampleConfig,
@@ -84,10 +89,16 @@ const routeConfigs = [
 	SrepConfig,
 	LeaveMgtConfig,
 	PerformanceAppraisalConfig,
+	DashboardConfig,
+	LeaveMgtConfig,
+	LineManagerDashboardConfig,
+	FinanceManagerDashboardConfig,
+	HRRecruitmentDashboardConfig,
+	LoanDashboardConfig
 ];
 
 const checkIfLoggedIn = () => {
-	if(localStorage.getItem('jwt_access_token')) {
+	if (localStorage.getItem('jwt_access_token')) {
 		return true;
 	} else {
 		return false;
@@ -99,7 +110,7 @@ const routes = [
 	{
 		path: '/',
 		exact: true,
-		component: checkIfLoggedIn() ?  React.lazy(() => import('app/main/employee/dashboard/ProjectDashboardApp')) : () => <Redirect to="/auth/login" />
+		component: checkIfLoggedIn() ? React.lazy(() => import('app/main/employee/dashboard/ProjectDashboardApp')) : () => <Redirect to="/auth/login" />
 	},
 ];
 
