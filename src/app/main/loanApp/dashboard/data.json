@@ -1,0 +1,38 @@
+{
+    "title": "Loan",
+    "ranges": [
+        "2019",
+        "2020"
+    ],
+    "currrentRange": "2019",
+    "data": [
+        {
+            "title": "Computer Techonology",
+            "status": "pending"
+        },
+        {
+            "title": "Software",
+            "status": "approved"
+        },
+        {
+            "title": "Finance",
+            "status": "in-review"
+        },
+        {
+            "title": "Gasoline",
+            "status": "pending"
+        },
+        {
+            "title": "Engineering",
+            "status": "pending"
+        },
+        {
+            "title": "Computer Techonology",
+            "status": "approved"
+        },
+        {
+            "title": "Computer Techonology",
+            "status": "pending"
+        }
+    ]
+}

@@ -19,18 +19,18 @@ const useStyles = makeStyles(theme => ({
 }))
 
 
-const DoughnutChart= ({data, percentage}) => {
-	const classes = useStyles({color: data.datasets[0].backgroundColor[1]});
-		return (
-<div className={`flex flex-col items-center w-full max-w-md ${classes.chart}`}>
-				<Doughnut data={data} options={{
-            legend: {
-              position: 'bottom'
-            }
-          }}/>
-					<Typography variant="h6" color="initial" className={classes.text}>{percentage}</Typography>
-			</div>
-		);
+const DoughnutChart = ({ data, percentage, doughnutStyle }) => {
+	const classes = useStyles({ color: data.datasets[0].backgroundColor[1] });
+	return (
+		<div className={`flex flex-col items-center w-full max-w-md ${classes.chart} ${doughnutStyle}`} >
+			<Doughnut data={data} options={{
+				legend: {
+					position: 'bottom'
+				}
+			}} />
+			<Typography variant="h6" color="initial" className={classes.text}>{percentage}</Typography>
+		</div>
+	);
 }
 
 export default DoughnutChart;
