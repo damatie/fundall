@@ -574,6 +574,41 @@ const navigationConfig = [
 		]
 	},
 
+	// PERFORMANCE APPRAISAL NAVIGATION
+	{
+		id: 'performanceAppraisal',
+		title: 'Performance appraisal',
+		translate: 'performance appraisal',
+		type: 'group',
+		auth: authRoles.admin,
+		children: [
+			{
+				id: 'hrDashboard',
+				title: 'HR Dashboard',
+				type: 'item',
+				url: '/hr/performance_appraisal/dashboard',
+				icon: 'dashboard',
+				auth: authRoles.admin,
+			},
+			{
+				id: 'LMDashboard',
+				title: 'Line manager Dashboard',
+				type: 'item',
+				url: '/line_manager/performance_appraisal/dashboard',
+				icon: 'dashboard',
+				auth: authRoles.admin,
+			},
+			{
+				id: 'FMDashboard',
+				title: 'Finance manager Dashboard',
+				type: 'item',
+				url: '/finance_manager/performance_appraisal/dashboard',
+				icon: 'dashboard',
+				auth: authRoles.admin,
+			},
+		]
+	},
+
 	// SREP navigations
 	{
 		id: 'srep',

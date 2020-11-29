@@ -43,6 +43,7 @@ import SrepConfig from 'app/main/srep/srepConfig'
 import DashboardConfig from 'app/main/personalTraining/personalTrainingDashboard/DashboardConfig';
 import LineManagerDashboardConfig from 'app/main/line_manager/training/TrainingDashboard/lineManagerDashboardConfig';
 import LeaveMgtConfig from 'app/main/leaveMgt/leaveMgtConfig';
+import PerformanceAppraisalConfig from 'app/main/performanceAppraisal/PerformanceAppraisalConfig';
 import FinanceManagerDashboardConfig from 'app/main/file-manager/TrainingDashboard/FinanceManagerDashboardConfig';
 import HRRecruitmentDashboardConfig from 'app/main/recruitment/recruitmentDashboard/DashboardConfig';
 import LoanDashboardConfig from "app/main/loanApp/dashboard/loanDashboardConfig";
@@ -86,6 +87,8 @@ const routeConfigs = [
 	DisciplinaryCaseConfig,
 	CheckListConfig,
 	SrepConfig,
+	LeaveMgtConfig,
+	PerformanceAppraisalConfig,
 	DashboardConfig,
 	LeaveMgtConfig,
 	LineManagerDashboardConfig,
