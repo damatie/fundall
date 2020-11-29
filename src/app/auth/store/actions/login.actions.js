@@ -51,8 +51,12 @@ export function submitLogin(data) {
 						}
 					};
 					localStorage.setItem('user_data', JSON.stringify(userState));
-					// dispatch(getProfile(user.data.id, user.token));
-					// dispatch(UserActions.setUserData(userState));
+					dispatch(getProfile({data: {
+						firstName: 'Admin',
+						lastName: 'admin',
+						email: 'admin@test.co'
+					}}));
+					dispatch(UserActions.setUserData(userState));
 					// dispatch(getNotification(user.token));
 					// return dispatch({
 					// 	type: LOGIN_SUCCESS
@@ -86,7 +90,7 @@ export function submitLogin(data) {
 	}
 }
 
-const getProfile = (id, token) => {
+const getProfile = ({id, token, data}) => {
 	return dispatch => {
 		dispatch({
       type: LOADING_EMPLOYEE_PROFILE
@@ -96,10 +100,10 @@ const getProfile = (id, token) => {
 				authorization: `JWT ${token}`
 			}
 		}).then(res => handleResponse(res)).then(
-			data => {
+			x => {
 				dispatch({
 					type: GET_EMPLOYEE_PROFILE,
-					payload: (data.data) ? data.data : []
+					payload: data
 				})
 			}
 		)

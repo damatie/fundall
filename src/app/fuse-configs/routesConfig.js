@@ -41,6 +41,7 @@ import DisciplinaryCaseConfig from 'app/main/disciplinary_case/DisciplinaryCaseC
 import CheckListConfig from 'app/main/check_list/CheckListConfig';
 import SrepConfig from 'app/main/srep/srepConfig'
 import LeaveMgtConfig from 'app/main/leaveMgt/leaveMgtConfig';
+import PerformanceAppraisalConfig from 'app/main/performanceAppraisal/PerformanceAppraisalConfig';
 
 const routeConfigs = [
 	// ExampleConfig,
@@ -81,7 +82,8 @@ const routeConfigs = [
 	DisciplinaryCaseConfig,
 	CheckListConfig,
 	SrepConfig,
-	LeaveMgtConfig
+	LeaveMgtConfig,
+	PerformanceAppraisalConfig,
 ];
 
 const checkIfLoggedIn = () => {

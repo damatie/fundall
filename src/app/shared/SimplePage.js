@@ -59,7 +59,7 @@ function SimplePage(props) {
 					)}
 				>	
 					<FuseAnimate animation="transition.slideUpIn" duration={400} delay={100}>
-						<Typography color="inherit" className="text-24 sm:text-40 font-light">
+						<Typography color="inherit" className="text-20 sm:text-24 font-semiBold">
 							{title}
 						</Typography>
 					</FuseAnimate>

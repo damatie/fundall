@@ -1,5 +1,4 @@
 import React from 'react';
-import { Line } from 'react-chartjs-2';
 
 const data = {
 	labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
@@ -49,21 +48,14 @@ const data = {
 	]
 };
 
-const LineGraphChart = () => {
-  return (
-    <div className="flex flex-col items-center w-full h-full">
-      <Line 
-        data={data} 
-        width={100}
-        height={'30%'}
-        options={{
-          legend: {
-            position: 'bottom'
-          }
-        }}
-        />
-    </div>
-  );
-}
+const useHRperformanceAppraisalDashboard = () => {
+  const [lineGraphData] = React.useState({
+    kpos: data,
+    performanceAppraisal: data
+  })
+  return {
+    lineGraphData
+  };
+};
 
-export default LineGraphChart;
+export default useHRperformanceAppraisalDashboard;
