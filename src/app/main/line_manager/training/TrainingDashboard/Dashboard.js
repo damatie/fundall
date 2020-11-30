@@ -3,18 +3,16 @@ import FuseAnimateGroup from '@fuse/core/FuseAnimateGroup';
 import _ from '@lodash';
 import Icon from '@material-ui/core/Icon';
 import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import withReducer from 'app/store/withReducer';
+import React from "react";
 import clsx from 'clsx';
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import ArrowBackIcon from '@material-ui/icons/ArrowBackIosRounded';
 import IconButton from '@material-ui/core/IconButton';
 import CardWidget from 'app/shared/widgets/CardWidget';
 import PersonalTrainingCalendar from 'app/main/personalTraining/personalTrainingCalendar';
-import CardWidgetWithChart from 'app/shared/widgets/CardWidgetWithChart';
-import useLMTrainingDashboard from '../hooks/customHook';
+import BarChart from 'app/shared/charts/BarChart';
 
 const useStyles = makeStyles(theme => ({
 	header: {
@@ -48,21 +46,38 @@ const useStyles = makeStyles(theme => ({
 	},
 }));
 
+
+const data = {
+	labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+	datasets: [
+		{
+			label: 'Training Chart',
+			fill: false,
+			lineTension: 0.1,
+			backgroundColor: 'rgba(75,192,192,0.4)',
+			borderColor: 'rgba(75,192,192,1)',
+			borderCapStyle: 'butt',
+			borderDash: [],
+			borderDashOffset: 0.0,
+			borderJoinStyle: 'miter',
+			pointBorderColor: 'rgba(75,192,192,1)',
+			pointBackgroundColor: '#fff',
+			pointBorderWidth: 1,
+			pointHoverRadius: 5,
+			pointHoverBackgroundColor: 'rgba(75,192,192,1)',
+			pointHoverBorderColor: 'rgba(220,220,220,1)',
+			pointHoverBorderWidth: 2,
+			pointRadius: 1,
+			pointHitRadius: 10,
+			data: [65, 59, 80, 81, 56, 55, 40]
+		}
+	]
+};
+
 function LineManagerDashboard(props) {
-	const dispatch = useDispatch();
 	const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
 
 	const classes = useStyles(props);
-	const [search, setSearch] = useState('');
-
-	const { doughnutChartData } = useLMTrainingDashboard();
-
-	useEffect(() => {
-	}, [dispatch]);
-
-	function handleSearch(event) {
-		setSearch(event.target.value);
-	}
 
 	const goToPreviousRoute = () => {
 		window.location = '/training/personal';
@@ -89,24 +104,6 @@ function LineManagerDashboard(props) {
 						<ArrowBackIcon />
 					</IconButton>
 				</div>
-				<div className="flex flex-col flex-1 max-w-2xl w-full mx-auto px-8 sm:px-16 py-24">
-					<div className="flex flex-col flex-shrink-0 sm:flex-row items-center justify-center py-24">
-						<TextField
-							// label="Search"
-							placeholder="Search..."
-							className="flex w-full sm:w-320 mb-16 sm:mb-0 mx-16"
-							value={search}
-							inputProps={{
-								'aria-label': 'Search'
-							}}
-							onChange={handleSearch}
-							variant="outlined"
-							InputLabelProps={{
-								shrink: true
-							}}
-						/>
-					</div>
-				</div >
 
 				<div className="p-12">
 					<FuseAnimateGroup
@@ -115,34 +112,31 @@ function LineManagerDashboard(props) {
 							animation: 'transition.slideUpBigIn'
 						}}
 					>
-						<div className="widget flex flex-wrap w-full">
+						<div className="widget flex  flex-wrap mt-24">
 							<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
-								<CardWidget count={[].length} title={"Total Trainings"} color="yellow" />
+								<CardWidget count={[].length} title={"Overall Trainings"} color="green" />
 							</div>
 							<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
-								<CardWidget count={[].filter(t => t.status === 'pending').length} title={"Pending Trainings"} color="blue" />
-							</div>
-							<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
-								<CardWidget count={[].filter(t => t.status === 'approved').length} title={"Approved Trainings"} color="green" />
+								<CardWidget count={[].filter(t => t.status === 'approved').length} title={"Employees in Trainings"} color="black" />
 							</div>
 						</div>
-						<div className="widget flex  flex-wrap">
+						<div className="widget flex flex-wrap w-full mt-24">
 							<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
-								<CardWidget count={[].filter(t => t.status === 'rejected').length} title={"Rejected Trainings"} color="red" />
+								<CardWidget count={[].filter(t => t.status === 'pending').length} title={"Pending Trainings"} color="yellow" />
 							</div>
 							<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
-								<CardWidget count={[].filter(t => t.status === 'reviewed').length} title={"Reviewed Trainings"} color="orange" />
+								<CardWidget count={[].filter(t => t.status === 'reviewed').length} title={"Ongoing Trainings"} color="orange" />
+							</div>
+							<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
+								<CardWidget count={[].filter(t => t.status === 'rejected').length} title={"Upcoming Trainings"} color="purple" />
 							</div>
 						</div>
-						<div className="widget flex w-full p-12 m-10">
-							<div style={{ width: "60%" }}>
+						<div className="widget flex w-full p-12 m-10 justify-between">
+							<div style={{ width: "49%" }}>
 								<PersonalTrainingCalendar />
 							</div>
-							<div style={{ width: "40%" }} className="flex justify-center align-center">
-								<CardWidgetWithChart
-									data={doughnutChartData}
-									customStyle={"flex justify-center align-center"}
-								/>
+							<div style={{ width: "49%" }} className="flex justify-center align-center">
+								<BarChart data={data} />
 							</div>
 						</div>
 					</FuseAnimateGroup>

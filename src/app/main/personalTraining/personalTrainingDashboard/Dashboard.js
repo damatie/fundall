@@ -114,19 +114,16 @@ function PersonalTrainingDashboard(props) {
 						</div>
 						<div className="flex-column" style={{ width: "20%" }}>
 							<div className="widget flex w-full p-12"  >
-								<CardWidget count={trainings.length} title={"Total"} />
+								<CardWidget count={trainings.filter(t => t.status === 'pending').length} title={"Ongoing Trainings"} color={"orange"} />
 							</div>
 							<div className="widget flex w-full p-12"  >
-								<CardWidget count={trainings.filter(t => t.status === 'pending').length} title={"Ongoing Trainings"} />
+								<CardWidget count={trainings.filter(t => t.status === 'approved').length} title={"Upcoming Trainings"} color={"blue"} />
 							</div>
 							<div className="widget flex w-full p-12"  >
-								<CardWidget count={trainings.filter(t => t.status === 'approved').length} title={"Upcoming Trainings"} />
+								<CardWidget count={trainings.filter(t => t.status === 'rejected').length} title={"Available Trainings"} color={"purple"} />
 							</div>
 							<div className="widget flex w-full p-12"  >
-								<CardWidget count={trainings.filter(t => t.status === 'rejected').length} title={"Available Trainings"} />
-							</div>
-							<div className="widget flex w-full p-12"  >
-								<CardWidget count={trainings.filter(t => t.status === 'completed').length} title={"Completed Trainings"} />
+								<CardWidget count={trainings.filter(t => t.status === 'completed').length} title={"Completed Trainings"} color={"green"} />
 							</div>
 						</div>
 					</FuseAnimateGroup>
