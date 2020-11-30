@@ -19,6 +19,10 @@ const PerformanceAppraisalConfig = {
 			path: '/finance_manager/performance_appraisal/dashboard',
 			component: React.lazy(() => import('./dashboards/FMperformanceAppraisalDashboard'))
 		},
+		{
+			path: '/hr/performance_appraisal/kpoCategory',
+			component: React.lazy(() => import('./KPOcategoryList/KPOcategoryList'))
+		},
 	]
 };
 
