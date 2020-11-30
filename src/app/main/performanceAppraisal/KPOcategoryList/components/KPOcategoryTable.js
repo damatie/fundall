@@ -8,8 +8,8 @@ import Typography from '@material-ui/core/Typography';
 
 
 const KPOcategoryTable = () => {
-  const { kpoCategoryList, handleGetCategory } = useKPOcategoryList();
-  const columns = React.useMemo(
+	const { kpoCategoryList, handleGetCategory } = useKPOcategoryList();
+	const columns = React.useMemo(
 		() => [
 			{
 				Header: 'Name',
@@ -32,11 +32,11 @@ const KPOcategoryTable = () => {
 				accessor: 'modifiedBy',
 				sortable: true
 			},
-      {
+			{
 				Header: 'Status',
 				accessor: 'status',
-				Cell: ({ row: { values: { status }} }) => {
-          return <Status status={status} />
+				Cell: ({ row: { values: { status } } }) => {
+					return <Status status={status} />
 				},
 				className: 'justify-center',
 				// width: 64,
@@ -44,39 +44,40 @@ const KPOcategoryTable = () => {
 			},
 		],
 	);
-  return (
-    <EnhancedTable
-				columns={columns}
-				data={kpoCategoryList}
-				onRowClick={(ev, row) => {
-					if (row) {
-						handleGetCategory(row.values);
-					}
-        }}
-        checkbox={{
-          showCheckbox: true,
-          onClick: (value) => console.log(value),
-          accessor: 'id',
-        }}
-        selectAll={(value) => console.log(value)}
-			/>
-  );
+
+	return (
+		<EnhancedTable
+			columns={columns}
+			data={kpoCategoryList}
+			onRowClick={(ev, row) => {
+				if (row) {
+					handleGetCategory(row.values);
+				}
+			}}
+			checkbox={{
+				showCheckbox: true,
+				onClick: (value) => console.log(value),
+				accessor: 'id',
+			}}
+			selectAll={(value) => console.log(value)}
+		/>
+	);
 };
 
 const Status = ({ status }) => {
-  switch(status.toUpperCase()) {
-    case 'ACTIVE':
-      return (
-        <Typography className={'bg-green text-white inline text-11 font-500 px-8 py-4 rounded-4'}>{status}</Typography>
-      );
-    case 'INACTIVE':
-      return (
-        <Typography className={'bg-red text-white inline text-11 font-500 px-8 py-4 rounded-4'}>{status}</Typography>
-      );
-    default: {
-      return status;
-    }
-  }
+	switch (status.toUpperCase()) {
+		case 'ACTIVE':
+			return (
+				<Typography className={'bg-green text-white inline text-11 font-500 px-8 py-4 rounded-4'}>{status}</Typography>
+			);
+		case 'INACTIVE':
+			return (
+				<Typography className={'bg-red text-white inline text-11 font-500 px-8 py-4 rounded-4'}>{status}</Typography>
+			);
+		default: {
+			return status;
+		}
+	}
 };
 
 export default KPOcategoryTable;

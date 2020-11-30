@@ -4,7 +4,7 @@ const data = {
 	labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
 	datasets: [
 		{
-			label: 'My First dataset',
+			label: 'Completed Performance Appraisal',
 			fill: false,
 			lineTension: 0.1,
 			backgroundColor: 'rgba(75,192,192,0.4)',
@@ -23,9 +23,9 @@ const data = {
 			pointRadius: 1,
 			pointHitRadius: 10,
 			data: [65, 59, 80, 81, 56, 55, 40]
-    },
-    {
-			label: 'My Second dataset',
+		},
+		{
+			label: 'Pending Performance Appraisal',
 			fill: false,
 			lineTension: 0.1,
 			backgroundColor: 'rgba(15,191,192,0.4)',
@@ -49,13 +49,13 @@ const data = {
 };
 
 const useHRperformanceAppraisalDashboard = () => {
-  const [lineGraphData] = React.useState({
-    kpos: data,
-    performanceAppraisal: data
-  })
-  return {
-    lineGraphData
-  };
+	const [lineGraphData] = React.useState({
+		kpos: data,
+		performanceAppraisal: data
+	})
+	return {
+		lineGraphData,
+	};
 };
 
 export default useHRperformanceAppraisalDashboard;
