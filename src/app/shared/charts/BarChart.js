@@ -1,21 +1,19 @@
 import React, { Component } from 'react';
 import { Bar } from 'react-chartjs-2';
 
-const BarChart = ({data}) => {
-    return (
-      <div className="flex flex-col items-center h-full">
-        <Bar
-          data={data}
-          width={100}
-          height={'30%'}
-          options={{
-            legend: {
-              position: 'bottom'
-            }
-          }}
-        />
-      </div>
-    );
+const BarChart = ({ data }) => {
+  return (
+    <div className="flex flex-col justify-center items-center h-full w-full">
+      <Bar
+        data={data}
+        options={{
+          legend: {
+            position: 'top'
+          }
+        }}
+      />
+    </div>
+  );
 }
 
 export default BarChart;

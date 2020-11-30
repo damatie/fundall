@@ -2,14 +2,14 @@ import React from 'react';
 import { Line } from 'react-chartjs-2';
 
 const data = {
-	labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+	labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', "August", "September", "October", "November", "December"],
 	datasets: [
 		{
-			label: 'My First dataset',
+			label: "Completed KPO's",
 			fill: false,
 			lineTension: 0.1,
 			backgroundColor: 'rgba(75,192,192,0.4)',
-			borderColor: 'rgba(75,192,192,1)',
+			borderColor: '#2196F3',
 			borderCapStyle: 'butt',
 			borderDash: [],
 			borderDashOffset: 0.0,
@@ -23,14 +23,14 @@ const data = {
 			pointHoverBorderWidth: 2,
 			pointRadius: 1,
 			pointHitRadius: 10,
-			data: [65, 59, 80, 81, 56, 55, 40]
-    },
-    {
-			label: 'My Second dataset',
+			data: [65, 59, 80, 81, 56, 55, 40, 46, 35, 26, 26, 26, 26]
+		},
+		{
+			label: "Uncompleted KPO's",
 			fill: false,
 			lineTension: 0.1,
 			backgroundColor: 'rgba(15,191,192,0.4)',
-			borderColor: 'rgba(15,92,91,1)',
+			borderColor: 'tomato',
 			borderCapStyle: 'butt',
 			borderDash: [],
 			borderDashOffset: 0.0,
@@ -44,26 +44,26 @@ const data = {
 			pointHoverBorderWidth: 2,
 			pointRadius: 1,
 			pointHitRadius: 10,
-			data: [55, 79, 10, 61, 66, 45, 50]
+			data: [46, 35, 26, 26, 26, 26, 55, 79, 10, 61, 66, 45, 50]
 		}
 	]
 };
 
-const LineGraphChart = () => {
-  return (
-    <div className="flex flex-col items-center w-full h-full">
-      <Line 
-        data={data} 
-        width={100}
-        height={'30%'}
-        options={{
-          legend: {
-            position: 'bottom'
-          }
-        }}
-        />
-    </div>
-  );
+const LineGraphChart = ({ customData }) => {
+	return (
+		<div className="flex flex-col items-center w-full h-full">
+			<Line
+				data={customData ? customData : data}
+				width={100}
+				height={'30%'}
+				options={{
+					legend: {
+						position: 'bottom'
+					}
+				}}
+			/>
+		</div>
+	);
 }
 
 export default LineGraphChart;
