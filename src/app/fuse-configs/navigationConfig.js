@@ -606,6 +606,14 @@ const navigationConfig = [
 				icon: 'dashboard',
 				auth: authRoles.admin,
 			},
+			{
+				id: 'kpoCategory',
+				title: 'KPO Category',
+				type: 'item',
+				url: '/hr/performance_appraisal/kpoCategory',
+				icon: 'assignment',
+				auth: authRoles.admin,
+			},
 		]
 	},
 

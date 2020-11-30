@@ -21,7 +21,7 @@ const SelectTextField = (props) => {
     refs,
   } = props;
   return (
-    <FormControl variant={variant || 'outlined'} size={size || 'medium'} className={`w-full my-2 ${className}`}>
+    <FormControl variant={variant || 'outlined'} size={size || 'medium'} className={`w-full ${className}`}>
       <InputLabel error={error} id="demo-simple-select-outlined-label">{label}</InputLabel>
       <Select
         labelId={`${name}-id`}
@@ -35,6 +35,7 @@ const SelectTextField = (props) => {
         onChange={onChange}
         defaultValue={value}
         onBlur={onBlur}
+        {...props}
       >
         {children}
       </Select>
