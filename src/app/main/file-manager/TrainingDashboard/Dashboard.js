@@ -3,7 +3,6 @@ import FuseAnimateGroup from '@fuse/core/FuseAnimateGroup';
 import _ from '@lodash';
 import Icon from '@material-ui/core/Icon';
 import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import withReducer from 'app/store/withReducer';
 import clsx from 'clsx';
@@ -12,9 +11,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import ArrowBackIcon from '@material-ui/icons/ArrowBackIosRounded';
 import IconButton from '@material-ui/core/IconButton';
 import CardWidget from 'app/shared/widgets/CardWidget';
-import PersonalTrainingCalendar from 'app/main/personalTraining/personalTrainingCalendar';
-import Widget from './components/widget';
-import widgets from "./data.json";
+import SelectTextField from 'app/shared/TextInput/SelectTextField';
+import { MenuItem, Paper } from '@material-ui/core';
+import EnhancedTable from 'app/shared/table/EnhancedTable';
 
 
 const useStyles = makeStyles(theme => ({
@@ -54,14 +53,70 @@ function FinanceManagerDashboard(props) {
 	const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
 
 	const classes = useStyles(props);
-	const [search, setSearch] = useState('');
 
-	useEffect(() => {
-	}, [dispatch]);
+	const data = [
+		{
+			id: 1,
+			department: 'Organizational Integrity',
+			entity: '5cee',
+			total_cost: '#18, 983, 000',
+			status: 'Active'
+		},
+		{
+			id: 2,
+			department: 'Organizational Integrity',
+			entity: 'CBit',
+			total_cost: '#1,000,000',
+			status: 'Active'
+		},
+		{
+			id: 3,
+			department: 'Oil and Gas',
+			entity: 'Springrock',
+			total_cost: '#1,350,000',
+			status: 'Inactive'
+		},
+		{
+			id: 4,
+			department: 'Doctor',
+			entity: '5cee',
+			total_cost: '#18,000,000',
+			status: 'Active'
+		},
+		{
+			id: 5,
+			department: 'Organizational Integrity',
+			entity: '5cee',
+			total_cost: '#8,300',
+			status: 'Inactive'
+		}
+	];
 
-	function handleSearch(event) {
-		setSearch(event.target.value);
-	}
+	const columns = React.useMemo(
+		() => [
+			{
+				Header: 'S/N',
+				accessor: "id",
+				className: 'font-bold',
+				sortable: true
+			},
+			{
+				Header: 'Department',
+				accessor: 'department',
+				sortable: true
+			},
+			{
+				Header: 'Entity',
+				accessor: 'entity',
+				sortable: true
+			},
+			{
+				Header: 'TotalCost',
+				accessor: 'total_cost',
+				sortable: false
+			},
+		],
+	);
 
 	const goToPreviousRoute = () => {
 		window.location = '/training/personal';
@@ -88,26 +143,8 @@ function FinanceManagerDashboard(props) {
 						<ArrowBackIcon />
 					</IconButton>
 				</div>
-				<div className="flex flex-col flex-1 max-w-2xl w-full mx-auto px-8 sm:px-16 py-24">
-					<div className="flex flex-col flex-shrink-0 sm:flex-row items-center justify-center py-24">
-						<TextField
-							// label="Search"
-							placeholder="Search..."
-							className="flex w-full sm:w-320 mb-16 sm:mb-0 mx-16"
-							value={search}
-							inputProps={{
-								'aria-label': 'Search'
-							}}
-							onChange={handleSearch}
-							variant="outlined"
-							InputLabelProps={{
-								shrink: true
-							}}
-						/>
-					</div>
-				</div >
 
-				<div className="p-12">
+				<div className="p-12 mt-24">
 					<FuseAnimateGroup
 						className="flex-column"
 						enter={{
@@ -116,23 +153,77 @@ function FinanceManagerDashboard(props) {
 					>
 						<div className="widget flex flex-wrap w-full">
 							<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
-								<CardWidget count={[].length} title={"Approved Trainings"} color="yellow" />
+								{/* <div className={"ml-24"}>
+									<SelectTextField
+										value={2019}
+										size='small'
+										label='Year'
+									>
+										{[2019, 2020].map(item => (
+											<MenuItem value={item}>
+												{item}
+											</MenuItem>
+										))}
+									</SelectTextField>
+								</div> */}
+								<CardWidget count={900} title={"Total Approved Trainings"} color="blue" />
 							</div>
 							<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
-								<CardWidget count={[].filter(t => t.status === 'pending').length} title={"Upcoming Trainings"} color="blue" />
+								<CardWidget count={83} title={"Total Upcoming Trainings"} color="orange" />
 							</div>
 							<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12 items-align-end">
-								<CardWidget count={[].filter(t => t.status === 'approved').length} title={"Cost of Trainings"} color="green" />
+								<CardWidget count={8} title={"Total Cost of Trainings"} color="green" />
 							</div>
 						</div>
-						<div className="widget flex w-full p-12 m-10 justify-between">
-							<div style={{ width: "58%" }}>
-								<PersonalTrainingCalendar />
+						<Paper className="widget p-24 m-10 mr-24" style={{ width: "98.5%" }}>
+							<div className="w-50 flex mb-24">
+								<div className={"mr-24"}>
+									<SelectTextField
+										value={2019}
+										size='small'
+										label='Year'
+									>
+										{[2019, 2020].map(item => (
+											<MenuItem value={item}>
+												{item}
+											</MenuItem>
+										))}
+									</SelectTextField>
+								</div>
+								<div className={"mr-24"}>
+									<SelectTextField
+										value={"IT", "Finance", "Software"}
+										size='small'
+										label='Department'
+									>
+										{["IT", "Finance", "Software"].map(item => (
+											<MenuItem value={item}>
+												{item}
+											</MenuItem>
+										))}
+									</SelectTextField>
+								</div>
+								<SelectTextField
+									value={"5C", "CBit", "SpringRock"}
+									size='small'
+									label='Entity'
+								>
+									{["5C", "CBit", "SpringRock"].map(item => (
+										<MenuItem value={item}>
+											{item}
+										</MenuItem>
+									))}
+								</SelectTextField>
 							</div>
-							<div style={{ width: "40%" }} className="flex justify-center align-center">
-								<Widget widget={widgets} />
-							</div>
-						</div>
+
+							<EnhancedTable
+								columns={columns}
+								data={data}
+								selectAll={(value) => console.log(value)}
+							/>
+
+						</Paper>
+
 					</FuseAnimateGroup>
 				</div>
 			</div>
