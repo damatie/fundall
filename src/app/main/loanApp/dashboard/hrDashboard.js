@@ -23,6 +23,7 @@ import SelectTextField from 'app/shared/TextInput/SelectTextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import LineGraphChart from 'app/shared/charts/LineGraphChart';
 import PieChart from 'app/shared/charts/PieChart';
+import CardBottom from 'app/shared/cards/CardBottom';
 
 
 const barChartData2 = {
@@ -245,7 +246,7 @@ function HRDashboard(props) {
           </Paper>
         </Grid>
         <Grid item lg={4} md={4} sm={12} xs={12} className='h-full'>
-          <Paper className='rounded-8 p-20 h-full'>
+          <Paper className='rounded-8 p-20 h-full relative'>
           <Typography variant="subtitle1" color="initial" className='mb-20 text-center font-semibold'>Rejected Loans vs Approved Loans</Typography>
             <section className='flex flex-row justify-between items-center w-full'>
               <SelectTextField label='Year' value={2020} size='small'>
@@ -260,7 +261,7 @@ function HRDashboard(props) {
                   <MenuItem value={item}>
                     {item}
                   </MenuItem>
-                ))}++
+                ))}
               </SelectTextField>
               <SelectTextField label='Department' value='HR' size='small'>
                 {['IT', 'HR', 'Finance'].map(item => (
@@ -270,10 +271,21 @@ function HRDashboard(props) {
                 ))}
               </SelectTextField>
             </section>
-            <section className='h-full flex flex-row justify-center items-center'>
+            <section className='flex mt-20 flex-row justify-center items-center'>
             <PieChart data={pieChartData}/>
             </section>
-            
+            <CardBottom
+              firstText={{
+                title: 'Rejected Loan',
+                count: 80,
+                color: '#FF6384',
+              }}
+              secondText={{
+                title: 'Approved Loan',
+                count: 50,
+                color: '#36A2EB'
+              }}
+            />
           </Paper>
         </Grid>
       </Grid>

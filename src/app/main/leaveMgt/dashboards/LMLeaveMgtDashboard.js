@@ -45,7 +45,7 @@ const LMLeaveMgtDashboard = () => {
             <Typography variant="subtitle1" color="initial" className='font-semibold text-center'>Total number of employees on leave per department</Typography>
           </Grid>
         </Grid>
-        <BarChart data={barChartData}/>
+        <BarChart data={barChartData} height='100%'/>
       </Paper>
       <TableComponent data={employeeData} lineManager/>
     </main>

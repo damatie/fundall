@@ -14,7 +14,7 @@ import Paper from '@material-ui/core/Paper';
 import SelectTextField from 'app/shared/TextInput/SelectTextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import Grid from '@material-ui/core/Grid';
-import CardWidget from 'app/shared/widgets/CardWidget';
+
 
 
 const useStyles = makeStyles(theme => ({
@@ -51,28 +51,32 @@ const useStyles = makeStyles(theme => ({
 
 const data = [
   {
-    requestedAmount: '₦200,000',
-    loanDuration: '3 Months',
-    dateApplied: '23 june 2020',
-    status: 'Approved'
+    sn: 1,
+    name: 'Adams Smith',
+    relationship: 'Son',
+    fund: '₦200,000',
+    status: 'pending'
   },
   {
-    requestedAmount: '₦100,000',
-    loanDuration: '2 Months',
-    dateApplied: '23 june 2019',
-    status: 'Rejected'
+    sn: 2,
+    name: 'Joy Smith',
+    relationship: 'Daughter',
+    fund: '₦100,000',
+    status: 'approved'
   },
   {
-    requestedAmount: '₦500,000',
-    loanDuration: '3 Months',
-    dateApplied: '23 may 2020',
-    status: 'Pending'
+    sn: 3,
+    name: 'John Doe',
+    relationship: 'brother',
+    fund: '₦200,000',
+    status: 'rejected'
   },
   {
-    requestedAmount: '₦240,000',
-    loanDuration: '3 Months',
-    dateApplied: '23 june 2020',
-    status: 'Approved'
+    sn: 4,
+    name: 'Adams Smith',
+    relationship: 'Son',
+    fund: '₦200,000',
+    status: 'pending'
   },
 ];
 
@@ -115,38 +119,70 @@ const barChartData = {
   ],
 };
 
-function HRsrepDashboard(props) {
+function EmployeeSrepDashboard(props) {
+
+  const columns = React.useMemo(
+    () => [
+      {
+        Header: 'S/N',
+        accessor: 'sn',
+        // className: 'font-bold',
+        sortable: true
+      },
+      {
+        Header: 'Name of Beneficiary',
+        accessor: 'name',
+        sortable: true
+      },
+      {
+        Header: 'Relationship to Employee',
+        accessor: 'relation',
+        sortable: true
+      },
+      {
+        Header: 'Capital Fund to be Contributed',
+        accessor: 'fund',
+        sortable: true
+      },
+      {
+        Header: 'Status',
+        accessor: 'status',
+        Cell: ({ row: { values: { status } } }) => {
+          return <Status status={status} />
+        },
+        className: 'justify-center',
+        // width: 64,
+        sortable: false
+      },
+    ],
+  );
 
   return (
-    <SimplePage title='HR SREP DASHBOARD'>
-      <div className="flex flex-row w-full justify-between">
-        <CardWidget count={13} title={"Number of  approved applications"} color="green" className="mr-6"/>
-        <CardWidget count={9} title={"Number of SREP pending applications"} color="yellow" />
- 
-      </div>
-      <Paper className='p-20 my-20 mb-20 rounded-8 h-sm'>
-
-        <Grid container spacing={1} alignItems='center'>
-          <Grid item lg={1}>
+    <SimplePage title='EMPLOYEE SREP DASHBOARD'>
+      <Paper className='p-20 mx-10 rounded-8'>
+      <Grid container spacing={1} alignItems='center'>
+          <Grid item lg={2}>
             <SelectTextField
-              value={2020}
+              value={'all'}
               size='small'
-              label='Year'
+              label='SREP applications status'
             >
-              {[2019, 2020].map(item => (
+              {['all', 'Approved', 'Pending', 'Rejected'].map(item => (
                 <MenuItem value={item}>
                   {item}
                 </MenuItem>
               ))}
             </SelectTextField>
           </Grid>
-          <Grid item lg={11}>
-            <Typography variant="subtitle1" color="initial" className='font-semibold text-center'>Approved SREP Application</Typography>
+          <Grid item lg={10}>
+            <Typography variant="subtitle1" color="initial" className='font-semibold text-center'>Status of SREP Applications</Typography>
           </Grid>
         </Grid>
-        <BarChart data={barChartData} height='100%'/>
+        <EnhancedTable
+          columns={columns}
+          data={data}
+        />
       </Paper>
-      
     </SimplePage>
   );
 }
@@ -171,4 +207,4 @@ const Status = ({ status }) => {
   }
 };
 
-export default withReducer('personalTraining', null)(HRsrepDashboard);
+export default withReducer('personalTraining', null)(EmployeeSrepDashboard);

@@ -625,6 +625,20 @@ const navigationConfig = [
 		type: 'group',
 		children: [
 			{
+				id: 'hrDashboard',
+				title: 'Admin Dashboard',
+				type: 'item',
+				url: '/srep/admin/dashboard',
+				icon: 'dashboard',
+			},
+			{
+				id: 'employeeDashboard',
+				title: 'Employee Dashboard',
+				type: 'item',
+				url: '/srep/employee/dashboard',
+				icon: 'dashboard',
+			},
+			{
 				id: 'applySREP',
 				title: 'Apply for Education Program',
 				type: 'item',
