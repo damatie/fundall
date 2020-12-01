@@ -7,13 +7,13 @@ import React, { useState } from 'react';
 
 const CardWidget = (props) =>{
     // const color = "blue";
-    const className = {
+    const classes = {
         root: "text-40 leading-none text-"+props.color
     }
 	return (
-		<Paper className="w-full rounded-8 shadow-none border-1 flex flex-col justify-center items-center">
+		<Paper className={`w-full rounded-8 shadow-none border-1 flex flex-col justify-center items-center ${props.className}`}>
 			<div className="text-center pt-12">
-				<Typography className={className.root}>
+				<Typography className={classes.root}>
 					{props.count}
 				</Typography>
 				<Typography className="text-16" color="textSecondary">

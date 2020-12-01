@@ -54,25 +54,25 @@ const data = [
     requestedAmount: '₦200,000',
     loanDuration: '3 Months',
     dateApplied: '23 june 2020',
-    status: 'approved'
+    status: 'Approved'
   },
   {
     requestedAmount: '₦100,000',
     loanDuration: '2 Months',
     dateApplied: '23 june 2019',
-    status: 'rejected'
+    status: 'Rejected'
   },
   {
     requestedAmount: '₦500,000',
     loanDuration: '3 Months',
     dateApplied: '23 may 2020',
-    status: 'pending'
+    status: 'Pending'
   },
   {
     requestedAmount: '₦240,000',
     loanDuration: '3 Months',
     dateApplied: '23 june 2020',
-    status: 'approved'
+    status: 'Approved'
   },
 ];
 
@@ -172,10 +172,10 @@ function EmployeeDashboard(props) {
             </SelectTextField>
           </Grid>
           <Grid item lg={11}>
-            <Typography variant="h6" color="initial" className='font-semibold text-center'>Number of loans taken per year.</Typography>
+            <Typography variant="h6" color="initial" className='font-semibold text-center'>Number of Loans Taken per Year.</Typography>
           </Grid>
         </Grid>
-        <BarChart data={barChartData} />
+        <BarChart data={barChartData} height='80%'/>
       </Paper>
       <Paper className='p-20 mx-10 rounded-8'>
       <Grid container spacing={1} alignItems='center'>
@@ -183,9 +183,9 @@ function EmployeeDashboard(props) {
             <SelectTextField
               value={'all'}
               size='small'
-              label='Loan status'
+              label='Loan Status'
             >
-              {['all', 'approved', 'pending', 'rejected'].map(item => (
+              {['all', 'Approved', 'Pending', 'Rejected'].map(item => (
                 <MenuItem value={item}>
                   {item}
                 </MenuItem>
