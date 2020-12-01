@@ -18,6 +18,7 @@ import EventDialog from './EventDialog';
 import * as Actions from './store/actions';
 import reducer from './store/reducers';
 import { Link, Redirect } from 'react-router-dom';
+import Typography from '@material-ui/core/Typography'
 
 const localizer = momentLocalizer(moment);
 
@@ -214,6 +215,7 @@ function PersonalTrainingCalendar(props) {
 	return (
 		<div className={clsx(classes.root, 'flex flex-col flex-auto relative')}>
 			<Card >
+				<Typography variant="h6" color="initial" className='p-20 font-semibold text-center'>{props.title}</Typography>
 				<CardContent>
 					<div ref={headerEl} />
 					<DragAndDropCalendar

@@ -85,17 +85,17 @@ function EventDialog(props) {
 				id: FuseUtils.generateGUID()
 			});
 		}
-	}, [eventDialog?.data, eventDialog.type, setForm]);
+	}, [eventDialog?.data, eventDialog?.type, setForm]);
 
 	useEffect(() => {
 		/**
 		 * After Dialog Open
 		 */
-		if (eventDialog.props.open) {
+		if (eventDialog?.props.open) {
 			initDialog();
 			dispatch(Actions.getApprovedCourses());
 		}
-	}, [eventDialog.props.open, initDialog, dispatch]);
+	}, [eventDialog?.props.open, initDialog, dispatch]);
 
 	function closeComposeDialog() {
 		return eventDialog.type === 'edit'
@@ -133,7 +133,7 @@ function EventDialog(props) {
 	}
 
 	return (
-		<Dialog {...eventDialog.props} onClose={closeComposeDialog} fullWidth maxWidth="xs" component="form">
+		<Dialog {...eventDialog?.props} onClose={closeComposeDialog} fullWidth maxWidth="xs" component="form">
 			<AppBar position="static" style={{ backgroundColor: color, color: 'white' }}>
 				<Toolbar className="flex w-full">
 					<Typography variant="subtitle1" color="inherit">

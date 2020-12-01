@@ -23,6 +23,7 @@ import SelectTextField from 'app/shared/TextInput/SelectTextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import LineGraphChart from 'app/shared/charts/LineGraphChart';
 import PieChart from 'app/shared/charts/PieChart';
+import CardBottom from 'app/shared/cards/CardBottom';
 
 
 const barChartData2 = {
@@ -206,18 +207,9 @@ function FinanceManager(props) {
     <SimplePage title='FINANCE MANAGER LOAN DASHBOARD'>
       <div className="flex flex-row w-full justify-between">
           <CardWidget count={'₦1,000,000'} title={"Total Loan Amount Pending"} color="green" className="mr-6"/>
-        {/* </div> */}
-        {/* <div className="mr-6"> */}
-        
           <CardWidget count={'₦500,000'} title={"Total Amount Issued"} color="yellow" />
-        {/* </div>
-        <div className="mr-6"> */}
         <CardWidget count={9} title={"Total Approved Loans"} color="green" />
           <CardWidget count={15} title={"Total Pending Loans"} color="red"/>
-        {/* </div> */}
-        {/* <div className="widget flex w-full sm:w-1/2 md:w-1/4 m-5 items-align-end"> */}
-          
-        {/* </div> */}
       </div>
 
       <Grid container spacing={2} className='my-10'>
@@ -270,10 +262,21 @@ function FinanceManager(props) {
                 ))}
               </SelectTextField>
             </section>
-            <section className='h-full flex flex-row justify-center items-center'>
+            <section style={{wodth: '50%'}} className='flex flex-row justify-center items-center'>
             <PieChart data={pieChartData}/>
             </section>
-            
+            <CardBottom
+              firstText={{
+                title: 'Rejected Loan',
+                count: 80,
+                color: '#FF6384',
+              }}
+              secondText={{
+                title: 'Approved Loan',
+                count: 50,
+                color: '#36A2EB'
+              }}
+            />
           </Paper>
         </Grid>
       </Grid>

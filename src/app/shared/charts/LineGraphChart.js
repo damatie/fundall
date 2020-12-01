@@ -49,6 +49,21 @@ const data = {
 	]
 };
 
+const options = {
+  scales: {
+    yAxes: [
+      {
+        ticks: {
+          beginAtZero: true,
+        },
+      },
+    ],
+	},
+	legend: {
+		position: 'bottom'
+	}
+}
+
 const LineGraphChart = ({ customData, height }) => {
 	return (
 		// <div className="flex flex-col items-center w-full h-full">
@@ -56,11 +71,7 @@ const LineGraphChart = ({ customData, height }) => {
 				data={customData ? customData : data}
 				// width={'100%'}
 				height={height}
-				options={{
-					legend: {
-						position: 'bottom'
-					}
-				}}
+				options={options}
 			/>
 		// </div>
 	);

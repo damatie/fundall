@@ -85,8 +85,7 @@ function PersonalTrainingDashboard(props) {
 						}}
 					>
 						<div className="widget flex p-12 flex-col" style={{ width: "80%" }}>
-							<h2 className="mb-24">Training Calendar</h2>
-							<PersonalTrainingCalendar />
+							<PersonalTrainingCalendar title='Training Calendar'/>
 						</div>
 						<div className="flex-column" style={{ width: "20%" }}>
 							<div className="widget flex w-full p-12"  >
