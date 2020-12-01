@@ -14,6 +14,7 @@ import CardWidget from 'app/shared/widgets/CardWidget';
 import SelectTextField from 'app/shared/TextInput/SelectTextField';
 import { MenuItem, Paper } from '@material-ui/core';
 import EnhancedTable from 'app/shared/table/EnhancedTable';
+import { formatToNaira } from 'utils/formatNumber';
 
 
 const useStyles = makeStyles(theme => ({
@@ -59,35 +60,35 @@ function FinanceManagerDashboard(props) {
 			id: 1,
 			department: 'Organizational Integrity',
 			entity: '5cee',
-			total_cost: '#18, 983, 000',
+			total_cost: formatToNaira(18983000),
 			status: 'Active'
 		},
 		{
 			id: 2,
 			department: 'Organizational Integrity',
 			entity: 'CBit',
-			total_cost: '#1,000,000',
+			total_cost: formatToNaira(1000000),
 			status: 'Active'
 		},
 		{
 			id: 3,
 			department: 'Oil and Gas',
 			entity: 'Springrock',
-			total_cost: '#1,350,000',
+			total_cost: formatToNaira(1350000),
 			status: 'Inactive'
 		},
 		{
 			id: 4,
 			department: 'Doctor',
 			entity: '5cee',
-			total_cost: '#18,000,000',
+			total_cost: formatToNaira(18000000),
 			status: 'Active'
 		},
 		{
 			id: 5,
 			department: 'Organizational Integrity',
 			entity: '5cee',
-			total_cost: '#8,300',
+			total_cost: formatToNaira(8300),
 			status: 'Inactive'
 		}
 	];
@@ -111,7 +112,7 @@ function FinanceManagerDashboard(props) {
 				sortable: true
 			},
 			{
-				Header: 'TotalCost',
+				Header: 'Total Cost',
 				accessor: 'total_cost',
 				sortable: false
 			},
@@ -153,31 +154,18 @@ function FinanceManagerDashboard(props) {
 					>
 						<div className="widget flex flex-wrap w-full">
 							<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
-								{/* <div className={"ml-24"}>
-									<SelectTextField
-										value={2019}
-										size='small'
-										label='Year'
-									>
-										{[2019, 2020].map(item => (
-											<MenuItem value={item}>
-												{item}
-											</MenuItem>
-										))}
-									</SelectTextField>
-								</div> */}
 								<CardWidget count={900} title={"Total Approved Trainings"} color="blue" />
 							</div>
 							<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
 								<CardWidget count={83} title={"Total Upcoming Trainings"} color="orange" />
 							</div>
 							<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12 items-align-end">
-								<CardWidget count={8} title={"Total Cost of Trainings"} color="green" />
+								<CardWidget count={formatToNaira(900000)} title={"Total Cost of Trainings"} color="green" />
 							</div>
 						</div>
 						<Paper className="widget p-24 m-10 mr-24" style={{ width: "98.5%" }}>
 
-							<h2 className="text-center mb-24">Cost of Trainings per Department</h2>
+							<Typography color="inherit" variant="subtitle1" className="text-center mb-24">Cost of Trainings per Department</Typography>
 							<div className="w-50 flex mb-24">
 								<div className={"mr-24"}>
 									<SelectTextField

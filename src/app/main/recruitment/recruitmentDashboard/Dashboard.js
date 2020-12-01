@@ -3,18 +3,14 @@ import FuseAnimateGroup from '@fuse/core/FuseAnimateGroup';
 import _ from '@lodash';
 import Icon from '@material-ui/core/Icon';
 import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import withReducer from 'app/store/withReducer';
 import clsx from 'clsx';
-import React, { useState } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import ArrowBackIcon from '@material-ui/icons/ArrowBackIosRounded';
 import IconButton from '@material-ui/core/IconButton';
 import CardWidget from 'app/shared/widgets/CardWidget';
-import CardWidgetWithChart from 'app/shared/widgets/CardWidgetWithChart';
-import useRecruitmentDashboard from '../hooks/customHook';
-import LineGraphChart from 'app/shared/charts/LineGraphChart';
 import BarChart from 'app/shared/charts/BarChart';
 import { Grid, MenuItem, Paper } from '@material-ui/core';
 import SelectTextField from 'app/shared/TextInput/SelectTextField';
@@ -23,7 +19,7 @@ import EnhancedTable from 'app/main/contact_list/ContactsTable';
 // import data from "./data.json";
 
 const data = {
-	labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', "August", 'September', "October", "November", "December"],
+	labels: ['Software', 'IT', 'HR', 'Admin', 'Oil', 'Gas', 'Software Team', "Engineering"],
 	datasets: [
 		{
 			label: 'Open Positions per Department',
@@ -44,7 +40,7 @@ const data = {
 			pointHoverBorderWidth: 2,
 			pointRadius: 1,
 			pointHitRadius: 10,
-			data: [65, 59, 80, 81, 56, 55, 40, 12, 46, 93, 25, 35]
+			data: [65, 59, 80, 81, 12, 46, 93, 25, 35]
 		}
 	]
 };
@@ -75,6 +71,7 @@ const data2 = {
 		}
 	]
 };
+
 const data3 = {
 	labels: ['Job Advert', 'Applications', 'Screened Candidate', 'Manager Interview', 'Onsite Interview', 'Offer', 'Hire', "Days Of Hire"],
 	datasets: [
@@ -138,7 +135,6 @@ function Recruitment(props) {
 	const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
 
 	const classes = useStyles(props);
-	const [search, setSearch] = useState('');
 
 	const tableData = [
 		{
@@ -220,10 +216,6 @@ function Recruitment(props) {
 	);
 
 
-	function handleSearch(event) {
-		setSearch(event.target.value);
-	}
-
 	const goToPreviousRoute = () => {
 		window.location = '/training/personal';
 	}
@@ -259,25 +251,26 @@ function Recruitment(props) {
 					>
 						<div className="widget flex flex-wrap w-full">
 							<div className="widget flex w-full sm:w-1/2 md:w-1/5 p-12">
-								<CardWidget count={[].length} title={"Total Openings"} color="orange" />
+								<CardWidget count={998} title={"Total Openings"} color="orange" />
 							</div>
 							<div className="widget flex w-full sm:w-1/2 md:w-1/5 p-12">
-								<CardWidget count={[].filter(t => t.status === 'pending').length} title={"Total Applicants"} color="purple" />
+								<CardWidget count={77} title={"Total Applicants"} color="purple" />
 							</div>
 							<div className="widget flex w-full sm:w-1/2 md:w-1/5 p-12">
-								<CardWidget count={[].filter(t => t.status === 'approved').length} title={"Shortlisted Applicants"} color="blue" />
+								<CardWidget count={57} title={"Shortlisted Applicants"} color="blue" />
 							</div>
 							<div className="widget flex w-full sm:w-1/2 md:w-1/5 p-12">
-								<CardWidget count={[].filter(t => t.status === 'rejected').length} title={"Rejected Applicants"} color="red" />
+								<CardWidget count={22} title={"Rejected Applicants"} color="red" />
 							</div>
 							<div className="widget flex w-full sm:w-1/2 md:w-1/5 p-12">
-								<CardWidget count={[].filter(t => t.status === 'reviewed').length} title={"Hired Applicants"} color="green" />
+								<CardWidget count={4} title={"Hired Applicants"} color="green" />
 							</div>
 						</div>
-						<div className="widget flex p-12 m-10 justify-between">
+
+						<div className="widget flex p-12 justify-between">
 							<Paper className="p-24 " style={{ width: "49%" }}>
-								<h2 className="text-center mb-24">Overall Open positions per department</h2>
-								<Grid container spacing={3} alignItems='center'>
+								<Typography variant="subtitle1" color="inherit" className="text-center mb-24">Overall Open positions per department</Typography>
+								<Grid container spacing={3} alignItems='center' className="mb-24">
 									<Grid item lg={2}>
 										<SelectTextField
 											value={2020}
@@ -285,6 +278,19 @@ function Recruitment(props) {
 											label='Year'
 										>
 											{[2019, 2020].map(item => (
+												<MenuItem value={item}>
+													{item}
+												</MenuItem>
+											))}
+										</SelectTextField>
+									</Grid>
+									<Grid item lg={2}>
+										<SelectTextField
+											value={"SpringRock"}
+											size='small'
+											label='Entity'
+										>
+											{["5Cee", "SpringRock", "HRIS", "SREP"].map(item => (
 												<MenuItem value={item}>
 													{item}
 												</MenuItem>
@@ -299,7 +305,7 @@ function Recruitment(props) {
 
 							<Paper style={{ width: "49%" }} className="flex-column justify-center align-center p-24">
 								<div>
-									<h2 className="text-center mb-24">Referrals Statistics</h2>
+									<Typography variant="subtitle1" color="inherit" className="text-center mb-24">Referrals Statistics</Typography>
 									<Grid container spacing={3} alignItems='center' className={"mb-24"}>
 										<Grid item lg={2}>
 											<SelectTextField
@@ -320,7 +326,7 @@ function Recruitment(props) {
 									/>
 								</div>
 								<div className="mt-24">
-									<h2 className="text-center mb-24">Recruitment Funnel</h2>
+									<Typography variant="subtitle1" color="inherit" className="text-center mb-24">Recruitment Funnel</Typography>
 									<Grid container spacing={3} alignItems='center' className={"mb-24"}>
 										<Grid item lg={2} >
 											<SelectTextField
@@ -345,8 +351,8 @@ function Recruitment(props) {
 							</Paper>
 						</div>
 
-						<Paper className="p-24 m-10">
-							<h2 className="text-center mb-48">Applicants Mini Data</h2>
+						<Paper className="p-24 m-12 mt-24">
+							<Typography variant="subtitle1" color="inherit" className="text-center mb-48">Applicants Mini Data</Typography>
 
 							<Grid container spacing={3} alignItems='center' className="mb-24">
 								<Grid item lg={2}>
