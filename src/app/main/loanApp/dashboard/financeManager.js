@@ -26,7 +26,7 @@ import PieChart from 'app/shared/charts/PieChart';
 
 
 const barChartData2 = {
-  labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+  labels: ['January', 'February', 'March', '.ril', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
   datasets: [
     {
       label: 'Months',
@@ -104,7 +104,7 @@ const barChartData1 = {
 };
 
 const pieChartData = {
-	labels: ['Reject Loan', 'Approved Loan',],
+	labels: ['Rejected Loan', 'Approved Loan',],
 	datasets: [
 		{
 			data: [80, 50,],

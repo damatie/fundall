@@ -104,7 +104,7 @@ const barChartData1 = {
 };
 
 const pieChartData = {
-	labels: ['Reject Loan', 'Approved Loan',],
+	labels: ['Rejected Loan', 'Approved Loan',],
 	datasets: [
 		{
 			data: [80, 50,],
@@ -212,8 +212,8 @@ function HRDashboard(props) {
           <CardWidget count={'₦500,000'} title={"Total Amount Issued"} color="yellow" />
         {/* </div>
         <div className="mr-6"> */}
-        <CardWidget count={9} title={"Approved Loans"} color="green" />
-          <CardWidget count={15} title={"Pending Loans"} color="red"/>
+        <CardWidget count={9} title={"Total Approved Loans"} color="green" />
+          <CardWidget count={15} title={"Total Pending Loans"} color="red"/>
         {/* </div> */}
         {/* <div className="widget flex w-full sm:w-1/2 md:w-1/4 m-5 items-align-end"> */}
           
@@ -223,7 +223,7 @@ function HRDashboard(props) {
       <Grid container spacing={2} className='my-10'>
         <Grid item lg={8} md={8} sm={12} xs={12}>
           <Paper className='rounded-8 h-full p-20'>
-          <Typography variant="subtitle1" color="initial" className='mb-20 text-center font-semibold'>Department With the Higest Number of Loan Application</Typography>
+          <Typography variant="subtitle1" color="initial" className='mb-20 text-center font-semibold'>Departments With the Higest Number of Loan Applications</Typography>
             <section className='flex flex-row justify-between items-center w-2/4'>
               <SelectTextField label='Year' value={2020} size='small'>
                 {[2019,2020].map(item => (
@@ -232,8 +232,8 @@ function HRDashboard(props) {
                   </MenuItem>
                 ))}
               </SelectTextField>
-              <SelectTextField label='Entity' value='SPRG' size='small'>
-                {['SPRG', '5C', 'Cbit'].map(item => (
+              <SelectTextField label='Entity' value='SREL' size='small'>
+                {['SREL', '5C', 'C-BIT'].map(item => (
                   <MenuItem value={item}>
                     {item}
                   </MenuItem>
@@ -246,7 +246,7 @@ function HRDashboard(props) {
         </Grid>
         <Grid item lg={4} md={4} sm={12} xs={12} className='h-full'>
           <Paper className='rounded-8 p-20 h-full'>
-          <Typography variant="subtitle1" color="initial" className='mb-20 text-center font-semibold'>Reject Loans & Approved Loans</Typography>
+          <Typography variant="subtitle1" color="initial" className='mb-20 text-center font-semibold'>Rejected Loans vs Approved Loans</Typography>
             <section className='flex flex-row justify-between items-center w-full'>
               <SelectTextField label='Year' value={2020} size='small'>
                 {[2019,2020].map(item => (
@@ -255,12 +255,12 @@ function HRDashboard(props) {
                   </MenuItem>
                 ))}
               </SelectTextField>
-              <SelectTextField label='Entity' value='SPRG' size='small'>
-                {['SPRG', '5C', 'Cbit'].map(item => (
+              <SelectTextField label='Entity' value='SREL' size='small'>
+                {['SREL', '5C', 'C-BIT'].map(item => (
                   <MenuItem value={item}>
                     {item}
                   </MenuItem>
-                ))}
+                ))}++
               </SelectTextField>
               <SelectTextField label='Department' value='HR' size='small'>
                 {['IT', 'HR', 'Finance'].map(item => (
@@ -281,7 +281,7 @@ function HRDashboard(props) {
       <Grid container spacing={2} className='my-10'>
         <Grid item lg={6} md={6} sm={12} xs={12}>
           <Paper className='rounded-8 p-20 h-full'>
-          <Typography variant="subtitle1" color="initial" className='mb-20 text-center font-semibold'>Number of Approved & Unapproved Loans Per Year for all Departments</Typography>
+          <Typography variant="subtitle1" color="initial" className='mb-20 text-center font-semibold'>Number Of Approved vs Number Of  Unapproved Loans For All Departments</Typography>
             <section className='flex flex-row justify-between items-center w-3/4'>
               <SelectTextField label='Year' value={2020} size='small'>
                 {[2019,2020].map(item => (
@@ -290,8 +290,8 @@ function HRDashboard(props) {
                   </MenuItem>
                 ))}
               </SelectTextField>
-              <SelectTextField label='Entity' value='SPRG' size='small'>
-                {['SPRG', '5C', 'Cbit'].map(item => (
+              <SelectTextField label='Entity' value='SREL' size='small'>
+                {['SREL', '5C', 'C-BIT'].map(item => (
                   <MenuItem value={item}>
                     {item}
                   </MenuItem>
@@ -310,7 +310,7 @@ function HRDashboard(props) {
         </Grid>
         <Grid item lg={6} md={6} sm={12} xs={12}>
           <Paper className='rounded-8 p-20 h-full'>
-          <Typography variant="subtitle1" color="initial" className='mb-20 text-center font-semibold'>Loan Application per Month</Typography>
+          <Typography variant="subtitle1" color="initial" className='mb-20 text-center font-semibold'>Loan Application Per Month</Typography>
             <section className='flex flex-row justify-between items-center w-3/4'>
               <SelectTextField label='Year' value={2020} size='small'>
                 {[2019,2020].map(item => (
@@ -319,8 +319,8 @@ function HRDashboard(props) {
                   </MenuItem>
                 ))}
               </SelectTextField>
-              <SelectTextField label='Entity' value='SPRG' size='small'>
-                {['SPRG', '5C', 'Cbit'].map(item => (
+              <SelectTextField label='Entity' value='SREL' size='small'>
+                {['SREL', '5C', 'C-BIT'].map(item => (
                   <MenuItem value={item}>
                     {item}
                   </MenuItem>

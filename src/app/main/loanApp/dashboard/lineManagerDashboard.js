@@ -26,10 +26,10 @@ import PieChart from 'app/shared/charts/PieChart';
 import { months } from 'data';
 
 const barChartData1 = {
-  labels: ['Finance', 'HR', 'IT', 'Finance', 'Production', 'Research and Development', 'Purchasing', 'Marketing ', 'Purchasing', 'Production', 'Finance', 'Finance'],
+  labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
   datasets: [
     {
-      label: 'Departments',
+      label: 'Months',
       data: [20, 19, 15, 14, 14, 13, 12, 11, 8, 7, 6, 5],
       backgroundColor: [
         'rgba(255, 99, 132, 0.2)',
@@ -76,7 +76,7 @@ const pieChartData = {
 };
 
 const lineChartData = {
-	labels: ['Finance', 'HR', 'IT', 'Finance', 'Production', 'Research and Development', 'Purchasing', 'Marketing ', 'Purchasing', 'Production', 'Finance', 'Finance'],
+  labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
 	datasets: [
 		{
 			label: "Approved Loans",
@@ -197,7 +197,7 @@ function LMDashboard(props) {
         <Grid container spacing={2} className='my-10'>
         <Grid item lg={8} md={8} sm={12} xs={12}>
           <Paper className='rounded-8 h-full p-20'>
-          <Typography variant="subtitle1" color="initial" className='mb-20 text-center font-semibold'>Loan Application per Department</Typography>
+          <Typography variant="subtitle1" color="initial" className='mb-20 text-center font-semibold'>Loan Application For Department</Typography>
             <section className='flex flex-row justify-between items-center w-2/4'>
               <SelectTextField label='Year' value={2020} size='small'>
                 {[2019,2020].map(item => (
@@ -220,17 +220,10 @@ function LMDashboard(props) {
         </Grid>
         <Grid item lg={4} md={4} sm={12} xs={12} className='h-full'>
           <Paper className='rounded-8 p-20 h-full'>
-          <Typography variant="subtitle1" color="initial" className='mb-20 text-center font-semibold'>Reject Loans & Approved Loans</Typography>
+          <Typography variant="subtitle1" color="initial" className='mb-20 text-center font-semibold'>Rejected Loans vs Approved Loans</Typography>
             <section className='flex flex-row justify-between items-center w-full'>
               <SelectTextField label='Year' value={2020} size='small'>
                 {[2019,2020].map(item => (
-                  <MenuItem value={item}>
-                    {item}
-                  </MenuItem>
-                ))}
-              </SelectTextField>
-              <SelectTextField label='Department' value='HR' size='small'>
-                {['IT', 'HR', 'Finance'].map(item => (
                   <MenuItem value={item}>
                     {item}
                   </MenuItem>
@@ -245,7 +238,7 @@ function LMDashboard(props) {
         </Grid>
       </Grid>
       <Paper className='rounded-8 p-20 h-full'>
-          <Typography variant="subtitle1" color="initial" className='mb-20 text-center font-semibold'>Number of Approved, Unapproved & Rejected Loans Per Year for all Departments</Typography>
+          <Typography variant="subtitle1" color="initial" className='mb-20 text-center font-semibold'>Number Of Approved Loans vs Number of Rejected vs Number of Unapproved Loans For Department</Typography>
             <section className='flex flex-row justify-between items-center w-2/4'>
               <SelectTextField label='Year' value={2020} size='small'>
                 {[2019,2020].map(item => (
