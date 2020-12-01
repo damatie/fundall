@@ -37,17 +37,17 @@ const TableComponent = ({ data, lineManager }) => {
 			// 	sortable: true
 			// },
 			{
-				Header: 'Total leave days',
+				Header: 'Total Leave Days',
 				accessor: 'total',
 				sortable: true
 			},
 			{
-				Header: 'Taken leave days',
+				Header: 'Taken Leave Days',
 				accessor: 'taken',
 				sortable: true
 			},
 			{
-				Header: 'Remaining leave days',
+				Header: 'Remaining Leave Days',
 				accessor: 'remain',
 				sortable: true
 			}

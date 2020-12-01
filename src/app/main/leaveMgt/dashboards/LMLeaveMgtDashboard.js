@@ -21,7 +21,7 @@ const LMLeaveMgtDashboard = () => {
       <section className='flex flex-row justify-between item-center'>
         <CardWidget
           count={20}
-          title='Total employee on leave'
+          title='Total Number Of Employees On Leave In Org'
           color='blue'
         />
         <CardWidgetWithChart data={doughnutChartData}/>
@@ -42,7 +42,7 @@ const LMLeaveMgtDashboard = () => {
           </SelectTextField>
           </Grid>
           <Grid item lg={10}>
-            <Typography variant="subtitle1" color="initial" className='font-semibold text-center'>Total number of employees on leave per department</Typography>
+            <Typography variant="subtitle1" color="initial" className='font-semibold text-center'>Total Number Of Employees On Leave Per Department</Typography>
           </Grid>
         </Grid>
         <BarChart data={barChartData} height='100%'/>
