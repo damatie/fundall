@@ -246,7 +246,7 @@ function FinanceManager(props) {
         </Grid>
         <Grid item lg={4} md={4} sm={12} xs={12} className='h-full'>
           <Paper className='rounded-8 p-20 h-full'>
-          <Typography variant="subtitle1" color="initial" className='mb-20 text-center font-semibold'>Reject Loans & Approved Loans</Typography>
+          <Typography variant="subtitle1" color="initial" className='mb-20 text-center font-semibold'>Rejected Loans & Approved Loans</Typography>
             <section className='flex flex-row justify-between items-center w-full'>
               <SelectTextField label='Year' value={2020} size='small'>
                 {[2019,2020].map(item => (
