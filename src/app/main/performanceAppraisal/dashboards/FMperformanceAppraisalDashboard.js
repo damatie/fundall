@@ -77,12 +77,12 @@ const FMperformanceAppraisalDashboard = () => {
                 </SelectTextField>
               </Grid>
             </Grid>
-            <BarChart data={chartData} />
-          </Paper>
+            <BarChart data={chartData} height='80%' />
 
+          </Paper>
         </section>
       </main>
-    </SimplePage>
+    </SimplePage >
   );
 };
 

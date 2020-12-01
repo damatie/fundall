@@ -89,7 +89,7 @@ const HrPerformanceAppraisalDashboard = () => {
         </section>
 
         <section>
-          <Paper className='p-20 mt-24'>
+          <Paper className='p-20 mt-24 h-full'>
 
             <div className="w-full p-12 mb-24 m-10">
               <h2 className="text-center mb-48">Chart of Completed KPO's VS Non-Completed KPO's</h2>
@@ -134,7 +134,7 @@ const HrPerformanceAppraisalDashboard = () => {
                   </SelectTextField>
                 </Grid>
               </Grid>
-              <LineGraphChart data={lineGraphData.kpos} />
+              <LineGraphChart data={lineGraphData.kpos} height='80%'/>
             </div>
           </Paper>
 
@@ -182,7 +182,7 @@ const HrPerformanceAppraisalDashboard = () => {
                   </SelectTextField>
                 </Grid>
               </Grid>
-              <LineGraphChart customData={data} />
+              <LineGraphChart customData={data} height='80%'/>
             </div>
           </Paper>
         </section>
