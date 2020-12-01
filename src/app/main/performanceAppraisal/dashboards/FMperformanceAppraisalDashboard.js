@@ -17,41 +17,69 @@ const FMperformanceAppraisalDashboard = () => {
     <SimplePage title='FINANCE MANAGER PERFORMANCE APPRAISAL MANAGEMENT DASHBOARD'>
       <main>
         <section className='flex flex-row justify-between items-center'>
-          <CardWidget
-            title='Total number of PIP awarded'
-            count={20}
-            color='green'
-          />
-          <CardWidget
-            title='Total cost of PIP awarded'
-            count={10}
-            color='yellow'
-          />
+          <div className="widget flex w-full sm:w-1/2 md:w-1/2 p-12">
+            <CardWidget
+              title='Performance appraisals completed'
+              count={20}
+              color='green'
+            />
+          </div>
+          <div className="widget flex w-full sm:w-1/2 md:w-1/2 p-12">
+            <CardWidget
+              title='Performance appraisals pending'
+              count={10}
+              color='orange'
+            />
+          </div>
         </section>
+
         <section>
-        <Paper className='p-20'>
-        
-        <Grid container spacing={1} alignItems='center'>
-          <Grid item lg={2}>
-          <SelectTextField
-            value={2020}
-            size='small'
-            label='Year'
-          >
-            {[2019, 2020].map(item => (
-              <MenuItem value={item}>
-                {item}
-              </MenuItem>
-            ))}
-          </SelectTextField>
-          </Grid>
-          <Grid item lg={10}>
-            <Typography variant="subtitle1" color="initial" className='font-semibold text-center'>Total number of PIP awarded per department</Typography>
-          </Grid>
-        </Grid>
-        <BarChart data={chartData} />
-      </Paper>
-          
+          <Paper className='p-24 mt-24'>
+
+            <Grid container spacing={3} alignItems='center' className="my-24">
+              <Grid item lg={2}>
+                <SelectTextField
+                  value={2020}
+                  size='small'
+                  label='Year'
+                >
+                  {[2019, 2020].map(item => (
+                    <MenuItem value={item}>
+                      {item}
+                    </MenuItem>
+                  ))}
+                </SelectTextField>
+              </Grid>
+              <Grid item lg={2}>
+                <SelectTextField
+                  value={2020}
+                  size='small'
+                  label='Entity'
+                >
+                  {[2019, 2020].map(item => (
+                    <MenuItem value={item}>
+                      {item}
+                    </MenuItem>
+                  ))}
+                </SelectTextField>
+              </Grid>
+              <Grid item lg={2} >
+                <SelectTextField
+                  value={2020}
+                  size='small'
+                  label='Department'
+                >
+                  {[2019, 2020].map(item => (
+                    <MenuItem value={item}>
+                      {item}
+                    </MenuItem>
+                  ))}
+                </SelectTextField>
+              </Grid>
+            </Grid>
+            <BarChart data={chartData} />
+          </Paper>
+
         </section>
       </main>
     </SimplePage>
