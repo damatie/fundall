@@ -19,15 +19,15 @@ const FMperformanceAppraisalDashboard = () => {
         <section className='flex flex-row justify-between items-center'>
           <div className="widget flex w-full sm:w-1/2 md:w-1/2 p-12">
             <CardWidget
-              title='Performance appraisals completed'
+              title='Total PIP in the Organization'
               count={20}
               color='green'
             />
           </div>
           <div className="widget flex w-full sm:w-1/2 md:w-1/2 p-12">
             <CardWidget
-              title='Performance appraisals pending'
-              count={10}
+              title='Cost of PIP in the Organization'
+              count={"90%"}
               color='orange'
             />
           </div>
@@ -35,7 +35,7 @@ const FMperformanceAppraisalDashboard = () => {
 
         <section>
           <Paper className='p-24 mt-24'>
-
+            <h2 className="text-center mb-48"> Total Number of PIP awarded per department</h2>
             <Grid container spacing={3} alignItems='center' className="my-24">
               <Grid item lg={2}>
                 <SelectTextField

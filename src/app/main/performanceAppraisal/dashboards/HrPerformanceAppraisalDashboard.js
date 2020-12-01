@@ -65,21 +65,21 @@ const HrPerformanceAppraisalDashboard = () => {
     <SimplePage title='HR PERFORMANCE APPRAISAL MANAGEMENT DASHBOARD'>
       <main>
         <section className='flex flex-row justify-between items-center'>
-          <div className="widget flex w-full sm:w-1/2 md:w-1/3 p-12">
+          <div className="widget flex w-full sm:w-1/2 md:w-1/3 pr-24">
             <CardWidget
               title='Performance appraisals completed'
               count={20}
               color='green'
             />
           </div>
-          <div className="widget flex w-full sm:w-1/2 md:w-1/3 p-12">
+          <div className="widget flex w-full sm:w-1/2 md:w-1/3 pr-24">
             <CardWidget
               title='Performance appraisals pending'
               count={10}
               color='orange'
             />
           </div>
-          <div className="widget flex w-full sm:w-1/2 md:w-1/3 p-12">
+          <div className="widget flex w-full sm:w-1/2 md:w-1/3">
             <CardWidget
               title='Average Performance score'
               count={`${20}%`}
@@ -92,6 +92,7 @@ const HrPerformanceAppraisalDashboard = () => {
           <Paper className='p-20 mt-24'>
 
             <div className="w-full p-12 mb-24 m-10">
+              <h2 className="text-center mb-48">Chart of Completed KPO's VS Non-Completed KPO's</h2>
               <Grid container spacing={3} alignItems='center' className="mb-24">
                 <Grid item lg={2}>
                   <SelectTextField
@@ -135,8 +136,11 @@ const HrPerformanceAppraisalDashboard = () => {
               </Grid>
               <LineGraphChart data={lineGraphData.kpos} />
             </div>
+          </Paper>
 
+          <Paper className="p-20 mt-24">
             <div className="w-full p-12 mt-24 m-10">
+              <h2 className="text-center mb-48">Chart of Completed Performance Appraisals VS Non-Completed Performance Appraisals</h2>
               <Grid container spacing={3} alignItems='center' className="mb-24">
                 <Grid item lg={2}>
                   <SelectTextField

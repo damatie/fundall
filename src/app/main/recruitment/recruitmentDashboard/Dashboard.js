@@ -249,24 +249,6 @@ function Recruitment(props) {
 						<ArrowBackIcon />
 					</IconButton>
 				</div>
-				{/* <div className="flex flex-col flex-1 max-w-2xl w-full mx-auto px-8 sm:px-16 py-24">
-					<div className="flex flex-col flex-shrink-0 sm:flex-row items-center justify-center py-24">
-						<TextField
-							// label="Search"
-							placeholder="Search..."
-							className="flex w-full sm:w-320 mb-16 sm:mb-0 mx-16"
-							value={search}
-							inputProps={{
-								'aria-label': 'Search'
-							}}
-							onChange={handleSearch}
-							variant="outlined"
-							InputLabelProps={{
-								shrink: true
-							}}
-						/>
-					</div>
-				</div > */}
 
 				<div className="p-12 mt-24">
 					<FuseAnimateGroup
@@ -294,6 +276,7 @@ function Recruitment(props) {
 						</div>
 						<div className="widget flex p-12 m-10 justify-between">
 							<Paper className="p-24 " style={{ width: "49%" }}>
+								<h2 className="text-center mb-24">Overall Open positions per department</h2>
 								<Grid container spacing={3} alignItems='center'>
 									<Grid item lg={2}>
 										<SelectTextField
@@ -316,6 +299,7 @@ function Recruitment(props) {
 
 							<Paper style={{ width: "49%" }} className="flex-column justify-center align-center p-24">
 								<div>
+									<h2 className="text-center mb-24">Referrals Statistics</h2>
 									<Grid container spacing={3} alignItems='center' className={"mb-24"}>
 										<Grid item lg={2}>
 											<SelectTextField
@@ -335,8 +319,9 @@ function Recruitment(props) {
 										data={data2}
 									/>
 								</div>
-								<div>
-									<Grid container spacing={3} alignItems='center' className={"mb-24 mt-24"}>
+								<div className="mt-24">
+									<h2 className="text-center mb-24">Recruitment Funnel</h2>
+									<Grid container spacing={3} alignItems='center' className={"mb-24"}>
 										<Grid item lg={2} >
 											<SelectTextField
 												value={2020}
@@ -361,6 +346,7 @@ function Recruitment(props) {
 						</div>
 
 						<Paper className="p-24 m-10">
+							<h2 className="text-center mb-48">Applicants Mini Data</h2>
 
 							<Grid container spacing={3} alignItems='center' className="mb-24">
 								<Grid item lg={2}>

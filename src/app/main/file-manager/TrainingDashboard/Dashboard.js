@@ -176,6 +176,8 @@ function FinanceManagerDashboard(props) {
 							</div>
 						</div>
 						<Paper className="widget p-24 m-10 mr-24" style={{ width: "98.5%" }}>
+
+							<h2 className="text-center mb-24">Cost of Trainings per Department</h2>
 							<div className="w-50 flex mb-24">
 								<div className={"mr-24"}>
 									<SelectTextField
@@ -203,17 +205,19 @@ function FinanceManagerDashboard(props) {
 										))}
 									</SelectTextField>
 								</div>
-								<SelectTextField
-									value={"5C", "CBit", "SpringRock"}
-									size='small'
-									label='Entity'
-								>
-									{["5C", "CBit", "SpringRock"].map(item => (
-										<MenuItem value={item}>
-											{item}
-										</MenuItem>
-									))}
-								</SelectTextField>
+								<div className="w-25">
+									<SelectTextField
+										value={"5C", "CBit", "SpringRock"}
+										size='small'
+										label='Entity'
+									>
+										{["5C", "CBit", "SpringRock"].map(item => (
+											<MenuItem value={item}>
+												{item}
+											</MenuItem>
+										))}
+									</SelectTextField>
+								</div>
 							</div>
 
 							<EnhancedTable

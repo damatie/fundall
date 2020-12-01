@@ -8,7 +8,7 @@ const BarChart = ({ data }) => {
         data={data}
         options={{
           legend: {
-            position: 'top'
+            position: 'bottom'
           }
         }}
       />
