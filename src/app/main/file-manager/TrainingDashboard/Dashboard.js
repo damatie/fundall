@@ -157,7 +157,7 @@ function FinanceManagerDashboard(props) {
 								<CardWidget count={900} title={"Total Approved Trainings"} color="blue" />
 							</div>
 							<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
-								<CardWidget count={83} title={"Upcoming Trainings In 30 Days"} color="orange" />
+								<CardWidget count={83} title={"Upcoming Trainings Within 30 Days"} color="orange" />
 							</div>
 							<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12 items-align-end">
 								<CardWidget count={formatToNaira(900000)} title={"Total Cost of Trainings For Org"} color="green" />

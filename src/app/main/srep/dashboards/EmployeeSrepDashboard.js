@@ -55,28 +55,28 @@ const data = [
     name: 'Adams Smith',
     relationship: 'Son',
     fund: '₦200,000',
-    status: 'pending'
+    status: 'Pending'
   },
   {
     sn: 2,
     name: 'Joy Smith',
     relationship: 'Daughter',
     fund: '₦100,000',
-    status: 'approved'
+    status: 'Approved'
   },
   {
     sn: 3,
     name: 'John Doe',
     relationship: 'brother',
     fund: '₦200,000',
-    status: 'rejected'
+    status: 'Rejected'
   },
   {
     sn: 4,
     name: 'Adams Smith',
     relationship: 'Son',
     fund: '₦200,000',
-    status: 'pending'
+    status: 'Pending'
   },
 ];
 
