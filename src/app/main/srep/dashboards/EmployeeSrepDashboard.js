@@ -136,7 +136,7 @@ function EmployeeSrepDashboard(props) {
       },
       {
         Header: 'Relationship to Employee',
-        accessor: 'relation',
+        accessor: 'relationship',
         sortable: true
       },
       {

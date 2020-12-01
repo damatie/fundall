@@ -28,23 +28,23 @@ const HrLeaveMgtDashboard = () => {
         </section>
         <Paper className='p-20'>
 
-          <Grid container spacing={1} alignItems='center'>
-            <Grid item lg={2}>
-              <SelectTextField
-                value={2020}
-                size='small'
-              >
-                {[2019, 2020].map(item => (
+          <Typography variant="subtitle1" color="initial" className='mb-20 text-center font-semibold'>Total number of employees on leave per department</Typography>
+            <section className='flex flex-row justify-between items-center w-2/4'>
+              <SelectTextField label='Year' value={2020} size='small'>
+                {[2019,2020].map(item => (
                   <MenuItem value={item}>
                     {item}
                   </MenuItem>
                 ))}
               </SelectTextField>
-            </Grid>
-            <Grid item lg={10}>
-              <Typography variant="subtitle1" color="initial" className='font-semibold text-center'>Total number of employees on leave per department</Typography>
-            </Grid>
-          </Grid>
+              <SelectTextField label='Entity' value='SREL' size='small'>
+                {['SREL', '5C', 'C-BIT'].map(item => (
+                  <MenuItem value={item}>
+                    {item}
+                  </MenuItem>
+                ))}
+              </SelectTextField>
+            </section>
           <BarChart data={barChartData} height='100%'/>
         </Paper>
         <TableComponent data={employeeData} />

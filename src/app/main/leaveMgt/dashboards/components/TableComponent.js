@@ -5,6 +5,7 @@ import SelectTextField from 'app/shared/TextInput/SelectTextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
 
 const TableComponent = ({ data, lineManager }) => {
 	const columns = React.useMemo(
@@ -54,38 +55,31 @@ const TableComponent = ({ data, lineManager }) => {
 		],
 	);
 	return (
-		<section className='my-20 mx-10'>
-			<Grid container spacing={1} alignItems='center'>
-				<Grid item lg={!lineManager ? 2 : 1}>
-					<SelectTextField
-						value={2020}
-						size='small'
-						label='Year'
-					>
-						{[2019, 2020].map(item => (
-							<MenuItem value={item}>
-								{item}
-							</MenuItem>
-						))}
-					</SelectTextField>
-				</Grid>
-				{!lineManager ? (<Grid item lg={2}>
-					<SelectTextField
-						value={'Finance'}
-						size='small'
-						label='Department'
-					>
-						{['Finance', 'IT'].map(item => (
-							<MenuItem value={item}>
-								{item}
-							</MenuItem>
-						))}
-					</SelectTextField>
-				</Grid>) : (<></>)}
-				<Grid item lg={!lineManager ? 8 : 10}>
-					<Typography variant="subtitle1" color="initial" className='font-semibold text-center'>Employee leave days summary</Typography>
-				</Grid>
-			</Grid>
+		<Paper className='rounded-8 p-20'>
+			<Typography variant="subtitle1" color="initial" className='mb-20 text-center font-semibold'>Employee Leave Days Summary</Typography>
+			<section className='flex flex-row justify-between items-center w-2/4'>
+				<SelectTextField label='Year' value={2020} size='small'>
+					{[2019, 2020].map(item => (
+						<MenuItem value={item}>
+							{item}
+						</MenuItem>
+					))}
+				</SelectTextField>
+				{!lineManager && <SelectTextField label='Entity' value='SREL' size='small'>
+					{['SREL', '5C', 'C-BIT'].map(item => (
+						<MenuItem value={item}>
+							{item}
+						</MenuItem>
+					))}
+				</SelectTextField>}
+				<SelectTextField label='Department' value='IT' size='small'>
+					{['IT', '5C', 'C-BIT'].map(item => (
+						<MenuItem value={item}>
+							{item}
+						</MenuItem>
+					))}
+				</SelectTextField>
+			</section>
 			<EnhancedTable
 				columns={columns}
 				data={data}
@@ -95,7 +89,7 @@ const TableComponent = ({ data, lineManager }) => {
 					}
 				}}
 			/>
-		</section>
+		</Paper>
 	);
 };
 

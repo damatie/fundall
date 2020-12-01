@@ -20,7 +20,7 @@ const useStyles = makeStyles(theme => ({
 
 
 const DoughnutChart = ({ data, percentage, doughnutStyle }) => {
-	const classes = useStyles({ color: data.datasets[0].backgroundColor[1] });
+	const classes = useStyles({ color: data.datasets[0].backgroundColor[0] });
 	return (
 		<div className={`flex flex-col items-center w-full ${classes.chart} ${doughnutStyle}`} >
 			<Doughnut data={data} options={{
