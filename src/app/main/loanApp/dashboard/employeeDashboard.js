@@ -175,7 +175,7 @@ function EmployeeDashboard(props) {
             <Typography variant="h6" color="initial" className='font-semibold text-center'>Number of loans taken per year.</Typography>
           </Grid>
         </Grid>
-        <BarChart data={barChartData} />
+        <BarChart data={barChartData} height='80%'/>
       </Paper>
       <Paper className='p-20 mx-10 rounded-8'>
       <Grid container spacing={1} alignItems='center'>
