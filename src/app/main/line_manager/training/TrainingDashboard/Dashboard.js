@@ -113,23 +113,21 @@ function LineManagerDashboard(props) {
 							animation: 'transition.slideUpBigIn'
 						}}
 					>
-						<div className="widget flex  flex-wrap mt-24">
-							<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
-								<CardWidget count={90} title={"Overall Trainings"} color="green" />
-							</div>
-							<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
-								<CardWidget count={86} title={"Employees in Trainings"} color="black" />
-							</div>
-						</div>
 						<div className="widget flex flex-wrap w-full mt-24">
-							<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
+							<div className="widget flex w-full sm:w-1/2 md:w-1/5 p-12">
 								<CardWidget count={37} title={"Pending Trainings"} color="yellow" />
 							</div>
-							<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
+							<div className="widget flex w-full sm:w-1/2 md:w-1/5 p-12">
 								<CardWidget count={70} title={"Ongoing Trainings"} color="orange" />
 							</div>
-							<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
+							<div className="widget flex w-full sm:w-1/2 md:w-1/5 p-12">
 								<CardWidget count={20} title={"Upcoming Trainings"} color="purple" />
+							</div>
+							<div className="widget flex w-full sm:w-1/2 md:w-1/5 p-12">
+								<CardWidget count={90} title={"Overall Trainings"} color="green" />
+							</div>
+							<div className="widget flex w-full sm:w-1/2 md:w-1/5 p-12">
+								<CardWidget count={86} title={"Employees in Trainings"} color="black" />
 							</div>
 						</div>
 						<div className="widget flex w-full p-12 m-10 justify-between">
