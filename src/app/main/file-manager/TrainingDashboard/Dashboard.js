@@ -58,36 +58,36 @@ function FinanceManagerDashboard(props) {
 	const data = [
 		{
 			id: 1,
-			department: 'Organizational Integrity',
-			entity: '5cee',
+			department: 'Human Resource',
+			entity: 'SREL',
 			total_cost: formatToNaira(18983000),
 			status: 'Active'
 		},
 		{
 			id: 2,
-			department: 'Organizational Integrity',
-			entity: 'CBit',
+			department: 'Human Resource',
+			entity: 'SREL',
 			total_cost: formatToNaira(1000000),
 			status: 'Active'
 		},
 		{
 			id: 3,
 			department: 'Oil and Gas',
-			entity: 'Springrock',
+			entity: 'SREL',
 			total_cost: formatToNaira(1350000),
 			status: 'Inactive'
 		},
 		{
 			id: 4,
 			department: 'Doctor',
-			entity: '5cee',
+			entity: 'SREL',
 			total_cost: formatToNaira(18000000),
 			status: 'Active'
 		},
 		{
 			id: 5,
-			department: 'Organizational Integrity',
-			entity: '5cee',
+			department: 'Human Resource',
+			entity: 'SREL',
 			total_cost: formatToNaira(8300),
 			status: 'Inactive'
 		}
@@ -157,19 +157,19 @@ function FinanceManagerDashboard(props) {
 								<CardWidget count={900} title={"Total Approved Trainings"} color="blue" />
 							</div>
 							<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
-								<CardWidget count={83} title={"Total Upcoming Trainings"} color="orange" />
+								<CardWidget count={83} title={"Upcoming Trainings In 30 Days"} color="orange" />
 							</div>
 							<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12 items-align-end">
-								<CardWidget count={formatToNaira(900000)} title={"Total Cost of Trainings"} color="green" />
+								<CardWidget count={formatToNaira(900000)} title={"Total Cost of Trainings For Org"} color="green" />
 							</div>
 						</div>
 						<Paper className="widget p-24 m-10 mr-24" style={{ width: "98.5%" }}>
 
-							<Typography color="inherit" variant="subtitle1" className="text-center mb-24">Cost of Trainings per Department</Typography>
+							<Typography color="inherit" variant="subtitle1" className="text-center mb-24">Total Cost of Trainings Per Department</Typography>
 							<div className="w-50 flex mb-24">
 								<div className={"mr-24"}>
 									<SelectTextField
-										value={2019}
+										value={2020}
 										size='small'
 										label='Year'
 									>
@@ -182,11 +182,11 @@ function FinanceManagerDashboard(props) {
 								</div>
 								<div className={"mr-24"}>
 									<SelectTextField
-										value={"IT", "Finance", "Software"}
+										value={"IT", "Finance", "HR"}
 										size='small'
 										label='Department'
 									>
-										{["IT", "Finance", "Software"].map(item => (
+										{["IT", "Finance", "HR"].map(item => (
 											<MenuItem value={item}>
 												{item}
 											</MenuItem>
@@ -195,11 +195,11 @@ function FinanceManagerDashboard(props) {
 								</div>
 								<div className="w-25">
 									<SelectTextField
-										value={"5C", "CBit", "SpringRock"}
+										value={"5C", "C-BIT", "SREL"}
 										size='small'
 										label='Entity'
 									>
-										{["5C", "CBit", "SpringRock"].map(item => (
+										{["5C", "C-BIT", "SREL"].map(item => (
 											<MenuItem value={item}>
 												{item}
 											</MenuItem>
