@@ -14,6 +14,7 @@ import { useGlobalFilter, usePagination, useRowSelect, useSortBy, useTable } fro
 import clsx from 'clsx';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import EnhancedTablePaginationActions from './components/EnhancedTablePaginationActions';
+import Toolbar from '@material-ui/core/Toolbar';
 
 const useStyles = makeStyles(theme => ({
 	bg: {
@@ -35,7 +36,7 @@ const IndeterminateCheckbox = React.forwardRef(({ indeterminate, ...rest }, ref)
 	);
 });
 
-const EnhancedTable = ({ columns, data, onRowClick, checkbox, selectAll }) => {
+const EnhancedTable = ({ columns, data, onRowClick, checkbox, selectAll, toolBar }) => {
 	const {
 		getTableProps,
 		headerGroups,
@@ -108,7 +109,10 @@ const EnhancedTable = ({ columns, data, onRowClick, checkbox, selectAll }) => {
 
 	// Render the UI for your table
 	return (
-		<TableContainer className={clsx("min-h-full sm:border-1 sm:rounded-16 bg-white", classes.bg)}>
+		<TableContainer className={clsx("min-h-full sm:border-1 sm:rounded-8 rounded-8 bg-white", classes.bg)}>
+			{/* <Toolbar>
+				{toolBar}
+			</Toolbar> */}
 			<MaUTable {...getTableProps()}>
 				<TableHead>
 					{headerGroups.map(headerGroup => (

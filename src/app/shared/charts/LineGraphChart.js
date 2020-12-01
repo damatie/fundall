@@ -49,20 +49,20 @@ const data = {
 	]
 };
 
-const LineGraphChart = ({ customData }) => {
+const LineGraphChart = ({ customData, height }) => {
 	return (
-		<div className="flex flex-col items-center w-full h-full">
+		// <div className="flex flex-col items-center w-full h-full">
 			<Line
 				data={customData ? customData : data}
-				width={100}
-				height={'30%'}
+				// width={'100%'}
+				height={height}
 				options={{
 					legend: {
 						position: 'bottom'
 					}
 				}}
 			/>
-		</div>
+		// </div>
 	);
 }
 

@@ -8,7 +8,7 @@ import React, { useState } from 'react';
 const CardWidget = (props) =>{
     // const color = "blue";
     const className = {
-        root: "text-72 leading-none text-"+props.color
+        root: "text-40 leading-none text-"+props.color
     }
 	return (
 		<Paper className="w-full rounded-8 shadow-none border-1 flex flex-col justify-center items-center">

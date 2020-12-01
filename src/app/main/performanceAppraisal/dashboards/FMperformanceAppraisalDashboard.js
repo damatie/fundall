@@ -32,11 +32,10 @@ const FMperformanceAppraisalDashboard = () => {
             />
           </div>
         </section>
-
-        <section>
-          <Paper className='p-24 mt-24'>
-
-            <Grid container spacing={3} alignItems='center' className="my-24">
+        <Grid container>
+        <Grid item lg={12}>
+        <Paper className='p-24 mt-24 h-full'>
+              <Grid container spacing={3} alignItems='center' className="my-24">
               <Grid item lg={2}>
                 <SelectTextField
                   value={2020}
@@ -77,10 +76,11 @@ const FMperformanceAppraisalDashboard = () => {
                 </SelectTextField>
               </Grid>
             </Grid>
-            <BarChart data={chartData} />
+            <BarChart data={chartData} height='80%'/>
+            
           </Paper>
-
-        </section>
+        </Grid>
+        </Grid> 
       </main>
     </SimplePage>
   );
