@@ -109,7 +109,7 @@ const HrPerformanceAppraisalDashboard = () => {
                   </SelectTextField>
                 </Grid>
               </Grid>
-              <LineGraphChart data={lineGraphData.kpos} />
+              <LineGraphChart data={lineGraphData.kpos} height='80%'/>
             </div>
           </Paper>
 
@@ -156,7 +156,7 @@ const HrPerformanceAppraisalDashboard = () => {
                   </SelectTextField>
                 </Grid>
               </Grid>
-              <LineGraphChart customData={data} />
+              <LineGraphChart customData={data} height='80%'/>
             </div>
           </Paper>
 
