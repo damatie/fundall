@@ -10,6 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import useHRperformanceAppraisalDashboard from '../hooks/useHRperformanceAppraisalDashboard';
 
+
 // test data, must be removed
 const data = {
   labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
@@ -88,104 +89,110 @@ const HrPerformanceAppraisalDashboard = () => {
           </div>
         </section>
 
-        <section>
-          <Paper className='p-20 mt-24 h-full'>
+        <Grid container spacing={2}>
+          <Grid item lg={6}>
+            <Paper className='p-20 mt-24 h-full'>
 
-            <div className="w-full p-12 mb-24 m-10">
-              <h2 className="text-center mb-48">Chart of Completed KPO's VS Non-Completed KPO's</h2>
-              <Grid container spacing={3} alignItems='center' className="mb-24">
-                <Grid item lg={2}>
-                  <SelectTextField
-                    value={2020}
-                    size='small'
-                    label='Year'
-                  >
-                    {[2019, 2020].map(item => (
-                      <MenuItem value={item}>
-                        {item}
-                      </MenuItem>
-                    ))}
-                  </SelectTextField>
+              <div className="w-full p-12 mb-24 m-10">
+                <Typography variant="subtitle1" color="initial" className="text-center mb-48 font-semibold">Chart of Completed KPO's VS Non-Completed KPO's</Typography>
+                <Grid container spacing={3} alignItems='center'>
+                  <Grid item lg={4}>
+                    <SelectTextField
+                      value={2020}
+                      size='small'
+                      label='Year'
+                    >
+                      {[2019, 2020].map(item => (
+                        <MenuItem value={item}>
+                          {item}
+                        </MenuItem>
+                      ))}
+                    </SelectTextField>
+                  </Grid>
+                  <Grid item lg={4}>
+                    <SelectTextField
+                      value={"SREP"}
+                      size='small'
+                      label='Entity'
+                    >
+                      {["5Cee", "SpringRock", "HRIS", "SREP"].map(item => (
+                        <MenuItem value={item}>
+                          {item}
+                        </MenuItem>
+                      ))}
+                    </SelectTextField>
+                  </Grid>
+                  <Grid item lg={4} >
+                    <SelectTextField
+                      value={"HRIS"}
+                      size='small'
+                      label='Department'
+                    >
+                      {["5Cee", "SpringRock", "HRIS", "SREP", "Software"].map(item => (
+                        <MenuItem value={item}>
+                          {item}
+                        </MenuItem>
+                      ))}
+                    </SelectTextField>
+                  </Grid>
                 </Grid>
-                <Grid item lg={2}>
-                  <SelectTextField
-                    value={"SREP"}
-                    size='small'
-                    label='Entity'
-                  >
-                    {["5Cee", "SpringRock", "HRIS", "SREP"].map(item => (
-                      <MenuItem value={item}>
-                        {item}
-                      </MenuItem>
-                    ))}
-                  </SelectTextField>
+                <LineGraphChart data={lineGraphData.kpos} height='100%' />
+              </div>
+            </Paper>
+          </Grid>
+          <Grid item lg={6}>
+            <Paper className="p-20 mt-24 h-full">
+              <div className="w-full mt-24 m-10">
+                <Typography variant="subtitle1" color="initial" className="text-center mb-20 font-semibold">Chart of Completed Performance Appraisals VS Non-Completed Performance Appraisals</Typography>
+                <Grid container spacing={3} alignItems='center'>
+                  <Grid item lg={4}>
+                    <SelectTextField
+                      value={2020}
+                      size='small'
+                      label='Year'
+                    >
+                      {[2019, 2020].map(item => (
+                        <MenuItem value={item}>
+                          {item}
+                        </MenuItem>
+                      ))}
+                    </SelectTextField>
+                  </Grid>
+                  <Grid item lg={4}>
+                    <SelectTextField
+                      value={"SpringRock"}
+                      size='small'
+                      label='Entity'
+                    >
+                      {["5Cee", "SpringRock", "HRIS", "SREP"].map(item => (
+                        <MenuItem value={item}>
+                          {item}
+                        </MenuItem>
+                      ))}
+                    </SelectTextField>
+                  </Grid>
+                  <Grid item lg={4}>
+                    <SelectTextField
+                      value={"Software"}
+                      size='small'
+                      label='Department'
+                    >
+                      {["5Cee", "SpringRock", "HRIS", "SREP", "Software"].map(item => (
+                        <MenuItem value={item}>
+                          {item}
+                        </MenuItem>
+                      ))}
+                    </SelectTextField>
+                  </Grid>
                 </Grid>
-                <Grid item lg={2} >
-                  <SelectTextField
-                    value={"HRIS"}
-                    size='small'
-                    label='Department'
-                  >
-                    {["5Cee", "SpringRock", "HRIS", "SREP", "Software"].map(item => (
-                      <MenuItem value={item}>
-                        {item}
-                      </MenuItem>
-                    ))}
-                  </SelectTextField>
-                </Grid>
-              </Grid>
-              <LineGraphChart data={lineGraphData.kpos} height='80%'/>
-            </div>
-          </Paper>
+                <LineGraphChart customData={data} height='100%' />
+              </div>
+            </Paper>
+          </Grid>
 
-          <Paper className="p-20 mt-24">
-            <div className="w-full p-12 mt-24 m-10">
-              <h2 className="text-center mb-48">Chart of Completed Performance Appraisals VS Non-Completed Performance Appraisals</h2>
-              <Grid container spacing={3} alignItems='center' className="mb-24">
-                <Grid item lg={2}>
-                  <SelectTextField
-                    value={2020}
-                    size='small'
-                    label='Year'
-                  >
-                    {[2019, 2020].map(item => (
-                      <MenuItem value={item}>
-                        {item}
-                      </MenuItem>
-                    ))}
-                  </SelectTextField>
-                </Grid>
-                <Grid item lg={2}>
-                  <SelectTextField
-                    value={"SpringRock"}
-                    size='small'
-                    label='Entity'
-                  >
-                    {["5Cee", "SpringRock", "HRIS", "SREP"].map(item => (
-                      <MenuItem value={item}>
-                        {item}
-                      </MenuItem>
-                    ))}
-                  </SelectTextField>
-                </Grid>
-                <Grid item lg={2} >
-                  <SelectTextField
-                    value={"Software"}
-                    size='small'
-                    label='Department'
-                  >
-                    {["5Cee", "SpringRock", "HRIS", "SREP", "Software"].map(item => (
-                      <MenuItem value={item}>
-                        {item}
-                      </MenuItem>
-                    ))}
-                  </SelectTextField>
-                </Grid>
-              </Grid>
-              <LineGraphChart customData={data} height='80%'/>
-            </div>
-          </Paper>
-        </section>
+
+
+        </Grid>
       </main>
     </SimplePage>
   );
