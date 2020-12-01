@@ -173,11 +173,11 @@ const HrPerformanceAppraisalDashboard = () => {
                   </Grid>
                   <Grid item lg={4}>
                     <SelectTextField
-                      value={"SREL"}
+                      value={"HR"}
                       size='small'
-                      label='Entity'
+                      label='Department'
                     >
-                      {["5C", "SREL", "C-BIT", "SRMC"].map(item => (
+                      {["IT", "SALES", "HR", "MARKETING"].map(item => (
                         <MenuItem value={item}>
                           {item}
                         </MenuItem>
