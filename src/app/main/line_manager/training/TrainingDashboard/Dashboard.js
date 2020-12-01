@@ -121,7 +121,7 @@ function LineManagerDashboard(props) {
 								<CardWidget count={70} title={"Ongoing Trainings"} color="orange" />
 							</div>
 							<div className="widget flex w-full sm:w-1/2 md:w-1/5 p-12">
-								<CardWidget count={20} title={"Upcoming Trainings In 30 Days"} color="purple" />
+								<CardWidget count={20} title={"Upcoming Trainings Within Next 30 Days"} color="purple" />
 							</div>
 							<div className="widget flex w-full sm:w-1/2 md:w-1/5 p-12">
 								<CardWidget count={90} title={"Overall Trainings In Department"} color="green" />

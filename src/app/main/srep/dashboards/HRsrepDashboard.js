@@ -120,8 +120,8 @@ function HRsrepDashboard(props) {
   return (
     <SimplePage title='HR SREP DASHBOARD'>
       <div className="flex flex-row w-full justify-between">
-        <CardWidget count={13} title={"Number of  approved applications"} color="green" className="mr-6"/>
-        <CardWidget count={9} title={"Number of SREP pending applications"} color="yellow" />
+        <CardWidget count={13} title={"Number Of  Approved Applications"} color="green" className="mr-6"/>
+        <CardWidget count={9} title={"Number of SREP Pending Applications"} color="yellow" />
  
       </div>
       <Paper className='p-20 my-20 mb-20 rounded-8 h-sm'>
@@ -141,7 +141,7 @@ function HRsrepDashboard(props) {
             </SelectTextField>
           </Grid>
           <Grid item lg={11}>
-            <Typography variant="subtitle1" color="initial" className='font-semibold text-center'>Approved SREP Application</Typography>
+            <Typography variant="subtitle1" color="initial" className='font-semibold text-center'>Number Of Approved SREP Application</Typography>
           </Grid>
         </Grid>
         <BarChart data={barChartData} height='100%'/>

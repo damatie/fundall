@@ -68,7 +68,7 @@ const HrPerformanceAppraisalDashboard = () => {
 
           <Paper className='p-20 mt-24'>
             <div className="w-full p-12">
-              <h2 className="text-center mb-48">Chart of Completed KPO's VS Non-Completed KPO's</h2>
+              <h2 className="text-center mb-48">Number Of Completed KPO's vs Number Of Non-Completed KPO's</h2>
               <Grid container spacing={3} alignItems='center' className="mb-24">
                 <Grid item lg={2}>
                   <SelectTextField
@@ -91,7 +91,7 @@ const HrPerformanceAppraisalDashboard = () => {
 
           <Paper className='p-20 mt-24'>
             <div className="w-full p-12 mt-24">
-              <h2 className="text-center mb-48">Chart of Completed Performance Appraisals VS Non-Completed Performance Appraisals</h2>
+              <h2 className="text-center mb-48">Number Of Completed Performance Appraisals VS UnCompleted Performance Appraisals</h2>
               <Grid container spacing={3} alignItems='center' className="mb-24">
                 <Grid item lg={2}>
                   <SelectTextField

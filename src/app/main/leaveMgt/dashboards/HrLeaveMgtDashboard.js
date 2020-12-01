@@ -21,7 +21,7 @@ const HrLeaveMgtDashboard = () => {
         <section className='flex flex-row justify-between item-center'>
           <CardWidget
             count={20}
-            title='Total employee on leave'
+            title='Total Number of Employees On Leave In Org'
             color='blue'
           />
           <CardWidgetWithChart data={doughnutChartData} />
