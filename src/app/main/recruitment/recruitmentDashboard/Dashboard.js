@@ -19,7 +19,7 @@ import EnhancedTable from 'app/main/contact_list/ContactsTable';
 // import data from "./data.json";
 
 const data = {
-	labels: ['Software', 'IT', 'HR', 'Admin', 'Oil', 'Gas', 'Software Team', "Engineering"],
+	labels: ['Marketing', 'IT', 'HR', 'Finance', 'Sales', 'Finance', 'Procurement', "Finance"],
 	datasets: [
 		{
 			label: 'Open Positions per Department',
@@ -143,7 +143,7 @@ function Recruitment(props) {
 			email: 'loremp@gmail.com',
 			job_title: 'Backend Engineer',
 			date_applied: 'May 12',
-			status: "Rejected"
+			status: "Shortlisted"
 		},
 		{
 			id: 2,
@@ -151,7 +151,7 @@ function Recruitment(props) {
 			email: 'willie89@gmail.com',
 			job_title: 'CEO',
 			date_applied: 'March 1',
-			status: "Saved"
+			status: "Hired"
 		},
 		{
 			id: 3,
@@ -159,7 +159,7 @@ function Recruitment(props) {
 			email: 'femijay9@gmail.com',
 			job_title: 'Backend Engineer',
 			date_applied: 'Oct 12',
-			status: "Saved"
+			status: "Interview"
 		},
 		{
 			id: 4,
@@ -175,7 +175,7 @@ function Recruitment(props) {
 			email: 'femijay9@gmail.com',
 			job_title: 'Frontend Engineer',
 			date_applied: 'Dec 12',
-			status: "Pending"
+			status: "Interview"
 		}
 	];
 
@@ -286,11 +286,11 @@ function Recruitment(props) {
 									</Grid>
 									<Grid item lg={2}>
 										<SelectTextField
-											value={"SpringRock"}
+											value={"SREL"}
 											size='small'
 											label='Entity'
 										>
-											{["5Cee", "SpringRock", "HRIS", "SREP"].map(item => (
+											{["5C", "SREL", "SRMC", "C-BIT"].map(item => (
 												<MenuItem value={item}>
 													{item}
 												</MenuItem>
@@ -352,7 +352,7 @@ function Recruitment(props) {
 						</div>
 
 						<Paper className="p-24 m-12 mt-24">
-							<Typography variant="subtitle1" color="inherit" className="text-center mb-48">Applicants Mini Data</Typography>
+							<Typography variant="subtitle1" color="inherit" className="text-center mb-48">Applicant Details</Typography>
 
 							<Grid container spacing={3} alignItems='center' className="mb-24">
 								<Grid item lg={2}>
@@ -370,11 +370,11 @@ function Recruitment(props) {
 								</Grid>
 								<Grid item lg={2}>
 									<SelectTextField
-										value={"SpringRock"}
+										value={"SREL"}
 										size='small'
 										label='Entity'
 									>
-										{["5Cee", "SpringRock", "HRIS", "SREP"].map(item => (
+										{["5C", "SREL", "C-BIT", "SRMC"].map(item => (
 											<MenuItem value={item}>
 												{item}
 											</MenuItem>
@@ -387,7 +387,7 @@ function Recruitment(props) {
 										size='small'
 										label='Department'
 									>
-										{["5Cee", "SpringRock", "HRIS", "SREP", "Software"].map(item => (
+										{["IT", "HR", "MARKETING", "SALES"].map(item => (
 											<MenuItem value={item}>
 												{item}
 											</MenuItem>

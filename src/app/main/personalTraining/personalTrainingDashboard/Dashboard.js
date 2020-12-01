@@ -93,7 +93,7 @@ function PersonalTrainingDashboard(props) {
 								<CardWidget count={89} title={"Ongoing Trainings"} color={"orange"} />
 							</div>
 							<div className="widget flex w-full p-12"  >
-								<CardWidget count={9} title={"Upcoming Trainings"} color={"blue"} />
+								<CardWidget count={9} title={"Upcoming Trainings In 30 Days"} color={"blue"} />
 							</div>
 							<div className="widget flex w-full p-12"  >
 								<CardWidget count={30} title={"Available Trainings"} color={"purple"} />

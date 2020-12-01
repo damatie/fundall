@@ -37,7 +37,7 @@ const data = {
       data: [65, 59, 80, 81, 56, 55, 40]
     },
     {
-      label: 'Pending Performance Appraisal',
+      label: 'Uncompleted Performance Appraisal',
       fill: false,
       lineTension: 0.1,
       backgroundColor: 'tomato',
@@ -94,7 +94,7 @@ const HrPerformanceAppraisalDashboard = () => {
             <Paper className='p-20 mt-24 h-full'>
 
               <div className="w-full p-12 mb-24 m-10">
-                <Typography variant="subtitle1" color="initial" className="text-center mb-48 font-semibold">Chart of Completed KPO's VS Non-Completed KPO's</Typography>
+                <Typography variant="subtitle1" color="initial" className="text-center mb-48 font-semibold">Number Of Completed KPO's vs Number UnCompleted KPO's Per Department</Typography>
                 <Grid container spacing={3} alignItems='center'>
                   <Grid item lg={4}>
                     <SelectTextField
@@ -111,11 +111,11 @@ const HrPerformanceAppraisalDashboard = () => {
                   </Grid>
                   <Grid item lg={4}>
                     <SelectTextField
-                      value={"SREP"}
+                      value={"SREL"}
                       size='small'
                       label='Entity'
                     >
-                      {["5Cee", "SpringRock", "HRIS", "SREP"].map(item => (
+                      {["5C", "C-BIT", "SRMC", "SREL"].map(item => (
                         <MenuItem value={item}>
                           {item}
                         </MenuItem>
@@ -128,7 +128,7 @@ const HrPerformanceAppraisalDashboard = () => {
                       size='small'
                       label='Department'
                     >
-                      {["5Cee", "SpringRock", "HRIS", "SREP", "Software"].map(item => (
+                      {["HR", "IT", "SALES"].map(item => (
                         <MenuItem value={item}>
                           {item}
                         </MenuItem>
@@ -143,7 +143,7 @@ const HrPerformanceAppraisalDashboard = () => {
           <Grid item lg={6}>
             <Paper className="p-20 mt-24 h-full">
               <div className="w-full mt-24 m-10">
-                <Typography variant="subtitle1" color="initial" className="text-center mb-20 font-semibold">Chart of Completed Performance Appraisals VS Non-Completed Performance Appraisals</Typography>
+                <Typography variant="subtitle1" color="initial" className="text-center mb-20 font-semibold"> Number Of Completed Performance Appraisals VS Number unCompleted Performance Appraisals Per Department</Typography>
                 <Grid container spacing={3} alignItems='center'>
                   <Grid item lg={4}>
                     <SelectTextField
@@ -160,11 +160,11 @@ const HrPerformanceAppraisalDashboard = () => {
                   </Grid>
                   <Grid item lg={4}>
                     <SelectTextField
-                      value={"SpringRock"}
+                      value={"SREL"}
                       size='small'
                       label='Entity'
                     >
-                      {["5Cee", "SpringRock", "HRIS", "SREP"].map(item => (
+                      {["5C", "SREL", "C-BIT", "SRMC"].map(item => (
                         <MenuItem value={item}>
                           {item}
                         </MenuItem>
@@ -173,11 +173,11 @@ const HrPerformanceAppraisalDashboard = () => {
                   </Grid>
                   <Grid item lg={4}>
                     <SelectTextField
-                      value={"Software"}
+                      value={"SREL"}
                       size='small'
-                      label='Department'
+                      label='Entity'
                     >
-                      {["5Cee", "SpringRock", "HRIS", "SREP", "Software"].map(item => (
+                      {["5C", "SREL", "C-BIT", "SRMC"].map(item => (
                         <MenuItem value={item}>
                           {item}
                         </MenuItem>
