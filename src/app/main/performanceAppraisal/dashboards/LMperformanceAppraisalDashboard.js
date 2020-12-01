@@ -83,32 +83,7 @@ const HrPerformanceAppraisalDashboard = () => {
                     ))}
                   </SelectTextField>
                 </Grid>
-                <Grid item lg={2}>
-                  <SelectTextField
-                    value={2020}
-                    size='small'
-                    label='Entity'
-                  >
-                    {[2019, 2020].map(item => (
-                      <MenuItem value={item}>
-                        {item}
-                      </MenuItem>
-                    ))}
-                  </SelectTextField>
-                </Grid>
-                <Grid item lg={2} >
-                  <SelectTextField
-                    value={2020}
-                    size='small'
-                    label='Department'
-                  >
-                    {[2019, 2020].map(item => (
-                      <MenuItem value={item}>
-                        {item}
-                      </MenuItem>
-                    ))}
-                  </SelectTextField>
-                </Grid>
+                
               </Grid>
               <LineGraphChart data={lineGraphData.kpos} height='80%'/>
             </div>
@@ -123,32 +98,6 @@ const HrPerformanceAppraisalDashboard = () => {
                     value={2020}
                     size='small'
                     label='Year'
-                  >
-                    {[2019, 2020].map(item => (
-                      <MenuItem value={item}>
-                        {item}
-                      </MenuItem>
-                    ))}
-                  </SelectTextField>
-                </Grid>
-                <Grid item lg={2}>
-                  <SelectTextField
-                    value={2020}
-                    size='small'
-                    label='Entity'
-                  >
-                    {[2019, 2020].map(item => (
-                      <MenuItem value={item}>
-                        {item}
-                      </MenuItem>
-                    ))}
-                  </SelectTextField>
-                </Grid>
-                <Grid item lg={2} >
-                  <SelectTextField
-                    value={2020}
-                    size='small'
-                    label='Department'
                   >
                     {[2019, 2020].map(item => (
                       <MenuItem value={item}>

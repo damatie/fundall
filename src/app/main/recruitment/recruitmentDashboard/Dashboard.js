@@ -73,13 +73,13 @@ const data2 = {
 };
 
 const data3 = {
-	labels: ['Job Advert', 'Applications', 'Screened Candidate', 'Manager Interview', 'Onsite Interview', 'Offer', 'Hire', "Days Of Hire"],
+	labels: ['Job Advert', 'Applications', 'Manager Interview', 'Onsite Interview', 'Offer', 'Hire', "Days Of Hire"],
 	datasets: [
 		{
 			label: 'Recruitment Funnel',
 			fill: false,
 			lineTension: 0.1,
-			backgroundColor: ['rgba(75,192,192,0.4)', "#F45448", "#2196F3", "#9C27B0", "#FFA500", "#4CAF50", "#F44336", "#BB6BC9", "#c4c4c4", "maroon"],
+			backgroundColor: ['rgba(75,192,192,0.4)', "#F45448", "#2196F3", "#9C27B0", "#FFA500", "#4CAF50"],
 			borderColor: 'rgba(75,192,192,1)',
 			borderCapStyle: 'butt',
 			borderDash: [],
@@ -94,7 +94,7 @@ const data3 = {
 			pointHoverBorderWidth: 2,
 			pointRadius: 1,
 			pointHitRadius: 10,
-			data: [65, 59, 80, 81, 40, 12, 46, 93, 25, 35]
+			data: [65, 59, 80, 81, 40, 12, 19 ]
 		}
 	]
 };
