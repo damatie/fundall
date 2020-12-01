@@ -109,21 +109,22 @@ function PersonalTrainingDashboard(props) {
 							animation: 'transition.slideUpBigIn'
 						}}
 					>
-						<div className="widget flex p-12" style={{ width: "80%" }}>
+						<div className="widget flex p-12 flex-col" style={{ width: "80%" }}>
+							<h2 className="mb-24">Training Calendar</h2>
 							<PersonalTrainingCalendar />
 						</div>
 						<div className="flex-column" style={{ width: "20%" }}>
 							<div className="widget flex w-full p-12"  >
-								<CardWidget count={trainings.filter(t => t.status === 'pending').length} title={"Ongoing Trainings"} color={"orange"} />
+								<CardWidget count={89} title={"Ongoing Trainings"} color={"orange"} />
 							</div>
 							<div className="widget flex w-full p-12"  >
-								<CardWidget count={trainings.filter(t => t.status === 'approved').length} title={"Upcoming Trainings"} color={"blue"} />
+								<CardWidget count={9} title={"Upcoming Trainings"} color={"blue"} />
 							</div>
 							<div className="widget flex w-full p-12"  >
-								<CardWidget count={trainings.filter(t => t.status === 'rejected').length} title={"Available Trainings"} color={"purple"} />
+								<CardWidget count={30} title={"Available Trainings"} color={"purple"} />
 							</div>
 							<div className="widget flex w-full p-12"  >
-								<CardWidget count={trainings.filter(t => t.status === 'completed').length} title={"Completed Trainings"} color={"green"} />
+								<CardWidget count={40} title={"Completed Trainings"} color={"green"} />
 							</div>
 						</div>
 					</FuseAnimateGroup>

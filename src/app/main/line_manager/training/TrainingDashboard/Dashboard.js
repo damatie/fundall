@@ -13,6 +13,7 @@ import IconButton from '@material-ui/core/IconButton';
 import CardWidget from 'app/shared/widgets/CardWidget';
 import PersonalTrainingCalendar from 'app/main/personalTraining/personalTrainingCalendar';
 import BarChart from 'app/shared/charts/BarChart';
+import { Paper } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
 	header: {
@@ -114,30 +115,32 @@ function LineManagerDashboard(props) {
 					>
 						<div className="widget flex  flex-wrap mt-24">
 							<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
-								<CardWidget count={[].length} title={"Overall Trainings"} color="green" />
+								<CardWidget count={90} title={"Overall Trainings"} color="green" />
 							</div>
 							<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
-								<CardWidget count={[].filter(t => t.status === 'approved').length} title={"Employees in Trainings"} color="black" />
+								<CardWidget count={86} title={"Employees in Trainings"} color="black" />
 							</div>
 						</div>
 						<div className="widget flex flex-wrap w-full mt-24">
 							<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
-								<CardWidget count={[].filter(t => t.status === 'pending').length} title={"Pending Trainings"} color="yellow" />
+								<CardWidget count={37} title={"Pending Trainings"} color="yellow" />
 							</div>
 							<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
-								<CardWidget count={[].filter(t => t.status === 'reviewed').length} title={"Ongoing Trainings"} color="orange" />
+								<CardWidget count={70} title={"Ongoing Trainings"} color="orange" />
 							</div>
 							<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
-								<CardWidget count={[].filter(t => t.status === 'rejected').length} title={"Upcoming Trainings"} color="purple" />
+								<CardWidget count={20} title={"Upcoming Trainings"} color="purple" />
 							</div>
 						</div>
 						<div className="widget flex w-full p-12 m-10 justify-between">
 							<div style={{ width: "49%" }}>
+								<h2 className=" mb-24">Trainings Calendar</h2>
 								<PersonalTrainingCalendar />
 							</div>
-							<div style={{ width: "49%" }} className="flex justify-center align-center">
+							<Paper style={{ width: "49%" }} className="flex justify-center align-center flex-col p-24">
+								<h2 className="text-center mb-24">No of Employees Currently Undergoing Training</h2>
 								<BarChart data={data} />
-							</div>
+							</Paper>
 						</div>
 					</FuseAnimateGroup>
 				</div>
