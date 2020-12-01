@@ -172,7 +172,7 @@ function EmployeeDashboard(props) {
             </SelectTextField>
           </Grid>
           <Grid item lg={11}>
-            <Typography variant="h6" color="initial" className='font-semibold text-center'>Number of Loans Taken per Year.</Typography>
+            <Typography variant="h6" color="initial" className='font-semibold text-center'>Number Of Loans Taken Per Year.</Typography>
           </Grid>
         </Grid>
         <BarChart data={barChartData} height='80%'/>
@@ -193,7 +193,7 @@ function EmployeeDashboard(props) {
             </SelectTextField>
           </Grid>
           <Grid item lg={11}>
-            <Typography variant="h6" color="initial" className='font-semibold text-center'>Loans status</Typography>
+            <Typography variant="h6" color="initial" className='font-semibold text-center'>Loan Status</Typography>
           </Grid>
         </Grid>
         <EnhancedTable
