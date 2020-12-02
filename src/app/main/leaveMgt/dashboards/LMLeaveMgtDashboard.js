@@ -21,32 +21,16 @@ const LMLeaveMgtDashboard = () => {
       <section className='flex flex-row justify-between item-center'>
         <CardWidget
           count={20}
-          title='Total Number Of Employees On Leave In Org'
+          title='Total Number Of Employees On Leave'
           color='blue'
         />
-        <CardWidgetWithChart data={doughnutChartData}/>
+        <CardWidget
+          count={20}
+          title='Total Number Of Pending Leave'
+          color='yellow'
+        />
+        <CardWidgetWithChart data={doughnutChartData} customStyle='h-full'/>
       </section>
-      <Paper className='p-20'>
-        
-        <Grid container spacing={1} alignItems='center'>
-          <Grid item lg={2}>
-          <SelectTextField
-            value={2020}
-            size='small'
-          >
-            {[2019, 2020].map(item => (
-              <MenuItem value={item}>
-                {item}
-              </MenuItem>
-            ))}
-          </SelectTextField>
-          </Grid>
-          <Grid item lg={10}>
-            <Typography variant="subtitle1" color="initial" className='font-semibold text-center'>Total Number Of Employees On Leave Per Department</Typography>
-          </Grid>
-        </Grid>
-        <BarChart data={barChartData} height='100%'/>
-      </Paper>
       <TableComponent data={employeeData} lineManager/>
     </main>
     </SimplePage>

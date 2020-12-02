@@ -11,7 +11,7 @@ const useStyles = makeStyles(theme => ({
 		position: 'absolute',
 		top: '45%',
 		left: '50%',
-		transform: 'translate(-50%, -40%)',
+		transform: 'translate(-50%, -50%)',
 		fontWeight: 'bold',
 		color: props => props.color,
 		fontSize: 30

@@ -22,32 +22,32 @@ export function submitLogin(data) {
 		dispatch({
 			type: LOGIN_LOADING
 		})
-		// fetch(`${getBaseUrl()}/auth/employee/login`, {
-		// 	...header.reqHeader(
-		// 		'post',
-		// 		data
-		// 	)
-		// }).then(res => res.json()).then(
-			// async user => {
-				if(/*user.success*/ true) {
+		fetch(`${getBaseUrl()}/auth/employee/login`, {
+			...header.reqHeader(
+				'post',
+				data
+			)
+		}).then(res => res.json()).then(
+			async user => {
+				if(user.success) {
 					Swal.fire({
 						title: 'Login',
-						// text: user.message,
+						text: user.message,
 						icon: 'success',
 						timer: 3000,
 					});
-					localStorage.setItem('jwt_access_token', JSON.stringify(/*user.token*/ 'ubgeeubgreugbtgbtygbytgbest78'));
+					localStorage.setItem('jwt_access_token', JSON.stringify(user.token));
 					const userState = {
-						role: /*user.data.role.name*/'HR',
+						role: user.data.role.name,
 						redirectUrl: '/employee/dashboard',
-						id: /*user.data.id*/ 1,
+						id: user.data.id,
 						data: {
-							displayName: /*`${user.data.firstName} ${user.data.lastName}`*/ 'Admin',
-							photoURL: /*user.data.profilePicture*/ '',
-							email: /*user.data.email*/ 'Admin@sys',
+							displayName: `${user.data.firstName} ${user.data.lastName}`,
+							photoURL: user.data.profilePicture,
+							email: user.data.email,
 							shortcuts: ['loan_request', 'request_leave', 'blog_list', 'todo'],
-							department: /*user.data.department*/ [],
-							details:/* user.data.info*/ {}
+							department: user.data.department,
+							details:user.data.info
 						}
 					};
 					localStorage.setItem('user_data', JSON.stringify(userState));
@@ -57,14 +57,14 @@ export function submitLogin(data) {
 						email: 'admin@test.co'
 					}}));
 					dispatch(UserActions.setUserData(userState));
-					// dispatch(getNotification(user.token));
-					// return dispatch({
-					// 	type: LOGIN_SUCCESS
-					// });
+					dispatch(getNotification(user.token));
+					return dispatch({
+						type: LOGIN_SUCCESS
+					});
 				} else {
 					Swal.fire({
 						title: 'Login',
-						// text: user.message,
+						text: user.message,
 						icon: 'error',
 						timer: 3000,
 					})
@@ -73,20 +73,20 @@ export function submitLogin(data) {
 						payload: ''
 					});
 				}
-			// }
-		// )
-		// .catch(error => {
-		// 	Swal.fire({
-		// 		title: 'Login',
-		// 		text: 'Service unavailable',
-		// 		icon: 'error',
-		// 		timer: 3000,
-		// 	})
-		// 	return dispatch({
-		// 		type: LOGIN_ERROR,
-		// 		payload: error
-		// 	});
-		// });
+			}
+		)
+		.catch(error => {
+			Swal.fire({
+				title: 'Login',
+				text: 'Service unavailable',
+				icon: 'error',
+				timer: 3000,
+			})
+			return dispatch({
+				type: LOGIN_ERROR,
+				payload: error
+			});
+		});
 	}
 }
 
