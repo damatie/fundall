@@ -113,7 +113,33 @@ function AddTrustDeed(props) {
     
     function approve() {
 		dispatch(Actions.approveSrep(parseInt(id)))
-	}
+    }
+    const getRole = (roleId) =>{
+        let roles = props.roles;
+        if(roles){
+            const role = roles.find(role => {return parseInt(role.id) === parseInt(roleId)});
+            return (role) ? role.name : '';
+        }
+        return '';
+    }
+
+    const getEntity = (entityId) =>{
+        let entities = props.entities;
+        if(entities){
+            const entity = entities.find(entity => {return parseInt(entity.id) === parseInt(entityId)});
+            return (entity) ? entity.name : '';
+        }
+        return '';
+    }
+
+    const getDepartment = (deptId) =>{
+        let departments = props.departments;
+        if(departments){
+            const dept = departments.find(dept => {return parseInt(dept.id) === parseInt(deptId)});
+            return (dept) ? dept.departmentName : '';
+        }
+        return '';
+    }
 
 	return (
 		<div className="md:flex w-full">
@@ -157,7 +183,7 @@ function AddTrustDeed(props) {
                                             <Typography className="font-bold mb-4 text-15">Department</Typography>
                                             <Typography>
                                                 {employee ? (
-                                                    employee.departmentId
+                                                     getDepartment(employee.departmentId)
                                                 ) : (
                                                     <SkeletonLoader height="3em" width="60%" />
                                                 )}
@@ -167,7 +193,7 @@ function AddTrustDeed(props) {
                                             <Typography className="font-bold mb-4 text-15">Job Role</Typography>
                                             <Typography>
                                                 {employee ? (
-                                                    employee.jobTitleId
+                                                    getRole(employee.roleId)
                                                 ) : (
                                                     <SkeletonLoader height="3em" width="60%" />
                                                 )}
@@ -179,7 +205,7 @@ function AddTrustDeed(props) {
                                             <Typography className="font-bold mb-4 text-15">Entity</Typography>
                                             <Typography>
                                                 {employee ? (
-                                                    employee.entityId
+                                                    getEntity(employee.entityId)
                                                 ) : (
                                                     <SkeletonLoader height="3em" width="60%" />
                                                 )}

@@ -222,7 +222,13 @@ function ViewSrep({ match }, props) {
 			content={
                 <div className=" sm:px-24 py-16 ">
                     {isHr() ? 
-                        <AddTrustDeed srepData={srepData} />
+                        <AddTrustDeed 
+                            srepData={srepData} 
+                            goBack={goBack} 
+                            roles={roles} 
+                            entities={entities}
+                            departments={departments}
+                        />
                     :
                         <DetailsTab srepData={srepData} 
                             goBack={goBack} 
