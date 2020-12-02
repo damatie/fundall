@@ -237,8 +237,8 @@ function FinanceManager(props) {
           </Paper>
         </Grid>
         <Grid item lg={4} md={4} sm={12} xs={12} className='h-full'>
-          <Paper className='rounded-8 p-20 h-full'>
-          <Typography variant="subtitle1" color="initial" className='mb-20 text-center font-semibold'>Rejected Loans & Approved Loans</Typography>
+          <Paper className='rounded-8 p-20 h-full relative'>
+          <Typography variant="subtitle1" color="initial" className='mb-20 text-center font-semibold'>Rejected Loans vs Approved Loans</Typography>
             <section className='flex flex-row justify-between items-center w-full'>
               <SelectTextField label='Year' value={2020} size='small'>
                 {[2019,2020].map(item => (
@@ -251,7 +251,7 @@ function FinanceManager(props) {
                 {['SREL', '5C', 'C-BIT'].map(item => (
                   <MenuItem value={item}>
                     {item}
-                  </MenuItem>
+                  </MenuItem> 
                 ))}
               </SelectTextField>
               <SelectTextField label='Department' value='HR' size='small'>
@@ -262,7 +262,7 @@ function FinanceManager(props) {
                 ))}
               </SelectTextField>
             </section>
-            <section style={{wodth: '50%'}} className='flex flex-row justify-center items-center'>
+            <section className='flex mt-20 flex-row justify-center items-center'>
             <PieChart data={pieChartData}/>
             </section>
             <CardBottom
