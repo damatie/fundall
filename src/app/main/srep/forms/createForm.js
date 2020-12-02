@@ -351,7 +351,7 @@ function CreateForm(props) {
 									<Typography variant='body1' className="mt-16 mb-8">Email Address *</Typography>
 									<TextFieldFormsy
 										className="mb-16 w-full"
-										type="text"
+										type="email"
 										name="email_address"
 										validations={{
 											minLength: 1

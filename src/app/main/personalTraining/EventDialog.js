@@ -46,13 +46,13 @@ const useStyles = makeStyles({
 
 function EventDialog(props) {
 	const dispatch = useDispatch();
-	const categories = useSelector(({ personalTraining }) => personalTraining.courses.categories);
-	const courses = useSelector(({ personalTraining }) => personalTraining.courses.courses);
-	const eventDialog = useSelector(({ personalTraining }) => personalTraining.events.eventDialog);
+	const categories = useSelector(({ personalTraining }) => personalTraining?.courses.categories);
+	const courses = useSelector(({ personalTraining }) => personalTraining?.courses.courses);
+	const eventDialog = useSelector(({ personalTraining }) => personalTraining?.events.eventDialog);
 	const { form, handleChange, setForm, setInForm } = useForm(defaultFormState);
-	const [start, setStart ] = useState(moment(new Date(), 'MM/DD/YYYY'));
+	const [start, setStart] = useState(moment(new Date(), 'MM/DD/YYYY'));
 	const [end, setEnd] = useState(moment(new Date(), 'MM/DD/YYYY'));
-  const classes = useStyles();
+	const classes = useStyles();
 	const [courseId, setCourseId] = useState(0);
 	const [edit, setEdit] = useState(false);
 	const [color, setColor] = useState('');
@@ -85,17 +85,17 @@ function EventDialog(props) {
 				id: FuseUtils.generateGUID()
 			});
 		}
-	}, [eventDialog.data, eventDialog.type, setForm]);
+	}, [eventDialog?.data, eventDialog?.type, setForm]);
 
 	useEffect(() => {
 		/**
 		 * After Dialog Open
 		 */
-		if (eventDialog.props.open) {
+		if (eventDialog?.props.open) {
 			initDialog();
 			dispatch(Actions.getApprovedCourses());
 		}
-	}, [eventDialog.props.open, initDialog, dispatch]);
+	}, [eventDialog?.props.open, initDialog, dispatch]);
 
 	function closeComposeDialog() {
 		return eventDialog.type === 'edit'
@@ -111,8 +111,8 @@ function EventDialog(props) {
 		event.preventDefault();
 		const payload = {
 			trainingCourseId: courseId,
-			departmentHead:7,
-			hrManager:4,
+			departmentHead: 7,
+			hrManager: 4,
 			startDate: moment(start).format("DD-MM-YYYY"),
 			endDate: moment(end).format("DD-MM-YYYY")
 		}
@@ -128,139 +128,139 @@ function EventDialog(props) {
 		closeComposeDialog();
 	}
 
-	function handleShowEdit(){
+	function handleShowEdit() {
 		setEdit(true);
 	}
 
 	return (
-		<Dialog {...eventDialog.props} onClose={closeComposeDialog} fullWidth maxWidth="xs" component="form">
-				<AppBar position="static" style={{backgroundColor: color, color: 'white'}}>
-					<Toolbar className="flex w-full">
-						<Typography variant="subtitle1" color="inherit">
-							{(!edit) ? title : 'Edit Training Request'}
-						</Typography>
-					</Toolbar>
-				</AppBar>
+		<Dialog {...eventDialog?.props} onClose={closeComposeDialog} fullWidth maxWidth="xs" component="form">
+			<AppBar position="static" style={{ backgroundColor: color, color: 'white' }}>
+				<Toolbar className="flex w-full">
+					<Typography variant="subtitle1" color="inherit">
+						{(!edit) ? title : 'Edit Training Request'}
+					</Typography>
+				</Toolbar>
+			</AppBar>
 
 			{
 				(edit) ? (
-				<form noValidate onSubmit={handleSubmit}>
-					<DialogContent classes={{ root: 'p-16 pb-0 sm:p-24 sm:pb-0' }}>
-						<FormControl variant="outlined" className="mt-8 mb-16 w-full">
-							<InputLabel htmlFor="outlined-age-native-simple">Courses</InputLabel>
-							<Select
-							value={courseId}
-							onChange={ev => setCourseId(ev.target.value)}
-							label="Courses"
-							inputProps={{
-								name: 'courses',
-								id: 'courses',
-							}}
-							>
-								<MenuItem value="">
-									Select Courses
+					<form noValidate onSubmit={handleSubmit}>
+						<DialogContent classes={{ root: 'p-16 pb-0 sm:p-24 sm:pb-0' }}>
+							<FormControl variant="outlined" className="mt-8 mb-16 w-full">
+								<InputLabel htmlFor="outlined-age-native-simple">Courses</InputLabel>
+								<Select
+									value={courseId}
+									onChange={ev => setCourseId(ev.target.value)}
+									label="Courses"
+									inputProps={{
+										name: 'courses',
+										id: 'courses',
+									}}
+								>
+									<MenuItem value="">
+										Select Courses
 								</MenuItem>
-								{courses.sort().map(item => (
-									<MenuItem value={item.id} key={item.id}>{item.name}</MenuItem>
-								))}
-							</Select>
-						</FormControl>
+									{courses.sort().map(item => (
+										<MenuItem value={item.id} key={item.id}>{item.name}</MenuItem>
+									))}
+								</Select>
+							</FormControl>
 
-						<DateTimePicker
-							label="Start"
-							inputVariant="outlined"
-							value={start}
-							onChange={date => setStart(date)}
-							className="mt-8 mb-16 w-full"
-							maxDate={end}
-						/>
+							<DateTimePicker
+								label="Start"
+								inputVariant="outlined"
+								value={start}
+								onChange={date => setStart(date)}
+								className="mt-8 mb-16 w-full"
+								maxDate={end}
+							/>
 
-						<DateTimePicker
-							label="End"
-							inputVariant="outlined"
-							value={end}
-							onChange={date => setEnd(date)}
-							className="mt-8 mb-16 w-full"
-							minDate={start}
-						/>
-					</DialogContent>
-					{eventDialog.type === 'new' ? (
-						<DialogActions className="justify-between px-8 sm:px-16">
-							<Button variant="contained" color="primary" type="submit" disabled={!canBeSubmitted()}>
-								Add
+							<DateTimePicker
+								label="End"
+								inputVariant="outlined"
+								value={end}
+								onChange={date => setEnd(date)}
+								className="mt-8 mb-16 w-full"
+								minDate={start}
+							/>
+						</DialogContent>
+						{eventDialog.type === 'new' ? (
+							<DialogActions className="justify-between px-8 sm:px-16">
+								<Button variant="contained" color="primary" type="submit" disabled={!canBeSubmitted()}>
+									Add
 							</Button>
-						</DialogActions>
-					) : (
-						<DialogActions className="justify-between px-8 sm:px-16">
-							<div>
-							<Button variant="contained" color="primary" type="submit" disabled={!canBeSubmitted()}>
-								Save
+							</DialogActions>
+						) : (
+								<DialogActions className="justify-between px-8 sm:px-16">
+									<div>
+										<Button variant="contained" color="primary" type="submit" disabled={!canBeSubmitted()}>
+											Save
 							</Button>
 							&nbsp;
-							<Button variant="contained" color="secondary" type="button" onClick={ev => {setEdit(false);}}>
-								View
+							<Button variant="contained" color="secondary" type="button" onClick={ev => { setEdit(false); }}>
+											View
 							</Button>
-							</div>
-							<IconButton onClick={handleRemove} color="secondary">
-								<Icon>delete</Icon>
-							</IconButton>
-						</DialogActions>
-					)}
-				</form> )
+									</div>
+									<IconButton onClick={handleRemove} color="secondary">
+										<Icon>delete</Icon>
+									</IconButton>
+								</DialogActions>
+							)}
+					</form>)
 					: (
-					<DialogContent classes={{ root: 'p-16 pb-0 sm:p-24 sm:pb-0' }}>
-						<table className={clsx(classes.table, 'w-full text-justify')}>
-							<tbody>
-								<tr className="cost">
-									<th>Cost</th>
-									<td>{course.cost}</td>
-								</tr>
+						<DialogContent classes={{ root: 'p-16 pb-0 sm:p-24 sm:pb-0' }}>
+							<table className={clsx(classes.table, 'w-full text-justify')}>
+								<tbody>
+									<tr className="cost">
+										<th>Cost</th>
+										<td>{course.cost}</td>
+									</tr>
 
-								<tr className="location">
-									<th>Location</th>
-									<td>{course.location}</td>
-								</tr>
+									<tr className="location">
+										<th>Location</th>
+										<td>{course.location}</td>
+									</tr>
 
-								<tr className="cert">
-									<th>Certification</th>
-									<td>{(course.certification) ? "Yes" : "No"}</td>
-								</tr>
+									<tr className="cert">
+										<th>Certification</th>
+										<td>{(course.certification) ? "Yes" : "No"}</td>
+									</tr>
 
-								<tr className="catergory">
-									<th>Category</th>
-									<td>{course.category}</td>
-								</tr>
+									<tr className="catergory">
+										<th>Category</th>
+										<td>{course.category}</td>
+									</tr>
 
-								<tr className="dept">
-									<th>Department</th>
-									<td>{course.department}</td>
-								</tr>
+									<tr className="dept">
+										<th>Department</th>
+										<td>{course.department}</td>
+									</tr>
 
-								<tr className="deptHead">
-									<th>Department Head</th>
-									<td>{course.departmentHeadId}</td>
-								</tr>
+									<tr className="deptHead">
+										<th>Department Head</th>
+										<td>{course.departmentHeadId}</td>
+									</tr>
 
-								<tr className="hrManager">
-									<th>HR Manager</th>
-									<td>{course.hrManager}</td>
-								</tr>
-								<tr className="created">
-									<th>Created</th>
-									<td><Moment format="ddd Do MMM, YYYY | hh:mm:ss a">{course.createdAt}</Moment></td>
-								</tr>
-								<tr className="updated">
-									<th>Updated</th>
-									<td><Moment format="ddd Do MMM, YYYY | hh:mm:ss a">{course.updatedAt}</Moment></td>
-								</tr>
-							</tbody>
-						</table>
-					<DialogActions className="justify-between px-8 sm:px-16">
-						<Button variant="contained" color="primary" onClick={handleShowEdit} type="button">
-							Edit
+									<tr className="hrManager">
+										<th>HR Manager</th>
+										<td>{course.hrManager}</td>
+									</tr>
+									<tr className="created">
+										<th>Created</th>
+										<td><Moment format="ddd Do MMM, YYYY | hh:mm:ss a">{course.createdAt}</Moment></td>
+									</tr>
+									<tr className="updated">
+										<th>Updated</th>
+										<td><Moment format="ddd Do MMM, YYYY | hh:mm:ss a">{course.updatedAt}</Moment></td>
+									</tr>
+								</tbody>
+							</table>
+							<DialogActions className="justify-between px-8 sm:px-16">
+								<Button variant="contained" color="primary" onClick={handleShowEdit} type="button">
+									Edit
 						</Button>
-					</DialogActions>
-					</DialogContent>
+							</DialogActions>
+						</DialogContent>
 					)
 			}
 		</Dialog>

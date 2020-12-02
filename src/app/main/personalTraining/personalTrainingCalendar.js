@@ -18,6 +18,7 @@ import EventDialog from './EventDialog';
 import * as Actions from './store/actions';
 import reducer from './store/reducers';
 import { Link, Redirect } from 'react-router-dom';
+import Typography from '@material-ui/core/Typography'
 
 const localizer = momentLocalizer(moment);
 
@@ -167,11 +168,12 @@ const useStyles = makeStyles(theme => ({
 
 function PersonalTrainingCalendar(props) {
 	const dispatch = useDispatch();
-	const events = useSelector(({ personalTraining }) => personalTraining.trainings.events);
+	const events = [];
+	//  useSelector(({ personalTraining }) => personalTraining?.trainings.events);
 
 	const classes = useStyles(props);
 	const headerEl = useRef(null);
-	
+
 	useEffect(() => {
 		dispatch(Actions.getAllTrainings());
 	}, [dispatch]);
@@ -197,11 +199,11 @@ function PersonalTrainingCalendar(props) {
 		);
 	}
 
-	function moveToCourses(start, end){
+	function moveToCourses(start, end) {
 		return <Redirect to={`/training/personal/courses/${start}/${end}`} />
 	}
 
-	const eventStyleGetter = (event, start, end, isSelected) =>{
+	const eventStyleGetter = (event, start, end, isSelected) => {
 		var style = {
 			backgroundColor: event.color,
 			color: 'white',
@@ -212,55 +214,56 @@ function PersonalTrainingCalendar(props) {
 	}
 	return (
 		<div className={clsx(classes.root, 'flex flex-col flex-auto relative')}>
-        <Card >
-          <CardContent>
-			<div ref={headerEl} />
-			<DragAndDropCalendar
-				className="flex flex-1 container"
-				selectable
-				localizer={localizer}
-				events={events}
-				onEventDrop={moveEvent}
-				resizable
-				onEventResize={resizeEvent}
-				defaultView={Views.MONTH}
-				defaultDate={new Date()}
-				startAccessor="start"
-				endAccessor="end"
-				views={allViews}
-				step={60}
-				showMultiDayTimes
-				eventPropGetter={eventStyleGetter}
-				// onNavigate={handleNavigate}
-				onSelectEvent={event => {
-					console.log(event);
-					dispatch(Actions.openEditEventDialog(event));
-				}}
-                // onSelectSlot={slotInfo =>
-                //     (slotInfo.start >= new Date()) ?
-				// 	dispatch(
-				// 		Actions.openNewEventDialog({
-				// 			start: slotInfo.start.toLocaleString(),
-				// 			end: slotInfo.end.toLocaleString()
-				// 		})
-                //     )
-                //     : null
-				// }
-			/>
-			<FuseAnimate animation="transition.expandIn" delay={500}>
-				<Fab
-					color="secondary"
-					aria-label="add"
-					className={classes.addButton}
-                    to={'/training/personal/courses'}
-                    component={Link}
-				>
-					<Icon>add</Icon>
-				</Fab>
-			</FuseAnimate>
-			<EventDialog />
-        </CardContent>
-        </Card>
+			<Card >
+				<Typography variant="h6" color="initial" className='p-20 font-semibold text-center'>{props.title}</Typography>
+				<CardContent>
+					<div ref={headerEl} />
+					<DragAndDropCalendar
+						className="flex flex-1 container"
+						selectable
+						localizer={localizer}
+						events={[]}
+						onEventDrop={moveEvent}
+						resizable
+						onEventResize={resizeEvent}
+						defaultView={Views.MONTH}
+						defaultDate={new Date()}
+						startAccessor="start"
+						endAccessor="end"
+						views={allViews}
+						step={60}
+						showMultiDayTimes
+						eventPropGetter={eventStyleGetter}
+						// onNavigate={handleNavigate}
+						onSelectEvent={event => {
+							console.log(event);
+							dispatch(Actions.openEditEventDialog(event));
+						}}
+					// onSelectSlot={slotInfo =>
+					//     (slotInfo.start >= new Date()) ?
+					// 	dispatch(
+					// 		Actions.openNewEventDialog({
+					// 			start: slotInfo.start.toLocaleString(),
+					// 			end: slotInfo.end.toLocaleString()
+					// 		})
+					//     )
+					//     : null
+					// }
+					/>
+					<FuseAnimate animation="transition.expandIn" delay={500}>
+						<Fab
+							color="secondary"
+							aria-label="add"
+							className={classes.addButton}
+							to={'/training/personal/courses'}
+							component={Link}
+						>
+							<Icon>add</Icon>
+						</Fab>
+					</FuseAnimate>
+					<EventDialog />
+				</CardContent>
+			</Card>
 		</div>
 	);
 }

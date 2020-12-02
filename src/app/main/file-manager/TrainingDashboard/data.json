@@ -1,0 +1,38 @@
+{
+    "title": "Departments",
+    "ranges": [
+        "2019",
+        "2020"
+    ],
+    "currrentRange": "2019",
+    "data": [
+        {
+            "dept": "Computer Techonology",
+            "count": 90
+        },
+        {
+            "dept": "Software",
+            "count": 9
+        },
+        {
+            "dept": "Finance",
+            "count": 900
+        },
+        {
+            "dept": "Gasoline",
+            "count": 80
+        },
+        {
+            "dept": "Engineering",
+            "count": 19
+        },
+        {
+            "dept": "Computer Techonology",
+            "count": 90
+        },
+        {
+            "dept": "Computer Techonology",
+            "count": 90
+        }
+    ]
+}

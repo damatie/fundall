@@ -297,18 +297,18 @@ const SrepTable = (props) =>{
 											{(n.employee) ? `${n.employee.firstName} ${n.employee.lastName}` : ''}
 										</TableCell>
 										<TableCell className="text-center" style={{padding: '0 16px'}}
-										onClick={event => {handleItemClick(event, n); setOpen(true) }}>{n.employee.email}</TableCell>
+										onClick={event => {handleItemClick(event, n); setOpen(true) }}>{(n.employee) ? n.employee.email : ''}</TableCell>
                                         <TableCell className="text-center" style={{padding: '0 16px'}}
 										onClick={event => {handleItemClick(event, n); setOpen(true) }}>
-                                            {getRole(n.employee.roleId)}
+                                            {(n.employee) ? getRole(n.employee.roleId) : ''}
 										</TableCell>
                                         <TableCell className="text-center" style={{padding: '0 16px'}}
 										onClick={event => {handleItemClick(event, n); setOpen(true) }}>
-                                            {getDepartment(n.employee.departmentId)}  
+                                            {(n.employee) ? getDepartment(n.employee.departmentId) : ''}  
                                         </TableCell>
                                         <TableCell className="text-center" style={{padding: '0 16px'}}
 										onClick={event => {handleItemClick(event, n); setOpen(true) }}>
-                                            {getEntity(n.employee.entityId)}  
+                                            {(n.employee) ? getEntity(n.employee.entityId) : ''}  
                                         </TableCell>
                                         <TableCell className="text-center" style={{padding: '0 16px'}}>
                                         <IconButton aria-label="delete" onClick={(event) => handleDelete(event, n.id)} disabled={parseInt(props.userId) !== n.employeeId || n.status !== 'pending'}>

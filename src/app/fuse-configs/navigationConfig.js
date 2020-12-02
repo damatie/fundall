@@ -249,6 +249,38 @@ const navigationConfig = [
 		type: 'group',
 		children: [
 			{
+				id: 'employee_loan_mgt',
+				title: 'Employee Dashboard',
+				type: 'item',
+				url: '/employee/loan_mgt/',
+				icon: 'monetization_on',
+				// auth: authRoles.loan,
+			},
+			{
+				id: 'hr_loan_mgt',
+				title: 'HR Dashboard',
+				type: 'item',
+				url: '/hr/loan_mgt/',
+				icon: 'monetization_on',
+				// auth: authRoles.loan,
+			},
+			{
+				id: 'line_manager_loan_mgt',
+				title: 'Line Manager Dashboard',
+				type: 'item',
+				url: '/line_manager/loan_mgt/',
+				icon: 'monetization_on',
+				// auth: authRoles.loan,
+			},
+			{
+				id: 'finance_manager_loan_mgt',
+				title: 'Finance Manager Dashboard',
+				type: 'item',
+				url: '/finance_manager/loan_mgt/',
+				icon: 'monetization_on',
+				// auth: authRoles.loan,
+			},
+			{
 				id: 'loan_review',
 				title: 'Loan review',
 				type: 'item',
@@ -266,13 +298,27 @@ const navigationConfig = [
 			}
 		]
 	},
-	// Leave navigations
+	// Leave mgt navigations
 	{
 		id: 'leave_management',
 		title: 'Leave management',
 		translate: 'Leave management',
 		type: 'group',
 		children: [
+			{
+				id: 'hr_dasboard',
+				title: 'HR leave dashboard',
+				type: 'item',
+				url: '/hr/leave/dashboard',
+				icon: 'dashboard'
+			},
+			{
+				id: 'hr_dasboard',
+				title: 'Line manager leave dashboard',
+				type: 'item',
+				url: '/line_manager/leave/dashboard',
+				icon: 'dashboard'
+			},
 			{
 				id: 'leave_type',
 				title: 'Leave type',
@@ -390,13 +436,39 @@ const navigationConfig = [
 		type: 'group',
 		children: [
 			{
-				id: 'trainingManagement',
+				id: 'training_Dashboard',
 				title: 'Training Dashboard',
-				type: 'item',
-				url: '/hr/training/management',
+				type: 'collapse',
+				// url: '/hr/training/management',
 				icon: 'dashboard',
-				auth: authRoles.admin,
+				children: [
+					{
+						id: 'staff_dashboard',
+						title: 'Employee Dashboard',
+						type: 'item',
+						icon: 'layers',
+						url: '/employee/training/dashboard',
+						auth: authRoles.staff,
+					},
+					{
+						id: 'line_manager_dashboard',
+						title: 'Line Manager Dashboard',
+						type: 'item',
+						icon: 'layers',
+						url: '/line_manager/training/dashboard',
+						auth: authRoles.staff,
+					},
+					{
+						id: 'finance_manager_dashboard',
+						title: 'Finance Manager Dashboard',
+						type: 'item',
+						icon: 'layers',
+						url: '/finance_manager/training/dashboard',
+						auth: authRoles.staff,
+					},
+				]
 			},
+
 			{
 				id: 'trainingManagement',
 				title: 'Training Management',
@@ -449,6 +521,22 @@ const navigationConfig = [
 		auth: authRoles.manager,
 		children: [
 			{
+				id: 'recruitment_dashboards',
+				title: 'Dashboards',
+				type: 'collapse',
+				icon: 'school',
+				children: [
+					{
+						id: 'hr_recruitment',
+						title: 'HR Dashboard',
+						type: 'item',
+						url: '/hr/recruitment',
+						icon: 'school',
+						auth: authRoles.admin,
+					},
+				]
+			},
+			{
 				id: 'listOfOpenings',
 				title: 'List of openings',
 				type: 'item',
@@ -486,6 +574,49 @@ const navigationConfig = [
 		]
 	},
 
+	// PERFORMANCE APPRAISAL NAVIGATION
+	{
+		id: 'performanceAppraisal',
+		title: 'Performance appraisal',
+		translate: 'performance appraisal',
+		type: 'group',
+		auth: authRoles.admin,
+		children: [
+			{
+				id: 'hrDashboard',
+				title: 'HR Dashboard',
+				type: 'item',
+				url: '/hr/performance_appraisal/dashboard',
+				icon: 'dashboard',
+				auth: authRoles.admin,
+			},
+			{
+				id: 'LMDashboard',
+				title: 'Line manager Dashboard',
+				type: 'item',
+				url: '/line_manager/performance_appraisal/dashboard',
+				icon: 'dashboard',
+				auth: authRoles.admin,
+			},
+			{
+				id: 'FMDashboard',
+				title: 'Finance manager Dashboard',
+				type: 'item',
+				url: '/finance_manager/performance_appraisal/dashboard',
+				icon: 'dashboard',
+				auth: authRoles.admin,
+			},
+			{
+				id: 'kpoCategory',
+				title: 'KPO Category',
+				type: 'item',
+				url: '/hr/performance_appraisal/kpoCategory',
+				icon: 'assignment',
+				auth: authRoles.admin,
+			},
+		]
+	},
+
 	// SREP navigations
 	{
 		id: 'srep',
@@ -493,6 +624,20 @@ const navigationConfig = [
 		translate: 'SpringRock Education Program',
 		type: 'group',
 		children: [
+			{
+				id: 'hrDashboard',
+				title: 'Admin Dashboard',
+				type: 'item',
+				url: '/srep/admin/dashboard',
+				icon: 'dashboard',
+			},
+			{
+				id: 'employeeDashboard',
+				title: 'Employee Dashboard',
+				type: 'item',
+				url: '/srep/employee/dashboard',
+				icon: 'dashboard',
+			},
 			{
 				id: 'applySREP',
 				title: 'Apply for Education Program',

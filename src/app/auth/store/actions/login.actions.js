@@ -86,7 +86,7 @@ export function submitLogin(data) {
 	}
 }
 
-const getProfile = (id, token) => {
+const getProfile = ({id, token, data}) => {
 	return dispatch => {
 		dispatch({
       type: LOADING_EMPLOYEE_PROFILE
@@ -101,7 +101,7 @@ const getProfile = (id, token) => {
 				localStorage.setItem('user_profile', JSON.stringify(data.data));
 				dispatch({
 					type: GET_EMPLOYEE_PROFILE,
-					payload: (data.data) ? data.data : []
+					payload: data
 				})
 			}
 		)
