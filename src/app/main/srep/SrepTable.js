@@ -50,6 +50,33 @@ const SrepTable = (props) =>{
     });
     const [selected, setSelected] = useState('');
 
+    const getRole = (roleId) =>{
+        let roles = props.roles;
+        if(roles){
+            const role = roles.find(role => {return parseInt(role.id) === parseInt(roleId)});
+            return (role) ? role.name : '';
+        }
+        return '';
+    }
+
+    const getEntity = (entityId) =>{
+        let entities = props.entities;
+        if(entities){
+            const entity = entities.find(entity => {return parseInt(entity.id) === parseInt(entityId)});
+            return (entity) ? entity.name : '';
+        }
+        return '';
+    }
+
+    const getDepartment = (deptId) =>{
+        let departments = props.departments;
+        if(departments){
+            const dept = departments.find(dept => {return parseInt(dept.id) === parseInt(deptId)});
+            return (dept) ? dept.departmentName : '';
+        }
+        return '';
+    }
+
 	const createSortHandler = property => event =>  {
 		const id = property;
 		let direction = 'desc';
@@ -270,14 +297,18 @@ const SrepTable = (props) =>{
 											{(n.employee) ? `${n.employee.firstName} ${n.employee.lastName}` : ''}
 										</TableCell>
 										<TableCell className="text-center" style={{padding: '0 16px'}}
-										onClick={event => {handleItemClick(event, n); setOpen(true) }}>{n.identityType}</TableCell>
+										onClick={event => {handleItemClick(event, n); setOpen(true) }}>{n.employee.email}</TableCell>
                                         <TableCell className="text-center" style={{padding: '0 16px'}}
 										onClick={event => {handleItemClick(event, n); setOpen(true) }}>
-                                        <Moment format="ddd Do MMM, YY | hh:mm:ss a">{n.createdAt}</Moment>
+                                            {getRole(n.employee.roleId)}
 										</TableCell>
                                         <TableCell className="text-center" style={{padding: '0 16px'}}
 										onClick={event => {handleItemClick(event, n); setOpen(true) }}>
-                                            {CheckStatus(n.status)}   
+                                            {getDepartment(n.employee.departmentId)}  
+                                        </TableCell>
+                                        <TableCell className="text-center" style={{padding: '0 16px'}}
+										onClick={event => {handleItemClick(event, n); setOpen(true) }}>
+                                            {getEntity(n.employee.entityId)}  
                                         </TableCell>
                                         <TableCell className="text-center" style={{padding: '0 16px'}}>
                                         <IconButton aria-label="delete" onClick={(event) => handleDelete(event, n.id)} disabled={parseInt(props.userId) !== n.employeeId || n.status !== 'pending'}>

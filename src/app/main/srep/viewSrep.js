@@ -23,10 +23,12 @@ import { Link, useParams } from 'react-router-dom';
 import { ThemeProvider } from '@material-ui/core/styles';
 import * as Actions from './store/actions';
 import reducer from './store/reducers';
-import DetailsTab from './forms/viewForm';
+import DetailsTab from './pages/viewDetails';
+import AddTrustDeed from './pages/addTrustDeed';
 import OtherFiles from './forms/otherFilesForm';
 import { useAuth } from 'app/hooks/useAuth';
 import ProgressBtn from 'app/shared/progressBtn';
+import * as UtilActions from '../../store/actions';
 
 const useStyles = makeStyles(theme => ({
 }));
@@ -41,6 +43,9 @@ function ViewSrep({ match }, props) {
 	const classes = useStyles(props);
 	const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
 	const srepData = useSelector(({ ViewSrep }) => ViewSrep.srep.data);
+	const roles = useSelector(({ roles }) => roles.roleList);
+	const departments = useSelector(({ departments }) => departments.deparmentList);
+	const entities = useSelector(({ entities }) => entities.entityList);
 
     const [anchorEl, setAnchorEl] = useState(null);
     const [tabValue, setTabValue] = useState(0);
@@ -49,6 +54,9 @@ function ViewSrep({ match }, props) {
     const srepId = match.params.srepId;
 	
 	useEffect(() => {
+		dispatch(UtilActions.getRoles());
+		dispatch(UtilActions.getEntities());
+		dispatch(UtilActions.getDepartments());
 		dispatch(Actions.getSrepByID(srepId));
 	}, [dispatch])
 
@@ -79,6 +87,8 @@ function ViewSrep({ match }, props) {
     const isOnlyHr = () => (userData.role.toUpperCase() === 'HR');
     
     const isFinance = () => (userData.role.toUpperCase() === 'FINANCE MANAGER');
+
+    const isEmployee = () => (userData.role.toUpperCase() === 'EMPLOYEE');
 
     const { loading, close } = useSelector(state => state.ViewSrep.srep);
 
@@ -143,6 +153,10 @@ function ViewSrep({ match }, props) {
                 break;
         }
     }
+
+    const goBack = () =>{
+        window.location = '/srep/all'
+    }
     
 
 	return (
@@ -157,15 +171,14 @@ function ViewSrep({ match }, props) {
 						<div className="flex items-center">
 							<FuseAnimate animation="transition.expandIn" delay={300}>
 								<Icon
-									className="text-24 text-black bg-white rounded-20"
-									component={Link}
-									to="/srep/all"
+                                    className="text-24 text-black bg-white rounded-20"
+                                    onClick= {()=>{goBack()}}
             			            role="button"
 								>arrow_back</Icon>
 							</FuseAnimate>
 							<FuseAnimate animation="transition.slideLeftIn" delay={300}>
 								<Typography className="hidden sm:flex mx-0 sm:mx-12" variant="h6">
-									Employee SpringRock Education Program Details
+									Employee SpringRock Education Application Details
 								</Typography>
 							</FuseAnimate>
 						</div>
@@ -206,28 +219,18 @@ function ViewSrep({ match }, props) {
 					</div>
 				</div>
             }
-            contentToolbar={
-                <Tabs
-					value={tabValue}
-					onChange={handleChangeTab}
-					indicatorColor="primary"
-					textColor="primary"
-					variant="scrollable"
-					scrollButtons="off"
-					className="w-full border-b-1 px-24"
-				>
-					<Tab className="text-14 font-600 normal-case" label="Details" />
-					{isHr() ? <Tab className="text-14 font-600 normal-case" label="Other Files" /> : ''}
-				</Tabs>
-            }
 			content={
                 <div className=" sm:px-24 py-16 ">
-                { tabValue === 0 && (
-                    <DetailsTab srepData={srepData} />
-                )}
-                { tabValue === 1 && (
-                    <OtherFiles srepData={srepData} isHr={isOnlyHr}/>
-                )}
+                    {isHr() ? 
+                        <AddTrustDeed srepData={srepData} />
+                    :
+                        <DetailsTab srepData={srepData} 
+                            goBack={goBack} 
+                            roles={roles} 
+                            entities={entities}
+                            departments={departments}
+                        />
+                    }
                 </div>
 			}
 			innerScroll

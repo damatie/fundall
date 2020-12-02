@@ -19,6 +19,10 @@ const SrepConfig = {
 			path: '/srep/details/:srepId',
 			component: React.lazy(() => import('../srep/viewSrep'))
 		},
+		// {
+		// 	path: '/srep/trustdeed/new/:srepId',
+		// 	component: React.lazy(() => import('../srep/pages/addTrustDeed'))
+		// }
 	]
 };
 

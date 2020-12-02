@@ -171,9 +171,6 @@ export function addSrep(payload){
 export function approveSrep(id) {
 	console.log(id);
 	return dispatch => {
-		swal.fire('Processing ...');
-		swal.showLoading();
-
 		swal.fire({
 			title: 'Are you sure?',
 			text: "You won't be able to revert this!",
@@ -183,7 +180,10 @@ export function approveSrep(id) {
 			cancelButtonColor: '#d33',
 			confirmButtonText: 'Yes, approve it!',
 			showLoaderOnConfirm: true,
-			preConfirm: () => [
+			preConfirm: () => {
+				swal.fire('Processing ...');
+				swal.showLoading();
+		
 				fetch(`${baseUrl()}/srep/approve/${id}`, { ...headers.reqHeader('PATCH', '') })
 				.then(res => res.json()).then(async data => {
 					if (data.success) {
@@ -221,7 +221,7 @@ export function approveSrep(id) {
 						type: APPROVE_SREP_ERROR
 					})
 				})
-			]
+			}
 		})
 	}
 
@@ -289,9 +289,6 @@ export function rejectSrep(id) {
 export function deleteSrep(id, role, userId) {
 	console.log(id);
 	return dispatch => {
-		swal.fire('Processing ...');
-		swal.showLoading();
-
 		swal.fire({
 			title: 'Are you sure?',
 			text: "You won't be able to revert this!",
@@ -301,7 +298,9 @@ export function deleteSrep(id, role, userId) {
 			cancelButtonColor: '#d33',
 			confirmButtonText: 'Yes, delete it!',
 			showLoaderOnConfirm: true,
-			preConfirm: () => [
+			preConfirm: () => {
+				swal.fire('Processing ...');
+				swal.showLoading();
 				fetch(`${baseUrl()}/srep/${id}`, { ...headers.delHeader() })
 				.then(res => res.json()).then(async data => {
 					if (data.success) {
@@ -343,7 +342,7 @@ export function deleteSrep(id, role, userId) {
 						type: DELETE_SREP_ERROR
 					})
 				})
-			]
+			}
 		})
 	}
 

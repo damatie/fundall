@@ -15,6 +15,7 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import * as ReactDOM from 'react-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Actions from './store/actions';
+import * as UtilActions from '../../store/actions';
 import reducer from './store/reducers';
 import CardWidget from 'app/shared/widgets/CardWidget';
 import SrepTable from './SrepTable';
@@ -38,35 +39,42 @@ const columns = [
 		id: 'employee_name',
 		align: 'center',
 		disablePadding: false,
-		label: 'Employee Name',
+		label: 'Name',
 		sort: true
 	},
 	{
-		id: 'identityType',
+		id: 'email',
 		align: 'center',
 		disablePadding: false,
-		label: 'Identity Type',
+		label: 'Email',
 		sort: true
 	},
 	{
-		id: 'created',
+		id: 'job_role',
 		align: 'center',
 		disablePadding: false,
-		label: 'Modified',
+		label: 'Job Role',
 		sort: true
 	},
 	{
-		id: 'status',
+		id: 'dept',
 		align: 'center',
 		disablePadding: false,
-		label: 'Status',
+		label: 'Dept',
+		sort: true
+	},
+	{
+		id: 'entity',
+		align: 'center',
+		disablePadding: false,
+		label: 'Entity',
 		sort: true
 	},
 	{
 		id: 'action',
 		align: 'center',
 		disablePadding: false,
-		label: 'Action',
+		label: '',
 		sort: true
 	}
 ];
@@ -77,10 +85,16 @@ const userData = useAuth().getUserData;
 function Srep(props) {
 	const dispatch = useDispatch();
 	const srep = useSelector(({ srep }) => srep.srep.data);
+	const roles = useSelector(({ roles }) => roles.roleList);
+	const departments = useSelector(({ departments }) => departments.deparmentList);
+	const entities = useSelector(({ entities }) => entities.entityList);
 	const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
 
 	const classes = useStyles(props);
 	useEffect(() => {
+		dispatch(UtilActions.getRoles());
+		dispatch(UtilActions.getEntities());
+		dispatch(UtilActions.getDepartments());
 		if(userData.role.toUpperCase() === 'EMPLOYEE'){
 			dispatch(Actions.getSrepByEmployeeID(userId));
 		}else{
@@ -157,6 +171,9 @@ function Srep(props) {
 									rows={srep}
 									props={props}
 									role={userData.role.toUpperCase()}
+									roles={roles}
+									departments={departments}
+									entities={entities}
 									userId={userId}
 								/>
 							</div>
