@@ -120,33 +120,63 @@ function HRsrepDashboard(props) {
   return (
     <SimplePage title='HR SREP DASHBOARD'>
       <div className="flex flex-row w-full justify-between">
-        <CardWidget count={13} title={"Number Of  Approved Applications"} color="green" className="mr-6"/>
+        <CardWidget count={13} title={"Number Of  Approved Applications"} color="green" className="mr-6" />
         <CardWidget count={9} title={"Number of SREP Pending Applications"} color="yellow" />
- 
+
       </div>
-      <Paper className='p-20 my-20 mb-20 rounded-8 h-sm'>
+      <Paper className='p-20 my-20 mb-20 rounded-8 h-full'>
 
         <Grid container spacing={1} alignItems='center'>
-          <Grid item lg={1}>
+          <Grid item lg={12}>
+            <Typography variant="subtitle1" color="initial" className='font-semibold text-center'>Number Of Approved SREP Application</Typography>
+          </Grid>
+        </Grid>
+        <section className='flex flex-row items-center w-2/5'>
+          <div>
+          <SelectTextField
+            value={2020}
+            size='small'
+            label='Year'
+          >
+            {[2019, 2020].map(item => (
+              <MenuItem value={item}>
+                {item}
+              </MenuItem>
+            ))}
+          </SelectTextField>
+          </div>
+          
+          <div className='mx-10'>
             <SelectTextField
-              value={2020}
+              value={"5C", "C-BIT", "SREL"}
               size='small'
-              label='Year'
+              label='Entity'
             >
-              {[2019, 2020].map(item => (
+              {["5C", "C-BIT", "SREL"].map(item => (
                 <MenuItem value={item}>
                   {item}
                 </MenuItem>
               ))}
             </SelectTextField>
-          </Grid>
-          <Grid item lg={11}>
-            <Typography variant="subtitle1" color="initial" className='font-semibold text-center'>Number Of Approved SREP Application</Typography>
-          </Grid>
-        </Grid>
-        <BarChart data={barChartData} height='100%'/>
+          </div>
+          <div className={"mr-24"}>
+            <SelectTextField
+              value={"IT", "Finance", "HR"}
+              size='small'
+              label='Department'
+            >
+              {["IT", "Finance", "HR"].map(item => (
+                <MenuItem value={item}>
+                  {item}
+                </MenuItem>
+              ))}
+            </SelectTextField>
+          </div>
+        </section>
+
+        <BarChart data={barChartData} height='100%' />
       </Paper>
-      
+
     </SimplePage>
   );
 }

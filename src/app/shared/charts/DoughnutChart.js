@@ -11,7 +11,7 @@ const useStyles = makeStyles(theme => ({
 		position: 'absolute',
 		top: '45%',
 		left: '50%',
-		transform: 'translate(-50%, -40%)',
+		transform: 'translate(-50%, -50%)',
 		fontWeight: 'bold',
 		color: props => props.color,
 		fontSize: 30
@@ -20,7 +20,7 @@ const useStyles = makeStyles(theme => ({
 
 
 const DoughnutChart = ({ data, percentage, doughnutStyle }) => {
-	const classes = useStyles({ color: data.datasets[0].backgroundColor[1] });
+	const classes = useStyles({ color: data.datasets[0].backgroundColor[0] });
 	return (
 		<div className={`flex flex-col items-center w-full ${classes.chart} ${doughnutStyle}`} >
 			<Doughnut data={data} options={{
