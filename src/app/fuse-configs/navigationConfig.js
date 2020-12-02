@@ -295,6 +295,14 @@ const navigationConfig = [
 				url: '/loan/request',
 				icon: 'monetization_on',
 				// auth: authRoles.staff,
+			},
+			{
+				id: 'loan_salary_advance_list',
+				title: 'Salary Advance Loans',
+				type: 'item',
+				url: '/loan/salary_advance/list',
+				icon: 'monetization_on',
+				auth: authRoles.managers,
 			}
 		]
 	},
