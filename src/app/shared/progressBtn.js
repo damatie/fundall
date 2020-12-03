@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -38,11 +38,11 @@ const useStyles = makeStyles((theme) => ({
   btn: {
     background: red[500],
     margin: '0 1rem',
-    color: '#fff'
+    color: '#fff',
   }
 }));
 
-const ProgressBtn = ({success, loading, content, disable, onClick, color}, props) => {
+const ProgressBtn = ({ success, loading, content, disable, onClick, color }, props) => {
   const classes = useStyles(props);
 
   const buttonClassname = clsx({
@@ -53,6 +53,7 @@ const ProgressBtn = ({success, loading, content, disable, onClick, color}, props
     <div className={classes.wrapper}>
       <Button
         variant="contained"
+        style={{ padding: "1em" }}
         color={!color ? "primary" : color}
         className={color === 'red' ? `${classes.btn} w-full` : 'w-full'}
         disabled={loading || disable}
