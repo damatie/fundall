@@ -36,7 +36,7 @@ export function submitLogin(data) {
 						icon: 'success',
 						timer: 3000,
 					});
-					await localStorage.setItem('jwt_access_token', JSON.stringify(user.token));
+					localStorage.setItem('jwt_access_token', JSON.stringify(user.token));
 					const userState = {
 						role: user.data.role.name,
 						redirectUrl: '/employee/dashboard',
@@ -47,7 +47,7 @@ export function submitLogin(data) {
 							email: user.data.email,
 							shortcuts: ['loan_request', 'request_leave', 'blog_list', 'todo'],
 							department: user.data.department,
-							details: user.data.info
+							details:user.data.info
 						}
 					};
 					await localStorage.setItem('user_data', JSON.stringify(userState));

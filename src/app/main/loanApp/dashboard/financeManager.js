@@ -251,7 +251,7 @@ function FinanceManager(props) {
                 {['SREL', '5C', 'C-BIT'].map(item => (
                   <MenuItem value={item}>
                     {item}
-                  </MenuItem>
+                  </MenuItem> 
                 ))}
               </SelectTextField>
               <SelectTextField label='Department' value='HR' size='small'>

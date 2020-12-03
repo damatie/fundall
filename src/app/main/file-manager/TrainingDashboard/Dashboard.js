@@ -167,13 +167,26 @@ function FinanceManagerDashboard(props) {
 
 							<Typography color="inherit" variant="subtitle1" className="text-center mb-24">Total Cost of Trainings Per Department</Typography>
 							<div className="w-50 flex mb-24">
-								<div className={"mr-24"}>
+								<div>
 									<SelectTextField
 										value={2020}
 										size='small'
 										label='Year'
 									>
 										{[2019, 2020].map(item => (
+											<MenuItem value={item}>
+												{item}
+											</MenuItem>
+										))}
+									</SelectTextField>
+								</div>
+								<div className='mx-10'>
+									<SelectTextField
+										value={"5C", "C-BIT", "SREL"}
+										size='small'
+										label='Entity'
+									>
+										{["5C", "C-BIT", "SREL"].map(item => (
 											<MenuItem value={item}>
 												{item}
 											</MenuItem>
@@ -193,19 +206,7 @@ function FinanceManagerDashboard(props) {
 										))}
 									</SelectTextField>
 								</div>
-								<div className="w-25">
-									<SelectTextField
-										value={"5C", "C-BIT", "SREL"}
-										size='small'
-										label='Entity'
-									>
-										{["5C", "C-BIT", "SREL"].map(item => (
-											<MenuItem value={item}>
-												{item}
-											</MenuItem>
-										))}
-									</SelectTextField>
-								</div>
+								
 							</div>
 
 							<EnhancedTable

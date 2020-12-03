@@ -325,7 +325,7 @@ function Recruitment(props) {
 										data={data2}
 									/>
 								</div>
-								<div className="mt-24">
+								{/* <div className="mt-24">
 									<Typography variant="subtitle1" color="inherit" className="text-center mb-24">Recruitment Funnel</Typography>
 									<Grid container spacing={3} alignItems='center' className={"mb-24"}>
 										<Grid item lg={2} >
@@ -347,7 +347,7 @@ function Recruitment(props) {
 										doughnutStyle={"justify-center align-center w-full"}
 										data={data3}
 									/>
-								</div>
+								</div> */}
 							</Paper>
 						</div>
 
