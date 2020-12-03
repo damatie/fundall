@@ -11,7 +11,8 @@ import Paper from '@material-ui/core/Paper';
 
 const PageLayout = ({
   contentToolbar,
-  content,
+	content,
+	noSearch,
   header: {
     icon,
     title,
@@ -48,7 +49,7 @@ const PageLayout = ({
 					</div>
 
 					<div className="flex flex-1 items-center justify-center px-12">
-						<ThemeProvider theme={mainTheme}>
+						{!noSearch && <ThemeProvider theme={mainTheme}>
 							<FuseAnimate animation="transition.slideDownIn" delay={300}>
 								<Paper className="flex items-center w-full max-w-512 px-8 py-4 rounded-8" elevation={1}>
 									<Icon color="action">search</Icon>
@@ -65,7 +66,7 @@ const PageLayout = ({
 									/>
 								</Paper>
 							</FuseAnimate>
-						</ThemeProvider>
+						</ThemeProvider>}
 					</div>
 
           {showButton && <div className="flex items-center max-w-full">
