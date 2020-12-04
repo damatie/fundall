@@ -15,6 +15,7 @@ import AppContext from './AppContext';
 import { Auth } from './auth';
 import routes from './fuse-configs/routesConfig';
 import store from './store';
+import api from 'app/services/api';
 
 const jss = create({
 	...jssPreset(),
@@ -25,6 +26,12 @@ const jss = create({
 const generateClassName = createGenerateClassName();
 
 const App = () => {
+	React.useEffect(() => {
+		const token = localStorage.getItem('jwt_access_token')
+		if (token) {
+			api.defaults.headers.Authorization = `JWT ${token}`;
+		}
+	}, [])
 	return (
 		<AppContext.Provider
 			value={{
