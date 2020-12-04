@@ -78,56 +78,56 @@ function SalaryAdvance(props) {
 				header: 'min-h-72 h-72 sm:h-136 sm:min-h-136'
 			}}
 			header={
-					<div className="flex flex-1 w-full items-center justify-between">
-						<div className="flex flex-col items-start max-w-full">
-							<FuseAnimate animation="transition.slideRightIn" delay={300}>
-								<Typography
-									className="normal-case flex items-center sm:mb-12"
-									component={Link}
-									role="button"
-									to="/loan/request/salaryadvance_request/list"
-									color="inherit"
-								>
-									<Icon className="text-20">
-										{theme.direction === 'ltr' ? 'arrow_back' : 'arrow_forward'}
-									</Icon>
-									<span className="mx-4">Salary Advance</span>
-								</Typography>
-							</FuseAnimate>
+				<div className="flex flex-1 w-full items-center justify-between">
+					<div className="flex flex-col items-start max-w-full">
+						<FuseAnimate animation="transition.slideRightIn" delay={300}>
+							<Typography
+								className="normal-case flex items-center sm:mb-12"
+								component={Link}
+								role="button"
+								to="/loan/request/salaryadvance_request/list"
+								color="inherit"
+							>
+								<Icon className="text-20">
+									{theme.direction === 'ltr' ? 'arrow_back' : 'arrow_forward'}
+								</Icon>
+								<span className="mx-4">Salary Advance</span>
+							</Typography>
+						</FuseAnimate>
 
-							<div className="flex items-center max-w-full">
-								
-							</div>
+						<div className="flex items-center max-w-full">
+
 						</div>
-            <div className="flex items-center max-w-full">
-								<FuseAnimate animation="transition.expandIn" delay={300}>
-										<img
-											className="w-32 sm:w-48 rounded"
-											src="assets/images/ecommerce/product-image-placeholder.png"
-											alt={'form.name'}
-										/>
-								</FuseAnimate>
-								<div className="flex flex-col min-w-0 mx-8 sm:mc-16">
-									<FuseAnimate animation="transition.slideLeftIn" delay={300}>
-									{id ? 
-										<ProgressBtn success={salaryAdvance.success} loading={salaryAdvance.loading} content='Cancel Salary advance' onClick={e => {
-											dispatch(Actions.cancelSalaryAdvance(id, history))
-										}} color='red'/> :
-										<Typography className="text-16 sm:text-20 truncate">
-										  New Salary Advance Request
+					</div>
+					<div className="flex items-center max-w-full">
+						<FuseAnimate animation="transition.expandIn" delay={300}>
+							<img
+								className="w-32 sm:w-48 rounded"
+								src="assets/images/ecommerce/product-image-placeholder.png"
+								alt={'form.name'}
+							/>
+						</FuseAnimate>
+						<div className="flex flex-col min-w-0 mx-8 sm:mc-16">
+							<FuseAnimate animation="transition.slideLeftIn" delay={300}>
+								{id ?
+									<ProgressBtn success={salaryAdvance.success} loading={salaryAdvance.loading} content='Cancel Salary advance' onClick={e => {
+										dispatch(Actions.cancelSalaryAdvance(id, history))
+									}} color='red' /> :
+									<Typography className="text-16 sm:text-20 truncate">
+										New Salary Advance Request
 										</Typography>}
-									</FuseAnimate>
-									{/* <FuseAnimate animation="transition.slideLeftIn" delay={300}>
+							</FuseAnimate>
+							{/* <FuseAnimate animation="transition.slideLeftIn" delay={300}>
 										<Typography variant="caption">Leave options details</Typography>
 									</FuseAnimate> */}
-								</div>
-							</div>
+						</div>
 					</div>
+				</div>
 			}
 			content={
-					<div className=" sm:p-24 ">
-						<RequestSalaryAdvTab />
-					</div>
+				<div className=" sm:p-24 ">
+					<RequestSalaryAdvTab />
+				</div>
 			}
 			innerScroll
 		/>

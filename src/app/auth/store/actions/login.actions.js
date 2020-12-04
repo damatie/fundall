@@ -91,7 +91,9 @@ const getProfile = ({id, token,}) => {
 				authorization: `JWT ${token}`
 			}
 		}).then(res => handleResponse(res)).then(
-			x => {
+			data => {
+				console.log(data.data)
+				localStorage.setItem('user_profile', JSON.stringify(data.data));
 				dispatch({
 					type: GET_EMPLOYEE_PROFILE,
 					payload: x
