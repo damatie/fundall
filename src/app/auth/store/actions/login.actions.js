@@ -27,7 +27,6 @@ export function submitLogin(data, x) {
 		})
 		api.post(`/auth/${x || "employee"}/login`, data).then(({ data: { success, message, token, data } }) => {
 			if (success) {
-				console.log(data, "1");
 				Swal.fire({
 					title: 'Login Successful',
 					text: message,
@@ -40,7 +39,6 @@ export function submitLogin(data, x) {
 				if (x) {
 					return;
 				}
-				console.log(success, "2");
 				const userState = {
 					role: data.role.name,
 					redirectUrl: '/employee/dashboard',
@@ -54,12 +52,11 @@ export function submitLogin(data, x) {
 						details: data.info
 					}
 				};
-				console.log(success, "3");
 				localStorage.setItem('user_data', JSON.stringify(userState));
 				dispatch(getProfile({ id: data.id, token }));
 				dispatch(UserActions.setUserData(userState));
 				dispatch(getNotification(token));
-				console.log(success, "4");
+
 				return dispatch({
 					type: LOGIN_SUCCESS
 				});
@@ -88,7 +85,6 @@ export function submitLogin(data, x) {
 				payload: error.response?.data.error || error.response?.data.message
 			});
 		});
-
 	}
 }
 
