@@ -1,25 +1,30 @@
 import Formsy from 'formsy-react';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
 import withReducer from 'app/store/withReducer';
 import * as Actions from '../store/actions';
 import ProgressBtn from 'app/shared/progressBtn';
 import employeeReducer from 'app/store/reducers';
 import * as employeeActions from 'app/store/actions';
 import GridSystem from 'app/shared/gridSystem';
-import AutoCompleteInput from 'app/shared/TextInput/AutoComplete';
-import { formatDataList } from 'utils/formatData';
 import employeesReducers from 'app/main/HR/employee_management/store/reducers';
 import * as employeesActions from 'app/main/HR/employee_management/store/actions';
 import CurrencyInput from 'app/shared/TextInput/CurrencyInput';
-import { formatToNaira } from 'utils/formatNumber';
-import Input from 'app/shared/TextInput/Input';
+
+// import AutoCompleteInput from 'app/shared/TextInput/AutoComplete';
+// import { formatDataList } from 'utils/formatData';
+
+// import { formatToNaira } from 'utils/formatNumber';
+// import Input from 'app/shared/TextInput/Input';
+
+// import { formateDate } from 'app/shared/formateDate';
+// import CustomIconButton from 'app/shared/button/CustomIconButton';
+
 import { Grid, TextField } from '@material-ui/core';
-import CustomIconButton from 'app/shared/button/CustomIconButton';
 import { TextFieldFormsy } from '@fuse/core/formsy';
-import { formateDate } from 'app/shared/formateDate';
 import SharedDropzone from 'app/shared/sharedDropZone';
+import { DateTimePicker } from '@material-ui/pickers';
 
 const matchRole = (data, role) => {
 	const arr = [];
@@ -29,39 +34,43 @@ const matchRole = (data, role) => {
 		}
 	}
 	return arr;
-}
+};
 
 function RequestSalaryAdvTab(props) {
 	const dispatch = useDispatch();
 
-	const [supportDirector, setSupportDirector] = useState('');
-	const [financeManager, setFinanceManager] = useState('');
 	const [amount, setAmount] = useState('');
-	const [netSalary, setNetSalary] = useState('');
+	const [repaymentDate, setRepaymentDate] = useState('');
+	const [fileInput, setFileInput] = useState("");
 
-	const [isFormValid, setIsFormValid] = useState(true);
+	const [isFormValid, setIsFormValid] = useState(false);
+	const [showDetails, setShowDetails] = useState(false);
 	const formRef = useRef(null);
 
 	const salaryAdvance = useSelector(({ salaryAdvance }) => salaryAdvance.salaryAdvance);
-
-	const details = useSelector(({ salaryAdvance }) => salaryAdvance.salaryAdvances.details);
+	const details = useSelector(({ salaryAdvance }) => salaryAdvance.salaryAdvances?.details);
 
 	const profile = useSelector(({ profile }) => profile);
-	const employeeList = useSelector(({ employeeList }) => employeeList);
 
-	const employees = useSelector(({ employees }) => employees.employees.data);
+	// const employeeList = useSelector(({ employeeList }) => employeeList);
+	// const employees = useSelector(({ employees }) => employees.employees.data);
 
 	const { id } = useParams();
-
 	const history = useHistory();
+	const location = useLocation();
 
 	useEffect(() => {
 		// if(!profile.loading) {
 		dispatch(employeeActions.getDepartmentEmployees(profile.data.departmentId));
 		// }
-		// console.log(salaryAdvance)
 		dispatch(employeesActions.getEmployees());
 	}, [profile.data, dispatch]);
+
+	useEffect(() => {
+		if (profile.data?.id) {
+			setShowDetails(true);
+		}
+	}, [showDetails, profile]);
 
 	useEffect(() => {
 		if (id) {
@@ -70,127 +79,98 @@ function RequestSalaryAdvTab(props) {
 	}, [id, dispatch]);
 
 	useEffect(() => {
-		if (id && details.salaryAdvanceData) {
-			setSupportDirector(details && details.salaryAdvanceData.supportDirector);
-			setFinanceManager(details && details.salaryAdvanceData.financeManager);
-			setNetSalary(details.salaryAdvanceData.netSalary);
-			setAmount(details.salaryAdvanceData.amount);
+		if (id && details?.data?.salaryAdvanceData) {
+			setAmount(details.data?.salaryAdvanceData.amount);
 		}
-	}, [id, details]);
+	}, [id, details, amount]);
 
-	function disableButton() {
-		setIsFormValid(false);
-	}
+	useEffect(() => {
+	}, [amount, fileInput])
 
 	function enableButton() {
 		setIsFormValid(true);
 	}
 
+	function disableButton() {
+		setIsFormValid(false);
+	}
+
 	function handleSubmit(model) {
-		if (id) {
-			dispatch(Actions.updateSalaryAdvance(id, {
-				...model,
-				amount,
-				netSalary,
-				supportDirector,
-				financeManager,
-				supervisor: 1,
-			}));
-		} else {
-			dispatch(Actions.applySalaryAdvance({
-				...model,
-				amount,
-				netSalary,
-				supportDirector,
-				financeManager,
-				supervisor: 1
-			}, history));
+		model.amount = Number(amount);
+		if (id && !location.state) {
+			dispatch(Actions.updateSalaryAdvance(id, model, fileInput[0], history));
 		}
-
-	}
-
-	const isInput = () => supportDirector && financeManager;
-
-
-	if (id) {
-		if (Object.entries(details).length === 0) {
-			return (
-				<>Loading...</>
-			);
+		else if (id && location.state) {
+			let role = location.state;
+			role = role.toLowerCase().split(" ").join("");
+			dispatch(Actions.updateSalaryAdvanceByRole(id, model, fileInput[0], role, history))
+		}
+		else if (!id && !location.state) {
+			dispatch(Actions.applySalaryAdvance(model, fileInput[0], history));
 		}
 	}
 
-	return (
+	return useMemo(() => (
 		<div className="w-full">
-			<Formsy
-				onValidSubmit={handleSubmit}
-				onValid={enableButton}
-				onInvalid={disableButton}
-				ref={formRef}
-				className="flex flex-col justify-center w-full"
-			>
-				<GridSystem>
-					<div>
-						<CurrencyInput
-							values={id ? details.salaryAdvanceData.netSalary : ''}
-							handleChange={e => setNetSalary(e.target.value)}
-							name={"netSalary"}
-							label={"Net Salary"}
-							error={''}
-							helperText={''}
-						/>
-					</div>
-					<div>
-						<CurrencyInput
-							values={id ? details.salaryAdvanceData.amount : ''}
-							handleChange={e => setAmount(e.target.value)}
-							name={"amount"}
-							label={"Amount requested"}
-							error={amount > netSalary / 2.5}
-							helperText={amount > netSalary / 2.5 ? 'Please you can not request for an amount that is greater than your net salary' : `Max amount: ${formatToNaira(netSalary / 2.5)}`}
-						/>
-					</div>
+			{
+				showDetails ?
+					<Formsy
+						onValidSubmit={handleSubmit}
+						onValid={enableButton}
+						onInvalid={disableButton}
+						ref={formRef}
+						className="flex flex-col justify-center w-full"
+					>
+						<GridSystem>
+							<div>
+								<CurrencyInput
+									values={amount}
+									handleChange={e => setAmount(e.target.value)}
+									name={"amount"}
+									label={"Amount requested"}
+								/>
+							</div>
 
-					<TextFieldFormsy
-						className="mt-16 w-full"
-						variant="outlined"
-						type="date"
-						name={"Repayment Date"}
-						value={formateDate(new Date())}
-						required
-					/>
-					<AutoCompleteInput data={employees && formatDataList(employees, 'Line manager')} inputs={{ label: 'Line manager' }} setInput={setFinanceManager} value={id ? { name: details.lineManager, id: details.salaryAdvanceData.lineManager } : {}} />
-				</GridSystem>
+							<div>
+								<TextFieldFormsy
+									className="w-full"
+									variant="outlined"
+									label="Repayment Date"
+									type="date"
+									name={"repaymentDate"}
+									required
+								/>
+							</div>
+						</GridSystem>
 
-				{true ?
-					<Grid container spacing={3} className="mt-48">
-						<Grid item lg={4}>
-							<ProgressBtn success={salaryAdvance.success} loading={salaryAdvance.loading} content={"Download form"} disable={!isFormValid} />
+						<Grid container spacing={3} className="mt-48">
+							<Grid item lg={4}>
+								<ProgressBtn content={"Download form"} />
+							</Grid>
+							<Grid item lg={4}>
+								<SharedDropzone
+									name={"Upload Signed document here"}
+									allowedTypes={'image/*, application/*'}
+									setValue={setFileInput}
+								/>
+							</Grid>
+							<Grid item lg={4}>
+								<ProgressBtn success={salaryAdvance.success} loading={salaryAdvance.loading} content={
+									id ?
+										location.state ?
+											"Approve Request" :
+											'Update Request' :
+										"Send Request to Line Manager"
+								} disable={id ? false : !isFormValid} />
+							</Grid>
 						</Grid>
-						<Grid item lg={4}>
-							<SharedDropzone name={"Upload Signed document here"} allowedTypes={'image/*'} setValue={(e) => { console.log(e) }} /> :
-						{/* <ProgressBtn success={salaryAdvance.success} loading={salaryAdvance.loading} content={id ? 'Update Request' : "Upload Form"} disable={!isFormValid} /> */}
-						</Grid>
-						<Grid item lg={4}>
-							<ProgressBtn success={salaryAdvance.success} loading={salaryAdvance.loading} content={id ? 'Update Request' : "Send Request to Line Manager"} disable={!isFormValid} />
-						</Grid>
-					</Grid>
+
+					</Formsy>
 					:
-					<Grid container spacing={3} className="mt-48">
-						<Grid item lg={4}>
-							<ProgressBtn success={salaryAdvance.success} loading={salaryAdvance.loading} content={"Download Request"} disable={!isFormValid} />
-						</Grid>
-						<Grid item lg={4}>
-							<ProgressBtn success={salaryAdvance.success} loading={salaryAdvance.loading} content={"Disburse Advance"} disable={!isFormValid} />
-						</Grid>
-						<Grid item lg={4}>
-							<ProgressBtn success={salaryAdvance.success} loading={salaryAdvance.loading} content={"Approve"} disable={!isFormValid} />
-						</Grid>
-					</Grid>
-				}
-			</Formsy>
+					<p>loading...</p>
+			}
 		</div>
-	);
+	), [details, showDetails, amount, fileInput, salaryAdvance])
 };
 
 
