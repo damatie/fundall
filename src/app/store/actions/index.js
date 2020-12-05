@@ -4,3 +4,6 @@ export * from './leaves.actions';
 export * from './leaveDetails.actions';
 export * from './profile.actions';
 export * from './regions.actions';
+export * from './roles.actions';
+export * from './entities.actions';
+export * from './departments.actions';

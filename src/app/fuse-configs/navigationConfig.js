@@ -588,7 +588,7 @@ const navigationConfig = [
 		title: 'Performance appraisal',
 		translate: 'performance appraisal',
 		type: 'group',
-		auth: authRoles.admin,
+		// auth: authRoles.admin,
 		children: [
 			{
 				id: 'hrDashboard',
@@ -621,6 +621,14 @@ const navigationConfig = [
 				url: '/hr/performance_appraisal/kpoCategory',
 				icon: 'assignment',
 				auth: authRoles.admin,
+			},
+			{
+				id: 'kpoList',
+				title: 'KPO List',
+				type: 'item',
+				url: '/performance_appraisal/kpoList',
+				icon: 'assignment',
+				// auth: authRoles.admin,
 			},
 		]
 	},
