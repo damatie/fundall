@@ -62,20 +62,20 @@ const useStyles = makeStyles(theme => ({
 // Table rows
 const rows = [
     {
-        id: 'employeeFirstName',
-        align: 'left',
-        disablePadding: false,
-        label: 'Employee First Name',
-        sort: true,
-        field: 'firstName'
-    },
-    {
         id: 'employeeLastName',
         align: 'left',
         disablePadding: false,
         label: 'Employee Last Name',
         sort: true,
         field: 'lastName'
+    },
+    {
+        id: 'employeeFirstName',
+        align: 'left',
+        disablePadding: false,
+        label: 'Employee First Name',
+        sort: true,
+        field: 'firstName'
     },
     {
         id: 'amountRequested',
@@ -86,20 +86,21 @@ const rows = [
         field: 'amount'
     },
     {
-        id: 'netSalary',
-        align: 'right',
-        disablePadding: false,
-        label: 'Net Salary',
-        sort: true,
-        field: 'netSalary'
-    },
-    {
         id: 'requestDate',
         align: 'right',
         disablePadding: false,
         label: 'Request date',
         sort: true,
         field: 'createdAt',
+        type: 'date'
+    },
+    {
+        id: 'repaymentDate',
+        align: 'right',
+        disablePadding: false,
+        label: 'Repayment date',
+        sort: true,
+        field: 'repaymentDate',
         type: 'date'
     },
 ];
@@ -143,12 +144,12 @@ function ManageSALoanForDirectSubordinates(props) {
         dispatch(Actions.getApprovedSA());
         dispatch(Actions.getOpenSA());
         dispatch(Actions.getClosedSA());
-        // dispatch(Actions.getReviewedSA());
+        dispatch(Actions.getReviewedSA());
     }, [dispatch]);
 
     useEffect(() => {
-        // console.log(pendingSA)
-    })
+        console.log(salaryAdvance)
+    }, [salaryAdvance])
 
     const handleClick = e => {
         history.push(`/loan/review/salaryadvance/list/details/${e.loanId}`);
@@ -182,7 +183,7 @@ function ManageSALoanForDirectSubordinates(props) {
                                     arrow_back
 								</Icon>
                                 <Typography className="hidden sm:flex mx-0 sm:mx-12" variant="h6">
-                                    Loan Review for Direct SubOrdinates
+                                    Pending Loan Requests
                                 </Typography>
                             </Typography>
                         </FuseAnimate>
@@ -204,18 +205,7 @@ function ManageSALoanForDirectSubordinates(props) {
                 </div>
             }
             contentToolbar={
-                profile.role.name !== 'Finance manager' ?
-                    <Tabs
-                        value={tabValue}
-                        onChange={handleChangeTab}
-                        indicatorColor="primary"
-                        textColor="primary"
-                        variant="scrollable"
-                        scrollButtons="auto"
-                        classes={{ root: 'w-full h-64' }}
-                    >
-                        {profile.role.name === 'HR' || profile.role.name === 'Director of support service' ? <Tab className="h-64 normal-case" label="Pending Loan" /> : ''}
-                    </Tabs> :
+                !(profile.role.name === 'Employee') ?
 
                     <Tabs
                         value={tabValue}
@@ -227,22 +217,28 @@ function ManageSALoanForDirectSubordinates(props) {
                         classes={{ root: 'w-full h-64' }}
                     >
 
-                        <Tab className="h-64 normal-case" label="Approved Loan" />
-                        <Tab className="h-64 normal-case" label="Open Loan" />
-                        <Tab className="h-64 normal-case" label="Close Loan" />
+                        <Tab className="h-64 normal-case" label="Pending Requests" />
+                        <Tab className="h-64 normal-case" label="Reviewed Requests" />
+                        <Tab className="h-64 normal-case" label="Approved Requests" />
+                        <Tab className="h-64 normal-case" label="Closed Requests" />
                     </Tabs>
+                    : <> </>
+
             }
             content={
                 <>
-                    {profile.role.name === 'HR' || profile.role.name === 'Director of support service' ? <div className=" sm:p-24 ">
-                        {tabValue === 0 && (<SharedTable data={salaryAdvance.pendingSA ? salaryAdvance.pendingSA : []} rows={rows} handleClick={handleClick} handleDelete={handleDelete} type='default' />)}
-                    </div> : <></>}
-
-                    {profile.role.name === 'Finance manager' ? <div className=" sm:p-24 ">
-                        {tabValue === 0 && (<SharedTable data={salaryAdvance.approvedSA ? salaryAdvance.approvedSA : []} rows={rows} handleClick={handleClick} handleDelete={handleDelete} type='default' />)}
-                        {tabValue === 1 && (<SharedTable data={salaryAdvance.openSA ? salaryAdvance.openSA : []} rows={rows} handleClick={handleClick} handleDelete={handleDelete} type='default' />)}
-                        {tabValue === 2 && (<SharedTable data={salaryAdvance.closedSA ? salaryAdvance.closedSA : []} rows={rows} handleClick={handleClick} handleDelete={handleDelete} type='default' />)}
-                    </div> : <></>}
+                    {
+                        profile.role.name === 'Employee'
+                            ?
+                            <p>How did you get here...</p>
+                            :
+                            <div className=" sm:p-24 ">
+                                {tabValue === 0 && (<SharedTable data={salaryAdvance?.pendingSA ?? []} rows={rows} handleClick={handleClick} handleDelete={handleDelete} type='default' />)}
+                                {tabValue === 1 && (<SharedTable data={salaryAdvance?.approvedSA ?? []} rows={rows} handleClick={handleClick} handleDelete={handleDelete} type='default' />)}
+                                {tabValue === 2 && (<SharedTable data={salaryAdvance?.reviewedSA ?? []} rows={rows} handleClick={handleClick} handleDelete={handleDelete} type='default' />)}
+                                {tabValue === 3 && (<SharedTable data={salaryAdvance?.closedSA ?? []} rows={rows} handleClick={handleClick} handleDelete={handleDelete} type='default' />)}
+                            </div>
+                    }
                 </>
             }
             innerScroll
