@@ -26,7 +26,7 @@ const CustomIconButton = props => {
 
   return (
     <Button
-      className={type ? classes : className}
+      className={`${classes} ${className}`}
       startIcon={<Icon>{icon}</Icon>}
       onClick={onClick}
       style={{ padding: "1rem 0" }}

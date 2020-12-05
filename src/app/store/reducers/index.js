@@ -7,6 +7,9 @@ import { leavesReducer } from './leaves.reducers';
 import { leaveDetailsReducers } from './leaveDetails.reducers';
 import { profileReducers } from './profile.reducers';
 import { regionsReducer } from './regions.reducers';
+import { roleListReducer } from './roles.reducers';
+import { entityListReducer } from './entities.reducers';
+import { departmentReducer } from './departments.reducers';
 
 const createReducer = asyncReducers =>
 	combineReducers({
@@ -18,7 +21,10 @@ const createReducer = asyncReducers =>
 		leaveRequest: leavesReducer,
 		leaveRequestDetails: leaveDetailsReducers,
 		profile: profileReducers,
-		regions: regionsReducer
+		regions: regionsReducer,
+		roles: roleListReducer,
+		entities: entityListReducer,
+		departments: departmentReducer
 	});
 
 export default createReducer;
