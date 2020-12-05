@@ -8,7 +8,7 @@ const CustomIconButton = props => {
   const [classes, setClasses] = useState('');
 
   useEffect(() => {
-    switch(type) {
+    switch (type) {
       case 'success': {
         setClasses('w-1/4 bg-green-300 text-white hover:bg-green-700');
         break;
@@ -29,6 +29,7 @@ const CustomIconButton = props => {
       className={type ? classes : className}
       startIcon={<Icon>{icon}</Icon>}
       onClick={onClick}
+      style={{ padding: "1rem 0" }}
       disabled={disabled ? disabled : false}
       type={submit ? 'submit' : ''}
     >
