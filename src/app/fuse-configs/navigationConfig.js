@@ -278,7 +278,7 @@ const navigationConfig = [
 				type: 'item',
 				url: '/finance_manager/loan_mgt/',
 				icon: 'monetization_on',
-				// auth: authRoles.loan,
+				// auth: authRoles.user,
 			},
 			{
 				id: 'loan_review',
@@ -286,7 +286,7 @@ const navigationConfig = [
 				type: 'item',
 				url: '/loan/review/',
 				icon: 'monetization_on',
-				// auth: authRoles.loan,
+				// auth: authRoles.user,
 			},
 			{
 				id: 'loan_request',
@@ -294,7 +294,7 @@ const navigationConfig = [
 				type: 'item',
 				url: '/loan/request',
 				icon: 'monetization_on',
-				// auth: authRoles.staff,
+				// auth: authRoles.user,
 			},
 			{
 				id: 'loan_salary_advance_list',
@@ -302,7 +302,7 @@ const navigationConfig = [
 				type: 'item',
 				url: '/loan/salary_advance/list',
 				icon: 'monetization_on',
-				auth: authRoles.managers,
+				// auth: authRoles.staff,
 			}
 		]
 	},
