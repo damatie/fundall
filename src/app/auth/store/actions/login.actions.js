@@ -19,21 +19,28 @@ export const LOGIN_LOADING = 'LOGIN_LOADING';
 
 const header = fetchHeaders();
 
-export function submitLogin(data) {
+export function submitLogin(data, x) {
+	console.log(x)
 	return dispatch => {
 		dispatch({
 			type: LOGIN_LOADING
 		})
-		api.post('/auth/employee/login', data).then(({ data: { success, message, token, data } }) => {
+		api.post(`/auth/${x || "employee"}/login`, data).then(({ data: { success, message, token, data } }) => {
 			if (success) {
+				console.log(data, "1");
 				Swal.fire({
-					title: 'Login',
+					title: 'Login Successful',
 					text: message,
 					icon: 'success',
 					timer: 3000,
 				});
 				api.defaults.headers.Authorization = `JWT ${token}`;
 				localStorage.setItem('jwt_access_token', JSON.stringify(token));
+
+				if (x) {
+					return;
+				}
+				console.log(success, "2");
 				const userState = {
 					role: data.role.name,
 					redirectUrl: '/employee/dashboard',
@@ -47,14 +54,17 @@ export function submitLogin(data) {
 						details: data.info
 					}
 				};
+				console.log(success, "3");
 				localStorage.setItem('user_data', JSON.stringify(userState));
 				dispatch(getProfile({ id: data.id, token }));
 				dispatch(UserActions.setUserData(userState));
 				dispatch(getNotification(token));
+				console.log(success, "4");
 				return dispatch({
 					type: LOGIN_SUCCESS
 				});
 			} else {
+
 				Swal.fire({
 					title: 'Login',
 					text: message,

@@ -57,7 +57,7 @@ function Login() {
 						<Typography variant="h6" className="text-center md:w-full mb-48">
 							LOGIN TO YOUR ACCOUNT
 						</Typography>
-            <JWTLoginTab />
+						<JWTLoginTab />
 						<div className="flex flex-col items-center justify-center pt-32">
 							<span className="font-medium">Don't have an account?</span>
 							<Link className="font-medium" to="/hr/register">
