@@ -24,23 +24,23 @@ import CurrencyInput from 'app/shared/TextInput/CurrencyInput';
 import { Grid, TextField } from '@material-ui/core';
 import { TextFieldFormsy } from '@fuse/core/formsy';
 import SharedDropzone from 'app/shared/sharedDropZone';
-import { DateTimePicker } from '@material-ui/pickers';
+// import { DateTimePicker } from '@material-ui/pickers';
 
-const matchRole = (data, role) => {
-	const arr = [];
-	for (const i of data) {
-		if (i.role.name === role) {
-			arr.push(i);
-		}
-	}
-	return arr;
-};
+// const matchRole = (data, role) => {
+// 	const arr = [];
+// 	for (const i of data) {
+// 		if (i.role.name === role) {
+// 			arr.push(i);
+// 		}
+// 	}
+// 	return arr;
+// };
 
 function RequestSalaryAdvTab(props) {
 	const dispatch = useDispatch();
 
 	const [amount, setAmount] = useState('');
-	const [repaymentDate, setRepaymentDate] = useState('');
+	// const [repaymentDate, setRepaymentDate] = useState('');
 	const [fileInput, setFileInput] = useState("");
 
 	const [isFormValid, setIsFormValid] = useState(false);
