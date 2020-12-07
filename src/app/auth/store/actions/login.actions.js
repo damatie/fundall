@@ -18,42 +18,54 @@ export const LOGIN_LOADING = 'LOGIN_LOADING';
 
 
 const header = fetchHeaders();
-export function submitLogin(data) {	
+
+export function submitLogin(data, x) {
+	console.log(x)
 	return dispatch => {
 		dispatch({
 			type: LOGIN_LOADING
 		})
-		api.post('/auth/employee/login', data).then(({data: { success, message, token, data }}) => {
-			if(success) {
+		api.post(`/auth/${x || "employee"}/login`, data).then(({ data: { success, message, token, data } }) => {
+			if (success) {
 				Swal.fire({
-					title: 'Login',
+					title: 'Login Successful',
 					text: message,
 					icon: 'success',
 					timer: 3000,
 				});
 				api.defaults.headers.Authorization = `JWT ${token}`;
 				localStorage.setItem('jwt_access_token', JSON.stringify(token));
+
+				// const userState;
+
+				// if (!x) {
+
+				// 	return;
+				// }
+
 				const userState = {
-					role: data.role.name,
+					role: data?.role.name ?? x.toUpperCase(),
 					redirectUrl: '/employee/dashboard',
-					id: data.id,
+					id: data?.id,
 					data: {
-						displayName: `${data.firstName} ${data.lastName}`,
-						photoURL: data.profilePicture,
-						email: data.email,
+						displayName: `${data?.firstName} ${data?.lastName}`,
+						photoURL: data?.profilePicture,
+						email: data?.email,
 						shortcuts: ['loan_request', 'request_leave', 'blog_list', 'todo'],
-						department: data.department,
-						details: data.info
+						department: data?.department,
+						details: data?.info
 					}
 				};
 				localStorage.setItem('user_data', JSON.stringify(userState));
-				dispatch(getProfile({ id: data.id, token }));
+				dispatch(getProfile({ id: data?.id, token }));
 				dispatch(UserActions.setUserData(userState));
-				dispatch(getNotification(token));
+				// dispatch(getNotification(token));
+
 				return dispatch({
 					type: LOGIN_SUCCESS
 				});
 			} else {
+
 				Swal.fire({
 					title: 'Login',
 					text: message,
@@ -77,15 +89,14 @@ export function submitLogin(data) {
 				payload: error.response?.data.error || error.response?.data.message
 			});
 		});
-		
 	}
 }
 
-const getProfile = ({id, token,}) => {
+const getProfile = ({ id, token, }) => {
 	return dispatch => {
 		dispatch({
-      type: LOADING_EMPLOYEE_PROFILE
-    });
+			type: LOADING_EMPLOYEE_PROFILE
+		});
 		fetch(`${getBaseUrl()}/auth/employee/${id}`, {
 			headers: {
 				authorization: `JWT ${token}`
@@ -106,8 +117,8 @@ const getProfile = ({id, token,}) => {
 const getNotification = token => {
 	return dispatch => {
 		dispatch({
-      type: LOADING_NOTIFICATIONS
-    });
+			type: LOADING_NOTIFICATIONS
+		});
 		fetch(`${getBaseUrl()}/notification`, {
 			headers: {
 				authorization: `JWT ${token}`

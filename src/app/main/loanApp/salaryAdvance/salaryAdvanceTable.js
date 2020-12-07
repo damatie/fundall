@@ -30,25 +30,25 @@ const rows = [
 		align: 'left',
 		disablePadding: false,
 		label: 'Amout requested',
-    sort: true,
-    field: 'amount'
-  },
-  {
-		id: 'netSalary',
+		sort: true,
+		field: 'amount'
+	},
+	{
+		id: 'repaymentDate',
 		align: 'left',
 		disablePadding: false,
-		label: 'Net salary',
-    sort: true,
-    field: 'netSalary'
-  },
-  {
+		label: 'Repayment Date',
+		sort: true,
+		field: 'repaymentDate'
+	},
+	{
 		id: 'status',
 		align: 'left',
 		disablePadding: false,
 		label: 'status',
-    sort: true,
-    field: 'status'
-  },
+		sort: true,
+		field: 'status'
+	},
 ];
 
 const handleDelete = () => {
@@ -58,29 +58,34 @@ const handleDelete = () => {
 
 function SalaryAdvanceTable() {
 	const classes = useStyles();
-  const dispatch = useDispatch();
+	const dispatch = useDispatch();
 	const salaryAdvanceLog = useSelector(({ salaryAdvance }) => salaryAdvance.salaryAdvances);
 	const employeeList = useSelector(({ employeeList }) => employeeList.employeeList);
-	const [data, setData] = useState([]);
+	const [data, setData] = useState(salaryAdvanceLog?.log || []);
 	const [open, setOpen] = useState(false);
 	const [loanDetails, setLoanDetails] = useState({});
 
-  useEffect(() => {
+	useEffect(() => {
 		dispatch(Actions.getSalaryAdvance());
 		dispatch(employeeActions.getAllEmployee());
-  }, []);
+	}, []);
 
-  useEffect(() => {
-		if(salaryAdvanceLog) {
-			setData(salaryAdvanceLog.log)
+	useEffect(() => {
+		if (salaryAdvanceLog) {
+			setData(salaryAdvanceLog?.log);
+			console.log(salaryAdvanceLog)
 		}
 	}, [salaryAdvanceLog]);
 
 	const history = useHistory();
-	
+
 	const handleClick = n => {
-		if(n.status === 'pending') {
-			history.push(`/loan/request/salaryadvance_request/new/${n.id}`)
+		if (!n.status.toLowerCase() === 'pending') {
+			history.push({
+				pathname: `/loan/request/salaryadvance_request/new/${n.id}`,
+				state: ""
+			});
+
 		} else {
 			setLoanDetails(n);
 			setOpen(true);
@@ -89,8 +94,8 @@ function SalaryAdvanceTable() {
 
 	const handleClose = () => setOpen(false);
 
-	if(employeeList.length === 0) return <>Loading...</>
-  
+	if (employeeList.length === 0) return <>Loading...</>
+
 	return (
 		<>
 			<FusePageCarded
@@ -99,21 +104,16 @@ function SalaryAdvanceTable() {
 					header: 'min-h-72 h-72 sm:h-136 sm:min-h-136'
 				}}
 				header={<SalaryAdvanceHeader />}
-				content={<SharedTable data={data} rows={rows} handleClick={handleClick} handleDelete={handleDelete} type='default'/>}
+				content={<SharedTable data={salaryAdvanceLog?.log ?? []} rows={rows} handleClick={handleClick} handleDelete={handleDelete} type='default' />}
 				innerScroll
 			/>
 
-			<SharedModal open={open} handleClose={handleClose} title={'Loan Details'}>
+			<SharedModal open={open} handleClose={handleClose} title={'Salary Advance Request'}>
 				<table className={clsx(classes.table, 'w-full text-justify')}>
 					<tbody>
 						<tr className="type">
 							<th>Amount Requested</th>
 							<td>{formatToNaira(loanDetails.amount)}</td>
-						</tr>
-
-						<tr className="size">
-							<th>Net Salary</th>
-							<td>{formatToNaira(loanDetails.netSalary)}</td>
 						</tr>
 
 						<tr className="created">
@@ -122,27 +122,32 @@ function SalaryAdvanceTable() {
 						</tr>
 
 						<tr className="created">
-							<th>Director of support service</th>
-							<td>{`${getEmployeeName(employeeList, loanDetails.supportDirector)} | (${(loanDetails.supportDirectorApprovalDate) ? moment(loanDetails.supportDirectorApprovalDate).format('LL') : 'Not approved yet' })`}</td>
+							<th>Repayment Date</th>
+							<td>{loanDetails.repaymentDate}</td>
+						</tr>
+
+						<tr className="created">
+							<th>Line Manager</th>
+							<td>{`${getEmployeeName(employeeList, loanDetails.lineManager)} | (${(loanDetails.lineManagerApprovalDate) ? moment(loanDetails.lineManagerApprovalDate).format('LL') : 'Not approved yet'})`}</td>
 						</tr>
 
 						<tr className="created">
 							<th>Finance Manager</th>
-							<td>{`${getEmployeeName(employeeList, loanDetails.financeManager)} | (${(loanDetails.financeManagerApprovalDate) ? moment(loanDetails.financeManagerApprovalDate).format('LL') : 'Not approved yet' })`}</td>
+							<td>{`${getEmployeeName(employeeList, loanDetails.financeManager)} | (${(loanDetails.financeManagerApprovalDate) ? moment(loanDetails.financeManagerApprovalDate).format('LL') : 'Not approved yet'})`}</td>
 						</tr>
 
-						{loanDetails.status === 'rejected' ? 
-						<tr className="created">
-							<th>Comment</th>
-							<td><div style={{
-								wordWrap: "break-word",
-								wordBreak: "break-all"
-							}}>{loanDetails.comment}</div></td>
-						</tr> : <></>}
+						{loanDetails.status === 'rejected' ?
+							<tr className="created">
+								<th>Comment</th>
+								<td><div style={{
+									wordWrap: "break-word",
+									wordBreak: "break-all"
+								}}>{loanDetails.comment}</div></td>
+							</tr> : <></>}
 
 						<tr className="created">
 							<th>Status</th>
-							<td><LoanStatus status={loanDetails.status}/></td>
+							<td><LoanStatus status={loanDetails.status} /></td>
 						</tr>
 					</tbody>
 				</table>

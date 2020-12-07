@@ -12,6 +12,8 @@ import React, { useEffect, useState } from 'react';
 import { withRouter, useParams } from 'react-router-dom';
 import SharedTableHead from 'app/shared/sharedTableHead';
 import moment from 'moment';
+import { formatToNaira } from 'utils/formatNumber';
+import LoanStatus from 'app/main/loanApp/LoanStatus';
 
 function SharedTable(props) {
 	const [selected, setSelected] = useState([]);
@@ -43,7 +45,7 @@ function SharedTable(props) {
 		}
 		setSelected([]);
 	}
-  
+
 	function handleCheck(event, id) {
 		const selectedIndex = selected.indexOf(id);
 		let newSelected = [];
@@ -73,12 +75,12 @@ function SharedTable(props) {
 		<div className="w-full flex flex-col">
 			<FuseScrollbars className="flex-grow overflow-x-auto">
 				<Table className="min-w-xl" aria-labelledby="tableTitle">
-				  <SharedTableHead
+					<SharedTableHead
 						numSelected={selected.length}
 						order={order}
 						onSelectAllClick={handleSelectAllClick}
 						onRequestSort={handleRequestSort}
-            rowCount={props.data.length}
+						rowCount={props.data.length}
 						rows={props.rows}
 						handleDelete={props.handleDelete}
 						success={true}
@@ -114,8 +116,8 @@ function SharedTable(props) {
 										selected={isSelected}
 										onClick={event => props.handleClick(n)}
 									>
-                    <TableCells type={props.type} data={n} rows={props.rows} />
-                    {/* <TableCell component="th" scope="row" align="right">
+										<TableCells type={props.type} data={n} rows={props.rows} />
+										{/* <TableCell component="th" scope="row" align="right">
 											{n.status === 'approved' ? (
 												<Icon className="text-green text-20">check_circle</Icon>
 											) : (
@@ -136,12 +138,8 @@ function SharedTable(props) {
 				count={props.data.length}
 				rowsPerPage={rowsPerPage}
 				page={page}
-				backIconButtonProps={{
-					'aria-label': 'Previous Page'
-				}}
-				nextIconButtonProps={{
-					'aria-label': 'Next Page'
-				}}
+				backIconButtonProps={{ 'aria-label': 'Previous Page' }}
+				nextIconButtonProps={{ 'aria-label': 'Next Page' }}
 				onChangePage={handleChangePage}
 				onChangeRowsPerPage={handleChangeRowsPerPage}
 			/>
@@ -151,40 +149,52 @@ function SharedTable(props) {
 
 // Table cell
 const TableCells = (props) => {
-  switch(props.type) {
-    case 'default': {
-      return (
-        <>
-          <TableCell component="th" scope="row" align='left'>
-                     
-          </TableCell>
-          {props.rows.map(item => (
-						<>
-            {
-							item.type === 'date' ?
-							<TableCell component="th" scope="row" align={item.align} key={item.id}>
-								{moment(props.data[item.field]).format('LL')}   
-							</TableCell>
-							:
-							<TableCell component="th" scope="row" align={item.align} key={item.id}>
-								{props.data[item.field]}   
-            	</TableCell>
-						}
-						</>
-          ))}
-        </>
-      );
-    }
-    default: {
-      // return <></>
-      break;
-    }
-  };
+	switch (props.type) {
+		case 'default': {
+			return (
+				<>
+					<TableCell component="th" scope="row" align='left'>
 
-  return (
-    <>
-    </>
-  );
+					</TableCell>
+					{
+						props.rows.map(item => (
+							<>
+								{
+									item.type === 'date' ?
+										<TableCell component="th" scope="row" align={item.align} key={item.id}>
+											{moment(props.data[item.field]).format('LL')}
+										</TableCell>
+										:
+										item.id === 'amount' ?
+											<TableCell component="th" scope="row" align={item.align} key={item.id}>
+												{formatToNaira(props.data[item.field])}
+											</TableCell>
+											:
+											item.id === 'status' ?
+												<TableCell component="th" scope="row" align={item.align} key={item.id}>
+													<LoanStatus status={props.data.status} />
+												</TableCell>
+												:
+												<TableCell component="th" scope="row" align={item.align} key={item.id}>
+													{props.data[item.field]}
+												</TableCell>
+								}
+							</>
+						))
+					}
+				</>
+			);
+		}
+		default: {
+			// return <></>
+			break;
+		}
+	};
+
+	return (
+		<>
+		</>
+	);
 };
 
 export default withRouter(SharedTable);

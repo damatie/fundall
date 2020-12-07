@@ -22,14 +22,14 @@ import SharedDropzone from 'app/shared/sharedDropZone';
 import { useAuth } from 'app/hooks/useAuth';
 
 export default function FileModal() {
-    const dispatch = useDispatch();
-    const categories = useSelector(({ filesByCategories }) => filesByCategories.categories.categories);
-    const loading = useSelector(({ filesByCategories }) => filesByCategories.files.loading);
-    const success = useSelector(({ filesByCategories }) => filesByCategories.files.success);
-    const [open, setOpen] = React.useState(false);
-    const [isFormValid, setIsFormValid] = useState(true);
-    const [file, setFile] = useState('');
-    const userData = useAuth().getUserData;
+  const dispatch = useDispatch();
+  const categories = useSelector(({ filesByCategories }) => filesByCategories.categories.categories);
+  const loading = useSelector(({ filesByCategories }) => filesByCategories.files.loading);
+  const success = useSelector(({ filesByCategories }) => filesByCategories.files.success);
+  const [open, setOpen] = React.useState(false);
+  const [isFormValid, setIsFormValid] = useState(true);
+  const [file, setFile] = useState('');
+  const userData = useAuth().getUserData;
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -39,93 +39,93 @@ export default function FileModal() {
     setOpen(false);
   };
 
-	const formRef = useRef(null);
-    function disableButton() {
-		setIsFormValid(false);
-	}
+  const formRef = useRef(null);
+  function disableButton() {
+    setIsFormValid(false);
+  }
 
-	function enableButton() {
-		setIsFormValid(true);
-	}
+  function enableButton() {
+    setIsFormValid(true);
+  }
 
-	function handleSubmit(model) {
+  function handleSubmit(model) {
     console.log(model);
     console.log(file[0]);
     dispatch(Actions.createDocument(model, file[0]));
     handleClose();
   }
 
-  function fileChange(event){
-    setFile({"file": event.target.files[0]});
+  function fileChange(event) {
+    setFile({ "file": event.target.files[0] });
   }
 
   useEffect(() => {
     dispatch(Actions.getCategories());
-  },[dispatch] )
+  }, [dispatch])
 
   return (
     <div>
-        {userData.role.toLowerCase() === 'hr' ?  
+      {userData.role.toLowerCase() === 'hr' ?
         <Fab
-            color="secondary"
-            aria-label="add"
-            className="absolute bottom-0 ltr:left-0 rtl:right-0 mx-16 -mb-28 z-999"
-            onClick={handleClickOpen}
+          color="secondary"
+          aria-label="add"
+          className="absolute bottom-0 ltr:left-0 rtl:right-0 mx-16 -mb-28 z-999"
+          onClick={handleClickOpen}
         >
-            <Icon>add</Icon>
+          <Icon>add</Icon>
         </Fab> : <></>}
-        <Dialog open={open} onClose={handleClose} fullWidth maxWidth={'sm'} aria-labelledby="form-dialog-title">
-          <DialogTitle id="form-dialog-title">Add New Document</DialogTitle>
-            <DialogContent>
-              <div className="w-full">
-                <Formsy
-                  onValidSubmit={handleSubmit}
-                  onValid={enableButton}
-                  onInvalid={disableButton}
-                  ref={formRef}
-                  className="flex flex-col justify-center w-full"
-                >
+      <Dialog open={open} onClose={handleClose} fullWidth maxWidth={'sm'} aria-labelledby="form-dialog-title">
+        <DialogTitle id="form-dialog-title">Add New Document</DialogTitle>
+        <DialogContent>
+          <div className="w-full">
+            <Formsy
+              onValidSubmit={handleSubmit}
+              onValid={enableButton}
+              onInvalid={disableButton}
+              ref={formRef}
+              className="flex flex-col justify-center w-full"
+            >
 
-                  <TextFieldFormsy
-                    className="mb-16"
-                    type="text"
-                    name="docName"
-                    label="Document Name"
-                    validations={{
-                      minLength: 1
-                    }}
-                    required
-                    validationErrors={{
-                      minLength: 'Min character length is 1'
-                    }}
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <Icon className="text-20" color="action">
-                            folder
+              <TextFieldFormsy
+                className="mb-16"
+                type="text"
+                name="docName"
+                label="Document Name"
+                validations={{
+                  minLength: 1
+                }}
+                required
+                validationErrors={{
+                  minLength: 'Min character length is 1'
+                }}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <Icon className="text-20" color="action">
+                        folder
                           </Icon>
-                        </InputAdornment>
-                      )
-                    }}
-                    variant="outlined"
-                    required
-                  />
+                    </InputAdornment>
+                  )
+                }}
+                variant="outlined"
+                required
+              />
 
-                  <SelectFormsy
-                    className="my-16"
-                    name="documentCategoryId"
-                    label="Document Category"
-                    value="none"
-                    validationError="requried"
-                    variant="outlined"
-                    required
-                  >
-                    <MenuItem value="none"></MenuItem>
-                    {categories.map(item => (
-                      <MenuItem value={item.id} key={item.id}>{item.categoryName}</MenuItem>
-                    ))}
-                  </SelectFormsy>
-                  {/* <TextField
+              <SelectFormsy
+                className="my-16"
+                name="documentCategoryId"
+                label="Document Category"
+                value="none"
+                validationError="requried"
+                variant="outlined"
+                required
+              >
+                <MenuItem value="none"></MenuItem>
+                {categories.map(item => (
+                  <MenuItem value={item.id} key={item.id}>{item.categoryName}</MenuItem>
+                ))}
+              </SelectFormsy>
+              {/* <TextField
                     className="mb-16"
                     type="file"
                     name="docFile"
@@ -144,19 +144,19 @@ export default function FileModal() {
                     required
                     onChange={fileChange}
                   /> */}
-                  <SharedDropzone name={"Document File"} allowedTypes={'image/*, application/*'} setValue={setFile}/>
-                  <DialogActions>
-                    <Grid container spacing={2}>
-                        <Grid item xs>
-                            <ProgressBtn  success={success} loading={loading} content='Upload' disable={!isFormValid}/>
-                        </Grid>
-                    </Grid>
-                  </DialogActions>
-                      <br></br>
-                </Formsy>
-		          </div>
-            </DialogContent>
-        </Dialog>
+              <SharedDropzone name={"Document File"} allowedTypes={'image/*, application/*'} setValue={setFile} />
+              <DialogActions>
+                <Grid container spacing={2}>
+                  <Grid item xs>
+                    <ProgressBtn success={success} loading={loading} content='Upload' disable={!isFormValid} />
+                  </Grid>
+                </Grid>
+              </DialogActions>
+              <br></br>
+            </Formsy>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

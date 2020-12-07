@@ -17,7 +17,7 @@ export const getNotifications = () => {
       ...headers.getRegHeader()
     }).then(res => handleResponse(res)).then(
       data => {
-        if(data.success) {
+        if (data.success) {
           dispatch({
             type: GET_NOTIFICATIONS,
             payload: desSort(data.data)
