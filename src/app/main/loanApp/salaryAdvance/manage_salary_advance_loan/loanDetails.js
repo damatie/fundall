@@ -78,9 +78,9 @@ function LoanDetails(props) {
 								className="normal-case flex items-center"
 								component={Link}
 								role="button"
-								// to="/hr/business_unit/"
+								to="/loan/salary_advance/list"
 								color="inherit"
-								onClick={e => history.goBack()}
+								// onClick={e => history.goBack()}
 							>
 								<Icon className="text-20">
 									{theme.direction === 'ltr' ? 'arrow_back' : 'arrow_forward'}

@@ -86,8 +86,8 @@ function SalaryAdvance(props) {
 								className="normal-case flex items-center sm:mb-12"
 								component={Link}
 								role="button"
-								onClick={() => history.goBack()}
-								// to="/loan/request/salaryadvance_request/list"
+								// onClick={() => history.goBack()}
+								to="/loan/request/salaryadvance_request/list"
 								color="inherit"
 							>
 								<Icon className="text-20">
