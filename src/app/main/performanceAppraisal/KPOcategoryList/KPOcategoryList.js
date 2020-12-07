@@ -24,7 +24,7 @@ const KPOcategoryList = () => {
       content={
         <div className='p-24'>
           {
-            loading ? (
+            false ? (
               <Skeleton variant="rect" width='100%' height={400} animation="wave"/>
             ) : (
               <>
