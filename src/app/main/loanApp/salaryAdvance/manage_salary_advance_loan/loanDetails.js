@@ -1,25 +1,25 @@
 import FuseAnimate from '@fuse/core/FuseAnimate';
 import FusePageSimple from '@fuse/core/FusePageSimple';
 import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
+// import Button from '@material-ui/core/Button';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import Typography from '@material-ui/core/Typography';
 import React, { useState } from 'react';
 import { useEffect } from 'react';
-import { useParams, Link, useHistory, Redirect } from 'react-router-dom';
+import { useParams, Link, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Icon from '@material-ui/core/Icon';
 import { fetchHeaders } from 'app/shared/fetchHeaders';
-import ProgressBtn from 'app/shared/progressBtn';
-import swal from 'sweetalert2';
+// import ProgressBtn from 'app/shared/progressBtn';
+// import swal from 'sweetalert2';
 import withReducer from 'app/store/withReducer';
-import { useDeepCompareEffectNoCheck } from '@fuse/hooks/useDeepCompareEffect';
+// import { useDeepCompareEffectNoCheck } from '@fuse/hooks/useDeepCompareEffect';
 import SALoanDetailsTab from '../../tabs/salaryAdvanceLoanDetailsTab';
 import reducers from '../../store/reducers';
 import * as Actions from '../../store/actions';
-import SalaryAdvanceActionBtn from '../salaryAdvanceActionBtn';
+// import SalaryAdvanceActionBtn from '../salaryAdvanceActionBtn';
 
 
 const useStyles = makeStyles(theme => ({
@@ -37,13 +37,13 @@ function LoanDetails(props) {
 	const header = fetchHeaders();
 	const classes = useStyles();
 
-	const salaryAdvanceDetails = useSelector(({salaryAdvanceDetails}) => salaryAdvanceDetails.salaryAdvances);
+	const salaryAdvanceDetails = useSelector(({ salaryAdvanceDetails }) => salaryAdvanceDetails.salaryAdvances);
 
 	const [selectedTab, setSelectedTab] = useState(0);
 
-	const [value, setValue] = useState('')
+	// const [value, setValue] = useState('')
 
-	const user = JSON.parse(localStorage.getItem('user_data'));
+	// const user = JSON.parse(localStorage.getItem('user_data'));
 
 	const { id } = useParams();
 
@@ -62,7 +62,7 @@ function LoanDetails(props) {
 	}, []);
 
 
-	if(Object.entries(salaryAdvanceDetails.details).length === 0) return <>Loading...</>
+	if (Object.entries(salaryAdvanceDetails.details).length === 0) return <>Loading...</>
 
 	return (
 		<FusePageSimple
@@ -72,43 +72,43 @@ function LoanDetails(props) {
 			}}
 			header={
 				<>
-				<div className="flex absolute m-24">
-							<FuseAnimate animation="transition.slideRightIn" delay={300}>
-								<Typography
-									className="normal-case flex items-center"
-									component={Link}
-									role="button"
-									// to="/hr/business_unit/"
-									color="inherit"
-									onClick={e => history.goBack()}
-								>
-									<Icon className="text-20">
-										{theme.direction === 'ltr' ? 'arrow_back' : 'arrow_forward'}
-									</Icon>
-									<span className="mx-4">Back</span>
-								</Typography>
-							</FuseAnimate>
-						</div>
-				<div className="p-24 flex flex-1 flex-col items-center justify-center md:flex-row md:items-end">
-						
-					<div className="flex flex-1 flex-col items-center justify-center md:flex-row md:items-center md:justify-start">
-						<FuseAnimate animation="transition.expandIn" delay={300}>
-							<Avatar className="w-96 h-96" src={salaryAdvanceDetails.details.employee.profilePicture} />
-						</FuseAnimate>
-						<div>
-						<FuseAnimate animation="transition.slideLeftIn" delay={300}>
-							<Typography className="md:mx-24" variant="h4" color="inherit">
-								{`${salaryAdvanceDetails.details.employee.firstName} ${salaryAdvanceDetails.details.employee.lastName}`}
+					<div className="flex absolute m-24">
+						<FuseAnimate animation="transition.slideRightIn" delay={300}>
+							<Typography
+								className="normal-case flex items-center"
+								component={Link}
+								role="button"
+								to="/loan/salary_advance/list"
+								color="inherit"
+								// onClick={e => history.goBack()}
+							>
+								<Icon className="text-20">
+									{theme.direction === 'ltr' ? 'arrow_back' : 'arrow_forward'}
+								</Icon>
+								<span className="mx-4">Back</span>
 							</Typography>
-							
 						</FuseAnimate>
-						<Typography className="md:mx-24" variant='subtitle1' color="inherit">
-								{salaryAdvanceDetails.details.employee.email}
-						</Typography>
-						</div>
-						
 					</div>
-				</div>
+					<div className="p-24 flex flex-1 flex-col items-center justify-center md:flex-row md:items-end">
+
+						<div className="flex flex-1 flex-col items-center justify-center md:flex-row md:items-center md:justify-start">
+							<FuseAnimate animation="transition.expandIn" delay={300}>
+								<Avatar className="w-96 h-96" src={salaryAdvanceDetails?.details?.employee?.profilePicture} />
+							</FuseAnimate>
+							<div>
+								<FuseAnimate animation="transition.slideLeftIn" delay={300}>
+									<Typography className="md:mx-24" variant="h4" color="inherit">
+										{`${salaryAdvanceDetails?.details?.data.salaryAdvanceData?.name}`}
+									</Typography>
+
+								</FuseAnimate>
+								<Typography className="md:mx-24" variant='subtitle1' color="inherit">
+									{salaryAdvanceDetails.details?.data.employeeInfo?.email}
+								</Typography>
+							</div>
+
+						</div>
+					</div>
 				</>
 			}
 			contentToolbar={
@@ -127,7 +127,7 @@ function LoanDetails(props) {
 						classes={{
 							root: 'h-64'
 						}}
-						label="Loan details"
+						label="Request Details"
 					/>
 					{/* {loan.status === 'open' ? <Tab
 						classes={{

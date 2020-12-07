@@ -19,10 +19,11 @@ export const getSalaryAdvance = () => {
       ...headers.getRegHeader()
     }).then(res => res.json()).then(
       data => {
-        if(data.success) {
+        if (data.success) {
+          console.log(data.data.rows);
           dispatch({
             type: GET_SALARY_ADVANCE,
-            payload: data.salaryAdvanceData
+            payload: data.data.rows
           })
         } else {
           dispatch({
@@ -48,12 +49,12 @@ export const getSalaryAdvanceDetails = id => {
     }).then(res => handleResponse(res)).then(
       data => {
         console.log(data);
-        if(data.success) {
+        if (data.success) {
           dispatch({
             type: GET_SALARY_ADVANCE_DETAILS,
             payload: {
               ...data,
-              
+
             }
           })
         }

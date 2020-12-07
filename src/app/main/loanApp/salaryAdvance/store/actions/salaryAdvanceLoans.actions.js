@@ -17,7 +17,7 @@ export const LOADING_REVIEWED_SA = 'LOANDING REVIEWED SA';
 
 const formateData = (data) => {
   const arr = [];
-  for(let i of data) {
+  for (let i of data) {
     arr.push(
       {
         loanId: i.id,
@@ -31,8 +31,8 @@ const formateData = (data) => {
 
 const pendingLoans = (data) => {
   const arr = [];
-  for(let i of data) {
-    if(i.status === 'pending') {
+  for (let i of data) {
+    if (i.status === 'pending') {
       arr.push(
         {
           loanId: i.id,
@@ -41,14 +41,14 @@ const pendingLoans = (data) => {
         }
       )
     }
-    
+
   }
   return desSort(arr);
 }
 
 const formateDatas = data => {
   const arr = [];
-  for(let i of data) {
+  for (let i of data) {
     arr.push(
       {
         loanId: i.salaryAdvance.id,
@@ -71,10 +71,14 @@ export const getPendingSA = () => {
       ...headers.getRegHeader(),
     }).then(res => handleResponse(res)).then(
       data => {
-        if(data.success) {
+        let response = data.data;
+        response.splice(0, 1);
+
+        // console.log(data, response)
+        if (data.success) {
           dispatch({
             type: GET_PENDING_SA,
-            payload: pendingLoans(data.loanData),
+            payload: formateDatas(response),
           });
         }
       }
@@ -87,14 +91,17 @@ export const getReviewedSA = () => {
     dispatch({
       type: LOADING_REVIEWED_SA
     });
-    fetch(`${getBaseUrl()}/salary-advance/all/reviewed`, {
+    fetch(`${getBaseUrl()}/salary-advance/all/reviewed1?offset=0&limit=50`, {
       ...headers.getRegHeader(),
     }).then(res => handleResponse(res)).then(
       data => {
-        if(data.success) {
+        let response = data.data;
+        response.splice(0, 1);
+        // console.log(data)
+        if (data.success) {
           dispatch({
             type: GET_REVIEWED_SA,
-            payload: formateDatas(data.data),
+            payload: formateDatas(response),
           })
         }
       }
@@ -107,12 +114,12 @@ export const getApprovedSA = () => {
     dispatch({
       type: LOADING_APPROVED_SA
     });
-    fetch(`${getBaseUrl()}/salary-advance/all/approved`, {
+    fetch(`${getBaseUrl()}/salary-advance/all/reviewed2?offset=0&limit=50`, {
       ...headers.getRegHeader(),
     }).then(res => handleResponse(res)).then(
       data => {
         console.log(formateDatas(data.data))
-        if(data.success) {
+        if (data.success) {
           dispatch({
             type: GET_APPROVED_SA,
             payload: formateDatas(data.data),
@@ -132,7 +139,7 @@ export const getOpenSA = () => {
       ...headers.getRegHeader(),
     }).then(res => handleResponse(res)).then(
       data => {
-        if(data.success) {
+        if (data.success) {
           dispatch({
             type: GET_OPEN_SA,
             payload: formateDatas(data.data),
@@ -152,7 +159,7 @@ export const getClosedSA = () => {
       ...headers.getRegHeader(),
     }).then(res => handleResponse(res)).then(
       data => {
-        if(data.success) {
+        if (data.success) {
           dispatch({
             type: GET_CLOSED_SA,
             payload: formateDatas(data.data),
@@ -162,3 +169,5 @@ export const getClosedSA = () => {
     ).catch(e => console.error(e));
   }
 };
+
+
