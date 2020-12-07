@@ -91,14 +91,17 @@ export const getReviewedSA = () => {
     dispatch({
       type: LOADING_REVIEWED_SA
     });
-    fetch(`${getBaseUrl()}/salary-advance/all/reviewed`, {
+    fetch(`${getBaseUrl()}/salary-advance/all/reviewed1?offset=0&limit=50`, {
       ...headers.getRegHeader(),
     }).then(res => handleResponse(res)).then(
       data => {
+        let response = data.data;
+        response.splice(0, 1);
+        // console.log(data)
         if (data.success) {
           dispatch({
             type: GET_REVIEWED_SA,
-            payload: formateDatas(data.data),
+            payload: formateDatas(response),
           })
         }
       }
@@ -111,7 +114,7 @@ export const getApprovedSA = () => {
     dispatch({
       type: LOADING_APPROVED_SA
     });
-    fetch(`${getBaseUrl()}/salary-advance/all/approved`, {
+    fetch(`${getBaseUrl()}/salary-advance/all/reviewed2?offset=0&limit=50`, {
       ...headers.getRegHeader(),
     }).then(res => handleResponse(res)).then(
       data => {
