@@ -36,26 +36,30 @@ export function submitLogin(data, x) {
 				api.defaults.headers.Authorization = `JWT ${token}`;
 				localStorage.setItem('jwt_access_token', JSON.stringify(token));
 
-				if (x) {
-					return;
-				}
+				// const userState;
+
+				// if (!x) {
+
+				// 	return;
+				// }
+
 				const userState = {
-					role: data.role.name,
+					role: data?.role.name ?? x.toUpperCase(),
 					redirectUrl: '/employee/dashboard',
-					id: data.id,
+					id: data?.id,
 					data: {
-						displayName: `${data.firstName} ${data.lastName}`,
-						photoURL: data.profilePicture,
-						email: data.email,
+						displayName: `${data?.firstName} ${data?.lastName}`,
+						photoURL: data?.profilePicture,
+						email: data?.email,
 						shortcuts: ['loan_request', 'request_leave', 'blog_list', 'todo'],
-						department: data.department,
-						details: data.info
+						department: data?.department,
+						details: data?.info
 					}
 				};
 				localStorage.setItem('user_data', JSON.stringify(userState));
-				dispatch(getProfile({ id: data.id, token }));
+				dispatch(getProfile({ id: data?.id, token }));
 				dispatch(UserActions.setUserData(userState));
-				dispatch(getNotification(token));
+				// dispatch(getNotification(token));
 
 				return dispatch({
 					type: LOGIN_SUCCESS
