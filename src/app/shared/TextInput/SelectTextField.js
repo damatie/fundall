@@ -19,9 +19,10 @@ const SelectTextField = (props) => {
     size,
     className,
     refs,
+    register
   } = props;
   return (
-    <FormControl variant={variant || 'outlined'} size={size || 'medium'} className={`w-full ${className}`}>
+      <FormControl variant={variant || 'outlined'} size={size || 'medium'} className={`w-full my-10`}>
       <InputLabel error={error} id="demo-simple-select-outlined-label">{label}</InputLabel>
       <Select
         labelId={`${name}-id`}
@@ -30,11 +31,12 @@ const SelectTextField = (props) => {
         label={label}
         variant={variant || 'outlined'}
         error={!!error}
-        ref={refs}
+        ref={register}
         name={name}
         onChange={onChange}
         defaultValue={value}
         onBlur={onBlur}
+        inputRef={register}
         {...props}
       >
         {children}

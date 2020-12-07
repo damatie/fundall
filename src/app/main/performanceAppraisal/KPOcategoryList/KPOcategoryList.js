@@ -21,10 +21,10 @@ const KPOcategoryList = () => {
         onClick: handleOpen('new')
       }}
       content={
-        <>
+        <div className='p-24'>
           <KPOcategoryTable/>
           <KPOcategoryDialog />
-        </>
+        </div>
       }
     />
   );

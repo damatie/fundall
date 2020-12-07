@@ -1,6 +1,49 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { OPEN_kPO_CATEGORY_LIST_DIALOG, CLOSE_KPO_CATEGORY_LIST_DIALOG, getCategory } from '../store/actions';
+import { useForm } from 'react-hook-form';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+import errorMssg from '../../../../../utils/errorMsg';
+
+const schema = yup.object().shape({
+  name: yup.string(
+    errorMssg({
+      name: 'Name',
+      type: 'string',
+    })
+  )
+    .required(
+      errorMssg({
+        name: 'Name',
+        type: 'required',
+      })
+    ),
+  description: yup.string(
+    errorMssg({
+      name: 'Description',
+      type: 'string',
+    })
+  )
+    .required(
+      errorMssg({
+        name: 'Description',
+        type: 'required',
+      })
+    ),
+  status: yup.string(
+    errorMssg({
+      name: 'Status',
+      type: 'string',
+    })
+  )
+    .required(
+      errorMssg({
+        name: 'Status',
+        type: 'required',
+      })
+    ),
+})
 
 const data = [
   {
@@ -49,6 +92,17 @@ const useKPOcategoryList = () => {
   const dispatch = useDispatch();
   const [kpoCategoryList] = React.useState(data);
 
+  const {
+    errors,
+    register,
+    handleSubmit,
+    control
+  } = useForm({
+    mode: 'onBlur',
+    resolver: yupResolver(schema),
+    defaultValues: category || {}
+  })
+
   const { open, category, title, type } = useSelector(state => state.kpoCategory)
 
   const handleOpen = (type) => () => {
@@ -76,6 +130,20 @@ const useKPOcategoryList = () => {
       }
     });
     dispatch(getCategory(data));
+  };
+
+  const onSubmit = (model) => {
+    switch (type) {
+      case 'new':
+        console.log(model, type);
+        break;
+      case 'update':
+        console.log(model, type);
+        break;
+      default: {
+        return model;
+      }
+    }
   }
 
   return {
@@ -86,7 +154,12 @@ const useKPOcategoryList = () => {
     open,
     handleGetCategory,
     category,
-    type
+    type,
+    handleSubmit,
+    onSubmit,
+    register,
+    errors,
+    control
   };
 };
 
