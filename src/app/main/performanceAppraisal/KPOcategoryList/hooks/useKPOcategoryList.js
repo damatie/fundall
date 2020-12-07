@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { OPEN_kPO_CATEGORY_LIST_DIALOG, CLOSE_KPO_CATEGORY_LIST_DIALOG, getCategory } from '../store/actions';
+import { OPEN_kPO_CATEGORY_LIST_DIALOG, CLOSE_KPO_CATEGORY_LIST_DIALOG, getCategory, getAllCategory, updateKpoCategory, deleteKpoCategory, addKpoCategory } from '../store/actions';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -45,7 +45,7 @@ const schema = yup.object().shape({
     ),
 })
 
-const data = [
+const items = [
   {
     id: 1,
     name: 'Organizational Integrity',
@@ -90,7 +90,7 @@ const data = [
 
 const useKPOcategoryList = () => {
   const dispatch = useDispatch();
-  const [kpoCategoryList] = React.useState(data);
+  const [kpoCategoryList] = React.useState(items);
 
   const {
     errors,
@@ -103,7 +103,11 @@ const useKPOcategoryList = () => {
     defaultValues: category || {}
   })
 
-  const { open, category, title, type } = useSelector(state => state.kpoCategory)
+  const { open, category, title, type, data, loading } = useSelector(state => state.kpoCategory)
+
+  React.useEffect(() => {
+    dispatch(getAllCategory());
+  }, []);
 
   const handleOpen = (type) => () => {
     dispatch({
@@ -135,16 +139,24 @@ const useKPOcategoryList = () => {
   const onSubmit = (model) => {
     switch (type) {
       case 'new':
-        console.log(model, type);
+        dispatch(addKpoCategory(model))
         break;
       case 'update':
         console.log(model, type);
+        dispatch(updateKpoCategory({
+          id: category?.id,
+          payload: model
+        }))
         break;
       default: {
         return model;
       }
     }
-  }
+  };
+
+  const handleDeleteKpoCategory = (id) => {
+    dispatch(deleteKpoCategory(id));
+  };
 
   return {
     kpoCategoryList,
@@ -159,7 +171,9 @@ const useKPOcategoryList = () => {
     onSubmit,
     register,
     errors,
-    control
+    control,
+    handleDeleteKpoCategory,
+    loading
   };
 };
 
