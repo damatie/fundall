@@ -4,7 +4,7 @@ import React from 'react';
 import CreateEmployeeKpo from './components/CreateEmployeeKpo';
 import EmployeeKpoListTable from './components/EmployeeKpoListTable';
 import useKpoList from './hooks/useKpoList';
-import reducer from './store/reducers/kpoList.reducers';
+import reducer from './store/reducers';
 import Skeleton from '@material-ui/lab/Skeleton';
 
 const EmployeeKpoList = () => {
@@ -37,4 +37,4 @@ const EmployeeKpoList = () => {
   );
 };
 
-export default withReducer('employeeKpoList', reducer)(EmployeeKpoList);
+export default withReducer('kpo', reducer)(EmployeeKpoList);

@@ -5,38 +5,54 @@ import SelectTextField from 'app/shared/TextInput/SelectTextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import SharedButton from 'app/shared/button/SharedButton';
 import useKpoContentList from '../hooks/useKpoContent';
+import { Controller } from 'react-hook-form';
 
 const CreateKpoContent = () => {
-  const { open, handleCloseModal } = useKpoContentList();
+  const { open, handleCloseModal, register, errors, handleSubmit, onSubmit, control } = useKpoContentList();
   return (
     <SharedModal
       title='Add KPO Content'
       open={open}
       handleClose={handleCloseModal}
     >
-      <form>
-        <SelectTextField
-          name='kpoCategory'
-          label='KPO Category'
-          className='my-10'
-        >
-          <MenuItem value="Active">
-            Office Admin
-          </MenuItem>
-          <MenuItem value="Inactive">
-            Dev Ops
-          </MenuItem>
-        </SelectTextField>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Controller
+          control={control}
+          name='kpoCategoryId'
+          as={
+            <SelectTextField
+              name='kpoCategory'
+              label='KPO Category'
+              className='my-10'
+              error={errors.kpoCategoryId}
+              message={errors.kpoCategoryId?.message}
+            >
+              <MenuItem value="Active">
+                Office Admin
+              </MenuItem>
+              <MenuItem value="Inactive">
+                Dev Ops
+              </MenuItem>
+            </SelectTextField>
+          }
+        />
+        
         <Input
-          name='description'
+          name='kpoDescription'
           label='Description'
           className='my-16'
           multiline
+          error={errors.kpoDescription}
+          message={errors.kpoDescription?.message}
+          refs={register}
         />
         <Input
           className='my-16'
           name='target'
           label='Target'
+          error={errors.target}
+          message={errors.target?.message}
+          refs={register}
         />
         <SharedButton
           variant='contained'

@@ -4,33 +4,53 @@ import Input from 'app/shared/TextInput/Input';
 import SelectTextField from 'app/shared/TextInput/SelectTextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import SharedButton from 'app/shared/button/SharedButton';
+import useKpoContentList from '../hooks/useKpoContent';
+import { Controller } from 'react-hook-form';
 
 const EditEmployeeKpoContent = () => {
+  const {
+    register, errors, handleSubmit, onSubmit, control
+  } = useKpoContentList();
   return (
     <Paper variant="outlined" className='w-1/2 flex flex-col mx-auto p-20'>
-      <form>
-        <SelectTextField
-          name='kpoCategory'
-          label='Kpo Category'
-          className='my-10'
-        >
-          <MenuItem value="Active">
-            Office Admin
-          </MenuItem>
-          <MenuItem value="Inactive">
-            Dev Ops
-          </MenuItem>
-        </SelectTextField>
+      <form onSubmit={handleSubmit(onSubmit)}>
+      <Controller
+          control={control}
+          name='kpoCategoryId'
+          as={
+            <SelectTextField
+              name='kpoCategoryId'
+              label='KPO Category'
+              className='my-10'
+              error={errors.kpoCategoryId}
+              message={errors.kpoCategoryId?.message}
+            >
+              <MenuItem value="Active">
+                Office Admin
+              </MenuItem>
+              <MenuItem value="Inactive">
+                Dev Ops
+              </MenuItem>
+            </SelectTextField>
+          }
+        />
+        
         <Input
-          name='kpoYear'
+          name='kpoDescription'
           label='Description'
           className='my-16'
           multiline
+          error={errors.kpoDescription}
+          message={errors.kpoDescription?.message}
+          refs={register}
         />
         <Input
           className='my-16'
-          name='lineManager'
+          name='target'
           label='Target'
+          error={errors.target}
+          message={errors.target?.message}
+          refs={register}
         />
         <SharedButton
           variant='contained'
