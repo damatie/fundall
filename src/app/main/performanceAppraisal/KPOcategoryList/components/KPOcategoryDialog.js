@@ -5,41 +5,67 @@ import React from 'react';
 import useKPOcategoryList from '../hooks/useKPOcategoryList';
 import MenuItem from '@material-ui/core/MenuItem';
 import SharedButton from 'app/shared/button/SharedButton';
+import { Controller } from 'react-hook-form';
 
 const KPOcategoryDialog = () => {
-  const { open, title, handleClose, type, category } = useKPOcategoryList();
+  const { 
+    open, 
+    title, 
+    handleClose, 
+    type, 
+    category, 
+    errors, 
+    handleSubmit, 
+    onSubmit, 
+    register,
+    control
+   } = useKPOcategoryList();
   return (
     <SharedModal
       open={open}
       title={title}
       handleClose={handleClose}
     >
-      <form>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <Input
           name='name'
           label='Name'
           className='my-16'
           defaultValue={type === 'update' ? category.name : ''}
+          error={errors.name}
+          refs={register}
+          message={errors.name?.message}
         />
-        <SelectTextField
+        <Controller
           name='status'
-          label='Status'
-          className='my-10'
+          control={control}
           defaultValue={type === 'update' ? category.status : ''}
-        >
-          <MenuItem value="Active">
-            Active
-          </MenuItem>
-          <MenuItem value="Inactive">
-            Inactive
-          </MenuItem>
-        </SelectTextField>
+          as={
+          <SelectTextField
+            name='status'
+            label='Status'
+            error={errors.status}
+            message={errors.status?.message}
+          >
+            <MenuItem value="Active">
+              Active
+            </MenuItem>
+            <MenuItem value="Inactive">
+              Inactive
+            </MenuItem>
+          </SelectTextField>
+          }
+        />
+        
         <Input
           className='my-16'
           name='description'
           label='Description'
           defaultValue={type === 'update' ? category.description : ''}
           multiline
+          error={errors.description}
+          refs={register}
+          message={errors.description?.message}
         />
         <SharedButton
           variant='contained'
