@@ -1,54 +1,80 @@
 import SharedModal from 'app/shared/modal/SharedModal';
 import React from 'react';
 import useKpoList from '../hooks/useKpoList';
-import Input from 'app/shared/TextInput/Input';
 import SelectTextField from 'app/shared/TextInput/SelectTextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import SharedButton from 'app/shared/button/SharedButton';
-import { DatePicker } from '@material-ui/pickers'
+import { Controller } from 'react-hook-form';
+import AutoCompleteInput from 'app/shared/TextInput/AutoComplete';
 
 const CreateEmployeeKpo = () => {
-  const { handleCloseModal, open } = useKpoList();
+  const { handleCloseModal, open, register, errors, handleSubmit, onSubmit, control, } = useKpoList();
   return (
     <SharedModal
       title='Create KPO'
       open={open}
       handleClose={handleCloseModal}
     >
-      <form>
-        <SelectTextField
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Controller
+          control={control}
+          as={
+            <SelectTextField
+              name='jobRole'
+              label='Job Role'
+              className='my-10'
+              error={errors.jobRole}
+              message={errors.jobRole?.message}
+            >
+              <MenuItem value="Active">
+                Office Admin
+              </MenuItem>
+              <MenuItem value="Inactive">
+                Dev Ops
+              </MenuItem>
+            </SelectTextField>
+          }
           name='jobRole'
-          label='Job Role'
-          className='my-10'
-        >
-          <MenuItem value="Active">
-            Office Admin
-          </MenuItem>
-          <MenuItem value="Inactive">
-            Dev Ops
-          </MenuItem>
-        </SelectTextField>
-        {/* <Input
+        />
+
+        <Controller
+          control={control}
+          as={
+            <SelectTextField
+              label='KPO Year'
+              error={errors.kpoYear}
+              message={errors.kpoYear?.message}
+              // className='my-10'
+            >
+              <MenuItem value="2019">
+                2019
+              </MenuItem>
+              <MenuItem value="2020">
+                2020
+              </MenuItem>
+            </SelectTextField>
+          }
           name='kpoYear'
-          label='KPO Year'
-          type='date'
-          className='my-16'
-        /> */}
-        <DatePicker
-          label='KPO Year'
-          inputVariant="outlined"
-          onChange={date => console.log(new Date(date))}
-          className="my-16 w-full"
         />
-        <Input
+
+        <AutoCompleteInput
           className='my-16'
-          name='lineManager'
+          name='lineManagerId'
           label='Line Manager'
+          data={[{name: 'Josh Maximum', id: 1}]}
+          error={errors.lineManagerId}
+          helperText={errors.lineManagerId?.message}
+          onChange={(ev, value) => register({name: 'lineManagerId', value: value?.id})}
         />
-        <Input
+
+        <AutoCompleteInput
           className='my-16'
-          name='reviewingManager'
+          name='reviewingManagerId'
           label='Reviewing Manager'
+          data={[{name: 'David chinweike', id: 2}]}
+          error={errors.reviewingManagerId}
+          helperText={errors.reviewingManagerId?.message}
+          onChange={(ev, value) => register({name: 'reviewingManagerId', value: value?.id})}
         />
         <SharedButton
           variant='contained'
