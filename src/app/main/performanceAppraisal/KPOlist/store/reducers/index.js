@@ -2,7 +2,9 @@ import { combineReducers } from 'redux';
 import employeeKpoList from './kpoList.reducers';
 import kpoContentList from './kpoContent.reducers';
 
-export default combineReducers({
+const reducer =  combineReducers({
   employeeKpoList,
   kpoContentList
 });
+
+export default reducer;

@@ -5,9 +5,10 @@ import CreateEmployeeKpo from './components/CreateEmployeeKpo';
 import EmployeeKpoListTable from './components/EmployeeKpoListTable';
 import useKpoList from './hooks/useKpoList';
 import reducer from './store/reducers/kpoList.reducers';
+import Skeleton from '@material-ui/lab/Skeleton';
 
 const EmployeeKpoList = () => {
-  const { handleOpenModal } = useKpoList();
+  const { handleOpenModal, loading } = useKpoList();
   return (
     <PageLayout
       header={{
@@ -22,8 +23,14 @@ const EmployeeKpoList = () => {
       }}
       content={
         <div className='p-24'>
-          <EmployeeKpoListTable />
-          <CreateEmployeeKpo />
+          {false ? (
+            <Skeleton variant="rect" width='100%' height={400} animation="wave"/>
+          ) : (
+            <>
+              <EmployeeKpoListTable />
+              <CreateEmployeeKpo />
+            </>
+          )}
         </div>
       }
     />

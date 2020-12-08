@@ -4,38 +4,78 @@ import Input from 'app/shared/TextInput/Input';
 import SelectTextField from 'app/shared/TextInput/SelectTextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import SharedButton from 'app/shared/button/SharedButton';
+import { Controller } from 'react-hook-form';
+import AutoCompleteInput from 'app/shared/TextInput/AutoComplete';
+import useKpoList from '../hooks/useKpoList';
 
 const EditEmployeeKpo = () => {
+  const { register, errors, handleSubmit, onSubmit, control, details } = useKpoList();
   return (
     <Paper variant="outlined" className='w-1/2 flex flex-col mx-auto p-20'>
-      <form>
-        <SelectTextField
+      <form onSubmit={handleSubmit(onSubmit)}>
+      <Controller
+          control={control}
+          defaultValue={details.jobRole}
+          as={
+            <SelectTextField
+              name='jobRole'
+              label='Job Role'
+              className='my-10'
+              error={errors.jobRole}
+              message={errors.jobRole?.message}
+            >
+              <MenuItem value="Admin Officer">
+                Office Admin
+              </MenuItem>
+              <MenuItem value="Inactive">
+                Dev Ops
+              </MenuItem>
+            </SelectTextField>
+          }
           name='jobRole'
-          label='Job Role'
-          className='my-10'
-        >
-          <MenuItem value="Active">
-            Office Admin
-          </MenuItem>
-          <MenuItem value="Inactive">
-            Dev Ops
-          </MenuItem>
-        </SelectTextField>
-        <Input
+        />
+
+        <Controller
+          control={control}
+          defaultValue={details.kpoYear}
+          as={
+            <SelectTextField
+              label='KPO Year'
+              error={errors.kpoYear}
+              message={errors.kpoYear?.message}
+              // className='my-10'
+            >
+              <MenuItem value="2019">
+                2019
+              </MenuItem>
+              <MenuItem value="2020">
+                2020
+              </MenuItem>
+            </SelectTextField>
+          }
           name='kpoYear'
-          label='KPO Year'
-          type='date'
-          className='my-16'
         />
-        <Input
+
+        <AutoCompleteInput
           className='my-16'
-          name='lineManager'
+          name='lineManagerId'
+          value={{name: details.lineManager, id: 1}}
           label='Line Manager'
+          data={[{name: 'Josh Maximum', id: 1}]}
+          error={errors.lineManagerId}
+          helperText={errors.lineManagerId?.message}
+          onChange={(ev, value) => register({name: 'lineManagerId', value: value?.id})}
         />
-        <Input
+
+        <AutoCompleteInput
           className='my-16'
-          name='reviewingManager'
+          name='reviewingManagerId'
           label='Reviewing Manager'
+          value={{name: details.reviewingManager, id: 2}}
+          data={[{name: 'David Chinweike', id: 2}]}
+          error={errors.reviewingManagerId}
+          helperText={errors.reviewingManagerId?.message}
+          onChange={(ev, value) => register({name: 'reviewingManagerId', value: value?.id})}
         />
         <SharedButton
           variant='contained'

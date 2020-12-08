@@ -5,8 +5,7 @@ import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import errorMssg from '../../../../../utils/errorMsg';
-
-
+import { useParams, useHistory } from 'react-router-dom';
 
 const schema = yup.object().shape({
   jobRole: yup.string(
@@ -50,20 +49,72 @@ const schema = yup.object().shape({
   ),
 })
 
+const data = [
+  {
+    id: 1,
+    jobRole: 'Admin Officer',
+    totalScore: 87,
+    kpoYear: '2019',
+    dateCompleted: '02 oct 2019',
+    lineManager: 'Patrick Obama',
+    reviewingManager: 'John Osama'
+  },
+  {
+    id: 2,
+    jobRole: 'Admin Officer',
+    totalScore: 90,
+    kpoYear: '2020',
+    dateCompleted: '02 oct 2020',
+    lineManager: 'Patrick Obama',
+    reviewingManager: 'John Osama'
+  }
+];
+
+const details = {
+  id: 1,
+  jobRole: 'Admin Officer',
+  totalScore: 87,
+  kpoYear: '2019',
+  dateCompleted: '02 oct 2019',
+  lineManager: 'Josh Maximum',
+  reviewingManager: 'John Osama'
+};
+
 const useKpoList = () => {
   const dispatch = useDispatch();
 
-  const { open } = useSelector(state => state.employeeKpoList);
+  const { open, kpoList, loading, kpo, } = useSelector(state => state.kpo.employeeKpoList);
+
+  const { id } = useParams();
+  const { push } = useHistory();
 
   const {
     errors,
     handleSubmit,
     register,
     control,
+    setValue
   } = useForm({
     mode: 'onBlur',
     resolver: yupResolver(schema),
   })
+
+  const [listOfKpo, setListOfKpo] = React.useState(data);
+
+  React.useEffect(() => {
+    if(!id) {
+      dispatch(Actions.getAllKpo(1));
+    } else {
+      dispatch(Actions.getOneKpo(id));
+    }
+  }, []);
+
+  React.useEffect(() => {
+    if(id) {
+      register({name: 'lineManagerId', value: 1});
+      register({name: 'reviewingManagerId', value: 2});
+    }
+  }, []);
 
   const handleCloseModal = () => {
     dispatch({
@@ -78,8 +129,21 @@ const useKpoList = () => {
   };
 
   const onSubmit = (model) => {
-    console.log(model);
-  }
+    dispatch(Actions.createKpo({ userId: 1, item: model}))
+  };
+
+  const handleDeleteKpo = (kpoId) => {
+    if(id) {
+      return dispatch(Actions.updateKpo({
+        id,
+        userId: 1
+      }));
+    }
+    dispatch(Actions.deleteKpo({
+      id: kpoId,
+      userId: 1
+    }))
+  };
 
   return {
     handleCloseModal,
@@ -90,6 +154,11 @@ const useKpoList = () => {
     register,
     onSubmit,
     control,
+    handleDeleteKpo,
+    listOfKpo,
+    loading,
+    push,
+    details
   };
 };
 
