@@ -1,6 +1,7 @@
 import React from 'react';
 import EnhancedTable from 'app/shared/table/EnhancedTable';
 import CustomIconButton from 'app/shared/button/CustomIconButton';
+import useKpoContentList from '../hooks/useKpoContent';
 
 const KpoContentList = () => {
   const columns = React.useMemo(
@@ -53,14 +54,15 @@ const KpoContentList = () => {
 			},
 		],
 	);
-  return (
+	const { kpoData, push, id, handleDelete } = useKpoContentList();
+	return (
 		<>
     <EnhancedTable
 			columns={columns}
-			data={[]}
+			data={kpoData}
 			onRowClick={(ev, row) => {
 				if (row) {
-					console.log(row)
+					push(`/performance_appraisal/kpoList/details/${id}/kpoContent/${row.original.id}`)
 				}
 			}}
 			checkbox={{
@@ -69,6 +71,7 @@ const KpoContentList = () => {
 				accessor: 'id',
 			}}
 			selectAll={(value) => console.log(value)}
+			handleDelete={handleDelete}
 		/>
 			<CustomIconButton type='success' className='flex flex-col my-10 mx-auto'>
 				Approve

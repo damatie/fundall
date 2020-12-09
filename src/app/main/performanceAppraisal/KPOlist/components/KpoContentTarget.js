@@ -9,7 +9,8 @@ const KpoContentTarget = () => {
     errors,
     handleSubmit,
     onSubmit,
-    register
+    register,
+    kpoDetails
   } = useKpoContentList({type: 'quarter'});
   return (
     <Paper variant="outlined" className='w-1/2 flex flex-col mx-auto p-20'>
@@ -22,6 +23,7 @@ const KpoContentTarget = () => {
           error={errors.q1}
           message={errors.q1?.message}
           refs={register}
+          defaultValue={kpoDetails.q1}
         />
         <Input
           className='my-16'
@@ -31,6 +33,7 @@ const KpoContentTarget = () => {
           error={errors.q2}
           message={errors.q2?.message}
           refs={register}
+          defaultValue={kpoDetails.q2}
         />
         <Input
           className='my-16'
@@ -40,6 +43,7 @@ const KpoContentTarget = () => {
           error={errors.q3}
           message={errors.q3?.message}
           refs={register}
+          defaultValue={kpoDetails.q3}
         />
         <Input
           className='my-16'
@@ -49,6 +53,7 @@ const KpoContentTarget = () => {
           error={errors.q4}
           message={errors.q4?.message}
           refs={register}
+          defaultValue={kpoDetails.q4}
         />
         <Input
           className='my-16'
@@ -58,6 +63,7 @@ const KpoContentTarget = () => {
           error={errors.yearEnd}
           message={errors.yearEnd?.message}
           refs={register}
+          defaultValue={kpoDetails.yearEnd}
         />
         <SharedButton
           variant='contained'

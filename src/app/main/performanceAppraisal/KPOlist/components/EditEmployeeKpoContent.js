@@ -9,7 +9,7 @@ import { Controller } from 'react-hook-form';
 
 const EditEmployeeKpoContent = () => {
   const {
-    register, errors, handleSubmit, onSubmit, control
+    register, errors, handleSubmit, onSubmit, control, kpoDetails
   } = useKpoContentList();
   return (
     <Paper variant="outlined" className='w-1/2 flex flex-col mx-auto p-20'>
@@ -17,6 +17,7 @@ const EditEmployeeKpoContent = () => {
       <Controller
           control={control}
           name='kpoCategoryId'
+          defaultValue={kpoDetails.kpoCategory}
           as={
             <SelectTextField
               name='kpoCategoryId'
@@ -25,7 +26,7 @@ const EditEmployeeKpoContent = () => {
               error={errors.kpoCategoryId}
               message={errors.kpoCategoryId?.message}
             >
-              <MenuItem value="Active">
+              <MenuItem value="Admin">
                 Office Admin
               </MenuItem>
               <MenuItem value="Inactive">
@@ -43,6 +44,7 @@ const EditEmployeeKpoContent = () => {
           error={errors.kpoDescription}
           message={errors.kpoDescription?.message}
           refs={register}
+          defaultValue={kpoDetails.description}
         />
         <Input
           className='my-16'
@@ -51,6 +53,7 @@ const EditEmployeeKpoContent = () => {
           error={errors.target}
           message={errors.target?.message}
           refs={register}
+          defaultValue={kpoDetails.target}
         />
         <SharedButton
           variant='contained'

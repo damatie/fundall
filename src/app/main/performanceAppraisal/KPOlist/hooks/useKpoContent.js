@@ -5,6 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import errorMsg from '../../../../../utils/errorMsg';
+import { useHistory, useParams } from 'react-router-dom';
 
 const schema = (type) => {
   switch(type){
@@ -106,9 +107,48 @@ const schema = (type) => {
   }
 };
 
+const kpoData = [
+  {
+    kpoCategory: 'Admin',
+    description: 'lorem ipsum dorem ipsam...',
+    target: 'Less then 90%',
+    q1: '70%',
+    q2: '80%',
+    q3: '',
+    q4: '',
+    yearEnd: '',
+    id: 1
+  },
+  {
+    kpoCategory: 'Admin',
+    description: 'lorem ipsum dorem ipsam...',
+    target: 'Less then 90%',
+    q1: '70%',
+    q2: '80%',
+    q3: '',
+    q4: '',
+    yearEnd: '',
+    id: 2
+  }
+];
+
+const kpoDetails = {
+  kpoCategory: 'Admin',
+  description: 'lorem ipsum dorem ipsam...',
+  target: 'Less then 90%',
+  q1: '70%',
+  q2: '80%',
+  q3: '',
+  q4: '',
+  yearEnd: '',
+  id: 2
+}
+
 const useKpoContentList = (config) => {
   const { open } = useSelector(state => state.kpo.kpoContentList);
   const dispatch = useDispatch();
+  const { push } = useHistory();
+  const { id, kpoId } = useParams();
 
   const {
     register,
@@ -120,6 +160,10 @@ const useKpoContentList = (config) => {
     resolver: yupResolver(schema(config?.type))
   });
 
+  React.useEffect(() => {
+    dispatch(Actions.getAllKpoContent(id));
+  }, []);
+
   const handleOpenModal = () => {
     dispatch({type: Actions.OPEN_ADD_KPO_CONTENT_MODAL})
   };
@@ -129,8 +173,25 @@ const useKpoContentList = (config) => {
   };
 
   const onSubmit = (model) => {
-    console.log(model);
-  }
+    const body = {
+      ...model,
+      kpoId: id
+    };
+
+    if(id) {
+      dispatch(Actions.addKpoContent(body));
+    } else if (kpoId) {
+      dispatch(Actions.updateKpoContent(body))
+    }
+    return;
+  };
+
+  const handleDelete = (kpoContentId) => {
+    dispatch(Actions.deleteKpoContent({
+      id: kpoContentId,
+      kpoId: id
+    }));
+  };
 
   return {
     open,
@@ -140,7 +201,12 @@ const useKpoContentList = (config) => {
     handleSubmit,
     register,
     onSubmit,
-    control
+    control,
+    kpoData,
+    push,
+    id,
+    handleDelete,
+    kpoDetails
   };
 };
 
