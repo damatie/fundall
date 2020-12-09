@@ -8,19 +8,26 @@ import Icon from '@material-ui/core/Icon';
 import Input from '@material-ui/core/Input';
 import FuseAnimate from '@fuse/core/FuseAnimate';
 import Paper from '@material-ui/core/Paper';
+import { Link } from 'react-router-dom';
 
 const PageLayout = ({
   contentToolbar,
 	content,
 	noSearch,
+	noPrevious,
+	props,
   header: {
     icon,
     title,
-    handleSearch,
+	handleSearch,
+	url,
+	isState,
   },
   button: {
     showButton,
-    btnTitle,
+	btnTitle,
+	btnIcon,
+	btnIconShow,
     onClick,
   }
 }) => {
@@ -37,6 +44,27 @@ const PageLayout = ({
 				<div className="flex flex-1 w-full items-center justify-between px-24">
 					<div className="flex flex-col items-start max-w-full">
 						<div className="flex items-center">
+							{noPrevious &&
+								<FuseAnimate animation="transition.expandIn" delay={300}>
+									{(isState) ? <Icon
+										className="text-20 text-black bg-white rounded-20 mr-16"
+										role="button"
+										onClick={ev => {props.history.goBack()}}
+									>
+										{mainTheme.direction === 'ltr' ? 'arrow_back' : 'arrow_forward'}
+									</Icon>
+									:
+									<Icon
+										className="text-20 text-black bg-white rounded-20 mr-16"
+										component={Link}
+										to={url}
+										role="button"
+									>
+										{mainTheme.direction === 'ltr' ? 'arrow_back' : 'arrow_forward'}
+									</Icon>
+									}
+								</FuseAnimate>
+							}
 							<FuseAnimate animation="transition.expandIn" delay={300}>
 								<Icon className="text-32">{icon}</Icon>
 							</FuseAnimate>
@@ -79,6 +107,7 @@ const PageLayout = ({
                   disableElevation
                   onClick={onClick}
                 >
+				{btnIconShow &&  <Icon className="text-32">{btnIcon}</Icon> }
                   {btnTitle}
                 </Button>
               </FuseAnimate>
