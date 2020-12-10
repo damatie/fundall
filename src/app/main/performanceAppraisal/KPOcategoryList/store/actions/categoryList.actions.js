@@ -49,10 +49,13 @@ export const addKpoCategory = (payload) => {
           icon: 'success',
         });
         dispatch(getAllCategory());
+        dispatch({
+          type: CLOSE_KPO_CATEGORY_LIST_DIALOG
+        })
       }
     } catch (e) {
       swal.fire({
-        text: e.response?.data.message || e.response?.data.error,
+        text: e.response?.data.message || e.response?.data.error || 'Service Unavailable',
         icon: 'error',
       })
     }
@@ -76,7 +79,7 @@ export const updateKpoCategory = ({id, payload}) => {
       }
     } catch (e) {
       swal.fire({
-        text: e.response?.data.message || e.response?.data.error,
+        text: e.response?.data.message || e.response?.data.error || 'Service Unavailable',
         icon: 'error',
       })
     }
@@ -100,7 +103,7 @@ export const deleteKpoCategory = (id) => {
       }
     } catch (e) {
       swal.fire({
-        text: e.response?.data.message || e.response?.data.error,
+        text: e.response?.data.message || e.response?.data.error || 'Service Unavailable',
         icon: 'error',
       })
     }
