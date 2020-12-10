@@ -1,8 +1,51 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { OPEN_kPO_CATEGORY_LIST_DIALOG, CLOSE_KPO_CATEGORY_LIST_DIALOG, getCategory } from '../store/actions';
+import { OPEN_kPO_CATEGORY_LIST_DIALOG, CLOSE_KPO_CATEGORY_LIST_DIALOG, getCategory, getAllCategory, updateKpoCategory, deleteKpoCategory, addKpoCategory } from '../store/actions';
+import { useForm } from 'react-hook-form';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+import errorMssg from '../../../../../utils/errorMsg';
 
-const data = [
+const schema = yup.object().shape({
+  name: yup.string(
+    errorMssg({
+      name: 'Name',
+      type: 'string',
+    })
+  )
+    .required(
+      errorMssg({
+        name: 'Name',
+        type: 'required',
+      })
+    ),
+  description: yup.string(
+    errorMssg({
+      name: 'Description',
+      type: 'string',
+    })
+  )
+    .required(
+      errorMssg({
+        name: 'Description',
+        type: 'required',
+      })
+    ),
+  status: yup.string(
+    errorMssg({
+      name: 'Status',
+      type: 'string',
+    })
+  )
+    .required(
+      errorMssg({
+        name: 'Status',
+        type: 'required',
+      })
+    ),
+})
+
+const items = [
   {
     id: 1,
     name: 'Organizational Integrity',
@@ -47,9 +90,24 @@ const data = [
 
 const useKPOcategoryList = () => {
   const dispatch = useDispatch();
-  const [kpoCategoryList] = React.useState(data);
+  const [kpoCategoryList] = React.useState(items);
 
-  const { open, category, title, type } = useSelector(state => state.kpoCategory)
+  const {
+    errors,
+    register,
+    handleSubmit,
+    control
+  } = useForm({
+    mode: 'onBlur',
+    resolver: yupResolver(schema),
+    defaultValues: category || {}
+  })
+
+  const { open, category, title, type, data, loading } = useSelector(state => state.kpoCategory)
+
+  React.useEffect(() => {
+    dispatch(getAllCategory());
+  }, []);
 
   const handleOpen = (type) => () => {
     dispatch({
@@ -76,7 +134,29 @@ const useKPOcategoryList = () => {
       }
     });
     dispatch(getCategory(data));
-  }
+  };
+
+  const onSubmit = (model) => {
+    switch (type) {
+      case 'new':
+        dispatch(addKpoCategory(model))
+        break;
+      case 'update':
+        console.log(model, type);
+        dispatch(updateKpoCategory({
+          id: category?.id,
+          payload: model
+        }))
+        break;
+      default: {
+        return model;
+      }
+    }
+  };
+
+  const handleDeleteKpoCategory = (id) => {
+    dispatch(deleteKpoCategory(id));
+  };
 
   return {
     kpoCategoryList,
@@ -86,7 +166,14 @@ const useKPOcategoryList = () => {
     open,
     handleGetCategory,
     category,
-    type
+    type,
+    handleSubmit,
+    onSubmit,
+    register,
+    errors,
+    control,
+    handleDeleteKpoCategory,
+    loading
   };
 };
 

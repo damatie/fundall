@@ -8,7 +8,7 @@ import Typography from '@material-ui/core/Typography';
 
 
 const KPOcategoryTable = () => {
-	const { kpoCategoryList, handleGetCategory } = useKPOcategoryList();
+	const { kpoCategoryList, handleGetCategory, handleDeleteKpoCategory } = useKPOcategoryList();
 	const columns = React.useMemo(
 		() => [
 			{
@@ -60,6 +60,7 @@ const KPOcategoryTable = () => {
 				accessor: 'id',
 			}}
 			selectAll={(value) => console.log(value)}
+			handleDelete={handleDeleteKpoCategory}
 		/>
 	);
 };
