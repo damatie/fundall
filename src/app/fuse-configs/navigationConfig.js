@@ -514,14 +514,14 @@ const navigationConfig = [
 				icon: 'book',
 				auth: authRoles.staff,
 			},
-			// {
-			// 	id: 'trainingList',
-			// 	title: 'Training List',
-			// 	type: 'item',
-			// 	url: '/training/list',
-			// 	icon: 'book',
-			// 	auth: authRoles.staff,
-			// },
+			{
+				id: 'trainingList',
+				title: 'Training List',
+				type: 'item',
+				url: '/training/list',
+				icon: 'book',
+				auth: authRoles.hrManager,
+			},
 			{
 				id: 'courseCategory',
 				title: 'Course Category',
