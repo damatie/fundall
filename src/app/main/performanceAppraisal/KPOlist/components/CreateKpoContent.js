@@ -8,7 +8,7 @@ import useKpoContentList from '../hooks/useKpoContent';
 import { Controller } from 'react-hook-form';
 
 const CreateKpoContent = () => {
-  const { open, handleCloseModal, register, errors, handleSubmit, onSubmit, control } = useKpoContentList();
+  const { open, handleCloseModal, register, errors, handleSubmit, onSubmit, control, kpoCategory } = useKpoContentList();
   return (
     <SharedModal
       title='Add KPO Content'
@@ -26,12 +26,15 @@ const CreateKpoContent = () => {
               error={errors.kpoCategoryId}
               message={errors.kpoCategoryId?.message}
             >
-              <MenuItem value={1}>
-                Office Admin
-              </MenuItem>
-              <MenuItem value={2}>
-                Dev Ops
-              </MenuItem>
+              {kpoCategory.map(item => {
+                if(item.status.toUpperCase() === 'ACTIVE') {
+                  return (
+                    <MenuItem value={item.id}>
+                      {item.name}
+                    </MenuItem>
+                  )
+                }
+              })}
             </SelectTextField>
           }
         />

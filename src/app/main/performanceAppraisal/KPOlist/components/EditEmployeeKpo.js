@@ -23,7 +23,7 @@ const EditEmployeeKpo = () => {
               <form onSubmit={handleSubmit(onSubmit)}>
                 <Controller
                   control={control}
-                  defaultValue={details.jobRole}
+                  defaultValue={details.jobTitleId}
                   as={
                     <SelectTextField
                       // name='jobRole'
@@ -67,7 +67,7 @@ const EditEmployeeKpo = () => {
                 <AutoCompleteInput
                   className='my-16'
                   name='lineManagerId'
-                  value={{ name: details.lineManager, id: 1 }}
+                  value={{ name: details?.lineManager, id: details.lineManagerId }}
                   label='Line Manager'
                   data={[{ name: 'Josh Maximum', id: 1 }]}
                   error={errors.lineManagerId}
@@ -79,7 +79,7 @@ const EditEmployeeKpo = () => {
                   className='my-16'
                   name='reviewingManagerId'
                   label='Reviewing Manager'
-                  value={{ name: details.reviewingManager, id: 2 }}
+                  value={{ name: details?.reviewingManager, id: details.reviewingManagerId }}
                   data={[{ name: 'David Chinweike', id: 2 }]}
                   error={errors.reviewingManagerId}
                   helperText={errors.reviewingManagerId?.message}

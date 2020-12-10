@@ -50,16 +50,6 @@ const schema = yup.object().shape({
 })
 
 
-const details = {
-  id: 1,
-  jobRole: 'Admin Officer',
-  totalScore: 87,
-  kpoYear: '2019',
-  dateCompleted: '02 oct 2019',
-  lineManager: 'Josh Maximum',
-  reviewingManager: 'John Osama'
-};
-
 const useKpoList = () => {
   const dispatch = useDispatch();
 
@@ -80,7 +70,7 @@ const useKpoList = () => {
     resolver: yupResolver(schema),
   })
 
-  const [listOfKpo, setListOfKpo] = React.useState(kpoList);
+  // const [listOfKpo, setListOfKpo] = React.useState(kpoList);
 
   React.useEffect(() => {
     if(!id) {
@@ -140,10 +130,10 @@ const useKpoList = () => {
     onSubmit,
     control,
     handleDeleteKpo,
-    listOfKpo,
+    listOfKpo: kpoList,
     loading,
     push,
-    details,
+    details: kpo,
     loadingSingleKpo
   };
 };

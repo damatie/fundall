@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import errorMsg from '../../../../../utils/errorMsg';
 import { useHistory, useParams } from 'react-router-dom';
+import { getAllCategory } from '../../KPOcategoryList/store/actions';
 
 const schema = (type) => {
   switch(type){
@@ -121,9 +122,11 @@ const kpoDetails = {
 
 const useKpoContentList = (config) => {
   const { open, data, loading } = useSelector(state => state.kpo.kpoContentList);
+  const { data: kpoCategory } = useSelector(state => state.kpoCategory);
   const dispatch = useDispatch();
   const { push } = useHistory();
   const { id, kpoContentId: kpoId } = useParams();
+  const params = useParams();
 
   const {
     register,
@@ -136,12 +139,12 @@ const useKpoContentList = (config) => {
   });
 
   React.useEffect(() => {
+    console.log(params);
     if(kpoId) {
       dispatch(Actions.getOneKpoContent(kpoId))
-    } else {
-      dispatch(Actions.getAllKpoContent(id));
     }
-    
+    dispatch(Actions.getAllKpoContent(id));
+    dispatch(getAllCategory());
   }, []);
 
   const handleOpenModal = () => {
@@ -188,6 +191,7 @@ const useKpoContentList = (config) => {
     handleDelete,
     kpoDetails,
     loading,
+    kpoCategory
   };
 };
 

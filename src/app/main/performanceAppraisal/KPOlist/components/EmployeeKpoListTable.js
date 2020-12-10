@@ -13,8 +13,11 @@ const EmployeeKpoListTable = () => {
 			},
 			{
 				Header: 'Total Score',
-				accessor: 'totalScore',
-				sortable: true
+				accessor: 'personnelOverallRating',
+				sortable: true,
+				Cell: ({ row: { original: { personnelOverallRating }} }) => {
+					return <>{personnelOverallRating || 'On Going'}</>
+				}
 			},
 			{
 				Header: 'KPO Year',
@@ -24,7 +27,10 @@ const EmployeeKpoListTable = () => {
 			{
 				Header: 'Date Completed',
 				accessor: 'dateCompleted',
-				sortable: true
+				sortable: true,
+				Cell: ({ row: { original: { dateCompleted }} }) => {
+					return <>{dateCompleted || 'On Going'}</>
+				}
       },
       {
 				Header: 'Line Manager',

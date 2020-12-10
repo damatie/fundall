@@ -9,6 +9,7 @@ import reducer from './store/reducers';
 import withReducer from 'app/store/withReducer';
 import useKpoContentList from './hooks/useKpoContent';
 import KpoComments from './components/KpoComments';
+import kpoCategoryReducer from '../KPOcategoryList/store/reducers/categoryList.reducer';
 
 const EmployeeKpoDetails = () => {
 
@@ -64,4 +65,5 @@ const EmployeeKpoDetails = () => {
   );
 };
 
+withReducer('kpoCategory', kpoCategoryReducer)(EmployeeKpoDetails);
 export default withReducer('kpo', reducer )(EmployeeKpoDetails);
