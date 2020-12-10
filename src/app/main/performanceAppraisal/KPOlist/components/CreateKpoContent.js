@@ -21,16 +21,15 @@ const CreateKpoContent = () => {
           name='kpoCategoryId'
           as={
             <SelectTextField
-              name='kpoCategory'
               label='KPO Category'
               className='my-10'
               error={errors.kpoCategoryId}
               message={errors.kpoCategoryId?.message}
             >
-              <MenuItem value="Active">
+              <MenuItem value={1}>
                 Office Admin
               </MenuItem>
-              <MenuItem value="Inactive">
+              <MenuItem value={2}>
                 Dev Ops
               </MenuItem>
             </SelectTextField>

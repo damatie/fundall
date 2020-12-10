@@ -20,21 +20,21 @@ const CreateEmployeeKpo = () => {
           control={control}
           as={
             <SelectTextField
-              name='jobRole'
+              name='jobTitleId'
               label='Job Role'
               className='my-10'
-              error={errors.jobRole}
-              message={errors.jobRole?.message}
+              error={errors.jobTitleId}
+              message={errors.jobTitleId?.message}
             >
-              <MenuItem value="Active">
+              <MenuItem value={1}>
                 Office Admin
               </MenuItem>
-              <MenuItem value="Inactive">
+              <MenuItem value={2}>
                 Dev Ops
               </MenuItem>
             </SelectTextField>
           }
-          name='jobRole'
+          name='jobTitleId'
         />
 
         <Controller

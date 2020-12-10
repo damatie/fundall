@@ -107,33 +107,8 @@ const schema = (type) => {
   }
 };
 
-const kpoData = [
-  {
-    kpoCategory: 'Admin',
-    description: 'lorem ipsum dorem ipsam...',
-    target: 'Less then 90%',
-    q1: '70%',
-    q2: '80%',
-    q3: '',
-    q4: '',
-    yearEnd: '',
-    id: 1
-  },
-  {
-    kpoCategory: 'Admin',
-    description: 'lorem ipsum dorem ipsam...',
-    target: 'Less then 90%',
-    q1: '70%',
-    q2: '80%',
-    q3: '',
-    q4: '',
-    yearEnd: '',
-    id: 2
-  }
-];
-
 const kpoDetails = {
-  kpoCategory: 'Admin',
+  kpoCategory: 1,
   description: 'lorem ipsum dorem ipsam...',
   target: 'Less then 90%',
   q1: '70%',
@@ -145,10 +120,10 @@ const kpoDetails = {
 }
 
 const useKpoContentList = (config) => {
-  const { open } = useSelector(state => state.kpo.kpoContentList);
+  const { open, data, loading } = useSelector(state => state.kpo.kpoContentList);
   const dispatch = useDispatch();
   const { push } = useHistory();
-  const { id, kpoId } = useParams();
+  const { id, kpoContentId: kpoId } = useParams();
 
   const {
     register,
@@ -161,7 +136,12 @@ const useKpoContentList = (config) => {
   });
 
   React.useEffect(() => {
-    dispatch(Actions.getAllKpoContent(id));
+    if(kpoId) {
+      dispatch(Actions.getOneKpoContent(kpoId))
+    } else {
+      dispatch(Actions.getAllKpoContent(id));
+    }
+    
   }, []);
 
   const handleOpenModal = () => {
@@ -202,11 +182,12 @@ const useKpoContentList = (config) => {
     register,
     onSubmit,
     control,
-    kpoData,
+    kpoData: data,
     push,
     id,
     handleDelete,
-    kpoDetails
+    kpoDetails,
+    loading,
   };
 };
 

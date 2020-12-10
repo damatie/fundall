@@ -23,7 +23,7 @@ const EmployeeKpoList = () => {
       }}
       content={
         <div className='p-24'>
-          {false ? (
+          {loading ? (
             <Skeleton variant="rect" width='100%' height={400} animation="wave"/>
           ) : (
             <>

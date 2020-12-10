@@ -29,7 +29,7 @@ const App = () => {
 	React.useEffect(() => {
 		const token = localStorage.getItem('jwt_access_token')
 		if (token) {
-			api.defaults.headers.Authorization = `JWT ${token}`;
+			api.defaults.headers.Authorization = `JWT ${JSON.parse(token)}`;
 		}
 	}, [])
 	return (

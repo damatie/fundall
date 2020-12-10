@@ -26,10 +26,10 @@ const EditEmployeeKpoContent = () => {
               error={errors.kpoCategoryId}
               message={errors.kpoCategoryId?.message}
             >
-              <MenuItem value="Admin">
+              <MenuItem value={1}>
                 Office Admin
               </MenuItem>
-              <MenuItem value="Inactive">
+              <MenuItem value={2}>
                 Dev Ops
               </MenuItem>
             </SelectTextField>

@@ -2,19 +2,23 @@ import React from 'react';
 import EnhancedTable from 'app/shared/table/EnhancedTable';
 import CustomIconButton from 'app/shared/button/CustomIconButton';
 import useKpoContentList from '../hooks/useKpoContent';
+import Skeleton from '@material-ui/lab/Skeleton';
 
 const KpoContentList = () => {
   const columns = React.useMemo(
 		() => [
 			{
 				Header: 'KPO Category',
-				accessor: 'kpoCategory',
+				// accessor: 'kpoCategory',
 				// className: 'font-bold',
-				sortable: true
+				sortable: true,
+				Cell: ({ row }) => {
+          return <>{row.original.kpoCategory?.name}</>;
+        },
 			},
 			{
 				Header: 'Description',
-				accessor: 'description',
+				accessor: 'kpoDescription',
 				sortable: true
 			},
 			{
@@ -54,12 +58,17 @@ const KpoContentList = () => {
 			},
 		],
 	);
-	const { kpoData, push, id, handleDelete } = useKpoContentList();
+	const { kpoData, push, id, handleDelete, loading } = useKpoContentList();
 	return (
 		<>
-    <EnhancedTable
+		{
+			loading ? (
+				<Skeleton animation='wave' width='100%' height='350px' variant='rect'/>
+			) : (
+				<>
+					<EnhancedTable
 			columns={columns}
-			data={kpoData}
+			data={kpoData || []}
 			onRowClick={(ev, row) => {
 				if (row) {
 					push(`/performance_appraisal/kpoList/details/${id}/kpoContent/${row.original.id}`)
@@ -76,6 +85,10 @@ const KpoContentList = () => {
 			<CustomIconButton type='success' className='flex flex-col my-10 mx-auto'>
 				Approve
 			</CustomIconButton>
+				</>
+			)
+		}
+    
 		</>
   );
 };

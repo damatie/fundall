@@ -8,7 +8,7 @@ import errorMssg from '../../../../../utils/errorMsg';
 import { useParams, useHistory } from 'react-router-dom';
 
 const schema = yup.object().shape({
-  jobRole: yup.string(
+  jobTitleId: yup.string(
     errorMssg({
       name: 'Job Role',
       type: 'string',
@@ -49,26 +49,6 @@ const schema = yup.object().shape({
   ),
 })
 
-const data = [
-  {
-    id: 1,
-    jobRole: 'Admin Officer',
-    totalScore: 87,
-    kpoYear: '2019',
-    dateCompleted: '02 oct 2019',
-    lineManager: 'Patrick Obama',
-    reviewingManager: 'John Osama'
-  },
-  {
-    id: 2,
-    jobRole: 'Admin Officer',
-    totalScore: 90,
-    kpoYear: '2020',
-    dateCompleted: '02 oct 2020',
-    lineManager: 'Patrick Obama',
-    reviewingManager: 'John Osama'
-  }
-];
 
 const details = {
   id: 1,
@@ -83,7 +63,8 @@ const details = {
 const useKpoList = () => {
   const dispatch = useDispatch();
 
-  const { open, kpoList, loading, kpo, } = useSelector(state => state.kpo.employeeKpoList);
+  const { open, kpoList, loading, kpo, loadingSingleKpo } = useSelector(state => state.kpo.employeeKpoList);
+  const userId = useSelector(state => state.profile?.data?.id)
 
   const { id } = useParams();
   const { push } = useHistory();
@@ -99,15 +80,17 @@ const useKpoList = () => {
     resolver: yupResolver(schema),
   })
 
-  const [listOfKpo, setListOfKpo] = React.useState(data);
+  const [listOfKpo, setListOfKpo] = React.useState(kpoList);
 
   React.useEffect(() => {
     if(!id) {
-      dispatch(Actions.getAllKpo(1));
+      if(userId) {
+        dispatch(Actions.getAllKpo(userId));
+      }
     } else {
       dispatch(Actions.getOneKpo(id));
     }
-  }, []);
+  }, [userId, id]);
 
   React.useEffect(() => {
     if(id) {
@@ -129,19 +112,21 @@ const useKpoList = () => {
   };
 
   const onSubmit = (model) => {
-    dispatch(Actions.createKpo({ userId: 1, item: model}))
-  };
-
-  const handleDeleteKpo = (kpoId) => {
     if(id) {
       return dispatch(Actions.updateKpo({
         id,
-        userId: 1
+        userId,
+        model
       }));
     }
+    dispatch(Actions.createKpo({ userId, item: model}));
+  };
+
+  const handleDeleteKpo = (kpoId) => {
+    
     dispatch(Actions.deleteKpo({
       id: kpoId,
-      userId: 1
+      userId
     }))
   };
 
@@ -158,7 +143,8 @@ const useKpoList = () => {
     listOfKpo,
     loading,
     push,
-    details
+    details,
+    loadingSingleKpo
   };
 };
 

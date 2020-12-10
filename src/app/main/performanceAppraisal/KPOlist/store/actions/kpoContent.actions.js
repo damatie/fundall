@@ -15,6 +15,9 @@ export const getAllKpoContent = (kpoId) => {
           type: GET_ALL_KPO_CONTENT,
           payload: data
         });
+        dispatch({
+          type: CLOSE_ADD_KPO_CONTENT_MODAL,
+        });
       }
     } catch (e) {
       dispatch({
@@ -91,13 +94,18 @@ export const deleteKpoContent = ({id, kpoId}) => {
   return async (dispatch) => {
     try {
       swal.showLoading();
-      const { data: { message, success } } = await api.delete(`/appraisal/kpo-content/${id}`);
+      const { data: { message, success, error } } = await api.delete(`/appraisal/kpo-content/${id}`);
       if(success) {
         swal.fire({
           text: message,
           icon: 'success'
         });
         dispatch(getAllKpoContent(kpoId));
+      } else {
+        swal.fire({
+          text: message || error,
+          icon: 'error'
+        });
       }
     } catch (e) {
       swal.fire({

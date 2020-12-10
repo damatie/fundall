@@ -7,7 +7,7 @@ const EmployeeKpoListTable = () => {
 		() => [
 			{
 				Header: 'Job Role',
-				accessor: 'jobRole',
+				accessor: 'jobTitle',
 				// className: 'font-bold',
 				sortable: true
 			},

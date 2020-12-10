@@ -28,7 +28,7 @@ export const getAllKpo = (userId) => {
   };
 };
 
-export const getOneKpo = ({id}) => {
+export const getOneKpo = (id) => {
   return async (dispatch) => {
     try {
       const { data: { data, success } } = await api.get(`/appraisal/kpo/${id}`);
@@ -68,11 +68,11 @@ export const deleteKpo = ({id, userId}) => {
   };
 };
 
-export const updateKpo = ({id, userId}) => {
+export const updateKpo = ({id, userId, model}) => {
   return async (dispatch) => {
     try {
       swal.showLoading();
-      const { data: { success, message } } = await api.patch(`/appraisal/kpo/${id}`);
+      const { data: { success, message } } = await api.patch(`/appraisal/kpo/${id}`, model);
       if(success) {
         swal.fire({
           text: message,
@@ -100,6 +100,9 @@ export const createKpo = ({userId, item}) => {
           icon: 'success'
         });
         dispatch(getAllKpo(userId));
+        dispatch({
+          type: CLOSE_EMPLOYEE_KPO_LIST_MODAL
+        });
       }
     } catch (e) {
       swal.fire({
