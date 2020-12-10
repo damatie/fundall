@@ -4,9 +4,16 @@ import useKpoList from '../hooks/useKpoList';
 import Grid from '@material-ui/core/Grid';
 import SelectTextField from 'app/shared/TextInput/SelectTextField';
 import MenuItem from '@material-ui/core/MenuItem';
-
+import useKpoReview from '../hooks/useKpoReview';
+import Skeleton from '@material-ui/lab/Skeleton';
 
 const ListOfEmployeeKpo = () => {
+	const { 
+		deptKpo,
+		loading,
+		handleDelete,
+		push
+	} = useKpoReview();
 	const columns = React.useMemo(
 		() => [
       {
@@ -19,23 +26,29 @@ const ListOfEmployeeKpo = () => {
 				Header: 'Entity',
 				accessor: 'entity',
 				// className: 'font-bold',
-				sortable: true
+				sortable: true,
+				Cell: ({ row: { original }}) => {
+					return <>{original.entity.entityName}</>
+				}
       },
       {
 				Header: 'Department',
 				accessor: 'department',
 				// className: 'font-bold',
-				sortable: true
+				sortable: true,
+				Cell: ({ row: { original }}) => {
+					return <>{original.department.departmentName}</>
+				}
 			},
 			{
 				Header: 'Job Role',
-				accessor: 'jobRole',
+				accessor: 'jobTitleId',
 				// className: 'font-bold',
 				sortable: true
 			},
 			{
 				Header: 'Total Score',
-				accessor: 'totalScore',
+				accessor: 'personnelOverallRating',
 				sortable: true
 			},
 			{
@@ -46,7 +59,10 @@ const ListOfEmployeeKpo = () => {
 			{
 				Header: 'Date Completed',
 				accessor: 'dateCompleted',
-				sortable: true
+				sortable: true,
+				Cell: ({ row: { original }}) => {
+					return <>{original.dateCompleted || 'On Going'}</>
+				}
       },
       {
 				Header: 'Line Manager',
@@ -60,16 +76,15 @@ const ListOfEmployeeKpo = () => {
 			},
 		],
 	);
-
-	const {
-		listOfKpo,
-		handleDeleteKpo,
-		push
-	} = useKpoList();
 	return (
+		<>
+			{
+				loading ? (
+					<Skeleton animation='wave' width='100%' height='350px' variant='rect' />
+				) : (
 		<EnhancedTable
 			columns={columns}
-			data={listOfKpo}
+			data={[deptKpo]}
 			onRowClick={(ev, row) => {
 				if (row) {
 					push(`/performance_appraisal/kpoList/details/${row.original.id}`)
@@ -81,11 +96,15 @@ const ListOfEmployeeKpo = () => {
 				accessor: 'id',
 			}}
 			selectAll={(value) => console.log(value)}
-      handleDelete={handleDeleteKpo}
+      handleDelete={handleDelete}
       toolBar={
         <Toolbar />
       }
 		/>
+				)
+			}
+		</>
+		
 	);
 };
 
@@ -93,7 +112,7 @@ const ListOfEmployeeKpo = () => {
 const Toolbar = () => {
   return (
     <Grid container spacing={1} className='w-2/5'>
-      <Grid item lg={4} md={4} sm={4} xs={4}>
+      {/* <Grid item lg={4} md={4} sm={4} xs={4}>
         <SelectTextField
           label='Entity'
           className='mr-10'
@@ -120,7 +139,7 @@ const Toolbar = () => {
             Dev Ops
           </MenuItem>
         </SelectTextField>
-      </Grid>
+      </Grid> */}
       <Grid item lg={4} md={4} sm={4} xs={4}>
       <SelectTextField
           label='Status'
