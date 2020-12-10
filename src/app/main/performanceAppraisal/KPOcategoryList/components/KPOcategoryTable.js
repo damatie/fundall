@@ -5,6 +5,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Icon from '@material-ui/core/Icon';
 import useKPOcategoryList from '../hooks/useKPOcategoryList';
 import Typography from '@material-ui/core/Typography';
+import moment from ''
 
 
 const KPOcategoryTable = () => {
@@ -24,8 +25,11 @@ const KPOcategoryTable = () => {
 			},
 			{
 				Header: 'Modified',
-				accessor: 'modified',
-				sortable: true
+				accessor: 'updatedAt',
+				sortable: true,
+				Cell: ({ row : { original }}) => {
+					return <>{}</>
+				}
 			},
 			{
 				Header: 'Modified by',
