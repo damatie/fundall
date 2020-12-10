@@ -15,47 +15,47 @@ import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import Input from '@material-ui/core/Input';
-import Button from  '@material-ui/core/Button';
-import React, {useState, useEffect} from 'react';
+import Button from '@material-ui/core/Button';
+import React, { useState, useEffect } from 'react';
 import Moment from 'react-moment';
 import WidgetModal from './WidgetModal';
 
-const CategoryTableWidget = (props) =>{
+const CategoryTableWidget = (props) => {
     const [data, setData] = useState(props.rows);
     const [open, setOpen] = useState(false);
     const [page, setPage] = useState(0);
     const [search, setSearch] = useState('');
-	const [rowsPerPage, setRowsPerPage] = useState(10);
-	const [order, setOrder] = useState({
-		direction: 'asc',
-		id: null
+    const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [order, setOrder] = useState({
+        direction: 'asc',
+        id: null
     });
     const [selected, setSelected] = useState({});
     let count = 0;
 
-	const createSortHandler = property => event =>  {
-		const id = property;
-		let direction = 'desc';
+    const createSortHandler = property => event => {
+        const id = property;
+        let direction = 'desc';
 
-		if (order.id === property && order.direction === 'desc') {
-			direction = 'asc';
-		}
+        if (order.id === property && order.direction === 'desc') {
+            direction = 'asc';
+        }
 
-		setOrder({
-			direction,
-			id
-		});
-	}
-
-    function handleChangePage(event, value) {
-		setPage(value);
-	}
-
-	function handleChangeRowsPerPage(event) {
-		setRowsPerPage(event.target.value);
+        setOrder({
+            direction,
+            id
+        });
     }
 
-    function handleSearch(event){
+    function handleChangePage(event, value) {
+        setPage(value);
+    }
+
+    function handleChangeRowsPerPage(event) {
+        setRowsPerPage(event.target.value);
+    }
+
+    function handleSearch(event) {
         setSearch(event.target.value);
     }
 
@@ -64,40 +64,40 @@ const CategoryTableWidget = (props) =>{
     };
 
     useEffect(() => {
-		if (search.length >= 2) {
-			setData(_.filter(props.rows, row => ( (row.name) ? row.name.toLowerCase() : row.categoryName.toLowerCase()).includes(search.toLowerCase())));
-			setPage(0);
-		} else {
-			setData(props.rows);
-		}
+        if (search.length >= 2) {
+            setData(_.filter(props.rows, row => ((row.name) ? row.name.toLowerCase() : row.categoryName.toLowerCase()).includes(search.toLowerCase())));
+            setPage(0);
+        } else {
+            setData(props.rows);
+        }
     }, [props.rows, search]);
-    
-    
-	return (
-		<Paper className="w-full rounded-8 shadow-none border-1">
-        <WidgetModal open={open} handleClose={handleClose} item={selected}/>
-			<div className="flex items-center justify-between px-16 h-64 border-b-1">
-				<Typography className="text-16">{props.title}</Typography>
-                    <div className="flex items-center">
-                        <Paper className="flex items-center w-full px-8 py-4 rounded-8">
-                            <Icon color="action">search</Icon>
-                            <Input
-                                placeholder="Search"
-                                className="flex flex-1 mx-8"
-                                disableUnderline
-                                fullWidth
-                                value={search}
-                                inputProps={{
-                                    'aria-label': 'Search'
-                                }}
-                                onChange={ev => handleSearch(ev)}
-                            />
-                        </Paper>
-                    </div>
-			</div>
-			<div className="table-responsive">
-				<Table className="w-full min-w-full">
-					<TableHead>
+
+
+    return (
+        <Paper className="w-full rounded-8 shadow-none border-1">
+            <WidgetModal open={open} handleClose={handleClose} item={selected} />
+            <div className="flex items-center justify-between px-16 h-64 border-b-1">
+                <Typography className="text-16">{props.title}</Typography>
+                <div className="flex items-center">
+                    <Paper className="flex items-center w-full px-8 py-4 rounded-8">
+                        <Icon color="action">search</Icon>
+                        <Input
+                            placeholder="Search"
+                            className="flex flex-1 mx-8"
+                            disableUnderline
+                            fullWidth
+                            value={search}
+                            inputProps={{
+                                'aria-label': 'Search'
+                            }}
+                            onChange={ev => handleSearch(ev)}
+                        />
+                    </Paper>
+                </div>
+            </div>
+            <div className="table-responsive">
+                <Table className="w-full min-w-full">
+                    <TableHead>
                         <TableRow className="h-64">
                             {props.columns.map(column => {
                                 return (
@@ -126,72 +126,73 @@ const CategoryTableWidget = (props) =>{
                                 );
                             }, this)}
                         </TableRow>
-					</TableHead>
-					<TableBody>
-						{_.orderBy(
-								data,
-								[
-									o => {
-										switch (order.id) {
-											case 'categories': {
-												return o.categories[0];
-											}
-											default: {
-												return o[order.id];
-											}
-										}
-									}
-								],
-								[order.direction]
-							)
-								.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-								.map(n => {
-                                    count++;
-								return (
-									<TableRow
-										key={n.id}
-										hover
-										// selected={n.id === selectedItemId}
-										className="cursor-pointer"
-									>
-										<TableCell className="text-center">
-											{count}
-										</TableCell>
+                    </TableHead>
+                    <TableBody>
+                        {_.orderBy(
+                            data,
+                            [
+                                o => {
+                                    switch (order.id) {
+                                        case 'categories': {
+                                            return o.categories[0];
+                                        }
+                                        default: {
+                                            return o[order.id];
+                                        }
+                                    }
+                                }
+                            ],
+                            [order.direction]
+                        )
+                            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                            .map(n => {
+                                count++;
+                                return (
+                                    <TableRow
+                                        key={n.id}
+                                        hover
+                                        onClick={props.tableRowClick}
+                                        // selected={n.id === selectedItemId}
+                                        className="cursor-pointer"
+                                    >
                                         <TableCell className="text-center">
-											{(n.name) ? n.name : n.categoryName}
-										</TableCell>
-                                       {(props.showDesc) ? (
-                                        <TableCell className="text-center">
-											{n.description}
-										</TableCell>
-                                       ) : null}
-										<TableCell className="text-center"><Moment format="ddd Do MMM, YY | hh:mm:ss a">{n.createdAt}</Moment></TableCell>
-                                        <TableCell className="text-center">
-                                        <Moment format="ddd Do MMM, YY | hh:mm:ss a">{n.updatedAt}</Moment>           
+                                            {count}
                                         </TableCell>
-                                            { (props.showEdit)?
-                                                <TableCell className="text-center">
-                                                    <Icon onClick={ev => props.handleEdit(ev, n)} className="text-blue text-20" color="action">
-                                                        edit
+                                        <TableCell className="text-center">
+                                            {(n.name) ? n.name : n.categoryName}
+                                        </TableCell>
+                                        {(props.showDesc) ? (
+                                            <TableCell className="text-center">
+                                                {n.description}
+                                            </TableCell>
+                                        ) : null}
+                                        <TableCell className="text-center"><Moment format="ddd Do MMM, YY | hh:mm:ss a">{n.createdAt}</Moment></TableCell>
+                                        <TableCell className="text-center">
+                                            <Moment format="ddd Do MMM, YY | hh:mm:ss a">{n.updatedAt}</Moment>
+                                        </TableCell>
+                                        { (props.showEdit) ?
+                                            <TableCell className="text-center">
+                                                <Icon onClick={ev => props.handleEdit(ev, n)} className="text-blue text-20" color="action">
+                                                    edit
                                                     </Icon>
                                                     &nbsp;
                                                     &nbsp;
                                                     <Icon onClick={ev => props.handleDelete(ev, n.id)} className="text-red text-20" color="action">
-                                                        delete
+                                                    delete
                                                     </Icon>
-                                                </TableCell>
-                                            : 
-                                                <TableCell className="text-center">
-                                                    <Icon onClick={ev => props.handleDelete(ev, n.id)} className="text-red text-20" color="action">
-                                                        delete
+                                            </TableCell>
+                                            :
+                                            <TableCell className="text-center">
+                                                <Icon onClick={ev => props.handleDelete(ev, n.id)} className="text-red text-20" color="action">
+                                                    delete
                                                     </Icon>
-                                                </TableCell>
-                                            }
-									</TableRow>
-								);
-							})}
-						</TableBody>
-				    <TableFooter>
+                                            </TableCell>
+                                        }
+                                    </TableRow>
+                                );
+                            })}
+                    </TableBody>
+                    <TableFooter>
                         <TableRow>
                             <TablePagination
                                 className="overflow-hidden"
@@ -211,10 +212,10 @@ const CategoryTableWidget = (props) =>{
                             />
                         </TableRow>
                     </TableFooter>
-				</Table>
-			</div>
-		</Paper>
-	);
+                </Table>
+            </div>
+        </Paper>
+    );
 }
 
 export default React.memo(CategoryTableWidget);
