@@ -7,13 +7,14 @@ import MenuItem from '@material-ui/core/MenuItem';
 import useKpoReview from '../hooks/useKpoReview';
 import Skeleton from '@material-ui/lab/Skeleton';
 
-const ListOfEmployeeKpo = () => {
+const ListOfEmployeeKpo = ({user}) => {
 	const { 
 		deptKpo,
 		loading,
 		handleDelete,
-		push
-	} = useKpoReview();
+		push,
+		assignedKpo
+	} = useKpoReview(user);
 	const columns = React.useMemo(
 		() => [
       {
@@ -84,7 +85,7 @@ const ListOfEmployeeKpo = () => {
 				) : (
 		<EnhancedTable
 			columns={columns}
-			data={[deptKpo]}
+			data={user !== 'reviewingManager' ? [deptKpo] : assignedKpo}
 			onRowClick={(ev, row) => {
 				if (row) {
 					push(`/performance_appraisal/kpoList/details/${row.original.id}`)
