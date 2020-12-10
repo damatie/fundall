@@ -63,7 +63,7 @@ const useStyles = makeStyles(theme => ({
 		marginBottom: 10,
 		alignSelf: 'left',
 		[theme.breakpoints.down('xs')]: {
-		  display: 'none',
+			display: 'none',
 		},
 		color: 'white',
 		fontSize: 20
@@ -95,14 +95,15 @@ function PersonalTrainingCourses(props) {
 	const userId = useAuth().getId;
 	const employeeHOD = useAuth().getUserDetails.department.departmentHeadId;
 	const [filterEmployees, setFilterEmployees] = useState(
-		employees.filter(f => {
-			return (f.firstName !== null || f.lastName !== null || f.role.name.toLowerCase() !== 'employee' || f.roleId !== 8);
-		}).sort((a, b) => {
-			if(a.firstName +" "+a.lastName < b.firstName +" "+b.lastName) { return -1; }
-    		if(a.firstName +" "+a.lastName > b.firstName +" "+b.lastName) { return 1; }
-    		return 0;
-		})
+		employees
 	);
+	// employees.filter(f => {
+	// 	return (f.firstName !== null || f.lastName !== null || f?.role.name.toLowerCase() !== 'employee' || f?.roleId !== 8);
+	// }).sort((a, b) => {
+	// 	if (a.firstName + " " + a.lastName < b.firstName + " " + b.lastName) { return -1; }
+	// 	if (a.firstName + " " + a.lastName > b.firstName + " " + b.lastName) { return 1; }
+	// 	return 0;
+	// })
 
 	useEffect(() => {
 		dispatch(Actions.getApprovedCourses());
@@ -141,19 +142,19 @@ function PersonalTrainingCourses(props) {
 	}
 
 	function canBeSubmitted() {
-		if(checkRole()){
+		if (checkRole()) {
 			return (start !== '' && hod !== 0);
-		}else{
+		} else {
 			return start !== '';
 		}
 	}
 
 	const handleChangePage = (event, value) => {
 		console.log(value);
-		let newPage = value-1;
-		dispatch(Actions.getApprovedCourses(rowsPerPage, newPage*rowsPerPage));
+		let newPage = value - 1;
+		dispatch(Actions.getApprovedCourses(rowsPerPage, newPage * rowsPerPage));
 		setPage(value);
-		window.scrollTo(0,0);
+		window.scrollTo(0, 0);
 		// alert('hello')
 	};
 
@@ -205,8 +206,8 @@ function PersonalTrainingCourses(props) {
 	}
 
 	const CaptializeFirstLetter = (word) => {
-		if(word){
-		return word.charAt(0).toUpperCase() + word.slice(1);
+		if (word) {
+			return word.charAt(0).toUpperCase() + word.slice(1);
 		}
 		return '';
 	}
@@ -228,7 +229,7 @@ function PersonalTrainingCourses(props) {
 						classes.header,
 						'relative overflow-hidden flex flex-col flex-shrink-0 items-center justify-center text-center p-16 sm:p-24 h-100 sm:h-188'
 					)}
-				>	
+				>
 					<FuseAnimate animation="transition.slideUpIn" duration={400} delay={100}>
 						<Typography color="inherit" className="text-24 sm:text-40 font-light">
 							COURSE LIST
@@ -282,83 +283,83 @@ function PersonalTrainingCourses(props) {
 							data &&
 							(data.length > 0 ? (
 								<div>
-								<FuseAnimateGroup
-									enter={{
-										animation: 'transition.slideUpBigIn'
-									}}
-									className="flex flex-wrap py-24"
-								>
-									{data.map(course => {
-										return (
-											<div className="w-full pb-24 sm:w-1/2 lg:w-1/3 sm:p-16" key={course.id}>
-												<Card elevation={1} className="flex flex-col h-256">
-													<div
-														className="flex flex-shrink-0 items-center justify-between px-24 h-64"
-														style={{
-															background: blue[500],
-															color: theme.palette.getContrastText(blue[500])
-														}}
-													>
-														<Typography className="font-medium truncate" color="inherit">
-															{course.category}
-														</Typography>
-														<div className="flex items-center justify-center opacity-75">
-															<Icon className="text-20 mx-8" color="inherit">
-																access_time
+									<FuseAnimateGroup
+										enter={{
+											animation: 'transition.slideUpBigIn'
+										}}
+										className="flex flex-wrap py-24"
+									>
+										{data.map(course => {
+											return (
+												<div className="w-full pb-24 sm:w-1/2 lg:w-1/3 sm:p-16" key={course.id}>
+													<Card elevation={1} className="flex flex-col h-256">
+														<div
+															className="flex flex-shrink-0 items-center justify-between px-24 h-64"
+															style={{
+																background: blue[500],
+																color: theme.palette.getContrastText(blue[500])
+															}}
+														>
+															<Typography className="font-medium truncate" color="inherit">
+																{course.category}
+															</Typography>
+															<div className="flex items-center justify-center opacity-75">
+																<Icon className="text-20 mx-8" color="inherit">
+																	access_time
 															</Icon>
-															<div className="text-16 whitespace-no-wrap">{course.duration}</div>
+																<div className="text-16 whitespace-no-wrap">{course.duration}</div>
+															</div>
 														</div>
-													</div>
-													<CardContent className="flex flex-col flex-auto items-center justify-center">
-														<Typography className="text-center text-20 font-400">{course.name}</Typography>
-														<Typography className="text-center text-16 font-600" color="textSecondary">
-															{course.certification ? 'Certificate Available' : 'Certificate Not Available'}
-														</Typography>
-														<Typography className="text-center text-13 font-600 mt-4" color="textSecondary">
-															<Moment format="MMM DD, YYYY">{course.createdAt}</Moment>
-														</Typography>
-													</CardContent>
-													<Divider />
-													<Dialog open={open} onClose={handleClose} fullWidth maxWidth="xs">
-														<AppBar position="static">
-															<Toolbar className="flex w-full">
-																<Typography variant="subtitle1" color="inherit">
-																	{'New Training Request'}
-																</Typography>
-															</Toolbar>
-														</AppBar>
-														<form noValidate onSubmit={ev => handleSubmit(ev)}>
-															<DialogContent classes={{ root: 'p-16 pb-0 sm:p-24 sm:pb-0' }}>
-																<Autocomplete
-																	hidden={!checkRole()}
-																	freeSolo
-																	options={
-																		filterEmployees &&
-																		filterEmployees.map(option => option && (CaptializeFirstLetter(option.firstName) + ' ' + CaptializeFirstLetter(option.lastName)) )
-																	}
-																	onChange={(ev, value) => handleSelectChange(value)}
-																	renderInput={params => (
-																		<TextField
-																			{...params}
-																			label="Head Of Department"
-																			margin="normal"
-																			variant="outlined"
-																			required
-																		/>
-																	)}
-																/>
+														<CardContent className="flex flex-col flex-auto items-center justify-center">
+															<Typography className="text-center text-20 font-400">{course.name}</Typography>
+															<Typography className="text-center text-16 font-600" color="textSecondary">
+																{course.certification ? 'Certificate Available' : 'Certificate Not Available'}
+															</Typography>
+															<Typography className="text-center text-13 font-600 mt-4" color="textSecondary">
+																<Moment format="MMM DD, YYYY">{course.createdAt}</Moment>
+															</Typography>
+														</CardContent>
+														<Divider />
+														<Dialog open={open} onClose={handleClose} fullWidth maxWidth="xs">
+															<AppBar position="static">
+																<Toolbar className="flex w-full">
+																	<Typography variant="subtitle1" color="inherit">
+																		{'New Training Request'}
+																	</Typography>
+																</Toolbar>
+															</AppBar>
+															<form noValidate onSubmit={ev => handleSubmit(ev)}>
+																<DialogContent classes={{ root: 'p-16 pb-0 sm:p-24 sm:pb-0' }}>
+																	<Autocomplete
+																		hidden={!checkRole()}
+																		freeSolo
+																		options={
+																			filterEmployees &&
+																			filterEmployees.map(option => option && (CaptializeFirstLetter(option.firstName) + ' ' + CaptializeFirstLetter(option.lastName)))
+																		}
+																		onChange={(ev, value) => handleSelectChange(value)}
+																		renderInput={params => (
+																			<TextField
+																				{...params}
+																				label="Head Of Department"
+																				margin="normal"
+																				variant="outlined"
+																				required
+																			/>
+																		)}
+																	/>
 
-																<DateTimePicker
-																	label="Start"
-																	inputVariant="outlined"
-																	value={start}
-																	onChange={date => handleDateChange(date)}
-																	className="mt-8 mb-16 w-full"
-																	minDate={start}
-																	format={'MMMM Do, YYYY hh:mm a'}
-																/>
+																	<DateTimePicker
+																		label="Start"
+																		inputVariant="outlined"
+																		value={start}
+																		onChange={date => handleDateChange(date)}
+																		className="mt-8 mb-16 w-full"
+																		minDate={start}
+																		format={'MMMM Do, YYYY hh:mm a'}
+																	/>
 
-																{/* <DateTimePicker
+																	{/* <DateTimePicker
 																		label="End"
 																		inputVariant="outlined"
 																		value={end}
@@ -369,46 +370,46 @@ function PersonalTrainingCourses(props) {
 																		minDate={start}
 																		// maxDate={end}
 																	/> */}
-															</DialogContent>
-															<DialogActions className="justify-between px-8 sm:px-16">
-																<Button variant="contained" color="primary" type="submit" disabled={!canBeSubmitted()}>
-																	Add
+																</DialogContent>
+																<DialogActions className="justify-between px-8 sm:px-16">
+																	<Button variant="contained" color="primary" type="submit" disabled={!canBeSubmitted()}>
+																		Add
 																</Button>
-															</DialogActions>
-														</form>
-													</Dialog>
-													<CardActions className="justify-center">
-														<Button
-															type="button"
-															className="justify-start px-32"
-															color="secondary"
-															onClick={ev => {
-																handleOpen();
-																setId(course.id);
-																setDuration(course.duration);
-																setStart(moment(new Date(), 'MM/DD/YYYY').add(1, 'days'));
-															}}
-														>
-															START
+																</DialogActions>
+															</form>
+														</Dialog>
+														<CardActions className="justify-center">
+															<Button
+																type="button"
+																className="justify-start px-32"
+																color="secondary"
+																onClick={ev => {
+																	handleOpen();
+																	setId(course.id);
+																	setDuration(course.duration);
+																	setStart(moment(new Date(), 'MM/DD/YYYY').add(1, 'days'));
+																}}
+															>
+																START
 														</Button>
-													</CardActions>
-													<LinearProgress className="w-full" variant="determinate" value={100} color="secondary" />
-												</Card>
-											</div>
-										);
-									})}
-								</FuseAnimateGroup>
+														</CardActions>
+														<LinearProgress className="w-full" variant="determinate" value={100} color="secondary" />
+													</Card>
+												</div>
+											);
+										})}
+									</FuseAnimateGroup>
 									<div className={classes.pagination}>
-										<Pagination count={Math.round(totalNo/rowsPerPage)} page={page} onChange={handleChangePage} color="primary" />
+										<Pagination count={Math.round(totalNo / rowsPerPage)} page={page} onChange={handleChangePage} color="primary" />
 									</div>
 								</div>
 							) : (
-								<div className="flex flex-1 items-center justify-center">
-									<Typography color="textSecondary" className="text-24 my-24">
-										No courses found!
+									<div className="flex flex-1 items-center justify-center">
+										<Typography color="textSecondary" className="text-24 my-24">
+											No courses found!
 									</Typography>
-								</div>
-							)),
+									</div>
+								)),
 						[categories, data, employees, filterEmployees, open, id, start, end, hod, page, theme.palette]
 					)}
 				</div>
