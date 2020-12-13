@@ -1,20 +1,22 @@
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import * as Actions from 'app/main/loanApp/salaryAdvance/store/actions';
+import { useHistory } from 'react-router';
 
-const handleBtnVisibility = ({role, status}) => {
+const handleBtnVisibility = ({ role, status }) => {
+  status = status.toLowerCase();
   const ruleOne = role === 'Director of support service' && (status === 'pending');
   const ruleTwo = role === 'Finance manager' && (status === 'approved');
-  // const ruleThree = status === 'open' && status === 'closed' && status === 'rejected';
+  const ruleThree = role !== "Employee" && status === 'pending';
 
-  const combineRules = ruleOne || ruleTwo;
+  const combineRules = ruleOne || ruleTwo || ruleThree;
 
   return combineRules;
 };
 
-const getSalaryAdvanceUrl = ({ type, status }) => {
-  if(type === 'approve') {
-    switch(status) {
+const getSalaryAdvanceUrl = ({ type, status, role, id }) => {
+  if (type === 'approve') {
+    switch (status.toLowerCase()) {
       case 'pending': {
         return '/salary-advance/approve/support/';
       }
@@ -26,9 +28,9 @@ const getSalaryAdvanceUrl = ({ type, status }) => {
       }
     };
   } else {
-    switch(status) {
+    switch (status.toLowerCase()) {
       case 'pending': {
-        return '/salary-advance/support/reject/';
+        return `/salary-advance/${role.toLowerCase().split(" ").join("")}/reject/${id}`;
       }
       case 'approved': {
         return '/salary-advance/finance/reject/';
@@ -38,7 +40,7 @@ const getSalaryAdvanceUrl = ({ type, status }) => {
       }
     };
   }
-  
+
 };
 
 
@@ -49,6 +51,7 @@ const useSalaryAdvanceMgt = ({ loan, userRole, id }) => {
   const [rejectUrl, setRejectUrl] = useState('');
 
   const dispatch = useDispatch();
+  let history = useHistory();
 
   useEffect(() => {
     setShowBtn(handleBtnVisibility(
@@ -67,22 +70,36 @@ const useSalaryAdvanceMgt = ({ loan, userRole, id }) => {
     setRejectUrl(getSalaryAdvanceUrl(
       {
         type: 'reject',
-        status: loan.salaryAdvanceData.status
+        status: loan.salaryAdvanceData.status,
+        role: userRole,
+        id: loan.salaryAdvanceData.id
       }
     ))
   }, [loan, userRole]);
 
   const handleApprove = () => {
-    dispatch(Actions.approveSalaryAvance({
-      id,
-      url: approveUrl,
-    }));
+    // dispatch(Actions.approveSalaryAvance({
+    //   id,
+    //   url: approveUrl,
+    // }));
+    history.push({
+      pathname: "/loan/request/salaryadvance_request/new/" + id,
+      state: userRole
+    })
+
   };
 
-  const handleReject = () => {
+  const handleReject = (data) => {
+    let payload = {};
+    payload.amount = data.amount;
+    payload.repaymentDate = data.repaymentDate;
+
+    console.log(rejectUrl)
+
     dispatch(Actions.rejectSalaryAdvance({
       id,
       url: rejectUrl,
+      payload
     }));
   };
 

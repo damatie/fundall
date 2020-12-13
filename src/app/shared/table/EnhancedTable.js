@@ -12,14 +12,34 @@ import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import { useGlobalFilter, usePagination, useRowSelect, useSortBy, useTable } from 'react-table';
 import clsx from 'clsx';
-import makeStyles from '@material-ui/core/styles/makeStyles';
+import { lighten, makeStyles } from '@material-ui/core/styles';
 import EnhancedTablePaginationActions from './components/EnhancedTablePaginationActions';
 import Toolbar from '@material-ui/core/Toolbar';
+import IconButton from '@material-ui/core/IconButton';
+import Icon from '@material-ui/core/Icon';
+import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles(theme => ({
 	bg: {
 		background: '#fff'
-	}
+	},
+	title: {
+    flex: '1 1 100%',
+	},
+	root: {
+		paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(1),
+	},
+	highlight:
+    theme.palette.type === 'light'
+      ? {
+          color: theme.palette.secondary.main,
+          backgroundColor: lighten(theme.palette.secondary.light, 0.6),
+        }
+      : {
+          color: theme.palette.text.primary,
+          backgroundColor: theme.palette.secondary.dark,
+        },
 }))
 const IndeterminateCheckbox = React.forwardRef(({ indeterminate, ...rest }, ref) => {
 	const defaultRef = React.useRef();
@@ -36,7 +56,24 @@ const IndeterminateCheckbox = React.forwardRef(({ indeterminate, ...rest }, ref)
 	);
 });
 
-const EnhancedTable = ({ columns, data, onRowClick, checkbox, selectAll, toolBar }) => {
+let globalArray = [];
+const EnhancedTable = ({ columns, data, onRowClick, checkbox, selectAll, toolBar, handleDelete }) => {
+	const [selectedItems, setSelectedItems] = React.useState([]);
+	// add or remove table row id to selectedItems state
+	const handleCheckbox = (id) => {
+		const newSelectedItems = selectedItems.length === 0 ? globalArray : selectedItems;
+		const index = selectedItems.length === 0 ? globalArray.indexOf(id) : selectedItems.indexOf(id);
+		index === -1 ? newSelectedItems.push(id) : newSelectedItems.splice(index, 1);
+		setSelectedItems(newSelectedItems);
+	};
+
+	//add all table rows id to selectedItems state
+	const handleCheckAll = (items) => {
+		const arr = items.map(item => item.id)
+		setSelectedItems(arr);
+		globalArray = arr;
+	};
+
 	const {
 		getTableProps,
 		headerGroups,
@@ -70,8 +107,9 @@ const EnhancedTable = ({ columns, data, onRowClick, checkbox, selectAll, toolBar
 					// In that case, getToggleAllRowsSelectedProps works fine.
 					Header: ({ getToggleAllRowsSelectedProps, rows }) => (
 						<div>
-							<IndeterminateCheckbox {...getToggleAllRowsSelectedProps()} onClick={() => {
+							<IndeterminateCheckbox {...getToggleAllRowsSelectedProps()} onClick={(e) => {
 								const result = rows.map(item => item.values);
+								handleCheckAll(e.target.checked ? result : []);
 								checkbox && selectAll(result);
 							}} />
 						</div>
@@ -84,7 +122,9 @@ const EnhancedTable = ({ columns, data, onRowClick, checkbox, selectAll, toolBar
 								{...row.getToggleRowSelectedProps()}
 								onClick={ev => {
 									ev.stopPropagation();
+									handleCheckbox(row.values.id)
 									checkbox && checkbox.onClick(row.values);
+		
 								}}
 							/>
 						</div>
@@ -105,14 +145,34 @@ const EnhancedTable = ({ columns, data, onRowClick, checkbox, selectAll, toolBar
 		setPageSize(Number(event.target.value));
 	};
 
+	
+
 	const classes = useStyles();
 
 	// Render the UI for your table
 	return (
 		<TableContainer className={clsx("min-h-full sm:border-1 sm:rounded-8 rounded-8 bg-white", classes.bg)}>
-			{/* <Toolbar>
-				{toolBar}
-			</Toolbar> */}
+			{
+				toolBar || selectedItems.length > 0 ? (
+					<Toolbar className={clsx(classes.root, {
+						[classes.highlight]: selectedItems.length > 0
+					})}>
+						{selectedItems.length > 0 ? (
+							<>
+							<Typography className={classes.title} color="inherit" variant="subtitle1" component="div">
+							{selectedItems.length}
+							</Typography>
+							<IconButton onClick={() => {handleDelete && handleDelete(selectedItems)}}>
+								<Icon>delete</Icon>
+							</IconButton>
+						</>
+						) : <></>}
+						
+					</Toolbar>
+				) : (
+					<></>
+				)
+			}
 			<MaUTable {...getTableProps()}>
 				<TableHead>
 					{headerGroups.map(headerGroup => (
@@ -144,13 +204,15 @@ const EnhancedTable = ({ columns, data, onRowClick, checkbox, selectAll, toolBar
 							<TableRow
 								{...row.getRowProps()}
 								onClick={ev => onRowClick(ev, row)}
-								className="truncate cursor-pointer"
+								className='truncate cursor-pointer'
 							>
 								{row.cells.map(cell => {
 									return (
 										<TableCell
 											{...cell.getCellProps()}
-											className={clsx('p-12', cell.column.className)}
+											className={clsx('p-12', cell.column.className, {
+												[classes.highlight]: selectedItems.some(id => id === row.original.id)
+											})}
 										>
 											{cell.render('Cell')}
 										</TableCell>

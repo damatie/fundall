@@ -5,6 +5,7 @@ import Input from 'app/shared/TextInput/Input';
 import SelectTextField from 'app/shared/TextInput/SelectTextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import SharedButton from 'app/shared/button/SharedButton';
+import { DatePicker } from '@material-ui/pickers'
 
 const CreateEmployeeKpo = () => {
   const { handleCloseModal, open } = useKpoList();
@@ -27,11 +28,17 @@ const CreateEmployeeKpo = () => {
             Dev Ops
           </MenuItem>
         </SelectTextField>
-        <Input
+        {/* <Input
           name='kpoYear'
           label='KPO Year'
           type='date'
           className='my-16'
+        /> */}
+        <DatePicker
+          label='KPO Year'
+          inputVariant="outlined"
+          onChange={date => console.log(new Date(date))}
+          className="my-16 w-full"
         />
         <Input
           className='my-16'

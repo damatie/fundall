@@ -4,7 +4,7 @@ import Typography from '@material-ui/core/Typography';
 const LoanStatus = (props) => {
   const { status } = props;
 
-  switch (status) {
+  switch (status.toLowerCase()) {
     case 'pending':
       return (
         <Typography className={'bg-orange text-white inline text-11 font-500 px-8 py-4 rounded-4'}>{status}</Typography>
@@ -36,6 +36,20 @@ const LoanStatus = (props) => {
       return (
         <Typography className={'bg-orange text-bold text-white inline text-11 font-500 px-8 py-4 rounded-4'}>
           {status}
+        </Typography>
+      );
+      break;
+    case 'reviewed1':
+      return (
+        <Typography className={'bg-orange text-bold text-white inline text-11 font-500 px-8 py-4 rounded-4'}>
+          Line Manager Approved
+        </Typography>
+      );
+      break;
+    case 'reviewed2':
+      return (
+        <Typography className={'bg-orange text-bold text-white inline text-11 font-500 px-8 py-4 rounded-4'}>
+          Finance Manager Approved
         </Typography>
       );
       break;

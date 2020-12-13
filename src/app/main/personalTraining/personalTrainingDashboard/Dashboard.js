@@ -13,6 +13,9 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBackIosRounded';
 import IconButton from '@material-ui/core/IconButton';
 import CardWidget from 'app/shared/widgets/CardWidget';
 import PersonalTrainingCalendar from '../personalTrainingCalendar';
+import { Grid, MenuItem, Paper } from '@material-ui/core';
+import SharedTable from 'app/shared/sharedTable';
+import SelectTextField from 'app/shared/TextInput/SelectTextField';
 
 const useStyles = makeStyles(theme => ({
 	header: {
@@ -45,14 +48,94 @@ const useStyles = makeStyles(theme => ({
 		fontSize: 20
 	},
 }));
+const rows = [
+	{
+		id: 'name',
+		field: 'name',
+		align: 'center',
+		disablePadding: false,
+		label: 'Course Name',
+		sort: true
+	},
+	{
+		id: 'category',
+		field: 'category',
+		align: 'center',
+		disablePadding: false,
+		label: 'Category',
+		sort: true
+	},
+	{
+		id: 'startDate',
+		type: 'date',
+		align: 'center',
+		disablePadding: false,
+		label: 'Start Date',
+		sort: true
+	},
+	{
+		id: 'endDate',
+		type: 'date',
+		align: 'center',
+		disablePadding: false,
+		label: 'End Date',
+		sort: true
+	},
+	{
+		id: 'location',
+		field: 'location',
+		align: 'center',
+		disablePadding: false,
+		label: 'Location',
+		sort: true
+	},
+	{
+		id: 'status',
+		field: 'status',
+		align: 'center',
+		disablePadding: false,
+		label: 'Status',
+		sort: true
+	}
+];
 
 function PersonalTrainingDashboard(props) {
 	const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
+
+	const data = [
+		{
+			name: "React Native Studies",
+			category: "Technical",
+			startDate: new Date(),
+			endDate: new Date(),
+			location: "Alaba, Nigeria",
+			status: "pending"
+		},
+		{
+			name: "React Native Studies",
+			category: "Technical",
+			startDate: new Date(),
+			endDate: new Date(),
+			location: "Nairobi, Kenya",
+			status: "pending"
+		},
+		{
+			name: "React Native Studies",
+			category: "Technical",
+			startDate: new Date(),
+			endDate: new Date(),
+			location: "Cairo, Egypt",
+			status: "pending"
+		}
+	];
 
 	const classes = useStyles(props);
 
 	const goToPreviousRoute = () => {
 		window.location = '/training/personal';
+	}
+
+	const routeToMe = () => {
 	}
 
 	return (
@@ -85,7 +168,7 @@ function PersonalTrainingDashboard(props) {
 						}}
 					>
 						<div className="widget flex p-12 flex-col" style={{ width: "80%" }}>
-							<PersonalTrainingCalendar title='Training Calendar'/>
+							<PersonalTrainingCalendar title='Training Calendar' />
 						</div>
 						<div className="flex-column" style={{ width: "20%" }}>
 							<div className="widget flex w-full p-12"  >
@@ -102,10 +185,53 @@ function PersonalTrainingDashboard(props) {
 							</div>
 						</div>
 					</FuseAnimateGroup>
+
+					<Paper className="mt-24 m-10">
+						<Typography variant="subtitle1" color="inherit" className="p-24 pb-0">Upcoming Trainings</Typography>
+						<Grid container spacing={3} alignItems='center' className="p-24">
+							<Grid item lg={2}>
+								<SelectTextField
+									value={2020}
+									size='small'
+									label='Year'
+								>
+									{[2019, 2020, 2021].map(item => (
+										<MenuItem value={item}>
+											{item}
+										</MenuItem>
+									))}
+								</SelectTextField>
+							</Grid>
+							<Grid item lg={2}>
+								<SelectTextField
+									value={"Jan"}
+									size='small'
+									label='Month'
+								>
+									{["Jan", "Feb", "March", "April", "May", "June"].map(item => (
+										<MenuItem value={item}>
+											{item}
+										</MenuItem>
+									))}
+								</SelectTextField>
+							</Grid>
+						</Grid>
+						<FuseAnimateGroup
+							className="flex flex-wrap"
+							enter={{
+								animation: 'transition.slideUpBigIn'
+							}}
+						>
+							<div className="widget flex w-full p-12">
+								<SharedTable data={data ?? []} rows={rows} type="default" />
+							</div>
+						</FuseAnimateGroup>
+					</Paper>
 				</div>
 			</div >
 		</ThemeProvider >
 	);
 }
 
-export default withReducer('personalTraining', reducer)(PersonalTrainingDashboard);
+withReducer('personalTraining', reducer)(PersonalTrainingDashboard);
+export default withReducer('TrainingCategory', reducer)(PersonalTrainingDashboard);
