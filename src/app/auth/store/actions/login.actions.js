@@ -20,12 +20,15 @@ export const LOGIN_LOADING = 'LOGIN_LOADING';
 const header = fetchHeaders();
 
 export function submitLogin(data, x) {
-	console.log(x)
+	// console.log(x)
 	return dispatch => {
 		dispatch({
 			type: LOGIN_LOADING
-		})
-		api.post(`/auth/${x || "employee"}/login`, data).then(({ data: { success, message, token, data } }) => {
+		});
+		api.post(`/auth/${x || "employee"}/login`, data).then((response) => {
+
+			const { success, message, token, data } = response.data;
+
 			if (success) {
 				Swal.fire({
 					title: 'Login Successful',
@@ -36,21 +39,14 @@ export function submitLogin(data, x) {
 				api.defaults.headers.Authorization = `JWT ${token}`;
 				localStorage.setItem('jwt_access_token', JSON.stringify(token));
 
-				// const userState;
-
-				// if (!x) {
-
-				// 	return;
-				// }
-
 				const userState = {
 					role: data?.role.name ?? x.toUpperCase(),
-					redirectUrl: '/employee/dashboard',
+					redirectUrl: x ? `/dashboard` : '/employee/dashboard',
 					id: data?.id,
 					data: {
-						displayName: `${data?.firstName} ${data?.lastName}`,
+						displayName: `${data?.firstName ?? response.firstName} ${data?.lastName ?? response.lastName}`,
 						photoURL: data?.profilePicture,
-						email: data?.email,
+						email: data?.email ?? response.email,
 						shortcuts: ['loan_request', 'request_leave', 'blog_list', 'todo'],
 						department: data?.department,
 						details: data?.info
