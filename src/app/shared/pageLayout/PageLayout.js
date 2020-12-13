@@ -28,7 +28,8 @@ const PageLayout = ({
 	btnTitle,
 	btnIcon,
 	btnIconShow,
-    onClick,
+	onClick,
+	hidden
   }
 }) => {
 

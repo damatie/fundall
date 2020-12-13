@@ -53,7 +53,10 @@ export function getDisciplinaryCase() {
 }
 
 export function createDisciplinaryCase(model) {
-	swal.fire('Processing ...');
+	swal.fire({
+            title: 'Processing ...',
+            allowOutsideClick: false
+        });
 	swal.showLoading();
 	return dispatch => {
 		dispatch({
@@ -107,7 +110,10 @@ export function createDisciplinaryCase(model) {
 export function updateDisciplinaryCase(model, id) {
 	console.log(id);
 	console.log(model);
-	swal.fire('Processing ...');
+	swal.fire({
+            title: 'Processing ...',
+            allowOutsideClick: false
+        });
 	swal.showLoading();
 	return dispatch => {
 		dispatch({
@@ -159,7 +165,10 @@ export function updateDisciplinaryCase(model, id) {
 }
 
 export function deleteDisciplinaryCase(id) {
-	swal.fire('Processing ...');
+	swal.fire({
+            title: 'Processing ...',
+            allowOutsideClick: false
+        });
 	swal.showLoading();
 	// console.log(id);
 	return dispatch => {
@@ -209,7 +218,10 @@ export function deleteDisciplinaryCase(id) {
 }
 
 export function closeDisciplinaryCase(id) {
-	swal.fire('Processing ...');
+	swal.fire({
+            title: 'Processing ...',
+            allowOutsideClick: false
+        });
 	swal.showLoading();
 	// console.log(id);
 	return dispatch => {

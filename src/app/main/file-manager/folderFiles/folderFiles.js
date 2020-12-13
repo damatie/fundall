@@ -62,7 +62,7 @@ const columns = [
 ];
 
 const userId = useAuth().getId;
-const userData = useAuth().getUserData;
+const userProfile = useAuth().getUserProfile;
 
 function FolderFiles(props) {
 	const dispatch = useDispatch();
@@ -75,6 +75,7 @@ function FolderFiles(props) {
     const loading = useSelector(({folderFiles}) => folderFiles.folders.uploadLoading);
     const success = useSelector(({folderFiles}) => folderFiles.folders.uploadSuccess);
     const [open, setOpen] = React.useState(false);
+    const roleId = userProfile.roleId;
 	useEffect(() => {
         if(!subFolder || subFolder === ''){
             window.location = `/library/folders/${convertText(mainFolder.name)}`;
@@ -112,13 +113,22 @@ function FolderFiles(props) {
         handleCloseModal();
     }
 
+    const getAccess = () => {
+		console.log(roleId);
+		console.log(mainFolder.access);
+		if(mainFolder.id === 2){
+			return mainFolder.access.includes(roleId.toString());
+		}
+		return true
+    }
+
 	return (
 		<PageLayout
             noSearch
             noPrevious
             props={props}
             header={{
-                icon: 'folder',
+                icon: (subFolder.folderId === 1) ? 'folder_shared' : 'folder',
                 title: `Document Library / ${mainFolder.name} / ${subFolder.name}`,
                 showLink: true,
                 url: `/library/folders/${convertText(mainFolder.name)}`,

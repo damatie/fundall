@@ -35,6 +35,10 @@ const useStyles = makeStyles({
 			content: "'folder'",
 			color: '#FFB300'
 		},
+		'&.folder_shared:before': {
+			content: "'folder_shared'",
+			color: '#FFB300'
+		},
 		'&.document:before': {
 			content: "'insert_drive_file'",
 			color: '#1565C0'
@@ -235,7 +239,11 @@ const MainFolderTable = (props) =>{
                                         style ={{height: "200"}}
 									>
                                         <TableCell className="max-w-64 w-64 p-0 text-center" onClick={event => {handleItemClick(event, n)}}>
-                                            {(n)? <div className="mb-8 mt-8"><Icon className={clsx(classes.typeIcon, 'folder')} /></div> : <div></div>}
+                                            {(n)? <div className="mb-8 mt-8">
+                                                    <Icon className={clsx(classes.typeIcon, (n.id === 1) ? 'folder_shared' : 'folder')} />
+                                                </div> 
+                                                : <div></div>
+                                            }
                                         </TableCell>
 										<TableCell className="text-center" style={{padding: '0 16px'}}
 										onClick={event => {handleItemClick(event, n)}}>

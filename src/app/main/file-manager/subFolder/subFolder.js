@@ -101,6 +101,15 @@ function SubFolder(props) {
     const handleCreate = (model) => {
         dispatch(Actions.createSubFolder(mainFolder.id, model));
         handleCloseModal();
+	}
+	
+	const getAccess = () => {
+		console.log(roleId);
+		console.log(mainFolder.access);
+		if(mainFolder.id === 2){
+			return mainFolder.access.includes(roleId.toString());
+		}
+		return true
     }
 
 	return (
@@ -109,7 +118,7 @@ function SubFolder(props) {
                 noPrevious
 				props={props}
 				header={{
-					icon: 'folder',
+					icon: (mainFolder.id === 1) ? 'folder_shared' : 'folder',
                     title: `Document Library / ${(mainFolder) ? mainFolder.name : ''}`,
                     handleSearch: ({target: { value }}) => console.log(value),
                     showLink: true,
@@ -117,11 +126,11 @@ function SubFolder(props) {
 					isState: true
                 }}
                 button={{
-                    showButton: true,
+                    showButton: getAccess(),
                     btnTitle: 'Create Folder',
                     onClick: handleOpenModal,
                     btnIconShow: true,
-                    btnIcon: 'add'
+                    btnIcon: 'create_new_folder'
                 }}
 				content={
 					<div className="p-12">

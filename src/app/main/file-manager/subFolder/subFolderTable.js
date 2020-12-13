@@ -40,6 +40,10 @@ const useStyles = makeStyles({
 			content: "'folder'",
 			color: '#FFB300'
 		},
+		'&.folder_shared:before': {
+			content: "'folder_shared'",
+			color: '#FFB300'
+		},
 		'&.document:before': {
 			content: "'insert_drive_file'",
 			color: '#1565C0'
@@ -274,7 +278,7 @@ const SubFolderTable = (props) =>{
                                         style ={{height: "200"}}
 									>
                                         <TableCell className="max-w-64 w-64 p-0 text-center" onClick={event => {handleItemClick(event, n)}}>
-                                            <Icon className={clsx(classes.typeIcon, 'folder')} />
+                                            <Icon className={clsx(classes.typeIcon, (n.folderId === 1) ? 'folder_shared' : 'folder')} />
                                         </TableCell>
 										<TableCell className="text-center" style={{padding: '0 16px'}}
                                             onClick={event => { handleItemClick(event, n)}}>
@@ -350,10 +354,10 @@ const SubFolderTable = (props) =>{
 										onClick={event => {handleItemClick(event, n) }}>
                                             {(n.employee) ? `${n.employee.firstName} ${n.employee.lastName}` : ''}
                                         </TableCell>
+                                        <TableCell className="text-center" style={{padding: '0 16px'}}>
                                         <IconButton aria-label="edit" onClick={(event) => {setSelected(n); handleOpenRename() }} disabled={parseInt(props.userId) !== n.createdBy}>
                                             <EditIcon style={{color: (parseInt(props.userId) !== n.createdBy) ? 'grey' : 'skyblue'}} />
                                         </IconButton>
-                                        <TableCell className="text-center" style={{padding: '0 16px'}}>
                                         <IconButton aria-label="delete" onClick={(event) => {setSelected(n); handleDelete()}} disabled={parseInt(props.userId) !== n.createdBy}>
                                             <DeleteIcon style={{color: (parseInt(props.userId) !== n.createdBy) ? 'grey' : 'red'}} />
                                         </IconButton> 

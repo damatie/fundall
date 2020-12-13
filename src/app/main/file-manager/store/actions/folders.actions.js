@@ -115,7 +115,10 @@ export function getSubFolder(id = 0){
 
 export function createSubFolder(id, payload){
     return dispatch => {
-		swal.fire('Processing ...');
+		swal.fire({
+            title: 'Processing ...',
+            allowOutsideClick: false
+        });
 		swal.showLoading();
         dispatch({
             type: LOADING_FOLDER
@@ -247,7 +250,10 @@ export function deleteSubFolder(mainId, folderId, name) {
 			confirmButtonText: 'Yes, delete it!',
 			showLoaderOnConfirm: true,
 			preConfirm: () => {
-				swal.fire('Processing ...');
+				swal.fire({
+            title: 'Processing ...',
+            allowOutsideClick: false
+        });
 				swal.showLoading();
 				api.delete(`library/folder/${mainId}/sub/${folderId}`)
                 .then(({data: { success, message, data }}) => {
@@ -319,7 +325,10 @@ export function grantSubFolderAccess(mainId, folderId, folderName, roleId) {
 			confirmButtonText: 'Yes, Grant it!',
 			showLoaderOnConfirm: true,
 			preConfirm: () => {
-				swal.fire('Processing ...');
+				swal.fire({
+            title: 'Processing ...',
+            allowOutsideClick: false
+        });
 				swal.showLoading();
 				api.patch(`library/folder/${mainId}/sub/${folderId}/access`, {roleId})
                 .then(({data: { success, message, data }}) => {
@@ -587,7 +596,10 @@ export function deleteDocument(mainId, folderId, fileId, name) {
 			confirmButtonText: 'Yes, delete it!',
 			showLoaderOnConfirm: true,
 			preConfirm: () => {
-				swal.fire('Processing ...');
+				swal.fire({
+            title: 'Processing ...',
+            allowOutsideClick: false
+        });
 				swal.showLoading();
 				api.delete(`library/folder/${mainId}/sub/${folderId}/file/${fileId}`)
                 .then(({data: { success, message, data }}) => {

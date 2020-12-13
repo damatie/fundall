@@ -78,7 +78,7 @@ function SharedTable(props) {
 						order={order}
 						onSelectAllClick={handleSelectAllClick}
 						onRequestSort={handleRequestSort}
-            rowCount={props.data.length}
+            			rowCount={(props.data) ? props.data.length : 0}
 						rows={props.rows}
 						handleDelete={props.handleDelete}
 						success={true}
@@ -133,7 +133,7 @@ function SharedTable(props) {
 			<TablePagination
 				className="overflow-hidden"
 				component="div"
-				count={props.data.length}
+				count={(props.data) ? props.data.length : 0}
 				rowsPerPage={rowsPerPage}
 				page={page}
 				backIconButtonProps={{
@@ -161,15 +161,15 @@ const TableCells = (props) => {
           {props.rows.map(item => (
 						<>
             {
-							item.type === 'date' ?
-							<TableCell component="th" scope="row" align={item.align} key={item.id}>
-								{moment(props.data[item.field]).format('LL')}   
-							</TableCell>
-							:
-							<TableCell component="th" scope="row" align={item.align} key={item.id}>
-								{props.data[item.field]}   
+				item.type === 'date' ?
+				<TableCell component="th" scope="row" align={item.align} key={item.id}>
+					{moment(props.data[item.field]).format('LL')}   
+				</TableCell>
+				:
+				<TableCell component="th" scope="row" align={item.align} key={item.id}>
+					{props.data[item.field]}   
             	</TableCell>
-						}
+			}
 						</>
           ))}
         </>
