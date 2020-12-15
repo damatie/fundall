@@ -430,25 +430,10 @@ const navigationConfig = [
 		id: 'library',
 		title: 'Library',
 		translate: 'Library',
-		type: 'group',
-		children: [
-			{
-				id: 'documents',
-				title: 'Documents library',
-				type: 'item',
-				url: '/library/documents',
-				icon: 'folder',
-				auth: authRoles.staff,
-			},
-			{
-				id: 'documentCategory',
-				title: 'Document Category',
-				type: 'item',
-				url: '/library/categories',
-				icon: 'category',
-				auth: authRoles.admin,
-			}
-		]
+		type: 'item',
+		url: '/library/folders',
+		icon: 'folder',
+		auth: authRoles.staff
 	},
 
 	// Training navigations

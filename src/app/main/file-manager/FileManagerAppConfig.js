@@ -8,16 +8,16 @@ const FileManagerAppConfig = {
 	},
 	routes: [
 		{
-			path: '/library/categories',
-			component: React.lazy(() => import('./documentCategories/DocumentCategories'))
+			path: '/library/folders/:name/:subName',
+			component: React.lazy(() => import('./folderFiles/folderFiles'))
 		},
 		{
-			path: '/library/documents',
-			component: React.lazy(() => import('./FilesByCategories'))
+			path: '/library/folders/:name',
+			component: React.lazy(() => import('./subFolder/subFolder'))
 		},
 		{
-			path: '/library/document/:id',
-			component: React.lazy(() => import('./files/FileManagerApp'))
+			path: '/library/folders',
+			component: React.lazy(() => import('./mainFolder/mainFolder'))
 		}
 	]
 };

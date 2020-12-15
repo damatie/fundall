@@ -80,7 +80,7 @@ function SharedTable(props) {
 						order={order}
 						onSelectAllClick={handleSelectAllClick}
 						onRequestSort={handleRequestSort}
-						rowCount={props.data.length}
+            			rowCount={(props.data) ? props.data.length : 0}
 						rows={props.rows}
 						handleDelete={props.handleDelete}
 						success={true}
@@ -135,7 +135,7 @@ function SharedTable(props) {
 			<TablePagination
 				className="overflow-hidden"
 				component="div"
-				count={props.data.length}
+				count={(props.data) ? props.data.length : 0}
 				rowsPerPage={rowsPerPage}
 				page={page}
 				backIconButtonProps={{ 'aria-label': 'Previous Page' }}
