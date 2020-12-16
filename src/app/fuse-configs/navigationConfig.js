@@ -97,6 +97,14 @@ const navigationConfig = [
 				icon: 'account_box',
 				auth: authRoles.admin,
 			},
+			{
+				id: 'employee_grade',
+				title: 'Employee Grade',
+				type: 'item',
+				url: '/employeeGrade/all',
+				icon: 'account_box',
+				auth: authRoles.admin,
+			},
 		]
 	},
 	// Blog navigations
