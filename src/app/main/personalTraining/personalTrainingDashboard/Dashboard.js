@@ -6,16 +6,18 @@ import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import withReducer from 'app/store/withReducer';
 import clsx from 'clsx';
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import * as Actions from '../store/actions';
 import reducer from '../store/reducers';
 import ArrowBackIcon from '@material-ui/icons/ArrowBackIosRounded';
 import IconButton from '@material-ui/core/IconButton';
 import CardWidget from 'app/shared/widgets/CardWidget';
 import PersonalTrainingCalendar from '../personalTrainingCalendar';
-import { Grid, MenuItem, Paper } from '@material-ui/core';
+import { AppBar, Button, Dialog, DialogActions, DialogContent, Grid, MenuItem, Paper, Toolbar } from '@material-ui/core';
 import SharedTable from 'app/shared/sharedTable';
 import SelectTextField from 'app/shared/TextInput/SelectTextField';
+import LoanStatus from 'app/main/loanApp/LoanStatus';
 
 const useStyles = makeStyles(theme => ({
 	header: {
@@ -100,7 +102,10 @@ const rows = [
 ];
 
 function PersonalTrainingDashboard(props) {
+	const dispatch = useDispatch()
 	const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
+	const [open, setOpen] = useState(false);
+	const [selectedTraining, setSelectedTraining] = useState(null)
 
 	const data = [
 		{
@@ -136,6 +141,20 @@ function PersonalTrainingDashboard(props) {
 	}
 
 	const routeToMe = () => {
+	}
+
+	const handleClick = (n) => {
+		if (!n.status.toLowerCase() === "pending") return;
+		handleOpen();
+		setSelectedTraining(n);
+	}
+
+	const handleClose = () => {
+		setOpen(false)
+	}
+
+	const handleOpen = () => {
+		setOpen(true);
 	}
 
 	return (
@@ -222,8 +241,61 @@ function PersonalTrainingDashboard(props) {
 								animation: 'transition.slideUpBigIn'
 							}}
 						>
+
+							<Dialog open={open} onClose={handleClose} fullWidth>
+								<AppBar position="static">
+									<Toolbar className="flex w-full">
+										<Typography variant="subtitle1" color="inherit">
+											{'Training Details'}
+										</Typography>
+									</Toolbar>
+								</AppBar>
+								<DialogContent classes={{ root: 'p-16 pb-0 sm:p-24 sm:pb-0' }}>
+
+									<table className={'w-full text-justify my-24'}>
+										<tbody>
+											<tr className="mb-24">
+												<th>Course Title: </th>
+												<td>{selectedTraining?.name}</td>
+											</tr>
+											<tr className="mb-24">
+												<th>Description: </th>
+												<td>{selectedTraining?.description}</td>
+											</tr>
+											<tr className="mb-24">
+												<th>Category: </th>
+												<td>{selectedTraining?.category}</td>
+											</tr>
+											<tr className="mb-24">
+												<th>Employee Grade: </th>
+												<td>{selectedTraining?.employeeGrade}</td>
+											</tr>
+											<tr className="mb-24">
+												<th>Company Seniority: </th>
+												<td>{selectedTraining?.companySeniority}</td>
+											</tr>
+											<tr className="mb-24">
+												<th>Company Seniority: </th>
+												<td>{selectedTraining?.industrySeniority}</td>
+											</tr>
+
+											<tr className="mb-48">
+												<th>Status</th>
+												<td><LoanStatus status={selectedTraining?.status} /></td>
+											</tr>
+										</tbody>
+									</table>
+
+								</DialogContent>
+								<DialogActions className="justify-between m-10 px-24 pb-12 sm:px-16">
+									<Button variant="contained" color="secondary" onClick={handleClose}>
+										Close
+                                </Button>
+								</DialogActions>
+							</Dialog >
+
 							<div className="widget flex w-full p-12">
-								<SharedTable data={data ?? []} rows={rows} type="default" />
+								<SharedTable data={data ?? []} rows={rows} handleClick={handleClick} type="default" />
 							</div>
 						</FuseAnimateGroup>
 					</Paper>

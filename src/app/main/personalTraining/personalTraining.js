@@ -7,7 +7,7 @@ import withReducer from 'app/store/withReducer';
 import clsx from 'clsx';
 import SharedTable from 'app/shared/sharedTable';
 import moment from 'moment';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Calendar, momentLocalizer, Views } from 'react-big-calendar';
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
@@ -20,8 +20,9 @@ import * as Actions from './store/actions';
 import reducer from './store/reducers';
 import CardWidget from 'app/shared/widgets/CardWidget';
 import TableWidget from 'app/shared/widgets/TrainingTableWidget';
-import { Grid, MenuItem, Paper, Typography } from '@material-ui/core';
+import { AppBar, Button, Dialog, DialogActions, DialogContent, Grid, MenuItem, Paper, Toolbar, Typography } from '@material-ui/core';
 import SelectTextField from 'app/shared/TextInput/SelectTextField';
+import LoanStatus from '../loanApp/LoanStatus';
 
 const localizer = momentLocalizer(moment);
 
@@ -92,6 +93,8 @@ function PersonalTraining(props) {
     const dispatch = useDispatch();
     const events = useSelector(({ personalTraining }) => personalTraining.events.entities);
     const trainings = useSelector(({ personalTraining }) => personalTraining.trainings.trainings);
+    const [open, setOpen] = useState(false);
+    const [selectedTraining, setSelectedTraining] = useState(null)
 
     const headerEl = useRef(null);
 
@@ -171,17 +174,10 @@ function PersonalTraining(props) {
     };
 
     const handleClick = n => {
-        // if (!n.status.toLowerCase() === 'pending') {
-        //     history.push({
-        //         pathname: `/loan/request/salaryadvance_request/new/${n.id}`,
-        //         state: ""
-        //     });
-
-        // } else {
-        //     setLoanDetails(n);
-        //     setOpen(true);
+        if (!n.status.toLowerCase() === "pending") return;
+        handleOpen();
+        setSelectedTraining(n);
     }
-
 
     function resizeEvent({ event, start, end }) {
         delete event.type;
@@ -194,36 +190,21 @@ function PersonalTraining(props) {
         );
     }
 
+    const handleClose = () => {
+        setOpen(false)
+    }
+
+    const handleOpen = () => {
+        setOpen(true);
+    }
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        dispatch(Actions.cancelTrainingRequest(selectedTraining?.id))
+    }
+
     return (
         <div className="p-12">
-            <FuseAnimateGroup
-                className="flex flex-wrap"
-                enter={{
-                    animation: 'transition.slideUpBigIn'
-                }}
-            >
-                <div className="widget flex w-full sm:w-1/2 md:w-1/6 p-12">
-                    <CardWidget count={trainings.length} title={"Total"} color="yellow" />
-                </div>
-                <div className="widget flex w-full sm:w-1/2 md:w-1/6 p-12">
-                    <CardWidget count={trainings.filter(t => t.status === 'pending').length} title={"Pending"} color="blue" />
-                </div>
-                <div className="widget flex w-full sm:w-1/2 md:w-1/6 p-12">
-                    <CardWidget count={trainings.filter(t => t.status === 'approved').length} title={"Approved"} color="green" />
-                </div>
-                <div className="widget flex w-full sm:w-1/2 md:w-1/6 p-12">
-                    <CardWidget count={trainings.filter(t => t.status === 'rejected').length} title={"Rejected"} color="red" />
-                </div>
-                <div className="widget flex w-full sm:w-1/2 md:w-1/6 p-12">
-                    <CardWidget count={trainings.filter(t => t.status === 'reviewed').length} title={"Reviewed"} color="orange" />
-                </div>
-                <div className="widget flex w-full sm:w-1/2 md:w-1/6 p-12">
-                    <CardWidget count={trainings.filter(t => t.status === 'completed').length} title={"Completed"} color="black" />
-                </div>
-                <div className="widget flex w-full p-12">
-                    <PersonalTrainingCalendar />
-                </div>
-            </FuseAnimateGroup>
 
             <FuseAnimateGroup>
                 <Paper className="m-10 mt-24 p-12">
@@ -238,8 +219,8 @@ function PersonalTraining(props) {
                                     size='small'
                                     label='Year'
                                 >
-                                    {["Technical", "Certification"].map(item => (
-                                        <MenuItem value={item}>
+                                    {["Technical", "Certification"].map((item, index) => (
+                                        <MenuItem value={item} key={index}>
                                             {item}
                                         </MenuItem>
                                     ))}
@@ -251,8 +232,8 @@ function PersonalTraining(props) {
                                     size='small'
                                     label='Entity'
                                 >
-                                    {["5C", "SREL", "SRMC", "C-BIT"].map(item => (
-                                        <MenuItem value={item}>
+                                    {["5C", "SREL", "SRMC", "C-BIT"].map((item, index) => (
+                                        <MenuItem value={item} key={index}>
                                             {item}
                                         </MenuItem>
                                     ))}
@@ -260,10 +241,72 @@ function PersonalTraining(props) {
                             </Grid>
                         </Grid>
                     }
+
+                    <Dialog open={open} onClose={handleClose} fullWidth>
+                        <AppBar position="static">
+                            <Toolbar className="flex w-full">
+                                <Typography variant="subtitle1" color="inherit">
+                                    {'Training Details'}
+                                </Typography>
+                            </Toolbar>
+                        </AppBar>
+                        <DialogContent classes={{ root: 'p-16 pb-0 sm:p-24 sm:pb-0' }}>
+
+                            <table className={'w-full text-justify my-24'}>
+                                <tbody>
+                                    <tr className="mb-24">
+                                        <th>Course Title: </th>
+                                        <td>{selectedTraining?.name}</td>
+                                    </tr>
+                                    <tr className="mb-24">
+                                        <th>Description: </th>
+                                        <td>{selectedTraining?.description}</td>
+                                    </tr>
+                                    <tr className="mb-24">
+                                        <th>Category: </th>
+                                        <td>{selectedTraining?.category}</td>
+                                    </tr>
+                                    <tr className="mb-24">
+                                        <th>Employee Grade: </th>
+                                        <td>{selectedTraining?.employeeGrade}</td>
+                                    </tr>
+                                    <tr className="mb-24">
+                                        <th>Company Seniority: </th>
+                                        <td>{selectedTraining?.companySeniority}</td>
+                                    </tr>
+                                    <tr className="mb-24">
+                                        <th>Company Seniority: </th>
+                                        <td>{selectedTraining?.industrySeniority}</td>
+                                    </tr>
+
+                                    <tr className="mb-48">
+                                        <th>Status</th>
+                                        <td><LoanStatus status={selectedTraining?.status} /></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </DialogContent>
+                        <DialogActions className="justify-between m-10 px-24 pb-12 sm:px-16">
+                            <Button variant="contained" color="secondary" onClick={handleClose}>
+                                Close
+                                </Button>
+                            {
+                                selectedTraining?.status === "pending" ?
+                                    <Button variant="contained" color="primary" onClick={handleSubmit} >
+                                        Cancel Request
+                                        </Button>
+                                    :
+                                    <></>
+                            }
+                        </DialogActions>
+                    </Dialog >
+
+
                     <SharedTable data={data ?? []} rows={rows} handleClick={handleClick} handleDelete={handleDelete} type='default' />
-                </Paper>
-            </FuseAnimateGroup>
-        </div>
+                </Paper >
+            </FuseAnimateGroup >
+        </div >
     );
 }
 

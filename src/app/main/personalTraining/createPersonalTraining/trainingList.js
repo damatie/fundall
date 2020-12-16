@@ -2,44 +2,34 @@ import FuseAnimate from '@fuse/core/FuseAnimate';
 import FuseAnimateGroup from '@fuse/core/FuseAnimateGroup';
 import _ from '@lodash';
 import Button from '@material-ui/core/Button';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import Divider from '@material-ui/core/Divider';
+import Tab from '@material-ui/core/Tab';
+import Tabs from '@material-ui/core/Tabs';
 import FormControl from '@material-ui/core/FormControl';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
 import Icon from '@material-ui/core/Icon';
 import InputLabel from '@material-ui/core/InputLabel';
-import LinearProgress from '@material-ui/core/LinearProgress';
 import MenuItem from '@material-ui/core/MenuItem';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import Select from '@material-ui/core/Select';
 import { makeStyles, useTheme, ThemeProvider } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import Autocomplete from '@material-ui/lab/Autocomplete';
 import Typography from '@material-ui/core/Typography';
 import withReducer from 'app/store/withReducer';
 import clsx from 'clsx';
 import React, { useEffect, useMemo, useState } from 'react';
-import { DateTimePicker } from '@material-ui/pickers';
 import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Actions from '../store/actions';
 import reducer from '../store/reducers';
-import { amber, blue, blueGrey, green } from '@material-ui/core/colors';
-import Moment from 'react-moment';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
 import { useAuth } from 'app/hooks/useAuth';
 import { authRoles } from 'app/auth';
 import ArrowBackIcon from '@material-ui/icons/ArrowBackIosRounded';
 import IconButton from '@material-ui/core/IconButton';
 import Pagination from '@material-ui/lab/Pagination';
-import SharedTable from 'app/shared/sharedTable';
 import AddNewTrainingDialogue from '../components/addNewTraining';
 import ViewTrainings from '../components/viewingTrainings';
+import SharedTable from 'app/shared/sharedTable';
+import { useHistory } from 'react-router';
+import * as hodActions from 'app/main/line_manager/training/deptTraining/store/actions';
 
 const useStyles = makeStyles(theme => ({
     header: {
@@ -83,8 +73,8 @@ const rows = [
         sort: true
     },
     {
-        id: 'employeeMail',
-        field: 'employeeMail',
+        id: 'email',
+        field: 'email',
         align: 'center',
         disablePadding: false,
         label: 'Employee Mail',
@@ -110,6 +100,7 @@ const rows = [
     {
         id: 'startDate',
         type: 'date',
+        field: "startDate",
         align: 'center',
         disablePadding: false,
         label: 'Start Date',
@@ -118,19 +109,20 @@ const rows = [
     {
         id: 'endDate',
         type: 'date',
+        field: "endDate",
         align: 'center',
         disablePadding: false,
         label: 'End Date',
         sort: true
     },
-    {
-        id: 'certification',
-        field: 'certification',
-        align: 'center',
-        disablePadding: false,
-        label: 'Certification',
-        sort: true
-    },
+    // {
+    //     id: 'certification',
+    //     field: 'certification',
+    //     align: 'center',
+    //     disablePadding: false,
+    //     label: 'Certification',
+    //     sort: true
+    // },
     {
         id: 'status',
         field: 'status',
@@ -206,21 +198,36 @@ const data = [
 
 function TrainingList(props) {
     const dispatch = useDispatch();
+    let history = useHistory()
     const courses = useSelector(({ academyApp }) => academyApp.courses.courses);
-    // const categories = useSelector(({ academyApp }) => academyApp.courses.categories);
-    const categories = [{ name: "Technical", id: Math.random() }, {
-        name: "Certification", id: Math.random()
-    }]
+
+    const trainings = useSelector(({ academyApp }) => academyApp.trainings);
+    const entities = useSelector(({ academyApp }) => academyApp.trainings.entities);
+    const department = useSelector(({ academyApp }) => academyApp.trainings.department);
+    const roles = useSelector(({ academyApp }) => academyApp.trainings.roles);
+    const categories = useSelector(({ academyApp }) => academyApp.courses.categories.rows);
+
     const employees = useSelector(({ academyApp }) => academyApp.employees.employees);
     const totalNo = useSelector(({ academyApp }) => academyApp.courses.totalNo);
     const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
+
+    const [tabValue, setTabValue] = React.useState(0);
+
+    function handleChangeTab(event, value) {
+        console.log(event, value)
+        setTabValue(value);
+    }
 
     const classes = useStyles(props);
     const theme = useTheme();
     const [_, setData] = useState(courses);
     const [open, setOpen] = useState(false);
     const [addNew, setAddNew] = useState(false);
-    const [filter, setFilter] = useState('all');
+    const [filter, setFilter] = useState({
+        department: "all",
+        entity: "all",
+        category: "all"
+    });
     const [search, setSearch] = useState('');
     const [start, setStart] = useState(moment(new Date(), 'MM/DD/YYYY').add(1, 'days'));
     const [end, setEnd] = useState(moment(new Date(), 'MM/DD/YYYY').add(1, 'days'));
@@ -231,13 +238,16 @@ function TrainingList(props) {
     const [rowsPerPage, setRowsPerPage] = useState(9);
     const userData = useAuth().getUserData;
     const profile = useSelector(({ profile }) => profile.data);
-    const userId = useAuth().getId;
-    const employeeHOD = useAuth().getUserDetails.department.departmentHeadId;
-    const [filterEmployees, setFilterEmployees] = useState(
-        employees
-    );
-    const [selectedData, setSelectedData] = useState({});
 
+    const [selectedData, setSelectedData] = useState([]);
+
+    const submitNewTraining = (value) => {
+        dispatch(Actions.createTraining(value, history));
+    }
+
+    const changeDepartment = (id) => {
+        dispatch(Actions.getDepartments(id));
+    }
 
     // employees.filter(f => {
     // 	return (f.firstName !== null || f.lastName !== null || f?.role.name.toLowerCase() !== 'employee' || f?.roleId !== 8);
@@ -248,11 +258,23 @@ function TrainingList(props) {
     // })
 
     useEffect(() => {
-        dispatch(Actions.getApprovedCourses());
+        dispatch(Actions.getPendingTrainingLM());
+        dispatch(Actions.getApprovedTrainingHR());
+        dispatch(Actions.getCompletedTrainingHR());
+        dispatch(Actions.getRejectedTrainingHR());
+
         dispatch(Actions.getCourseCategories());
-        dispatch(Actions.getEmployees());
-    }, [dispatch]);
-    console.log(profile);
+        dispatch(Actions.getCategories());
+        dispatch(Actions.getEntities());
+        dispatch(Actions.getDepartments(1));
+        dispatch(Actions.getRoles());
+
+
+    }, [dispatch])
+
+    useEffect(() => {
+        console.log(trainings);
+    }, [department, trainings])
 
     // useEffect(() => {
     //     if (search.length >= 2) {
@@ -281,13 +303,18 @@ function TrainingList(props) {
     }
 
     function handleFilter(event) {
-        setFilter(event.target.value);
+        if (event.target.name === "entity") {
+            let id = entities.find(element => element.name = event.target.value);
+            console.log(id.id)
+            changeDepartment(id.id);
+        }
+        console.log(event)
+        setFilter({ ...filter, [event.target.name]: event.target.value });
     }
 
     const handleChangePage = (event, value) => {
-        console.log(value);
         let newPage = value - 1;
-        dispatch(Actions.getApprovedCourses(rowsPerPage, newPage * rowsPerPage));
+        dispatch(Actions.getAllCourses(rowsPerPage, newPage * rowsPerPage));
         setPage(value);
         window.scrollTo(0, 0);
         // alert('hello')
@@ -296,6 +323,22 @@ function TrainingList(props) {
     //Check if the logged in user has management role
     function checkRole() {
         return (authRoles.managers.includes(userData.role));
+    }
+
+    function handleApproveTraining(id, role) {
+        if (role === "lm") {
+            dispatch(hodActions.approveTraining(id))
+        } else {
+
+        }
+    }
+
+    function handleRejectraining(id, role) {
+        if (role === "lm") {
+            dispatch(hodActions.rejectTraining(id))
+        } else {
+
+        }
     }
 
     const goToPreviousRoute = () => {
@@ -336,12 +379,10 @@ function TrainingList(props) {
                         <ArrowBackIcon />
                     </IconButton>
                     {
-                        profile && profile?.role?.name.toLowerCase() === "line manager" ?
-                            <Button variant="contained" color="secondary" type="submit" className="m-12" onClick={() => setAddNew(true)}>
-                                Add New Training
-                            </Button>
-                            :
-                            <></>
+                        userData.role === "Hr Manager" &&
+                        <Button variant="contained" color="secondary" type="submit" className="m-12" onClick={() => setAddNew(true)}>
+                            Add New Training
+                        </Button>
                     }
                 </div>
                 <div className="flex flex-col flex-1 w-full mx-auto px-8 sm:px-16 py-24">
@@ -360,56 +401,58 @@ function TrainingList(props) {
                                 shrink: true
                             }}
                         />
-
                         {
-                            profile && profile?.role?.name.toLowerCase() === "hr" &&
-                            <>
-                                <FormControl className="flex w-full sm:w-320 mx-16" variant="outlined">
-                                    <InputLabel htmlFor="category-label-placeholder"> Department </InputLabel>
-                                    <Select
-                                        value={filter}
-                                        onChange={handleFilter}
-                                        input={
-                                            <OutlinedInput labelWidth={'department'.length * 9} name="department" id="department-label-placeholder" />
-                                        }
-                                    >
-                                        <MenuItem value="all">
-                                            <em> All </em>
-                                        </MenuItem>
-                                        {["Software", "IT"].map(category => (
-                                            <MenuItem value={category} key={Math.random()}>
-                                                {category}
-                                            </MenuItem>
-                                        ))}
-                                    </Select>
-                                </FormControl>
+                            userData.role === "Hr Manager" ?
 
-                                <FormControl className="flex w-full sm:w-320 mx-16" variant="outlined">
-                                    <InputLabel htmlFor="category-label-placeholder"> Entity </InputLabel>
-                                    <Select
-                                        value={filter}
-                                        onChange={handleFilter}
-                                        input={
-                                            <OutlinedInput labelWidth={'entity'.length * 9} name="entity" id="entity-label-placeholder" />
-                                        }
-                                    >
-                                        <MenuItem value="all">
-                                            <em> All </em>
-                                        </MenuItem>
-                                        {["SpringRock", "5cee", "CBit"].map(category => (
-                                            <MenuItem value={category} key={Math.random()}>
-                                                {category}
+                                <>
+                                    <FormControl className="flex w-full sm:w-320 mx-16" variant="outlined">
+                                        <InputLabel htmlFor="category-label-placeholder"> Entity </InputLabel>
+                                        <Select
+                                            value={filter.entity}
+                                            onChange={handleFilter}
+                                            input={
+                                                <OutlinedInput labelWidth={'entity'.length * 9} name="entity" id="entity-label-placeholder" />
+                                            }
+                                        >
+                                            <MenuItem value="all">
+                                                <em> All </em>
                                             </MenuItem>
-                                        ))}
-                                    </Select>
-                                </FormControl>
-                            </>
+                                            {entities.map(entity => (
+                                                <MenuItem value={entity.id} key={Math.random()}>
+                                                    {entity.entityName}
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
+
+                                    <FormControl className="flex w-full sm:w-320 mx-16" variant="outlined">
+                                        <InputLabel htmlFor="category-label-placeholder"> Department </InputLabel>
+                                        <Select
+                                            value={filter.department}
+                                            onChange={handleFilter}
+                                            input={
+                                                <OutlinedInput labelWidth={'department'.length * 9} name="department" id="department-label-placeholder" />
+                                            }
+                                        >
+                                            <MenuItem value="all">
+                                                <em> All </em>
+                                            </MenuItem>
+                                            {department.map(dept => (
+                                                <MenuItem value={dept.id} key={Math.random()}>
+                                                    {dept.departmentName}
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
+                                </>
+                                :
+                                <></>
                         }
 
                         <FormControl className="flex w-full sm:w-320 mx-16" variant="outlined">
                             <InputLabel htmlFor="category-label-placeholder"> Category </InputLabel>
                             <Select
-                                value={filter}
+                                value={filter.category}
                                 onChange={handleFilter}
                                 input={
                                     <OutlinedInput labelWidth={'category'.length * 9} name="category" id="category-label-placeholder" />
@@ -418,8 +461,8 @@ function TrainingList(props) {
                                 <MenuItem value="all">
                                     <em> All </em>
                                 </MenuItem>
-                                {categories.map(category => (
-                                    <MenuItem value={category.name} key={category.id}>
+                                {categories?.map(category => (
+                                    <MenuItem value={category.id} key={category.id}>
                                         {category.name}
                                     </MenuItem>
                                 ))}
@@ -428,93 +471,87 @@ function TrainingList(props) {
                     </div>
 
                     {/* creating a new training request */}
-                    <AddNewTrainingDialogue open={addNew} handleClose={handleCloseNew} viewer={profile?.role?.name} />
+                    <AddNewTrainingDialogue
+                        open={addNew}
+                        handleClose={handleCloseNew}
+                        viewer={profile?.role?.name}
+                        categories={categories}
+                        entities={entities}
+                        department={department}
+                        roles={roles}
+                        submit={submitNewTraining}
+                        changeDepartment={changeDepartment}
+                    />
 
                     {/* opening up a training request */}
-                    <ViewTrainings open={open} handleClose={handleClose} data={selectedData} viewer={profile?.role?.name} />
+                    <ViewTrainings
+                        open={open}
+                        handleClose={handleClose}
+                        data={selectedData}
+                        viewer={profile?.role?.name}
+                        approveTraining={handleApproveTraining}
+                        rejectTraining={handleRejectraining}
+                    />
 
                     {/* End Dialog  */}
                     {useMemo(
                         () =>
-                            data &&
-                            (data.length > 0 ? (
-                                <div>
-                                    <FuseAnimateGroup
-                                        enter={{
-                                            animation: 'transition.slideUpBigIn'
-                                        }}
-                                        className="flex flex-wrap py-24"
+                            // trainings &&
+                            // ((
+                            //     trainings.pendingTrainings.length > 0 ||
+                            //     trainings.approvedTrainings.length > 0 ||
+                            //     trainings.completedTrainings.length > 0 ||
+                            //     trainings.rejectedTrainings.length > 0
+                            // )
+                            //     ? (
+                            <div>
+                                <FuseAnimateGroup
+                                    enter={{
+                                        animation: 'transition.slideUpBigIn'
+                                    }}
+                                    className="flex flex-wrap py-24"
+                                >
+                                    <Tabs
+                                        value={tabValue}
+                                        onChange={handleChangeTab}
+                                        indicatorColor="primary"
+                                        textColor="primary"
+                                        variant="scrollable"
+                                        scrollButtons="auto"
+                                        classes={{ root: 'w-full h-64' }}
                                     >
-                                        <SharedTable data={data} rows={rows} type='default' handleClick={handleOpen} />
-                                        {/* {data.map(course => {
-                                            return (
-                                                <div className="w-full pb-24 sm:w-1/2 lg:w-1/3 sm:p-16" key={course.id}>
-                                                    <Card elevation={1} className="flex flex-col h-256">
-                                                        <div
-                                                            className="flex flex-shrink-0 items-center justify-between px-24 h-64"
-                                                            style={{
-                                                                background: blue[500],
-                                                                color: theme.palette.getContrastText(blue[500])
-                                                            }}
-                                                        >
-                                                            <Typography className="font-medium truncate" color="inherit">
-                                                                {course.category}
-                                                            </Typography>
-                                                            <div className="flex items-center justify-center opacity-75">
-                                                                <Icon className="text-20 mx-8" color="inherit">
-                                                                    access_time
-															</Icon>
-                                                                <div className="text-16 whitespace-no-wrap">{course.duration}</div>
-                                                            </div>
-                                                        </div>
-                                                        <CardContent className="flex flex-col flex-auto items-center justify-center">
-                                                            <Typography className="text-center text-20 font-400">{course.name}</Typography>
-                                                            <Typography className="text-center text-16 font-600" color="textSecondary">
-                                                                {course.certification ? 'Certificate Available' : 'Certificate Not Available'}
-                                                            </Typography>
-                                                            <Typography className="text-center text-13 font-600 mt-4" color="textSecondary">
-                                                                <Moment format="MMM DD, YYYY">{course.createdAt}</Moment>
-                                                            </Typography>
-                                                        </CardContent>
-                                                        <Divider />
+                                        <Tab className="h-64 normal-case" label="Pending Trainings" />
+                                        <Tab className="h-64 normal-case" label="Approved Trainings" />
+                                        <Tab className="h-64 normal-case" label="Completed Trainings" />
+                                        <Tab className="h-64 normal-case" label="Rejected Trainings" />
+                                    </Tabs>
 
-                                                        <CardActions className="justify-center">
-                                                            <Button
-                                                                type="button"
-                                                                className="justify-start px-32"
-                                                                color="secondary"
-                                                                onClick={ev => {
-                                                                    handleOpen();
-                                                                    setId(course.id);
-                                                                    setDuration(course.duration);
-                                                                    setStart(moment(new Date(), 'MM/DD/YYYY').add(1, 'days'));
-                                                                }}
-                                                            >
-                                                                START
-                                                            </Button>
-                                                        </CardActions>
-                                                        <LinearProgress className="w-full" variant="determinate" value={100} color="secondary" />
-                                                    </Card>
-                                                </div>
-                                            );
-                                        })} */}
-                                    </FuseAnimateGroup>
-                                    <div className={classes.pagination}>
-                                        <Pagination count={Math.round(totalNo / rowsPerPage)} page={page} onChange={handleChangePage} color="primary" />
+                                    <div className="w-full">
+                                        {tabValue === 0 && (<SharedTable data={trainings?.pendingTrainings.rows ?? []} rows={rows} type='default' handleClick={handleOpen} />)}
+                                        {tabValue === 1 && (<SharedTable data={trainings?.approvedTrainings.rows ?? []} rows={rows} type='default' handleClick={handleOpen} />)}
+                                        {tabValue === 2 && (<SharedTable data={trainings.completedTrainings.rows} rows={rows} type='default' handleClick={handleOpen} />)}
+                                        {tabValue === 3 && (<SharedTable data={trainings.rejectedTrainings.rows} rows={rows} type='default' handleClick={handleOpen} />)}
                                     </div>
+
+
+                                </FuseAnimateGroup>
+                                <div className={classes.pagination}>
+                                    <Pagination count={Math.round(totalNo / rowsPerPage)} page={page} onChange={handleChangePage} color="primary" />
                                 </div>
-                            ) : (
-                                    <div className="flex flex-1 items-center justify-center">
-                                        <Typography color="textSecondary" className="text-24 my-24">
-                                            No Training found!
-									</Typography>
-                                    </div>
-                                )),
-                        [categories, data, employees, filterEmployees, open, id, start, end, hod, page, theme.palette]
+                            </div>
+                        // )
+                        // : (
+                        //     <div className="flex flex-1 items-center justify-center">
+                        //         <Typography color="textSecondary" className="text-24 my-24">
+                        //             No Training found!
+                        // 	</Typography>
+                        //     </div>
+                        // ))
+                        , [categories, data, employees, open, id, start, end, hod, page, theme.palette, trainings, tabValue]
                     )}
                 </div>
             </div>
-        </ThemeProvider>
+        </ThemeProvider >
     );
 }
 
