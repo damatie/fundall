@@ -498,21 +498,21 @@ const navigationConfig = [
 				icon: 'school',
 				auth: authRoles.admin,
 			},
-			{
-				id: 'deptTraining',
-				title: 'Department Training',
-				type: 'item',
-				url: '/training/dept',
-				icon: 'group',
-				auth: authRoles.hrManager,
-			},
+			// {
+			// 	id: 'deptTraining',
+			// 	title: 'Department Training',
+			// 	type: 'item',
+			// 	url: '/training/dept',
+			// 	icon: 'group',
+			// 	auth: authRoles.lineManager,
+			// },
 			{
 				id: 'personalTraining',
 				title: 'Personal Training',
 				type: 'item',
 				url: '/training/personal',
 				icon: 'book',
-				auth: authRoles.staff,
+				auth: authRoles.employee,
 			},
 			{
 				id: 'trainingList',
@@ -528,7 +528,7 @@ const navigationConfig = [
 				type: 'item',
 				url: '/hr/training/category',
 				icon: 'category',
-				auth: authRoles.hrManager,
+				auth: authRoles.admin,
 			},
 			{
 				id: 'checkList',
@@ -536,7 +536,7 @@ const navigationConfig = [
 				type: 'item',
 				url: '/training/checklist',
 				icon: 'category',
-				auth: authRoles.hrManager,
+				auth: authRoles.staff,
 			}
 		]
 	},
