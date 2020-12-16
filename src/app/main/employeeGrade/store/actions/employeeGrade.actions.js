@@ -7,20 +7,22 @@ export const GET_ONE_EMPLOYEE_GRADE = 'GET ONE EMPLOYEE GRADE';
 
 export const getAllEmployeeGrade = () => {
   return (dispatch) => {
-    dispatch({
-      type: GET_ALL_EMPLOYEE_GRADE,
-      payload: [{
-        name: 'GL8',
-        description: 'lorem lorem lorem lorem',
-        pip: true,
-        id: 1
-      },{
-        name: 'GL9',
-        description: 'lorem lorem lorem lorem',
-        pip: false,
-        id: 2
-      }]
-    })
+    setTimeout(() => {
+      dispatch({
+        type: GET_ALL_EMPLOYEE_GRADE,
+        payload: [{
+          name: 'GL8',
+          description: 'lorem lorem lorem lorem',
+          pip: true,
+          id: 1
+        },{
+          name: 'GL9',
+          description: 'lorem lorem lorem lorem',
+          pip: false,
+          id: 2
+        }]
+      })
+    }, 1500)
   }
 };
 

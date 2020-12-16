@@ -31,8 +31,16 @@ const EmployeeGrade = () => {
       }}
       content={
         <div className='p-24'>
-          <EmployeeGradeTable/>
-          <EmployeeGradeModal />
+          {
+            state.loading ? (
+              <Skeleton variant="rect" width='100%' height={400} animation="wave"/>
+            ) : (
+              <>
+                <EmployeeGradeTable/>
+                <EmployeeGradeModal />
+              </>
+            )
+          }
         </div>
       }
     />
