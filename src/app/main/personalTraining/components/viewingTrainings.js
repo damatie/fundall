@@ -1,10 +1,14 @@
 import { AppBar, Button, Dialog, DialogActions, DialogContent, TextField, Toolbar, Typography } from '@material-ui/core'
 import React from 'react'
 
-const ViewTrainings = ({ open, handleClose, data, viewer }) => {
+const ViewTrainings = ({ open, handleClose, data, viewer, approveTraining, rejectTraining }) => {
 
     const handleApprove = () => {
-        handleClose();
+        approveTraining(data.id, viewer === "Line Manager" ? "lm" : "hr");
+    }
+
+    const handleReject = () => {
+        rejectTraining(data.id, viewer === "Line Manager" ? "lm" : "hr");
     }
 
     return (
@@ -168,10 +172,14 @@ const ViewTrainings = ({ open, handleClose, data, viewer }) => {
                         <Button variant="contained" color="primary" onClick={handleApprove}>
                             Approve
                     </Button>
-                        <Button variant="contained" color="danger" onClick={handleClose}>
+                        <Button variant="contained" color="info" onClick={handleReject}>
                             Reject
                     </Button>
-                    </DialogActions>}
+                        <Button variant="contained" color="danger" onClick={handleClose}>
+                            Close
+                    </Button>
+                    </DialogActions>
+                }
             </form>
         </Dialog>
     )
