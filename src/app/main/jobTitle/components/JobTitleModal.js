@@ -39,7 +39,7 @@ const JobTitleModal = () => {
           type='submit'
           className='flex mx-auto'
         >
-          Create category
+          {type === 'new' ? 'Create Job Title' : 'Update Job Title'}
         </SharedButton>
       </form>
     </SharedModal>
