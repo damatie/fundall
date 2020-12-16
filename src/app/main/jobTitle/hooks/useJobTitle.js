@@ -44,14 +44,21 @@ const useJobTitle = () => {
   });
 
   const dispatch = useDispatch();
-  const { data, open, singleData, type } = useSelector(state => state.jobTitle);
+  const { data, open, singleData, type, loading } = useSelector(state => state.jobTitle);
 
   React.useEffect(() => {
     dispatch(Actions.getAllJobTitle());
   }, []);
 
-  const onSubmit = (value) => {
-    console.log(value)
+  const onSubmit = (model) => {
+    switch(type) {
+      case 'new':
+        return dispatch(Actions.createJobTitle(model));
+      case 'update':
+        return dispatch(Actions.updateJobTitle({id: singleData?.id, model }));
+      default:
+        return;
+    }
   };
 
   const openModal = () => {
@@ -80,7 +87,7 @@ const useJobTitle = () => {
   };
 
   const handleDelete = (id) => {
-    console.log(id);
+    dispatch(Actions.deleteJobTitle(id));
   };
 
   return {
@@ -96,6 +103,7 @@ const useJobTitle = () => {
     handleDelete,
     open,
     type,
+    loading
   };
 };
 
