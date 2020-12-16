@@ -6,4 +6,4 @@ const EmployeeGrade = () => {
   );
 };
 
-export default EmployeeGrade
+export default EmployeeGrade;
