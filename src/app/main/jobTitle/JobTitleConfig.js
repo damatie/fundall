@@ -9,7 +9,7 @@ const JobTitleConfig = {
   routes: [
     {
       path: '/jobTitle/all',
-      components: React.lazy(() => import(''))
+      component: React.lazy(() => import('./JobTitle'))
     }
   ]
 };
