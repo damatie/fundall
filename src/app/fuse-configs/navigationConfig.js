@@ -78,6 +78,14 @@ const navigationConfig = [
 				icon: 'account_box',
 				auth: authRoles.admin,
 			},
+			{
+				id: 'job_title',
+				title: 'Job Title',
+				type: 'item',
+				url: '/jobTitle/all',
+				icon: 'account_box',
+				auth: authRoles.admin,
+			},
 		]
 	},
 	// Blog navigations
