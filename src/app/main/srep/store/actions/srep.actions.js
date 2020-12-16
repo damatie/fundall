@@ -120,7 +120,10 @@ export function getSrepByID(id = 0) {
 
 export function addSrep(payload){
 	return dispatch => {
-		swal.fire('Processing ...');
+		swal.fire({
+            title: 'Processing ...',
+            allowOutsideClick: false
+        });
 		swal.showLoading();
 		dispatch({
 			type: LOADING_SREP
@@ -181,7 +184,10 @@ export function approveSrep(id) {
 			confirmButtonText: 'Yes, approve it!',
 			showLoaderOnConfirm: true,
 			preConfirm: () => {
-				swal.fire('Processing ...');
+				swal.fire({
+            title: 'Processing ...',
+            allowOutsideClick: false
+        });
 				swal.showLoading();
 		
 				fetch(`${baseUrl()}/srep/approve/${id}`, { ...headers.reqHeader('PATCH', '') })
@@ -230,7 +236,10 @@ export function approveSrep(id) {
 export function rejectSrep(id) {
 	console.log(id);
 	return dispatch => {
-		swal.fire('Processing ...');
+		swal.fire({
+            title: 'Processing ...',
+            allowOutsideClick: false
+        });
 		swal.showLoading();
 
 		swal.fire({
@@ -299,7 +308,10 @@ export function deleteSrep(id, role, userId) {
 			confirmButtonText: 'Yes, delete it!',
 			showLoaderOnConfirm: true,
 			preConfirm: () => {
-				swal.fire('Processing ...');
+				swal.fire({
+            title: 'Processing ...',
+            allowOutsideClick: false
+        });
 				swal.showLoading();
 				fetch(`${baseUrl()}/srep/${id}`, { ...headers.delHeader() })
 				.then(res => res.json()).then(async data => {
@@ -350,7 +362,10 @@ export function deleteSrep(id, role, userId) {
 
 export function sendToFinance(id){
 	return dispatch => {
-		swal.fire('Processing ...');
+		swal.fire({
+            title: 'Processing ...',
+            allowOutsideClick: false
+        });
 		swal.showLoading();
 		fetch(`${baseUrl()}/srep/sendToFinance/${id}`, { ...headers.reqHeader('PATCH', '') })
 		.then(res => res.json()).then(async data => {

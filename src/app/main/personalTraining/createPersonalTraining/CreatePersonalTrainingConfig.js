@@ -5,10 +5,10 @@ const CreatePersonalTraining = {
 		layout: {}
 	},
 	routes: [
-		// {
-		// 	path: '/training/personal/courses/:startDate/:endDate',
-		// 	component: React.lazy(() => import('./courses/Courses'))
-		// },
+		{
+			path: '/training/list',
+			component: React.lazy(() => import('./trainingList'))
+		},
 		{
 			path: '/training/personal/courses',
 			component: React.lazy(() => import('./PersonalTrainingCourses'))

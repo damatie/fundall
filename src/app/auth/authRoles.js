@@ -8,6 +8,10 @@ const authRoles = {
 	managers: ['HR', 'Line Manager', 'Finance Manager', 'Head of department', 'Director of support service', "hr", 'HR Manager'],
 	hod: ['Head of department'],
 	user: ['admin', 'staff', 'user'],
+	employee: ["employee", "Employee"],
+	financeMnager: ["finance manager", "Finance Manager"],
+	hrManager: ["line manager", "Line Manager", "hr", "HR"],
+	lineManager: ["line manager", "Line Manager"],
 	onlyGuest: [],
 	loan: ['Line managers', 'Finance Manager', 'Director of support service']
 };

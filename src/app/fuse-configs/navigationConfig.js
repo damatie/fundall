@@ -22,28 +22,39 @@ const navigationConfig = [
 				id: 'dashboard',
 				title: 'HR Dashboard',
 				translate: 'Dashboard',
-				// type: 'item',
+				type: 'item',
+				url: '/hr/dashboard',
 				icon: 'dashboard',
-				type: 'collapse',
-				children: [
-					{
-						id: 'hr_dashboard',
-						title: 'Hr dashboard',
-						type: 'item',
-						url: '/hr/dashboard',
-						icon: 'dashboard',
-						auth: authRoles.admin,
-					},
-					{
-						id: 'employee_dashboard',
-						title: 'Dashboard',
-						type: 'item',
-						url: '/employee/dashboard',
-						icon: 'dashboard',
-						auth: authRoles.staff,
-					},
-				]
+				auth: authRoles.admin,
 			},
+			{
+				id: 'employee_dashboard',
+				title: 'Dashboard',
+				type: 'item',
+				url: '/employee/dashboard',
+				icon: 'dashboard',
+				auth: authRoles.staff,
+			},
+			// {
+			// children: [
+			// {
+			// 	id: 'hr_dashboard',
+			// 	title: 'Hr dashboard',
+			// 	type: 'item',
+			// 	url: '/hr/dashboard',
+			// 	icon: 'dashboard',
+			// 	auth: authRoles.admin,
+			// },
+			// {
+			// 	id: 'employee_dashboard',
+			// 	title: 'Dashboard',
+			// 	type: 'item',
+			// 	url: '/employee/dashboard',
+			// 	icon: 'dashboard',
+			// 	auth: authRoles.staff,
+			// },
+			// ]
+			// },
 
 			{
 				id: 'employee_management',
@@ -258,27 +269,27 @@ const navigationConfig = [
 		children: [
 			{
 				id: 'employee_loan_mgt',
-				title: 'Employee Dashboard',
+				title: 'Dashboard',
 				type: 'item',
 				url: '/employee/loan_mgt/',
 				icon: 'monetization_on',
-				// auth: authRoles.loan,
+				auth: authRoles.employee,
 			},
 			{
 				id: 'hr_loan_mgt',
-				title: 'HR Dashboard',
+				title: 'Dashboard',
 				type: 'item',
 				url: '/hr/loan_mgt/',
 				icon: 'monetization_on',
-				// auth: authRoles.loan,
+				auth: authRoles.admin,
 			},
 			{
 				id: 'line_manager_loan_mgt',
-				title: 'Line Manager Dashboard',
+				title: 'Dashboard',
 				type: 'item',
 				url: '/line_manager/loan_mgt/',
 				icon: 'monetization_on',
-				// auth: authRoles.loan,
+				auth: authRoles.lineManager,
 			},
 			{
 				id: 'finance_manager_loan_mgt',
@@ -286,7 +297,7 @@ const navigationConfig = [
 				type: 'item',
 				url: '/finance_manager/loan_mgt/',
 				icon: 'monetization_on',
-				// auth: authRoles.user,
+				auth: authRoles.financeMnager,
 			},
 			{
 				id: 'loan_review',
@@ -323,17 +334,19 @@ const navigationConfig = [
 		children: [
 			{
 				id: 'hr_dasboard',
-				title: 'HR leave dashboard',
+				title: 'dashboard',
 				type: 'item',
 				url: '/hr/leave/dashboard',
-				icon: 'dashboard'
+				icon: 'dashboard',
+				auth: authRoles.admin
 			},
 			{
-				id: 'hr_dasboard',
+				id: 'line_manager_dasboard',
 				title: 'Line manager leave dashboard',
 				type: 'item',
 				url: '/line_manager/leave/dashboard',
-				icon: 'dashboard'
+				icon: 'dashboard',
+				auth: authRoles.lineManager
 			},
 			{
 				id: 'leave_type',
@@ -342,6 +355,7 @@ const navigationConfig = [
 				url: '/hr/leave_type',
 				icon: 'flight_takeoff',
 				auth: authRoles.admin,
+
 				children: [
 					{
 						id: 'new_leave_type',
@@ -358,6 +372,7 @@ const navigationConfig = [
 				url: '/hr/leave_options',
 				icon: 'event',
 				auth: authRoles.admin,
+
 				children: [
 					{
 						id: 'new_leave_options',
@@ -423,25 +438,10 @@ const navigationConfig = [
 		id: 'library',
 		title: 'Library',
 		translate: 'Library',
-		type: 'group',
-		children: [
-			{
-				id: 'documents',
-				title: 'Documents library',
-				type: 'item',
-				url: '/library/documents',
-				icon: 'folder',
-				auth: authRoles.staff,
-			},
-			{
-				id: 'documentCategory',
-				title: 'Document Category',
-				type: 'item',
-				url: '/library/categories',
-				icon: 'category',
-				auth: authRoles.admin,
-			}
-		]
+		type: 'item',
+		url: '/library/folders',
+		icon: 'folder',
+		auth: authRoles.staff
 	},
 
 	// Training navigations
@@ -451,38 +451,36 @@ const navigationConfig = [
 		translate: 'training',
 		type: 'group',
 		children: [
+			// {
+			// id: 'training_Dashboard',
+			// title: 'Training Dashboard',
+			// type: 'collapse',
+			// // url: '/hr/training/management',
+			// icon: 'dashboard',
+			// children: [
 			{
-				id: 'training_Dashboard',
-				title: 'Training Dashboard',
-				type: 'collapse',
-				// url: '/hr/training/management',
-				icon: 'dashboard',
-				children: [
-					{
-						id: 'staff_dashboard',
-						title: 'Employee Dashboard',
-						type: 'item',
-						icon: 'layers',
-						url: '/employee/training/dashboard',
-						auth: authRoles.staff,
-					},
-					{
-						id: 'line_manager_dashboard',
-						title: 'Line Manager Dashboard',
-						type: 'item',
-						icon: 'layers',
-						url: '/line_manager/training/dashboard',
-						auth: authRoles.staff,
-					},
-					{
-						id: 'finance_manager_dashboard',
-						title: 'Finance Manager Dashboard',
-						type: 'item',
-						icon: 'layers',
-						url: '/finance_manager/training/dashboard',
-						auth: authRoles.staff,
-					},
-				]
+				id: 'staff_dashboard',
+				title: 'Dashboard',
+				type: 'item',
+				icon: 'layers',
+				url: '/employee/training/dashboard',
+				auth: authRoles.employee,
+			},
+			{
+				id: 'line_manager_dashboard',
+				title: 'Dashboard',
+				type: 'item',
+				icon: 'layers',
+				url: '/line_manager/training/dashboard',
+				auth: authRoles.lineManager,
+			},
+			{
+				id: 'finance_manager_dashboard',
+				title: 'Dashboard',
+				type: 'item',
+				icon: 'layers',
+				url: '/finance_manager/training/dashboard',
+				auth: authRoles.financeMnager,
 			},
 
 			{
@@ -499,7 +497,7 @@ const navigationConfig = [
 				type: 'item',
 				url: '/training/dept',
 				icon: 'group',
-				auth: authRoles.managers,
+				auth: authRoles.hrManager,
 			},
 			{
 				id: 'personalTraining',
@@ -510,12 +508,20 @@ const navigationConfig = [
 				auth: authRoles.staff,
 			},
 			{
+				id: 'trainingList',
+				title: 'Training List',
+				type: 'item',
+				url: '/training/list',
+				icon: 'book',
+				auth: authRoles.hrManager,
+			},
+			{
 				id: 'courseCategory',
 				title: 'Course Category',
 				type: 'item',
 				url: '/hr/training/category',
 				icon: 'category',
-				auth: authRoles.admin,
+				auth: authRoles.hrManager,
 			},
 			{
 				id: 'checkList',
@@ -523,7 +529,7 @@ const navigationConfig = [
 				type: 'item',
 				url: '/training/checklist',
 				icon: 'category',
-				auth: authRoles.admin,
+				auth: authRoles.hrManager,
 			}
 		]
 	},
@@ -537,20 +543,22 @@ const navigationConfig = [
 		auth: authRoles.manager,
 		children: [
 			{
-				id: 'recruitment_dashboards',
-				title: 'Dashboards',
-				type: 'collapse',
+				id: 'hr_recruitment',
+				title: 'Dashboard',
+				type: 'item',
 				icon: 'school',
-				children: [
-					{
-						id: 'hr_recruitment',
-						title: 'HR Dashboard',
-						type: 'item',
-						url: '/hr/recruitment',
-						icon: 'school',
-						auth: authRoles.admin,
-					},
-				]
+				url: '/hr/recruitment',
+				// auth: authRoles.admin
+				// children: [
+				// 	{
+				// 		id: 'hr_recruitment',
+				// 		title: 'HR Dashboard',
+				// 		type: 'item',
+				// 		url: '/hr/recruitment',
+				// 		icon: 'school',
+				// 		auth: authRoles.admin,
+				// 	},
+				// ]
 			},
 			{
 				id: 'listOfOpenings',
@@ -558,7 +566,7 @@ const navigationConfig = [
 				type: 'item',
 				url: '/recruitment/all',
 				icon: 'school',
-				auth: authRoles.manager,
+				// auth: authRoles.manager,
 			},
 			{
 				id: 'createOpening',
@@ -566,7 +574,7 @@ const navigationConfig = [
 				type: 'item',
 				url: '/recruitment/create_opening',
 				icon: 'group',
-				auth: authRoles.manager,
+				// auth: authRoles.manager,
 			},
 		]
 	},
@@ -600,7 +608,7 @@ const navigationConfig = [
 		children: [
 			{
 				id: 'hrDashboard',
-				title: 'HR Dashboard',
+				title: 'Dashboard',
 				type: 'item',
 				url: '/hr/performance_appraisal/dashboard',
 				icon: 'dashboard',
@@ -608,19 +616,19 @@ const navigationConfig = [
 			},
 			{
 				id: 'LMDashboard',
-				title: 'Line manager Dashboard',
+				title: 'Dashboard',
 				type: 'item',
 				url: '/line_manager/performance_appraisal/dashboard',
 				icon: 'dashboard',
-				auth: authRoles.admin,
+				auth: authRoles.lineManager,
 			},
 			{
 				id: 'FMDashboard',
-				title: 'Finance manager Dashboard',
+				title: 'Dashboard',
 				type: 'item',
 				url: '/finance_manager/performance_appraisal/dashboard',
 				icon: 'dashboard',
-				auth: authRoles.admin,
+				auth: authRoles.financeMnager,
 			},
 			{
 				id: 'kpoCategory',
@@ -644,7 +652,7 @@ const navigationConfig = [
 				type: 'item',
 				url: '/performance_appraisal/kpoList',
 				icon: 'assignment',
-				// auth: authRoles.admin,
+				auth: authRoles.admin,
 			},
 		]
 	},
@@ -662,6 +670,7 @@ const navigationConfig = [
 				type: 'item',
 				url: '/srep/admin/dashboard',
 				icon: 'dashboard',
+				auth: authRoles.admin
 			},
 			{
 				id: 'employeeDashboard',
@@ -669,6 +678,7 @@ const navigationConfig = [
 				type: 'item',
 				url: '/srep/employee/dashboard',
 				icon: 'dashboard',
+				auth: authRoles.employee
 			},
 			{
 				id: 'applySREP',
@@ -676,6 +686,7 @@ const navigationConfig = [
 				type: 'item',
 				url: '/srep/apply',
 				icon: 'note_add',
+				auth: authRoles.staff
 			},
 			{
 				id: 'listSREP',
@@ -683,6 +694,7 @@ const navigationConfig = [
 				type: 'item',
 				url: '/srep/all',
 				icon: 'list_alt',
+				auth: authRoles.staff
 			},
 		]
 	},
