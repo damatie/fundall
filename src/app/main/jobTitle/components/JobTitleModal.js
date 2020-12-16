@@ -5,19 +5,19 @@ import SharedButton from 'app/shared/button/SharedButton';
 import useJobTitle from '../hooks/useJobTitle';
 
 const JobTitleModal = () => {
-  const { errors, register, onSubmit, handleSubmit } = useJobTitle();
+  const { errors, register, onSubmit, handleSubmit, type, singleData, open, closeModal } = useJobTitle();
   return (
     <SharedModal
-      open={true}
-      title={'Create Job Title'}
-      handleClose={() => console.log('hello')}
+      open={open}
+      title={type === 'new' ? 'Create Job Title' : 'Update Job Title'}
+      handleClose={closeModal}
     >
       <form onSubmit={handleSubmit(onSubmit)}>
         <Input
           name='name'
           label='Name'
           className='my-16'
-          // defaultValue={type === 'update' ? category.name : ''}
+          defaultValue={type === 'update' ? singleData?.name : ''}
           error={errors.name}
           refs={register}
           message={errors.name?.message}
@@ -27,7 +27,7 @@ const JobTitleModal = () => {
           className='my-16'
           name='description'
           label='Description'
-          // defaultValue={type === 'update' ? category.description : ''}
+          defaultValue={type === 'update' ? singleData?.description : ''}
           multiline
           error={errors.description}
           refs={register}

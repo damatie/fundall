@@ -2,14 +2,18 @@ import PageLayout from 'app/shared/pageLayout/PageLayout';
 import React from 'react';
 import JobTitleTable from './components/JobTitleTable';
 import JobTitleModal from './components/JobTitleModal';
+import reducer from './store/reducers/jobTitle.reducer';
+import withReducer from 'app/store/withReducer';
+import useJobTitle from './hooks/useJobTitle';
 
 const JobTitle = () => {
+  const { openModal } = useJobTitle();
   return (
     <PageLayout
       button={{
         showButton: true,
         btnTitle: 'Add Job Title',
-        onClick: () => console.log('click')
+        onClick: openModal
       }}
       header={{
         title: 'Job Title',
@@ -25,4 +29,4 @@ const JobTitle = () => {
   );
 };
 
-export default JobTitle;
+export default withReducer('jobTitle', reducer)(JobTitle);
