@@ -1,8 +1,8 @@
-import FormControl from '@material-ui/core/FormControl';
+// import FormControl from '@material-ui/core/FormControl';
 import Icon from '@material-ui/core/Icon';
 import _ from '@lodash';
-import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
+// import MenuItem from '@material-ui/core/MenuItem';
+// import Select from '@material-ui/core/Select';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -15,7 +15,7 @@ import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import Input from '@material-ui/core/Input';
-import Button from '@material-ui/core/Button';
+// import Button from '@material-ui/core/Button';
 import React, { useState, useEffect } from 'react';
 import Moment from 'react-moment';
 import WidgetModal from './WidgetModal';
@@ -65,13 +65,14 @@ const CategoryTableWidget = (props) => {
 
     useEffect(() => {
         if (search.length >= 2) {
-            setData(_.filter(props.rows, row => ((row.name) ? row.name.toLowerCase() : row.categoryName.toLowerCase()).includes(search.toLowerCase())));
+            setData(_.filter(props.rows, row => ((row.name) ? row.name.toLowerCase() : row.name.toLowerCase()).includes(search.toLowerCase())));
             setPage(0);
         } else {
             setData(props.rows);
         }
     }, [props.rows, search]);
 
+    // console.log(data)
 
     return (
         <Paper className="w-full rounded-8 shadow-none border-1">
@@ -128,76 +129,79 @@ const CategoryTableWidget = (props) => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {_.orderBy(
-                            data,
-                            [
-                                o => {
-                                    switch (order.id) {
-                                        case 'categories': {
-                                            return o.categories[0];
-                                        }
-                                        default: {
-                                            return o[order.id];
+                        {
+                            _.orderBy(
+                                data,
+                                [
+                                    o => {
+                                        switch (order.id) {
+                                            case 'categories': {
+                                                return o.categories[0];
+                                            }
+                                            default: {
+                                                return o[order.id];
+                                            }
                                         }
                                     }
-                                }
-                            ],
-                            [order.direction]
-                        )
-                            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                            .map(n => {
-                                count++;
-                                return (
-                                    <TableRow
-                                        key={n.id}
-                                        hover
-                                        onClick={props.tableRowClick}
-                                        // selected={n.id === selectedItemId}
-                                        className="cursor-pointer"
-                                    >
-                                        <TableCell className="text-center">
-                                            {count}
-                                        </TableCell>
-                                        <TableCell className="text-center">
-                                            {(n.name) ? n.name : n.categoryName}
-                                        </TableCell>
-                                        {(props.showDesc) ? (
+                                ],
+                                [order.direction]
+                            )
+                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                .map(n => {
+                                    count++;
+                                    // console.log(n)
+                                    return (
+                                        <TableRow
+                                            key={n.id}
+                                            hover
+                                            onClick={props.tableRowClick}
+                                            // selected={n.id === selectedItemId}
+                                            className="cursor-pointer"
+                                        >
+                                            <TableCell className="text-center">
+                                                {count}
+                                            </TableCell>
+                                            <TableCell className="text-center">
+                                                {/* {(n.name) ? n.name : n.categoryName} */}
+                                                {n.name}
+                                            </TableCell>
+                                            {/* {(props.showDesc) ? (
                                             <TableCell className="text-center">
                                                 {n.description}
                                             </TableCell>
-                                        ) : null}
-                                        <TableCell className="text-center"><Moment format="ddd Do MMM, YY | hh:mm:ss a">{n.createdAt}</Moment></TableCell>
-                                        <TableCell className="text-center">
-                                            <Moment format="ddd Do MMM, YY | hh:mm:ss a">{n.updatedAt}</Moment>
-                                        </TableCell>
-                                        { (props.showEdit) ?
+                                        ) : null} */}
+                                            <TableCell className="text-center"><Moment format="ddd Do MMM, YY | hh:mm:ss a">{n.createdAt}</Moment></TableCell>
                                             <TableCell className="text-center">
-                                                <Icon onClick={ev => props.handleEdit(ev, n)} className="text-blue text-20" color="action">
-                                                    edit
+                                                <Moment format="ddd Do MMM, YY | hh:mm:ss a">{n.updatedAt}</Moment>
+                                            </TableCell>
+                                            { (props.showEdit) ?
+                                                <TableCell className="text-center">
+                                                    <Icon onClick={ev => props.handleEdit(ev, n)} className="text-blue text-20" color="action">
+                                                        edit
                                                     </Icon>
                                                     &nbsp;
                                                     &nbsp;
                                                     <Icon onClick={ev => props.handleDelete(ev, n.id)} className="text-red text-20" color="action">
-                                                    delete
+                                                        delete
                                                     </Icon>
-                                            </TableCell>
-                                            :
-                                            <TableCell className="text-center">
-                                                <Icon onClick={ev => props.handleDelete(ev, n.id)} className="text-red text-20" color="action">
-                                                    delete
+                                                </TableCell>
+                                                :
+                                                <TableCell className="text-center">
+                                                    <Icon onClick={ev => props.handleDelete(ev, n.id)} className="text-red text-20" color="action">
+                                                        delete
                                                     </Icon>
-                                            </TableCell>
-                                        }
-                                    </TableRow>
-                                );
-                            })}
+                                                </TableCell>
+                                            }
+                                        </TableRow>
+                                    );
+                                })}
                     </TableBody>
                     <TableFooter>
                         <TableRow>
                             <TablePagination
                                 className="overflow-hidden"
                                 // component="div"
-                                count={data.length}
+                                count={props.rows.length}
                                 colSpan={props.columns.length}
                                 rowsPerPage={rowsPerPage}
                                 page={page}
