@@ -9,7 +9,7 @@ const useStyles = makeStyles(theme => ({
 
 }));
 
-const AutoCompleteInput = ({ data, inputs, handleChange, value, setInput }) => {
+const AutoCompleteInput = ({ data, inputs, label, handleChange, value, setInput, onChange, error, helperText, name, className }) => {
   return (
     <Autocomplete
       freeSolo
@@ -20,19 +20,29 @@ const AutoCompleteInput = ({ data, inputs, handleChange, value, setInput }) => {
         data
       }
       onChange={(ev, values) => {
-        if(setInput && values) {
-          setInput(values.id);
+        if(!onChange) {
+          if(setInput && values) {
+            setInput(values.id);
+          }
+        } else {
+          onChange(ev, values);
         }
+        
       }}
+      name={name}
+      className={className}
       renderInput={params => (
         <TextField
           {...params}
+          error={error}
+          helperText={helperText}
           // disabled={!edit}
           // value={selected.accuserName}
-          label={inputs.label}
+          label={inputs?.label || label}
           margin="normal"
           variant="outlined"
           required
+          name={name}
         />
       )}
     />

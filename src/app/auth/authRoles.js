@@ -2,10 +2,10 @@
  * Authorization Roles
  */
 const authRoles = {
-	admin: ['HR', 'hr'],
-	staff: ['employee', 'Employee', 'Line Manager', 'HR', 'Line managers', 'Finance Manager', 'Head of department', 'Director of support service'],
-	manager: ['HR', 'Line managers', 'Director of support service'],
-	managers: ['HR', 'Line Manager', 'Finance Manager', 'Head of department', 'Director of support service', "hr"],
+	admin: ['HR', 'Hr Manager'],
+	staff: ['employee', 'Employee', 'Line Manager','HR', 'Line managers', 'Finance Manager', 'Head of department', 'Director of support service', 'HR Manager'],
+	manager: ['HR', 'Line managers', 'Director of support service', 'HR Manager'],
+	managers: ['HR', 'Line Manager', 'Finance Manager', 'Head of department', 'Director of support service', "hr", 'HR Manager'],
 	hod: ['Head of department'],
 	user: ['admin', 'staff', 'user'],
 	employee: ["employee", "Employee"],
