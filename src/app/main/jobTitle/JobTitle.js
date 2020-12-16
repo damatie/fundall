@@ -5,9 +5,10 @@ import JobTitleModal from './components/JobTitleModal';
 import reducer from './store/reducers/jobTitle.reducer';
 import withReducer from 'app/store/withReducer';
 import useJobTitle from './hooks/useJobTitle';
+import Skeleton from '@material-ui/lab/Skeleton';
 
 const JobTitle = () => {
-  const { openModal } = useJobTitle();
+  const { openModal, loading } = useJobTitle();
   return (
     <PageLayout
       button={{
@@ -21,8 +22,17 @@ const JobTitle = () => {
       }}
       content={
         <div className='p-24'>
-          <JobTitleModal/>
-          <JobTitleTable />
+          {
+            loading ? (
+              <Skeleton variant="rect" width='100%' height={400} animation="wave"/>
+            ) : (
+              <>
+                <JobTitleModal/>
+                <JobTitleTable />
+              </>
+            )
+          }
+          
         </div>
       }
     />
