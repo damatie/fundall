@@ -107,7 +107,7 @@ export function deleteCategory(id){
 			  if(data.success) {
 				swal.fire(
 				  'Deleted!',
-				  'Your file has been deleted.',
+				  'Your category has been deleted.',
 				  'success'
 				);
 				return dispatch({
