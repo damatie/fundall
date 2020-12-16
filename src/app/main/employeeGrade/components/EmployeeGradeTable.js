@@ -5,6 +5,8 @@ import IconButton from '@material-ui/core/IconButton';
 import Icon from '@material-ui/core/Icon';
 import Typography from '@material-ui/core/Typography';
 import moment from 'moment';
+import useEmployeeGrade from '../hooks/useEmployeeGrade';
+import { useSelector } from 'react-redux';
 
 const EmployeeGradeTable = () => {
   const columns = React.useMemo(
@@ -24,6 +26,9 @@ const EmployeeGradeTable = () => {
 				Header: 'PIP Eligibility',
 				accessor: 'pip',
 				sortable: true,
+				Cell: ({ row: { original }}) => {
+					return <>{(original.pip) ? 'Yes' : 'No'}</>
+				}
 			},
 			{
 				Header: 'Modified',
@@ -36,13 +41,17 @@ const EmployeeGradeTable = () => {
 		],
 	);
 
+	const state = useSelector(state => state.employeeGrade);
+
+	const { handleGetOne, handleDelete } = useEmployeeGrade(state);
+
 	return (
 		<EnhancedTable
 			columns={columns}
-			data={[]}
+			data={state?.data}
 			onRowClick={(ev, row) => {
 				if (row) {
-          console.log(row.values)
+          handleGetOne(row.values)
 				}
 			}}
 			checkbox={{
@@ -51,7 +60,7 @@ const EmployeeGradeTable = () => {
 				accessor: 'id',
 			}}
 			selectAll={(value) => console.log(value)}
-			handleDelete={() => null}
+			handleDelete={handleDelete}
 		/>
 	);
 };
