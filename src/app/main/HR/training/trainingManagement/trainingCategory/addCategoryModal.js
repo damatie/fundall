@@ -21,24 +21,40 @@ import * as Actions from './../store/actions';
 import reducer from './../store/reducers';
 import FuseAnimate from '@fuse/core/FuseAnimate';
 
-export default function AddCourseModal(props) {
+export default function AddCourseModal({ data, trigger, clearEdit }) {
   const loading = useSelector(({ TrainingCategory }) => TrainingCategory.categories.loading);
   const success = useSelector(({ TrainingCategory }) => TrainingCategory.categories.success);
   const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
+
   const [isFormValid, setIsFormValid] = useState(true);
 
   const handleClickOpen = () => {
     setOpen(true);
   };
 
+  useEffect(() => {
+  }, [data])
+
+  useEffect(() => {
+    if (trigger) {
+      setOpen(true);
+    } else {
+      setOpen(false)
+    }
+  }, [trigger])
+
   const handleClose = () => {
+    if (data) {
+      clearEdit();
+      return;
+    }
     setOpen(false);
   };
 
   const formRef = useRef(null);
   function disableButton() {
-    setIsFormValid(false);
+    setIsFormValid(true);
   }
 
   function enableButton() {
@@ -46,6 +62,10 @@ export default function AddCourseModal(props) {
   }
 
   function handleSubmit(model) {
+    if (data) {
+      dispatch(Actions.updateCategory(model, data.id));
+      return;
+    }
     dispatch(Actions.addCategory(model));
     setOpen(false);
   }
@@ -64,7 +84,7 @@ export default function AddCourseModal(props) {
         </Button>
       </FuseAnimate>
       <Dialog open={open} onClose={handleClose} fullWidth maxWidth={'sm'} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">Add New Category</DialogTitle>
+        <DialogTitle id="form-dialog-title">{data && data?.name ? "Update Category" : "Add New Category"}</DialogTitle>
         <DialogContent>
           <div className="w-full">
             <Formsy
@@ -79,6 +99,7 @@ export default function AddCourseModal(props) {
                 type="text"
                 name="name"
                 label="Name"
+                value={data ? data?.name : ""}
                 validations={{
                   minLength: 1
                 }}
@@ -103,11 +124,12 @@ export default function AddCourseModal(props) {
                 type="text"
                 name="description"
                 label="Description"
+                value={data ? data?.description : ""}
                 validations={{
                   minLength: 5
                 }}
                 validationErrors={{
-                  minLength: 'Min character length is 1'
+                  minLength: 'Min character length is 5'
                 }}
                 InputProps={{
                   endAdornment: (
@@ -126,13 +148,13 @@ export default function AddCourseModal(props) {
                 className="my-16"
                 name="status"
                 label="Status"
-                value="none"
+                value={data ? data?.status : ""}
                 // validations="not-equals:none"
                 validationError="required"
                 variant="outlined"
                 required
               >
-                <MenuItem default >Select</MenuItem>
+                <MenuItem default value="" >Select</MenuItem>
                 <MenuItem value="ACTIVE">Active</MenuItem>
                 <MenuItem value="INACTIVE">Inactive</MenuItem>
               </SelectFormsy>
