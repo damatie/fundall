@@ -662,6 +662,14 @@ const navigationConfig = [
 				icon: 'assignment',
 				auth: authRoles.admin,
 			},
+			{
+				id: 'behaviouralAttribute',
+				title: 'Behavioural Attribute',
+				type: 'item',
+				url: '/behaviouralAttribute/all',
+				icon: 'assignment',
+				auth: authRoles.admin,
+			},
 		]
 	},
 
