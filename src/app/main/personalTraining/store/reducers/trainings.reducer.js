@@ -75,6 +75,11 @@ const trainingsReducer = (state = initialState, action) => {
 				...state,
 				pendingTrainings: action.payload
 			};
+		case Actions.REVIEWED_TRAININGS_HR:
+			return {
+				...state,
+				reviewedTrainings: action.payload
+			};
 		case Actions.APPROVED_TRAININGS_HR:
 			return {
 				...state,
