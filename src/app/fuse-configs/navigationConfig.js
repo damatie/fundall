@@ -459,11 +459,12 @@ const navigationConfig = [
 		type: 'group',
 		children: [
 			// {
-			// id: 'training_Dashboard',
-			// title: 'Training Dashboard',
-			// type: 'collapse',
-			// // url: '/hr/training/management',
-			// icon: 'dashboard',
+			// 	id: 'training_Dashboard',
+			// 	title: 'Training Dashboard',
+			// 	type: 'collapse',
+			// 	url: '/hr/training/management',
+			// 	icon: 'dashboard'
+			// },
 			// children: [
 			{
 				id: 'staff_dashboard',
@@ -512,7 +513,7 @@ const navigationConfig = [
 				type: 'item',
 				url: '/training/personal',
 				icon: 'book',
-				auth: authRoles.employee,
+				auth: authRoles.staff,
 			},
 			{
 				id: 'trainingList',
@@ -520,7 +521,7 @@ const navigationConfig = [
 				type: 'item',
 				url: '/training/list',
 				icon: 'book',
-				auth: authRoles.hrManager,
+				auth: authRoles.lineManager,
 			},
 			{
 				id: 'courseCategory',
