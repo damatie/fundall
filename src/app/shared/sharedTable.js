@@ -1,17 +1,14 @@
 import FuseScrollbars from '@fuse/core/FuseScrollbars';
 import _ from '@lodash';
-import Checkbox from '@material-ui/core/Checkbox';
-import Icon from '@material-ui/core/Icon';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import clsx from 'clsx';
-import React, { useEffect, useState } from 'react';
-import { withRouter, useParams } from 'react-router-dom';
+import React, { Fragment, useState } from 'react';
+import { withRouter } from 'react-router-dom';
 import SharedTableHead from 'app/shared/sharedTableHead';
-import moment from 'moment';
 import { formatToNaira } from 'utils/formatNumber';
 import LoanStatus from 'app/main/loanApp/LoanStatus';
 
@@ -46,22 +43,22 @@ function SharedTable(props) {
 		setSelected([]);
 	}
 
-	function handleCheck(event, id) {
-		const selectedIndex = selected.indexOf(id);
-		let newSelected = [];
+	// function handleCheck(event, id) {
+	// 	const selectedIndex = selected.indexOf(id);
+	// 	let newSelected = [];
 
-		if (selectedIndex === -1) {
-			newSelected = newSelected.concat(selected, id);
-		} else if (selectedIndex === 0) {
-			newSelected = newSelected.concat(selected.slice(1));
-		} else if (selectedIndex === selected.length - 1) {
-			newSelected = newSelected.concat(selected.slice(0, -1));
-		} else if (selectedIndex > 0) {
-			newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1));
-		}
+	// 	if (selectedIndex === -1) {
+	// 		newSelected = newSelected.concat(selected, id);
+	// 	} else if (selectedIndex === 0) {
+	// 		newSelected = newSelected.concat(selected.slice(1));
+	// 	} else if (selectedIndex === selected.length - 1) {
+	// 		newSelected = newSelected.concat(selected.slice(0, -1));
+	// 	} else if (selectedIndex > 0) {
+	// 		newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1));
+	// 	}
 
-		setSelected(newSelected);
-	}
+	// 	setSelected(newSelected);
+	// }
 
 	function handleChangePage(event, value) {
 		setPage(value);
@@ -103,7 +100,7 @@ function SharedTable(props) {
 							[order.direction]
 						)
 							.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-							.map(n => {
+							.map((n, index) => {
 								const isSelected = selected.indexOf(n.id) !== -1;
 								return (
 									<TableRow
@@ -112,7 +109,7 @@ function SharedTable(props) {
 										role="checkbox"
 										aria-checked={isSelected}
 										tabIndex={-1}
-										key={n.id}
+										key={index * Math.random()}
 										selected={isSelected}
 										onClick={event => props.handleClick(n)}
 									>
@@ -157,8 +154,8 @@ const TableCells = (props) => {
 
 					</TableCell>
 					{
-						props.rows.map(item => (
-							<>
+						props.rows.map((item, index) => (
+							<Fragment key={index}>
 								{
 									item.type === 'date' ?
 										<TableCell component="th" scope="row" align={item.align} key={item.id}>
@@ -180,7 +177,7 @@ const TableCells = (props) => {
 													{props.data[item.field]}
 												</TableCell>
 								}
-							</>
+							</Fragment>
 						))
 					}
 				</>
