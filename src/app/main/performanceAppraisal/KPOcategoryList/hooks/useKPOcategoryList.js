@@ -90,7 +90,6 @@ const items = [
 
 const useKPOcategoryList = () => {
   const dispatch = useDispatch();
-  const [kpoCategoryList] = React.useState(items);
 
   const {
     errors,
@@ -159,7 +158,7 @@ const useKPOcategoryList = () => {
   };
 
   return {
-    kpoCategoryList,
+    kpoCategoryList: data,
     handleOpen,
     handleClose,
     title,

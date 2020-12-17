@@ -53,7 +53,10 @@ export function getDisciplinaryAction(id = 1) {
 }
 
 export function createDisciplinaryAction(model) {
-	swal.fire('Processing ...');
+	swal.fire({
+            title: 'Processing ...',
+            allowOutsideClick: false
+        });
 	swal.showLoading();
 	return dispatch => {
 		dispatch({
@@ -108,7 +111,10 @@ export function createDisciplinaryAction(model) {
 export function updateDisciplinaryAction(model, id) {
 	console.log(id);
 	console.log(model);
-	swal.fire('Processing ...');
+	swal.fire({
+            title: 'Processing ...',
+            allowOutsideClick: false
+        });
 	swal.showLoading();
 	return dispatch => {
 		dispatch({

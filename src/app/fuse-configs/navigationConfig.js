@@ -89,6 +89,22 @@ const navigationConfig = [
 				icon: 'account_box',
 				auth: authRoles.admin,
 			},
+			{
+				id: 'job_title',
+				title: 'Job Title',
+				type: 'item',
+				url: '/jobTitle/all',
+				icon: 'account_box',
+				auth: authRoles.admin,
+			},
+			{
+				id: 'employee_grade',
+				title: 'Employee Grade',
+				type: 'item',
+				url: '/employeeGrade/all',
+				icon: 'account_box',
+				auth: authRoles.admin,
+			},
 		]
 	},
 	// Blog navigations
@@ -430,25 +446,10 @@ const navigationConfig = [
 		id: 'library',
 		title: 'Library',
 		translate: 'Library',
-		type: 'group',
-		children: [
-			{
-				id: 'documents',
-				title: 'Documents library',
-				type: 'item',
-				url: '/library/documents',
-				icon: 'folder',
-				auth: authRoles.staff,
-			},
-			{
-				id: 'documentCategory',
-				title: 'Document Category',
-				type: 'item',
-				url: '/library/categories',
-				icon: 'category',
-				auth: authRoles.admin,
-			}
-		]
+		type: 'item',
+		url: '/library/folders',
+		icon: 'folder',
+		auth: authRoles.staff
 	},
 
 	// Training navigations
@@ -644,13 +645,29 @@ const navigationConfig = [
 				type: 'item',
 				url: '/hr/performance_appraisal/kpoCategory',
 				icon: 'assignment',
-				auth: authRoles.admin,
+				// auth: authRoles.admin,
+			},
+			{
+				id: 'kpoReview',
+				title: 'KPO Review',
+				type: 'item',
+				url: '/performance_appraisal/kpoList/review',
+				icon: 'assignment',
+				// auth: authRoles.admin,
 			},
 			{
 				id: 'kpoList',
-				title: 'KPO List',
+				title: 'KPO',
 				type: 'item',
 				url: '/performance_appraisal/kpoList',
+				icon: 'assignment',
+				auth: authRoles.admin,
+			},
+			{
+				id: 'behaviouralAttribute',
+				title: 'Behavioural Attribute',
+				type: 'item',
+				url: '/behaviouralAttribute/all',
 				icon: 'assignment',
 				auth: authRoles.admin,
 			},

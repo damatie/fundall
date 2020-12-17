@@ -26,7 +26,10 @@ const auth = useAuth;
 
 export function addEndorsed(payload, srepId){
 	return dispatch => {
-		// swal.fire('Processing ...');
+		// swal.fire({
+        //     title: 'Processing ...',
+        //     allowOutsideClick: false
+        // });
 		// swal.showLoading();
 		fetch(`${baseUrl()}/srep/otherfiles`, { ...headers.fdHeader('post', payload) })
 		.then(res => res.json()).then(async data => {
@@ -65,7 +68,10 @@ export function addEndorsed(payload, srepId){
 
 export function addEmailIndemnity(payload, srepId){
 	return dispatch => {
-		// swal.fire('Processing ...');
+		// swal.fire({
+        //     title: 'Processing ...',
+        //     allowOutsideClick: false
+        // });
 		// swal.showLoading();
 		fetch(`${baseUrl()}/srep/otherfiles`, { ...headers.fdHeader('post', payload) })
 		.then(res => res.json()).then(async data => {
@@ -104,7 +110,10 @@ export function addEmailIndemnity(payload, srepId){
 
 export function addBoardResolution(payload, srepId){
 	return dispatch => {
-		// swal.fire('Processing ...');
+		// swal.fire({
+        //     title: 'Processing ...',
+        //     allowOutsideClick: false
+        // });
 		// swal.showLoading();
 		fetch(`${baseUrl()}/srep/otherfiles`, { ...headers.fdHeader('post', payload) })
 		.then(res => res.json()).then(async data => {
@@ -143,7 +152,10 @@ export function addBoardResolution(payload, srepId){
 
 export function addTrustDeed(payload, srepId){
 	return dispatch => {
-		// swal.fire('Processing ...');
+		// swal.fire({
+        //     title: 'Processing ...',
+        //     allowOutsideClick: false
+        // });
 		// swal.showLoading();
 		dispatch({type: ADD_TRUST_DEED_FILES_LOADING});
 		fetch(`${baseUrl()}/srep/otherfiles`, { ...headers.fdHeader('post', payload) })
@@ -183,7 +195,10 @@ export function addTrustDeed(payload, srepId){
 
 export function addTrustAccDetails(payload, srepId){
 	return dispatch => {
-		// swal.fire('Processing ...');
+		// swal.fire({
+        //     title: 'Processing ...',
+        //     allowOutsideClick: false
+        // });
 		// swal.showLoading();
 		dispatch({type: ADD_TRUST_ACC_DETAILS_FILES_LOADING})
 		fetch(`${baseUrl()}/srep/otherfiles`, { ...headers.fdHeader('post', payload) })

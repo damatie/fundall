@@ -166,7 +166,7 @@ const EnhancedTable = ({ columns, data, onRowClick, checkbox, selectAll, toolBar
 								<Icon>delete</Icon>
 							</IconButton>
 						</>
-						) : <></>}
+						) : toolBar }
 						
 					</Toolbar>
 				) : (
