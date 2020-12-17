@@ -72,7 +72,6 @@ const CategoryTableWidget = (props) => {
         }
     }, [props.rows, search]);
 
-    // console.log(data)
 
     return (
         <Paper className="w-full rounded-8 shadow-none border-1">
@@ -149,7 +148,6 @@ const CategoryTableWidget = (props) => {
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map(n => {
                                     count++;
-                                    // console.log(n)
                                     return (
                                         <TableRow
                                             key={n.id}
@@ -165,22 +163,20 @@ const CategoryTableWidget = (props) => {
                                                 {/* {(n.name) ? n.name : n.categoryName} */}
                                                 {n.name}
                                             </TableCell>
-                                            {/* {(props.showDesc) ? (
-                                            <TableCell className="text-center">
-                                                {n.description}
-                                            </TableCell>
-                                        ) : null} */}
+                                            {(props.showDesc) ? (
+                                                <TableCell className="text-center">
+                                                    {n.description}
+                                                </TableCell>
+                                            ) : null}
                                             <TableCell className="text-center"><Moment format="ddd Do MMM, YY | hh:mm:ss a">{n.createdAt}</Moment></TableCell>
                                             <TableCell className="text-center">
                                                 <Moment format="ddd Do MMM, YY | hh:mm:ss a">{n.updatedAt}</Moment>
                                             </TableCell>
                                             { (props.showEdit) ?
                                                 <TableCell className="text-center">
-                                                    <Icon onClick={ev => props.handleEdit(ev, n)} className="text-blue text-20" color="action">
+                                                    <Icon onClick={ev => props.handleEdit(ev, n)} className="text-blue text-20 mr-24" color="action">
                                                         edit
                                                     </Icon>
-                                                    &nbsp;
-                                                    &nbsp;
                                                     <Icon onClick={ev => props.handleDelete(ev, n.id)} className="text-red text-20" color="action">
                                                         delete
                                                     </Icon>
@@ -201,7 +197,7 @@ const CategoryTableWidget = (props) => {
                             <TablePagination
                                 className="overflow-hidden"
                                 // component="div"
-                                count={props.rows.length}
+                                count={props?.rows?.length}
                                 colSpan={props.columns.length}
                                 rowsPerPage={rowsPerPage}
                                 page={page}
