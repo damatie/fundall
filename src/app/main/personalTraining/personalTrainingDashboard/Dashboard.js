@@ -235,12 +235,12 @@ function PersonalTrainingDashboard(props) {
 								</SelectTextField>
 							</Grid>
 						</Grid>
-						<FuseAnimateGroup
-							className="flex flex-wrap"
-							enter={{
-								animation: 'transition.slideUpBigIn'
-							}}
-						>
+						{/* <FuseAnimateGroup
+							// // className="flex flex-wrap"
+							// enter={{
+							// 	animation: 'transition.slideUpBigIn'
+							// }}
+						> */}
 
 							<Dialog open={open} onClose={handleClose} fullWidth>
 								<AppBar position="static">
@@ -297,7 +297,7 @@ function PersonalTrainingDashboard(props) {
 							<div className="widget flex w-full p-12">
 								<SharedTable data={data ?? []} rows={rows} handleClick={handleClick} type="default" />
 							</div>
-						</FuseAnimateGroup>
+						{/* </FuseAnimateGroup> */}
 					</Paper>
 				</div>
 			</div >
