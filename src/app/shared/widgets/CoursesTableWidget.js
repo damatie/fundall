@@ -111,14 +111,6 @@ const CoursesTableWidget = (props) => {
         }
     }, [props.rows, search]);
 
-    useEffect(() => {
-        if (filter !== '') {
-            setData(_.filter(props.rows, row => row.status.toLowerCase() === filter.toLowerCase()));
-            setPage(0);
-        } else {
-            setData(props.rows);
-        }
-    }, [props.rows, filter]);
 
     return (
         <Paper className="w-full rounded-8 shadow-none border-1">
@@ -211,7 +203,7 @@ const CoursesTableWidget = (props) => {
                     <Paper className="flex items-center w-full px-8 py-4 rounded-8">
                         <Icon color="action">search</Icon>
                         <Input
-                            placeholder="Search"
+                            placeholder="Search course name"
                             className="flex flex-1 mx-8"
                             disableUnderline
                             fullWidth
@@ -223,7 +215,7 @@ const CoursesTableWidget = (props) => {
                         />
                     </Paper>
                 </div>
-                <div className="flex">
+                {/* <div className="flex">
                     <div className="flex flex-2 items-center">
                         <FormControl className="">
                             <Select value={filter} onChange={ev => handleFilter(ev)} displayEmpty name="filter" className="">
@@ -236,7 +228,7 @@ const CoursesTableWidget = (props) => {
                             </Select>
                         </FormControl>
                     </div>
-                </div>
+                </div> */}
             </div>
             <div className="table-responsive">
                 <Table className="w-full min-w-full">
