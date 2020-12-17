@@ -6,6 +6,7 @@ import Icon from '@material-ui/core/Icon';
 import Typography from '@material-ui/core/Typography';
 import moment from 'moment';
 import { useSelector } from 'react-redux';
+import useBehaviouralAttribute from '../hooks/useBehaviouralAttribute';
 
 const BehaviouralAttributeTable = () => {
   const columns = React.useMemo(
@@ -31,14 +32,15 @@ const BehaviouralAttributeTable = () => {
 			},
 		],
 	);
-
+  const state = useSelector(state => state.behaviouralAttribute);
+  const { handleGetOne, handleDelete } = useBehaviouralAttribute(state)
 	return (
 		<EnhancedTable
 			columns={columns}
-			data={[]}
+			data={state.data}
 			onRowClick={(ev, row) => {
 				if (row) {
-          console.log(row.values)
+          handleGetOne(row.values)
 				}
 			}}
 			checkbox={{
@@ -47,7 +49,7 @@ const BehaviouralAttributeTable = () => {
 				accessor: 'id',
 			}}
 			selectAll={(value) => console.log(value)}
-			handleDelete={() => null}
+			handleDelete={handleDelete}
 		/>
 	);
 };

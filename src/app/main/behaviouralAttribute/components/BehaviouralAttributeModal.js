@@ -3,35 +3,46 @@ import Input from 'app/shared/TextInput/Input';
 import React from 'react';
 import SharedButton from 'app/shared/button/SharedButton';
 import { useSelector } from 'react-redux';
+import useBehaviouralAttribute from '../hooks/useBehaviouralAttribute';
 
 const BehaviouralAttributeModal = () => {
-
+  const state = useSelector(state => state.behaviouralAttribute);
+  const { 
+    modalTitle,
+    handleSubmit, 
+    onSubmit, 
+    handleClose, 
+    textFieldValue, 
+    buttonTitle,
+    errors,
+    register
+  } = useBehaviouralAttribute(state);
   return (
     <SharedModal
-      open={false}
-      // title={modalTitle()}
-      handleClose={() => null}
+      open={state.open}
+      title={modalTitle()}
+      handleClose={handleClose}
     >
-      <form /*onSubmit={handleSubmit(onSubmit)}*/>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <Input
           name='name'
           label='Name'
           className='my-16'
-          // defaultValue={textFieldValue('name')}
-          // error={errors.name}
-          // refs={register}
-          // message={errors.name?.message}
+          defaultValue={textFieldValue('name')}
+          error={errors.name}
+          refs={register}
+          message={errors.name?.message}
         />
         
         <Input
           className='my-16'
           name='description'
           label='Description'
-          // defaultValue={textFieldValue('description')}
+          defaultValue={textFieldValue('description')}
           multiline
-          // error={errors.description}
-          // refs={register}
-          // message={errors.description?.message}
+          error={errors.description}
+          refs={register}
+          message={errors.description?.message}
         />
         
         <SharedButton
@@ -40,7 +51,7 @@ const BehaviouralAttributeModal = () => {
           type='submit'
           className='flex mx-auto'
         >
-          {/* {buttonTitle()} */} hello
+          {buttonTitle()}
         </SharedButton>
       </form>
     </SharedModal>
