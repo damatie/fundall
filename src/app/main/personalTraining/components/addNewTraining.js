@@ -1,10 +1,9 @@
 import { AppBar, Button, Dialog, DialogActions, DialogContent, FormControl, InputLabel, MenuItem, OutlinedInput, Select, TextField, Toolbar, Typography } from '@material-ui/core'
 import { DateTimePicker } from '@material-ui/pickers'
-import department from 'app/main/HR/business_unit/department/department';
 import CurrencyInput from 'app/shared/TextInput/CurrencyInput';
 import React, { useEffect, useState } from 'react'
 
-const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, categories, roles, submit, changeDepartment }) => {
+const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, categories, roles, submit, update, changeDepartment, data }) => {
 
     const [formstate, setFormstate] = useState({
         department: "",
@@ -12,11 +11,11 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
         entity: "",
         jobRole: "",
         name: "",
-        cost: 0,
+        cost: "",
         description: "",
         employeeGrade: "",
-        companySeniority: "",
-        industrySeniority: "",
+        companySeniority: 0,
+        industrySeniority: 0,
         certification: false,
         startDate: new Date(),
         endDate: new Date(),
@@ -31,26 +30,72 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
             let id = entities.find(element => element.name = value);
             changeDepartment(id.id);
         }
-        if (name === "category") {
+        else if (name === "category") {
             let id = entities.find(element => element.name = value);
-            setFormstate({ ...formstate, trainingCategoryId: id.id })
+            // console.log(id, name, value)
+            let courseData = { trainingCourseId: data?.id }
+            if (data) {
+                setFormstate({ ...formstate, trainingCategoryId: id.id, [name]: value, ...courseData });
+            }
+            else {
+                setFormstate({ ...formstate, trainingCategoryId: id.id, [name]: value });
+            }
+            return;
         }
+
         setFormstate({ ...formstate, [name]: value })
     }
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        let payload = formstate;
-        payload.trainingCategoryId = payload.category.split("#")[1];
-        payload.category = payload.category.split("#")[0];
-        delete payload.selectedCategory;
 
-        console.log(formstate);
-        submit(formstate);
+        let payload = formstate;
+        payload.cost = Number(payload.cost);
+        payload.industrySeniority = Number(payload.industrySeniority);
+        payload.companySeniority = Number(payload.companySeniority);
+
+        // console.log(payload, e);
+        if (data) {
+            update(payload, data.id)
+        } else {
+            submit(payload);
+        }
     }
 
     useEffect(() => {
-        console.log(departments)
+        if (data) {
+            // console.log(data, departments.length > 0)
+            if (departments.length > 0) {
+                setFormstate({
+                    department: data.department,
+                    category: data.category,
+                    entity: data.entity,
+                    jobRole: data.jobRole,
+                    name: data.name,
+                    cost: data.cost,
+                    description: data.description,
+                    employeeGrade: data.employeeGrade,
+                    companySeniority: data.companySeniority,
+                    industrySeniority: data.industrySeniority,
+                    certification: data.certification,
+                    startDate: data.startDate,
+                    endDate: data.endDate,
+                    state: data.state,
+                    country: data.category,
+                    trainingCourseId: data.id
+                });
+            }
+            else {
+                let id = entities.find(element => element.name = data.entity);
+                if (id) {
+                    changeDepartment(id.id);
+                }
+            }
+        }
+    }, [data, departments])
+
+    useEffect(() => {
+        // if (data && department)
     }, [departments])
 
     useEffect(() => {
@@ -77,6 +122,7 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
                         variant="outlined"
                         onChange={(e) => handleChange("name", e.target.value)}
                         label="Course Title"
+                        value={formstate.name}
                         className="w-full mb-24"
                     />
 
@@ -124,7 +170,7 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
                             }
                         >
                             {departments?.map(department => (
-                                <MenuItem value={department.id} key={Math.random()}>
+                                <MenuItem value={department.departmentName} key={Math.random()}>
                                     {department.departmentName}
                                 </MenuItem>
                             ))}
@@ -221,6 +267,7 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
                         id="outlined-secondary"
                         type="text"
                         variant="outlined"
+                        value={formstate.employeeGrade}
                         onChange={(e) => handleChange("employeeGrade", e.target.value)}
                         label="Employee Grade"
                         className="w-full mb-24"
@@ -228,8 +275,9 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
 
                     <TextField
                         id="outlined-secondary"
-                        type="text"
+                        type="number"
                         variant="outlined"
+                        value={formstate.industrySeniority}
                         onChange={(e) => handleChange("industrySeniority", e.target.value)}
                         label="Industry Senority"
                         className="w-full mb-24"
@@ -237,8 +285,9 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
 
                     <TextField
                         id="outlined-secondary"
-                        type="text"
+                        type="number"
                         variant="outlined"
+                        value={formstate.companySeniority}
                         onChange={(e) => handleChange("companySeniority", e.target.value)}
                         label="Company Senority"
                         className="w-full mb-24"
@@ -248,6 +297,7 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
                         id="outlined-secondary"
                         type="text"
                         variant="outlined"
+                        value={formstate.description}
                         onChange={(e) => handleChange("description", e.target.value)}
                         label="Decription"
                         className="w-full mb-24"
@@ -274,6 +324,7 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
                     <TextField
                         id="outlined-secondary"
                         type="text"
+                        value={formstate.country}
                         variant="outlined"
                         onChange={(e) => handleChange("country", e.target.value)}
                         label="Country"
@@ -283,6 +334,7 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
                     <TextField
                         id="outlined-secondary"
                         type="text"
+                        value={formstate?.state}
                         variant="outlined"
                         onChange={(e) => handleChange("state", e.target.value)}
                         label="State"
@@ -332,10 +384,10 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
                     <CurrencyInput
 
                         id="outlined-secondary"
-                        type="text"
-                        value={formstate?.cost}
+                        type="number"
+                        values={formstate.cost}
                         variant="outlined"
-                        onChange={(e) => handleChange("cost", e.target.value)}
+                        handleChange={(e) => handleChange("cost", e.target.value)}
                         label="Training Cost"
                         className="w-full mb-24"
                     />
@@ -343,7 +395,7 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
                 </DialogContent>
                 <DialogActions className="justify-between m-10 px-24 pb-12 sm:px-16">
                     <Button variant="contained" color="primary" type="submit" disabled={!canBeSubmitted}>
-                        Add New Training
+                        {data ? "Update Training" : "Add New Training"}
                     </Button>
                     <Button variant="contained" color="secondary" onClick={handleClose}>
                         Close
