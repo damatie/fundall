@@ -3,6 +3,8 @@ import PageLayout from 'app/shared/pageLayout/PageLayout';
 import withReducer from 'app/store/withReducer';
 import Skeleton from '@material-ui/lab/Skeleton';
 import { useDispatch, useSelector } from 'react-redux';
+import BehaviouralAttributeTable from './components/BehaviouralAttributeTable';
+import BehaviouralAttributeModal from './components/BehaviouralAttributeModal';
 
 const BehaviouralAttribute = () => {
   return (
@@ -18,7 +20,8 @@ const BehaviouralAttribute = () => {
       }}
       content={
         <div className='p-24'>
-          hello world
+          <BehaviouralAttributeTable/>
+          <BehaviouralAttributeModal />
         </div>
       }
     />
