@@ -21,14 +21,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as Actions from '../store/actions';
 import reducer from '../store/reducers';
 import { useAuth } from 'app/hooks/useAuth';
-import { authRoles } from 'app/auth';
 import ArrowBackIcon from '@material-ui/icons/ArrowBackIosRounded';
 import IconButton from '@material-ui/core/IconButton';
 import Pagination from '@material-ui/lab/Pagination';
-import AddNewTrainingDialogue from '../components/addNewTraining';
 import ViewTrainings from '../components/viewingTrainings';
 import SharedTable from 'app/shared/sharedTable';
-import { useHistory } from 'react-router';
 import * as hodActions from 'app/main/line_manager/training/deptTraining/store/actions';
 
 const useStyles = makeStyles(theme => ({
@@ -198,13 +195,11 @@ const data = [
 
 function TrainingList(props) {
     const dispatch = useDispatch();
-    let history = useHistory()
     const courses = useSelector(({ academyApp }) => academyApp.courses.courses);
 
     const trainings = useSelector(({ academyApp }) => academyApp.trainings);
     const entities = useSelector(({ academyApp }) => academyApp.trainings.entities);
     const department = useSelector(({ academyApp }) => academyApp.trainings.department);
-    const roles = useSelector(({ academyApp }) => academyApp.trainings.roles);
     const categories = useSelector(({ academyApp }) => academyApp.courses.categories.rows);
 
     const employees = useSelector(({ academyApp }) => academyApp.employees.employees);
@@ -222,7 +217,6 @@ function TrainingList(props) {
     const theme = useTheme();
     const [_, setData] = useState(courses);
     const [open, setOpen] = useState(false);
-    const [addNew, setAddNew] = useState(false);
     const [filter, setFilter] = useState({
         department: "all",
         entity: "all",
@@ -231,34 +225,33 @@ function TrainingList(props) {
     const [search, setSearch] = useState('');
     const [start, setStart] = useState(moment(new Date(), 'MM/DD/YYYY').add(1, 'days'));
     const [end, setEnd] = useState(moment(new Date(), 'MM/DD/YYYY').add(1, 'days'));
-    const [duration, setDuration] = useState('');
+    // const [duration, setDuration] = useState('');
     const [id, setId] = useState('');
     const [hod, setHod] = useState(0);
     const [page, setPage] = useState(1);
     const [rowsPerPage, setRowsPerPage] = useState(9);
     const userData = useAuth().getUserData;
     const profile = useSelector(({ profile }) => profile.data);
+    // const userId = useAuth().getId;
+    // const [filterEmployees, setFilterEmployees] = useState(
+    //     employees.filter(f => {
+    //         return (f.firstName !== null || f.lastName !== null || f?.role.name.toLowerCase() !== 'employee' || f?.roleId !== 8);
+    //     }).sort((a, b) => {
+    //         if (a.firstName + " " + a.lastName < b.firstName + " " + b.lastName) { return -1; }
+    //         if (a.firstName + " " + a.lastName > b.firstName + " " + b.lastName) { return 1; }
+    //         return 0;
+    //     }));
 
     const [selectedData, setSelectedData] = useState([]);
-
-    const submitNewTraining = (value) => {
-        dispatch(Actions.createTraining(value, history));
-    }
 
     const changeDepartment = (id) => {
         dispatch(Actions.getDepartments(id));
     }
 
-    // employees.filter(f => {
-    // 	return (f.firstName !== null || f.lastName !== null || f?.role.name.toLowerCase() !== 'employee' || f?.roleId !== 8);
-    // }).sort((a, b) => {
-    // 	if (a.firstName + " " + a.lastName < b.firstName + " " + b.lastName) { return -1; }
-    // 	if (a.firstName + " " + a.lastName > b.firstName + " " + b.lastName) { return 1; }
-    // 	return 0;
-    // })
 
     useEffect(() => {
         dispatch(Actions.getPendingTrainingLM());
+        dispatch(Actions.getReviewedTrainingLM());
         dispatch(Actions.getApprovedTrainingHR());
         dispatch(Actions.getCompletedTrainingHR());
         dispatch(Actions.getRejectedTrainingHR());
@@ -266,9 +259,9 @@ function TrainingList(props) {
         dispatch(Actions.getCourseCategories());
         dispatch(Actions.getCategories());
         dispatch(Actions.getEntities());
-        dispatch(Actions.getDepartments(1));
-        dispatch(Actions.getRoles());
+        // dispatch(Actions.getDepartments(1));
 
+        dispatch(Actions.getRoles());
 
     }, [dispatch])
 
@@ -320,11 +313,6 @@ function TrainingList(props) {
         // alert('hello')
     };
 
-    //Check if the logged in user has management role
-    function checkRole() {
-        return (authRoles.managers.includes(userData.role));
-    }
-
     function handleApproveTraining(id, role) {
         if (role === "lm") {
             dispatch(hodActions.approveTraining(id))
@@ -347,10 +335,6 @@ function TrainingList(props) {
 
     function handleClose() {
         setOpen(false);
-    }
-
-    function handleCloseNew() {
-        setAddNew(false);
     }
 
     function handleOpen(values) {
@@ -378,12 +362,7 @@ function TrainingList(props) {
                     <IconButton className={classes.previousBtn} aria-label="go back" component="span" onClick={goToPreviousRoute}>
                         <ArrowBackIcon />
                     </IconButton>
-                    {
-                        userData.role === "Hr Manager" &&
-                        <Button variant="contained" color="secondary" type="submit" className="m-12" onClick={() => setAddNew(true)}>
-                            Add New Training
-                        </Button>
-                    }
+
                 </div>
                 <div className="flex flex-col flex-1 w-full mx-auto px-8 sm:px-16 py-24">
                     <div className="flex flex-col flex-shrink-0 sm:flex-row items-center justify-between py-24">
@@ -470,19 +449,6 @@ function TrainingList(props) {
                         </FormControl>
                     </div>
 
-                    {/* creating a new training request */}
-                    <AddNewTrainingDialogue
-                        open={addNew}
-                        handleClose={handleCloseNew}
-                        viewer={profile?.role?.name}
-                        categories={categories}
-                        entities={entities}
-                        department={department}
-                        roles={roles}
-                        submit={submitNewTraining}
-                        changeDepartment={changeDepartment}
-                    />
-
                     {/* opening up a training request */}
                     <ViewTrainings
                         open={open}
@@ -496,57 +462,59 @@ function TrainingList(props) {
                     {/* End Dialog  */}
                     {useMemo(
                         () =>
-                            // trainings &&
-                            // ((
-                            //     trainings.pendingTrainings.length > 0 ||
-                            //     trainings.approvedTrainings.length > 0 ||
-                            //     trainings.completedTrainings.length > 0 ||
-                            //     trainings.rejectedTrainings.length > 0
-                            // )
-                            //     ? (
-                            <div>
-                                <FuseAnimateGroup
-                                    enter={{
-                                        animation: 'transition.slideUpBigIn'
-                                    }}
-                                    className="flex flex-wrap py-24"
-                                >
-                                    <Tabs
-                                        value={tabValue}
-                                        onChange={handleChangeTab}
-                                        indicatorColor="primary"
-                                        textColor="primary"
-                                        variant="scrollable"
-                                        scrollButtons="auto"
-                                        classes={{ root: 'w-full h-64' }}
-                                    >
-                                        <Tab className="h-64 normal-case" label="Pending Trainings" />
-                                        <Tab className="h-64 normal-case" label="Approved Trainings" />
-                                        <Tab className="h-64 normal-case" label="Completed Trainings" />
-                                        <Tab className="h-64 normal-case" label="Rejected Trainings" />
-                                    </Tabs>
+                            trainings &&
+                            ((
+                                trainings.pendingTrainings.length > 0 ||
+                                trainings.approvedTrainings.length > 0 ||
+                                trainings.completedTrainings.length > 0 ||
+                                trainings.rejectedTrainings.length > 0
+                            )
+                                ? (
+                                    <div>
+                                        <FuseAnimateGroup
+                                            enter={{
+                                                animation: 'transition.slideUpBigIn'
+                                            }}
+                                            className="flex flex-wrap py-24"
+                                        >
+                                            <Tabs
+                                                value={tabValue}
+                                                onChange={handleChangeTab}
+                                                indicatorColor="primary"
+                                                textColor="primary"
+                                                variant="scrollable"
+                                                scrollButtons="auto"
+                                                classes={{ root: 'w-full h-64' }}
+                                            >
+                                                <Tab className="h-64 normal-case" label="Pending Trainings" />
+                                                <Tab className="h-64 normal-case" label="Reviewed Trainings" />
+                                                <Tab className="h-64 normal-case" label="Approved Trainings" />
+                                                <Tab className="h-64 normal-case" label="Completed Trainings" />
+                                                <Tab className="h-64 normal-case" label="Rejected Trainings" />
+                                            </Tabs>
 
-                                    <div className="w-full">
-                                        {tabValue === 0 && (<SharedTable data={trainings?.pendingTrainings.rows ?? []} rows={rows} type='default' handleClick={handleOpen} />)}
-                                        {tabValue === 1 && (<SharedTable data={trainings?.approvedTrainings.rows ?? []} rows={rows} type='default' handleClick={handleOpen} />)}
-                                        {tabValue === 2 && (<SharedTable data={trainings.completedTrainings.rows} rows={rows} type='default' handleClick={handleOpen} />)}
-                                        {tabValue === 3 && (<SharedTable data={trainings.rejectedTrainings.rows} rows={rows} type='default' handleClick={handleOpen} />)}
+                                            <div className="w-full">
+                                                {tabValue === 0 && (<SharedTable data={trainings?.pendingTrainings.rows ?? []} rows={rows} type='default' handleClick={handleOpen} />)}
+                                                {tabValue === 1 && (<SharedTable data={trainings?.reviewedTrainings.rows ?? []} rows={rows} type='default' handleClick={handleOpen} />)}
+                                                {tabValue === 2 && (<SharedTable data={trainings?.approvedTrainings.rows ?? []} rows={rows} type='default' handleClick={handleOpen} />)}
+                                                {tabValue === 3 && (<SharedTable data={trainings?.completedTrainings.rows} rows={rows} type='default' handleClick={handleOpen} />)}
+                                                {tabValue === 4 && (<SharedTable data={trainings?.rejectedTrainings.rows} rows={rows} type='default' handleClick={handleOpen} />)}
+                                            </div>
+
+
+                                        </FuseAnimateGroup>
+                                        <div className={classes.pagination}>
+                                            <Pagination count={Math.round(totalNo / rowsPerPage)} page={page} onChange={handleChangePage} color="primary" />
+                                        </div>
                                     </div>
-
-
-                                </FuseAnimateGroup>
-                                <div className={classes.pagination}>
-                                    <Pagination count={Math.round(totalNo / rowsPerPage)} page={page} onChange={handleChangePage} color="primary" />
-                                </div>
-                            </div>
-                        // )
-                        // : (
-                        //     <div className="flex flex-1 items-center justify-center">
-                        //         <Typography color="textSecondary" className="text-24 my-24">
-                        //             No Training found!
-                        // 	</Typography>
-                        //     </div>
-                        // ))
+                                )
+                                : (
+                                    <div className="flex flex-1 items-center justify-center">
+                                        <Typography color="textSecondary" className="text-24 my-24">
+                                            No Training found!
+                        	</Typography>
+                                    </div>
+                                ))
                         , [categories, data, employees, open, id, start, end, hod, page, theme.palette, trainings, tabValue]
                     )}
                 </div>
