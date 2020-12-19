@@ -250,8 +250,8 @@ function TrainingList(props) {
 
 
     useEffect(() => {
-        dispatch(Actions.getPendingTrainingLM());
-        dispatch(Actions.getReviewedTrainingLM());
+        dispatch(Actions.getPendingTrainingHR());
+        dispatch(Actions.getReviewedTrainingHR());
         dispatch(Actions.getApprovedTrainingHR());
         dispatch(Actions.getCompletedTrainingHR());
         dispatch(Actions.getRejectedTrainingHR());
@@ -463,58 +463,58 @@ function TrainingList(props) {
                     {useMemo(
                         () =>
                             trainings &&
-                            ((
-                                trainings.pendingTrainings.length > 0 ||
-                                trainings.approvedTrainings.length > 0 ||
-                                trainings.completedTrainings.length > 0 ||
-                                trainings.rejectedTrainings.length > 0
-                            )
-                                ? (
-                                    <div>
-                                        <FuseAnimateGroup
-                                            enter={{
-                                                animation: 'transition.slideUpBigIn'
-                                            }}
-                                            className="flex flex-wrap py-24"
-                                        >
-                                            <Tabs
-                                                value={tabValue}
-                                                onChange={handleChangeTab}
-                                                indicatorColor="primary"
-                                                textColor="primary"
-                                                variant="scrollable"
-                                                scrollButtons="auto"
-                                                classes={{ root: 'w-full h-64' }}
-                                            >
-                                                <Tab className="h-64 normal-case" label="Pending Trainings" />
-                                                <Tab className="h-64 normal-case" label="Reviewed Trainings" />
-                                                <Tab className="h-64 normal-case" label="Approved Trainings" />
-                                                <Tab className="h-64 normal-case" label="Completed Trainings" />
-                                                <Tab className="h-64 normal-case" label="Rejected Trainings" />
-                                            </Tabs>
+                            // ((
+                            //     trainings.pendingTrainings.length > 0 ||
+                            //     trainings.approvedTrainings.length > 0 ||
+                            //     trainings.completedTrainings.length > 0 ||
+                            //     trainings.rejectedTrainings.length > 0
+                            // )
+                            //     ? (
+                            <div>
+                                <FuseAnimateGroup
+                                    enter={{
+                                        animation: 'transition.slideUpBigIn'
+                                    }}
+                                    className="flex flex-wrap py-24"
+                                >
+                                    <Tabs
+                                        value={tabValue}
+                                        onChange={handleChangeTab}
+                                        indicatorColor="primary"
+                                        textColor="primary"
+                                        variant="scrollable"
+                                        scrollButtons="auto"
+                                        classes={{ root: 'w-full h-64' }}
+                                    >
+                                        <Tab className="h-64 normal-case" label="Pending Trainings" />
+                                        <Tab className="h-64 normal-case" label="Reviewed Trainings" />
+                                        <Tab className="h-64 normal-case" label="Approved Trainings" />
+                                        <Tab className="h-64 normal-case" label="Completed Trainings" />
+                                        <Tab className="h-64 normal-case" label="Rejected Trainings" />
+                                    </Tabs>
 
-                                            <div className="w-full">
-                                                {tabValue === 0 && (<SharedTable data={trainings?.pendingTrainings.rows ?? []} rows={rows} type='default' handleClick={handleOpen} />)}
-                                                {tabValue === 1 && (<SharedTable data={trainings?.reviewedTrainings.rows ?? []} rows={rows} type='default' handleClick={handleOpen} />)}
-                                                {tabValue === 2 && (<SharedTable data={trainings?.approvedTrainings.rows ?? []} rows={rows} type='default' handleClick={handleOpen} />)}
-                                                {tabValue === 3 && (<SharedTable data={trainings?.completedTrainings.rows} rows={rows} type='default' handleClick={handleOpen} />)}
-                                                {tabValue === 4 && (<SharedTable data={trainings?.rejectedTrainings.rows} rows={rows} type='default' handleClick={handleOpen} />)}
-                                            </div>
-
-
-                                        </FuseAnimateGroup>
-                                        <div className={classes.pagination}>
-                                            <Pagination count={Math.round(totalNo / rowsPerPage)} page={page} onChange={handleChangePage} color="primary" />
-                                        </div>
+                                    <div className="w-full">
+                                        {tabValue === 0 && (<SharedTable data={trainings?.pendingTrainings.rows ?? []} rows={rows} type='default' handleClick={handleOpen} />)}
+                                        {tabValue === 1 && (<SharedTable data={trainings?.reviewedTrainings.rows ?? []} rows={rows} type='default' handleClick={handleOpen} />)}
+                                        {tabValue === 2 && (<SharedTable data={trainings?.approvedTrainings.rows ?? []} rows={rows} type='default' handleClick={handleOpen} />)}
+                                        {tabValue === 3 && (<SharedTable data={trainings?.completedTrainings.rows} rows={rows} type='default' handleClick={handleOpen} />)}
+                                        {tabValue === 4 && (<SharedTable data={trainings?.rejectedTrainings.rows} rows={rows} type='default' handleClick={handleOpen} />)}
                                     </div>
-                                )
-                                : (
-                                    <div className="flex flex-1 items-center justify-center">
-                                        <Typography color="textSecondary" className="text-24 my-24">
-                                            No Training found!
-                        	</Typography>
-                                    </div>
-                                ))
+
+
+                                </FuseAnimateGroup>
+                                <div className={classes.pagination}>
+                                    <Pagination count={Math.round(totalNo / rowsPerPage)} page={page} onChange={handleChangePage} color="primary" />
+                                </div>
+                            </div>
+                        // )
+                        //     : (
+                        //         <div className="flex flex-1 items-center justify-center">
+                        //             <Typography color="textSecondary" className="text-24 my-24">
+                        //                 No Training found!
+                        // </Typography>
+                        //         </div>
+                        //     ))
                         , [categories, data, employees, open, id, start, end, hod, page, theme.palette, trainings, tabValue]
                     )}
                 </div>

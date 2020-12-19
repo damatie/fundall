@@ -7,6 +7,11 @@ const initialState = {
 	approvedTrainings: [],
 	completedTrainings: [],
 	rejectedTrainings: [],
+	pendingPersonalTrainings: [],
+	reviewedPersonalTrainings: [],
+	approvedPersonalTrainings: [],
+	completedPersonalTrainings: [],
+	rejectedPersonalTrainings: [],
 	events: [],
 	trainings: [],
 	entities: [],
@@ -94,6 +99,33 @@ const trainingsReducer = (state = initialState, action) => {
 			return {
 				...state,
 				rejectedTrainings: action.payload
+			};
+
+		// personal trainings
+		case Actions.PENDING_TRAININGS_PERSONAL:
+			return {
+				...state,
+				pendingPersonalTrainings: action.payload
+			};
+		case Actions.APPROVED_TRAININGS_PERSONAL:
+			return {
+				...state,
+				approvedPersonalTrainings: action.payload
+			};
+		case Actions.REVIEWED_TRAININGS_PERSONAL:
+			return {
+				...state,
+				reviewedPersonalTrainings: action.payload
+			};
+		case Actions.COMPLETED_TRAININGS_PERSONAL:
+			return {
+				...state,
+				completedPersonalTrainings: action.payload
+			};
+		case Actions.REJECTED_TRAININGS_PERSONAL:
+			return {
+				...state,
+				rejectedPersonalTrainings: action.payload
 			};
 		default: {
 			return state;

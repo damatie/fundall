@@ -10,11 +10,18 @@ import { GET_ROLES } from 'app/main/HR/roles/store/actions';
 export { GET_ROLES };
 export const LOADING_TRAININGS = 'LOADING TRAININGS';
 export const GET_TRAININGS = 'GET TRAININGS';
+
 export const PENDING_TRAININGS_HR = "PENDING TRAININGS HR";
 export const REVIEWED_TRAININGS_HR = "REVIEWED TRAININGS HR";
 export const APPROVED_TRAININGS_HR = "APPROVED TRAININGS HR";
 export const COMPLETED_TRAININGS_HR = "COMPLETED TRAININGS HR";
 export const REJECTED_TRAININGS_HR = "REJECTED TRAININGS HR";
+
+export const PENDING_TRAININGS_PERSONAL = "PENDING TRAININGS PERSONAL";
+export const REVIEWED_TRAININGS_PERSONAL = "REVIEWED TRAININGS PERSONAL";
+export const APPROVED_TRAININGS_PERSONAL = "APPROVED TRAININGS PERSONAL";
+export const COMPLETED_TRAININGS_PERSONAL = "COMPLETED TRAININGS PERSONAL";
+export const REJECTED_TRAININGS_PERSONAL = "REJECTED TRAININGS PERSONAL";
 
 export const LOADING_CATEGORIES = 'LOADING CATEGORIES';
 export const GET_CATEGORIES = 'GET COURSE CATEGORIES';
@@ -401,8 +408,28 @@ export function requestTraining(id) {
 	}
 }
 
+export function getPendingTrainingPersonal(offset = 0, limit = 20) {
 
-export function getPendingTrainingLM(offset = 0, limit = 20) {
+	return dispatch => {
+
+		axios.get(`${basUrl()}/training/all/employee/request?offset=${offset}&limit=${limit}&status=pending`, {
+			headers: {
+				Authorization: `JWT ${auth().getToken}`
+			}
+		}).then((res) => {
+			dispatch({
+				type: PENDING_TRAININGS_PERSONAL,
+				payload: res.data.data
+			})
+		}).catch((err) => {
+			// console.log(err.response);
+			return [];
+		});
+
+	}
+}
+
+export function getPendingTrainingHR(offset = 0, limit = 20) {
 
 	return dispatch => {
 
@@ -423,7 +450,28 @@ export function getPendingTrainingLM(offset = 0, limit = 20) {
 	}
 }
 
-export function getReviewedTrainingLM(offset = 0, limit = 20) {
+export function getReviewedTrainingPersonal(offset = 0, limit = 20) {
+
+	return dispatch => {
+
+		axios.get(`${basUrl()}/training/all/employee/request?offset=${offset}&limit=${limit}&status=reviewed`, {
+			headers: {
+				Authorization: `JWT ${auth().getToken}`
+			}
+		}).then((res) => {
+			dispatch({
+				type: REVIEWED_TRAININGS_PERSONAL,
+				payload: res.data.data
+			})
+		}).catch((err) => {
+			// console.log(err.response);
+			return [];
+		});
+
+	}
+}
+
+export function getReviewedTrainingHR(offset = 0, limit = 20) {
 
 	return dispatch => {
 
@@ -441,6 +489,25 @@ export function getReviewedTrainingLM(offset = 0, limit = 20) {
 			return [];
 		});
 
+	}
+}
+
+export function getCompletedTrainingPersonal(offset = 0, limit = 20) {
+
+	return dispatch => {
+		axios.get(`${basUrl()}/training/all/employee/?offset=${offset}&limit=${limit}&status=completed`, {
+			headers: {
+				Authorization: `JWT ${auth().getToken}`
+			}
+		}).then((res) => {
+			dispatch({
+				type: COMPLETED_TRAININGS_PERSONAL,
+				payload: res.data.data
+			})
+		}).catch((err) => {
+			// console.log(err.response);
+			return [];
+		});
 	}
 }
 
@@ -463,6 +530,25 @@ export function getCompletedTrainingHR(offset = 0, limit = 20) {
 	}
 }
 
+export function getApprovedTrainingPersonal(offset = 0, limit = 20) {
+
+	return dispatch => {
+		axios.get(`${basUrl()}/training/all/employee/request?offset=${offset}&limit=${limit}&status=approved`, {
+			headers: {
+				Authorization: `JWT ${auth().getToken}`
+			}
+		}).then((res) => {
+			dispatch({
+				type: APPROVED_TRAININGS_PERSONAL,
+				payload: res.data.data
+			})
+		}).catch((err) => {
+			// console.log(err.response);
+			return []
+		});
+	}
+}
+
 export function getApprovedTrainingHR(offset = 0, limit = 20) {
 
 	return dispatch => {
@@ -478,6 +564,25 @@ export function getApprovedTrainingHR(offset = 0, limit = 20) {
 		}).catch((err) => {
 			// console.log(err.response);
 			return []
+		});
+	}
+}
+
+export function getRejectedTrainingPersonal(offset = 0, limit = 20) {
+
+	return dispatch => {
+		axios.get(`${basUrl()}/training/all/employee/request?offset=${offset}&limit=${limit}&status=rejected`, {
+			headers: {
+				Authorization: `JWT ${auth().getToken}`
+			}
+		}).then((res) => {
+			dispatch({
+				type: REJECTED_TRAININGS_PERSONAL,
+				payload: res.data.data
+			})
+		}).catch((err) => {
+			// console.log(err.response);
+			return [];
 		});
 	}
 }

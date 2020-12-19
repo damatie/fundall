@@ -1,25 +1,25 @@
 //@flow
 import FuseAnimateGroup from '@fuse/core/FuseAnimateGroup';
 import FusePageSimple from '@fuse/core/FusePageSimple';
-import Hidden from '@material-ui/core/Hidden';
-import Button from '@material-ui/core/Button';
+// import Hidden from '@material-ui/core/Hidden';
+// import Button from '@material-ui/core/Button';
 import Icon from '@material-ui/core/Icon';
-import IconButton from '@material-ui/core/IconButton';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
+// import IconButton from '@material-ui/core/IconButton';
+// import Menu from '@material-ui/core/Menu';
+// import MenuItem from '@material-ui/core/MenuItem';
 import { makeStyles } from '@material-ui/core/styles';
-import Tab from '@material-ui/core/Tab';
-import Tabs from '@material-ui/core/Tabs';
-import Typography from '@material-ui/core/Typography';
+// import Tab from '@material-ui/core/Tab';
+// import Tabs from '@material-ui/core/Tabs';
+// import Typography from '@material-ui/core/Typography';
 import withReducer from 'app/store/withReducer';
 import { ThemeProvider } from '@material-ui/core/styles';
-import clsx from 'clsx';
+// import clsx from 'clsx';
 import _ from '@lodash';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Actions from './../store/actions';
 import reducer from './../store/reducers';
-import CardWidget from 'app/shared/widgets/CardWidget';
+// import CardWidget from 'app/shared/widgets/CardWidget';
 import CategoryTableWidget from 'app/shared/widgets/CategoryTableWidget';
 import FuseAnimate from '@fuse/core/FuseAnimate';
 import AddCategoryModal from './addCategoryModal';
@@ -68,9 +68,9 @@ function TrainingCategory(props) {
         dispatch(Actions.getCategories());
     }, [dispatch]);
 
-    function handleChangeTab(event, value) {
-        setTabValue(value);
-    }
+    // function handleChangeTab(event, value) {
+    //     setTabValue(value);
+    // }
 
     function handleDelete(event, id) {
         dispatch(Actions.deleteCategory(id))
@@ -135,6 +135,7 @@ function TrainingCategory(props) {
             sort: true
         }
     ];
+    
     return (
         <ThemeProvider theme={mainTheme}>
             <FusePageSimple

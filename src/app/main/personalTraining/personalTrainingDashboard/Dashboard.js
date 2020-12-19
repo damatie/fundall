@@ -8,7 +8,7 @@ import withReducer from 'app/store/withReducer';
 import clsx from 'clsx';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import * as Actions from '../store/actions';
+// import * as Actions from '../store/actions';
 import reducer from '../store/reducers';
 import ArrowBackIcon from '@material-ui/icons/ArrowBackIosRounded';
 import IconButton from '@material-ui/core/IconButton';
@@ -214,8 +214,8 @@ function PersonalTrainingDashboard(props) {
 									size='small'
 									label='Year'
 								>
-									{[2019, 2020, 2021].map(item => (
-										<MenuItem value={item}>
+									{[2019, 2020, 2021].map((item, index) => (
+										<MenuItem value={item} key={index}>
 											{item}
 										</MenuItem>
 									))}
@@ -227,8 +227,8 @@ function PersonalTrainingDashboard(props) {
 									size='small'
 									label='Month'
 								>
-									{["Jan", "Feb", "March", "April", "May", "June"].map(item => (
-										<MenuItem value={item}>
+									{["Jan", "Feb", "March", "April", "May", "June"].map((item, index) => (
+										<MenuItem value={item} key={index}>
 											{item}
 										</MenuItem>
 									))}
@@ -242,61 +242,61 @@ function PersonalTrainingDashboard(props) {
 							// }}
 						> */}
 
-							<Dialog open={open} onClose={handleClose} fullWidth>
-								<AppBar position="static">
-									<Toolbar className="flex w-full">
-										<Typography variant="subtitle1" color="inherit">
-											{'Training Details'}
-										</Typography>
-									</Toolbar>
-								</AppBar>
-								<DialogContent classes={{ root: 'p-16 pb-0 sm:p-24 sm:pb-0' }}>
+						<Dialog open={open} onClose={handleClose} fullWidth>
+							<AppBar position="static">
+								<Toolbar className="flex w-full">
+									<Typography variant="subtitle1" color="inherit">
+										{'Training Details'}
+									</Typography>
+								</Toolbar>
+							</AppBar>
+							<DialogContent classes={{ root: 'p-16 pb-0 sm:p-24 sm:pb-0' }}>
 
-									<table className={'w-full text-justify my-24'}>
-										<tbody>
-											<tr className="mb-24">
-												<th>Course Title: </th>
-												<td>{selectedTraining?.name}</td>
-											</tr>
-											<tr className="mb-24">
-												<th>Description: </th>
-												<td>{selectedTraining?.description}</td>
-											</tr>
-											<tr className="mb-24">
-												<th>Category: </th>
-												<td>{selectedTraining?.category}</td>
-											</tr>
-											<tr className="mb-24">
-												<th>Employee Grade: </th>
-												<td>{selectedTraining?.employeeGrade}</td>
-											</tr>
-											<tr className="mb-24">
-												<th>Company Seniority: </th>
-												<td>{selectedTraining?.companySeniority}</td>
-											</tr>
-											<tr className="mb-24">
-												<th>Company Seniority: </th>
-												<td>{selectedTraining?.industrySeniority}</td>
-											</tr>
+								<table className={'w-full text-justify my-24'}>
+									<tbody>
+										<tr className="mb-24">
+											<th>Course Title: </th>
+											<td>{selectedTraining?.name}</td>
+										</tr>
+										<tr className="mb-24">
+											<th>Description: </th>
+											<td>{selectedTraining?.description}</td>
+										</tr>
+										<tr className="mb-24">
+											<th>Category: </th>
+											<td>{selectedTraining?.category}</td>
+										</tr>
+										<tr className="mb-24">
+											<th>Employee Grade: </th>
+											<td>{selectedTraining?.employeeGrade}</td>
+										</tr>
+										<tr className="mb-24">
+											<th>Company Seniority: </th>
+											<td>{selectedTraining?.companySeniority}</td>
+										</tr>
+										<tr className="mb-24">
+											<th>Company Seniority: </th>
+											<td>{selectedTraining?.industrySeniority}</td>
+										</tr>
 
-											<tr className="mb-48">
-												<th>Status</th>
-												<td><LoanStatus status={selectedTraining?.status} /></td>
-											</tr>
-										</tbody>
-									</table>
+										<tr className="mb-48">
+											<th>Status</th>
+											<td><LoanStatus status={selectedTraining?.status} /></td>
+										</tr>
+									</tbody>
+								</table>
 
-								</DialogContent>
-								<DialogActions className="justify-between m-10 px-24 pb-12 sm:px-16">
-									<Button variant="contained" color="secondary" onClick={handleClose}>
-										Close
+							</DialogContent>
+							<DialogActions className="justify-between m-10 px-24 pb-12 sm:px-16">
+								<Button variant="contained" color="secondary" onClick={handleClose}>
+									Close
                                 </Button>
-								</DialogActions>
-							</Dialog >
+							</DialogActions>
+						</Dialog >
 
-							<div className="widget flex w-full p-12">
-								<SharedTable data={data ?? []} rows={rows} handleClick={handleClick} type="default" />
-							</div>
+						<div className="widget flex w-full p-12">
+							<SharedTable data={data ?? []} rows={rows} handleClick={handleClick} type="default" />
+						</div>
 						{/* </FuseAnimateGroup> */}
 					</Paper>
 				</div>

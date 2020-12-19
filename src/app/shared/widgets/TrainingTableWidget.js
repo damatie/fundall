@@ -85,7 +85,7 @@ const TableWidget = props => {
 	}
 
 	function handleItemClick(event, item) {
-		console.log(item);
+		// console.log(item);
 		setSelected(item);
 		setOpen(true);
 	}
@@ -404,10 +404,10 @@ const TableWidget = props => {
 							[order.direction]
 						)
 							.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-							.map(n => {
+							.map((n, index) => {
 								return (
 									<TableRow
-										key={n?.trainingCourseIdCourseId}
+										key={index * Math.random()}
 										hover
 										onClick={event => {
 											handleItemClick(event, n);

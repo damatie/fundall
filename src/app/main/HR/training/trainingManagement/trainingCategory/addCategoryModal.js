@@ -1,24 +1,24 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
+// import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
+// import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import Fab from '@material-ui/core/Fab';
+// import Fab from '@material-ui/core/Fab';
 import Icon from '@material-ui/core/Icon';
-import Select from '@material-ui/core/Select';
+// import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import { TextFieldFormsy, SelectFormsy, } from '@fuse/core/formsy';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Formsy from 'formsy-react';
-import { CircularProgress } from '@material-ui/core';
+// import { CircularProgress } from '@material-ui/core';
 import ProgressBtn from 'app/shared/progressBtn';
 import Grid from '@material-ui/core/Grid';
 import * as Actions from './../store/actions';
-import reducer from './../store/reducers';
+// import reducer from './../store/reducers';
 import FuseAnimate from '@fuse/core/FuseAnimate';
 
 export default function AddCourseModal({ data, trigger, clearEdit }) {
@@ -162,7 +162,7 @@ export default function AddCourseModal({ data, trigger, clearEdit }) {
               <DialogActions>
                 <Grid container spacing={2}>
                   <Grid item xs>
-                    <ProgressBtn success={success} loading={loading} content='Create' disable={!isFormValid} />
+                    <ProgressBtn success={success} loading={loading} content={data ? "Update" : "Create"} disable={!isFormValid} />
                   </Grid>
                 </Grid>
               </DialogActions>

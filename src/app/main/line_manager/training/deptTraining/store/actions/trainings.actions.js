@@ -1,7 +1,7 @@
 import { getBaseUrl } from 'app/shared/getBaseUrl';
 import swal from 'sweetalert2';
 import { fetchHeaders } from 'app/shared/fetchHeaders'
-import { getApprovedTrainingHR, getCompletedTrainingHR, getPendingTrainingLM, getRejectedTrainingHR } from 'app/main/personalTraining/store/actions';
+import { getApprovedTrainingHR, getCompletedTrainingHR, getPendingTrainingHR, getRejectedTrainingHR } from 'app/main/personalTraining/store/actions';
 
 export const LOADING_TRAINIING = 'LOADING TRAINING';
 export const GET_APPROVED_TRAINING = 'GET APPROVED TRAINING';
@@ -242,7 +242,7 @@ export function approveTraining(id) {
 									type: APPROVE_TRAINING_SUCCESS
 								})
 							]).then(() => {
-								dispatch(getPendingTrainingLM());
+								dispatch(getPendingTrainingHR());
 								dispatch(getApprovedTrainingHR());
 								dispatch(getCompletedTrainingHR());
 								dispatch(getRejectedTrainingHR());
