@@ -44,7 +44,7 @@ const useJobTitle = () => {
   });
 
   const dispatch = useDispatch();
-  const { data, open, singleData, type, loading } = useSelector(state => state.jobTitle);
+  const { data, open, singleData, type, loading } = {};
 
   React.useEffect(() => {
     dispatch(Actions.getAllJobTitle());
@@ -103,7 +103,8 @@ const useJobTitle = () => {
     handleDelete,
     open,
     type,
-    loading
+    loading,
+    x: 'fucking test'
   };
 };
 

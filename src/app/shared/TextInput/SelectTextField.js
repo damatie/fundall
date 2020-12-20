@@ -4,7 +4,7 @@ import Select from '@material-ui/core/Select';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import React from 'react';
 
-const SelectTextField = (props) => {
+const SelectTextField = React.forwardRef((props, ref) => {
   const {
     error,
     color,
@@ -31,7 +31,7 @@ const SelectTextField = (props) => {
         label={label}
         variant={variant || 'outlined'}
         error={!!error}
-        ref={register}
+        ref={register || ref}
         name={name}
         onChange={onChange}
         defaultValue={value}
@@ -44,6 +44,6 @@ const SelectTextField = (props) => {
       <FormHelperText error={error}>{message}</FormHelperText>
     </FormControl>
   );
-};
+});
 
 export default SelectTextField;
