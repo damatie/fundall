@@ -5,16 +5,18 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
-import clsx from 'clsx';
+// import clsx from 'clsx';
 import React, { Fragment, useState } from 'react';
 import { withRouter } from 'react-router-dom';
 import SharedTableHead from 'app/shared/sharedTableHead';
 import { formatToNaira } from 'utils/formatNumber';
 import LoanStatus from 'app/main/loanApp/LoanStatus';
+import { useEffect } from 'react';
 
 function SharedTable(props) {
 	const [selected, setSelected] = useState([]);
 	const [page, setPage] = useState(0);
+	const [data, setData] = useState(null);
 	const [rowsPerPage, setRowsPerPage] = useState(10);
 	const [order, setOrder] = useState({
 		direction: 'asc',
@@ -37,7 +39,7 @@ function SharedTable(props) {
 
 	function handleSelectAllClick(event) {
 		if (event.target.checked) {
-			setSelected(props.data.map(n => n.id));
+			setSelected(data.map(n => n.id));
 			return;
 		}
 		setSelected([]);
@@ -77,14 +79,14 @@ function SharedTable(props) {
 						order={order}
 						onSelectAllClick={handleSelectAllClick}
 						onRequestSort={handleRequestSort}
-            			rowCount={(props.data) ? props.data.length : 0}
+						rowCount={(data) ? data.length : 0}
 						rows={props.rows}
 						handleDelete={props.handleDelete}
 						success={true}
 					/>
 					<TableBody>
 						{_.orderBy(
-							props.data,
+							data,
 							[
 								o => {
 									switch (order.id) {
@@ -132,7 +134,7 @@ function SharedTable(props) {
 			<TablePagination
 				className="overflow-hidden"
 				component="div"
-				count={(props.data) ? props.data.length : 0}
+				count={(data) ? data.length : 0}
 				rowsPerPage={rowsPerPage}
 				page={page}
 				backIconButtonProps={{ 'aria-label': 'Previous Page' }}
@@ -159,7 +161,7 @@ const TableCells = (props) => {
 								{
 									item.type === 'date' ?
 										<TableCell component="th" scope="row" align={item.align} key={item.id}>
-											{/* {moment(props.data[item.field]).format('LL')} */}
+											{/* {moment(data[item.field]).format('LL')} */}
 											{props.data[item.field]}
 										</TableCell>
 										:
