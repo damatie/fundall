@@ -12,7 +12,7 @@ const ViewTrainings = ({ open, handleClose, data, viewer, approveTraining, rejec
     }
 
     useEffect(() => {
-        console.log(data)
+        // console.log(data)
     }, [data])
 
     return (
