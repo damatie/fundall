@@ -243,11 +243,10 @@ export function approveTraining(id) {
 								})
 							]).then(() => {
 								dispatch(getPendingTrainingHR());
+								dispatch(getReviewedTraining());
 								dispatch(getApprovedTrainingHR());
 								dispatch(getCompletedTrainingHR());
 								dispatch(getRejectedTrainingHR());
-								dispatch(getRejectedTraining());
-								dispatch(getReviewedTraining());
 							})
 						} else {
 							swal.fire(
@@ -307,11 +306,11 @@ export function rejectTraining(id) {
 									type: REJECT_TRAINING_SUCCESS
 								})
 							]).then(() => {
-								dispatch(getPendingTraining());
-								dispatch(getApprovedTraining());
-								dispatch(getCompletedTraining());
-								dispatch(getRejectedTraining());
+								dispatch(getPendingTrainingHR());
 								dispatch(getReviewedTraining());
+								dispatch(getApprovedTrainingHR());
+								dispatch(getCompletedTrainingHR());
+								dispatch(getRejectedTrainingHR());
 							})
 						} else {
 							swal.fire(
