@@ -47,7 +47,7 @@ const ViewTrainings = ({ open, handleClose, data, viewer, approveTraining, rejec
                                         type="text"
                                         // disabled
                                         onChange={() => { }}
-                                        value={data.employeeId}
+                                        value={data?.employeeId}
                                         variant="outlined"
                                         label="Employee"
                                         className="w-full mb-24"
@@ -61,7 +61,7 @@ const ViewTrainings = ({ open, handleClose, data, viewer, approveTraining, rejec
                                         type="text"
                                         // disabled
                                         onChange={() => { }}
-                                        defaultValue={data.email}
+                                        defaultValue={data?.email}
                                         variant="outlined"
                                         label="Employee Mail"
                                         className="w-full mb-24"
@@ -80,7 +80,7 @@ const ViewTrainings = ({ open, handleClose, data, viewer, approveTraining, rejec
                                 type="text"
                                 // disabled
                                 onChange={() => { }}
-                                value={data.employeeGrade}
+                                value={data?.employeeGrade}
                                 variant="outlined"
                                 label="Employee Grade"
                                 className="w-full mb-24"
@@ -95,7 +95,7 @@ const ViewTrainings = ({ open, handleClose, data, viewer, approveTraining, rejec
                                 type="text"
                                 // disabled
                                 onChange={() => { }}
-                                value={data.companySeniority}
+                                value={data?.companySeniority}
                                 variant="outlined"
                                 label="Company Seniority"
                                 className="w-full mb-24"
@@ -110,7 +110,7 @@ const ViewTrainings = ({ open, handleClose, data, viewer, approveTraining, rejec
                                 type="text"
                                 // disabled
                                 onChange={() => { }}
-                                value={data.industrySenority}
+                                value={data?.industrySenority}
                                 variant="outlined"
                                 label="Industry Seniority"
                                 className="w-full mb-24"
@@ -160,7 +160,7 @@ const ViewTrainings = ({ open, handleClose, data, viewer, approveTraining, rejec
                                     type="text"
                                     // disabled
                                     onChange={() => { }}
-                                    value={viewer.department.departmentName}
+                                    value={data?.department}
                                     variant="outlined"
                                     label="Department"
                                     className="w-full mb-24"
@@ -171,54 +171,35 @@ const ViewTrainings = ({ open, handleClose, data, viewer, approveTraining, rejec
                                     type="text"
                                     // disabled
                                     onChange={() => { }}
-                                    value={viewer.entity.entityName}
+                                    value={data?.entity}
                                     variant="outlined"
                                     label="Entity"
                                     className="w-full mb-24"
                                 />
 
-                                <TextField
-                                    id="outlined-secondary"
-                                    type="text"
-                                    // disabled
-                                    onChange={() => { }}
-                                    value={viewer?.country ?? "Nigeria"}
-                                    variant="outlined"
-                                    label="Country"
-                                    className="w-full mb-24"
-                                />
+                                {data?.industrySenority &&
+                                    <TextField
+                                        id="outlined-secondary"
+                                        type="text"
+                                        // disabled
+                                        onChange={() => { }}
+                                        value={data?.industrySenority}
+                                        variant="outlined"
+                                        label="Industry Senority"
+                                        className="w-full mb-24"
+                                    />}
 
                                 <TextField
                                     id="outlined-secondary"
                                     type="text"
-                                    // disabled
+                                    // disbaled
                                     onChange={() => { }}
-                                    value={viewer?.info.industrySenority}
-                                    variant="outlined"
-                                    label="Industry Senority"
-                                    className="w-full mb-24"
-                                />
-
-                                <TextField
-                                    id="outlined-secondary"
-                                    type="text"
-                                    disbaled
-                                    value={data.info.SRGSeniority}
+                                    value={data?.companySeniority}
                                     variant="outlined"
                                     label="Company Senority"
                                     className="w-full mb-24"
                                 />
 
-                                <TextField
-                                    id="outlined-secondary"
-                                    type="text"
-                                    // disabled
-                                    onChange={() => { }}
-                                    value={viewer.state}
-                                    variant="outlined"
-                                    label="State"
-                                    className="w-full mb-24"
-                                />
 
                             </>
                             : <></>
