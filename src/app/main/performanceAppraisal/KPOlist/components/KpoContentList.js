@@ -51,11 +51,16 @@ const KpoContentList = () => {
 				accessor: 'yearEnd',
 				sortable: true
       },
-      {
-				Header: '%PIP',
-				accessor: 'pip',
-				sortable: true
-			},
+      // {
+			// 	Header: '%PIP Achieved',
+			// 	accessor: 'pipA',
+			// 	sortable: true
+			// },
+			// {
+			// 	Header: '%PIP Compersation',
+			// 	accessor: 'pipC',
+			// 	sortable: true
+			// },
 		],
 	);
 	const { kpoData, push, id, handleDelete, loading } = useKpoContentList();

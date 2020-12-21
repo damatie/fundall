@@ -43,25 +43,11 @@ const EditEmployeeKpo = () => {
                   name='jobTitleId'
                 />
 
-                <Controller
-                  control={control}
-                  defaultValue={details.kpoYear}
-                  as={
-                    <SelectTextField
-                      label='KPO Year'
-                      error={errors.kpoYear}
-                      message={errors.kpoYear?.message}
-                    // className='my-10'
-                    >
-                      <MenuItem value={2019}>
-                        2019
-                      </MenuItem>
-                      <MenuItem value="2020">
-                        2020
-                      </MenuItem>
-                    </SelectTextField>
-                  }
-                  name='kpoYear'
+                <Input
+                  name='pipTarget'
+                  className='my-16'
+                  label='PIP Target'
+                  multiline
                 />
 
                 <AutoCompleteInput

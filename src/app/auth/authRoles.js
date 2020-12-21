@@ -3,7 +3,7 @@
  */
 const authRoles = {
 	admin: ['HR', 'Hr Manager'],
-	staff: ['employee', 'Employee', 'Line Manager','HR', 'Line managers', 'Finance Manager', 'Head of department', 'Director of support service', 'HR Manager'],
+	staff: ['employee', 'Employee', 'Line Manager','HR', 'Line managers', 'Finance Manager', 'Head of department', 'Director of support service', 'HR Manager', 'Hr Manager'],
 	manager: ['HR', 'Line managers', 'Director of support service', 'HR Manager'],
 	managers: ['HR', 'Line Manager', 'Finance Manager', 'Head of department', 'Director of support service', "hr", 'HR Manager'],
 	hod: ['Head of department'],

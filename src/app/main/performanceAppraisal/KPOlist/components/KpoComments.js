@@ -18,10 +18,10 @@ const KpoComments = () => {
         <div className='w-full'>
           <Typography variant="subtitle1" color="initial">What are the key strengths identièed that the employee has?</Typography>
           <Input
-          name='kpoYear'
-          className='my-16'
-          multiline
-        />
+            name='kpoYear'
+            className='my-16'
+            multiline
+          />
         </div>
 
         <div className='w-full'>

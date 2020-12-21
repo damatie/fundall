@@ -37,7 +37,7 @@ const EmployeeKpoContentDetails = () => {
 				>
 					<Tab className="h-64 normal-case" label="KPO Content Details" />
 					<Tab className="h-64 normal-case" label="KPO Targets" />
-          <Tab className="h-64 normal-case" label="PIP Score" />
+          {/* <Tab className="h-64 normal-case" label="PIP Score" /> */}
 				</Tabs>
       }
       content={
@@ -48,7 +48,7 @@ const EmployeeKpoContentDetails = () => {
               <KpoContentTarget />
             </>
           )}
-          {tabValue === 2 && (<KpoContentPipScore />)}
+          {/* {tabValue === 2 && (<KpoContentPipScore />)} */}
         </div>
       }
     />

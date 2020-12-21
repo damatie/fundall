@@ -31,7 +31,12 @@ const EmployeeKpoListTable = () => {
 				Cell: ({ row: { original: { dateCompleted }} }) => {
 					return <>{dateCompleted || 'On Going'}</>
 				}
-      },
+			},
+			{
+				Header: 'PIP Target',
+				accessor: 'pipTarget',
+				sortable: true
+			},
       {
 				Header: 'Line Manager',
 				accessor: 'lineManager',

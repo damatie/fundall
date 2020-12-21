@@ -38,7 +38,7 @@ const JobTitleTable = () => {
 	return (
 		<EnhancedTable
 			columns={columns}
-			data={data}
+			data={data || []}
 			onRowClick={(ev, row) => {
 				if (row) {
           handleGetOne(row.values)
