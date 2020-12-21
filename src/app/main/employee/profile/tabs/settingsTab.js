@@ -7,10 +7,10 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import WorkOffIcon from '@material-ui/icons/WorkOff';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import { useSelector, useDispatch } from 'react-redux';
-import * as Actions from '../store/actions';
-import RejectIcon from '@material-ui/icons/Cancel';
-import ApproveIcon from '@material-ui/icons/Check';
+// import { useDispatch } from 'react-redux';
+// import * as Actions from '../store/actions';
+// import RejectIcon from '@material-ui/icons/Cancel';
+// import ApproveIcon from '@material-ui/icons/Check';
 import Divider from '@material-ui/core/Divider';
 import FormDialog from '../../../../shared/formDialog';
 import StatusDialog from '../utils/dialog'
@@ -27,7 +27,7 @@ const title = 'Quit Job';
 
 function SettingsTab() {
   const classes = useStyles();
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   const [open, setOpen] = React.useState(false);
   const [openStatusDialog, setOpenStatusDialog] = React.useState(false);
@@ -53,13 +53,13 @@ function SettingsTab() {
           </ListItemIcon>
           <ListItemText className="text-red" primary="Apply to quit job" />
           <ListItemSecondaryAction>
-          <Button
-            className="bg-red text-white"
-            style={{textTransform: 'none', fontSize: 12, padding: '.15rem .8rem'}}
-            // startIcon={<RejectIcon />}
-            onClick={handleOpenStatusDialog}
-          >
-            reject
+            <Button
+              className="bg-red text-white"
+              style={{ textTransform: 'none', fontSize: 12, padding: '.15rem .8rem' }}
+              // startIcon={<RejectIcon />}
+              onClick={handleOpenStatusDialog}
+            >
+              reject
           </Button>
           </ListItemSecondaryAction>
         </ListItem>
@@ -72,7 +72,7 @@ function SettingsTab() {
         title={title}
         buttonValue='Quit'
         color='red'
-        // requestQuit={value => handleQuitJobRequest(value)}  
+      // requestQuit={value => handleQuitJobRequest(value)}  
       />
       <StatusDialog open={openStatusDialog} close={value => setOpenStatusDialog(value)} />
     </div>
