@@ -56,6 +56,14 @@ const CreateKpoContent = () => {
           message={errors.target?.message}
           refs={register}
         />
+        <Input
+          className='my-16'
+          name='pipTarget'
+          label='PIP Target'
+          // error={errors.target}
+          // message={errors.target?.message}
+          // refs={register}
+        />
         <SharedButton
           variant='contained'
           color='primary'

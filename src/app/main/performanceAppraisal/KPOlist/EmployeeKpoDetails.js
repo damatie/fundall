@@ -11,6 +11,7 @@ import useKpoContentList from './hooks/useKpoContent';
 import KpoComments from './components/KpoComments';
 import kpoCategoryReducer from '../KPOcategoryList/store/reducers/categoryList.reducer';
 import KpoContentPipScore from './components/KpoContentPipScore';
+import PersonalDevelopment from './components/PersonalDevelopment';
 
 const EmployeeKpoDetails = () => {
 
@@ -65,7 +66,7 @@ const EmployeeKpoDetails = () => {
           {tabValue === 2 && (<KpoComments />)}
           {tabValue === 3 && (<KpoContentPipScore />)}
           {tabValue === 4 && (<KpoComments />)}
-          {tabValue === 5 && (<KpoComments />)}
+          {tabValue === 5 && (<PersonalDevelopment />)}
         </div>
       }
     />

@@ -38,12 +38,12 @@ const CreateEmployeeKpo = () => {
           name='jobTitleId'
         />
 
-          <Input
+          {/* <Input
             name='pipTarget'
             className='my-16'
             label='PIP Target'
             multiline
-          />
+          /> */}
 
         <AutoCompleteInput
           className='my-16'

@@ -5,8 +5,9 @@ import Tabs from '@material-ui/core/Tabs';
 import withReducer from 'app/store/withReducer';
 import EditEmployeeKpoContent from './components/EditEmployeeKpoContent';
 import KpoContentTarget from './components/KpoContentTarget';
-import KpoContentPipScore from './components/KpoContentPipScore';
 import reducer from './store/reducers';
+import kpoCategoryReducer from '../KPOcategoryList/store/reducers/categoryList.reducer';
+import PipAchieved from './components/PipAchieved';
 
 const EmployeeKpoContentDetails = () => {
 
@@ -37,7 +38,7 @@ const EmployeeKpoContentDetails = () => {
 				>
 					<Tab className="h-64 normal-case" label="KPO Content Details" />
 					<Tab className="h-64 normal-case" label="KPO Targets" />
-          {/* <Tab className="h-64 normal-case" label="PIP Score" /> */}
+          <Tab className="h-64 normal-case" label="%PIP" />
 				</Tabs>
       }
       content={
@@ -48,11 +49,11 @@ const EmployeeKpoContentDetails = () => {
               <KpoContentTarget />
             </>
           )}
-          {/* {tabValue === 2 && (<KpoContentPipScore />)} */}
+          {tabValue === 2 && (<PipAchieved />)}
         </div>
       }
     />
   );
 };
-
+withReducer('kpoCategory', kpoCategoryReducer)(EmployeeKpoContentDetails);
 export default withReducer('kpo', reducer)(EmployeeKpoContentDetails);
