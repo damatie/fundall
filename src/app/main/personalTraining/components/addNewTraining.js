@@ -3,19 +3,100 @@ import { DateTimePicker } from '@material-ui/pickers'
 import CurrencyInput from 'app/shared/TextInput/CurrencyInput';
 import React, { useEffect, useState } from 'react'
 
-const AddNewTrainingDialogue = ({ open, handleClose }) => {
+const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, categories, roles, submit, update, changeDepartment, data }) => {
 
-    const [formstate, setFormstate] = useState({});
+    const [formstate, setFormstate] = useState({
+        department: "",
+        category: "",
+        entity: "",
+        jobRole: "",
+        name: "",
+        cost: "",
+        description: "",
+        employeeGrade: "",
+        companySeniority: 0,
+        industrySeniority: 0,
+        certification: false,
+        startDate: new Date(),
+        endDate: new Date(),
+        state: "",
+        country: "",
+        trainingCategoryId: 0
+    });
     const [canBeSubmitted, setCanBeSubmitted] = useState(false)
 
     const handleChange = (name, value) => {
+        if (name === "entity") {
+            let id = entities.find(element => element.name = value);
+            changeDepartment(id.id);
+        }
+        else if (name === "category") {
+            let id = entities.find(element => element.name = value);
+            // console.log(id, name, value)
+            let courseData = { trainingCourseId: data?.id }
+            if (data) {
+                setFormstate({ ...formstate, trainingCategoryId: id.id, [name]: value, ...courseData });
+            }
+            else {
+                setFormstate({ ...formstate, trainingCategoryId: id.id, [name]: value });
+            }
+            return;
+        }
+
         setFormstate({ ...formstate, [name]: value })
     }
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(formstate);
+
+        let payload = formstate;
+        payload.cost = Number(payload.cost);
+        payload.industrySeniority = Number(payload.industrySeniority);
+        payload.companySeniority = Number(payload.companySeniority);
+
+        // console.log(payload, e);
+        if (data) {
+            update(payload, data.id)
+        } else {
+            submit(payload);
+        }
     }
+
+    useEffect(() => {
+        if (data) {
+            // console.log(data, departments.length > 0)
+            if (departments.length > 0) {
+                setFormstate({
+                    department: data.department,
+                    category: data.category,
+                    entity: data.entity,
+                    jobRole: data.jobRole,
+                    name: data.name,
+                    cost: data.cost,
+                    description: data.description,
+                    employeeGrade: data.employeeGrade,
+                    companySeniority: data.companySeniority,
+                    industrySeniority: data.industrySeniority,
+                    certification: data.certification,
+                    startDate: data.startDate,
+                    endDate: data.endDate,
+                    state: data.state,
+                    country: data.category,
+                    trainingCourseId: data.id
+                });
+            }
+            else {
+                let id = entities.find(element => element.name = data.entity);
+                if (id) {
+                    changeDepartment(id.id);
+                }
+            }
+        }
+    }, [data, departments])
+
+    useEffect(() => {
+        // if (data && department)
+    }, [departments])
 
     useEffect(() => {
         if (Object.entries(formstate).length !== "") {
@@ -39,101 +120,99 @@ const AddNewTrainingDialogue = ({ open, handleClose }) => {
                         id="outlined-secondary"
                         type="text"
                         variant="outlined"
-                        onChange=""
+                        onChange={(e) => handleChange("name", e.target.value)}
                         label="Course Title"
+                        value={formstate.name}
                         className="w-full mb-24"
                     />
 
                     <FormControl className="flex w-full mb-24" variant="outlined">
                         <InputLabel htmlFor="category-label-placeholder"> Category </InputLabel>
                         <Select
-                            value={"Software"}
-                            // onChange={handleFilter}
+                            value={formstate.category}
+                            onChange={(e) => handleChange(e.target.name, e.target.value)}
                             input={
-                                <OutlinedInput labelWidth={'department'.length * 9} name="department" id="department-label-placeholder" />
+                                <OutlinedInput labelWidth={'category'.length * 9} name="category" id="category-label-placeholder" />
                             }
                         >
-                            <MenuItem value="all">
-                                <em> All </em>
-                            </MenuItem>
-                            {["Software", "IT"].map(category => (
-                                <MenuItem value={category} key={Math.random()}>
-                                    {category}
+                            {categories?.map(category => (
+                                <MenuItem value={category.name} key={Math.random()}>
+                                    {category.name}
                                 </MenuItem>
                             ))}
                         </Select>
                     </FormControl>
 
                     <FormControl className="flex w-full mb-24" variant="outlined">
-                        <InputLabel htmlFor="category-label-placeholder"> Entity </InputLabel>
+                        <InputLabel htmlFor="entity-label-placeholder"> Entity </InputLabel>
                         <Select
-                            value={"SpringRock"}
-                            // onChange={handleFilter}
+                            value={formstate.entity}
+                            onChange={(e) => handleChange(e.target.name, e.target.value)}
                             input={
-                                <OutlinedInput labelWidth={'department'.length * 9} name="department" id="department-label-placeholder" />
+                                <OutlinedInput labelWidth={'entity'.length * 9} name="entity" id="entity-label-placeholder" />
                             }
                         >
-                            <MenuItem value="all">
-                                <em> All </em>
-                            </MenuItem>
-                            {["SpringRock", "5cee", "CBit"].map(category => (
-                                <MenuItem value={category} key={Math.random()}>
-                                    {category}
+                            {entities.map(entity => (
+                                <MenuItem value={entity.entityName} key={Math.random()}>
+                                    {entity.entityName}
                                 </MenuItem>
                             ))}
                         </Select>
                     </FormControl>
 
                     <FormControl className="flex w-full mb-24" variant="outlined">
-                        <InputLabel htmlFor="category-label-placeholder"> Department </InputLabel>
+                        <InputLabel htmlFor="department-label-placeholder"> Department </InputLabel>
                         <Select
-                            value={"SpringRock"}
-                            // onChange={handleFilter}
+                            value={formstate.department}
+                            onChange={(e) => handleChange(e.target.name, e.target.value)}
                             input={
                                 <OutlinedInput labelWidth={'department'.length * 9} name="department" id="department-label-placeholder" />
                             }
                         >
-                            <MenuItem value="all">
-                                <em> All </em>
-                            </MenuItem>
-                            {["SpringRock", "5cee", "CBit"].map(category => (
-                                <MenuItem value={category} key={Math.random()}>
-                                    {category}
+                            {departments?.map(department => (
+                                <MenuItem value={department.departmentName} key={Math.random()}>
+                                    {department.departmentName}
                                 </MenuItem>
                             ))}
                         </Select>
                     </FormControl>
 
+                    {/* <TextField
+                        id="outlined-secondary"
+                        type="text"
+                        variant="outlined"
+                        onChange={(e) => handleChange("department", e.target.value)}
+                        label="Department"
+                        className="w-full mb-24"
+                    /> */}
+
                     <FormControl className="flex w-full mb-24" variant="outlined">
-                        <InputLabel htmlFor="category-label-placeholder"> Job Role </InputLabel>
+                        <InputLabel htmlFor="jobRole-label-placeholder"> Job Role </InputLabel>
                         <Select
-                            value={"SpringRock"}
-                            // onChange={handleFilter}
+                            value={formstate.jobRole}
+                            onChange={(e) => handleChange(e.target.name, e.target.value)}
                             input={
-                                <OutlinedInput labelWidth={'department'.length * 9} name="department" id="department-label-placeholder" />
+                                <OutlinedInput labelWidth={'jobRole'.length * 9} name="jobRole" id="jobRole-label-placeholder" />
                             }
                         >
-                            <MenuItem value="all">
-                                <em> All </em>
-                            </MenuItem>
-                            {["SpringRock", "5cee", "CBit"].map(category => (
-                                <MenuItem value={category} key={Math.random()}>
-                                    {category}
+                            {roles?.map(role => (
+                                <MenuItem value={role.name} key={Math.random()}>
+                                    {role.name}
                                 </MenuItem>
                             ))}
                         </Select>
                     </FormControl>
 
-                    <FormControl className="flex w-full mb-24" variant="outlined">
+                    {/* <FormControl className="flex w-full mb-24" variant="outlined">
                         <InputLabel htmlFor="category-label-placeholder"> Employee Grade </InputLabel>
                         <Select
-                            value={"SpringRock"}
-                            // onChange={handleFilter}
+                            value={formstate.employeeGrade}
+                            onChange={(e) => handleChange(e.target.name, e.target.value)}
                             input={
-                                <OutlinedInput labelWidth={'department'.length * 9} name="department" id="department-label-placeholder" />
+                                <OutlinedInput labelWidth={'employeeGrade'.length * 9} name="employeeGrade" id="employeeGrade-label-placeholder" />
                             }
                         >
-                            <MenuItem value="all">
+                            <MenuItem value="">
                                 <em> All </em>
                             </MenuItem>
                             {["SpringRock", "5cee", "CBit"].map(category => (
@@ -142,15 +221,15 @@ const AddNewTrainingDialogue = ({ open, handleClose }) => {
                                 </MenuItem>
                             ))}
                         </Select>
-                    </FormControl>
+                    </FormControl> */}
 
-                    <FormControl className="flex w-full mb-24" variant="outlined">
-                        <InputLabel htmlFor="category-label-placeholder"> Industrial Seniority </InputLabel>
+                    {/* <FormControl className="flex w-full mb-24" variant="outlined">
+                        <InputLabel htmlFor="industrySenority-label-placeholder"> Industrial Seniority </InputLabel>
                         <Select
-                            value={"SpringRock"}
-                            // onChange={handleFilter}
+                            value={formstate.industrySeniority}
+                            onChange={(e) => handleChange(e.target.name, e.target.value)}
                             input={
-                                <OutlinedInput labelWidth={'department'.length * 9} name="department" id="department-label-placeholder" />
+                                <OutlinedInput labelWidth={'industrySenority'.length * 9} name="industrySenority" id="industrySenority-label-placeholder" />
                             }
                         >
                             <MenuItem value="all">
@@ -162,15 +241,15 @@ const AddNewTrainingDialogue = ({ open, handleClose }) => {
                                 </MenuItem>
                             ))}
                         </Select>
-                    </FormControl>
+                    </FormControl> */}
 
-                    <FormControl className="flex w-full mb-24" variant="outlined">
-                        <InputLabel htmlFor="category-label-placeholder"> Company Seniority </InputLabel>
+                    {/* <FormControl className="flex w-full mb-24" variant="outlined">
+                        <InputLabel htmlFor="companySenority-label-placeholder"> Company Seniority </InputLabel>
                         <Select
-                            value={"SpringRock"}
-                            // onChange={handleFilter}
+                            value={formstate.companySeniority}
+                            onChange={(e) => handleChange(e.target.name, e.target.value)}
                             input={
-                                <OutlinedInput labelWidth={'department'.length * 9} name="department" id="department-label-placeholder" />
+                                <OutlinedInput labelWidth={'companySenority'.length * 9} name="companySenority" id="companySenority-label-placeholder" />
                             }
                         >
                             <MenuItem value="all">
@@ -182,13 +261,44 @@ const AddNewTrainingDialogue = ({ open, handleClose }) => {
                                 </MenuItem>
                             ))}
                         </Select>
-                    </FormControl>
+                    </FormControl> */}
 
                     <TextField
                         id="outlined-secondary"
                         type="text"
                         variant="outlined"
-                        onChange=""
+                        value={formstate.employeeGrade}
+                        onChange={(e) => handleChange("employeeGrade", e.target.value)}
+                        label="Employee Grade"
+                        className="w-full mb-24"
+                    />
+
+                    <TextField
+                        id="outlined-secondary"
+                        type="number"
+                        variant="outlined"
+                        value={formstate.industrySeniority}
+                        onChange={(e) => handleChange("industrySeniority", e.target.value)}
+                        label="Industry Senority"
+                        className="w-full mb-24"
+                    />
+
+                    <TextField
+                        id="outlined-secondary"
+                        type="number"
+                        variant="outlined"
+                        value={formstate.companySeniority}
+                        onChange={(e) => handleChange("companySeniority", e.target.value)}
+                        label="Company Senority"
+                        className="w-full mb-24"
+                    />
+
+                    <TextField
+                        id="outlined-secondary"
+                        type="text"
+                        variant="outlined"
+                        value={formstate.description}
+                        onChange={(e) => handleChange("description", e.target.value)}
                         label="Decription"
                         className="w-full mb-24"
                     />
@@ -196,8 +306,8 @@ const AddNewTrainingDialogue = ({ open, handleClose }) => {
                     <DateTimePicker
                         label="Start"
                         inputVariant="outlined"
-                        value={formstate.start}
-                        onChange={date => handleChange("start", date)}
+                        value={formstate.startDate}
+                        onChange={date => handleChange("startDate", date)}
                         className="mt-8 mb-16 w-full"
                         format={'MMMM Do, YYYY hh:mm a'}
                     />
@@ -205,58 +315,79 @@ const AddNewTrainingDialogue = ({ open, handleClose }) => {
                     <DateTimePicker
                         label="End"
                         inputVariant="outlined"
-                        value={formstate.end}
-                        onChange={date => handleChange("end", date)}
+                        value={formstate.endDate}
+                        onChange={date => handleChange("endDate", date)}
                         className="mt-8 mb-16 w-full"
                         format={'MMMM Do, YYYY hh:mm a'}
                     />
 
-                    <FormControl className="flex w-full mb-24" variant="outlined">
-                        <InputLabel htmlFor="category-label-placeholder"> Country </InputLabel>
+                    <TextField
+                        id="outlined-secondary"
+                        type="text"
+                        value={formstate.country}
+                        variant="outlined"
+                        onChange={(e) => handleChange("country", e.target.value)}
+                        label="Country"
+                        className="w-full mb-24"
+                    />
+
+                    <TextField
+                        id="outlined-secondary"
+                        type="text"
+                        value={formstate?.state}
+                        variant="outlined"
+                        onChange={(e) => handleChange("state", e.target.value)}
+                        label="State"
+                        className="w-full mb-24"
+                    />
+
+                    {/* <FormControl className="flex w-full mb-24" variant="outlined">
+                        <InputLabel htmlFor="country-label-placeholder"> Country </InputLabel>
                         <Select
                             value={"Nigeria"}
-                            // onChange={handleFilter}
+                            onChange={(e) => handleChange(e.target.name, e.target.value)}
                             input={
-                                <OutlinedInput labelWidth={'department'.length * 9} name="department" id="department-label-placeholder" />
+                                <OutlinedInput labelWidth={'country'.length * 9} name="country" id="country-label-placeholder" />
                             }
                         >
                             <MenuItem value="all">
                                 <em> All </em>
                             </MenuItem>
-                            {["Software", "IT"].map(category => (
+                            {["Nigeria", "Gambia"].map(category => (
                                 <MenuItem value={category} key={Math.random()}>
                                     {category}
                                 </MenuItem>
                             ))}
                         </Select>
-                    </FormControl>
+                    </FormControl> */}
 
-                    <FormControl className="flex w-full mb-24" variant="outlined">
-                        <InputLabel htmlFor="category-label-placeholder"> State </InputLabel>
+                    {/* <FormControl className="flex w-full mb-24" variant="outlined">
+                        <InputLabel htmlFor="state-label-placeholder"> State </InputLabel>
                         <Select
                             value={"Enugu"}
-                            // onChange={handleFilter}
+                            onChange={(e) => handleChange(e.target.name, e.target.value)}
                             input={
-                                <OutlinedInput labelWidth={'department'.length * 9} name="department" id="department-label-placeholder" />
+                                <OutlinedInput labelWidth={'state'.length * 9} name="state" id="state-label-placeholder" />
                             }
                         >
                             <MenuItem value="all">
                                 <em> All </em>
                             </MenuItem>
-                            {["Software", "IT"].map(category => (
+                            {["Enugu"].map(category => (
                                 <MenuItem value={category} key={Math.random()}>
                                     {category}
                                 </MenuItem>
                             ))}
                         </Select>
-                    </FormControl>
+                    </FormControl> */}
 
                     <CurrencyInput
 
-                        // id="outlined-secondary"
-                        // type="text"
-                        // variant="outlined"
-                        // onChange=""
+                        id="outlined-secondary"
+                        type="number"
+                        values={formstate.cost}
+                        variant="outlined"
+                        handleChange={(e) => handleChange("cost", e.target.value)}
                         label="Training Cost"
                         className="w-full mb-24"
                     />
@@ -264,14 +395,14 @@ const AddNewTrainingDialogue = ({ open, handleClose }) => {
                 </DialogContent>
                 <DialogActions className="justify-between m-10 px-24 pb-12 sm:px-16">
                     <Button variant="contained" color="primary" type="submit" disabled={!canBeSubmitted}>
-                        Add New Training
+                        {data ? "Update Training" : "Add New Training"}
                     </Button>
                     <Button variant="contained" color="secondary" onClick={handleClose}>
                         Close
                     </Button>
                 </DialogActions>
             </form>
-        </Dialog>
+        </Dialog >
     )
 }
 

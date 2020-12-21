@@ -3,7 +3,7 @@ import Drawer from '@material-ui/core/Drawer';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import withReducer from 'app/store/withReducer';
-import React, { useEffect, useState} from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Actions from './store/actions/index';
 import reducer from './store/reducers';
@@ -46,14 +46,14 @@ function QuickPanel(props) {
 					<Typography variant="h6" color="initial">Notifications</Typography>
 				</Grid>
 				<Grid item lg={6} sm={6} md={6}>
-					<Button variant="text" color="default" size='small' style={{float: 'right'}}>
+					<Button variant="text" color="default" size='small' style={{ float: 'right' }}>
 						Mark as Read
 					</Button>
 				</Grid>
 			</Grid>
 			<FuseScrollbars>
 				{
-					notifications.data.map(item => (<Notifications data={item} />))
+					notifications.data.map((item, index) => (<Notifications data={item} key={index} />))
 				}
 			</FuseScrollbars>
 		</Drawer>

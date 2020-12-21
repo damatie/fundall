@@ -63,6 +63,10 @@ const TableWidget = props => {
 		});
 	};
 
+	useEffect(() => {
+		//reloading on data change
+	}, [data])
+
 	function handleChangePage(event, value) {
 		setPage(value);
 	}
@@ -81,13 +85,14 @@ const TableWidget = props => {
 	}
 
 	function handleItemClick(event, item) {
-		console.log(item);
+		// console.log(item);
 		setSelected(item);
 		setOpen(true);
 	}
 
 	function CheckStatus(status) {
-		switch (status) {
+		if (!status) return <></>;
+		switch (status.toLowerCase()) {
 			case 'pending':
 				return (
 					<Typography className={'bg-blue text-white inline text-11 font-500 px-8 py-4 rounded-4'}>{status}</Typography>
@@ -137,9 +142,8 @@ const TableWidget = props => {
 				_.filter(
 					props.rows,
 					row =>
-						row.training.employee.firstName.toLowerCase().includes(search.toLowerCase()) ||
-						row.training.employee.lastName.toLowerCase().includes(search.toLowerCase()) ||
-						row.training.employee.firstName.toLowerCase().includes(search.toLowerCase())
+						row.employeeName.toLowerCase().includes(search.toLowerCase()) ||
+						row.employeeName.toLowerCase().includes(search.toLowerCase())
 				)
 			);
 			setPage(0);
@@ -150,7 +154,7 @@ const TableWidget = props => {
 
 	useEffect(() => {
 		if (filter !== '') {
-			setData(_.filter(props.rows, row => row.training.status.toLowerCase() === filter.toLowerCase()));
+			setData(_.filter(props.rows, row => row.status.toLowerCase() === filter.status.toLowerCase()));
 			setPage(0);
 		} else {
 			setData(props.rows);
@@ -175,143 +179,139 @@ const TableWidget = props => {
 									<tr className="employee">
 										<th>Employee Name</th>
 										<td>
-											{selected.training
-												? selected.training.employee.firstName + ' ' + selected.training.employee.lastName
+											{selected
+												? selected.employeeName
 												: ''}
 										</td>
 									</tr>
 
 									<tr className="cost">
 										<th>Cost</th>
-										<td>{selected.training ? selected.training.trainingCourse.cost : ''}</td>
+										<td>{selected ? selected.cost : ''}</td>
 									</tr>
 
 									<tr className="location">
 										<th>Location</th>
-										<td>{selected.training ? selected.training.trainingCourse.location : ''}</td>
+										<td>{selected ? selected.country : ''}</td>
 									</tr>
 
 									<tr className="cert">
 										<th>Certification</th>
-										<td>{(selected.training ? selected.training.trainingCourse.certification : '') ? 'Yes' : 'No'}</td>
+										<td>{(selected ? selected?.certification : '') ? 'Yes' : 'No'}</td>
 									</tr>
 
-									<tr className="duration">
-										<th>Duration</th>
-										<td>{selected.training ? selected.training.trainingCourse.duration : ''}</td>
-									</tr>
 
 									<tr className="catergory">
 										<th>Category</th>
-										<td>{selected.training ? selected.training.trainingCourse.category : ''}</td>
+										<td>{selected ? selected.category : ''}</td>
 									</tr>
 
 									<tr className="dept">
 										<th>Department</th>
-										<td>{selected.training ? selected.training.trainingCourse.department : ''}</td>
+										<td>{selected ? selected.department : ''}</td>
 									</tr>
 
 									<tr className="startDate">
 										<th>Training Starts</th>
-										<td>{selected.training ? selected.training.startDate : ''} </td>
+										<td>{selected ? selected.startDate : ''} </td>
 									</tr>
 									<tr className="endDate">
 										<th>Training Ends</th>
-										<td>{selected.training ? selected.training.endDate : ''}</td>
+										<td>{selected ? selected.endDate : ''}</td>
 									</tr>
 
 									<tr className="created">
 										<th>Created</th>
 										<td>
-											{selected.training ? (
-												<Moment format="ddd Do MMM, YYYY | hh:mm:ss a">{selected.training.createdAt}</Moment>
+											{selected ? (
+												<Moment format="ddd Do MMM, YYYY | hh:mm:ss a">{selected?.createdAt}</Moment>
 											) : (
-												''
-											)}{' '}
+													''
+												)}{' '}
 										</td>
 									</tr>
 									<tr className="updated">
 										<th>Updated</th>
 										<td>
-											{selected.training ? (
-												<Moment format="ddd Do MMM, YYYY | hh:mm:ss a">{selected.training.updatedAt}</Moment>
+											{selected ? (
+												<Moment format="ddd Do MMM, YYYY | hh:mm:ss a">{selected?.updatedAt}</Moment>
 											) : (
-												''
-											)}
+													''
+												)}
 										</td>
 									</tr>
 								</tbody>
 							</table>
-                            {
-                            !props.isHR && ((
-								(selected.training
-									? (selected.training.status === 'pending')
-									: false) && props.allowAuth
-							) ? (
-								<Grid container className="items-center w-full pt-20" justify="center" alignItems="center">
-									<Button
-										className="bg-red text-white"
-										startIcon={<RejectIcon />}
-										onClick={ev => {
-											props.handleReject(ev, selected.training.id);
-											handleClose();
-										}}
-									>
-										Reject
+							{
+								!props.isHR && ((
+									(selected
+										? (selected?.status?.toLowerCase() === 'pending')
+										: false) && props.allowAuth
+								) ? (
+										<Grid container className="items-center w-full pt-20" justify="center" alignItems="center">
+											<Button
+												className="bg-red text-white"
+												startIcon={<RejectIcon />}
+												onClick={ev => {
+													props.handleReject(ev, selected?.trainingCourseId);
+													handleClose();
+												}}
+											>
+												Reject
+											</Button>
+											&nbsp;
+											<Button
+												className="bg-green text-white"
+												startIcon={<ApproveIcon />}
+												onClick={ev => {
+													props.handleApprove(ev, selected.trainingCourseId);
+													handleClose();
+												}}
+											>
+												Approve
+									</Button>
+										</Grid>
+									) : (
+										<Grid container className="items-center w-full pt-20" justify="center" alignItems="center">
+											{selected ? CheckStatus(selected?.status) : ''}
+										</Grid>
+									))}
+							{
+								props.isHR && (
+									(
+										(selected
+											? (selected?.status?.toLowerCase() === 'reviewed' || selected?.status?.toLowerCase() === 'pending')
+											: false) && props.isHR
+									) ? (
+											<Grid container className="items-center w-full pt-20" justify="center" alignItems="center">
+												<Button
+													className="bg-red text-white"
+													startIcon={<RejectIcon />}
+													onClick={ev => {
+														props.handleReject(ev, selected.id);
+														handleClose();
+													}}
+												>
+													Reject
 									</Button>
 									&nbsp;
-									<Button
-										className="bg-green text-white"
-										startIcon={<ApproveIcon />}
-										onClick={ev => {
-											props.handleApprove(ev, selected.training.id);
-											handleClose();
-										}}
-									>
-										Approve
+												<Button
+													className="bg-green text-white"
+													startIcon={<ApproveIcon />}
+													onClick={ev => {
+														props.handleApprove(ev, selected.id);
+														handleClose();
+													}}
+												>
+													Approve
 									</Button>
-								</Grid>
-							) : (
-								<Grid container className="items-center w-full pt-20" justify="center" alignItems="center">
-									{selected.training ? CheckStatus(selected.training.status) : ''}
-								</Grid>
-							))}
-                            {
-                                props.isHR &&(
-                            (
-								(selected.training
-									? (selected.training.status === 'reviewed' || selected.training.status === 'pending')
-									: false) && props.isHR
-							) ? (
-								<Grid container className="items-center w-full pt-20" justify="center" alignItems="center">
-									<Button
-										className="bg-red text-white"
-										startIcon={<RejectIcon />}
-										onClick={ev => {
-											props.handleReject(ev, selected.training.id);
-											handleClose();
-										}}
-									>
-										Reject
-									</Button>
-									&nbsp;
-									<Button
-										className="bg-green text-white"
-										startIcon={<ApproveIcon />}
-										onClick={ev => {
-											props.handleApprove(ev, selected.training.id);
-											handleClose();
-										}}
-									>
-										Approve
-									</Button>
-								</Grid>
-							) : (
-								<Grid container className="items-center w-full pt-20" justify="center" alignItems="center">
-									{selected.training ? CheckStatus(selected.training.status) : ''}
-								</Grid>
-							))
-                            }
+											</Grid>
+										) : (
+											<Grid container className="items-center w-full pt-20" justify="center" alignItems="center">
+												{selected ? CheckStatus(selected?.status) : ''}
+											</Grid>
+										))
+							}
 						</DialogContent>
 						<DialogActions>
 							<Button onClick={handleClose} color="primary">
@@ -404,10 +404,10 @@ const TableWidget = props => {
 							[order.direction]
 						)
 							.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-							.map(n => {
+							.map((n, index) => {
 								return (
 									<TableRow
-										key={n.training.id}
+										key={index * Math.random()}
 										hover
 										onClick={event => {
 											handleItemClick(event, n);
@@ -417,13 +417,13 @@ const TableWidget = props => {
 										className="cursor-pointer"
 									>
 										<TableCell className="text-center">
-											{n.training.employee.firstName} {n.training.employee.lastName}
+											{n?.employeeName}
 										</TableCell>
-										<TableCell>{n.training.trainingCourse.name}</TableCell>
-										<TableCell className="text-center">{n.training.trainingCourse.cost}</TableCell>
-										<TableCell className="text-center">{n.training.startDate}</TableCell>
-										<TableCell className="text-center">{n.training.startDate}</TableCell>
-										<TableCell className="text-center">{CheckStatus(n.training.status)}</TableCell>
+										<TableCell>{n?.trainingName}</TableCell>
+										<TableCell className="text-center">{n?.cost}</TableCell>
+										<TableCell className="text-center">{n?.startDate}</TableCell>
+										<TableCell className="text-center">{n?.startDate}</TableCell>
+										<TableCell className="text-center">{CheckStatus(n?.status)}</TableCell>
 									</TableRow>
 								);
 							})}

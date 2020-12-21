@@ -8,7 +8,7 @@ export const GET_ENTITIES_ERROR = 'GET ENTITIES ERROR';
 
 const baseUrl = getBaseUrl;
 const headers = fetchHeaders();
-const auth = useAuth;
+// const auth = useAuth;
 
 export function getEntities() {
 	return dispatch => {

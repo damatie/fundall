@@ -10,7 +10,7 @@ const authRoles = {
 	user: ['admin', 'staff', 'user'],
 	employee: ["employee", "Employee"],
 	financeMnager: ["finance manager", "Finance Manager"],
-	hrManager: ["line manager", "Line Manager", "hr", "HR"],
+	hrManager: ["Line Manager", "Hr Manager"],
 	lineManager: ["line manager", "Line Manager"],
 	onlyGuest: [],
 	loan: ['Line managers', 'Finance Manager', 'Director of support service']

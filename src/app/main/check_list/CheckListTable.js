@@ -59,8 +59,8 @@ const CheckListTable = props => {
 
 	function handleChangePage(event, value) {
 		setPage(value);
-    }
-    
+	}
+
 
 	function handleChangeRowsPerPage(event) {
 		setRowsPerPage(event.target.value);
@@ -183,12 +183,12 @@ const CheckListTable = props => {
 							[order.direction]
 						)
 							.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-							.map(n => {
+							.map((n, index) => {
 								j++;
 								return (
-									<Tooltip title="Click to view avaliable questions" placement={'center'} enterDelay={300}>
+									<Tooltip key={index + Math.random()} title="Click to view avaliable questions" placement={'bottom-start'} enterDelay={300}>
 										<TableRow
-											key={n.id}
+
 											hover
 											// selected={n.id === selectedItemId}
 											className="cursor-pointer"

@@ -15,25 +15,25 @@ import * as Actions from './store/actions';
 import reducer from './store/reducers';
 
 function CheckList(props) {
-	const dispatch = useDispatch();
-	const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
-	const rows = useSelector(({ checkList }) => checkList.checkList.data);
-	const pageLayout = useRef(null);
+    const dispatch = useDispatch();
+    const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
+    const rows = useSelector(({ checkList }) => checkList.checkList.data);
+    const pageLayout = useRef(null);
 
     useEffect(() => {
         dispatch(Actions.getAllCheckLists());
     }, [dispatch]);
-    
-	function handleDelete(event, id){
-        // dispatch(Actions.deleteCheckList(id))
+
+    function handleDelete(event, id) {
+        dispatch(Actions.deleteCheckList(id))
     }
 
-    function handleEdit(event, model){
-        console.log(model)
-        // dispatch(Actions.updateCheckList(model, model.id));
+    function handleEdit(event, model) {
+        // console.log(model)
+        dispatch(Actions.updateCheckList(model, model.id));
     }
 
-    console.log(rows);
+    // console.log(rows);
 
     const columns = [
         {
@@ -72,17 +72,17 @@ function CheckList(props) {
             sort: false
         }
     ];
-	return (
-		<FusePageSimple
-			classes={{
-				root: 'bg-red',
-				header: 'h-96 min-h-96 sm:h-160 sm:min-h-160',
-				sidebarHeader: 'h-96 min-h-96 sm:h-160 sm:min-h-160',
-				rightSidebar: 'w-320'
-			}}
-			header={
-					<ThemeProvider theme={mainTheme}>
-					<div className="flex flex-col flex-1 p-8 sm:p-12 relative">
+    return (
+        <FusePageSimple
+            classes={{
+                root: 'bg-red',
+                header: 'h-96 min-h-96 sm:h-160 sm:min-h-160',
+                sidebarHeader: 'h-96 min-h-96 sm:h-160 sm:min-h-160',
+                rightSidebar: 'w-320'
+            }}
+            header={
+                <ThemeProvider theme={mainTheme}>
+                    <div className="flex flex-col flex-1 p-8 sm:p-12 relative">
                         <div className="flex items-center w-full">
                             <FuseAnimate animation="transition.expandIn" delay={300}>
                                 <Icon className="text-32">announcement</Icon>
@@ -91,19 +91,19 @@ function CheckList(props) {
                                 <span className="text-24 mx-16">Check List Management</span>
                             </FuseAnimate>
                         </div>
-						<div className="flex flex-1 items-end">
-							<FuseAnimate animation="transition.expandIn" delay={600}>
-								<AddCheckListModal />
-							</FuseAnimate>
-						</div>
-					</div>
-			</ThemeProvider>
-			}
-			content={<CheckListTable title={""} type="default" handleDelete={handleDelete} handleEdit={handleEdit} columns={columns} rows={rows} props={props}/>}
-			ref={pageLayout}
-			innerScroll
-		/>
-	);
+                        <div className="flex flex-1 items-end">
+                            <FuseAnimate animation="transition.expandIn" delay={600}>
+                                <AddCheckListModal />
+                            </FuseAnimate>
+                        </div>
+                    </div>
+                </ThemeProvider>
+            }
+            content={<CheckListTable title={""} type="default" handleDelete={handleDelete} handleEdit={handleEdit} columns={columns} rows={rows} props={props} />}
+            ref={pageLayout}
+            innerScroll
+        />
+    );
 }
 
 export default withReducer('checkList', reducer)(CheckList);

@@ -18,17 +18,17 @@ import OutlinedInput from '@material-ui/core/OutlinedInput';
 import Select from '@material-ui/core/Select';
 import { makeStyles, useTheme, ThemeProvider } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import Autocomplete from '@material-ui/lab/Autocomplete';
+// import Autocomplete from '@material-ui/lab/Autocomplete';
 import Typography from '@material-ui/core/Typography';
 import withReducer from 'app/store/withReducer';
 import clsx from 'clsx';
 import React, { useEffect, useMemo, useState } from 'react';
-import { DateTimePicker } from '@material-ui/pickers';
+// import { DateTimePicker } from '@material-ui/pickers';
 import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Actions from '../store/actions';
 import reducer from '../store/reducers';
-import { amber, blue, blueGrey, green } from '@material-ui/core/colors';
+import { blue } from '@material-ui/core/colors';
 import Moment from 'react-moment';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -73,7 +73,7 @@ const useStyles = makeStyles(theme => ({
 function PersonalTrainingCourses(props) {
 	const dispatch = useDispatch();
 	const courses = useSelector(({ academyApp }) => academyApp.courses.courses);
-	const categories = useSelector(({ academyApp }) => academyApp.courses.categories);
+	const categories = useSelector(({ academyApp }) => academyApp.courses.categories.rows);
 	const employees = useSelector(({ academyApp }) => academyApp.employees.employees);
 	const totalNo = useSelector(({ academyApp }) => academyApp.courses.totalNo);
 	const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
@@ -95,20 +95,20 @@ function PersonalTrainingCourses(props) {
 	const userId = useAuth().getId;
 	const employeeHOD = useAuth().getUserDetails.department.departmentHeadId;
 	const [filterEmployees, setFilterEmployees] = useState(
-		employees
+		employees.filter(f => {
+			return (f.firstName !== null || f.lastName !== null || f?.role.name.toLowerCase() !== 'employee' || f?.roleId !== 8);
+		}).sort((a, b) => {
+			if (a.firstName + " " + a.lastName < b.firstName + " " + b.lastName) { return -1; }
+			if (a.firstName + " " + a.lastName > b.firstName + " " + b.lastName) { return 1; }
+			return 0;
+		})
 	);
-	// employees.filter(f => {
-	// 	return (f.firstName !== null || f.lastName !== null || f?.role.name.toLowerCase() !== 'employee' || f?.roleId !== 8);
-	// }).sort((a, b) => {
-	// 	if (a.firstName + " " + a.lastName < b.firstName + " " + b.lastName) { return -1; }
-	// 	if (a.firstName + " " + a.lastName > b.firstName + " " + b.lastName) { return 1; }
-	// 	return 0;
-	// })
 
 	useEffect(() => {
-		dispatch(Actions.getApprovedCourses());
+		dispatch(Actions.getAllCourses());
 		dispatch(Actions.getCourseCategories());
 		dispatch(Actions.getEmployees());
+		setData(courses)
 	}, [dispatch]);
 
 	useEffect(() => {
@@ -141,18 +141,18 @@ function PersonalTrainingCourses(props) {
 		setFilter(event.target.value);
 	}
 
-	function canBeSubmitted() {
-		if (checkRole()) {
-			return (start !== '' && hod !== 0);
-		} else {
-			return start !== '';
-		}
-	}
+	// function canBeSubmitted() {
+	// 	if (checkRole()) {
+	// 		return (start !== '' && hod !== 0);
+	// 	} else {
+	// 		return start !== '';
+	// 	}
+	// }
 
 	const handleChangePage = (event, value) => {
 		console.log(value);
 		let newPage = value - 1;
-		dispatch(Actions.getApprovedCourses(rowsPerPage, newPage * rowsPerPage));
+		dispatch(Actions.getAllCourses(rowsPerPage, newPage * rowsPerPage));
 		setPage(value);
 		window.scrollTo(0, 0);
 		// alert('hello')
@@ -165,27 +165,32 @@ function PersonalTrainingCourses(props) {
 
 	function handleSubmit(event) {
 		event.preventDefault();
-		// console.log(duration);
-		//let Trim the duration value to remove white space
-		let durations = duration.trim();
-		//let Split the duration to get first part of the array as the number and convert it to interger
-		let number = parseInt(durations.split(' ')[0]);
-		//let split the duration and get the second part of the array.
-		let months = durations.split(' ')[1].toLowerCase().includes('s')
-			? durations.split(' ')[1].toLowerCase()
-			: durations.split(' ')[1].toLowerCase() + 's';
-
-		//constructing our training request payload
-		const payload = {
-			trainingCourseId: id,
-			departmentHead: hod === 0 ? (employeeHOD != null ? employeeHOD : 13) : hod,
-			hrManager: 4,
-			startDate: start.format('DD-MM-YYYY'),
-			endDate: end.add(number, months).format('DD-MM-YYYY')
-		};
-		console.log(payload);
-		dispatch(Actions.createTraining(payload));
+		// if (userData.role === "Employee") {
+		dispatch(Actions.requestTraining(id));
 		setOpen(false);
+		return;
+		// }
+		// console.log(duration);
+		// //let Trim the duration value to remove white space
+		// let durations = duration.trim();
+		// //let Split the duration to get first part of the array as the number and convert it to interger
+		// let number = parseInt(durations.split(' ')[0]);
+		// //let split the duration and get the second part of the array.
+		// let months = durations.split(' ')[1].toLowerCase().includes('s')
+		// 	? durations.split(' ')[1].toLowerCase()
+		// 	: durations.split(' ')[1].toLowerCase() + 's';
+
+		// //constructing our training request payload
+		// const payload = {
+		// 	trainingCourseId: id,
+		// 	departmentHead: hod === 0 ? (employeeHOD != null ? employeeHOD : 13) : hod,
+		// 	hrManager: 4,
+		// 	startDate: start.format('DD-MM-YYYY'),
+		// 	endDate: end.add(number, months).format('DD-MM-YYYY')
+		// };
+		// console.log(payload);
+		// dispatch(Actions.createTraining(payload));
+		// setOpen(false);
 	}
 
 	function handleDateChange(date) {
@@ -213,12 +218,10 @@ function PersonalTrainingCourses(props) {
 	}
 
 	function handleSelectChange(name) {
-		console.log(name);
 		let hodDetails = filterEmployees.find(em => {
 			return em.firstName.toLowerCase() + ' ' + em.lastName.toLowerCase() === name.toLowerCase();
 		});
 		setHod(hodDetails.id);
-		console.log(hodDetails)
 	}
 
 	return (
@@ -270,7 +273,7 @@ function PersonalTrainingCourses(props) {
 								<MenuItem value="all">
 									<em> All </em>
 								</MenuItem>
-								{categories.map(category => (
+								{categories?.map(category => (
 									<MenuItem value={category.name} key={category.id}>
 										{category.name}
 									</MenuItem>
@@ -330,7 +333,7 @@ function PersonalTrainingCourses(props) {
 															</AppBar>
 															<form noValidate onSubmit={ev => handleSubmit(ev)}>
 																<DialogContent classes={{ root: 'p-16 pb-0 sm:p-24 sm:pb-0' }}>
-																	<Autocomplete
+																	{/* <Autocomplete
 																		hidden={!checkRole()}
 																		freeSolo
 																		options={
@@ -357,22 +360,12 @@ function PersonalTrainingCourses(props) {
 																		className="mt-8 mb-16 w-full"
 																		minDate={start}
 																		format={'MMMM Do, YYYY hh:mm a'}
-																	/>
-
-																	{/* <DateTimePicker
-																		label="End"
-																		inputVariant="outlined"
-																		value={end}
-																		hidden={true}
-																		onChange={date => setEnd(date)}
-																		className="mt-8 mb-16 w-full"
-																		format={'MMMM Do, YYYY hh:mm a'}
-																		minDate={start}
-																		// maxDate={end}
 																	/> */}
+
+																	<Typography variant="subtitle1" color="inherit" className="mb-24" >Are you sure you want to request for this course ?</Typography>
 																</DialogContent>
 																<DialogActions className="justify-between px-8 sm:px-16">
-																	<Button variant="contained" color="primary" type="submit" disabled={!canBeSubmitted()}>
+																	<Button variant="contained" color="primary" type="submit" >
 																		Add
 																</Button>
 																</DialogActions>
@@ -385,13 +378,14 @@ function PersonalTrainingCourses(props) {
 																color="secondary"
 																onClick={ev => {
 																	handleOpen();
+
 																	setId(course.id);
 																	setDuration(course.duration);
 																	setStart(moment(new Date(), 'MM/DD/YYYY').add(1, 'days'));
 																}}
 															>
 																START
-														</Button>
+															</Button>
 														</CardActions>
 														<LinearProgress className="w-full" variant="determinate" value={100} color="secondary" />
 													</Card>

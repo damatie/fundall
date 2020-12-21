@@ -460,11 +460,12 @@ const navigationConfig = [
 		type: 'group',
 		children: [
 			// {
-			// id: 'training_Dashboard',
-			// title: 'Training Dashboard',
-			// type: 'collapse',
-			// // url: '/hr/training/management',
-			// icon: 'dashboard',
+			// 	id: 'training_Dashboard',
+			// 	title: 'Training Dashboard',
+			// 	type: 'collapse',
+			// 	url: '/hr/training/management',
+			// 	icon: 'dashboard'
+			// },
 			// children: [
 			{
 				id: 'staff_dashboard',
@@ -499,14 +500,14 @@ const navigationConfig = [
 				icon: 'school',
 				auth: authRoles.admin,
 			},
-			{
-				id: 'deptTraining',
-				title: 'Department Training',
-				type: 'item',
-				url: '/training/dept',
-				icon: 'group',
-				auth: authRoles.hrManager,
-			},
+			// {
+			// 	id: 'deptTraining',
+			// 	title: 'Department Training',
+			// 	type: 'item',
+			// 	url: '/training/dept',
+			// 	icon: 'group',
+			// 	auth: authRoles.lineManager,
+			// },
 			{
 				id: 'personalTraining',
 				title: 'Personal Training',
@@ -521,7 +522,7 @@ const navigationConfig = [
 				type: 'item',
 				url: '/training/list',
 				icon: 'book',
-				auth: authRoles.hrManager,
+				auth: authRoles.lineManager,
 			},
 			{
 				id: 'courseCategory',
@@ -529,7 +530,7 @@ const navigationConfig = [
 				type: 'item',
 				url: '/hr/training/category',
 				icon: 'category',
-				auth: authRoles.hrManager,
+				auth: authRoles.admin,
 			},
 			{
 				id: 'checkList',
@@ -537,7 +538,7 @@ const navigationConfig = [
 				type: 'item',
 				url: '/training/checklist',
 				icon: 'category',
-				auth: authRoles.hrManager,
+				auth: authRoles.staff,
 			}
 		]
 	},

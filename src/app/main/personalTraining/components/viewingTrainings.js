@@ -1,11 +1,19 @@
 import { AppBar, Button, Dialog, DialogActions, DialogContent, TextField, Toolbar, Typography } from '@material-ui/core'
-import React from 'react'
+import React, { useEffect } from 'react'
 
-const ViewTrainings = ({ open, handleClose, data, viewer }) => {
+const ViewTrainings = ({ open, handleClose, data, viewer, approveTraining, rejectTraining }) => {
 
     const handleApprove = () => {
-        handleClose();
+        approveTraining(data.id, viewer === "Line Manager" ? "lm" : "hr");
     }
+
+    const handleReject = () => {
+        rejectTraining(data.id, viewer === "Line Manager" ? "lm" : "hr");
+    }
+
+    useEffect(() => {
+        // console.log(data)
+    }, [data])
 
     return (
         <Dialog open={open} onClose={handleClose} fullWidth>
@@ -18,7 +26,7 @@ const ViewTrainings = ({ open, handleClose, data, viewer }) => {
             </AppBar>
             <form noValidate>
                 <DialogContent classes={{ root: 'p-16 pb-0 sm:p-24 sm:pb-0' }}>
-
+                    {/* 
                     <TextField
                         id="outlined-secondary"
                         type="text"
@@ -27,32 +35,77 @@ const ViewTrainings = ({ open, handleClose, data, viewer }) => {
                         variant="outlined"
                         label="Employee"
                         className="w-full mb-24"
-                    />
+                    /> */}
                     {
                         (viewer && viewer.toLowerCase() !== "employee" && data.employeeID)
                             ?
-                            <TextField
-                                id="outlined-secondary"
-                                type="text"
-                                disabled
-                                value={data.employeeID}
-                                variant="outlined"
-                                label="Employee"
-                                className="w-full mb-24"
-                            />
+                            <>
+                                <TextField
+                                    id="outlined-secondary"
+                                    type="text"
+                                    disabled
+                                    value={data.employeeID}
+                                    variant="outlined"
+                                    label="Employee"
+                                    className="w-full mb-24"
+                                />
+
+                                <TextField
+                                    id="outlined-secondary"
+                                    type="text"
+                                    disabled
+                                    defaultValue={data.employeeMail}
+                                    variant="outlined"
+                                    label="Employee Mail"
+                                    className="w-full mb-24"
+                                />
+                            </>
                             :
                             <></>
                     }
 
-                    <TextField
-                        id="outlined-secondary"
-                        type="text"
-                        disabled
-                        defaultValue={data.employeeMail}
-                        variant="outlined"
-                        label="Employee Mail"
-                        className="w-full mb-24"
-                    />
+                    {
+                        data.employeeGrade ?
+                            <TextField
+                                id="outlined-secondary"
+                                type="text"
+                                disabled
+                                value={data.employeeGrade}
+                                variant="outlined"
+                                label="Employee Grade"
+                                className="w-full mb-24"
+                            />
+                            : <></>
+                    }
+
+                    {
+                        data.companySeniority ?
+                            <TextField
+                                id="outlined-secondary"
+                                type="text"
+                                disabled
+                                value={data.companySeniority}
+                                variant="outlined"
+                                label="Company Seniority"
+                                className="w-full mb-24"
+                            />
+                            : <></>
+                    }
+
+                    {
+                        data.industrySenority ?
+                            <TextField
+                                id="outlined-secondary"
+                                type="text"
+                                disabled
+                                value={data.industrySenority}
+                                variant="outlined"
+                                label="Industry Seniority"
+                                className="w-full mb-24"
+                            />
+                            : <></>
+                    }
+
 
                     <TextField
                         id="outlined-secondary"
@@ -163,15 +216,19 @@ const ViewTrainings = ({ open, handleClose, data, viewer }) => {
 
                 </DialogContent>
                 {
-                    data.status !== "pending" &&
+                    data.status === "pending" &&
                     <DialogActions className="justify-between m-10 px-24 pb-12 sm:px-16">
                         <Button variant="contained" color="primary" onClick={handleApprove}>
                             Approve
                     </Button>
-                        <Button variant="contained" color="danger" onClick={handleClose}>
+                        <Button variant="contained" color="info" onClick={handleReject}>
                             Reject
                     </Button>
-                    </DialogActions>}
+                        <Button variant="contained" color="danger" onClick={handleClose}>
+                            Close
+                    </Button>
+                    </DialogActions>
+                }
             </form>
         </Dialog>
     )

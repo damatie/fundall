@@ -8,10 +8,10 @@ import Typography from '@material-ui/core/Typography';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import * as Actions from './store/actions';
+// import * as Actions from './store/actions';
 
 function RolesHeader(props) {
-	const dispatch = useDispatch();
+	// const dispatch = useDispatch();
 	// const searchText = useSelector(({ leaveOptions }) => leaveOptions.leaveOptions.searchText);
 	const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
 

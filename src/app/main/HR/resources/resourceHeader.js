@@ -6,12 +6,12 @@ import Paper from '@material-ui/core/Paper';
 import { ThemeProvider } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import * as Actions from './store/actions';
+// import * as Actions from './store/actions';
 
 function ResourcesHeader(props) {
-	const dispatch = useDispatch();
+	// const dispatch = useDispatch();
 	// const searchText = useSelector(({ leaveOptions }) => leaveOptions.leaveOptions.searchText);
 	const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
 
@@ -43,7 +43,7 @@ function ResourcesHeader(props) {
 								inputProps={{
 									'aria-label': 'Search'
 								}}
-								// onChange={ev => dispatch(Actions.setLeaveOptionsSearchText(ev))}
+							// onChange={ev => dispatch(Actions.setLeaveOptionsSearchText(ev))}
 							/>
 						</Paper>
 					</FuseAnimate>

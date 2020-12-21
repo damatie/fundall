@@ -1,27 +1,32 @@
 import FuseAnimateGroup from '@fuse/core/FuseAnimateGroup';
 import FusePageSimple from '@fuse/core/FusePageSimple';
-import Hidden from '@material-ui/core/Hidden';
 import Icon from '@material-ui/core/Icon';
-import IconButton from '@material-ui/core/IconButton';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
+// import IconButton from '@material-ui/core/IconButton';
+// import Menu from '@material-ui/core/Menu';
+// import MenuItem from '@material-ui/core/MenuItem';
+// import Typography from '@material-ui/core/Typography';
+// import clsx from 'clsx';
+// import Hidden from '@material-ui/core/Hidden';
 import { makeStyles } from '@material-ui/core/styles';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
-import Typography from '@material-ui/core/Typography';
 import withReducer from 'app/store/withReducer';
 import { ThemeProvider } from '@material-ui/core/styles';
-import clsx from 'clsx';
 import _ from '@lodash';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Actions from './store/actions';
+import * as TrainingListActions from '../../../personalTraining/store/actions';
 import reducer from './store/reducers';
 import CardWidget from 'app/shared/widgets/CardWidget';
 import TrainingTableWidget from 'app/shared/widgets/TrainingTableWidget';
 import CoursesTableWidget from 'app/shared/widgets/CoursesTableWidget';
 import FuseAnimate from '@fuse/core/FuseAnimate';
 import { useAuth } from 'app/hooks/useAuth';
+import AddNewTrainingDialogue from 'app/main/personalTraining/components/addNewTraining';
+import { useHistory } from 'react-router';
+import { Button } from '@material-ui/core';
+import * as CoursesAction from '../../../personalTraining/store/actions';
 
 const useStyles = makeStyles(theme => ({
 	content: {
@@ -49,14 +54,26 @@ const useStyles = makeStyles(theme => ({
 
 function TrainingManagement(props) {
 	const dispatch = useDispatch();
+	const history = useHistory();
+
 	const approvedTrainings = useSelector(({ TrainingManagement }) => TrainingManagement.trainings.approvedTrainings);
 	const rejectedTrainings = useSelector(({ TrainingManagement }) => TrainingManagement.trainings.rejectedTrainings);
 	const pendingTrainings = useSelector(({ TrainingManagement }) => TrainingManagement.trainings.pendingTrainings);
 	const reviewedTrainings = useSelector(({ TrainingManagement }) => TrainingManagement.trainings.reviewedTrainings);
-	const approvedCourses = useSelector(({ TrainingManagement }) => TrainingManagement.courses.approvedCourses);
-	const rejectedCourses = useSelector(({ TrainingManagement }) => TrainingManagement.courses.rejectedCourses);
-	const pendingCourses = useSelector(({ TrainingManagement }) => TrainingManagement.courses.pendingCourses);
+
+	let totalCourses = useSelector(({ TrainingManagement }) => TrainingManagement.courses.totalCourses.rows);
+	// const approvedCourses = useSelector(({ TrainingManagement }) => TrainingManagement.courses.approvedCourses);
+	// const rejectedCourses = useSelector(({ TrainingManagement }) => TrainingManagement.courses.rejectedCourses);
+	// const pendingCourses = useSelector(({ TrainingManagement }) => TrainingManagement.courses.pendingCourses);
 	const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
+	const [data, setData] = useState({});
+
+	const roles = useSelector(({ TrainingManagement }) => TrainingManagement.categories.roles);
+	const entities = useSelector(({ TrainingManagement }) => TrainingManagement.categories.entities);
+	const departments = useSelector(({ TrainingManagement }) => TrainingManagement.categories.departments);
+	const categories = useSelector(({ TrainingManagement }) => TrainingManagement.categories.data.rows);
+
+	const [addNew, setAddNew] = useState(false);
 
 	//Appending All trainings into one array of object
 	let totalTrainings = reviewedTrainings.concat(pendingTrainings).concat(approvedTrainings).concat(rejectedTrainings);
@@ -67,11 +84,29 @@ function TrainingManagement(props) {
 	});
 
 	//Appending All courses into one array of object
-	let totalCourses = approvedCourses.concat(rejectedCourses).concat(pendingCourses);
+	// let totalCourses = approvedCourses.concat(rejectedCourses).concat(pendingCourses);
+
 	//Sorting the appended courses
-	totalCourses = totalCourses.sort((a, b) => {
+	totalCourses = totalCourses?.sort((a, b) => {
 		return new Date(b.createdAt) - new Date(a.createdAt);
 	});
+
+	useEffect(() => {
+		// console.log(totalCourses, state);
+	}, [addNew, data,])
+
+	const submitNewTraining = (value) => {
+		dispatch(TrainingListActions.createTraining(value, history));
+	}
+
+	const changeDepartment = (id) => {
+		dispatch(TrainingListActions.getDepartments(id));
+	}
+
+	function handleCloseNew() {
+		setData(null);
+		setAddNew(false);
+	}
 
 	const classes = useStyles(props);
 	const pageLayout = useRef(null);
@@ -84,9 +119,12 @@ function TrainingManagement(props) {
 		dispatch(Actions.getReviewedTraining());
 		dispatch(Actions.getApprovedTraining());
 		dispatch(Actions.getRejectedTraining());
-		dispatch(Actions.getPendingCourses());
-		dispatch(Actions.getApprovedCourses());
-		dispatch(Actions.getRejectedCourses());
+
+		dispatch(Actions.getAllCourses());
+
+		dispatch(Actions.getRoles());
+		dispatch(Actions.getCategories());
+		dispatch(Actions.getEntities());
 	}, [dispatch]);
 
 	function handleChangeTab(event, value) {
@@ -94,15 +132,19 @@ function TrainingManagement(props) {
 	}
 
 	function checkRole() {
-		return userData.role.toUpperCase() === 'HR';
+		return userData.role.toLowerCase() === 'Hr Manager';
 	}
 
-	function checkHODRole() {
-		return (userData.role.toUpperCase() === 'HEAD OF DEPARTMENT' || userData.role.toUpperCase() === 'LINE MANAGERS');
-	}
+	// function checkHODRole() {
+	// 	return (userData.role.toUpperCase() === 'HEAD OF DEPARTMENT' || userData.role.toUpperCase() === 'LINE MANAGERS');
+	// }
 
 	function handleCourseReject(ev, id) {
 		dispatch(Actions.rejectCourse(id));
+	}
+
+	function handleCourseDelete(id) {
+		dispatch(Actions.deleteCourse(id));
 	}
 
 	function handleCourseApprove(ev, id) {
@@ -115,6 +157,10 @@ function TrainingManagement(props) {
 
 	function handleTrainingApprove(ev, id) {
 		dispatch(Actions.approveTraining(id));
+	}
+
+	function updateTraining(payload, id) {
+		dispatch(CoursesAction.updateTraining(payload, id))
 	}
 
 	const columns = [
@@ -161,6 +207,7 @@ function TrainingManagement(props) {
 			sort: true
 		}
 	];
+
 	const coursesColumn = [
 		{
 			id: 'name',
@@ -170,17 +217,10 @@ function TrainingManagement(props) {
 			sort: true
 		},
 		{
-			id: 'cost',
+			id: 'description',
 			align: 'center',
 			disablePadding: false,
-			label: 'Cost',
-			sort: true
-		},
-		{
-			id: 'duration',
-			align: 'center',
-			disablePadding: false,
-			label: 'Duration',
+			label: 'Description',
 			sort: true
 		},
 		{
@@ -191,19 +231,47 @@ function TrainingManagement(props) {
 			sort: true
 		},
 		{
+			id: 'entity',
+			align: 'center',
+			disablePadding: false,
+			label: 'Entity',
+			sort: true
+		},
+		{
+			id: 'department',
+			align: 'center',
+			disablePadding: false,
+			label: 'Department',
+			sort: true
+		},
+		{
+			id: 'location',
+			align: 'center',
+			disablePadding: false,
+			label: 'Location',
+			sort: true
+		},
+		{
+			id: 'cost',
+			align: 'center',
+			disablePadding: false,
+			label: 'Cost',
+			sort: true
+		},
+		{
 			id: 'created',
 			align: 'center',
 			disablePadding: false,
 			label: 'Created',
 			sort: true
 		},
-		{
-			id: 'status',
-			align: 'center',
-			disablePadding: false,
-			label: 'Status',
-			sort: true
-		}
+		// {
+		// 	id: 'status',
+		// 	align: 'center',
+		// 	disablePadding: false,
+		// 	label: 'Status',
+		// 	sort: true
+		// }
 	];
 
 	return (
@@ -227,6 +295,11 @@ function TrainingManagement(props) {
 								<FuseAnimate animation="transition.slideLeftIn" delay={300}>
 									<span className="text-24 mx-16">Training Management</span>
 								</FuseAnimate>
+							</div>
+							<div className="flex justify-end items-center w-full">
+								<Button variant="contained" color="secondary" type="submit" className="m-12" onClick={() => setAddNew(true)}>
+									Add New Training
+								</Button>
 							</div>
 						</div>
 					</ThemeProvider>
@@ -291,9 +364,9 @@ function TrainingManagement(props) {
 								}}
 							>
 								<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
-									<CardWidget count={totalCourses.length} title={'Total'} color="yellow" />
+									<CardWidget count={totalCourses?.length ?? 0} title={'Total'} color="yellow" />
 								</div>
-								<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
+								{/* <div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
 									<CardWidget count={pendingCourses.length} title={'Pending'} color="blue" />
 								</div>
 								<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
@@ -301,17 +374,20 @@ function TrainingManagement(props) {
 								</div>
 								<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
 									<CardWidget count={rejectedCourses.length} title={'Rejected'} color="red" />
-								</div>
+								</div> */}
 								<div className="widget flex w-full p-12">
 									<CoursesTableWidget
 										title={'Course list'}
 										allowClick={true}
 										handleApprove={handleCourseApprove}
 										handleReject={handleCourseReject}
+										deleteCourse={handleCourseDelete}
 										allowAuth={checkRole()}
 										type="default"
 										columns={coursesColumn}
-										rows={totalCourses}
+										rows={totalCourses ? totalCourses : []}
+										changeEdit={setAddNew}
+										setData={setData}
 									/>
 								</div>
 							</FuseAnimateGroup>
@@ -320,8 +396,20 @@ function TrainingManagement(props) {
 				}
 				ref={pageLayout}
 			/>
+			<AddNewTrainingDialogue
+				open={addNew}
+				handleClose={handleCloseNew}
+				viewer={"Hr Manager"}
+				categories={categories}
+				entities={entities}
+				departments={departments}
+				roles={roles}
+				submit={submitNewTraining}
+				update={updateTraining}
+				data={data}
+				changeDepartment={changeDepartment}
+			/>
 		</ThemeProvider>
 	);
 }
-
 export default withReducer('TrainingManagement', reducer)(TrainingManagement);
