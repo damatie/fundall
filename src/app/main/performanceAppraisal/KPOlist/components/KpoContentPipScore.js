@@ -28,7 +28,7 @@ const KpoContentPipScore = () => {
         </SelectTextField>
         <Input
           name='kpoYear'
-          label='%PIP Compansation'
+          label='%PIP Awarded'
           className='my-16'
         />
         <SharedButton
