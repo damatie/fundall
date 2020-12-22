@@ -518,7 +518,7 @@ const navigationConfig = [
 			},
 			{
 				id: 'trainingList',
-				title: 'Training List',
+				title: 'Departmental Training List',
 				type: 'item',
 				url: '/training/list',
 				icon: 'book',
@@ -532,6 +532,14 @@ const navigationConfig = [
 				icon: 'category',
 				auth: authRoles.admin,
 			},
+			// {
+			// 	id: 'trainingPersonalCourses',
+			// 	title: 'Course List',
+			// 	type: 'item',
+			// 	url: '/training/personal/courses',
+			// 	icon: 'category',
+			// 	auth: authRoles.admin,
+			// },
 			{
 				id: 'checkList',
 				title: 'Check List',

@@ -37,6 +37,11 @@ function SharedTable(props) {
 		});
 	}
 
+	useEffect(() => {
+		setData(props.data);
+		// console.log(props.data)
+	}, [props.data])
+
 	function handleSelectAllClick(event) {
 		if (event.target.checked) {
 			setSelected(data.map(n => n.id));

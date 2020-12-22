@@ -25,6 +25,7 @@ import Button from '@material-ui/core/Button';
 import clsx from 'clsx';
 import Moment from 'react-moment';
 import ApproveIcon from '@material-ui/icons/Check';
+import { AppBar, Toolbar } from '@material-ui/core';
 
 const useStyles = makeStyles({
     table: {
@@ -117,7 +118,15 @@ const CoursesTableWidget = (props) => {
             <React.Fragment>
                 <div>
                     <Dialog open={open} onClose={handleClose} fullWidth={true} maxWidth={'sm'} aria-labelledby="form-dialog-title">
-                        <DialogTitle id="form-dialog-title">{selected.name}</DialogTitle>
+
+                        <AppBar position="static">
+                            <Toolbar className="flex w-full">
+                                <Typography variant="subtitle1" color="inherit">
+                                    {selected.name}
+                                </Typography>
+                            </Toolbar>
+                        </AppBar>
+
                         <DialogContent>
                             <table className={clsx(classes.table, 'w-full text-justify')}>
                                 <tbody>
@@ -180,7 +189,7 @@ const CoursesTableWidget = (props) => {
                                 //     <></>
                             }
                         </DialogContent>
-                        <DialogActions className="flex justify-between">
+                        <DialogActions className="flex justify-between m-20">
 
                             <Button onClick={handleDelete} className="bg-red text-white">
                                 DELETE

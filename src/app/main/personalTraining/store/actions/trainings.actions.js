@@ -463,7 +463,7 @@ export function getReviewedTrainingPersonal(offset = 0, limit = 20) {
 				Authorization: `JWT ${auth().getToken}`
 			}
 		}).then((res) => {
-			
+
 			let response = res.data.data;
 			response.splice(0, 1);
 
@@ -503,14 +503,17 @@ export function getReviewedTrainingHR(offset = 0, limit = 20) {
 export function getCompletedTrainingPersonal(offset = 0, limit = 20) {
 
 	return dispatch => {
-		axios.get(`${basUrl()}/training/all/employee/?offset=${offset}&limit=${limit}&status=completed`, {
+		axios.get(`${basUrl()}/training/all/employee/request?offset=${offset}&limit=${limit}&status=completed`, {
 			headers: {
 				Authorization: `JWT ${auth().getToken}`
 			}
 		}).then((res) => {
+			let response = res.data.data;
+			response.splice(0, 1);
+
 			dispatch({
 				type: COMPLETED_TRAININGS_PERSONAL,
-				payload: res.data.data
+				payload: response
 			})
 		}).catch((err) => {
 			// console.log(err.response);
@@ -586,9 +589,13 @@ export function getRejectedTrainingPersonal(offset = 0, limit = 20) {
 				Authorization: `JWT ${auth().getToken}`
 			}
 		}).then((res) => {
+
+			let response = res.data.data;
+			response.splice(0, 1);
+
 			dispatch({
 				type: REJECTED_TRAININGS_PERSONAL,
-				payload: res.data.data
+				payload: response
 			})
 		}).catch((err) => {
 			// console.log(err.response);

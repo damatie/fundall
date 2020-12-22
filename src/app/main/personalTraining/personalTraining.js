@@ -158,7 +158,7 @@ function PersonalTraining(props) {
     const [page, setPage] = useState(1);
     const [rowsPerPage, setRowsPerPage] = useState(9);
     // const userData = useAuth().getUserData;
-    
+
     // const userId = useAuth().getId;
     // const [filterEmployees, setFilterEmployees] = useState(
     //     employees.filter(f => {
@@ -199,7 +199,7 @@ function PersonalTraining(props) {
         //     return newData;
         // });
         // console.log(newData)
-        // console.log(trainings)
+        console.log(trainings)
     }, [department, trainings]);
 
     // useEffect(() => {
