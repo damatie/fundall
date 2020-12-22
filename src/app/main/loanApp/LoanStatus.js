@@ -3,6 +3,7 @@ import Typography from '@material-ui/core/Typography';
 
 const LoanStatus = (props) => {
   const { status } = props;
+  if (!status) return (<></>);
 
   switch (status.toLowerCase()) {
     case 'pending':

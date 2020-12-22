@@ -93,7 +93,7 @@ function EventDialog(props) {
 		 */
 		if (eventDialog?.props.open) {
 			initDialog();
-			dispatch(Actions.getApprovedCourses());
+			dispatch(Actions.getAllCourses());
 		}
 	}, [eventDialog?.props.open, initDialog, dispatch]);
 

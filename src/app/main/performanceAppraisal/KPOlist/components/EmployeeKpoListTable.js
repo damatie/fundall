@@ -1,20 +1,23 @@
 import EnhancedTable from 'app/shared/table/EnhancedTable';
 import React from 'react';
-import Typography from '@material-ui/core/Typography';
+import useKpoList from '../hooks/useKpoList';
 
 const EmployeeKpoListTable = () => {
 	const columns = React.useMemo(
 		() => [
 			{
 				Header: 'Job Role',
-				accessor: 'jobRole',
+				accessor: 'jobTitle',
 				// className: 'font-bold',
 				sortable: true
 			},
 			{
 				Header: 'Total Score',
-				accessor: 'totalScore',
-				sortable: true
+				accessor: 'personnelOverallRating',
+				sortable: true,
+				Cell: ({ row: { original: { personnelOverallRating }} }) => {
+					return <>{personnelOverallRating || 'On Going'}</>
+				}
 			},
 			{
 				Header: 'KPO Year',
@@ -23,8 +26,11 @@ const EmployeeKpoListTable = () => {
 			},
 			{
 				Header: 'Date Completed',
-				accessor: 'dataCompleted',
-				sortable: true
+				accessor: 'dateCompleted',
+				sortable: true,
+				Cell: ({ row: { original: { dateCompleted }} }) => {
+					return <>{dateCompleted || 'On Going'}</>
+				}
       },
       {
 				Header: 'Line Manager',
@@ -39,13 +45,18 @@ const EmployeeKpoListTable = () => {
 		],
 	);
 
+	const {
+		listOfKpo,
+		handleDeleteKpo,
+		push
+	} = useKpoList();
 	return (
 		<EnhancedTable
 			columns={columns}
-			data={[]}
+			data={listOfKpo}
 			onRowClick={(ev, row) => {
 				if (row) {
-					console.log(row)
+					push(`/performance_appraisal/kpoList/details/${row.original.id}`)
 				}
 			}}
 			checkbox={{
@@ -54,6 +65,7 @@ const EmployeeKpoListTable = () => {
 				accessor: 'id',
 			}}
 			selectAll={(value) => console.log(value)}
+			handleDelete={handleDeleteKpo}
 		/>
 	);
 };

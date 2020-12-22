@@ -7,7 +7,7 @@ import { darken } from '@material-ui/core/styles/colorManipulator';
 import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
 import React from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { useAuthentication } from 'app/hooks/useAuthentication';
 import swal from 'sweetalert2';
@@ -19,19 +19,20 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-function MailConfirmPage({match}) {
+function MailConfirmPage({ match }) {
 	const classes = useStyles();
 	const [redirect, setRedirect] = React.useState(false);
+
 	React.useEffect(() => {
 		confirmMail();
-	}, [])
+	})
 
 	const auth = useAuthentication;
 
 	const confirmMail = () => {
-		auth('hr_confirmation', {token: match.params.id}).then(data => {
-			console.log(data);
-			if(data.success && data.message !== "Email Already Verified") {
+		auth('hr_confirmation', { token: match.params.id }).then(data => {
+			// console.log(data);
+			if (data.success && data.message !== "Email Already Verified") {
 				swal.fire({
 					title: 'Email confirmation',
 					text: data.message,
@@ -49,7 +50,7 @@ function MailConfirmPage({match}) {
 				setRedirect(true);
 			}
 		}).catch(e => {
-			console.lerror(e);
+			// console.lerror(e);
 			swal.fire({
 				title: 'Email confirmation',
 				text: 'Service unavvailable',
@@ -60,7 +61,7 @@ function MailConfirmPage({match}) {
 		})
 	};
 
-	if(redirect) {
+	if (redirect) {
 		return <Redirect to='/hr/login' />
 	}
 	return (

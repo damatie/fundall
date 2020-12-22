@@ -89,6 +89,22 @@ const navigationConfig = [
 				icon: 'account_box',
 				auth: authRoles.admin,
 			},
+			{
+				id: 'job_title',
+				title: 'Job Title',
+				type: 'item',
+				url: '/jobTitle/all',
+				icon: 'account_box',
+				auth: authRoles.admin,
+			},
+			{
+				id: 'employee_grade',
+				title: 'Employee Grade',
+				type: 'item',
+				url: '/employeeGrade/all',
+				icon: 'account_box',
+				auth: authRoles.admin,
+			},
 		]
 	},
 	// Blog navigations
@@ -444,11 +460,12 @@ const navigationConfig = [
 		type: 'group',
 		children: [
 			// {
-			// id: 'training_Dashboard',
-			// title: 'Training Dashboard',
-			// type: 'collapse',
-			// // url: '/hr/training/management',
-			// icon: 'dashboard',
+			// 	id: 'training_Dashboard',
+			// 	title: 'Training Dashboard',
+			// 	type: 'collapse',
+			// 	url: '/hr/training/management',
+			// 	icon: 'dashboard'
+			// },
 			// children: [
 			{
 				id: 'staff_dashboard',
@@ -483,14 +500,14 @@ const navigationConfig = [
 				icon: 'school',
 				auth: authRoles.admin,
 			},
-			{
-				id: 'deptTraining',
-				title: 'Department Training',
-				type: 'item',
-				url: '/training/dept',
-				icon: 'group',
-				auth: authRoles.hrManager,
-			},
+			// {
+			// 	id: 'deptTraining',
+			// 	title: 'Department Training',
+			// 	type: 'item',
+			// 	url: '/training/dept',
+			// 	icon: 'group',
+			// 	auth: authRoles.lineManager,
+			// },
 			{
 				id: 'personalTraining',
 				title: 'Personal Training',
@@ -501,11 +518,11 @@ const navigationConfig = [
 			},
 			{
 				id: 'trainingList',
-				title: 'Training List',
+				title: 'Departmental Training List',
 				type: 'item',
 				url: '/training/list',
 				icon: 'book',
-				auth: authRoles.hrManager,
+				auth: authRoles.lineManager,
 			},
 			{
 				id: 'courseCategory',
@@ -513,15 +530,23 @@ const navigationConfig = [
 				type: 'item',
 				url: '/hr/training/category',
 				icon: 'category',
-				auth: authRoles.hrManager,
+				auth: authRoles.admin,
 			},
+			// {
+			// 	id: 'trainingPersonalCourses',
+			// 	title: 'Course List',
+			// 	type: 'item',
+			// 	url: '/training/personal/courses',
+			// 	icon: 'category',
+			// 	auth: authRoles.admin,
+			// },
 			{
 				id: 'checkList',
 				title: 'Check List',
 				type: 'item',
 				url: '/training/checklist',
 				icon: 'category',
-				auth: authRoles.hrManager,
+				auth: authRoles.staff,
 			}
 		]
 	},
@@ -628,13 +653,29 @@ const navigationConfig = [
 				type: 'item',
 				url: '/hr/performance_appraisal/kpoCategory',
 				icon: 'assignment',
-				auth: authRoles.admin,
+				// auth: authRoles.admin,
+			},
+			{
+				id: 'kpoReview',
+				title: 'KPO Review',
+				type: 'item',
+				url: '/performance_appraisal/kpoList/review',
+				icon: 'assignment',
+				// auth: authRoles.admin,
 			},
 			{
 				id: 'kpoList',
-				title: 'KPO List',
+				title: 'KPO',
 				type: 'item',
 				url: '/performance_appraisal/kpoList',
+				icon: 'assignment',
+				auth: authRoles.admin,
+			},
+			{
+				id: 'behaviouralAttribute',
+				title: 'Behavioural Attribute',
+				type: 'item',
+				url: '/behaviouralAttribute/all',
 				icon: 'assignment',
 				auth: authRoles.admin,
 			},

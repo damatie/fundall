@@ -15,7 +15,7 @@ import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import Input from '@material-ui/core/Input';
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -29,116 +29,116 @@ import ApproveIcon from '@material-ui/icons/Check';
 import Grid from '@material-ui/core/Grid';
 import WidgetModal from './WidgetModal';
 const useStyles = makeStyles({
-	table: {
-		'& th': {
-			padding: '16px 0'
-		}
-	}
+    table: {
+        '& th': {
+            padding: '16px 0'
+        }
+    }
 });
-const TableWidget = (props) =>{
+const TableWidget = (props) => {
     const [data, setData] = useState(props.rows);
     const [open, setOpen] = useState(false);
     const [filter, setFilter] = useState('');
     const classes = useStyles();
     const [page, setPage] = useState(0);
     const [search, setSearch] = useState('');
-	const [rowsPerPage, setRowsPerPage] = useState(10);
-	const [order, setOrder] = useState({
-		direction: 'asc',
-		id: null
+    const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [order, setOrder] = useState({
+        direction: 'asc',
+        id: null
     });
     const [selected, setSelected] = useState({});
 
-	const createSortHandler = property => event =>  {
-		const id = property;
-		let direction = 'desc';
+    const createSortHandler = property => event => {
+        const id = property;
+        let direction = 'desc';
 
-		if (order.id === property && order.direction === 'desc') {
-			direction = 'asc';
-		}
+        if (order.id === property && order.direction === 'desc') {
+            direction = 'asc';
+        }
 
-		setOrder({
-			direction,
-			id
-		});
-	}
-
-    function handleChangePage(event, value) {
-		setPage(value);
-	}
-
-	function handleChangeRowsPerPage(event) {
-		setRowsPerPage(event.target.value);
+        setOrder({
+            direction,
+            id
+        });
     }
 
-    function handleSearch(event){
+    function handleChangePage(event, value) {
+        setPage(value);
+    }
+
+    function handleChangeRowsPerPage(event) {
+        setRowsPerPage(event.target.value);
+    }
+
+    function handleSearch(event) {
         setSearch(event.target.value);
     }
 
-    function handleFilter(event){
+    function handleFilter(event) {
         console.log(event.target.value);
         setFilter(event.target.value);
     }
 
-    function handleItemClick(event, item){
+    function handleItemClick(event, item) {
         console.log(item);
         setSelected(item);
         setOpen(true);
     }
-    
-    function CheckStatus(status){
+
+    function CheckStatus(status) {
         switch (status) {
             case "pending":
                 return (
                     <Typography
-                            className={'bg-blue text-white inline text-11 font-500 px-8 py-4 rounded-4'}
-                        >
-                            {status}
+                        className={'bg-blue text-white inline text-11 font-500 px-8 py-4 rounded-4'}
+                    >
+                        {status}
                     </Typography>
                 )
                 break;
-            
+
             case "approved":
                 return (
                     <Typography
-                            className={'bg-green text-white inline text-11 font-500 px-8 py-4 rounded-4'}
-                        >
-                            {status}
+                        className={'bg-green text-white inline text-11 font-500 px-8 py-4 rounded-4'}
+                    >
+                        {status}
                     </Typography>
                 )
                 break;
-            
+
             case "rejected":
                 return (
                     <Typography
-                            className={'bg-red text-white inline text-11 font-500 px-8 py-4 rounded-4'}
-                        >
-                            {status}
+                        className={'bg-red text-white inline text-11 font-500 px-8 py-4 rounded-4'}
+                    >
+                        {status}
                     </Typography>
                 )
                 break;
             case "reviewed":
                 return (
                     <Typography
-                            className={'bg-black text-white inline text-11 font-500 px-8 py-4 rounded-4'}
-                        >
-                            {status}
+                        className={'bg-black text-white inline text-11 font-500 px-8 py-4 rounded-4'}
+                    >
+                        {status}
                     </Typography>
                 )
                 break;
             case "completed":
                 return (
                     <Typography
-                            className={'bg-black text-white inline text-11 font-500 px-8 py-4 rounded-4'}
-                        >
-                            {status}
+                        className={'bg-black text-white inline text-11 font-500 px-8 py-4 rounded-4'}
+                    >
+                        {status}
                     </Typography>
                 )
                 break;
 
             default:
                 return (
-                    {status}
+                    { status }
                 )
                 break;
         }
@@ -146,137 +146,137 @@ const TableWidget = (props) =>{
 
     const handleClose = () => {
         setOpen(false);
-      };
+    };
     useEffect(() => {
-		if (search.length >= 2) {
-            setData(_.filter(props.rows, row => row.training.employee.firstName.toLowerCase().includes(search.toLowerCase()) 
-            || row.training.employee.lastName.toLowerCase().includes(search.toLowerCase()) || row.training.employee.firstName.toLowerCase().includes(search.toLowerCase())));
-			setPage(0);
-		} else {
-			setData(props.rows);
-		}
+        if (search.length >= 2) {
+            setData(_.filter(props.rows, row => row.training.employee.firstName.toLowerCase().includes(search.toLowerCase())
+                || row.training.employee.lastName.toLowerCase().includes(search.toLowerCase()) || row.training.employee.firstName.toLowerCase().includes(search.toLowerCase())));
+            setPage(0);
+        } else {
+            setData(props.rows);
+        }
     }, [props.rows, search]);
-    
+
     useEffect(() => {
-		if (filter !== '') {
+        if (filter !== '') {
             setData(_.filter(props.rows, row => row.training.status.toLowerCase() === filter.toLowerCase()));
-			setPage(0);
-		} else {
-			setData(props.rows);
-		}
-	}, [props.rows, filter]);
-    
-	return (
-		<Paper className="w-full rounded-8 shadow-none border-1">
+            setPage(0);
+        } else {
+            setData(props.rows);
+        }
+    }, [props.rows, filter]);
+
+    return (
+        <Paper className="w-full rounded-8 shadow-none border-1">
             <React.Fragment>
                 <div>
-                <Dialog open={open} onClose={handleClose} fullWidth={true} maxWidth={'sm'} aria-labelledby="form-dialog-title">
-                    <DialogTitle id="form-dialog-title">Training Request Details</DialogTitle>
-                    <DialogContent>
-                    <table className={clsx(classes.table, 'w-full text-justify')}>
-                        <tbody>
-                            
-                            <tr className="employee">
-                                <th>Employee Name</th>
-                                <td>{(selected.training) ? selected.training.employee.firstName+ ' '+selected.training.employee.lastName : ''}</td>
-                            </tr>
+                    <Dialog open={open} onClose={handleClose} fullWidth={true} maxWidth={'sm'} aria-labelledby="form-dialog-title">
+                        <DialogTitle id="form-dialog-title">Training Request Details</DialogTitle>
+                        <DialogContent>
+                            <table className={clsx(classes.table, 'w-full text-justify')}>
+                                <tbody>
 
-                            <tr className="cost">
-                                <th>Cost</th>
-                                <td>{(selected.training) ? selected.training.trainingCourse.cost : ''}</td>
-                            </tr>
+                                    <tr className="employee">
+                                        <th>Employee Name</th>
+                                        <td>{(selected.training) ? selected.training.employee.firstName + ' ' + selected.training.employee.lastName : ''}</td>
+                                    </tr>
 
-                            <tr className="location">
-                                <th>Location</th>
-                                <td>{(selected.training) ? selected.training.trainingCourse.location : ''}</td>
-                            </tr>
+                                    <tr className="cost">
+                                        <th>Cost</th>
+                                        <td>{(selected.training) ? selected.training.trainingCourse.cost : ''}</td>
+                                    </tr>
 
-                            <tr className="cert">
-                                <th>Certification</th>
-                                <td>{((selected.training) ? selected.training.trainingCourse.certification : '') ? "Yes" : "No"}</td>
-                            </tr>
-                            
-                            <tr className="duration">
-                                <th>Duration</th>
-                                <td>{(selected.training) ? selected.training.trainingCourse.duration : ''}</td>
-                            </tr>
+                                    <tr className="location">
+                                        <th>Location</th>
+                                        <td>{(selected.training) ? selected.training.trainingCourse.location : ''}</td>
+                                    </tr>
 
-                            <tr className="catergory">
-                                <th>Category</th>
-                                <td>{(selected.training) ? selected.training.trainingCourse.category : ''}</td>
-                            </tr>
+                                    <tr className="cert">
+                                        <th>Certification</th>
+                                        <td>{((selected.training) ? selected.training.trainingCourse.certification : '') ? "Yes" : "No"}</td>
+                                    </tr>
 
-                            <tr className="dept">
-                                <th>Department</th>
-                                <td>{(selected.training) ? selected.training.trainingCourse.department : ''}</td>
-                            </tr>
+                                    <tr className="duration">
+                                        <th>Duration</th>
+                                        <td>{(selected.training) ? selected.training.trainingCourse.duration : ''}</td>
+                                    </tr>
+
+                                    <tr className="catergory">
+                                        <th>Category</th>
+                                        <td>{(selected.training) ? selected.training.trainingCourse.category : ''}</td>
+                                    </tr>
+
+                                    <tr className="dept">
+                                        <th>Department</th>
+                                        <td>{(selected.training) ? selected.training.trainingCourse.department : ''}</td>
+                                    </tr>
 
 
-                            <tr className="startDate">
-                                <th>Training Starts</th>
-                                <td>{ (selected.training) ? selected.training.startDate : '' } </td>
-                            </tr>
-                            <tr className="endDate">
-                                <th>Training Ends</th>
-                                <td>{(selected.training) ? selected.training.endDate : '' }</td>
-                            </tr>
+                                    <tr className="startDate">
+                                        <th>Training Starts</th>
+                                        <td>{(selected.training) ? selected.training.startDate : ''} </td>
+                                    </tr>
+                                    <tr className="endDate">
+                                        <th>Training Ends</th>
+                                        <td>{(selected.training) ? selected.training.endDate : ''}</td>
+                                    </tr>
 
-                            <tr className="created">
-                                <th>Created</th>
-                                <td>{ (selected.training) ? <Moment format="ddd Do MMM, YYYY | hh:mm:ss a">{selected.training.createdAt}</Moment> : '' } </td>
-                            </tr>
-                            <tr className="updated">
-                                <th>Updated</th>
-                                <td>{(selected.training) ? <Moment format="ddd Do MMM, YYYY | hh:mm:ss a">{selected.training.updatedAt}</Moment> : '' }</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                        {((selected.training) ? (selected.training.status === 'pending' || selected.training.status === 'reviewed') : false && props.allowAuth) ? 
-                            <Grid container className="items-center w-full pt-20" justify="center" alignItems="center">
-                                <Button className="bg-red text-white" 
-                                startIcon={<RejectIcon />} onClick={ev => {props.handleReject(ev, selected.training.id); handleClose(); }} 
-                                >
-                                    Reject
+                                    <tr className="created">
+                                        <th>Created</th>
+                                        <td>{(selected.training) ? <Moment format="ddd Do MMM, YYYY | hh:mm:ss a">{selected.training.createdAt}</Moment> : ''} </td>
+                                    </tr>
+                                    <tr className="updated">
+                                        <th>Updated</th>
+                                        <td>{(selected.training) ? <Moment format="ddd Do MMM, YYYY | hh:mm:ss a">{selected.training.updatedAt}</Moment> : ''}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            {((selected.training) ? (selected.training.status === 'pending' || selected.training.status === 'reviewed') : false && props.allowAuth) ?
+                                <Grid container className="items-center w-full pt-20" justify="center" alignItems="center">
+                                    <Button className="bg-red text-white"
+                                        startIcon={<RejectIcon />} onClick={ev => { props.handleReject(ev, selected.training.id); handleClose(); }}
+                                    >
+                                        Reject
                                 </Button>
                                 &nbsp;
-                                <Button className="bg-green text-white" 
-                                startIcon={<ApproveIcon />} onClick={ev => {props.handleApprove(ev, selected.training.id); handleClose(); }} 
-                                >
-                                    Approve
+                                <Button className="bg-green text-white"
+                                        startIcon={<ApproveIcon />} onClick={ev => { props.handleApprove(ev, selected.training.id); handleClose(); }}
+                                    >
+                                        Approve
                                 </Button>
-                            </Grid>
-                        : 
-                            <Grid container className="items-center w-full pt-20" justify="center" alignItems="center">
-                                {(selected.training) ? CheckStatus(selected.training.status) : ''}
-                            </Grid>
-                    }
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleClose} color="primary">
-                            Close
+                                </Grid>
+                                :
+                                <Grid container className="items-center w-full pt-20" justify="center" alignItems="center">
+                                    {(selected.training) ? CheckStatus(selected.training.status) : ''}
+                                </Grid>
+                            }
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={handleClose} color="primary">
+                                Close
                         </Button>
-                    </DialogActions>
-                </Dialog>
+                        </DialogActions>
+                    </Dialog>
                 </div>
             </React.Fragment>
-			<div className="flex items-center justify-between px-16 h-64 border-b-1">
-				<Typography className="text-16">{props.title}</Typography>
-                    <div className="flex items-center">
-                        <Paper className="flex items-center w-full px-8 py-4 rounded-8">
-                            <Icon color="action">search</Icon>
-                            <Input
-                                placeholder="Search"
-                                className="flex flex-1 mx-8"
-                                disableUnderline
-                                fullWidth
-                                value={search}
-                                inputProps={{
-                                    'aria-label': 'Search'
-                                }}
-                                onChange={ev => handleSearch(ev)}
-                            />
-                        </Paper>
-                    </div>
+            <div className="flex items-center justify-between px-16 h-64 border-b-1">
+                <Typography className="text-16">{props.title}</Typography>
+                <div className="flex items-center">
+                    <Paper className="flex items-center w-full px-8 py-4 rounded-8">
+                        <Icon color="action">search</Icon>
+                        <Input
+                            placeholder="Search"
+                            className="flex flex-1 mx-8"
+                            disableUnderline
+                            fullWidth
+                            value={search}
+                            inputProps={{
+                                'aria-label': 'Search'
+                            }}
+                            onChange={ev => handleSearch(ev)}
+                        />
+                    </Paper>
+                </div>
                 <div className="flex">
                     <div className="flex flex-2 items-center">
                         <FormControl className="">
@@ -291,10 +291,10 @@ const TableWidget = (props) =>{
                         </FormControl>
                     </div>
                 </div>
-			</div>
-			<div className="table-responsive">
-				<Table className="w-full min-w-full">
-					<TableHead>
+            </div>
+            <div className="table-responsive">
+                <Table className="w-full min-w-full">
+                    <TableHead>
                         <TableRow className="h-64">
                             {props.columns.map(column => {
                                 return (
@@ -323,51 +323,51 @@ const TableWidget = (props) =>{
                                 );
                             }, this)}
                         </TableRow>
-					</TableHead>
-					<TableBody>
-						{_.orderBy(
-								data,
-								[
-									o => {
-										switch (order.id) {
-											case 'categories': {
-												return o.categories[0];
-											}
-											default: {
-												return o[order.id];
-											}
-										}
-									}
-								],
-								[order.direction]
-							)
-								.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-								.map(n => {
-								return (
-									<TableRow
-										key={n.training.id}
-										hover
-										onClick={event => {handleItemClick(event, n); setOpen(true) }}
-										// selected={n.id === selectedItemId}
-										className="cursor-pointer"
-									>
-										<TableCell className="text-center">
-											{n.training.employee.firstName} {n.training.employee.lastName}
-										</TableCell>
-										<TableCell>{n.training.trainingCourse.name}</TableCell>
-										<TableCell className="text-center">{n.training.trainingCourse.cost}</TableCell>
-										<TableCell className="text-center">
-											{n.training.startDate}
-										</TableCell>
-										<TableCell className="text-center">{n.training.startDate}</TableCell>
+                    </TableHead>
+                    <TableBody>
+                        {_.orderBy(
+                            data,
+                            [
+                                o => {
+                                    switch (order.id) {
+                                        case 'categories': {
+                                            return o.categories[0];
+                                        }
+                                        default: {
+                                            return o[order.id];
+                                        }
+                                    }
+                                }
+                            ],
+                            [order.direction]
+                        )
+                            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                            .map(n => {
+                                return (
+                                    <TableRow
+                                        key={n.training.id}
+                                        hover
+                                        onClick={event => { handleItemClick(event, n); setOpen(true) }}
+                                        // selected={n.id === selectedItemId}
+                                        className="cursor-pointer"
+                                    >
                                         <TableCell className="text-center">
-                                            {CheckStatus(n.training.status)}           
+                                            {n.training.employee.firstName} {n.training.employee.lastName}
                                         </TableCell>
-									</TableRow>
-								);
-							})}
-						</TableBody>
-				    <TableFooter>
+                                        <TableCell>{n.training.trainingCourse.name}</TableCell>
+                                        <TableCell className="text-center">{n.training.trainingCourse.cost}</TableCell>
+                                        <TableCell className="text-center">
+                                            {n.training.startDate}
+                                        </TableCell>
+                                        <TableCell className="text-center">{n.training.startDate}</TableCell>
+                                        <TableCell className="text-center">
+                                            {CheckStatus(n.training.status)}
+                                        </TableCell>
+                                    </TableRow>
+                                );
+                            })}
+                    </TableBody>
+                    <TableFooter>
                         <TableRow>
                             <TablePagination
                                 className="overflow-hidden"
@@ -387,10 +387,10 @@ const TableWidget = (props) =>{
                             />
                         </TableRow>
                     </TableFooter>
-				</Table>
-			</div>
-		</Paper>
-	);
+                </Table>
+            </div>
+        </Paper>
+    );
 }
 
 export default React.memo(TableWidget);

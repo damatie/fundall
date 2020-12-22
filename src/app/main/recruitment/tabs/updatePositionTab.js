@@ -8,19 +8,19 @@ import reducer from '../store/reducers';
 import Formsy from 'formsy-react';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Redirect } from 'react-router';
+// import { Redirect } from 'react-router';
 import ProgressBtn from 'app/shared/progressBtn';
 import GridSystem from 'app/shared/gridSystem';
 
 function NewOpening(props) {
 	const dispatch = useDispatch();
 	const entity = useSelector(({ Recruitment }) => Recruitment.entity.data);
-	const loading = useSelector(({ Recruitment }) => Recruitment.recruitment.loading);
+	// const loading = useSelector(({ Recruitment }) => Recruitment.recruitment.loading);
 
 	const [department, setDepartment] = useState([]);
 	const [country, setCountry] = React.useState([]);
 	const [isFormValid, setIsFormValid] = useState(true);
-  const formRef = useRef(null);
+	const formRef = useRef(null);
 
 	useEffect(() => {
 		if (country.length > 0) return;
@@ -30,15 +30,15 @@ function NewOpening(props) {
 				setCountry(res.map(country => country.name));
 			})
 			.catch(err => console.log(err))
-	}, [])
-	
+	}, [country])
+
 	useEffect(() => {
 		getDepartment();
-	}, []);
+	});
 
 	const getDepartment = (entityId = props.selectedPosition.entity.id) => {
-		entity.map(entity => {
-			if(entity.id === entityId) {
+		return entity.map(entity => {
+			if (entity.id === entityId) {
 				setDepartment(entity.department);
 			}
 		})
@@ -75,7 +75,7 @@ function NewOpening(props) {
 	}
 
 	const checkValue = (item) => {
-		if (item.entityName) return item.id;	
+		if (item.entityName) return item.id;
 		if (item.departmentName) return item.id;
 		return item;
 	}
@@ -83,15 +83,15 @@ function NewOpening(props) {
 	let state = ['Abia', 'Akwa ibom', 'Adamawa', 'Bauchi', 'Bayelsa', 'Lagos', 'Ogun', 'Rivers'];
 
 	const formInputs = [
-		{name: 'entityId', label: 'Entity name *', data: entity, value: props.selectedPosition.entity.id },
-		{name: 'departmentId', label: 'Department *', data: department, value: props.selectedPosition.department.id},
-		{name: 'jobTitle', label: 'Job title', validations: '', icon: 'account-hard-hat', type: 'text', value: props.selectedPosition.jobTitle},
-		{name: 'requiredSkills', label: 'Required skills', validations: '', type: 'text', value: props.selectedPosition.requiredSkills},
-		{name: 'employeeStatus', label: 'Employee status *', data: ['Full time', 'Contract'], value: props.selectedPosition.employeeStatus},
-		{name: 'urgency', label: 'Urgency *', data: ['Immediately', 'Urgent', 'Not urgent'], value: props.selectedPosition.urgency},
-		{name: 'dueDate', label: 'Due date', validations: '', type: 'date', value: props.selectedPosition.dueDate},
-		{name: 'country', label: 'Country', validations: '', icon: 'email', data: country, value: props.selectedPosition.country},
-		{name: 'state', label: 'State', validations: '', icon: 'email', data: state, value: props.selectedPosition.state},
+		{ name: 'entityId', label: 'Entity name *', data: entity, value: props.selectedPosition.entity.id },
+		{ name: 'departmentId', label: 'Department *', data: department, value: props.selectedPosition.department.id },
+		{ name: 'jobTitle', label: 'Job title', validations: '', icon: 'account-hard-hat', type: 'text', value: props.selectedPosition.jobTitle },
+		{ name: 'requiredSkills', label: 'Required skills', validations: '', type: 'text', value: props.selectedPosition.requiredSkills },
+		{ name: 'employeeStatus', label: 'Employee status *', data: ['Full time', 'Contract'], value: props.selectedPosition.employeeStatus },
+		{ name: 'urgency', label: 'Urgency *', data: ['Immediately', 'Urgent', 'Not urgent'], value: props.selectedPosition.urgency },
+		{ name: 'dueDate', label: 'Due date', validations: '', type: 'date', value: props.selectedPosition.dueDate },
+		{ name: 'country', label: 'Country', validations: '', icon: 'email', data: country, value: props.selectedPosition.country },
+		{ name: 'state', label: 'State', validations: '', icon: 'email', data: state, value: props.selectedPosition.state },
 	];
 
 	const recruitmentForm = formInputs.map((input, i) => {
@@ -101,8 +101,8 @@ function NewOpening(props) {
 					className="mb-8"
 					type={input.type}
 					name={input.name}
-          label={input.label}
-          value={input.value}
+					label={input.label}
+					value={input.value}
 					// validations="isEmail"
 					// validationErrors={{
 					// 	isEmail: 'Please enter a valid email'
@@ -149,10 +149,10 @@ function NewOpening(props) {
 				onValid={enableButton}
 				onInvalid={disableButton}
 				ref={formRef}
-        className="flex flex-col justify-center w-full"
+				className="flex flex-col justify-center w-full"
 			>
 				<GridSystem>
-					{ recruitmentForm }
+					{recruitmentForm}
 				</GridSystem>
 				<ProgressBtn success={false} content='Update Opening' disable={!isFormValid} />
 			</Formsy>

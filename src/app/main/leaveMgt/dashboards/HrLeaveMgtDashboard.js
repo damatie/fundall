@@ -7,8 +7,8 @@ import TableComponent from './components/TableComponent';
 import SelectTextField from 'app/shared/TextInput/SelectTextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
-import FusePageCarded from '@fuse/core/FusePageCarded';
+// import Grid from '@material-ui/core/Grid';
+// import FusePageCarded from '@fuse/core/FusePageCarded';
 import useHrLeaveDashboard from '../hooks/useHrLeaveDashboard';
 import SimplePage from 'app/shared/SimplePage';
 

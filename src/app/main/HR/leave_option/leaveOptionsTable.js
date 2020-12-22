@@ -29,7 +29,7 @@ function LeaveOptionsTable(props) {
 	});
 
 	useEffect(() => {
-    dispatch(Actions.getLeaveOptions());
+		dispatch(Actions.getLeaveOptions());
 	}, [dispatch]);
 
 	useEffect(() => {
@@ -96,7 +96,7 @@ function LeaveOptionsTable(props) {
 		<div className="w-full flex flex-col">
 			<FuseScrollbars className="flex-grow overflow-x-auto">
 				<Table className="min-w-xl" aria-labelledby="tableTitle">
-				  <LeaveOptionsTableHead
+					<LeaveOptionsTableHead
 						numSelected={selected.length}
 						order={order}
 						onSelectAllClick={handleSelectAllClick}
@@ -143,7 +143,7 @@ function LeaveOptionsTable(props) {
 										</TableCell>
 
 										<TableCell component="th" scope="row">
-                      {n.businessUnit}
+											{n.businessUnit}
 										</TableCell>
 
 										<TableCell component="th" scope="row">
@@ -162,19 +162,19 @@ function LeaveOptionsTable(props) {
 											{n.workingHours}
 										</TableCell>
 
-                    <TableCell component="th" scope="row" align="right">
+										<TableCell component="th" scope="row" align="right">
 											{n.allowLeaveTransfer}
 										</TableCell>
 
-                    <TableCell component="th" scope="row" align="right">
+										<TableCell component="th" scope="row" align="right">
 											{n.calendarStartMonth}
 										</TableCell>
 
-                    <TableCell component="th" scope="row" align="right">
+										<TableCell component="th" scope="row" align="right">
 											{n.selectWeekendStartDay}
 										</TableCell>
 
-                    <TableCell component="th" scope="row" align="right">
+										<TableCell component="th" scope="row" align="right">
 											{n.selectWeekendEndDay}
 										</TableCell>
 									</TableRow>

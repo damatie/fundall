@@ -6,6 +6,7 @@ import withReducer from 'app/store/withReducer';
 import EditEmployeeKpoContent from './components/EditEmployeeKpoContent';
 import KpoContentTarget from './components/KpoContentTarget';
 import KpoContentPipScore from './components/KpoContentPipScore';
+import reducer from './store/reducers';
 
 const EmployeeKpoContentDetails = () => {
 
@@ -54,4 +55,4 @@ const EmployeeKpoContentDetails = () => {
   );
 };
 
-export default withReducer('kpo', null)(EmployeeKpoContentDetails);
+export default withReducer('kpo', reducer)(EmployeeKpoContentDetails);

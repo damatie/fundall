@@ -130,15 +130,10 @@ function LineManagerDashboard(props) {
 								<CardWidget count={86} title={"Employees in Trainings"} color="black" />
 							</div>
 						</div>
-						{/* <div className="widget flex w-full p-12 m-10 justify-between"> */}
-						{/* <Paper className="flex my-20 justify-center align-center flex-col p-24">
-								<h2 className="text-center mb-24">No of Employees Currently Undergoing Training</h2>
-								<BarChart data={data} height='100%'/>
-							</Paper> */}
-							<div className='my-20'>
-								<PersonalTrainingCalendar title='Trainings Calendar'/>
-							</div>
-							
+						<div className='my-20'>
+							<PersonalTrainingCalendar title='Trainings Calendar' />
+						</div>
+
 						{/* </div> */}
 					</FuseAnimateGroup>
 				</div>

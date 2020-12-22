@@ -47,6 +47,9 @@ import PerformanceAppraisalConfig from 'app/main/performanceAppraisal/Performanc
 import FinanceManagerDashboardConfig from 'app/main/file-manager/TrainingDashboard/FinanceManagerDashboardConfig';
 import HRRecruitmentDashboardConfig from 'app/main/recruitment/recruitmentDashboard/DashboardConfig';
 import LoanDashboardConfig from "app/main/loanApp/dashboard/loanDashboardConfig";
+import JobTitleConfig from 'app/main/jobTitle/JobTitleConfig';
+import EmployeeGradeConfig from 'app/main/employeeGrade/EmployeeGradeConfig';
+import BehaviouralAttributeConfig from 'app/main/behaviouralAttribute/BehaviouralAttributeConfig';
 
 const routeConfigs = [
 	// ExampleConfig,
@@ -94,7 +97,10 @@ const routeConfigs = [
 	LineManagerDashboardConfig,
 	FinanceManagerDashboardConfig,
 	HRRecruitmentDashboardConfig,
-	LoanDashboardConfig
+	LoanDashboardConfig,
+	JobTitleConfig,
+	EmployeeGradeConfig,
+	BehaviouralAttributeConfig
 ];
 
 const checkIfLoggedIn = () => {

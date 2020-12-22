@@ -14,14 +14,14 @@ const projectsReducer = (state = initialState, action) => {
 	switch (action.type) {
 		case Actions.LOADING_COURSES: {
 			return {
-			  ...state,
-			  loading: true,
+				...state,
+				loading: true,
 			}
-		  }
+		}
 		case Actions.LOADING_COURSE_CATEGORIES: {
 			return {
-			...state,
-			loading: true,
+				...state,
+				loading: true,
 			}
 		}
 		case Actions.GET_APPROVED_COURSES:
@@ -29,6 +29,12 @@ const projectsReducer = (state = initialState, action) => {
 				...state,
 				loading: false,
 				approvedCourses: action.payload
+			};
+		case Actions.GET_ALL_COURSES:
+			return {
+				...state,
+				loading: false,
+				totalCourses: action.payload
 			};
 		case Actions.GET_REJECTED_COURSES:
 			return {

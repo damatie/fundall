@@ -5,10 +5,11 @@ import Tabs from '@material-ui/core/Tabs';
 import EditEmployeeKpo from './components/EditEmployeeKpo';
 import KpoContentList from './components/KpoContentList';
 import CreateKpoContent from './components/CreateKpoContent';
-import reducer from './store/reducers/index';
+import reducer from './store/reducers';
 import withReducer from 'app/store/withReducer';
 import useKpoContentList from './hooks/useKpoContent';
 import KpoComments from './components/KpoComments';
+import kpoCategoryReducer from '../KPOcategoryList/store/reducers/categoryList.reducer';
 
 const EmployeeKpoDetails = () => {
 
@@ -64,4 +65,5 @@ const EmployeeKpoDetails = () => {
   );
 };
 
+withReducer('kpoCategory', kpoCategoryReducer)(EmployeeKpoDetails);
 export default withReducer('kpo', reducer )(EmployeeKpoDetails);

@@ -23,33 +23,33 @@ export function getAllCheckLists() {
 		dispatch({
 			type: LOADING_CHECK_LIST
 		});
-		fetch(`${basUrl()}/checklist/`, {...headers.getRegHeader()})
-		.then(res => res.json()).then(async data => {
-			console.log(data);
-			data.success ? 
-				(data.checkLists || data.data) ?
-					dispatch({
-						type: GET_CHECK_LIST,
-						payload: (data.data) ? data.data : data.checkLists 
-					})
-				:
+		fetch(`${basUrl()}/checklist/`, { ...headers.getRegHeader() })
+			.then(res => res.json()).then(async data => {
+				// console.log(data);
+				data.success ?
+					(data.checkLists || data.data) ?
+						dispatch({
+							type: GET_CHECK_LIST,
+							payload: (data.data) ? data.data : data.checkLists
+						})
+						:
+						dispatch({
+							type: GET_CHECK_LIST,
+							payload: []
+						})
+					:
 					dispatch({
 						type: GET_CHECK_LIST,
 						payload: []
 					})
-			:
+			}).catch(err => {
+				console.log(err);
 				dispatch({
 					type: GET_CHECK_LIST,
 					payload: []
 				})
-		}).catch(err => {
-			console.log(err);
-			dispatch({
-				type: GET_CHECK_LIST,
-				payload: []
 			})
-		})
-    }
+	}
 }
 
 export function createCheckList(model) {
@@ -77,9 +77,9 @@ export function createCheckList(model) {
 					timer: 3000,
 					icon: 'success'
 				}).then(
-				function(){
-				//   window.location.href = "/training/personal";
-				});
+					function () {
+						//   window.location.href = "/training/personal";
+					});
 			} else {
 				swal.fire({
 					title: 'Create Check List',
@@ -109,66 +109,66 @@ export function createCheckList(model) {
 export function updateCheckList(model, id) {
 	return dispatch => {
 		dispatch({
-		  type: LOADING_CHECK_LIST
+			type: LOADING_CHECK_LIST
 		})
-		
+
 		swal.fire({
-		  title: 'Update Check List',
-		  input: 'text',
-		  inputValue: model.type,
-		  inputAttributes: {
-			autocapitalize: 'off'
-		  },
-		  showCancelButton: true,
-		  confirmButtonText: 'Edit',
-		  showLoaderOnConfirm: true,
-		  preConfirm: (name) => {
-		  model.type = name;
-		  return fetch(`${basUrl()}/checklist/${id}`, {...headers.reqHeader('PATCH', model)}
-			  ).then(res => res.json()).then(async data => {
-				// let data = response.data;
-			    console.log(data);
-				if(data.success) {
-				  swal.fire({
-					title: 'Update Check List',
-					text: data.message,
-					timer: 3000,
-					icon: 'success'
-				  })
-				  Promise.all([
-					dispatch({
-						type: UPDATE_CHECK_LIST_SUCCESS
+			title: 'Update Check List',
+			input: 'text',
+			inputValue: model.type,
+			inputAttributes: {
+				autocapitalize: 'off'
+			},
+			showCancelButton: true,
+			confirmButtonText: 'Edit',
+			showLoaderOnConfirm: true,
+			preConfirm: (name) => {
+				model.type = name;
+				return fetch(`${basUrl()}/checklist/${id}`, { ...headers.reqHeader('PATCH', model) }
+				).then(res => res.json()).then(async data => {
+					// let data = response.data;
+					// console.log(data);
+					if (data.success) {
+						swal.fire({
+							title: 'Update Check List',
+							text: data.message,
+							timer: 3000,
+							icon: 'success'
 						})
-					]).then(() => {
-						dispatch(getAllCheckLists())
+						Promise.all([
+							dispatch({
+								type: UPDATE_CHECK_LIST_SUCCESS
+							})
+						]).then(() => {
+							dispatch(getAllCheckLists())
+						})
+					} else {
+						swal.fire({
+							title: 'Update Check List',
+							text: data.error,
+							timer: 3000,
+							icon: 'error'
+						})
+						dispatch({
+							type: UPDATE_CHECK_LIST_ERROR
+						})
+					}
+				}).catch(e => {
+					console.error(e);
+					swal.fire({
+						title: 'Update Check List',
+						text: 'Oops! an error occurred. Kindly check network and try again',
+						timer: 3000,
+						icon: 'error'
 					})
-				} else {
-				  swal.fire({
-					title: 'Update Check List',
-					text: data.error,
-					timer: 3000,
-					icon: 'error'
-				  })
-				  dispatch({
-					type: UPDATE_CHECK_LIST_ERROR
-				  })
-				}
-			  }).catch(e => {
-				console.error(e);
-				swal.fire({
-					title: 'Update Check List',
-					text: 'Oops! an error occurred. Kindly check network and try again',
-					timer: 3000,
-					icon: 'error'
-				  })
-				dispatch({
-				  type: UPDATE_CHECK_LIST_ERROR
+					dispatch({
+						type: UPDATE_CHECK_LIST_ERROR
+					})
 				})
-			  })
-		  },
-		  allowOutsideClick: () => !swal.isLoading()
+			},
+			allowOutsideClick: () => !swal.isLoading()
 		})
-	  }
+	}
 }
 
 export function deleteCheckList(id) {
@@ -192,42 +192,42 @@ export function deleteCheckList(id) {
 			showLoaderOnConfirm: true,
 			preConfirm: () => [
 				fetch(`${basUrl()}/checklist/${id}`, { ...headers.delHeader() })
-				.then(res => res.json()).then(async data => {
-					if (data.success) {
-						swal.fire(
-							'DELETE!',
-							'Check List has been deleted.',
-							'success'
-						)
-						Promise.all([
-							dispatch({
-								type: DELETE_CHECK_LIST_SUCCESS
+					.then(res => res.json()).then(async data => {
+						if (data.success) {
+							swal.fire(
+								'DELETE!',
+								'Check List has been deleted.',
+								'success'
+							)
+							Promise.all([
+								dispatch({
+									type: DELETE_CHECK_LIST_SUCCESS
+								})
+							]).then(() => {
+								dispatch(getAllCheckLists())
 							})
-						]).then(() => {
-							dispatch(getAllCheckLists())
-						})
-					} else {
+						} else {
+							swal.fire(
+								'Deleted!',
+								'something went wrong',
+								'error'
+							)
+							return dispatch({
+								type: DELETE_CHECK_LIST_ERROR
+							})
+						}
+					}
+					).catch(e => {
+						console.error(e);
 						swal.fire(
-							'Deleted!',
+							'Oops!',
 							'something went wrong',
 							'error'
 						)
 						return dispatch({
 							type: DELETE_CHECK_LIST_ERROR
 						})
-					}
-				}
-				).catch(e => {
-					console.error(e);
-					swal.fire(
-						'Oops!',
-						'something went wrong',
-						'error'
-					)
-					return dispatch({
-						type: DELETE_CHECK_LIST_ERROR
 					})
-				})
 			]
 		})
 	}
