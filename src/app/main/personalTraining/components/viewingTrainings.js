@@ -37,28 +37,37 @@ const ViewTrainings = ({ open, handleClose, data, viewer, approveTraining, rejec
                         className="w-full mb-24"
                     /> */}
                     {
-                        (viewer && viewer.toLowerCase() !== "employee" && data.employeeID)
+                        (viewer && viewer.toLowerCase() !== "employee")
                             ?
                             <>
-                                <TextField
-                                    id="outlined-secondary"
-                                    type="text"
-                                    disabled
-                                    value={data.employeeID}
-                                    variant="outlined"
-                                    label="Employee"
-                                    className="w-full mb-24"
-                                />
+                                {
+                                    data.employeeId &&
+                                    <TextField
+                                        id="outlined-secondary"
+                                        type="text"
+                                        // disabled
+                                        onChange={() => { }}
+                                        value={data?.employeeId}
+                                        variant="outlined"
+                                        label="Employee"
+                                        className="w-full mb-24"
+                                    />
+                                }
 
-                                <TextField
-                                    id="outlined-secondary"
-                                    type="text"
-                                    disabled
-                                    defaultValue={data.employeeMail}
-                                    variant="outlined"
-                                    label="Employee Mail"
-                                    className="w-full mb-24"
-                                />
+                                {
+                                    data.email &&
+                                    <TextField
+                                        id="outlined-secondary"
+                                        type="text"
+                                        // disabled
+                                        onChange={() => { }}
+                                        defaultValue={data?.email}
+                                        variant="outlined"
+                                        label="Employee Mail"
+                                        className="w-full mb-24"
+                                    />
+                                }
+
                             </>
                             :
                             <></>
@@ -69,8 +78,9 @@ const ViewTrainings = ({ open, handleClose, data, viewer, approveTraining, rejec
                             <TextField
                                 id="outlined-secondary"
                                 type="text"
-                                disabled
-                                value={data.employeeGrade}
+                                // disabled
+                                onChange={() => { }}
+                                value={data?.employeeGrade}
                                 variant="outlined"
                                 label="Employee Grade"
                                 className="w-full mb-24"
@@ -83,8 +93,9 @@ const ViewTrainings = ({ open, handleClose, data, viewer, approveTraining, rejec
                             <TextField
                                 id="outlined-secondary"
                                 type="text"
-                                disabled
-                                value={data.companySeniority}
+                                // disabled
+                                onChange={() => { }}
+                                value={data?.companySeniority}
                                 variant="outlined"
                                 label="Company Seniority"
                                 className="w-full mb-24"
@@ -97,8 +108,9 @@ const ViewTrainings = ({ open, handleClose, data, viewer, approveTraining, rejec
                             <TextField
                                 id="outlined-secondary"
                                 type="text"
-                                disabled
-                                value={data.industrySenority}
+                                // disabled
+                                onChange={() => { }}
+                                value={data?.industrySenority}
                                 variant="outlined"
                                 label="Industry Seniority"
                                 className="w-full mb-24"
@@ -110,7 +122,8 @@ const ViewTrainings = ({ open, handleClose, data, viewer, approveTraining, rejec
                     <TextField
                         id="outlined-secondary"
                         type="text"
-                        disabled
+                        // disabled
+                        onChange={() => { }}
                         value={data.category}
                         variant="outlined"
                         label="Category"
@@ -120,7 +133,8 @@ const ViewTrainings = ({ open, handleClose, data, viewer, approveTraining, rejec
                     <TextField
                         id="outlined-secondary"
                         type="text"
-                        disabled
+                        // disabled
+                        onChange={() => { }}
                         value={data.startDate}
                         variant="outlined"
                         label="Start Date"
@@ -130,7 +144,8 @@ const ViewTrainings = ({ open, handleClose, data, viewer, approveTraining, rejec
                     <TextField
                         id="outlined-secondary"
                         type="text"
-                        disabled
+                        // disabled
+                        onChange={() => { }}
                         value={data.endDate}
                         variant="outlined"
                         label="End Date"
@@ -138,13 +153,14 @@ const ViewTrainings = ({ open, handleClose, data, viewer, approveTraining, rejec
                     />
 
                     {
-                        viewer && viewer.toLowerCase() === "hr" ? // must be an hr to view
+                        viewer && viewer.toLowerCase() === "hr manager" ? // must be an hr to view
                             <>
                                 <TextField
                                     id="outlined-secondary"
                                     type="text"
-                                    disabled
-                                    value={viewer.department.departmentName}
+                                    // disabled
+                                    onChange={() => { }}
+                                    value={data?.department}
                                     variant="outlined"
                                     label="Department"
                                     className="w-full mb-24"
@@ -153,71 +169,61 @@ const ViewTrainings = ({ open, handleClose, data, viewer, approveTraining, rejec
                                 <TextField
                                     id="outlined-secondary"
                                     type="text"
-                                    disabled
-                                    value={viewer.entity.entityName}
+                                    // disabled
+                                    onChange={() => { }}
+                                    value={data?.entity}
                                     variant="outlined"
                                     label="Entity"
                                     className="w-full mb-24"
                                 />
 
-                                <TextField
-                                    id="outlined-secondary"
-                                    type="text"
-                                    disabled
-                                    value={viewer?.country ?? "Nigeria"}
-                                    variant="outlined"
-                                    label="Country"
-                                    className="w-full mb-24"
-                                />
+                                {data?.industrySenority &&
+                                    <TextField
+                                        id="outlined-secondary"
+                                        type="text"
+                                        // disabled
+                                        onChange={() => { }}
+                                        value={data?.industrySenority}
+                                        variant="outlined"
+                                        label="Industry Senority"
+                                        className="w-full mb-24"
+                                    />}
 
                                 <TextField
                                     id="outlined-secondary"
                                     type="text"
-                                    disabled
-                                    value={viewer?.info.industrySenority}
-                                    variant="outlined"
-                                    label="Industry Senority"
-                                    className="w-full mb-24"
-                                />
-
-                                <TextField
-                                    id="outlined-secondary"
-                                    type="text"
-                                    disbaled
-                                    value={data.info.SRGSeniority}
+                                    // disbaled
+                                    onChange={() => { }}
+                                    value={data?.companySeniority}
                                     variant="outlined"
                                     label="Company Senority"
                                     className="w-full mb-24"
                                 />
 
-                                <TextField
-                                    id="outlined-secondary"
-                                    type="text"
-                                    disabled
-                                    value={viewer.state}
-                                    variant="outlined"
-                                    label="State"
-                                    className="w-full mb-24"
-                                />
 
                             </>
                             : <></>
                     }
 
-                    <TextField
-                        id="outlined-secondary"
-                        type="text"
-                        disabled
-                        value={data.certification}
-                        variant="outlined"
-                        label="Certification"
-                        className="w-full mb-24"
-                    />
+                    {
+                        data.certification ?
+                            <TextField
+                                id="outlined-secondary"
+                                type="text"
+                                // disabled
+                                onChange={() => { }}
+                                value={data.certification}
+                                variant="outlined"
+                                label="Certification"
+                                className="w-full mb-24"
+                            />
+                            : <></>
+                    }
 
                 </DialogContent>
                 {
-                    data.status === "pending" &&
-                    <DialogActions className="justify-between m-10 px-24 pb-12 sm:px-16">
+                    data?.status?.toLowerCase() === "pending" &&
+                    <DialogActions className="justify-between m-10 px-24 pb-12 sm:px-16 m-20">
                         <Button variant="contained" color="primary" onClick={handleApprove}>
                             Approve
                     </Button>

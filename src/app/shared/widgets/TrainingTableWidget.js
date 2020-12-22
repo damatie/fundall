@@ -28,6 +28,7 @@ import RejectIcon from '@material-ui/icons/Cancel';
 import ApproveIcon from '@material-ui/icons/Check';
 import Grid from '@material-ui/core/Grid';
 import WidgetModal from './WidgetModal';
+import { AppBar, Toolbar } from '@material-ui/core';
 const useStyles = makeStyles({
 	table: {
 		'& th': {
@@ -172,7 +173,15 @@ const TableWidget = props => {
 						maxWidth={'sm'}
 						aria-labelledby="form-dialog-title"
 					>
-						<DialogTitle id="form-dialog-title">Training Request Details</DialogTitle>
+						{/* <DialogTitle id="form-dialog-title">Training Request Details</DialogTitle> */}
+
+						<AppBar position="static">
+							<Toolbar className="flex w-full">
+								<Typography variant="subtitle1" color="inherit">
+									Training Request Details
+								</Typography>
+							</Toolbar>
+						</AppBar>
 						<DialogContent>
 							<table className={clsx(classes.table, 'w-full text-justify')}>
 								<tbody>
@@ -313,7 +322,7 @@ const TableWidget = props => {
 										))
 							}
 						</DialogContent>
-						<DialogActions>
+						<DialogActions className="m-20">
 							<Button onClick={handleClose} color="primary">
 								Close
 							</Button>

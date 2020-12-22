@@ -1,7 +1,7 @@
 import FuseAnimate from '@fuse/core/FuseAnimate';
 import FuseAnimateGroup from '@fuse/core/FuseAnimateGroup';
 import _ from '@lodash';
-import Button from '@material-ui/core/Button';
+// import Button from '@material-ui/core/Button';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import FormControl from '@material-ui/core/FormControl';
@@ -209,7 +209,7 @@ function TrainingList(props) {
     const [tabValue, setTabValue] = React.useState(0);
 
     function handleChangeTab(event, value) {
-        console.log(event, value)
+        // console.log(event, value)
         setTabValue(value);
     }
 
@@ -266,7 +266,7 @@ function TrainingList(props) {
     }, [dispatch])
 
     useEffect(() => {
-        // console.log(trainings);
+        console.log(trainings);
     }, [department, trainings])
 
     // useEffect(() => {
@@ -298,10 +298,10 @@ function TrainingList(props) {
     function handleFilter(event) {
         if (event.target.name === "entity") {
             let id = entities.find(element => element.name = event.target.value);
-            console.log(id.id)
+            // console.log(id.id)
             changeDepartment(id.id);
         }
-        console.log(event)
+        // console.log(event)
         setFilter({ ...filter, [event.target.name]: event.target.value });
     }
 
@@ -447,6 +447,7 @@ function TrainingList(props) {
                                 ))}
                             </Select>
                         </FormControl>
+
                     </div>
 
                     {/* opening up a training request */}
@@ -494,11 +495,11 @@ function TrainingList(props) {
                                     </Tabs>
 
                                     <div className="w-full">
-                                        {tabValue === 0 && (<SharedTable data={trainings?.pendingTrainings.rows ?? []} rows={rows} type='default' handleClick={handleOpen} />)}
-                                        {tabValue === 1 && (<SharedTable data={trainings?.reviewedTrainings.rows ?? []} rows={rows} type='default' handleClick={handleOpen} />)}
-                                        {tabValue === 2 && (<SharedTable data={trainings?.approvedTrainings.rows ?? []} rows={rows} type='default' handleClick={handleOpen} />)}
-                                        {tabValue === 3 && (<SharedTable data={trainings?.completedTrainings.rows} rows={rows} type='default' handleClick={handleOpen} />)}
-                                        {tabValue === 4 && (<SharedTable data={trainings?.rejectedTrainings.rows} rows={rows} type='default' handleClick={handleOpen} />)}
+                                        {tabValue === 0 && (<SharedTable data={trainings?.pendingTrainings?.rows ?? []} rows={rows} type='default' handleClick={handleOpen} />)}
+                                        {tabValue === 1 && (<SharedTable data={trainings?.reviewedTrainings?.rows ?? []} rows={rows} type='default' handleClick={handleOpen} />)}
+                                        {tabValue === 2 && (<SharedTable data={trainings?.approvedTrainings?.rows ?? []} rows={rows} type='default' handleClick={handleOpen} />)}
+                                        {tabValue === 3 && (<SharedTable data={trainings?.completedTrainings?.rows ?? []} rows={rows} type='default' handleClick={handleOpen} />)}
+                                        {tabValue === 4 && (<SharedTable data={trainings?.rejectedTrainings?.rows ?? []} rows={rows} type='default' handleClick={handleOpen} />)}
                                     </div>
 
 
