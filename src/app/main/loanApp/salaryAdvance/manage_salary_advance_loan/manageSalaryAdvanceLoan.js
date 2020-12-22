@@ -214,7 +214,7 @@ function ManageSALoan(props) {
 						scrollButtons="auto"
 						classes={{ root: 'w-full h-64' }}
 					>
-						{profile.role.name === 'HR' || profile.role.name === 'Director of support service' ? <Tab className="h-64 normal-case" label="Pending Loan" /> : ''}
+						{profile.role.name.toUpperCase() === 'HR MANAGER' || profile.role.name === 'Director of support service' ? <Tab className="h-64 normal-case" label="Pending Loan" /> : ''}
 					</Tabs> :
 
 					<Tabs
@@ -234,7 +234,7 @@ function ManageSALoan(props) {
 			}
 			content={
 				<>
-					{profile.role.name === 'HR' || profile.role.name === 'Director of support service' ? <div className=" sm:p-24 ">
+					{profile.role.name.toUpperCase() === 'HR MANAGER' || profile.role.name === 'Director of support service' ? <div className=" sm:p-24 ">
 						{tabValue === 0 && (<SharedTable data={salaryAdvance.pendingSA ? salaryAdvance.pendingSA : []} rows={rows} handleClick={handleClick} handleDelete={handleDelete} type='default' />)}
 					</div> : <></>}
 
