@@ -135,8 +135,10 @@ const SubFolderTable = (props) =>{
         }
     }
 
-    const handleDelete = () => {
-        dispatch(Actions.deleteSubFolder(props.mainFolder.id, selected.id, selected.name));
+    const handleDelete = (id, name) => {
+        console.log(id)
+        console.log(name)
+        dispatch(Actions.deleteSubFolder(props.mainFolder.id, id, name));
         handleClose();
     }
 
@@ -278,7 +280,7 @@ const SubFolderTable = (props) =>{
                                         style ={{height: "200"}}
 									>
                                         <TableCell className="max-w-64 w-64 p-0 text-center" onClick={event => {handleItemClick(event, n)}}>
-                                            <Icon className={clsx(classes.typeIcon, (n.folderId === 1) ? 'folder_shared' : 'folder')} />
+                                            <Icon className={clsx(classes.typeIcon, (n.folderId === 1 || n.documentMainFolder.name.toUpperCase().includes('PUBLIC')) ? 'folder_shared' : 'folder')} />
                                         </TableCell>
 										<TableCell className="text-center" style={{padding: '0 16px'}}
                                             onClick={event => { handleItemClick(event, n)}}>
@@ -310,6 +312,7 @@ const SubFolderTable = (props) =>{
                                                         handleDelete={handleDelete}
                                                         anchorEl={anchorEl}
                                                         folderId={selected && selected.folderId}
+                                                        documentMainFolderName={selected ? selected.documentMainFolder.name : ''}
                                                         roles={(selected) ? props.roles.filter(role => !selected.access.includes(role.id.toString())) : []}
                                                     />
                                                     <FolderDetails 
@@ -358,7 +361,7 @@ const SubFolderTable = (props) =>{
                                         <IconButton aria-label="edit" onClick={(event) => {setSelected(n); handleOpenRename() }} disabled={parseInt(props.userId) !== n.createdBy}>
                                             <EditIcon style={{color: (parseInt(props.userId) !== n.createdBy) ? 'grey' : 'skyblue'}} />
                                         </IconButton>
-                                        <IconButton aria-label="delete" onClick={(event) => {setSelected(n); handleDelete()}} disabled={parseInt(props.userId) !== n.createdBy}>
+                                        <IconButton aria-label="delete" onClick={(event) => {setSelected(n); handleDelete(n.id, n.name)}} disabled={parseInt(props.userId) !== n.createdBy}>
                                             <DeleteIcon style={{color: (parseInt(props.userId) !== n.createdBy) ? 'grey' : 'red'}} />
                                         </IconButton> 
                                         </TableCell>

@@ -10,7 +10,7 @@ import Fade from '@material-ui/core/Fade';
 export default function ActionMenu(props){
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
-
+    console.log(props)
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
@@ -28,7 +28,7 @@ export default function ActionMenu(props){
                 onClose={props.handleClose}
                 TransitionComponent={Fade}
             >
-                {(parseInt(props.folderId) !== 1) &&
+                {(props.documentMainFolderName.toUpperCase().includes('PUBLIC')) &&
                     <MenuItem onClick={handleClick}>Manage Access
                         <Button aria-controls="fade-menu" aria-haspopup="true" >
                             <Arrow/>

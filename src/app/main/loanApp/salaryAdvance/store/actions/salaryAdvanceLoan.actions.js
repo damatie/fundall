@@ -25,8 +25,7 @@ export const approveSalaryAvance = ({ id, url }) => {
         swal.fire({
           title: 'Approve salary advance',
           text: result.message,
-          icon: 'success',
-          timer: 3000
+          icon: 'success'
         });
         dispatch(getSalaryAdvanceDetails(id));
         dispatch(getApprovedSA());
@@ -35,8 +34,7 @@ export const approveSalaryAvance = ({ id, url }) => {
         swal.fire({
           title: 'Approve salary advance',
           text: result.message,
-          icon: 'error',
-          timer: 3000
+          icon: 'error'
         });
       }
     } catch (e) {
@@ -69,8 +67,7 @@ export const rejectSalaryAdvance = ({ id, url, payload }) => {
                 swal.fire({
                   title: 'Reject Loan',
                   text: data.message,
-                  icon: 'success',
-                  timer: 3000
+                  icon: 'success'
                 })
                 dispatch(getSalaryAdvanceDetails(id));
                 dispatch(getApprovedSA());
@@ -79,8 +76,7 @@ export const rejectSalaryAdvance = ({ id, url, payload }) => {
                 swal.fire({
                   title: 'Reject Loan',
                   text: data.message,
-                  icon: 'error',
-                  timer: 3000
+                  icon: 'error'
                 })
               }
             }
@@ -110,8 +106,7 @@ export const cancelSalaryAdvance = (id) => {
         swal.fire({
           title: 'Cancel salary advance',
           text: result.message,
-          icon: 'success',
-          timer: 3000
+          icon: 'success'
         });
         dispatch(getOpenSA());
         dispatch(getSalaryAdvanceDetails(id))
@@ -119,8 +114,7 @@ export const cancelSalaryAdvance = (id) => {
         swal.fire({
           title: 'Cancel salary advance',
           text: result.message,
-          icon: 'error',
-          timer: 3000
+          icon: 'error'
         });
       }
     } catch (e) {

@@ -127,13 +127,13 @@ function SalaryAdvanceTable() {
 						</tr>
 
 						<tr className="created">
-							<th>Line Manager</th>
-							<td>{`${getEmployeeName(employeeList, loanDetails.lineManager)} | (${(loanDetails.lineManagerApprovalDate) ? moment(loanDetails.lineManagerApprovalDate).format('LL') : 'Not approved yet'})`}</td>
+							<th>HR Manager</th>
+							<td>{`${getEmployeeName(employeeList, loanDetails.hrManager)} | (${(loanDetails.lineManagerApprovalDate) ? moment(loanDetails.lineManagerApprovalDate).format('LL') : 'Not approved yet'})`}</td>
 						</tr>
 
 						<tr className="created">
 							<th>Finance Manager</th>
-							<td>{`${getEmployeeName(employeeList, loanDetails.financeManager)} | (${(loanDetails.financeManagerApprovalDate) ? moment(loanDetails.financeManagerApprovalDate).format('LL') : 'Not approved yet'})`}</td>
+							<td>{`${getEmployeeName(employeeList, loanDetails.financeManager)} | (${(loanDetails.dateOfApproval) ? moment(loanDetails.dateOfApproval).format('LL') : 'Not approved yet'})`}</td>
 						</tr>
 
 						{loanDetails.status === 'rejected' ?
