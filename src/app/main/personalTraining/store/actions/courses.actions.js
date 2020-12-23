@@ -1,5 +1,5 @@
 import { getBaseUrl } from 'app/shared/getBaseUrl';
-import swal from 'sweetalert2';
+// import swal from 'sweetalert2';
 import { fetchHeaders } from 'app/shared/fetchHeaders'
 
 export const GET_CATEGORIES = '[ACADEMY APP] GET CATEGORIES';

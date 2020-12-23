@@ -25,8 +25,11 @@ import IconButton from '@material-ui/core/IconButton';
 import Pagination from '@material-ui/lab/Pagination';
 // import SharedTable from 'app/shared/sharedTable';
 import * as hodActions from 'app/main/line_manager/training/deptTraining/store/actions';
+import * as HrActions from 'app/main/HR/training/trainingManagement/store/actions';
 import ViewTrainings from './components/viewingTrainings';
 import PersonalTrainingTable from './components/personalTrainingTable';
+import { Button } from '@material-ui/core';
+import { useHistory } from 'react-router';
 
 const useStyles = makeStyles(theme => ({
     header: {
@@ -123,6 +126,8 @@ const rows = [
 
 function PersonalTraining(props) {
     const dispatch = useDispatch();
+    const history = useHistory();
+
     const courses = useSelector(({ academyApp }) => academyApp.courses.courses);
 
     const trainings = useSelector(({ academyApp }) => academyApp.trainings);
@@ -267,7 +272,7 @@ function PersonalTraining(props) {
         if (role === "lm") {
             dispatch(hodActions.approveTraining(id))
         } else {
-
+            dispatch(HrActions.approveTraining(id))
         }
     }
 
@@ -275,7 +280,7 @@ function PersonalTraining(props) {
         if (role === "lm") {
             dispatch(hodActions.rejectTraining(id))
         } else {
-
+            dispatch(HrActions.rejectTraining(id))
         }
     }
 
@@ -313,6 +318,11 @@ function PersonalTraining(props) {
                         <ArrowBackIcon />
                     </IconButton>
 
+                    <div className="flex justify-end items-center w-full">
+                        <Button variant="contained" color="secondary" type="submit" className="m-12" onClick={() => history.push("/training/personal/courses")}>
+                            Request new Training
+                        </Button>
+                    </div>
                 </div>
                 <div className="flex flex-col flex-1 w-full mx-auto px-8 sm:px-16 py-24">
                     <div className="flex flex-col flex-shrink-0 sm:flex-row items-center justify-between py-24">

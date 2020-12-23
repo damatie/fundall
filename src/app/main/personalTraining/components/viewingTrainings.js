@@ -223,6 +223,8 @@ const ViewTrainings = ({ open, handleClose, data, viewer, approveTraining, rejec
                 </DialogContent>
                 {
                     data?.status?.toLowerCase() === "pending" &&
+                    viewer.toLowerCase() !== "employee" &&
+
                     <DialogActions className="justify-between m-10 px-24 pb-12 sm:px-16 m-20">
                         <Button variant="contained" color="primary" onClick={handleApprove}>
                             Approve
