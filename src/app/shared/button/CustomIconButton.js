@@ -31,7 +31,7 @@ const CustomIconButton = props => {
       onClick={onClick}
       style={{ padding: "1rem 0" }}
       disabled={disabled ? disabled : false}
-      type={submit ? 'submit' : ''}
+      type={submit ? 'submit' : 'button'}
     >
       <span className='normal-case'>
         {children}

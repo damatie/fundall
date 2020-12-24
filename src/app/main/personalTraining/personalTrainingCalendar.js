@@ -2,21 +2,21 @@ import FuseAnimate from '@fuse/core/FuseAnimate';
 import Fab from '@material-ui/core/Fab';
 import Icon from '@material-ui/core/Icon';
 import { makeStyles } from '@material-ui/core/styles';
-import withReducer from 'app/store/withReducer';
+// import withReducer from 'app/store/withReducer';
 import clsx from 'clsx';
 import moment from 'moment';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useSelector } from 'react';
 import { Calendar, momentLocalizer, Views } from 'react-big-calendar';
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import * as ReactDOM from 'react-dom';
-import { useDispatch, useSelector } from 'react-redux';
+// import * as ReactDOM from 'react-dom';
+import { useDispatch } from 'react-redux';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import EventDialog from './EventDialog';
 import * as Actions from './store/actions';
-import reducer from './store/reducers';
+// import reducer from './store/reducers';
 import { Link, Redirect } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography'
 
@@ -168,14 +168,19 @@ const useStyles = makeStyles(theme => ({
 
 function PersonalTrainingCalendar(props) {
 	const dispatch = useDispatch();
-	const events = [];
-	//  useSelector(({ personalTraining }) => personalTraining?.trainings.events);
+
+	// const events = [];
+	// const trainings = useSelector(({ personalTraining }) => personalTraining?.trainings.events);
 
 	const classes = useStyles(props);
 	const headerEl = useRef(null);
 
 	useEffect(() => {
-		dispatch(Actions.getAllTrainings());
+		dispatch(Actions.getPendingTrainingPersonal());
+		dispatch(Actions.getApprovedTrainingPersonal());
+		dispatch(Actions.getRejectedTrainingPersonal());
+		dispatch(Actions.getReviewedTrainingPersonal());
+		dispatch(Actions.getCompletedTrainingPersonal());
 	}, [dispatch]);
 
 	function moveEvent({ event, start, end }) {

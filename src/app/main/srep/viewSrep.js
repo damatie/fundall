@@ -82,9 +82,9 @@ function ViewSrep({ match }, props) {
         setAnchorEl(null);
     };
 
-    const isHr = () => (userData.role.toUpperCase() === 'HR' || userData.role.toUpperCase() === 'FINANCE MANAGER');
+    const isHr = () => (userData.role.toUpperCase() === 'HR MANAGER' || userData.role.toUpperCase() === 'FINANCE MANAGER');
 
-    const isOnlyHr = () => (userData.role.toUpperCase() === 'HR');
+    const isOnlyHr = () => (userData.role.toUpperCase() === 'HR MANAGER');
     
     const isFinance = () => (userData.role.toUpperCase() === 'FINANCE MANAGER');
 

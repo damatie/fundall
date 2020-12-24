@@ -66,12 +66,21 @@ function SalaryAdvance(props) {
 	const classes = useStyles(props);
 
 	const salaryAdvance = useSelector(({ salaryAdvance }) => salaryAdvance.salaryAdvance);
+	const details = useSelector(({ salaryAdvance }) => salaryAdvance.salaryAdvances?.details);
 
 	const history = useHistory();
 	const location = useLocation();
 
 	const { id } = useParams();
 
+	useEffect(() => {
+		if (id) {
+			dispatch(Actions.getSalaryAdvanceDetails(id));
+		}
+	}, [id, dispatch]);
+
+
+	console.log(details);
 	return (
 		<FusePageCarded
 			classes={{
@@ -135,7 +144,10 @@ function SalaryAdvance(props) {
 			}
 			content={
 				<div className=" sm:p-24 ">
-					<RequestSalaryAdvTab />
+					<RequestSalaryAdvTab 
+						salaryAdvance={salaryAdvance}
+						details={details}
+					/>
 				</div>
 			}
 			innerScroll

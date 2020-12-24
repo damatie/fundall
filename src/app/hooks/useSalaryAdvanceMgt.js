@@ -5,11 +5,12 @@ import { useHistory } from 'react-router';
 
 const handleBtnVisibility = ({ role, status }) => {
   status = status.toLowerCase();
-  const ruleOne = role === 'Director of support service' && (status === 'pending');
-  const ruleTwo = role === 'Finance manager' && (status === 'approved');
-  const ruleThree = role !== "Employee" && status === 'pending';
+  const ruleOne = (role === 'Director of support service' || role === 'Line Manager') && (status === 'pending');
+  const ruleTwo = role === 'Hr Manager' && (status === 'reviewed1');
+  const ruleThree = role === 'Finance Manager' && (status === 'reviewed2');
+  const ruleFour = role !== "Employee" && status === 'pending';
 
-  const combineRules = ruleOne || ruleTwo || ruleThree;
+  const combineRules = ruleOne || ruleTwo || ruleThree || ruleFour;
 
   return combineRules;
 };
@@ -18,10 +19,16 @@ const getSalaryAdvanceUrl = ({ type, status, role, id }) => {
   if (type === 'approve') {
     switch (status.toLowerCase()) {
       case 'pending': {
-        return '/salary-advance/approve/support/';
+        return `/salary-advance/approve/linemanager/`;
+      }
+      case 'reviewed1': {
+        return `/salary-advance/approve/hrmanager/`;
+      }
+      case 'reviewed2': {
+        return `/salary-advance/approve/finance/`;
       }
       case 'approved': {
-        return '/salary-advance/approve/finance/';
+        return `/salary-advance/confirm/disbursement/`;
       }
       default: {
         return;
@@ -30,10 +37,13 @@ const getSalaryAdvanceUrl = ({ type, status, role, id }) => {
   } else {
     switch (status.toLowerCase()) {
       case 'pending': {
-        return `/salary-advance/${role.toLowerCase().split(" ").join("")}/reject/${id}`;
+        return `/salary-advance/reject/linemanager/`;
       }
-      case 'approved': {
-        return '/salary-advance/finance/reject/';
+      case 'reviewed1': {
+        return `/salary-advance/reject/hrmanager/`;
+      }
+      case 'reviewed2': {
+        return `/salary-advance/reject/finance/`;
       }
       default: {
         return;
@@ -64,7 +74,8 @@ const useSalaryAdvanceMgt = ({ loan, userRole, id }) => {
     setApproveUrl(getSalaryAdvanceUrl(
       {
         type: 'approve',
-        status: loan.salaryAdvanceData.status
+        status: loan.salaryAdvanceData.status,
+        id: loan.salaryAdvanceData.id
       }
     ))
     setRejectUrl(getSalaryAdvanceUrl(
@@ -78,14 +89,18 @@ const useSalaryAdvanceMgt = ({ loan, userRole, id }) => {
   }, [loan, userRole]);
 
   const handleApprove = () => {
-    // dispatch(Actions.approveSalaryAvance({
-    //   id,
-    //   url: approveUrl,
-    // }));
-    history.push({
-      pathname: "/loan/request/salaryadvance_request/new/" + id,
-      state: userRole
-    })
+    console.log(loan.salaryAdvanceData.status);
+    if( loan.salaryAdvanceData.status.toLowerCase() === 'approved'){
+      dispatch(Actions.approveSalaryAvance({
+        id,
+        url: approveUrl,
+      }));
+    }else{
+      history.push({
+        pathname: "/loan/request/salaryadvance_request/new/" + id,
+        state: userRole
+      })
+    }
 
   };
 

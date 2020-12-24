@@ -13,6 +13,7 @@
         "@material-ui/icons": "4.9.1",
         "@material-ui/lab": "4.0.0-alpha.54",
         "@material-ui/pickers": "3.2.10",
+        "@testing-library/react": "^11.2.2",
         "auth0-lock": "^11.26.3",
         "autosuggest-highlight": "3.1.1",
         "axios": "0.19.2",
@@ -119,7 +120,11 @@
         "eslint-plugin-prettier": "^3.1.2",
         "eslint-plugin-react": "^7.19.0",
         "eslint-plugin-react-hooks": "^1.7.0",
+<<<<<<< HEAD
         "jest-environment-jsdom-sixteen": "^1.0.3",
+=======
+        "fetch-mock": "^9.11.0",
+>>>>>>> f87595a15c5d8e051b8b9d9d30881f5d99ca797e
         "js-beautify": "1.11.0",
         "prettier": "^2.0.5",
         "promise": "8.1.0",
@@ -135,7 +140,11 @@
         "build": "yarn run tailwind && yarn run purge-tailwind && cross-env GENERATE_SOURCEMAP=false react-scripts build",
         "tailwind": "tailwind build ./src/styles/tailwind-config.css -c ./tailwind.config.js -o ./src/styles/tailwind.css",
         "purge-tailwind": "node ./purge-tailwindcss.js",
+<<<<<<< HEAD
         "test": "react-scripts test --env=jest-environment-jsdom-sixteen",
+=======
+        "test": "react-scripts test --env=jsdom",
+>>>>>>> f87595a15c5d8e051b8b9d9d30881f5d99ca797e
         "eject": "react-scripts eject",
         "build-docs": "find ./src/app/main/documentation/material-ui-components \\( -name '*.ts' -o -name '*.tsx' \\) -type f -delete && babel-node --presets @babel/preset-env src/app/main/documentation/material-ui-components/build.js",
         "analyze": "yarn run tailwind && yarn run purge-tailwind && react-scripts build && source-map-explorer 'build/static/js/*.js' --html analyze-result.html",

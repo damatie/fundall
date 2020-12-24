@@ -36,8 +36,7 @@ function SalaryAdvanceHeader(props) {
 			</div>
 
 				<div className="flex flex-1 items-center justify-center px-12">
-					<ThemeProvider theme={mainTheme}>
-					</ThemeProvider>
+					
 				</div>
 				<FuseAnimate animation="transition.slideRightIn" delay={300}>
 					<Button

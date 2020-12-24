@@ -2,7 +2,7 @@ import { handleResponse } from "app/auth/handleRes";
 import { fetchHeaders } from "app/shared/fetchHeaders";
 import { getBaseUrl } from "app/shared/getBaseUrl";
 import swal from 'sweetalert2';
-import { getApprovedSA, getOpenSA, getPendingSA } from "./salaryAdvanceLoans.actions";
+import { getApprovedSA, getDisbursedSA, getOpenSA, getPendingSA, getReviewedSA } from "./salaryAdvanceLoans.actions";
 import { getSalaryAdvanceDetails } from "app/main/loanApp/store/actions";
 
 export const APPROVE_SALARY_ADVANCE = 'APPROVE SALARY ADVANCE';
@@ -21,22 +21,22 @@ export const approveSalaryAvance = ({ id, url }) => {
         )
       }).then(res => handleResponse(res));
 
-      if (result.message == 'Approved') {
-        swal.fire({
-          title: 'Approve salary advance',
-          text: result.message,
-          icon: 'success',
-          timer: 3000
-        });
+      if (result.success) {
         dispatch(getSalaryAdvanceDetails(id));
         dispatch(getApprovedSA());
         dispatch(getPendingSA());
+        dispatch(getReviewedSA());
+        dispatch(getDisbursedSA());
+        swal.fire({
+          title: 'Salary advance',
+          text: result.message,
+          icon: 'success'
+        });
       } else {
         swal.fire({
           title: 'Approve salary advance',
           text: result.message,
-          icon: 'error',
-          timer: 3000
+          icon: 'error'
         });
       }
     } catch (e) {
@@ -66,21 +66,21 @@ export const rejectSalaryAdvance = ({ id, url, payload }) => {
           }).then(res => res.json()).then(
             data => {
               if (data.success) {
-                swal.fire({
-                  title: 'Reject Loan',
-                  text: data.message,
-                  icon: 'success',
-                  timer: 3000
-                })
                 dispatch(getSalaryAdvanceDetails(id));
                 dispatch(getApprovedSA());
                 dispatch(getPendingSA());
+                swal.fire({
+                  title: 'Reject Loan',
+                  text: data.message,
+                  icon: 'success'
+                }).then(function(){
+                  window.location = '/loan/salary_advance/list'
+                });
               } else {
                 swal.fire({
                   title: 'Reject Loan',
                   text: data.message,
-                  icon: 'error',
-                  timer: 3000
+                  icon: 'error'
                 })
               }
             }
@@ -107,20 +107,18 @@ export const cancelSalaryAdvance = (id) => {
       }).then(res => handleResponse(res));
 
       if (result.success) {
+        dispatch(getOpenSA());
+        dispatch(getSalaryAdvanceDetails(id))
         swal.fire({
           title: 'Cancel salary advance',
           text: result.message,
-          icon: 'success',
-          timer: 3000
+          icon: 'success'
         });
-        dispatch(getOpenSA());
-        dispatch(getSalaryAdvanceDetails(id))
       } else {
         swal.fire({
           title: 'Cancel salary advance',
           text: result.message,
-          icon: 'error',
-          timer: 3000
+          icon: 'error'
         });
       }
     } catch (e) {

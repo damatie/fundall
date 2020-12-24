@@ -118,7 +118,7 @@ function SubFolder(props) {
                 noPrevious
 				props={props}
 				header={{
-					icon: (mainFolder.id === 1) ? 'folder_shared' : 'folder',
+					icon: (mainFolder.id === 1 || mainFolder.name.toUpperCase().includes('PUBLIC')) ? 'folder_shared' : 'folder',
                     title: `Document Library / ${(mainFolder) ? mainFolder.name : ''}`,
                     handleSearch: ({target: { value }}) => console.log(value),
                     showLink: true,

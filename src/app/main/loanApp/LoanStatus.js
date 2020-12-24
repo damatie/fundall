@@ -50,7 +50,21 @@ const LoanStatus = (props) => {
     case 'reviewed2':
       return (
         <Typography className={'bg-orange text-bold text-white inline text-11 font-500 px-8 py-4 rounded-4'}>
-          Finance Manager Approved
+          HR Manager Approved
+        </Typography>
+      );
+      break;
+    case 'approved':
+      return (
+        <Typography className={'bg-green text-bold text-white inline text-11 font-500 px-8 py-4 rounded-4'}>
+          Finanace Manager Approved
+        </Typography>
+      );
+      break;
+    case 'disbursed':
+      return (
+        <Typography className={'bg-green text-bold text-white inline text-11 font-500 px-8 py-4 rounded-4'}>
+          Cash Disbursed
         </Typography>
       );
       break;
