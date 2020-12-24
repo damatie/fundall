@@ -91,7 +91,7 @@ const navigationConfig = [
 			},
 			{
 				id: 'job_title',
-				title: 'Job Title',
+				title: 'Job Role',
 				type: 'item',
 				url: '/jobTitle/all',
 				icon: 'account_box',

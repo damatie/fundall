@@ -44,7 +44,7 @@ const useJobTitle = () => {
   });
 
   const dispatch = useDispatch();
-  const { data, open, singleData, type, loading } = {};
+  const { data, open, singleData, type, loading } = useSelector(state => state.jobTitle);
 
   React.useEffect(() => {
     dispatch(Actions.getAllJobTitle());

@@ -1,11 +1,11 @@
 
 import { renderHook } from '@testing-library/react-hooks';
-import { act, render, fireEvent } from '@testing-library/react';
+import { render, fireEvent } from '@testing-library/react';
 import useEmployeeGrade from '../hooks/useEmployeeGrade';
 import EmployeeGradeModal from '../components/EmployeeGradeModal';
 import React from 'react';
 import configureMockStore from 'redux-mock-store';
-// import { act } from 'react-dom/test-utils';
+import { act } from 'react-dom/test-utils';
 import thunk from 'redux-thunk'
 
 const state = {

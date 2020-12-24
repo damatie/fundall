@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import moment from 'moment';
 import { useSelector } from 'react-redux';
 import useBehaviouralAttribute from '../hooks/useBehaviouralAttribute';
+import { useHistory } from 'react-router-dom';
 
 const BehaviouralAttributeTable = () => {
   const columns = React.useMemo(
@@ -33,14 +34,17 @@ const BehaviouralAttributeTable = () => {
 		],
 	);
   const state = useSelector(state => state.behaviouralAttribute);
-  const { handleGetOne, handleDelete } = useBehaviouralAttribute(state)
+	const { handleGetOne, handleDelete } = useBehaviouralAttribute(state);
+	
+	const { push } = useHistory();
 	return (
 		<EnhancedTable
 			columns={columns}
 			data={state.data}
 			onRowClick={(ev, row) => {
 				if (row) {
-          handleGetOne(row.values)
+					// handleGetOne(row.values)
+					push(`/behaviouralAttribute/content/1`)
 				}
 			}}
 			checkbox={{

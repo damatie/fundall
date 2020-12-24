@@ -5,69 +5,54 @@ import IconButton from '@material-ui/core/IconButton';
 import Icon from '@material-ui/core/Icon';
 import Typography from '@material-ui/core/Typography';
 import moment from 'moment';
-import useJobTitle from '../hooks/useJobTitle';
-import TableToolbar from './TableToolbar';
 
-const JobTitleTable = () => {
-	const { data, handleDelete, handleGetOne } = useJobTitle();
+const BehaviouralAttributeContent = () => {
   const columns = React.useMemo(
 		() => [
 			{
-				Header: 'Name',
+				Header: 'Title',
 				accessor: 'name',
 				// className: 'font-bold',
 				sortable: true,
 			},
 			{
-				Header: 'Description',
+				Header: 'Content',
 				accessor: 'description',
 				sortable: true,
-				align: 'center'
-			},
-			{
-				Header: 'Entity',
-				accessor: 'entity',
-				sortable: true,
-				align: 'center'
-			},
+      },
 			{
 				Header: 'Modified',
 				accessor: 'updatedAt',
 				align: 'right',
-				sortable: true,
 				Cell: ({ row : { original }}) => {
 					return <>{moment(original.updatedAt).format('LLL')}</>
 				}
-			},
-			{
+      },
+      {
 				Header: 'Modified By',
-				accessor: 'modifiedBy',
-				sortable: true,
-				align: 'center'
+				accessor: 'updatedBy',
+				align: 'right',
 			},
-			
 		],
 	);
-
 	return (
 		<EnhancedTable
 			columns={columns}
-			data={data || []}
+			data={[]}
 			onRowClick={(ev, row) => {
 				if (row) {
-          handleGetOne(row.values)
+          // handleGetOne(row.values)
 				}
 			}}
-			toolBar={<TableToolbar/>}
 			checkbox={{
 				showCheckbox: true,
 				onClick: (value) => console.log(value),
 				accessor: 'id',
 			}}
 			selectAll={(value) => console.log(value)}
-			handleDelete={handleDelete}
+			handleDelete={(handleDelete) => null}
 		/>
 	);
 };
 
-export default JobTitleTable;
+export default BehaviouralAttributeContent;
