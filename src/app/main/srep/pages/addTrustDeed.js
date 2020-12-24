@@ -92,7 +92,7 @@ function AddTrustDeed(props) {
 
     const [hideBtn, setHideBtn] = useState(false);
     
-    const isOnlyHr = () => (userData.role.toUpperCase() === 'HR');
+    const isOnlyHr = () => (userData.role.toUpperCase() === 'HR MANAGER');
     
     const isFinance = () => (userData.role.toUpperCase() === 'FINANCE MANAGER');
 

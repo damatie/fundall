@@ -240,7 +240,7 @@ const MainFolderTable = (props) =>{
 									>
                                         <TableCell className="max-w-64 w-64 p-0 text-center" onClick={event => {handleItemClick(event, n)}}>
                                             {(n)? <div className="mb-8 mt-8">
-                                                    <Icon className={clsx(classes.typeIcon, (n.id === 1) ? 'folder_shared' : 'folder')} />
+                                                    <Icon className={clsx(classes.typeIcon, (n.id === 1 || n.name.toUpperCase().includes('PUBLIC')) ? 'folder_shared' : 'folder')} />
                                                 </div> 
                                                 : <div></div>
                                             }

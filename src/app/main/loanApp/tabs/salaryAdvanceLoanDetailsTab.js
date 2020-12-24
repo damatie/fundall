@@ -22,17 +22,18 @@ import { formatToNaira } from 'utils/formatNumber';
 import CustomIconButton from 'app/shared/button/CustomIconButton';
 import useSalaryAdvanceMgt from 'app/hooks/useSalaryAdvanceMgt';
 import { useParams } from 'react-router';
+import { useAuth } from 'app/hooks/useAuth';
 
 function SALoanDetailsTab({ setValue }) {
 
-	const profile = useSelector(({ profile }) => profile.data)
+	const userProfile = useAuth().getUserProfile;
 	const salaryAdvanceDetails = useSelector(({ salaryAdvanceDetails }) => salaryAdvanceDetails.salaryAdvances);
 
 	const { id } = useParams();
 
 	const { showBtn, showCancelBtn, handleApprove, handleReject, handleCancel } = useSalaryAdvanceMgt({
 		loan: salaryAdvanceDetails.details.data,
-		userRole: profile?.role?.name,
+		userRole: userProfile?.role?.name,
 		id,
 	});
 
@@ -118,7 +119,7 @@ function SALoanDetailsTab({ setValue }) {
 										</CustomIconButton>
 
 										<CustomIconButton type='error' icon='cancel' onClick={() => handleReject(salaryAdvanceDetails.details.data.salaryAdvanceData)}>
-											Reject Requested
+											Reject
 										</CustomIconButton>
 									</>
 									: <></>

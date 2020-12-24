@@ -22,6 +22,7 @@ import { Link, useParams, useHistory } from 'react-router-dom';
 import SharedTable from 'app/shared/sharedTable';
 import * as Actions from '../store/actions';
 import reducers from '../store/reducers';
+import { useAuth } from 'app/hooks/useAuth';
 
 const useStyles = makeStyles(theme => ({
     productImageFeaturedStar: {
@@ -121,6 +122,7 @@ const filterData = (data, status) => {
     return arr;
 };
 
+const userProfile = useAuth().getUserProfile;
 function ManageSALoanForDirectSubordinates(props) {
     const dispatch = useDispatch();
     const theme = useTheme();
@@ -205,31 +207,68 @@ function ManageSALoanForDirectSubordinates(props) {
                 </div>
             }
             contentToolbar={
-
-                <Tabs
-                    value={tabValue}
-                    onChange={handleChangeTab}
-                    indicatorColor="primary"
-                    textColor="primary"
-                    variant="scrollable"
-                    scrollButtons="auto"
-                    classes={{ root: 'w-full h-64' }}
-                >
-
-                    <Tab className="h-64 normal-case" label="Pending Requests" />
-                    <Tab className="h-64 normal-case" label="Reviewed Requests" />
-                    <Tab className="h-64 normal-case" label="Approved Requests" />
-                    <Tab className="h-64 normal-case" label="Closed Requests" />
-                </Tabs>
+                (userProfile.role.name.toUpperCase() === 'LINE MANAGER') ?
+                    <Tabs
+                        value={tabValue}
+                        onChange={handleChangeTab}
+                        indicatorColor="primary"
+                        textColor="primary"
+                        variant="scrollable"
+                        scrollButtons="auto"
+                        classes={{ root: 'w-full h-64' }}
+                    >
+                            <Tab className="h-64 normal-case" label="Pending Requests" />
+                            <Tab className="h-64 normal-case" label="Reviewed Requests" />
+                            <Tab className="h-64 normal-case" label="Approved Requests" />
+                    </Tabs>
+                : (userProfile.role.name.toUpperCase() === 'HR MANAGER') ?
+                    <Tabs
+                        value={tabValue}
+                        onChange={handleChangeTab}
+                        indicatorColor="primary"
+                        textColor="primary"
+                        variant="scrollable"
+                        scrollButtons="auto"
+                        classes={{ root: 'w-full h-64' }}
+                    >
+                        <Tab className="h-64 normal-case" label="Pending Requests" />
+                        <Tab className="h-64 normal-case" label="Reviewed Requests" />
+                        <Tab className="h-64 normal-case" label="Approved Requests" />
+                    </Tabs>
+                :
+                    <Tabs
+                        value={tabValue}
+                        onChange={handleChangeTab}
+                        indicatorColor="primary"
+                        textColor="primary"
+                        variant="scrollable"
+                        scrollButtons="auto"
+                        classes={{ root: 'w-full h-64' }}
+                    >
+                        <Tab className="h-64 normal-case" label="Pending Requests" />
+                        <Tab className="h-64 normal-case" label="Approved Requests" />
+                    </Tabs>
 
             }
             content={
-                <div className=" sm:p-24 ">
-                    {tabValue === 0 && (<SharedTable data={salaryAdvance?.pendingSA ?? []} rows={rows} handleClick={handleClick} handleDelete={handleDelete} type='default' />)}
-                    {tabValue === 1 && (<SharedTable data={salaryAdvance?.reviewedSA ?? []} rows={rows} handleClick={handleClick} handleDelete={handleDelete} type='default' />)}
-                    {tabValue === 2 && (<SharedTable data={salaryAdvance?.approvedSA ?? []} rows={rows} handleClick={handleClick} handleDelete={handleDelete} type='default' />)}
-                    {tabValue === 3 && (<SharedTable data={salaryAdvance?.closedSA ?? []} rows={rows} handleClick={handleClick} handleDelete={handleDelete} type='default' />)}
-                </div>
+                    (userProfile.role.name.toUpperCase() === 'LINE MANAGER') ? 
+                        <div className=" sm:p-24 ">
+                            {tabValue === 0 && (<SharedTable data={salaryAdvance?.pendingSA ?? []} rows={rows} handleClick={handleClick} handleDelete={handleDelete} type='default' />)}
+                            {tabValue === 1 && (<SharedTable data={salaryAdvance?.reviewedSA ?? []} rows={rows} handleClick={handleClick} handleDelete={handleDelete} type='default' />)}
+                            {tabValue === 2 && (<SharedTable data={salaryAdvance?.closedSA ?? []} rows={rows} handleClick={handleClick} handleDelete={handleDelete} type='default' />)}
+                        </div>
+                    : (userProfile.role.name.toUpperCase() === 'HR MANAGER') ?
+                        <div className=" sm:p-24 ">
+                            {tabValue === 0 && (<SharedTable data={salaryAdvance?.reviewedSA ?? []} rows={rows} handleClick={handleClick} handleDelete={handleDelete} type='default' />)}
+                            {tabValue === 1 && (<SharedTable data={salaryAdvance?.approvedSA ?? []} rows={rows} handleClick={handleClick} handleDelete={handleDelete} type='default' />)}
+                            {tabValue === 2 && (<SharedTable data={salaryAdvance?.closedSA ?? []} rows={rows} handleClick={handleClick} handleDelete={handleDelete} type='default' />)}
+                        </div>
+                    :
+                        <div className=" sm:p-24 ">
+                            {tabValue === 0 && (<SharedTable data={salaryAdvance?.approvedSA ?? []} rows={rows} handleClick={handleClick} handleDelete={handleDelete} type='default' />)}
+                            {tabValue === 1 && (<SharedTable data={salaryAdvance?.closedSA ?? []} rows={rows} handleClick={handleClick} handleDelete={handleDelete} type='default' />)}
+                        </div>
+
             }
             innerScroll
         />
