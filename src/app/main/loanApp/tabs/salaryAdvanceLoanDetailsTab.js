@@ -122,7 +122,14 @@ function SALoanDetailsTab({ setValue }) {
 											Reject
 										</CustomIconButton>
 									</>
-									: <></>
+									: (salaryAdvanceDetails?.details.data.salaryAdvanceData.status.toLowerCase() === 'approved') ?
+										<>
+											<CustomIconButton type='success' icon='check' onClick={handleApprove}>
+												Disbursed
+											</CustomIconButton>
+										</>
+									:
+									<></>
 							}
 
 							{

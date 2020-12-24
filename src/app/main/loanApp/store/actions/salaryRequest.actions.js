@@ -30,7 +30,7 @@ export const applySalaryAdvance = (model, file, history) => {
       )
     }).then(res => res.json()).then(
       data => {
-        if (data.message === 'Created!') {
+        if (data.success) {
           Swal.fire({
             title: 'Salary advance request',
             text: data.message,
@@ -81,7 +81,7 @@ export const updateSalaryAdvance = (id, model, file, history) => {
       )
     }).then(res => handleResponse(res)).then(
       data => {
-        if (data.message === 'Updated!') {
+        if (data.success) {
           dispatch({
             type: UPDATE_SALARY_REQUEST
           })
@@ -127,7 +127,7 @@ export const updateSalaryAdvanceByRole = (id, model, file, role, history) => {
       )
     }).then(res => handleResponse(res)).then(
       data => {
-        if (data.message === 'Updated!') {
+        if (data.success) {
           dispatch({
             type: UPDATE_SALARY_REQUEST
           })
@@ -136,7 +136,9 @@ export const updateSalaryAdvanceByRole = (id, model, file, role, history) => {
             text: data.message,
             timer: 3000,
             icon: 'success'
-          })
+          }).then(function(){
+            window.location = '/loan/salary_advance/list'
+          });
         } else {
           dispatch({
             type: SALARY_REQUEST_ERROR

@@ -39,7 +39,7 @@ import SharedDropzone from 'app/shared/sharedDropZone';
 function RequestSalaryAdvTab(props) {
 	const dispatch = useDispatch();
 
-	const [amount, setAmount] = useState('');
+	const [amount, setAmount] = useState(0);
 	// const [repaymentDate, setRepaymentDate] = useState('');
 	const [fileInput, setFileInput] = useState("");
 
@@ -48,7 +48,7 @@ function RequestSalaryAdvTab(props) {
 	const formRef = useRef(null);
 
 	const salaryAdvance = useSelector(({ salaryAdvance }) => salaryAdvance.salaryAdvance);
-	const details = useSelector(({ salaryAdvance }) => salaryAdvance.salaryAdvances?.details);
+	const details = props.details;
 
 	const profile = useSelector(({ profile }) => profile);
 
@@ -58,7 +58,6 @@ function RequestSalaryAdvTab(props) {
 	const { id } = useParams();
 	const history = useHistory();
 	const location = useLocation();
-
 	useEffect(() => {
 		// if(!profile.loading) {
 		dispatch(employeeActions.getDepartmentEmployees(profile.data.departmentId));
@@ -73,19 +72,10 @@ function RequestSalaryAdvTab(props) {
 	}, [showDetails, profile]);
 
 	useEffect(() => {
-		if (id) {
-			dispatch(Actions.getSalaryAdvanceDetails(id));
-		}
-	}, [id, dispatch]);
-
-	useEffect(() => {
-		if (id && details?.data?.salaryAdvanceData) {
+		if (details) {
 			setAmount(details.data?.salaryAdvanceData.amount);
 		}
-	}, [id, details, amount]);
-
-	useEffect(() => {
-	}, [amount, fileInput])
+	}, [details, amount]);
 
 	function enableButton() {
 		setIsFormValid(true);
@@ -103,6 +93,9 @@ function RequestSalaryAdvTab(props) {
 		else if (id && location.state) {
 			let role = location.state;
 			role = role.toLowerCase().split(" ").join("");
+			if(role === 'financemanager'){
+				role = 'finance'
+			}
 			dispatch(Actions.updateSalaryAdvanceByRole(id, model, fileInput[0], role, history))
 		}
 		else if (!id && !location.state) {
@@ -156,12 +149,12 @@ function RequestSalaryAdvTab(props) {
 							</Grid>
 							<Grid item lg={4}>
 								<ProgressBtn success={salaryAdvance.success} loading={salaryAdvance.loading} content={
-									id ?
+									(id && amount && fileInput.length > 0) ?
 										location.state ?
 											"Approve Request" :
 											'Update Request' :
 										"Send Request to Line Manager"
-								} disable={id ? false : !isFormValid} />
+								} disable={(id && amount && fileInput.length > 0) ? false : !isFormValid} />
 							</Grid>
 						</Grid>
 
