@@ -170,14 +170,14 @@ function TrainingManagement(props) {
 			id: 'name',
 			align: 'center',
 			disablePadding: false,
-			label: 'Name',
+			label: 'Employee Name',
 			sort: true
 		},
 		{
 			id: 'course_name',
 			align: 'center',
 			disablePadding: false,
-			label: 'Course Name',
+			label: 'Training Name',
 			sort: true
 		},
 		{
@@ -215,7 +215,7 @@ function TrainingManagement(props) {
 			id: 'name',
 			align: 'center',
 			disablePadding: false,
-			label: 'Name',
+			label: 'Course Name',
 			sort: true
 		},
 		{

@@ -101,7 +101,7 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
             setFormstate({ formstate });
         }
 
-        console.log(formstate, departments);
+        // console.log(formstate, departments);
     }, [departments, data])
 
     // useEffect(() => {

@@ -44,6 +44,7 @@ const TableWidget = props => {
 	const [page, setPage] = useState(0);
 	const [search, setSearch] = useState('');
 	const [rowsPerPage, setRowsPerPage] = useState(10);
+
 	const [order, setOrder] = useState({
 		direction: 'asc',
 		id: null
@@ -66,7 +67,6 @@ const TableWidget = props => {
 
 	useEffect(() => {
 		//reloading on data change
-		console.log(props.isHR)
 	}, [data, selected])
 
 	function handleChangePage(event, value) {
@@ -82,12 +82,10 @@ const TableWidget = props => {
 	}
 
 	function handleFilter(event) {
-		console.log(event.target.value);
 		setFilter(event.target.value);
 	}
 
 	function handleItemClick(event, item) {
-		console.log(item);
 		setSelected(item);
 		setOpen(true);
 	}
@@ -157,7 +155,7 @@ const TableWidget = props => {
 
 	useEffect(() => {
 		if (filter !== '') {
-			setData(_.filter(props.rows, row => row.status.toLowerCase() === filter.status.toLowerCase()));
+			setData(_.filter(props.rows, row => row?.status?.toLowerCase() === filter.toLowerCase()));
 			setPage(0);
 		} else {
 			setData(props.rows);
@@ -290,13 +288,9 @@ const TableWidget = props => {
 
 							{
 								props.fromTrainingMgt && (
-									// props.isHR && (
 									(
-										// true
+										props.isHR &&
 										selected
-										// props.fromTrainingMgt
-										// ? (selected?.status?.toLowerCase() === 'reviewed' || selected?.status?.toLowerCase() === 'pending')
-										// : false) && props.isHR
 									)
 										?
 										(
@@ -305,7 +299,7 @@ const TableWidget = props => {
 													className="bg-red text-white"
 													startIcon={<RejectIcon />}
 													onClick={ev => {
-														props.handleReject(ev, selected?.trainingCourseId);
+														props.handleReject(ev, selected?.id);
 														handleClose();
 													}}
 												>
@@ -316,7 +310,7 @@ const TableWidget = props => {
 													className="bg-green text-white"
 													startIcon={<ApproveIcon />}
 													onClick={ev => {
-														props.handleApprove(ev, selected?.trainingCourseId);
+														props.handleApprove(ev, selected?.id);
 														handleClose();
 													}}
 												>
@@ -348,7 +342,7 @@ const TableWidget = props => {
 					<Paper className="flex items-center w-full px-8 py-4 rounded-8">
 						<Icon color="action">search</Icon>
 						<Input
-							placeholder="Search"
+							placeholder="Employee Search"
 							className="flex flex-1 mx-8"
 							disableUnderline
 							fullWidth
@@ -369,7 +363,7 @@ const TableWidget = props => {
 								</MenuItem>
 								<MenuItem value="approved">Approved</MenuItem>
 								<MenuItem value="rejected">Rejected</MenuItem>
-								<MenuItem value="pending">Pending</MenuItem>
+								<MenuItem value="reviewed">Reviewed</MenuItem>
 							</Select>
 						</FormControl>
 					</div>
