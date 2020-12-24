@@ -65,7 +65,7 @@ function EventDialog(props) {
 		 * Dialog type: 'edit'
 		 */
 		if (eventDialog.type === 'edit' && eventDialog.data) {
-			console.log(eventDialog.data);
+			// console.log(eventDialog.data);
 			setCourseId(eventDialog.data.course.id);
 			setColor(eventDialog.data.color);
 			setStart(moment(eventDialog.data.start, 'MM/DD/YYYY'));
@@ -116,14 +116,14 @@ function EventDialog(props) {
 			startDate: moment(start).format("DD-MM-YYYY"),
 			endDate: moment(end).format("DD-MM-YYYY")
 		}
-		console.log(payload);
-		console.log(id);
+		// console.log(payload);
+		// console.log(id);
 		dispatch(Actions.updateTraining(payload, id));
 		closeComposeDialog();
 	}
 
 	function handleRemove() {
-		console.log(id);
+		// console.log(id);
 		dispatch(Actions.deleteTrainingRequest(id))
 		closeComposeDialog();
 	}

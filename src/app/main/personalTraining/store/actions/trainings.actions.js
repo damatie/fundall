@@ -6,6 +6,9 @@ import moment from 'moment';
 import { fetchHeaders } from 'app/shared/fetchHeaders'
 import { amber, blue, orange, blueGrey, lightGreen, green, grey, red } from '@material-ui/core/colors';
 import { GET_ROLES } from 'app/main/HR/roles/store/actions';
+import { GET_CATEGORIES } from "./courses.actions";
+
+import * as HrActions from "../../../HR/training/trainingManagement/store/actions"
 
 export { GET_ROLES };
 export const LOADING_TRAININGS = 'LOADING TRAININGS';
@@ -24,7 +27,7 @@ export const COMPLETED_TRAININGS_PERSONAL = "COMPLETED TRAININGS PERSONAL";
 export const REJECTED_TRAININGS_PERSONAL = "REJECTED TRAININGS PERSONAL";
 
 export const LOADING_CATEGORIES = 'LOADING CATEGORIES';
-export const GET_CATEGORIES = 'GET COURSE CATEGORIES';
+// export const GET_CATEGORIES = 'GET COURSE CATEGORIES';
 export const GET_ENTITIES = "GET ENTITIES"
 export const GET_DEPARTMENTS = "GET DEPARTMENTS"
 
@@ -97,7 +100,7 @@ export function getAllTrainings() {
 
 export function createTraining(model, history) {
 	swal.fire("Processing ...");
-	swal.showLoading();
+	// swal.showLoading();
 	return dispatch => {
 		dispatch({
 			type: LOADING_TRAININGS
@@ -112,7 +115,11 @@ export function createTraining(model, history) {
 						type: CREATE_TRAINING_SUCCESS
 					})
 				]).then(() => {
-					dispatch(getAllTrainings())
+					dispatch(HrActions.getPendingTraining());
+					dispatch(HrActions.getReviewedTraining());
+					dispatch(HrActions.getApprovedTraining());
+					dispatch(HrActions.getRejectedTraining());
+					// window.location.reload()
 				})
 				swal.fire({
 					title: 'Create Training',
@@ -172,7 +179,13 @@ export function updateTraining(model, id) {
 					dispatch({
 						type: UPDATE_TRAINING_SUCCESS
 					})
-				]).then(() => dispatch(getAllTrainings()))
+				]).then(() => {
+					dispatch(HrActions.getPendingTraining());
+					dispatch(HrActions.getReviewedTraining());
+					dispatch(HrActions.getApprovedTraining());
+					dispatch(HrActions.getRejectedTraining());
+					// window.location.reload()
+				})
 				swal.fire({
 					title: 'Update Training Request',
 					text: (data.message) ? data.message : data.error,
@@ -298,8 +311,13 @@ export function cancelTrainingRequest(id) {
 									type: DELETE_TRAINING_SUCCESS
 								})
 							]).then(() => {
-								dispatch(getAllTrainings())
-							})
+								dispatch(getPendingTrainingPersonal());
+								dispatch(getApprovedTrainingPersonal());
+								dispatch(getReviewedTrainingPersonal());
+								dispatch(getCompletedTrainingPersonal());
+								dispatch(getRejectedTrainingPersonal());
+							});
+							window.location.reload();
 						} else {
 							swal.fire(
 								'Deleted!',
@@ -394,7 +412,8 @@ export function requestTraining(id) {
 					text: (data.message) ? data.message : data.error,
 					timer: 3000,
 					icon: 'success'
-				})
+				});
+
 			}
 			else {
 				swal.fire({

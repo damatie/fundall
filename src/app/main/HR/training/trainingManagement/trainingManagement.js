@@ -76,7 +76,7 @@ function TrainingManagement(props) {
 	const [addNew, setAddNew] = useState(false);
 
 	//Appending All trainings into one array of object
-	let totalTrainings = reviewedTrainings.concat(pendingTrainings).concat(approvedTrainings).concat(rejectedTrainings);
+	let totalTrainings = reviewedTrainings.concat(approvedTrainings).concat(rejectedTrainings);
 
 	//Sorting the appended Trainings
 	totalTrainings = totalTrainings.sort((a, b) => {
@@ -97,6 +97,7 @@ function TrainingManagement(props) {
 
 	const submitNewTraining = (value) => {
 		dispatch(TrainingListActions.createTraining(value, history));
+		handleCloseNew();
 	}
 
 	const changeDepartment = (id) => {
@@ -132,7 +133,7 @@ function TrainingManagement(props) {
 	}
 
 	function checkRole() {
-		return userData.role.toLowerCase() === 'Hr Manager';
+		return userData.role.toLowerCase() === 'hr manager';
 	}
 
 	// function checkHODRole() {
@@ -161,6 +162,7 @@ function TrainingManagement(props) {
 
 	function updateTraining(payload, id) {
 		dispatch(CoursesAction.updateTraining(payload, id))
+		handleCloseNew();
 	}
 
 	const columns = [
@@ -168,14 +170,14 @@ function TrainingManagement(props) {
 			id: 'name',
 			align: 'center',
 			disablePadding: false,
-			label: 'Name',
+			label: 'Employee Name',
 			sort: true
 		},
 		{
 			id: 'course_name',
 			align: 'center',
 			disablePadding: false,
-			label: 'Course Name',
+			label: 'Training Name',
 			sort: true
 		},
 		{
@@ -213,7 +215,7 @@ function TrainingManagement(props) {
 			id: 'name',
 			align: 'center',
 			disablePadding: false,
-			label: 'Name',
+			label: 'Course Name',
 			sort: true
 		},
 		{
@@ -344,6 +346,7 @@ function TrainingManagement(props) {
 								</div>
 								<div className="widget flex w-full p-12">
 									<TrainingTableWidget
+										fromTrainingMgt
 										title={'Training Requests'}
 										type="default"
 										columns={columns}

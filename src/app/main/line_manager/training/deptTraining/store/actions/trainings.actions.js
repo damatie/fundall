@@ -16,6 +16,7 @@ export const REJECT_TRAINING_ERROR = 'REJECT TRAINING ERROR';
 
 const basUrl = getBaseUrl;
 const headers = fetchHeaders();
+
 export function getApprovedTraining() {
 	return dispatch => {
 		dispatch({
@@ -247,6 +248,7 @@ export function approveTraining(id) {
 								dispatch(getApprovedTrainingHR());
 								dispatch(getCompletedTrainingHR());
 								dispatch(getRejectedTrainingHR());
+								window.location.reload(); //bad practice, please refector this later JOSH
 							})
 						} else {
 							swal.fire(
@@ -311,6 +313,7 @@ export function rejectTraining(id) {
 								dispatch(getApprovedTrainingHR());
 								dispatch(getCompletedTrainingHR());
 								dispatch(getRejectedTrainingHR());
+								window.location.reload(); //bad practice, please refector this later JOSH	
 							})
 						} else {
 							swal.fire(
