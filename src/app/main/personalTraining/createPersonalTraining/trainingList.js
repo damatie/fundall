@@ -266,7 +266,7 @@ function TrainingList(props) {
     }, [dispatch])
 
     useEffect(() => {
-        console.log(trainings);
+        // console.log(trainings);
     }, [department, trainings])
 
     // useEffect(() => {

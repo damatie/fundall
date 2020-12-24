@@ -204,7 +204,7 @@ function PersonalTraining(props) {
         //     return newData;
         // });
         // console.log(newData)
-        console.log(trainings)
+        // console.log(trainings)
     }, [department, trainings]);
 
     // useEffect(() => {
@@ -297,6 +297,11 @@ function PersonalTraining(props) {
         setSelectedData(values);
     }
 
+    function handleCancelTraining(id) {
+        console.log(id, "I am an employee");
+        dispatch(Actions.cancelTrainingRequest(id));
+    }
+
     return (
         <ThemeProvider theme={mainTheme}>
             <div className="flex flex-col flex-auto flex-shrink-0 w-full">
@@ -370,6 +375,7 @@ function PersonalTraining(props) {
                         viewer={"Employee"}
                         approveTraining={handleApproveTraining}
                         rejectTraining={handleRejectraining}
+                        handleEmployeeCancel={handleCancelTraining}
                     />
                     {/* End Dialog  */}
 

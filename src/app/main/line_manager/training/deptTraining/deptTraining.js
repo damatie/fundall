@@ -158,6 +158,7 @@ function DeptTraining(props) {
 			sort: true
 		}
 	];
+	
 	const coursesColumn = [
 		{
 			id: 'name',

@@ -1,7 +1,7 @@
 import { AppBar, Button, Dialog, DialogActions, DialogContent, TextField, Toolbar, Typography } from '@material-ui/core'
 import React, { useEffect } from 'react'
 
-const ViewTrainings = ({ open, handleClose, data, viewer, approveTraining, rejectTraining }) => {
+const ViewTrainings = ({ open, handleClose, data, viewer, approveTraining, rejectTraining, handleEmployeeCancel }) => {
 
     const handleApprove = () => {
         approveTraining(data.id, viewer === "Line Manager" ? "lm" : "hr");
@@ -223,19 +223,25 @@ const ViewTrainings = ({ open, handleClose, data, viewer, approveTraining, rejec
                 </DialogContent>
                 {
                     data?.status?.toLowerCase() === "pending" &&
-                    viewer.toLowerCase() !== "employee" &&
+                    (viewer.toLowerCase() !== "employee" ?
 
-                    <DialogActions className="justify-between m-10 px-24 pb-12 sm:px-16 m-20">
-                        <Button variant="contained" color="primary" onClick={handleApprove}>
-                            Approve
-                    </Button>
-                        <Button variant="contained" color="info" onClick={handleReject}>
-                            Reject
-                    </Button>
-                        <Button variant="contained" color="danger" onClick={handleClose}>
-                            Close
-                    </Button>
-                    </DialogActions>
+                        <DialogActions className="justify-between m-10 px-24 pb-12 sm:px-16 m-20">
+                            <Button variant="contained" color="primary" onClick={handleApprove}>
+                                Approve
+                            </Button>
+                            <Button variant="contained" color="info" onClick={handleReject}>
+                                Reject
+                            </Button>
+                            <Button variant="contained" color="danger" onClick={handleClose}>
+                                Close
+                            </Button>
+                        </DialogActions>
+                        :
+                        <DialogActions className="justify-between m-10 px-24 pb-12 sm:px-16 m-20">
+                            <Button variant="contained" color="primary" onClick={() => handleEmployeeCancel(data?.id)}>
+                                Cancel Request
+                            </Button>
+                        </DialogActions>)
                 }
             </form>
         </Dialog>

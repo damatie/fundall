@@ -16,6 +16,7 @@ export const REJECT_TRAINING_ERROR = 'REJECT TRAINING ERROR';
 
 const basUrl = getBaseUrl;
 const headers = fetchHeaders();
+
 export function getApprovedTraining() {
 	return dispatch => {
 		dispatch({
