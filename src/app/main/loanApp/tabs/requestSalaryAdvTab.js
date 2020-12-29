@@ -72,10 +72,10 @@ function RequestSalaryAdvTab(props) {
 	}, [showDetails, profile]);
 
 	useEffect(() => {
-		if (details) {
+		if (details && id) {
 			setAmount(details.data?.salaryAdvanceData.amount);
 		}
-	}, [details, amount]);
+	}, [details, amount, id]);
 
 	function enableButton() {
 		setIsFormValid(true);
