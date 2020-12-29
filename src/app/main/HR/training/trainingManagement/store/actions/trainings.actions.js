@@ -210,7 +210,7 @@ export function approveTraining(id) {
 						} else {
 							swal.fire(
 								'Approved!',
-								'something went wrong',
+								data.message,
 								'error'
 							)
 							return dispatch({
@@ -272,7 +272,7 @@ export function rejectTraining(id) {
 						} else {
 							swal.fire(
 								'Rejected!',
-								'something went wrong',
+								data.message,
 								'error'
 							)
 							return dispatch({

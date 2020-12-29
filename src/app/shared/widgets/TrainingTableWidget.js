@@ -19,7 +19,6 @@ import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogActions from '@material-ui/core/DialogActions';
 import Button from '@material-ui/core/Button';
 import clsx from 'clsx';
@@ -27,7 +26,7 @@ import Moment from 'react-moment';
 import RejectIcon from '@material-ui/icons/Cancel';
 import ApproveIcon from '@material-ui/icons/Check';
 import Grid from '@material-ui/core/Grid';
-import WidgetModal from './WidgetModal';
+// import WidgetModal from './WidgetModal';
 import { AppBar, Toolbar } from '@material-ui/core';
 const useStyles = makeStyles({
 	table: {
@@ -36,6 +35,7 @@ const useStyles = makeStyles({
 		}
 	}
 });
+
 const TableWidget = props => {
 	const [data, setData] = useState(props.rows);
 	const [open, setOpen] = useState(false);
@@ -44,6 +44,7 @@ const TableWidget = props => {
 	const [page, setPage] = useState(0);
 	const [search, setSearch] = useState('');
 	const [rowsPerPage, setRowsPerPage] = useState(10);
+
 	const [order, setOrder] = useState({
 		direction: 'asc',
 		id: null
@@ -66,7 +67,7 @@ const TableWidget = props => {
 
 	useEffect(() => {
 		//reloading on data change
-	}, [data])
+	}, [data, selected])
 
 	function handleChangePage(event, value) {
 		setPage(value);
@@ -81,12 +82,10 @@ const TableWidget = props => {
 	}
 
 	function handleFilter(event) {
-		console.log(event.target.value);
 		setFilter(event.target.value);
 	}
 
 	function handleItemClick(event, item) {
-		// console.log(item);
 		setSelected(item);
 		setOpen(true);
 	}
@@ -137,6 +136,7 @@ const TableWidget = props => {
 	const handleClose = () => {
 		setOpen(false);
 	};
+
 	useEffect(() => {
 		if (search.length >= 2) {
 			setData(
@@ -155,7 +155,7 @@ const TableWidget = props => {
 
 	useEffect(() => {
 		if (filter !== '') {
-			setData(_.filter(props.rows, row => row.status.toLowerCase() === filter.status.toLowerCase()));
+			setData(_.filter(props.rows, row => row?.status?.toLowerCase() === filter.toLowerCase()));
 			setPage(0);
 		} else {
 			setData(props.rows);
@@ -173,8 +173,6 @@ const TableWidget = props => {
 						maxWidth={'sm'}
 						aria-labelledby="form-dialog-title"
 					>
-						{/* <DialogTitle id="form-dialog-title">Training Request Details</DialogTitle> */}
-
 						<AppBar position="static">
 							<Toolbar className="flex w-full">
 								<Typography variant="subtitle1" color="inherit">
@@ -182,6 +180,7 @@ const TableWidget = props => {
 								</Typography>
 							</Toolbar>
 						</AppBar>
+
 						<DialogContent>
 							<table className={clsx(classes.table, 'w-full text-justify')}>
 								<tbody>
@@ -284,42 +283,49 @@ const TableWidget = props => {
 										<Grid container className="items-center w-full pt-20" justify="center" alignItems="center">
 											{selected ? CheckStatus(selected?.status) : ''}
 										</Grid>
-									))}
+									))
+							}
+
 							{
-								props.isHR && (
+								props.fromTrainingMgt && (
 									(
-										(selected
-											? (selected?.status?.toLowerCase() === 'reviewed' || selected?.status?.toLowerCase() === 'pending')
-											: false) && props.isHR
-									) ? (
+										props.isHR &&
+										selected
+									)
+										?
+										(
 											<Grid container className="items-center w-full pt-20" justify="center" alignItems="center">
 												<Button
 													className="bg-red text-white"
 													startIcon={<RejectIcon />}
 													onClick={ev => {
-														props.handleReject(ev, selected.id);
+														props.handleReject(ev, selected?.id);
 														handleClose();
 													}}
 												>
 													Reject
-									</Button>
-									&nbsp;
+												</Button>
+												&nbsp;
 												<Button
 													className="bg-green text-white"
 													startIcon={<ApproveIcon />}
 													onClick={ev => {
-														props.handleApprove(ev, selected.id);
+														props.handleApprove(ev, selected?.id);
 														handleClose();
 													}}
 												>
 													Approve
-									</Button>
+												</Button>
 											</Grid>
-										) : (
+										)
+										: (
 											<Grid container className="items-center w-full pt-20" justify="center" alignItems="center">
 												{selected ? CheckStatus(selected?.status) : ''}
 											</Grid>
-										))
+										)
+
+								)
+								// )
 							}
 						</DialogContent>
 						<DialogActions className="m-20">
@@ -336,7 +342,7 @@ const TableWidget = props => {
 					<Paper className="flex items-center w-full px-8 py-4 rounded-8">
 						<Icon color="action">search</Icon>
 						<Input
-							placeholder="Search"
+							placeholder="Employee Search"
 							className="flex flex-1 mx-8"
 							disableUnderline
 							fullWidth
@@ -357,7 +363,7 @@ const TableWidget = props => {
 								</MenuItem>
 								<MenuItem value="approved">Approved</MenuItem>
 								<MenuItem value="rejected">Rejected</MenuItem>
-								<MenuItem value="pending">Pending</MenuItem>
+								<MenuItem value="reviewed">Reviewed</MenuItem>
 							</Select>
 						</FormControl>
 					</div>

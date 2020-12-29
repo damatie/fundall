@@ -32,7 +32,6 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
         }
         else if (name === "category") {
             let id = entities.find(element => element.name = value);
-            // console.log(id, name, value)
             let courseData = { trainingCourseId: data?.id }
             if (data) {
                 setFormstate({ ...formstate, trainingCategoryId: id.id, [name]: value, ...courseData });
@@ -43,7 +42,7 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
             return;
         }
 
-        setFormstate({ ...formstate, [name]: value })
+        setFormstate({ ...formstate, [name]: value });
     }
 
     const handleSubmit = (e) => {
@@ -60,6 +59,9 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
         } else {
             submit(payload);
         }
+
+        setFormstate({});
+        handleClose();
     }
 
     useEffect(() => {
@@ -95,8 +97,16 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
     }, [data, departments])
 
     useEffect(() => {
-        // if (data && department)
-    }, [departments])
+        if (formstate.entity) {
+            setFormstate({ formstate });
+        }
+
+        // console.log(formstate, departments);
+    }, [departments, data])
+
+    // useEffect(() => {
+    //     //reload when data changes
+    // }, [data])
 
     useEffect(() => {
         if (Object.entries(formstate).length !== "") {
@@ -105,11 +115,11 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
     }, [formstate])
 
     return (
-        <Dialog open={open} onClose={handleClose} fullWidth>
+        <Dialog open={open} onClose={() => { handleClose(); setFormstate({}); }} fullWidth>
             <AppBar position="static">
                 <Toolbar className="flex w-full">
                     <Typography variant="subtitle1" color="inherit">
-                        {'New Training Request'}
+                        {data ? "Update Training Request" : 'New Training Request'}
                     </Typography>
                 </Toolbar>
             </AppBar>
@@ -122,14 +132,14 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
                         variant="outlined"
                         onChange={(e) => handleChange("name", e.target.value)}
                         label="Course Title"
-                        value={formstate.name}
+                        value={formstate?.name}
                         className="w-full mb-24"
                     />
 
                     <FormControl className="flex w-full mb-24" variant="outlined">
                         <InputLabel htmlFor="category-label-placeholder"> Category </InputLabel>
                         <Select
-                            value={formstate.category}
+                            value={formstate?.category}
                             onChange={(e) => handleChange(e.target.name, e.target.value)}
                             input={
                                 <OutlinedInput labelWidth={'category'.length * 9} name="category" id="category-label-placeholder" />
@@ -146,7 +156,7 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
                     <FormControl className="flex w-full mb-24" variant="outlined">
                         <InputLabel htmlFor="entity-label-placeholder"> Entity </InputLabel>
                         <Select
-                            value={formstate.entity}
+                            value={formstate?.entity}
                             onChange={(e) => handleChange(e.target.name, e.target.value)}
                             input={
                                 <OutlinedInput labelWidth={'entity'.length * 9} name="entity" id="entity-label-placeholder" />
@@ -163,7 +173,7 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
                     <FormControl className="flex w-full mb-24" variant="outlined">
                         <InputLabel htmlFor="department-label-placeholder"> Department </InputLabel>
                         <Select
-                            value={formstate.department}
+                            value={formstate?.department}
                             onChange={(e) => handleChange(e.target.name, e.target.value)}
                             input={
                                 <OutlinedInput labelWidth={'department'.length * 9} name="department" id="department-label-placeholder" />
@@ -189,7 +199,7 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
                     <FormControl className="flex w-full mb-24" variant="outlined">
                         <InputLabel htmlFor="jobRole-label-placeholder"> Job Role </InputLabel>
                         <Select
-                            value={formstate.jobRole}
+                            value={formstate?.jobRole}
                             onChange={(e) => handleChange(e.target.name, e.target.value)}
                             input={
                                 <OutlinedInput labelWidth={'jobRole'.length * 9} name="jobRole" id="jobRole-label-placeholder" />
@@ -206,7 +216,7 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
                     {/* <FormControl className="flex w-full mb-24" variant="outlined">
                         <InputLabel htmlFor="category-label-placeholder"> Employee Grade </InputLabel>
                         <Select
-                            value={formstate.employeeGrade}
+                            value={formstate?.employeeGrade}
                             onChange={(e) => handleChange(e.target.name, e.target.value)}
                             input={
                                 <OutlinedInput labelWidth={'employeeGrade'.length * 9} name="employeeGrade" id="employeeGrade-label-placeholder" />
@@ -226,7 +236,7 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
                     {/* <FormControl className="flex w-full mb-24" variant="outlined">
                         <InputLabel htmlFor="industrySenority-label-placeholder"> Industrial Seniority </InputLabel>
                         <Select
-                            value={formstate.industrySeniority}
+                            value={formstate?.industrySeniority}
                             onChange={(e) => handleChange(e.target.name, e.target.value)}
                             input={
                                 <OutlinedInput labelWidth={'industrySenority'.length * 9} name="industrySenority" id="industrySenority-label-placeholder" />
@@ -246,7 +256,7 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
                     {/* <FormControl className="flex w-full mb-24" variant="outlined">
                         <InputLabel htmlFor="companySenority-label-placeholder"> Company Seniority </InputLabel>
                         <Select
-                            value={formstate.companySeniority}
+                            value={formstate?.companySeniority}
                             onChange={(e) => handleChange(e.target.name, e.target.value)}
                             input={
                                 <OutlinedInput labelWidth={'companySenority'.length * 9} name="companySenority" id="companySenority-label-placeholder" />
@@ -267,7 +277,7 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
                         id="outlined-secondary"
                         type="text"
                         variant="outlined"
-                        value={formstate.employeeGrade}
+                        value={formstate?.employeeGrade}
                         onChange={(e) => handleChange("employeeGrade", e.target.value)}
                         label="Employee Grade"
                         className="w-full mb-24"
@@ -277,7 +287,7 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
                         id="outlined-secondary"
                         type="number"
                         variant="outlined"
-                        value={formstate.industrySeniority}
+                        value={formstate?.industrySeniority}
                         onChange={(e) => handleChange("industrySeniority", e.target.value)}
                         label="Industry Senority"
                         className="w-full mb-24"
@@ -287,7 +297,7 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
                         id="outlined-secondary"
                         type="number"
                         variant="outlined"
-                        value={formstate.companySeniority}
+                        value={formstate?.companySeniority}
                         onChange={(e) => handleChange("companySeniority", e.target.value)}
                         label="Company Senority"
                         className="w-full mb-24"
@@ -297,7 +307,7 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
                         id="outlined-secondary"
                         type="text"
                         variant="outlined"
-                        value={formstate.description}
+                        value={formstate?.description}
                         onChange={(e) => handleChange("description", e.target.value)}
                         label="Decription"
                         className="w-full mb-24"
@@ -306,7 +316,7 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
                     <DateTimePicker
                         label="Start"
                         inputVariant="outlined"
-                        value={formstate.startDate}
+                        value={formstate?.startDate}
                         onChange={date => handleChange("startDate", date)}
                         className="mt-8 mb-16 w-full"
                         format={'MMMM Do, YYYY hh:mm a'}
@@ -315,7 +325,7 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
                     <DateTimePicker
                         label="End"
                         inputVariant="outlined"
-                        value={formstate.endDate}
+                        value={formstate?.endDate}
                         onChange={date => handleChange("endDate", date)}
                         className="mt-8 mb-16 w-full"
                         format={'MMMM Do, YYYY hh:mm a'}
@@ -324,7 +334,7 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
                     <TextField
                         id="outlined-secondary"
                         type="text"
-                        value={formstate.country}
+                        value={formstate?.country}
                         variant="outlined"
                         onChange={(e) => handleChange("country", e.target.value)}
                         label="Country"
@@ -385,7 +395,7 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
 
                         id="outlined-secondary"
                         type="number"
-                        values={formstate.cost}
+                        values={formstate?.cost}
                         variant="outlined"
                         handleChange={(e) => handleChange("cost", e.target.value)}
                         label="Training Cost"

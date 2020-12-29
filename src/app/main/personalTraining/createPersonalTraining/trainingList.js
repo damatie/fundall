@@ -266,7 +266,7 @@ function TrainingList(props) {
     }, [dispatch])
 
     useEffect(() => {
-        console.log(trainings);
+        // console.log(trainings);
     }, [department, trainings])
 
     // useEffect(() => {
@@ -427,7 +427,7 @@ function TrainingList(props) {
                                 :
                                 <></>
                         }
-
+                        {/* 
                         <FormControl className="flex w-full sm:w-320 mx-16" variant="outlined">
                             <InputLabel htmlFor="category-label-placeholder"> Category </InputLabel>
                             <Select
@@ -446,7 +446,7 @@ function TrainingList(props) {
                                     </MenuItem>
                                 ))}
                             </Select>
-                        </FormControl>
+                        </FormControl> */}
 
                     </div>
 
