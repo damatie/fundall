@@ -168,6 +168,9 @@ const CategoryTableWidget = (props) => {
                                                     {n.description}
                                                 </TableCell>
                                             ) : null}
+                                            <TableCell className="text-center">
+                                                {n.status}
+                                            </TableCell>
                                             <TableCell className="text-center"><Moment format="ddd Do MMM, YY | hh:mm:ss a">{n.createdAt}</Moment></TableCell>
                                             <TableCell className="text-center">
                                                 <Moment format="ddd Do MMM, YY | hh:mm:ss a">{n.updatedAt}</Moment>

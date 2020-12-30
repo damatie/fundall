@@ -49,7 +49,7 @@ const TableWidget = props => {
 		direction: 'asc',
 		id: null
 	});
-	const [selected, setSelected] = useState({});
+	const [selected, setSelected] = useState(null);
 
 	const createSortHandler = property => event => {
 		const id = property;
@@ -290,7 +290,7 @@ const TableWidget = props => {
 								props.fromTrainingMgt && (
 									(
 										props.isHR &&
-										selected
+										selected?.status?.toLowerCase() === "reviewed"
 									)
 										?
 										(
