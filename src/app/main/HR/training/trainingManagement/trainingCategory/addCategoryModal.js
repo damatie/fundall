@@ -64,6 +64,9 @@ export default function AddCourseModal({ data, trigger, clearEdit }) {
   function handleSubmit(model) {
     if (data) {
       dispatch(Actions.updateCategory(model, data.id));
+      setTimeout(() => {
+        handleClose();
+      }, 1500);
       return;
     }
     dispatch(Actions.addCategory(model));
@@ -147,10 +150,11 @@ export default function AddCourseModal({ data, trigger, clearEdit }) {
               <SelectFormsy
                 className="my-16"
                 name="status"
-                label="Status"
+                label="Status *"
                 value={data ? data?.status : ""}
-                // validations="not-equals:none"
-                validationError="required"
+                // validations={{
+
+                // }}
                 variant="outlined"
                 required
               >

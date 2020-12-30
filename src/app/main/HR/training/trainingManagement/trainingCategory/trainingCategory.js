@@ -58,11 +58,11 @@ function TrainingCategory(props) {
 
     const classes = useStyles(props);
     const pageLayout = useRef(null);
-    const [tabValue, setTabValue] = useState(0);
-    const [selectedProject, setSelectedProject] = useState({
-        id: 1,
-        menuEl: null
-    });
+    // const [tabValue, setTabValue] = useState(0);
+    // const [selectedProject, setSelectedProject] = useState({
+    //     id: 1,
+    //     menuEl: null
+    // });
 
     useEffect(() => {
         dispatch(Actions.getCategories());
@@ -111,6 +111,13 @@ function TrainingCategory(props) {
             align: 'center',
             disablePadding: false,
             label: 'Description',
+            sort: true
+        },
+        {
+            id: 'status',
+            align: 'center',
+            disablePadding: false,
+            label: 'Status',
             sort: true
         },
         {
