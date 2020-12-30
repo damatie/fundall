@@ -37,6 +37,7 @@ import { authRoles } from 'app/auth';
 import ArrowBackIcon from '@material-ui/icons/ArrowBackIosRounded';
 import IconButton from '@material-ui/core/IconButton';
 import Pagination from '@material-ui/lab/Pagination';
+import { useHistory } from 'react-router';
 
 const useStyles = makeStyles(theme => ({
 	header: {
@@ -72,6 +73,7 @@ const useStyles = makeStyles(theme => ({
 
 function PersonalTrainingCourses(props) {
 	const dispatch = useDispatch();
+	const history = useHistory();
 	const courses = useSelector(({ academyApp }) => academyApp.courses.courses);
 	const categories = useSelector(({ academyApp }) => academyApp.courses.categories.rows);
 	const employees = useSelector(({ academyApp }) => academyApp.employees.employees);
@@ -159,14 +161,14 @@ function PersonalTrainingCourses(props) {
 	};
 
 	//Check if the logged in user has management role
-	function checkRole() {
-		return (authRoles.managers.includes(userData.role));
-	}
+	// function checkRole() {
+	// 	return (authRoles.managers.includes(userData.role));
+	// }
 
 	function handleSubmit(event) {
 		event.preventDefault();
 		// if (userData.role === "Employee") {
-		dispatch(Actions.requestTraining(id));
+		dispatch(Actions.requestTraining(id, history));
 		setOpen(false);
 		return;
 		// }
@@ -193,10 +195,10 @@ function PersonalTrainingCourses(props) {
 		// setOpen(false);
 	}
 
-	function handleDateChange(date) {
-		setStart(date);
-		setEnd(date);
-	}
+	// function handleDateChange(date) {
+	// 	setStart(date);
+	// 	setEnd(date);
+	// }
 
 	const goToPreviousRoute = () => {
 		window.location = '/training/personal';
@@ -210,19 +212,19 @@ function PersonalTrainingCourses(props) {
 		setOpen(true);
 	}
 
-	const CaptializeFirstLetter = (word) => {
-		if (word) {
-			return word.charAt(0).toUpperCase() + word.slice(1);
-		}
-		return '';
-	}
+	// const CaptializeFirstLetter = (word) => {
+	// 	if (word) {
+	// 		return word.charAt(0).toUpperCase() + word.slice(1);
+	// 	}
+	// 	return '';
+	// }
 
-	function handleSelectChange(name) {
-		let hodDetails = filterEmployees.find(em => {
-			return em.firstName.toLowerCase() + ' ' + em.lastName.toLowerCase() === name.toLowerCase();
-		});
-		setHod(hodDetails.id);
-	}
+	// function handleSelectChange(name) {
+	// 	let hodDetails = filterEmployees.find(em => {
+	// 		return em.firstName.toLowerCase() + ' ' + em.lastName.toLowerCase() === name.toLowerCase();
+	// 	});
+	// 	setHod(hodDetails.id);
+	// }
 
 	return (
 		<ThemeProvider theme={mainTheme}>

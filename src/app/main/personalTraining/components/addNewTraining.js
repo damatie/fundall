@@ -53,7 +53,7 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
         payload.industrySeniority = Number(payload.industrySeniority);
         payload.companySeniority = Number(payload.companySeniority);
 
-        // console.log(payload, e);
+        // console.log(payload);
         if (data) {
             update(payload, data.id)
         } else {
@@ -98,15 +98,14 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
 
     useEffect(() => {
         if (formstate.entity) {
-            setFormstate({ formstate });
+            setFormstate(formstate);
         }
-
         // console.log(formstate, departments);
     }, [departments, data])
 
-    // useEffect(() => {
-    //     //reload when data changes
-    // }, [data])
+    useEffect(() => {
+        //reload when data changes
+    }, [data])
 
     useEffect(() => {
         if (Object.entries(formstate).length !== "") {
