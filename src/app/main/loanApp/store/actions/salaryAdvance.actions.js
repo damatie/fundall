@@ -1,5 +1,6 @@
 import { fetchHeaders } from "app/shared/fetchHeaders";
 import { handleResponse } from "app/auth/handleRes";
+import { useAuth } from "app/hooks/useAuth";
 import { getBaseUrl } from "app/shared/getBaseUrl";
 
 export const LOADING_SALARY_ADVANCE = 'LOADING SALARY ADVANCE';
@@ -9,13 +10,14 @@ export const GET_SALARY_ADVANCE_DETAILS = 'GET SALARY ADVANCE DETAILS';
 export const LOADING_SALARY_ADVANCE_DETAILS = 'LOADING SALARY ADVANCE DETAILS';
 
 const headers = fetchHeaders();
+const userId = useAuth().getId;
 
 export const getSalaryAdvance = () => {
   return dispatch => {
     dispatch({
       type: LOADING_SALARY_ADVANCE
     })
-    fetch(`${getBaseUrl()}/salary-advance/all/log`, {
+    fetch(`${getBaseUrl()}/salary-advance/history/${userId}?offset=0&limit=100`, {
       ...headers.getRegHeader()
     }).then(res => res.json()).then(
       data => {

@@ -7,7 +7,7 @@ const handleBtnVisibility = ({ role, status }) => {
   status = status.toLowerCase();
   const ruleOne = (role === 'Director of support service' || role === 'Line Manager') && (status === 'pending');
   const ruleTwo = role === 'Hr Manager' && (status === 'reviewed1');
-  const ruleThree = role === 'Finance manager' && (status === 'reviewed2');
+  const ruleThree = role === 'Finance Manager' && (status === 'reviewed2');
   const ruleFour = role !== "Employee" && status === 'pending';
 
   const combineRules = ruleOne || ruleTwo || ruleThree || ruleFour;
@@ -26,6 +26,9 @@ const getSalaryAdvanceUrl = ({ type, status, role, id }) => {
       }
       case 'reviewed2': {
         return `/salary-advance/approve/finance/`;
+      }
+      case 'approved': {
+        return `/salary-advance/confirm/disbursement/`;
       }
       default: {
         return;
@@ -86,14 +89,18 @@ const useSalaryAdvanceMgt = ({ loan, userRole, id }) => {
   }, [loan, userRole]);
 
   const handleApprove = () => {
-    // dispatch(Actions.approveSalaryAvance({
-    //   id,
-    //   url: approveUrl,
-    // }));
-    history.push({
-      pathname: "/loan/request/salaryadvance_request/new/" + id,
-      state: userRole
-    })
+    console.log(loan.salaryAdvanceData.status);
+    if( loan.salaryAdvanceData.status.toLowerCase() === 'approved'){
+      dispatch(Actions.approveSalaryAvance({
+        id,
+        url: approveUrl,
+      }));
+    }else{
+      history.push({
+        pathname: "/loan/request/salaryadvance_request/new/" + id,
+        state: userRole
+      })
+    }
 
   };
 
