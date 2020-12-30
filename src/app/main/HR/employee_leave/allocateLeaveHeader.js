@@ -125,7 +125,7 @@ const AllocateLeaveHead = () => {
           required
           size='small'
         >
-          {departments.data.length !== 0 ? departments.data.map(item => (
+          {departments?.data.length !== 0 ? departments.data.map(item => (
             <MenuItem value={item.id}>{item.departmentName}</MenuItem>
           )) : 
           <h3>No department</h3>}

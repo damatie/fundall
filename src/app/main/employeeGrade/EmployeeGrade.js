@@ -13,7 +13,8 @@ const EmployeeGrade = () => {
 
   const dispatch = useDispatch();
   const state = useSelector(state => state.employeeGrade);
-  const { handleOpen } = useEmployeeGrade(state);
+  const customHook = useEmployeeGrade(state, dispatch);
+
   React.useEffect(() => {
     dispatch(getAllEmployeeGrade());
   }, []);
@@ -23,7 +24,7 @@ const EmployeeGrade = () => {
       button={{
         showButton: true,
         btnTitle: 'Add Employee Grade',
-        onClick: handleOpen,
+        onClick: customHook.handleOpen,
       }}
       header={{
         title: 'Employee Grade',
@@ -36,8 +37,8 @@ const EmployeeGrade = () => {
               <Skeleton variant="rect" width='100%' height={400} animation="wave"/>
             ) : (
               <>
-                <EmployeeGradeTable/>
-                <EmployeeGradeModal />
+                <EmployeeGradeTable customHook={customHook}/>
+                <EmployeeGradeModal customHook={customHook}/>
               </>
             )
           }

@@ -5,12 +5,11 @@ import SharedButton from 'app/shared/button/SharedButton';
 import { Controller } from 'react-hook-form';
 import SelectTextField from 'app/shared/TextInput/SelectTextField';
 import MenuItem from '@material-ui/core/MenuItem';
-import { useSelector } from 'react-redux';
-import useEmployeeGrade from '../hooks/useEmployeeGrade';
 
-const EmployeeGradeModal = () => {
-  const state = useSelector(state => state.employeeGrade);
-  const { textFieldValue, onSubmit, handleSubmit, errors, register, control, handleClose, buttonTitle, modalTitle } = useEmployeeGrade(state);
+const EmployeeGradeModal = ({ customHook }) => {
+
+  const { textFieldValue, onSubmit, handleSubmit, errors, register, control, handleClose, buttonTitle, modalTitle, state } = customHook;
+
   return (
     <SharedModal
       open={state.open}
@@ -24,7 +23,7 @@ const EmployeeGradeModal = () => {
           className='my-16'
           defaultValue={textFieldValue('name')}
           error={errors.name}
-          refs={register}
+          ref={register}
           message={errors.name?.message}
         />
         
@@ -35,15 +34,17 @@ const EmployeeGradeModal = () => {
           defaultValue={textFieldValue('description')}
           multiline
           error={errors.description}
-          refs={register}
+          ref={register}
           message={errors.description?.message}
         />
         <Controller
           name='pip'
           control={control}
           defaultValue={textFieldValue('pip')}
+          label='PIP Eligible'
          as={
            <SelectTextField
+           data-testid='pip'
             name='pip'
             label='PIP Eligible'
             defaultValue={textFieldValue('pip')}
@@ -64,6 +65,7 @@ const EmployeeGradeModal = () => {
           color='primary'
           type='submit'
           className='flex mx-auto'
+          data-testid='button'
         >
           {buttonTitle()}
         </SharedButton>

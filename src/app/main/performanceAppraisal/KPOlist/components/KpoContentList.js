@@ -52,8 +52,13 @@ const KpoContentList = () => {
 				sortable: true
       },
       {
-				Header: '%PIP',
-				accessor: 'pip',
+				Header: '%PIP Target',
+				accessor: 'pipA',
+				sortable: true
+			},
+			{
+				Header: '%PIP Achieved',
+				accessor: 'pipC',
 				sortable: true
 			},
 		],

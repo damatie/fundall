@@ -1,14 +1,8 @@
 import EnhancedTable from 'app/shared/table/EnhancedTable';
 import React from 'react';
-import Checkbox from '@material-ui/core/Checkbox';
-import IconButton from '@material-ui/core/IconButton';
-import Icon from '@material-ui/core/Icon';
-import Typography from '@material-ui/core/Typography';
 import moment from 'moment';
-import useEmployeeGrade from '../hooks/useEmployeeGrade';
-import { useSelector } from 'react-redux';
 
-const EmployeeGradeTable = () => {
+const EmployeeGradeTable = ({ customHook }) => {
   const columns = React.useMemo(
 		() => [
 			{
@@ -41,9 +35,7 @@ const EmployeeGradeTable = () => {
 		],
 	);
 
-	const state = useSelector(state => state.employeeGrade);
-
-	const { handleGetOne, handleDelete } = useEmployeeGrade(state);
+	const { handleGetOne, handleDelete, state } = customHook;
 
 	return (
 		<EnhancedTable

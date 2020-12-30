@@ -16,12 +16,12 @@ const KpoComments = () => {
     <Paper className='w-1/2 flex flex-col mx-auto p-20'>
       <form>
         <div className='w-full'>
-          <Typography variant="subtitle1" color="initial">What are the key strengths identièed that the employee has?</Typography>
+          <Typography variant="subtitle1" color="initial">What are the key strengths identied that the employee has?</Typography>
           <Input
-          name='kpoYear'
-          className='my-16'
-          multiline
-        />
+            name='kpoYear'
+            className='my-16'
+            multiline
+          />
         </div>
 
         <div className='w-full'>
