@@ -17,8 +17,9 @@ export function getAllCourses(limit = 8, offset = 0) {
 			type: LOADING_COURSES
 		});
 		fetch(`${basUrl()}/training/courses`, { ...headers.getRegHeader() })
-			.then(res => res.json()).then(async data => {
-				// console.log(data);
+			.then(res =>
+				res.json()
+			).then(async data => {
 				return data.success ?
 					(data.data) ?
 						dispatch({

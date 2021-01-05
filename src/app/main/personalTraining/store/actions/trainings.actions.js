@@ -119,7 +119,7 @@ export function createTraining(model, history) {
 					dispatch(HrActions.getReviewedTraining());
 					dispatch(HrActions.getApprovedTraining());
 					dispatch(HrActions.getRejectedTraining());
-					// window.location.reload()
+					window.location.reload()
 				})
 				swal.fire({
 					title: 'Create Training',
@@ -184,7 +184,7 @@ export function updateTraining(model, id) {
 					dispatch(HrActions.getReviewedTraining());
 					dispatch(HrActions.getApprovedTraining());
 					dispatch(HrActions.getRejectedTraining());
-					// window.location.reload()
+					window.location.reload()
 				})
 				swal.fire({
 					title: 'Update Training Request',
