@@ -185,63 +185,64 @@ const navigationConfig = [
 	},
 	// roles & resource navigations
 	{
-		id: 'roles&Resources',
-		title: 'Roles and Resources',
+		id: 'roles&Permission',
+		title: 'Roles and Permission',
 		translate: 'Roles and Resources',
-		type: 'group',
 		icon: 'apps',
-		auth: authRoles.admin,
-		children: [
-			{
-				id: 'roles',
-				title: 'Roles',
-				translate: 'Roles',
-				type: 'collapse',
-				icon: 'assignment_turned_in',
-				url: '/hr/roles',
-				children: [
-					{
-						id: 'roles_list',
-						title: 'Roles',
-						type: 'item',
-						url: '/hr/roles',
-						exact: true
-					},
-					{
-						id: 'new_role',
-						title: 'New role',
-						type: 'item',
-						url: '/hr/roles/new',
-						exact: true
-					},
-				]
-			},
-			{
-				id: 'resources',
-				title: 'Resources',
-				translate: 'Resources',
-				type: 'collapse',
-				icon: 'layers',
-				url: '/hr/resources',
-				children: [
-					{
-						id: 'resources_list',
-						title: 'Resources',
-						type: 'item',
-						url: '/hr/resources',
-						exact: true
-					},
-					{
-						id: 'new_resources',
-						title: 'New resources',
-						type: 'item',
-						url: '/hr/rources/new',
-						exact: true
-					},
-				]
-			},
+		auth: [],
+		type: 'item',
+		url: '/roles/permissions',
+		// children: [
+		// 	{
+		// 		id: 'roles',
+		// 		title: 'Roles',
+		// 		translate: 'Roles',
+		// 		type: 'collapse',
+		// 		icon: 'assignment_turned_in',
+		// 		url: '/hr/roles',
+		// 		children: [
+		// 			{
+		// 				id: 'roles_list',
+		// 				title: 'Roles',
+		// 				type: 'item',
+		// 				url: '/hr/roles',
+		// 				exact: true
+		// 			},
+		// 			{
+		// 				id: 'new_role',
+		// 				title: 'New role',
+		// 				type: 'item',
+		// 				url: '/hr/roles/new',
+		// 				exact: true
+		// 			},
+		// 		]
+		// 	},
+		// 	{
+		// 		id: 'resources',
+		// 		title: 'Resources',
+		// 		translate: 'Resources',
+		// 		type: 'collapse',
+		// 		icon: 'layers',
+		// 		url: '/hr/resources',
+		// 		children: [
+		// 			{
+		// 				id: 'resources_list',
+		// 				title: 'Resources',
+		// 				type: 'item',
+		// 				url: '/hr/resources',
+		// 				exact: true
+		// 			},
+		// 			{
+		// 				id: 'new_resources',
+		// 				title: 'New resources',
+		// 				type: 'item',
+		// 				url: '/hr/rources/new',
+		// 				exact: true
+		// 			},
+		// 		]
+		// 	},
 
-		]
+		// ]
 	},
 	// Entity & department navigations
 	{
