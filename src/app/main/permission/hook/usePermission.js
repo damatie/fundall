@@ -1,25 +1,36 @@
 import React from 'react';
+import * as Actions from '../store/actions';
 
 const usePermission = ({dispatch, state}) => {
   const [initialEndpoint, setInitialEndpoint] = React.useState([]);
 
   const updateWithCurrentPermissions = (endpoints) => {
     const currentEndpoints = [];
-    const defaultEndpoints = [];
-    const convertObj = Object.entries(state);
-    for(const i of endpoints) {
-      for(const [key, value] of convertObj) {
-        if(i.path === key) {
-          currentEndpoints.push({
-            ...i,
-            methods: value
-          });
-        } else {
-          defaultEndpoints.push(i);
+    let defaultEndpoints = [];
+    const convertObj = Object.entries(state.permissions?.endpoints || {});
+    if(convertObj.length !== 0) {
+      for(const i of endpoints) {
+        for(const [key, value] of convertObj) {
+          if(i.path === key) {
+            currentEndpoints.push({
+              ...i,
+              methods: value
+            });
+          }
+        }
+        
+      };
+      for(let x = 0; x < endpoints.length ; x++) {
+        for(let item=0; item < currentEndpoints.length; item++) {
+          if(endpoints[x].path === currentEndpoints[item].path) {
+            defaultEndpoints = endpoints.slice(item, 1);
+          }
         }
       }
+      return [...currentEndpoints, ...defaultEndpoints];
+    } else {
+      return endpoints;
     }
-    return [...currentEndpoints, ...defaultEndpoints];
   };
 
   const getInitialEndpoint = (endpoints) => {
@@ -80,23 +91,48 @@ const usePermission = ({dispatch, state}) => {
   };
 
   const handleSubmit = () => {
-    let value = {};
+    let endpoints = {};
     initialEndpoint.map((item) => {
-      if(item.methods.length !== 0) {
-        value = {
-          ...value,
+      // if(item.methods.length !== 0) {
+        endpoints = {
+          ...endpoints,
           [item.path]: item.methods
         }
-      }
+      // }
     });
-    console.log(value);
+    if(Object.entries(state.permissions).length === 0) {
+      dispatch(Actions.submitRolePermission({
+        id: state.id,
+        payload: {
+          roleId: state.id,
+          endpoints, 
+        }
+      }))
+    } else {
+      dispatch(Actions.updateRolePermission({
+        id: state.permissions.id,
+        payload: {
+          roleId: state.id,
+          endpoints, 
+        }
+      }))
+    }
+  };
+
+  const handleClickTab = (role) => () => {
+    dispatch({
+      type: Actions.ROLE_ID,
+      payload: role.id
+    });
+    dispatch(Actions.getAllRolePermissions(role.id));
   };
 
   return {
     updateWithCurrentPermissions,
     getInitialEndpoint,
     updateInitialEndpoint,
-    handleSubmit
+    handleSubmit,
+    handleClickTab
   };
 };
 

@@ -8,28 +8,39 @@ const getValue = (endpoints, keyWord) => {
   return endpoints.includes(keyWord);
 };
 
+const checkboxConfig = [
+  {
+    name: 'get',
+    label: 'Can View'
+  },
+  {
+    name: 'post',
+    label: 'Can Add'
+  },
+  {
+    name: 'patch',
+    label: 'Can Edit'
+  },
+  {
+    name: 'delete',
+    label: 'Can Delete'
+  }
+];
+
 const PermissionList = ({endpointFor, handleClick, getInitialEndpoint}) => {
   React.useEffect(() => getInitialEndpoint(endpointFor), []);
   return (
-    <section>
+    <section className='my-16'>
       <Typography variant="subtitle1" color="initial">{endpointFor.name}</Typography>
       <FormGroup row>
-        <FormControlLabel
-          control={<Checkbox defaultChecked={getValue(endpointFor.methods, 'GET')} onChange={handleClick(endpointFor)} name="get" />}
-          label="Can View"
-        />
-        <FormControlLabel
-          control={<Checkbox defaultChecked={getValue(endpointFor.methods, 'POST')} onChange={handleClick(endpointFor)} name="post" />}
-          label="Can Add"
-        />
-        <FormControlLabel
-          control={<Checkbox defaultChecked={getValue(endpointFor.methods, 'PATCH')} onChange={handleClick(endpointFor)} name="patch" />}
-          label="Can Edit"
-        />
-        <FormControlLabel
-          control={<Checkbox defaultChecked={getValue(endpointFor.methods, 'DELETE')} onChange={handleClick(endpointFor)} name="delete" />}
-          label="Can Delete"
-        />
+        {
+          checkboxConfig.map(item => (
+            <FormControlLabel
+              control={<Checkbox defaultChecked={getValue(endpointFor.methods, item.name.toUpperCase())} onChange={handleClick(endpointFor)} name={item.name} />}
+              label={item.label}
+            />
+          ))
+        }
       </FormGroup>
     </section>
   );
