@@ -1,8 +1,23 @@
 import React from 'react';
 import * as Actions from '../store/actions';
 
+
+function removeDuplicates(a, b) {
+
+  b = b.filter( function( item ) {
+      for( var i=0, len=a.length; i<len; i++ ){
+          if( a[i].name == item.name ) {
+              return false;
+          }
+      }
+      return true;
+  });
+  return b;
+}
+
 const usePermission = ({dispatch, state}) => {
   const [initialEndpoint, setInitialEndpoint] = React.useState([]);
+  const [submitValue, setSubmitValue] = React.useState({});
 
   const updateWithCurrentPermissions = (endpoints) => {
     const currentEndpoints = [];
@@ -20,14 +35,7 @@ const usePermission = ({dispatch, state}) => {
         }
         
       };
-      for(let x = 0; x < endpoints.length ; x++) {
-        for(let item=0; item < currentEndpoints.length; item++) {
-          if(endpoints[x].path === currentEndpoints[item].path) {
-            defaultEndpoints = endpoints.slice(item, 1);
-          }
-        }
-      }
-      return [...currentEndpoints, ...defaultEndpoints];
+      return [...currentEndpoints, ...removeDuplicates(currentEndpoints, endpoints)];
     } else {
       return endpoints;
     }
@@ -100,6 +108,7 @@ const usePermission = ({dispatch, state}) => {
         }
       // }
     });
+    setSubmitValue(endpoints);
     if(Object.entries(state.permissions).length === 0) {
       dispatch(Actions.submitRolePermission({
         id: state.id,
@@ -132,7 +141,9 @@ const usePermission = ({dispatch, state}) => {
     getInitialEndpoint,
     updateInitialEndpoint,
     handleSubmit,
-    handleClickTab
+    handleClickTab,
+    submitValue,
+    initialEndpoint
   };
 };
 

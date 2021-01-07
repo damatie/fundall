@@ -4,7 +4,7 @@ module.exports = {
   verbose: true,
   moduleFileExtensions: [...defaults.moduleFileExtensions, 'ts', 'tsx', 'test.js'],
   testPathIgnorePatterns: ['<rootDir>/.next/', '<rootDir>/node_modules/'],
-  setupFilesAfterEnv: ['<rootDir>/setupTests.js'],
+  setupFilesAfterEnv: ['<rootDir>/src/setupTests.js'],
   transform: {
     '^.+\\.(js|jsx|ts|tsx|css)$': '<rootDir>/node_modules/babel-jest',
   },

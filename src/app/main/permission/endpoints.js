@@ -12,6 +12,11 @@ const endpoints = [
         name: 'Get all pending Loan',
         path: '/loans/pending',
         methods: [],
+      },
+      {
+        name: 'Get all approved Loan',
+        path: '/loans/approved',
+        methods: [],
       }
     ]
   },
