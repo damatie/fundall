@@ -13,7 +13,7 @@ const authRoles = {
 	hrManager: ["Line Manager", "Hr Manager"],
 	lineManager: ["line manager", "Line Manager"],
 	onlyGuest: [],
-	loan: ['Line managers', 'Finance Manager', 'Director of support service']
+	loan: ['Hr Manager', 'Finance Manager', 'Director of support service']
 };
 
 export default authRoles;

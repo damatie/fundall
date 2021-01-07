@@ -18,15 +18,15 @@ const navigationConfig = [
 		icon: 'apps',
 
 		children: [
-			{
-				id: 'dashboard',
-				title: 'HR Dashboard',
-				translate: 'Dashboard',
-				type: 'item',
-				url: '/hr/dashboard',
-				icon: 'dashboard',
-				auth: authRoles.admin,
-			},
+			// {
+			// 	id: 'dashboard',
+			// 	title: 'HR Dashboard',
+			// 	translate: 'Dashboard',
+			// 	type: 'item',
+			// 	url: '/hr/dashboard',
+			// 	icon: 'dashboard',
+			// 	auth: authRoles.admin,
+			// },
 			{
 				id: 'employee_dashboard',
 				title: 'Dashboard',
@@ -313,7 +313,7 @@ const navigationConfig = [
 				type: 'item',
 				url: '/loan/review/',
 				icon: 'monetization_on',
-				auth: authRoles.staff,
+				auth: authRoles.loan,
 			},
 			{
 				id: 'loan_request',
