@@ -14,8 +14,8 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
         cost: "",
         description: "",
         employeeGrade: "",
-        companySeniority: 0,
-        industrySeniority: 0,
+        companySeniority: '0',
+        industrySeniority: "0",
         certification: false,
         startDate: "",
         endDate: "",
@@ -47,6 +47,9 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        // if (formstate.name.length < 10 || formstate.description.length < 25) {
+        //     return;
+        // }
 
         let payload = formstate;
         payload.cost = Number(payload.cost);
@@ -63,6 +66,15 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
         setFormstate({});
         handleClose();
     }
+
+    useEffect(() => {
+        if (Object.values(formstate).includes("") || formstate?.name?.length < 10 || formstate?.description?.length < 25) {
+            console.log(formstate);
+            setCanBeSubmitted(false)
+        } else {
+            setCanBeSubmitted(true)
+        }
+    }, [formstate])
 
     useEffect(() => {
         if (data) {
@@ -107,11 +119,11 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
         //reload when data changes
     }, [data])
 
-    useEffect(() => {
-        if (Object.entries(formstate).length !== "") {
-            setCanBeSubmitted(true)
-        }
-    }, [formstate])
+    // useEffect(() => {
+    //     if (Object.entries(formstate).includes( !== "") {
+    //         // setCanBeSubmitted(true)
+    //     }
+    // }, [formstate])
 
     return (
         <Dialog open={open} onClose={() => { handleClose(); setFormstate({}); }} fullWidth>
@@ -131,14 +143,17 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
                         variant="outlined"
                         onChange={(e) => handleChange("name", e.target.value)}
                         label="Course Title"
+                        required
                         value={formstate?.name}
                         className="w-full mb-24"
-                        helperText={"must be more than 10 characters: " + (formstate?.name?.length > -1 ? formstate?.name?.length > 10 ? "Okay" : 10 - formstate?.name?.length : 0)}
+                        error={formstate.name?.length < 10 ? true : false}
+                        helperText={"must be more than 10 characters: " + (formstate?.name?.length > -1 ? formstate?.name?.length > 10 ? "" : 10 - formstate?.name?.length : 0)}
                     />
 
                     <FormControl className="flex w-full mb-24" variant="outlined">
                         <InputLabel htmlFor="category-label-placeholder"> Category </InputLabel>
                         <Select
+                            required
                             value={formstate?.category}
                             onChange={(e) => handleChange(e.target.name, e.target.value)}
                             input={
@@ -311,8 +326,10 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
                         value={formstate?.description}
                         onChange={(e) => handleChange("description", e.target.value)}
                         label="Decription"
+                        required
+                        error={formstate.description?.length < 25 ? true : false}
                         className="w-full mb-24"
-                        helperText={"must be more than 25 characters: " + (formstate?.description?.length > -1 ? formstate?.description?.length > 25 ? "Okay" : 25 - formstate?.description?.length : 0)}
+                        helperText={"must be more than 25 characters " + (formstate?.description?.length > -1 ? formstate?.description?.length > 25 ? "" : 25 - formstate?.description?.length : 0)}
                     />
 
                     <DateTimePicker

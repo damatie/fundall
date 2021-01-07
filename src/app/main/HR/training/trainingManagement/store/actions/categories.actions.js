@@ -128,7 +128,7 @@ export function addCategory(payload) {
 				} else {
 					swal.fire({
 						title: 'Create Course Category',
-						text: data.error,
+						text: data.message,
 						timer: 3000,
 						icon: 'error'
 					})
