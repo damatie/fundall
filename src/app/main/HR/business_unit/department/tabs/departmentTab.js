@@ -199,7 +199,7 @@ function DepartmentTab(props) {
 					required
 				/>
 
-				<ProgressBtn success={department.success} loading={department.loading} content={departmentId ? 'Update' : 'Save'} disable={!isFormValid}/>
+				<ProgressBtn content={departmentId ? 'Update' : 'Save'} disable={!isFormValid}/>
 			</Formsy>
 		</div>
 	);
