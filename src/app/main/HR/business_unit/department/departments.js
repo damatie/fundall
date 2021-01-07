@@ -40,4 +40,4 @@ function Departments() {
 	);
 }
 
-export default withReducer('departments', reducer)(Departments);
+export default withReducer('departmentsList', reducer)(Departments);

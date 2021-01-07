@@ -21,6 +21,11 @@ export function saveDepartment(data, id) {
       ...data,
       entityId: id
     }
+    swal.fire({
+      title: 'Creating Department',
+      allowClickOutside: false
+    });
+    swal.showLoading();
 
     const request = axios.post(`${getBaseUrl()}/department/new`, newData, {
       headers: {
@@ -92,6 +97,11 @@ export const updateDepartment = (id, model) => {
     dispatch({
       type: DEPARTMENT_LOADING
     })
+    swal.fire({
+      title: 'Creating Department',
+      allowClickOutside: false
+    });
+    swal.showLoading();
     fetch(`${getBaseUrl()}/department/update/${id}`, {
       ...header.reqHeader(
         'PATCH',
