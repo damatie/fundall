@@ -41,7 +41,7 @@ export function submitLogin(data, x) {
 
 				const userState = {
 					role: data?.role.name ?? x.toUpperCase(),
-					redirectUrl: x ? `/dashboard` : '/employee/dashboard',
+					redirectUrl: '/employee/dashboard',
 					id: data?.id,
 					data: {
 						displayName: `${data?.firstName ?? response.firstName} ${data?.lastName ?? response.lastName}`,
