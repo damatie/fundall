@@ -18,7 +18,7 @@ const PermissionsContainer = ({
     <>
       {
         state.loadingPermission ? (
-          <Skeleton variant="rect" width='100%' height="70%" animation="wave" />
+          <Skeleton variant="rect" width='30%' height="70%" animation="wave" />
         ) :
           endpoints.map((item) => (
             <section key={item.id}>
@@ -33,7 +33,7 @@ const PermissionsContainer = ({
             </section>
           ))
       }
-      <Button variant="contained" color="primary" className='text-white my-8' onClick={handleSubmit}>
+      <Button disabled={state.loadingPermission} variant="contained" color="primary" className='text-white my-8' onClick={handleSubmit}>
         Save
       </Button>
     </>
