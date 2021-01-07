@@ -1,5 +1,6 @@
 import { AppBar, Button, Dialog, DialogActions, DialogContent, FormControl, InputLabel, MenuItem, OutlinedInput, Select, TextField, Toolbar, Typography } from '@material-ui/core'
-import { DateTimePicker } from '@material-ui/pickers'
+import { FormatListBulletedOutlined } from '@material-ui/icons';
+import { DateTimePicker, DatePicker } from '@material-ui/pickers'
 import CurrencyInput from 'app/shared/TextInput/CurrencyInput';
 import React, { useEffect, useState } from 'react'
 
@@ -23,13 +24,27 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
         country: "",
         trainingCategoryId: 0
     });
-    const [canBeSubmitted, setCanBeSubmitted] = useState(false)
+    const [canBeSubmitted, setCanBeSubmitted] = useState(FormatListBulletedOutlined)
+    const [errorEndDate, setErrorEndDate] = useState("")
+    const [errorStartDate, setErrorStartDate] = useState("")
+    const [titleError, setTitleError] = useState("")
+    const [descriptionError, setDescriptionError] = useState("")
 
     const handleChange = (name, value) => {
         if (name === "entity") {
             let id = entities.find(element => element.name = value);
             changeDepartment(id.id);
         }
+        else if (name === "endDate") {
+            if (!formstate.startDate) {
+                setErrorEndDate("must select a start date");
+                setTimeout(() => {
+                    setErrorEndDate("")
+                }, 2000);
+                return;
+            }
+        }
+
         else if (name === "category") {
             let id = entities.find(element => element.name = value);
             let courseData = { trainingCourseId: data?.id }
@@ -47,9 +62,18 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // if (formstate.name.length < 10 || formstate.description.length < 25) {
-        //     return;
-        // }
+
+        if (Date.parse(formstate.startDate) >= Date.parse(formstate.endDate)) {
+            setErrorStartDate("Start date cannot be greater than the end date");
+            return
+        } else if (formstate.name?.length < 10) {
+            setTitleError("Minimum required length is 10");
+            return;
+        }
+        else if (formstate.description?.length < 25) {
+            setDescriptionError("Minimum required length is 25");
+            return;
+        }
 
         let payload = formstate;
         payload.cost = Number(payload.cost);
@@ -68,7 +92,15 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
     }
 
     useEffect(() => {
-        if (Object.values(formstate).includes("") || formstate?.name?.length < 10 || formstate?.description?.length < 25) {
+        if (formstate?.name?.length > 10) { setTitleError("") }
+    }, [formstate?.name])
+
+    useEffect(() => {
+        if (formstate?.description?.length > 25) { setDescriptionError("") }
+    }, [formstate?.description])
+
+    useEffect(() => {
+        if (Object.values(formstate).includes("")) {
             console.log(formstate);
             setCanBeSubmitted(false)
         } else {
@@ -146,8 +178,8 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
                         required
                         value={formstate?.name}
                         className="w-full mb-24"
-                        error={formstate.name?.length < 10 ? true : false}
-                        helperText={"must be more than 10 characters: " + (formstate?.name?.length > -1 ? formstate?.name?.length > 10 ? "" : 10 - formstate?.name?.length : 0)}
+                        error={Boolean(titleError)}
+                        helperText={titleError}
                     />
 
                     <FormControl className="flex w-full mb-24" variant="outlined">
@@ -327,32 +359,37 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
                         onChange={(e) => handleChange("description", e.target.value)}
                         label="Decription"
                         required
-                        error={formstate.description?.length < 25 ? true : false}
+                        error={Boolean(descriptionError)}
                         className="w-full mb-24"
-                        helperText={"must be more than 25 characters " + (formstate?.description?.length > -1 ? formstate?.description?.length > 25 ? "" : 25 - formstate?.description?.length : 0)}
+                        helperText={descriptionError}
                     />
 
-                    <DateTimePicker
+                    <DatePicker
                         label="Start"
                         inputVariant="outlined"
                         disablePast
                         value={formstate?.startDate}
                         onChange={date => handleChange("startDate", date)}
                         className="mt-8 mb-16 w-full"
-                        format={'MMMM Do, YYYY hh:mm a'}
-                        helperText={"please select a valid date"}
+                        format={'MMMM Do, YYYY'}
+                        helperText={errorStartDate ? errorStartDate : "must select a date"}
+                        // error={Boolean(errorStartDate)}
+                        error={Boolean(errorStartDate)}
+                    // maxDate={formstate.endDate > formstate.startDate}
                     />
 
-                    <DateTimePicker
+                    <DatePicker
                         label="End"
-                        disablePast
+                        // disablePast
                         inputVariant="outlined"
                         value={formstate?.endDate}
                         onChange={date => handleChange("endDate", date)}
                         className="mt-8 mb-16 w-full"
-                        format={'MMMM Do, YYYY hh:mm a'}
-                        helperText={"please select a valid date"}
-
+                        format={'MMMM Do, YYYY'}
+                        minDate={formstate?.startDate}
+                        error={Boolean(errorEndDate)}
+                        // disableFuture
+                        helperText={errorEndDate ? errorEndDate : "must select a date"}
                     />
 
                     <TextField
