@@ -1,22 +1,22 @@
 import FuseAnimate from '@fuse/core/FuseAnimate';
-import FuseChipSelect from '@fuse/core/FuseChipSelect';
-import FuseLoading from '@fuse/core/FuseLoading';
+// import FuseChipSelect from '@fuse/core/FuseChipSelect';
+// import FuseLoading from '@fuse/core/FuseLoading';
 import FusePageCarded from '@fuse/core/FusePageCarded';
-import { useForm, useDeepCompareEffect } from '@fuse/hooks';
-import FuseUtils from '@fuse/utils';
+// import { useForm, useDeepCompareEffect } from '@fuse/hooks';
+// import FuseUtils from '@fuse/utils';
 import _ from '@lodash';
-import Button from '@material-ui/core/Button';
+// import Button from '@material-ui/core/Button';
 import { orange } from '@material-ui/core/colors';
 import Icon from '@material-ui/core/Icon';
-import InputAdornment from '@material-ui/core/InputAdornment';
+// import InputAdornment from '@material-ui/core/InputAdornment';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import Tab from '@material-ui/core/Tab';
-import Tabs from '@material-ui/core/Tabs';
-import TextField from '@material-ui/core/TextField';
+// import Tab from '@material-ui/core/Tab';
+// import Tabs from '@material-ui/core/Tabs';
+// import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import withReducer from 'app/store/withReducer';
-import clsx from 'clsx';
-import React, { useEffect, useState } from 'react';
+// import clsx from 'clsx';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams, useHistory, useLocation } from 'react-router-dom';
 import RequestSalaryAdvTab from '../tabs/requestSalaryAdvTab';
@@ -79,8 +79,6 @@ function SalaryAdvance(props) {
 		}
 	}, [id, dispatch]);
 
-
-	console.log(details);
 	return (
 		<FusePageCarded
 			classes={{
@@ -144,7 +142,7 @@ function SalaryAdvance(props) {
 			}
 			content={
 				<div className=" sm:p-24 ">
-					<RequestSalaryAdvTab 
+					<RequestSalaryAdvTab
 						salaryAdvance={salaryAdvance}
 						details={details}
 					/>

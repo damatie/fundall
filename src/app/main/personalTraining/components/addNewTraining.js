@@ -17,8 +17,8 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
         companySeniority: 0,
         industrySeniority: 0,
         certification: false,
-        startDate: new Date(),
-        endDate: new Date(),
+        startDate: "",
+        endDate: "",
         state: "",
         country: "",
         trainingCategoryId: 0
@@ -133,6 +133,7 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
                         label="Course Title"
                         value={formstate?.name}
                         className="w-full mb-24"
+                        helperText={"must be more than 10 characters: " + (formstate?.name?.length > -1 ? formstate?.name?.length > 10 ? "Okay" : 10 - formstate?.name?.length : 0)}
                     />
 
                     <FormControl className="flex w-full mb-24" variant="outlined">
@@ -290,6 +291,7 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
                         onChange={(e) => handleChange("industrySeniority", e.target.value)}
                         label="Industry Senority"
                         className="w-full mb-24"
+                    // helperText={"must be more than 25 characters"}
                     />
 
                     <TextField
@@ -310,24 +312,30 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
                         onChange={(e) => handleChange("description", e.target.value)}
                         label="Decription"
                         className="w-full mb-24"
+                        helperText={"must be more than 25 characters: " + (formstate?.description?.length > -1 ? formstate?.description?.length > 25 ? "Okay" : 25 - formstate?.description?.length : 0)}
                     />
 
                     <DateTimePicker
                         label="Start"
                         inputVariant="outlined"
+                        disablePast
                         value={formstate?.startDate}
                         onChange={date => handleChange("startDate", date)}
                         className="mt-8 mb-16 w-full"
                         format={'MMMM Do, YYYY hh:mm a'}
+                        helperText={"please select a valid date"}
                     />
 
                     <DateTimePicker
                         label="End"
+                        disablePast
                         inputVariant="outlined"
                         value={formstate?.endDate}
                         onChange={date => handleChange("endDate", date)}
                         className="mt-8 mb-16 w-full"
                         format={'MMMM Do, YYYY hh:mm a'}
+                        helperText={"please select a valid date"}
+
                     />
 
                     <TextField
