@@ -52,6 +52,11 @@ export const submitRolePermission = ({id, payload}) => {
       type: SUBMITTING_ROLE_PERMISSIONS
     });
     try {
+      swal.fire({
+        title: 'Creating Permission ...',
+        allowOutsideClick: false
+      });
+      swal.showLoading();
       const { data: { message, success } } = await api.post('permissions/', payload);
       if(success) {
         swal.fire({
@@ -78,6 +83,11 @@ export const updateRolePermission = ({id, payload}) => {
       type: SUBMITTING_ROLE_PERMISSIONS
     });
     try {
+      swal.fire({
+        title: 'Updating Permissions ...',
+        allowOutsideClick: false
+      });
+      swal.showLoading();
       const { data: { message, success } } = await api.patch(`permissions/${id}`, payload);
       if(success) {
         swal.fire({

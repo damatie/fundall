@@ -2,14 +2,12 @@ import PageLayout from 'app/shared/pageLayout/PageLayout';
 import React from 'react';
 import VerticalTabs from './components/VerticalTab';
 import endpoints from './endpoints';
-import Typography from '@material-ui/core/Typography'
-import PermissionList from './components/PermissionList';
 import usePermission from './hook/usePermission';
-import Button from '@material-ui/core/Button';
 import withReducer from 'app/store/withReducer';
 import reducer from './store/reducers/permission.reducer';
 import { useSelector, useDispatch } from 'react-redux';
 import { getAllRoles, getAllRolePermissions } from './store/actions';
+import PermissionsContainer from './components/PermissionsContainer';
 
 const Permission = () => {
   const [index, setIndex] = React.useState(0);
@@ -50,30 +48,18 @@ const Permission = () => {
           roles={state.roles}
           handleClick={(ev, value) => setIndex(value)}
           index={index}
-          // loading={loading}
+          loading={state.loading}
         >
-          <>
-          {
-            state.loadingPermission ? (
-              <>Loading...</>
-            ) : 
-            endpoints.map((item) => (
-              <section key={item.id}>
-              <Typography variant="h6" className='font-semibold' color="initial">{item.name}</Typography>
-              {
-                updateWithCurrentPermissions(item.endpoints)?.map((result, index, current) => {
-                  return (
-                    <PermissionList endpointFor={result} key={result.name} handleClick={updateInitialEndpoint} getInitialEndpoint={getInitialEndpoint}/>
-                  );
-                })
-              }
-              </section>
-            ))
-          }
-          <Button variant="contained" color="primary" className='text-white my-8' onClick={handleSubmit}>
-            Submit
-          </Button>
-          </>
+          <PermissionsContainer
+            state={state}
+            endpoints={endpoints}
+            permissions={{
+              updateWithCurrentPermissions,
+              updateInitialEndpoint,
+              getInitialEndpoint
+            }}
+            handleSubmit={handleSubmit}
+          />
         </VerticalTabs>
         </section>
         
