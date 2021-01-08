@@ -24,9 +24,9 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
         country: "",
         trainingCategoryId: 0
     });
-    const [canBeSubmitted, setCanBeSubmitted] = useState(FormatListBulletedOutlined)
-    const [errorEndDate, setErrorEndDate] = useState("")
-    const [errorStartDate, setErrorStartDate] = useState("")
+    const [canBeSubmitted, setCanBeSubmitted] = useState(false)
+    const [errorEndDate, setErrorEndDate] = useState("Select End Date");
+    const [errorStartDate, setErrorStartDate] = useState("Select Start Date");
     const [titleError, setTitleError] = useState("")
     const [descriptionError, setDescriptionError] = useState("")
 
@@ -35,6 +35,7 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
             let id = entities.find(element => element.name = value);
             changeDepartment(id.id);
         }
+
         else if (name === "endDate") {
             if (!formstate.startDate) {
                 setErrorEndDate("must select a start date");
@@ -93,20 +94,11 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
 
     useEffect(() => {
         if (formstate?.name?.length > 10) { setTitleError("") }
-    }, [formstate?.name])
+    }, [formstate?.name]);
 
     useEffect(() => {
         if (formstate?.description?.length > 25) { setDescriptionError("") }
-    }, [formstate?.description])
-
-    useEffect(() => {
-        if (Object.values(formstate).includes("")) {
-            console.log(formstate);
-            setCanBeSubmitted(false)
-        } else {
-            setCanBeSubmitted(true)
-        }
-    }, [formstate])
+    }, [formstate?.description]);
 
     useEffect(() => {
         if (data) {
@@ -138,27 +130,49 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
                 }
             }
         }
-    }, [data, departments])
+    }, [data, departments]);
 
     useEffect(() => {
         if (formstate.entity) {
             setFormstate(formstate);
         }
         // console.log(formstate, departments);
-    }, [departments, data])
+    }, [departments, data]);
 
     useEffect(() => {
         //reload when data changes
-    }, [data])
+    }, [data]);
 
-    // useEffect(() => {
-    //     if (Object.entries(formstate).includes( !== "") {
-    //         // setCanBeSubmitted(true)
-    //     }
-    // }, [formstate])
+    useEffect(() => {
+        if (Object.values(formstate).includes("")) {
+            // console.log(formstate);
+            setCanBeSubmitted(false)
+        } else {
+            setCanBeSubmitted(true)
+        }
+    }, [formstate]);
+
+    const persistedData = {
+        department: "",
+        category: "",
+        entity: "",
+        jobRole: "",
+        name: "",
+        cost: "",
+        description: "",
+        employeeGrade: "",
+        companySeniority: '0',
+        industrySeniority: "0",
+        certification: false,
+        startDate: "",
+        endDate: "",
+        state: "",
+        country: "",
+        trainingCategoryId: 0
+    };
 
     return (
-        <Dialog open={open} onClose={() => { handleClose(); setFormstate({}); }} fullWidth>
+        <Dialog open={open} onClose={() => { handleClose(); setFormstate(persistedData); }} fullWidth>
             <AppBar position="static">
                 <Toolbar className="flex w-full">
                     <Typography variant="subtitle1" color="inherit">
@@ -372,9 +386,9 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
                         onChange={date => handleChange("startDate", date)}
                         className="mt-8 mb-16 w-full"
                         format={'MMMM Do, YYYY'}
-                        helperText={errorStartDate ? errorStartDate : "must select a date"}
+                        helperText={!formstate?.startDate ? errorStartDate : ""}
                         // error={Boolean(errorStartDate)}
-                        error={Boolean(errorStartDate)}
+                        error={formstate?.startDate ? false : true}
                     // maxDate={formstate.endDate > formstate.startDate}
                     />
 
@@ -387,9 +401,10 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
                         className="mt-8 mb-16 w-full"
                         format={'MMMM Do, YYYY'}
                         minDate={formstate?.startDate}
-                        error={Boolean(errorEndDate)}
+                        error={formstate?.endDate ? false : true}
+                        // error={Boolean(errorEndDate)}
                         // disableFuture
-                        helperText={errorEndDate ? errorEndDate : "must select a date"}
+                        helperText={!formstate?.endDate ? errorEndDate : ""}
                     />
 
                     <TextField
