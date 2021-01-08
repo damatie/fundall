@@ -328,7 +328,7 @@ const navigationConfig = [
 				type: 'item',
 				url: '/hr/training/management',
 				icon: 'school',
-				auth: authRoles?.manager,
+				auth: authRoles?.admin,
 			},
 			{
 				id: 'personalTraining',
@@ -344,7 +344,7 @@ const navigationConfig = [
 				type: 'item',
 				url: '/training/list',
 				icon: 'book',
-				auth: authRoles?.manager,
+				auth: authRoles?.lineManager,
 			},
 			{
 				id: 'courseCategory',
