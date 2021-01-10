@@ -8,33 +8,14 @@ const getValue = (endpoints, keyWord) => {
   return endpoints.includes(keyWord);
 };
 
-const checkboxConfig = [
-  {
-    name: 'get',
-    label: 'Can View'
-  },
-  {
-    name: 'post',
-    label: 'Can Add'
-  },
-  {
-    name: 'patch',
-    label: 'Can Edit'
-  },
-  {
-    name: 'delete',
-    label: 'Can Delete'
-  }
-];
-
-const PermissionList = ({endpointFor, handleClick, getInitialEndpoint}) => {
+const PermissionList = ({endpointFor, handleClick, getInitialEndpoint, methodsType}) => {
   React.useEffect(() => getInitialEndpoint(endpointFor), []);
   return (
     <section className='my-16'>
       <Typography variant="subtitle1" color="initial">{endpointFor.name}</Typography>
       <FormGroup row>
         {
-          checkboxConfig.map(item => (
+          methodsType(endpointFor.name).map(item => (
             <FormControlLabel
               control={<Checkbox defaultChecked={getValue(endpointFor.methods, item.name.toUpperCase())} onChange={handleClick(endpointFor)} name={item.name} />}
               label={item.label}

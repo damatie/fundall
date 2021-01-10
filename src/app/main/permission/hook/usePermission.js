@@ -21,7 +21,6 @@ const usePermission = ({dispatch, state}) => {
 
   const updateWithCurrentPermissions = (endpoints) => {
     const currentEndpoints = [];
-    let defaultEndpoints = [];
     const convertObj = Object.entries(state.permissions?.endpoints || {});
     if(convertObj.length !== 0) {
       for(const i of endpoints) {
@@ -136,6 +135,54 @@ const usePermission = ({dispatch, state}) => {
     dispatch(Actions.getAllRolePermissions(role.id));
   };
 
+  const includesCharacter = (name, char) => {
+    return name.toUpperCase().includes(char.toUpperCase());
+  }
+  const methodsType = (name) => {
+    if(includesCharacter(name, 'view') && includesCharacter(name, 'add')) {
+      return [
+        {
+          name: 'get',
+          label: 'Can View'
+        },
+        {
+          name: 'post',
+          label: 'Can Add'
+        },
+      ];
+    } else if((includesCharacter(name, 'update') && includesCharacter(name, 'delete'))) {
+      return [
+        {
+          name: 'patch',
+          label: 'Can Edit'
+        },
+        {
+          name: 'delete',
+          label: 'Can Delete'
+        }
+      ]
+    } else {
+      return [
+        {
+          name: 'get',
+          label: 'Can View'
+        },
+        {
+          name: 'post',
+          label: 'Can Add'
+        },
+        {
+          name: 'patch',
+          label: 'Can Edit'
+        },
+        {
+          name: 'delete',
+          label: 'Can Delete'
+        }
+      ]
+    }
+  }
+
   return {
     updateWithCurrentPermissions,
     getInitialEndpoint,
@@ -143,7 +190,8 @@ const usePermission = ({dispatch, state}) => {
     handleSubmit,
     handleClickTab,
     submitValue,
-    initialEndpoint
+    initialEndpoint,
+    methodsType
   };
 };
 
