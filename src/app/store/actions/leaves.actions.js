@@ -31,7 +31,12 @@ export const getPendingLeaveReq = () => {
           type: LEAVE_REQUEST_SUCCESS
         })
       }
-    ).catch(e => console.error(e))
+    ).catch(e => {
+      dispatch({
+        type: GET_PENDING_LEAVE_REQUEST,
+        payload: []
+      })
+    })
   }
 }
 
@@ -54,7 +59,12 @@ export const getApprovedLeaveReq = () => {
           type: LEAVE_REQUEST_SUCCESS
         })
       }
-    ).catch(e => console.error(e))
+    ).catch(e => {
+      dispatch({
+        type: GET_APPROVED_LEAVE_REQUEST,
+        payload: []
+      })
+    })
   }
 }
 
@@ -77,6 +87,11 @@ export const getReviewedLeaveReq = () => {
           type: LEAVE_REQUEST_SUCCESS
         })
       }
-    ).catch(e => console.error(e))
+    ).catch(e => {
+      dispatch({
+        type: GET_REVIEWED_LEAVE_REQUEST,
+        payload: []
+      })
+    })
   }
 }

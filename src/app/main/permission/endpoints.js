@@ -1,23 +1,18 @@
 const endpoints = [
   {
     id: 1,
-    name: 'Loan',
+    name: 'Performance Appraisal',
     endpoints: [
       {
-        name: 'Get all Loan',
-        path: '/loans',
+        name: 'View and Add KPO Category',
+        path: '/appraisal/kpo-category/',
         methods: [],
       },
       {
-        name: 'Get all pending Loan',
-        path: '/loans/pending',
+        name: 'Update and Delete KPO Category',
+        path: '/appraisal/kpo-category/:id',
         methods: [],
       },
-      {
-        name: 'Get all approved Loan',
-        path: '/loans/approved',
-        methods: [],
-      }
     ]
   },
 ];

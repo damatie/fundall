@@ -29,6 +29,7 @@ const Permission = () => {
     updateInitialEndpoint,
     handleSubmit,
     handleClickTab,
+    methodsType
   } = usePermission({state, dispatch});
 
   return (
@@ -56,7 +57,8 @@ const Permission = () => {
             permissions={{
               updateWithCurrentPermissions,
               updateInitialEndpoint,
-              getInitialEndpoint
+              getInitialEndpoint,
+              methodsType
             }}
             handleSubmit={handleSubmit}
           />

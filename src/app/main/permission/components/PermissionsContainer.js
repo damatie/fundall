@@ -10,7 +10,8 @@ const PermissionsContainer = ({
   permissions: {
     updateWithCurrentPermissions,
     updateInitialEndpoint,
-    getInitialEndpoint
+    getInitialEndpoint,
+    methodsType
   },
   handleSubmit
 }) => {
@@ -26,7 +27,7 @@ const PermissionsContainer = ({
               {
                 updateWithCurrentPermissions(item.endpoints)?.map((result) => {
                   return (
-                    <PermissionList endpointFor={result} key={result.name} handleClick={updateInitialEndpoint} getInitialEndpoint={getInitialEndpoint} />
+                    <PermissionList endpointFor={result} key={result.name} handleClick={updateInitialEndpoint} getInitialEndpoint={getInitialEndpoint} methodsType={methodsType}/>
                   );
                 })
               }
