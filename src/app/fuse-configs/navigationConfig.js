@@ -212,14 +212,14 @@ const navigationConfig = [
 				icon: 'monetization_on',
 				auth: authRoles?.staff,
 			},
-			{
-				id: 'loan_salary_advance_list',
-				title: 'Salary Advance Loans',
-				type: 'item',
-				url: '/loan/salary_advance/list',
-				icon: 'monetization_on',
-				auth: authRoles?.manager,
-			}
+			// {
+			// 	id: 'loan_salary_advance_list',
+			// 	title: 'Salary Advance Loans',
+			// 	type: 'item',
+			// 	url: '/loan/salary_advance/list',
+			// 	icon: 'monetization_on',
+			// 	auth: authRoles.managers,
+			// }
 		]
 	},
 	// Leave mgt navigations
