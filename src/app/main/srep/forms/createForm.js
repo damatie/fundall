@@ -22,6 +22,8 @@ import ProgressBtn from 'app/shared/progressBtn';
 import GridSystem from 'app/shared/gridSystem';
 import { useAuth } from 'app/hooks/useAuth';
 import * as LocationActions from '../../../store/actions/index';
+import PhoneNumberInput from '../../../shared/TextInput/PhoneNumberInput';
+import CurrencyInput from 'app/shared/TextInput/CurrencyInput';
 
 
 
@@ -44,10 +46,13 @@ function CreateForm(props) {
 	const [adProof, setAdProof] = useState('');
 	const [photo, setPhoto] = useState('');
 	const [benPhoto, setBenPhoto] = useState('');
+	const [phoneNo, setPhoneNo] = useState('');
+	const [telNo, setTelNo] = useState('');
+	const [amount, setAmount] = useState('');
 	const formRef = useRef(null);
 
 	useEffect(() => {
-		dispatch(LocationActions.getCountries())
+		dispatch(LocationActions.getCountries());
 	}, [dispatch])
 
 	function disableButton() {
@@ -58,9 +63,11 @@ function CreateForm(props) {
 		setIsFormValid(true);
 	}
 
-
 	function handleSubmit(model) {
 		console.log(model);
+		// console.log(phoneNo);
+		// console.log(telNo);
+		// console.log(amount);
 		let payload = new FormData();
 		payload.append("employeeId", userId);
 		payload.append("hrManagerId", userId);
@@ -69,13 +76,13 @@ function CreateForm(props) {
 		payload.append("benDob", dob.format("DD-MM-YYYY"));
 		payload.append("benNationality", model.nationality);
 		payload.append("birthCertNo", model.birth_cert_no);
-		payload.append("capitalFund", model.capital_fund);
+		payload.append("capitalFund", amount);
 		payload.append("benEmailAddress", model.email_address);
 		payload.append("benGender", model.gender);
-		payload.append("phoneNo", model.phone_no);
+		payload.append("phoneNo", phoneNo);
 		payload.append("benRelationshipEmp", model.relationship_emp);
 		payload.append("residentialAddress", model.residential_address);
-		payload.append("benTelNo", model.tel_no);
+		payload.append("benTelNo", telNo);
 		payload.append("benTitle", model.title);
 		
 		// payload.append("sre_form", file[0]);
@@ -90,7 +97,7 @@ function CreateForm(props) {
 	function checkFiles(){
 		return (identity.length === 0 ||  
 			benIdentity.length === 0 || adProof.length === 0 || 
-			photo.length === 0 || benPhoto.length === 0)
+			photo.length === 0 || benPhoto.length === 0 || !telNo || !phoneNo)
 	}
 
 	const identityTypes = [
@@ -109,7 +116,8 @@ function CreateForm(props) {
 		{ id: 1, name: "Mr" },
 		{ id: 2, name: "Miss" }
 	]
-	
+	const minValue = min => value =>
+  	value && value < min ? `Must be at least ${min}` : undefined
 
 	return (
 		<FusePageCarded
@@ -145,7 +153,7 @@ function CreateForm(props) {
 								<Typography variant='h6' className="mb-3">Employee Name: {userData.displayName} </Typography>
 							</div>
 							<div>
-							<Typography variant='h6' className="mb-3">Employment ID: EMP1236</Typography>
+							<Typography variant='h6' className="mb-3">Employment ID: {(userProfile.info) ? userProfile.info.SRGNumber : ''}</Typography>
 							</div>
 							<div>
 								<Typography variant='h6' className="mb-3">Department: {(userProfile.department) ? userProfile.department.departmentName : ''}</Typography>
@@ -154,10 +162,10 @@ function CreateForm(props) {
 								<Typography variant='h6' className="mb-3">Job Role: {(userProfile.role) ? userProfile.role.name : ''}</Typography>
 							</div>
 							<div>
-							<Typography variant='h6' className="mb-3">Entity: SREL</Typography>
+							<Typography variant='h6' className="mb-3">Entity: {(userProfile.entity) ? userProfile.entity.entityName : ''}</Typography>
 							</div>
 							<div>
-							<Typography variant='h6' className="mb-3">Employee Grade: G9</Typography>
+							<Typography variant='h6' className="mb-3">Employee Grade: {(userProfile.info) ? userProfile.info.gradeLevel : ''}</Typography>
 							</div>
 							<div>
 							<Typography variant='h6' className="mb-32">Email: {(userProfile) ? userProfile.email : ''}</Typography>
@@ -189,7 +197,7 @@ function CreateForm(props) {
 								</div>
 								<div>
 									<Typography variant='body1' className="mt-16 mb-8">Phone Number *</Typography>
-									<TextFieldFormsy
+									{/* <TextFieldFormsy
 										className="mb-16 w-full"
 										type="text"
 										name="phone_no"
@@ -201,11 +209,18 @@ function CreateForm(props) {
 										}}
 										variant="outlined"
 										required
-									/>
+									/> */}
+									<PhoneNumberInput
+										label=''
+										name='phone_no'
+										onChange={e => setPhoneNo(e)}
+										type='number'
+										country={'ng'}
+								  />
 								</div>
 								<div>
 									<Typography variant='body1' className="mt-16 mb-8">Capital Fund to be contributed to the SREP(monthly) *</Typography>
-									<TextFieldFormsy
+									{/* <TextFieldFormsy
 										className="mb-16 w-full"
 										type="number"
 										name="capital_fund"
@@ -216,6 +231,13 @@ function CreateForm(props) {
 											minLength: 'Min character length is 1'
 										}}
 										variant="outlined"
+										required
+									/> */}
+									<CurrencyInput
+										values={amount}
+										handleChange={e => setAmount(e.target.value)}
+										name={"capital_fund"}
+										// label={"Amount requested"}
 										required
 									/>
 								</div>
@@ -317,7 +339,7 @@ function CreateForm(props) {
 								</div>
 								<div>
 									<Typography variant='body1' className="mt-16 mb-8">Telephone Number *</Typography>
-									<TextFieldFormsy
+									{/* <TextFieldFormsy
 										className="mb-16 w-full"
 										type="text"
 										name="tel_no"
@@ -329,7 +351,14 @@ function CreateForm(props) {
 										}}
 										variant="outlined"
 										required
-									/>
+									/> */}
+									<PhoneNumberInput
+										label=''
+										name='phone_no'
+										onChange={e => setTelNo(e)}
+										type='number'
+										country={'ng'}
+								  />
 								</div>
 								<div>
 									<Typography variant='body1' className="mt-16 mb-8">Birth Certificate Number *</Typography>

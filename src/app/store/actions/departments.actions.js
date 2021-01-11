@@ -10,7 +10,7 @@ const header = fetchHeaders()
 const userData = useAuth().getUserProfile
 
 function entity(){
-  return (userData.entity) ? userData.entity.id : 0;
+  return (userData.entityId) ? userData.entityId : 0;
 }
 
 export const getDepartments = () => {
