@@ -37,18 +37,19 @@ const schema = yup.object().shape({
   )
 });
 
-const useEmployeeGrade = (params) => {
+const useEmployeeGrade = (params, dispatch) => {
   const {
     errors,
     handleSubmit,
     control,
-    register
+    register,
+    getValues,
   } = useForm({
-    mode: 'onBlur',
+    mode: 'onSubmit',
     resolver: yupResolver(schema),
   });
 
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   const handleOpen = () => {
     dispatch({
@@ -130,7 +131,10 @@ const useEmployeeGrade = (params) => {
     handleSubmit,
     textFieldValue,
     modalTitle,
-    buttonTitle
+    buttonTitle,
+    x: 'fucking test',
+    state: params,
+    getValues: getValues(),
   };
 };
 

@@ -1,13 +1,13 @@
 import TextField from '@material-ui/core/TextField';
 import clsx from 'clsx';
-import { useState, memo } from 'react';
+import { useState, forwardRef } from 'react';
 import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import React from 'react';
 
-const Input = memo((props) => {
+const Input = forwardRef((props, ref) => {
   const {
     name,
     error,
@@ -56,7 +56,7 @@ const Input = memo((props) => {
       variant={variant || 'outlined'}
       helperText={message}
       onBlur={onBlur}
-      inputRef={refs}
+      inputRef={refs || ref}
       rows={multiline && 4}
       multiline={multiline && true}
       placeholder={placeholder}

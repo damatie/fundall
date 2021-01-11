@@ -19,12 +19,12 @@ const schema = yup.object().shape({
       type: 'required',
     })
   ),
-  kpoYear: yup.mixed().required(
-    errorMssg({
-      name: 'KpoYear',
-      type: 'required',
-    })
-  ),
+  // kpoYear: yup.mixed().required(
+  //   errorMssg({
+  //     name: 'KpoYear',
+  //     type: 'required',
+  //   })
+  // ),
   lineManagerId: yup.number(
     errorMssg({
       name: 'Line Manager',
@@ -109,7 +109,7 @@ const useKpoList = () => {
         model
       }));
     }
-    dispatch(Actions.createKpo({ userId, item: model}));
+    dispatch(Actions.createKpo({ userId, item: {...model, kpoYear: `${new Date().getFullYear()}`}}));
   };
 
   const handleDeleteKpo = (kpoId) => {

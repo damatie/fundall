@@ -7,7 +7,7 @@ const ProjectDashboardAppConfig = {
 			config: {}
 		}
 	},
-	auth: authRoles.staff,
+	// auth: authRoles.staff,
 	routes: [
 		{
 			path: '/employee/dashboard',

@@ -31,7 +31,7 @@ const EmployeeKpoListTable = () => {
 				Cell: ({ row: { original: { dateCompleted }} }) => {
 					return <>{dateCompleted || 'On Going'}</>
 				}
-      },
+			},
       {
 				Header: 'Line Manager',
 				accessor: 'lineManager',

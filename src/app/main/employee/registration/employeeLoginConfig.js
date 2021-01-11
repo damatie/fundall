@@ -24,7 +24,7 @@ const EmployeeLoginConfig = {
 			}
 		}
 	},
-	auth: authRoles.onlyGuest,
+	// auth: authRoles.onlyGuest,
 	routes: [
 		{
 			path: '/employee/login',

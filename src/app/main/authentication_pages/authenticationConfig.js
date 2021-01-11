@@ -23,7 +23,7 @@ const AuthenticationConfig = {
 			}
 		}
 	},
-	auth: authRoles.onlyGuest,
+	// auth: authRoles.onlyGuest,
 	routes: [ 
 		{
 			path: '/auth/forgot-password',

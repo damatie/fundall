@@ -6,6 +6,7 @@ import Icon from '@material-ui/core/Icon';
 import Typography from '@material-ui/core/Typography';
 import moment from 'moment';
 import useJobTitle from '../hooks/useJobTitle';
+import TableToolbar from './TableToolbar';
 
 const JobTitleTable = () => {
 	const { data, handleDelete, handleGetOne } = useJobTitle();
@@ -24,6 +25,12 @@ const JobTitleTable = () => {
 				align: 'center'
 			},
 			{
+				Header: 'Entity',
+				accessor: 'entity',
+				sortable: true,
+				align: 'center'
+			},
+			{
 				Header: 'Modified',
 				accessor: 'updatedAt',
 				align: 'right',
@@ -32,18 +39,26 @@ const JobTitleTable = () => {
 					return <>{moment(original.updatedAt).format('LLL')}</>
 				}
 			},
+			{
+				Header: 'Modified By',
+				accessor: 'modifiedBy',
+				sortable: true,
+				align: 'center'
+			},
+			
 		],
 	);
 
 	return (
 		<EnhancedTable
 			columns={columns}
-			data={data}
+			data={data || []}
 			onRowClick={(ev, row) => {
 				if (row) {
           handleGetOne(row.values)
 				}
 			}}
+			toolBar={<TableToolbar/>}
 			checkbox={{
 				showCheckbox: true,
 				onClick: (value) => console.log(value),

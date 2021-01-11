@@ -151,7 +151,7 @@ function LeaveTableTab(props) {
 						order={order}
 						onSelectAllClick={handleSelectAllClick}
 						onRequestSort={handleRequestSort}
-            rowCount={data.length}
+            rowCount={data?.length || 0}
 						rows={rows}
 						handleDelete={handleDelete}
 						success={true}

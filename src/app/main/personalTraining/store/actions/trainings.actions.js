@@ -119,7 +119,7 @@ export function createTraining(model, history) {
 					dispatch(HrActions.getReviewedTraining());
 					dispatch(HrActions.getApprovedTraining());
 					dispatch(HrActions.getRejectedTraining());
-					// window.location.reload()
+					window.location.reload()
 				})
 				swal.fire({
 					title: 'Create Training',
@@ -128,7 +128,7 @@ export function createTraining(model, history) {
 					icon: 'success'
 				}).then(
 					function () {
-						history.push("/training/list");
+						history.go(0);
 					});
 			} else {
 				swal.fire({
@@ -184,7 +184,7 @@ export function updateTraining(model, id) {
 					dispatch(HrActions.getReviewedTraining());
 					dispatch(HrActions.getApprovedTraining());
 					dispatch(HrActions.getRejectedTraining());
-					// window.location.reload()
+					window.location.reload()
 				})
 				swal.fire({
 					title: 'Update Training Request',
@@ -395,7 +395,7 @@ export function getTraining() {
 	});
 }
 
-export function requestTraining(id) {
+export function requestTraining(id, history) {
 	swal.fire("Processing ...");
 	// console.log(id)
 	swal.showLoading();
@@ -412,8 +412,11 @@ export function requestTraining(id) {
 					text: (data.message) ? data.message : data.error,
 					timer: 3000,
 					icon: 'success'
-				});
-
+				}).then(
+					function () {
+						history.push("/training/personal");
+					}
+				);
 			}
 			else {
 				swal.fire({
