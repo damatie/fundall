@@ -45,7 +45,7 @@ const rows = [
 		id: 'status',
 		align: 'left',
 		disablePadding: false,
-		label: 'status',
+		label: 'Status',
 		sort: true,
 		field: 'status'
 	},

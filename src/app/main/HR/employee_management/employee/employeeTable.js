@@ -203,7 +203,7 @@ function EmployeesTable(props) {
 										</TableCell>
 
 										<TableCell className="truncate" component="th" scope="row" align="left">
-											{n.department.departmentName}
+											{n.department?.departmentName}
 										</TableCell>
 
 										<TableCell component="th" scope="row" align="right">

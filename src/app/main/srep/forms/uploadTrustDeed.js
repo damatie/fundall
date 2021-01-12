@@ -30,9 +30,9 @@ function UploadTrustDeed(props){
     
     let srepId = props.srepId;
     
-    const files = (props.srepOtherFiles) ? props.srepOtherFiles.filter((f, id, self)=>{return self.indexOf(f) === id;} ).map(d => {return d.fieldname}) : [];
-    let fileUrls = (props.srepOtherFiles) ? props.srepOtherFiles.filter((f, id, self)=>{return self.indexOf(f) === id;} ).map(d => {return {fieldName: d.fieldname, url:d.url}}) : [];
-
+    const files = (props.srepOtherFiles) ? props.srepOtherFiles.filter((f, id, self)=>{return self.indexOf(f) === id;} ).map(d => {return d.fieldName}) : [];
+    let fileUrls = (props.srepOtherFiles) ? props.srepOtherFiles.filter((f, id, self)=>{return self.indexOf(f) === id;} ).map(d => {return {fieldName: d.fieldName, url:d.url}}) : [];
+    
     const downloadFile = (fieldName) => {
         console.log(fileUrls);
         let url = fileUrls.find(file => {return file.fieldName === fieldName});

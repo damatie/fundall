@@ -16,8 +16,8 @@ import DepartmentTableHead from './departmentTableHead';
 
 function DepartmentTable(props) {
 	const dispatch = useDispatch();
-	const departments = useSelector(({ departments }) => departments.departments.data);
-	const searchText = useSelector(({ departments }) => departments.departments.searchText);
+	const departments = useSelector(({ departmentsList }) => departmentsList.departments.data);
+	const searchText = useSelector(({ departmentsList }) => departmentsList.departments.searchText);
 
 	const params = useParams();
 

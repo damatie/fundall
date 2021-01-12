@@ -24,5 +24,5 @@ function AllocateLeave() {
 
 withReducer('employeeList', employeeListReducer)(AllocateLeave);
 withReducer('businessUnits', businessUnitReducer)(AllocateLeave);
-withReducer('departments', departmentReducer)(AllocateLeave);
+withReducer('department', departmentReducer)(AllocateLeave);
 export default withReducer('allocate', reducer)(AllocateLeave);

@@ -52,7 +52,7 @@ function EmployeementInfoTab() {
   // STORES
   const profile = useSelector(({ profile }) => profile.data);
 
-  const department = useSelector(({ departments }) => departments.departments.data);
+  const department = useSelector(({ department }) => department.departments.data);
 
   const regions = useSelector(({ regions }) => regions);
 
