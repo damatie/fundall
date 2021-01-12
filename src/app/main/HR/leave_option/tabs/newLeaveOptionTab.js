@@ -77,7 +77,7 @@ function NewLeaveOptionTab(props) {
           variant="outlined"
 					required
         >
-					{businessUnits.data.map(item => (
+					{businessUnits.data?.map(item => (
 						<MenuItem value={item.entityName} onClick={e => {
 							getDepartments(item.id);
 						}}>{item.entityName}</MenuItem>
@@ -94,12 +94,8 @@ function NewLeaveOptionTab(props) {
           variant="outlined"
           required
         >
-					{departments.data.length === 0 ? 
-						<div>
-							<CircularProgress color='secondary' className={loader.loader}/>
-						</div>
-						:
-						departments.data.map(item => (
+					{
+						departments?.data?.map(item => (
 							<MenuItem value="no">Human resources</MenuItem>
 						))
 					}
