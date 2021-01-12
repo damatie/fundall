@@ -175,6 +175,7 @@ function ManageLoan(props) {
 					>
 
 						<Tab className="h-64 normal-case" label="Pending Loan" />
+						<Tab className="h-64 normal-case" label="Reviewed Loan" />
 						<Tab className="h-64 normal-case" label="Approved Loan" />
 						<Tab className="h-64 normal-case" label="Disbursed Loan" />
 						<Tab className="h-64 normal-case" label="Open Loan" />
@@ -189,11 +190,12 @@ function ManageLoan(props) {
 					</div> : <></>}
 
 					{profile.role?.name === 'Finance Manager' ? <div className=" sm:p-24 ">
-						{tabValue === 0 && (<LoanReqTab loans={loans.reviewedLoan} />)}
-						{tabValue === 1 && (<LoanReqTab loans={loans.approvedLoan} />)}
-						{tabValue === 2 && (<LoanReqTab loans={loans.disbursedLoan} />)}
-						{tabValue === 3 && (<LoanReqTab loans={loans.openLoan} />)}
-						{tabValue === 4 && (<LoanReqTab loans={loans.closedLoan} />)}
+						{tabValue === 0 && (<LoanReqTab loans={loans.pendingLoan} />)}
+						{tabValue === 1 && (<LoanReqTab loans={loans.reviewedLoan} />)}
+						{tabValue === 2 && (<LoanReqTab loans={loans.approvedLoan} />)}
+						{tabValue === 3 && (<LoanReqTab loans={loans.disbursedLoan} />)}
+						{tabValue === 4 && (<LoanReqTab loans={loans.openLoan} />)}
+						{tabValue === 5 && (<LoanReqTab loans={loans.closedLoan} />)}
 					</div> : <></>}
 				</>
 			}

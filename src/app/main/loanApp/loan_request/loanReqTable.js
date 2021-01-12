@@ -390,10 +390,10 @@ function LoanReqTable(props) {
 							:
 							loanDetails.status?.toLowerCase() === 'approved' ?
 								<div className='flex justify-center w-full my-16 mx-auto'>
-									<CustomIconButton onClick={e => confirmDisbursement(loanDetails.id)} icon='check_circle_outline' className={'bg-green hover:bg-green-A700 text-white w-1/3 mx-16'}>
+									<CustomIconButton onClick={e => confirmDisbursement(loanDetails.id)} icon='check_circle_outline' className={'bg-green hover:bg-green-A700 text-white w-1/2 mx-16'}>
 										Confirm Loan Disbursement
 									</CustomIconButton>
-									<CustomIconButton onClick={e => handleCancel(loanDetails.id)} icon='cancel' className={'bg-red hover:bg-red-A700 text-white w-1/3 mx-16'}>
+									<CustomIconButton onClick={e => handleCancel(loanDetails.id)} icon='cancel' className={'bg-red hover:bg-red-A700 text-white w-1/2 mx-16'}>
 										Cancel Request
 									</CustomIconButton>
 								</div>
