@@ -60,7 +60,7 @@ const navigationConfig = [
 			},
 			{
 				id: 'job_title',
-				title: 'Job Role',
+				title: 'Job Title',
 				type: 'item',
 				url: '/jobTitle/all',
 				icon: 'account_box',
