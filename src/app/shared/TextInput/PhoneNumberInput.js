@@ -21,7 +21,7 @@ const PhoneNumberInput = (props) => {
       specialLabel={placeholder ? placeholder : "Phone"}
       defaultErrorMessage='Phone number'
       isValid={(value, country) => {
-        if (!isValidPhoneNumber(`+${value}`)) {
+        if ((value.length < 14 || value.length > 14) && value.length !== 3) {
           if (setError) {
             setError(true);
           }

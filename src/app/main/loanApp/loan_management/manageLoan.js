@@ -183,9 +183,6 @@ function ManageLoan(props) {
 			}
 			content={
 				<>
-					{/* {profile.role?.name === 'Line Managers' ? <div className=" sm:p-24 ">
-						{tabValue === 0 && (<LoanReqTab loans={loans.pendingLoan} />)}
-					</div> : <></>} */}
 
 					{profile.role?.name === 'Hr Manager' ? <div className=" sm:p-24 ">
 						{tabValue === 0 && (<LoanReqTab loans={loans.pendingLoan} />)}

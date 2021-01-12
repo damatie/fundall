@@ -292,7 +292,7 @@ function RequestLoanTab(props) {
 
 					<PhoneNumberInput
 						required
-						setError={setError}
+						// setError={setError}
 						value={otherDetails.workPhone}
 						onChange={(e) => handleOtherDetails(e, "workPhone")}
 						country={'ng'}
@@ -301,7 +301,7 @@ function RequestLoanTab(props) {
 
 					<PhoneNumberInput
 						required
-						setError={setError}
+						// setError={setError}
 						value={otherDetails.mobilePhone}
 						onChange={(e) => handleOtherDetails(e, "mobilePhone")}
 						country={'ng'}
@@ -310,17 +310,18 @@ function RequestLoanTab(props) {
 
 					<PhoneNumberInput
 						required
-						setError={setError}
+						// setError={setError}
 						value={otherDetails.homePhone}
 						onChange={(e) => handleOtherDetails(e, "homePhone")}
 						country={'ng'}
 						placeholder={"Home Phone"}
-						validations={{
-							minLength: 10
-						}}
-						validationErrors={{
-							minLength: 'Min character length is 10'
-						}}
+						// validations={{
+						// 	minLength: 10,
+						// 	maxLength: 10
+						// }}
+						// validationErrors={{
+						// 	minLength: 'Min character length is 10'
+						// }}
 					/>
 
 					{/* 
