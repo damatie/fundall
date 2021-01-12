@@ -88,7 +88,9 @@ export const deleteJobTitle = (id) => {
       });
       swal.showLoading();
       const { data: { success, message } } = await api.delete(`/appraisal/jobTitle/all/selected`, {
-        id
+        data: {
+          id
+        }
       });
       if(success) {
         swal.fire({
