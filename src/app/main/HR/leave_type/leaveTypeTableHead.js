@@ -31,10 +31,10 @@ const rows = [
 		sort: true
 	},
 	{
-		id: 'is_deductable',
+		id: 'is_deductible',
 		align: 'left',
 		disablePadding: false,
-		label: 'Is Deductable',
+		label: 'Is Deductible',
 		sort: true
 	},
 	{

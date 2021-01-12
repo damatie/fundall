@@ -19,7 +19,7 @@ function NewEmployeeTab(props) {
 	const employee = useSelector(({ employees }) => employees.employee);
 	const entity = useSelector(({ entity }) => entity.businessUnits);
 	const department = useSelector(({ department }) => department.departments);
-	const roles = useSelector(({ roles }) => roles.roles);
+	const roles = useSelector(({ roles }) => roles);
 
 	const [isFormValid, setIsFormValid] = useState(true);
 	const formRef = useRef(null);
@@ -124,6 +124,7 @@ function NewEmployeeTab(props) {
 					required
 					requiredError='Must not be None'
 				>
+					<MenuItem value={1}>Employee</MenuItem>
 					{roles.data.map(item => (
 						<MenuItem value={item.id} key={item.id}>{item.name}</MenuItem>
 					))}
