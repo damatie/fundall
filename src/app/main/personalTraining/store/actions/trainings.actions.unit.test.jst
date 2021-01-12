@@ -1,0 +1,57 @@
+import configureMockStore from 'redux-mock-store'
+import thunk from 'redux-thunk'
+import * as types from './trainings.actions';
+import fetchMock from 'fetch-mock'
+
+const middlewares = [thunk]
+const mockStore = configureMockStore(middlewares)
+
+describe('async actions', () => {
+    afterEach(() => {
+        fetchMock.restore()
+    })
+
+    it('creates training successfully ', () => {
+
+        let model = {
+            name: "React Course",
+            entity: "SpringRock Group",
+            department: "IT",
+            location: "Nigeria"
+        };
+
+        fetchMock.postOnce('/training/courses', {
+            body: { model },
+            headers: { 'content-type': 'application/json' }
+        });
+
+        const expectedActions = [
+            { type: types.CREATE_TRAINING_SUCCESS },
+        ];
+
+        const store = mockStore({
+            loading: true,
+            data: [],
+            pendingTrainings: [],
+            approvedTrainings: [],
+            completedTrainings: [],
+            rejectedTrainings: [],
+            pendingPersonalTrainings: [],
+            reviewedPersonalTrainings: [],
+            approvedPersonalTrainings: [],
+            completedPersonalTrainings: [],
+            rejectedPersonalTrainings: [],
+            events: [],
+            trainings: [],
+            entities: [],
+            department: [],
+            roles: [],
+            success: false
+        });
+
+        return store.dispatch(types.createTraining(model, null)).then(() => {
+            // return of async actions
+            expect(store.createTraining(model, null)).toEqual(expectedActions)
+        })
+    })
+});
