@@ -10,8 +10,8 @@ const initialState = {
   closing: false,
 }
 
-export const loanReducer = (state = initialState, actions) => {
-  switch(actions.type) {
+const loanReducer = (state = initialState, actions) => {
+  switch (actions.type) {
     case Actions.LOAN_SUCCESS: {
       return {
         ...state,
@@ -75,3 +75,5 @@ export const loanReducer = (state = initialState, actions) => {
     }
   }
 };
+
+export default loanReducer;

@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
-import { loansReducer } from './loans.reducer';
-import { loanReducer } from './loan.reducer';
+import loansReducer from './loans.reducer';
+import loanReducer from './loan.reducer';
 import { salaryAdvanceReducers } from './salaryAdvance.reducers';
 import { salaryAdvanceReducer } from './salaryAdvance.reducer';
 

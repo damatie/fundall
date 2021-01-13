@@ -19,7 +19,7 @@ const initialState = {
   disbursedLoan: []
 };
 
-export const loansReducer = (state = initialState, actions) => {
+const loansReducer = (state = initialState, actions) => {
   switch (actions.type) {
     case Actions.GET_ALL_APPROVED_LOAN: {
       return {
@@ -130,3 +130,5 @@ export const loansReducer = (state = initialState, actions) => {
     }
   }
 }
+
+export default loansReducer;
