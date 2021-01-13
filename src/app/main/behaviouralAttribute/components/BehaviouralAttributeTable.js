@@ -5,11 +5,8 @@ import IconButton from '@material-ui/core/IconButton';
 import Icon from '@material-ui/core/Icon';
 import Typography from '@material-ui/core/Typography';
 import moment from 'moment';
-import { useSelector } from 'react-redux';
-import useBehaviouralAttribute from '../hooks/useBehaviouralAttribute';
-import { useHistory } from 'react-router-dom';
 
-const BehaviouralAttributeTable = () => {
+const BehaviouralAttributeTable = ({handleDelete, state, push}) => {
   const columns = React.useMemo(
 		() => [
 			{
@@ -33,10 +30,7 @@ const BehaviouralAttributeTable = () => {
 			},
 		],
 	);
-  const state = useSelector(state => state.behaviouralAttribute);
-	const { handleGetOne, handleDelete } = useBehaviouralAttribute(state);
-	
-	const { push } = useHistory();
+
 	return (
 		<EnhancedTable
 			columns={columns}
@@ -44,7 +38,7 @@ const BehaviouralAttributeTable = () => {
 			onRowClick={(ev, row) => {
 				if (row) {
 					// handleGetOne(row.values)
-					push(`/behaviouralAttribute/content/1`)
+					push(`/behaviouralAttribute/content/${row.original.id}`)
 				}
 			}}
 			checkbox={{

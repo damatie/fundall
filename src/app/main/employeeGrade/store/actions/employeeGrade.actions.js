@@ -76,7 +76,7 @@ export const updateEmployeeGrade = ({id, model, pagination}) => {
     })
     swal.showLoading();
     try {
-      const { data: { success, message } } = await api.post(`/employee-grade/${id}`, model);
+      const { data: { success, message } } = await api.patch(`/employee-grade/${id}`, model);
       if(success) {
         swal.fire({
           text: message,
