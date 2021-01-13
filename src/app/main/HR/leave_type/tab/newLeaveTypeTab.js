@@ -102,16 +102,16 @@ function NewLeaveTypeTab(props) {
 
         <SelectFormsy
           className="my-16"
-          name="isDeductable"
-          label="Is Deductable"
+          name="isDeductible"
+          label="Is Deductible"
           value="none"
           // validations="not-equals:none"
           validationError="requried"
           variant="outlined"
           required
         >
-          <MenuItem value="yes">Yes</MenuItem>
-          <MenuItem value="no">No</MenuItem>
+          <MenuItem value={true}>Yes</MenuItem>
+          <MenuItem value={false}>No</MenuItem>
         </SelectFormsy>
 
 
