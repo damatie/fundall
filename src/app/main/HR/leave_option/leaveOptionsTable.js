@@ -151,11 +151,11 @@ function LeaveOptionsTable(props) {
 										</TableCell>
 
 										<TableCell component="th" scope="row">
-											{`${n.halfDayRequests}`}
+											{n.halfDayRequests ? 'Yes' : 'No'}
 										</TableCell>
 
 										<TableCell component="th" scope="row" align="right">
-											{`${n.skipHolidays}`}
+											{n.skipHolidays ? 'Yes' : 'No'}
 										</TableCell>
 
 										<TableCell component="th" scope="row" align="right">
@@ -163,19 +163,19 @@ function LeaveOptionsTable(props) {
 										</TableCell>
 
 										<TableCell component="th" scope="row" align="right">
-											{n.allowLeaveTransfer}
+											{n.allowLeaveTransfer ? 'Yes' : 'No'}
 										</TableCell>
 
 										<TableCell component="th" scope="row" align="right">
-											{n.calendarStartMonth}
+											{n.weekendStartDay}
 										</TableCell>
 
 										<TableCell component="th" scope="row" align="right">
-											{n.selectWeekendStartDay}
+											{n.weekendStartDay}
 										</TableCell>
 
 										<TableCell component="th" scope="row" align="right">
-											{n.selectWeekendEndDay}
+											{n.description}
 										</TableCell>
 									</TableRow>
 								);
