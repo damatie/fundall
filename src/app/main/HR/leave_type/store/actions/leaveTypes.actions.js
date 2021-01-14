@@ -5,34 +5,6 @@ export const GET_LEAVE_TYPES = 'GET LEAVE TYPES';
 export const SET_LEAVE_TYPES_SEARCH_TEXT = 'SET LEAVE TYPES SEARCH TEXT';
 
 export function getLeaveTypes() {
-  const leave = [
-    {
-      leaveType:"work leave",
-      leaveShortCode:"WL",
-      isDeductable:true,
-      isPreAllocated:false,
-      noOfDays:10,
-      description:"For staying off work for a while and resting",
-    },
-    {
-      leaveType:"work leave",
-      leaveShortCode:"WL",
-      isDeductable:true,
-      isPreAllocated:false,
-      noOfDays:10,
-      description:"For staying off work for a while and resting",
-    },
-    {
-      leaveType:"work leave",
-      leaveShortCode:"WL",
-      isDeductable:true,
-      isPreAllocated:false,
-      noOfDays:10,
-      description:"For staying off work for a while and resting",
-    }
-  ];
-
-  console.log(leave)
 
 	return dispatch => {
       const request = axios.get('https://hris-cbit.herokuapp.com/api/v1/leave-type/', {

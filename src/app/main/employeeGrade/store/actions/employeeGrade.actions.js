@@ -16,11 +16,11 @@ export const getAllEmployeeGrade = ({offset, limit}) => {
       dispatch({
         type: GET_ALL_EMPLOYEE_GRADE,
         payload: {
-          rows: data,
+          rows: data.rows,
           pagination: {
             offset,
             limit,
-            count: data.length,
+            count: data.count,
           }
         }
       })
@@ -109,6 +109,7 @@ export const deleteEmployeeGrade = ({id, pagination}) => {
         text: message,
         icon: 'success',
       })
+      window.location.reload();
       dispatch(getAllEmployeeGrade({...pagination}));
     } catch (e) {
       swal.fire({

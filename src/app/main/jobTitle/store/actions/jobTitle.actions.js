@@ -9,7 +9,7 @@ export const GET_ONE_JOB_TITLE = 'GET ONE JOB TITLE';
 export const getAllJobTitle = () => {
   return async (dispatch) => {
     try {
-      const { data: { data, success }} = await api.get('/appraisal/jobTitle/all');
+      const { data: { data, success }} = await api.get('/appraisal/jobTitle/');
       if(success) {
         dispatch({
           type: GET_ALL_JOB_TITLE,
@@ -33,7 +33,7 @@ export const createJobTitle = (model) => {
         allowClickOutside: false,
       });
       swal.showLoading();
-      const { data: { success, message } } = await api.post('/appraisal/jobTitle/new', model);
+      const { data: { success, message } } = await api.post('/appraisal/jobTitle/', model);
       if(success) {
         swal.fire({
           text: message,
@@ -62,7 +62,7 @@ export const updateJobTitle = ({id, model}) => {
         allowClickOutside: false,
       });
       swal.showLoading();
-      const { data: { success, message } } = await api.patch(`/appraisal/jobTitle/update/${id}`, model);
+      const { data: { success, message } } = await api.patch(`/appraisal/jobTitle/${id}`, model);
       if(success) {
         swal.fire({
           text: message,

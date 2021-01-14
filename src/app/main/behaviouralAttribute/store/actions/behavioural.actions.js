@@ -13,7 +13,7 @@ export const getAllBehaviouralAttribute = ({offset, limit}) => {
       const { data: { data } } = await api.get(`/behavioral/attributes/header/?offset=${offset}&limit=${limit}`);
       dispatch({
         type: GET_ALL_BEHAVIOURAL_ATTRIBUTE,
-        payload: data || []
+        payload: data.rows || []
       })
     } catch (e) {
       dispatch({
