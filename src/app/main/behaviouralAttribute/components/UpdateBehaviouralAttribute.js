@@ -3,29 +3,36 @@ import React from 'react';
 import SharedButton from 'app/shared/button/SharedButton';
 import Paper from '@material-ui/core/Paper';
 
-const UpdateBehaviouralAttribute = () => {
+const UpdateBehaviouralAttribute = ({customHook}) => {
+  const {
+    textFieldValue,
+    errors,
+    register,
+    handleSubmit,
+    onSubmit
+  } = customHook
   return (
     <Paper variant="outlined" className='w-1/2 flex flex-col mx-auto p-20'>
-      <form>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <Input
-          name='name'
-          label='Name'
+          name='title'
+          label='Title'
           className='my-16'
-          // defaultValue={textFieldValue('name')}
-          // error={errors.name}
-          // refs={register}
-          // message={errors.name?.message}
+          defaultValue={textFieldValue('title')}
+          error={errors.title}
+          refs={register}
+          message={errors.title?.message}
         />
         
         <Input
           className='my-16'
           name='description'
           label='Description'
-          // defaultValue={textFieldValue('description')}
+          defaultValue={textFieldValue('description')}
           multiline
-          // error={errors.description}
-          // refs={register}
-          // message={errors.description?.message}
+          error={errors.description}
+          refs={register}
+          message={errors.description?.message}
         />
         
         <SharedButton

@@ -13,7 +13,7 @@ import { useHistory } from 'react-router-dom';
 const BehaviouralAttribute = () => {
 
   const dispatch = useDispatch();
-  const push = useHistory();
+  const { push } = useHistory();
   const state = useSelector(state => state.behaviouralAttribute);
   const customHook = useBehaviouralAttribute(state, dispatch);
 
