@@ -2,11 +2,8 @@ import SharedModal from 'app/shared/modal/SharedModal';
 import Input from 'app/shared/TextInput/Input';
 import React from 'react';
 import SharedButton from 'app/shared/button/SharedButton';
-import { useSelector } from 'react-redux';
-import useBehaviouralAttribute from '../hooks/useBehaviouralAttribute';
 
-const BehaviouralAttributeModal = () => {
-  const state = useSelector(state => state.behaviouralAttribute);
+const BehaviouralAttributeModal = ({customHook, state}) => {
   const { 
     modalTitle,
     handleSubmit, 
@@ -16,7 +13,7 @@ const BehaviouralAttributeModal = () => {
     buttonTitle,
     errors,
     register
-  } = useBehaviouralAttribute(state);
+  } = customHook;
   return (
     <SharedModal
       open={state.open}
@@ -25,13 +22,13 @@ const BehaviouralAttributeModal = () => {
     >
       <form onSubmit={handleSubmit(onSubmit)}>
         <Input
-          name='name'
-          label='Name'
+          name='title'
+          label='Title'
           className='my-16'
-          defaultValue={textFieldValue('name')}
-          error={errors.name}
+          defaultValue={textFieldValue('title')}
+          error={errors.title}
           refs={register}
-          message={errors.name?.message}
+          message={errors.title?.message}
         />
         
         <Input

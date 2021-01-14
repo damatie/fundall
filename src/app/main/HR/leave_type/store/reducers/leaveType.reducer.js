@@ -1,15 +1,15 @@
 import * as Actions from '../actions';
 
 const initialState = {
-  loading: false,
-  data: null,
+  loading: true,
+  data: {},
   error: null,
   success: false,
 };
 
 const leaveTypeReducer = (state = initialState, action) => {
 	switch (action.type) {
-		case Actions.GET_LEAVE_TYPE: {
+		case Actions.GET_ONE_LEAVE_TYPE: {
 			return {
 				...state,
         data: action.payload,

@@ -57,7 +57,7 @@ const IndeterminateCheckbox = React.forwardRef(({ indeterminate, ...rest }, ref)
 });
 
 let globalArray = [];
-const EnhancedTable = ({ columns, data, onRowClick, checkbox, selectAll, toolBar, handleDelete }) => {
+const EnhancedTable = ({ columns, data, onRowClick, checkbox, selectAll, toolBar, handleDelete, pagination }) => {
 	const [selectedItems, setSelectedItems] = React.useState([]);
 	// add or remove table row id to selectedItems state
 	const handleCheckbox = (id) => {
@@ -138,11 +138,11 @@ const EnhancedTable = ({ columns, data, onRowClick, checkbox, selectAll, toolBar
 	);
 
 	const handleChangePage = (event, newPage) => {
-		gotoPage(newPage);
+		pagination?.gotoPage(newPage) || gotoPage(newPage);
 	};
 
 	const handleChangeRowsPerPage = event => {
-		setPageSize(Number(event.target.value));
+		pagination?.setPageSize(Number(event.target.value)) || setPageSize(Number(event.target.value));
 	};
 
 	
@@ -230,11 +230,11 @@ const EnhancedTable = ({ columns, data, onRowClick, checkbox, selectAll, toolBar
 								root: 'overflow-hidden',
 								spacer: 'w-0 max-w-0'
 							}}
-							rowsPerPageOptions={[5, 10, 25, { label: 'All', value: data.length + 1 }]}
+							rowsPerPageOptions={[5, 10, 25, { label: 'All', value: pagination?.limit || data.length + 1 }]}
 							colSpan={5}
-							count={data.length}
-							rowsPerPage={pageSize}
-							page={pageIndex}
+							count={pagination?.count || data.length}
+							rowsPerPage={pagination?.limit || pageSize}
+							page={pagination?.offset || pageIndex}
 							SelectProps={{
 								inputProps: { 'aria-label': 'rows per page' },
 								native: false

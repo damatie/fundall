@@ -1,27 +1,34 @@
 import EnhancedTable from 'app/shared/table/EnhancedTable';
 import React from 'react';
 import moment from 'moment';
+import EmployeeGradeToolbar from './EmployeeGradeToolbar';
 
 const EmployeeGradeTable = ({ customHook }) => {
   const columns = React.useMemo(
 		() => [
 			{
 				Header: 'Name',
-				accessor: 'name',
+				accessor: 'gradeName',
+				// className: 'font-bold',
+				sortable: true,
+			},
+			{
+				Header: 'Entity',
+				accessor: 'entityName',
 				// className: 'font-bold',
 				sortable: true,
 			},
 			{
 				Header: 'Description',
-				accessor: 'description',
+				accessor: 'gradeDescription',
 				sortable: true,
       },
       {
 				Header: 'PIP Eligibility',
-				accessor: 'pip',
+				accessor: 'pipEligibility',
 				sortable: true,
 				Cell: ({ row: { original }}) => {
-					return <>{(original.pip) ? 'Yes' : 'No'}</>
+					return <>{(original.pipEligibility) ? 'Yes' : 'No'}</>
 				}
 			},
 			{
@@ -35,7 +42,7 @@ const EmployeeGradeTable = ({ customHook }) => {
 		],
 	);
 
-	const { handleGetOne, handleDelete, state } = customHook;
+	const { handleGetOne, handleDelete, state, gotoPage, handleFilter } = customHook;
 
 	return (
 		<EnhancedTable
@@ -46,6 +53,9 @@ const EmployeeGradeTable = ({ customHook }) => {
           handleGetOne(row.values)
 				}
 			}}
+			toolBar={
+				<EmployeeGradeToolbar entities={state.entity} handleFilter={handleFilter}/>
+			}
 			checkbox={{
 				showCheckbox: true,
 				onClick: (value) => console.log(value),
@@ -53,6 +63,9 @@ const EmployeeGradeTable = ({ customHook }) => {
 			}}
 			selectAll={(value) => console.log(value)}
 			handleDelete={handleDelete}
+			pagination={{
+				gotoPage
+			}}
 		/>
 	);
 };
