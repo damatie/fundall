@@ -61,8 +61,8 @@ const useStyles = makeStyles(theme => ({
 // filter data by status
 const filterData = (data, status) => {
 	const arr = [];
-	for(const i of data) {
-		if(i.status === status) {
+	for (const i of data) {
+		if (i.status === status) {
 			arr.push(i);
 		}
 	}
@@ -71,30 +71,33 @@ const filterData = (data, status) => {
 
 function ManageLoan(props) {
 	const dispatch = useDispatch();
-  const theme = useTheme();
+	const theme = useTheme();
 	const [tabValue, setTabValue] = useState(0);
 	const loans = useSelector(({ loans }) => loans.loans);
 	const profile = useSelector(({ profile }) => profile.data);
-	const profileLoading = useSelector(({ profile }) => profile.loading)
+	// const profileLoading = useSelector(({ profile }) => profile.loading);
+	// const [allLoans, _] = useState(loans.pendingLoan.concat(loans.approvedLoan).concat(loans.reviewedLoan).concat(loans.openLoan).concat(loans.closedLoan))
 
+	const classes = useStyles(props);
 
-  const classes = useStyles(props);
-  
-  function handleChangeTab(event, value) {
+	function handleChangeTab(event, value) {
+		event.preventDefault();
 		setTabValue(value);
 	}
 
 	useEffect(() => {
 		dispatch(Actions.getPendingLoan());
-		dispatch(Actions.getApprovedLoan());
-		dispatch(Actions.getOpenLoan());
 		dispatch(Actions.getClosedLoan());
+		dispatch(Actions.getOpenLoan());
+		dispatch(Actions.getApprovedLoan());
 		dispatch(Actions.getReviewedLoan());
+		dispatch(Actions.getReturnedLoan());
+		dispatch(Actions.getDisbursedLoan());
 	}, [dispatch]);
 
-	// useEffect(() => {
-
-	// })
+	useEffect(() => {
+		console.log(loans);
+	})
 
 	// useEffect(() => window.location.reload(false), [])
 	// if(loans.loading || profileLoading) {
@@ -110,89 +113,90 @@ function ManageLoan(props) {
 				header: 'min-h-50 h-50 sm:h-136 sm:min-h-136'
 			}}
 			header={
-					<div className="flex flex-1 w-full items-center justify-between">
-						<div className="flex justify-between w-full">
+				<div className="flex flex-1 w-full items-center justify-between">
+					<div className="flex justify-between w-full">
+						<FuseAnimate animation="transition.slideRightIn" delay={300}>
+							<Typography
+								className="normal-case flex items-center sm:mb-12"
+								component={Link}
+								role="button"
+								to="/loan/review/"
+								color="inherit"
+							>
+								<Icon className="text-20">
+									arrow_back
+								</Icon>
+								<Typography className="hidden sm:flex mx-0 sm:mx-12" variant="h6">
+									Loan Review
+									</Typography>
+							</Typography>
+						</FuseAnimate>
+						<div className="flex items-center max-w-full">
 							<FuseAnimate animation="transition.slideRightIn" delay={300}>
 								<Typography
 									className="normal-case flex items-center sm:mb-12"
-									component={Link}
 									role="button"
-									to="/loan/review/"
 									color="inherit"
 								>
-								<Icon className="text-20">
-								arrow_back
-								</Icon>
-									<Typography className="hidden sm:flex mx-0 sm:mx-12" variant="h6">
-										Loan Review
-									</Typography>
+									<Icon className="text-20">
+										monetization_on
+										</Icon>
+									<span className="mx-4">Loan Management</span>
 								</Typography>
 							</FuseAnimate>
-							<div className="flex items-center max-w-full">
-								<FuseAnimate animation="transition.slideRightIn" delay={300}>
-									<Typography
-										className="normal-case flex items-center sm:mb-12"
-										role="button"
-										color="inherit"
-									>
-										<Icon className="text-20">
-											monetization_on
-										</Icon>
-										<span className="mx-4">Loan Management</span>
-									</Typography>
-								</FuseAnimate>
-							</div>
 						</div>
-            
 					</div>
-      }
-      contentToolbar={
-				profile.role?.name !== 'Finance manager' ? 
-				<Tabs
-					value={tabValue}
-					onChange={handleChangeTab}
-					indicatorColor="primary"
-					textColor="primary"
-					variant="scrollable"
-					scrollButtons="auto"
-					classes={{ root: 'w-full h-64' }}
-				>
-					{profile.role?.name === 'Line managers' ? <Tab className="h-64 normal-case" label="Pending Loan" /> : ''}
-					{profile.role?.name === 'HR' || profile.role?.name === 'Director of support service' ? <Tab className="h-64 normal-case" label="Reviewed Loan" /> : ''}
-				</Tabs> : 
 
-				<Tabs
-				value={tabValue}
-				onChange={handleChangeTab}
-				indicatorColor="primary"
-				textColor="primary"
-				variant="scrollable"
-				scrollButtons="auto"
-				classes={{ root: 'w-full h-64' }}
-				>
-					
-				<Tab className="h-64 normal-case" label="Approved Loan" />
-				<Tab className="h-64 normal-case" label="Returned Loan" /> 
-				<Tab className="h-64 normal-case" label="Open Loan" /> 
-				<Tab className="h-64 normal-case" label="Closed Loan" /> 
-			</Tabs>
+				</div>
+			}
+			contentToolbar={
+				profile.role?.name !== 'Finance Manager' ?
+					<Tabs
+						value={tabValue}
+						onChange={handleChangeTab}
+						indicatorColor="primary"
+						textColor="primary"
+						variant="scrollable"
+						scrollButtons="auto"
+						classes={{ root: 'w-full h-64' }}
+					>
+						{/* {profile.role?.name === 'Line Managers' ? <Tab className="h-64 normal-case" label="Pending Loan" /> : ''} */}
+						{profile.role?.name === 'Hr Manager' ? <Tab className="h-64 normal-case" label="Pending Loan" /> : ''}
+					</Tabs> :
+
+					<Tabs
+						value={tabValue}
+						onChange={handleChangeTab}
+						indicatorColor="primary"
+						textColor="primary"
+						variant="scrollable"
+						scrollButtons="auto"
+						classes={{ root: 'w-full h-64' }}
+					>
+
+						<Tab className="h-64 normal-case" label="Pending Loan" />
+						<Tab className="h-64 normal-case" label="Reviewed Loan" />
+						<Tab className="h-64 normal-case" label="Approved Loan" />
+						<Tab className="h-64 normal-case" label="Disbursed Loan" />
+						<Tab className="h-64 normal-case" label="Open Loan" />
+						<Tab className="h-64 normal-case" label="Closed Loan" />
+					</Tabs>
 			}
 			content={
 				<>
-        {profile.role?.name === 'Line managers' ? <div className=" sm:p-24 ">
-          {tabValue === 0 && (<LoanReqTab loans={loans.pendingLoan}/>)}
-				</div> : <></>}
-				
-				{profile.role?.name === 'HR' || profile.role?.name === 'Director of support service' ? 	<div className=" sm:p-24 ">
-					{tabValue === 0 && (<LoanReqTab loans={loans.reviewedLoan}/>)}
-				</div> : <></>}
-				
-				{profile.role?.name === 'Finance manager' ? <div className=" sm:p-24 ">
-					{tabValue === 0 && (<LoanReqTab loans={loans.approvedLoan}/>)}
-					{tabValue === 1 && (<LoanReqTab loans={loans.approvedLoan}/>)}
-					{tabValue === 2 && (<LoanReqTab loans={loans.openLoan}/>)}
-					{tabValue === 3 && (<LoanReqTab loans={loans.closedLoan}/>)}
-				</div> : <></>}
+
+					{profile.role?.name === 'Hr Manager' ? <div className=" sm:p-24 ">
+						{tabValue === 0 && (<LoanReqTab loans={loans.pendingLoan} />)}
+					</div> : <></>}
+
+					{profile.role?.name === 'Finance Manager' ? <div className=" sm:p-24 ">
+						{tabValue === 0 && (<LoanReqTab loans={loans.pendingLoan} />)}
+						{tabValue === 1 && (<LoanReqTab loans={loans.reviewedLoan} />)}
+						{tabValue === 2 && (<LoanReqTab loans={loans.approvedLoan} />)}
+						{tabValue === 3 && (<LoanReqTab loans={loans.disbursedLoan} />)}
+						{tabValue === 4 && (<LoanReqTab loans={loans.openLoan} />)}
+						{tabValue === 5 && (<LoanReqTab loans={loans.closedLoan} />)}
+					</div> : <></>}
 				</>
 			}
 			innerScroll
