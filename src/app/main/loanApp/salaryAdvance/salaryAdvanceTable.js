@@ -128,7 +128,7 @@ function SalaryAdvanceTable() {
 
 						<tr className="created">
 							<th>HR Manager</th>
-							<td>{`${getEmployeeName(employeeList, loanDetails.hrManager)} | (${(loanDetails.hrManager) ? 'Approved' : 'Not approved yet'})`}</td>
+							<td>{`${getEmployeeName(employeeList, loanDetails.hrManager)} | (${(loanDetails.hrManager && ['reviewed2', 'approved', 'disbursed'].includes(loanDetails.status.toLowerCase())) ? 'Approved' : 'Not approved yet'})`}</td>
 						</tr>
 
 						<tr className="created">
