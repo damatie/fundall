@@ -4,15 +4,23 @@ const initialState = {
   pendingLoan: [],
   approvedLoan: [],
   loanHistory: [],
+  pendingLoanHistory: [],
+  reviewedLoanHistory: [],
+  rejectedLoanHistory: [],
+  correctedLoanHistory: [],
+  disbursedLoanHistory: [],
+  approvedLoanHistory: [],
+  closedLoanHistory: [],
   loading: false,
   openLoan: [],
   closedLoan: [],
   reviewedLoan: [],
   returnedLoan: [],
+  disbursedLoan: []
 };
 
-export const loansReducer = (state = initialState, actions) => {
-  switch(actions.type) {
+const loansReducer = (state = initialState, actions) => {
+  switch (actions.type) {
     case Actions.GET_ALL_APPROVED_LOAN: {
       return {
         ...state,
@@ -41,6 +49,13 @@ export const loansReducer = (state = initialState, actions) => {
         returnedLoan: actions.payload
       }
     }
+    case Actions.GET_DISBURSED_LOAN: {
+      return {
+        ...state,
+        loading: false,
+        disbursedLoan: actions.payload
+      }
+    }
     case Actions.GET_ALL_CLOSED_LOAN: {
       return {
         ...state,
@@ -48,11 +63,53 @@ export const loansReducer = (state = initialState, actions) => {
         closedLoan: actions.payload
       }
     }
-    case Actions.EMPLOYEE_LOAN_HISTORY: {
+    case Actions.EMPLOYEE_DISBURSED_LOAN_HISTORY: {
       return {
         ...state,
         loading: false,
-        loanHistory: actions.payload
+        disbursedLoanHistory: actions.payload
+      }
+    }
+    case Actions.EMPLOYEE_CORRECTED_LOAN_HISTORY: {
+      return {
+        ...state,
+        loading: false,
+        correctedLoanHistory: actions.payload
+      }
+    }
+    case Actions.EMPLOYEE_REVIEWED_LOAN_HISTORY: {
+      return {
+        ...state,
+        loading: false,
+        reviewedLoanHistory: actions.payload
+      }
+    }
+    case Actions.EMPLOYEE_PENDING_LOAN_HISTORY: {
+      return {
+        ...state,
+        loading: false,
+        pendingLoanHistory: actions.payload
+      }
+    }
+    case Actions.EMPLOYEE_REJECTED_LOAN_HISTORY: {
+      return {
+        ...state,
+        loading: false,
+        rejectedLoanHistory: actions.payload
+      }
+    }
+    case Actions.EMPLOYEE_APPROVED_LOAN_HISTORY: {
+      return {
+        ...state,
+        loading: false,
+        approvedLoanHistory: actions.payload
+      }
+    }
+    case Actions.EMPLOYEE_CLOSED_LOAN_HISTORY: {
+      return {
+        ...state,
+        loading: false,
+        closedLoanHistory: actions.payload
       }
     }
     case Actions.LOADING_LOANS: {
@@ -73,3 +130,5 @@ export const loansReducer = (state = initialState, actions) => {
     }
   }
 }
+
+export default loansReducer;

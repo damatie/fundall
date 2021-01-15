@@ -27,35 +27,63 @@ const rows = [
 		disablePadding: false,
 		label: 'Email',
 		sort: true
-  },
-  {
+	},
+	{
+		id: 'jobRole',
+		align: 'left',
+		disablePadding: false,
+		label: 'Job Role',
+		sort: true
+	},
+	{
+		id: 'department',
+		align: 'left',
+		disablePadding: false,
+		label: 'Department',
+		sort: true
+	},
+	{
+		id: 'entity',
+		align: 'left',
+		disablePadding: false,
+		label: 'Entity',
+		sort: true
+	},
+	{
 		id: 'amountRequested',
 		align: 'left',
 		disablePadding: false,
 		label: 'Amount Requested',
 		sort: true
-  },
-  {
-		id: 'deductableAmount',
+	},
+	{
+		id: 'duration',
 		align: 'left',
 		disablePadding: false,
-		label: 'Deductable Amount',
-		sort: true
-  },
-  {
-		id: 'amountApproved',
-		align: 'left',
-		disablePadding: false,
-		label: 'Amount Approved',
-		sort: true
-  },
-  {
-		id: 'dateRequested',
-		align: 'right',
-		disablePadding: false,
-		label: 'Date Requested',
+		label: 'Loan Duration',
 		sort: true
 	}
+	// {
+	// 	id: 'deductableAmount',
+	// 	align: 'left',
+	// 	disablePadding: false,
+	// 	label: 'Deductable Amount',
+	// 	sort: true
+	// },
+	// {
+	// 	id: 'amountApproved',
+	// 	align: 'left',
+	// 	disablePadding: false,
+	// 	label: 'Amount Approved',
+	// 	sort: true
+	// },
+	// {
+	// 	id: 'dateRequested',
+	// 	align: 'right',
+	// 	disablePadding: false,
+	// 	label: 'Date Requested',
+	// 	sort: true
+	// }
 ];
 
 function LoanReqTab(props) {
@@ -99,17 +127,24 @@ function LoanReqTab(props) {
 	function handleClick(item) {
 		// if(props.user.user === 'line_manager') {
 		// 	props.history.push(`/line_manager/leave_review/employee/${item.id}`);
-		// } else if(props.user.user === 'hr') {
+		// } else
+		// if (props.user.user === 'Hr Manager') {
 		// 	props.history.push(`/hr/leave_review/employee/${item.id}`);
+		// 	return;
 		// }
-		
-		props.history.push(`/loan/review/list/details/${item.id}`);
-  }
-  
+
+		// props.history.push(`/hr/leave_review/employee/${item.id}`);
+		props.history.push({
+			pathname: `/loan/review/list/details/${item.loan.id}`,
+			state: item
+		});
+	}
+
 
 
 	function handleCheck(event, id) {
-		const selectedIndex = selected.indexOf(id);
+		const selectedIndex = selected.indexOf(id);;
+		// console.log(selectedIndex)
 		let newSelected = [];
 
 		if (selectedIndex === -1) {
@@ -151,12 +186,12 @@ function LoanReqTab(props) {
 		<div className="w-full flex flex-col">
 			<FuseScrollbars className="flex-grow overflow-x-auto">
 				<Table className="min-w-xl" aria-labelledby="tableTitle">
-				  <SharedTableHead
+					<SharedTableHead
 						numSelected={selected.length}
 						order={order}
 						onSelectAllClick={handleSelectAllClick}
 						onRequestSort={handleRequestSort}
-            rowCount={data.length}
+						rowCount={data.length}
 						rows={rows}
 						handleDelete={handleDelete}
 						success={true}
@@ -188,31 +223,35 @@ function LoanReqTab(props) {
 										role="checkbox"
 										aria-checked={isSelected}
 										tabIndex={-1}
-										key={n.id}
+										key={Math.random()}
 										selected={isSelected}
-										onClick={event => handleClick(n.loan)}
+										onClick={event => handleClick(n)}
 									>
-                    <TableCell component="th" scope="row" align='left'>
-                     
-										</TableCell>
+										<TableCell component="th" scope="row" align='left'></TableCell>
 
 										<TableCell component="th" scope="row" align='left'>
-                      {`${n.employee.firstName} ${n.employee.lastName}`}
+											{`${n.employee.firstName} ${n.employee.lastName}`}
 										</TableCell>
 										<TableCell component="th" scope="row" align='left'>
-                      {`${n.employee.email}`}
+											{`${n.employee.email}`}
 										</TableCell>
-                    <TableCell component="th" scope="row" align='left'>
-                      {`₦ ${compareInput(n.loan.amountRequested)}`}
+										<TableCell component="th" scope="row" align='left'>
+											{n.loan.jobRole}
 										</TableCell>
-                    <TableCell component="th" scope="row" align='left'>
-                      {`₦ ${compareInput(n.loan.deductableAmount)}`}
+										<TableCell component="th" scope="row" align='left'>
+											{n.loan.department}
 										</TableCell>
-                    <TableCell component="th" scope="row" align='left'>
-                      {`₦ ${compareInput(n.loan.amountApproved)}`}
+										<TableCell component="th" scope="row" align='left'>
+											{n.loan.entity}
 										</TableCell>
-                    <TableCell component="th" scope="row" align='right'>
-                      {n.loan.dateRequested}
+										{/* <TableCell component="th" scope="row" align='left'>
+											{n.loan.jobRole}
+										</TableCell> */}
+										<TableCell component="th" scope="row" align='left'>
+											{`₦ ${compareInput(n.loan.amountRequested)}`}
+										</TableCell>
+										<TableCell component="th" scope="row" align='left'>
+											{`${compareInput(n.loan.duration)} months`}
 										</TableCell>
 
 									</TableRow>
