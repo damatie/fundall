@@ -14,7 +14,11 @@ const initialState = {
     count: 0
   },
   open: false,
-  details: {}
+  details: {},
+  singleData: {},
+  type: 'update',
+  isUpdate: false,
+  id: null
 }
 
 const behaviouralContentReducer = (state = initialState, actions) => {
@@ -23,24 +27,27 @@ const behaviouralContentReducer = (state = initialState, actions) => {
       return {
         ...state,
         loading: false,
-        data: actions.payload.rows,
-        pagination: actions.payload.pagination
+        data: actions.payload.contents,
+        singleData: actions.payload,
+        id: actions.payload.id
       }
     case OPEN_BEHAVIOURAL_CONTENT_MODAL:
       return {
         ...state,
-        open: true
+        open: true,
       }
     case CLOSE_BEHAVIOURAL_CONTENT_MODAL:
       return {
         ...state,
         open: false,
-        details: {}
+        details: {},
+        isUpdate: false
       }
     case GET_ONE_BEHAVIOURAL_CONTENT:
       return {
         ...state,
-        details: actions.payload
+        details: actions.payload,
+        isUpdate: true
       }
     default:
       return {
