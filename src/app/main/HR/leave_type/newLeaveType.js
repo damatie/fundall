@@ -64,6 +64,12 @@ function NewLeaveType(props) {
 	const theme = useTheme();
 
 	const classes = useStyles(props);
+	const { id } = useParams();
+	React.useEffect(() => {
+		if(id) {
+			dispatch(Actions.getOneLeaveType(id))
+		}
+	}, []);
 
 	return (
 		<FusePageCarded
@@ -104,7 +110,7 @@ function NewLeaveType(props) {
 								<div className="flex flex-col min-w-0 mx-8 sm:mc-16">
 									<FuseAnimate animation="transition.slideLeftIn" delay={300}>
 										<Typography className="text-16 sm:text-20 truncate">
-										  New Leave type
+										  {id ? 'Update Leave Type' : 'New Leave type'}
 										</Typography>
 									</FuseAnimate>
 									<FuseAnimate animation="transition.slideLeftIn" delay={300}>
@@ -116,7 +122,7 @@ function NewLeaveType(props) {
 			}
 			content={
 					<div className=" sm:p-24 ">
-						<NewLeaveTypeTab />
+						<NewLeaveTypeTab update={id}/>
 					</div>
 			}
 			innerScroll

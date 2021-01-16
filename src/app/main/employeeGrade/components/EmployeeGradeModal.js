@@ -8,7 +8,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 
 const EmployeeGradeModal = ({ customHook }) => {
 
-  const { textFieldValue, onSubmit, handleSubmit, errors, register, control, handleClose, buttonTitle, modalTitle, state } = customHook;
+  const { entity, textFieldValue, onSubmit, handleSubmit, errors, register, control, handleClose, buttonTitle, modalTitle, state } = customHook;
 
   return (
     <SharedModal
@@ -21,17 +21,41 @@ const EmployeeGradeModal = ({ customHook }) => {
           name='name'
           label='Name'
           className='my-16'
-          defaultValue={textFieldValue('name')}
+          defaultValue={textFieldValue('gradeName')}
           error={errors.name}
           ref={register}
           message={errors.name?.message}
+        />
+        <Controller
+          name='entity'
+          control={control}
+          defaultValue={textFieldValue('entityName')}
+          label='Entity'
+         as={
+           <SelectTextField
+           data-testid='entity'
+            name='entity'
+            label='Entity'
+            defaultValue={textFieldValue('entityName')}
+            error={errors.entity}
+            message={errors.entity?.message}
+           >
+             {
+               entity.map((item) => (
+                <MenuItem value={item}>
+                  {item.entityName}
+                </MenuItem>
+               ))
+             }
+           </SelectTextField>
+         }
         />
         
         <Input
           className='my-16'
           name='description'
           label='Description'
-          defaultValue={textFieldValue('description')}
+          defaultValue={textFieldValue('gradeDescription')}
           multiline
           error={errors.description}
           ref={register}
@@ -40,14 +64,14 @@ const EmployeeGradeModal = ({ customHook }) => {
         <Controller
           name='pip'
           control={control}
-          defaultValue={textFieldValue('pip')}
+          defaultValue={textFieldValue('pipEligibility')}
           label='PIP Eligible'
          as={
            <SelectTextField
            data-testid='pip'
             name='pip'
             label='PIP Eligible'
-            defaultValue={textFieldValue('pip')}
+            defaultValue={textFieldValue('pipEligibility')}
             error={errors.pip}
             message={errors.pip?.message}
            >

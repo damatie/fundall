@@ -216,6 +216,9 @@ const useStyles2 = makeStyles(theme => ({
 
 const compareYear = (data) => {
 	let result = 0;
+	if(data.length === 0) {
+		return result;
+	}
 	for(const i of data) {
 		if(i.allotedYear == new Date().getFullYear()) {
 			return result = {

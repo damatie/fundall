@@ -39,7 +39,7 @@ function LeaveTypeTable(props) {
 
 	useEffect(() => {
 		if (searchText.length !== 0) {
-			setData(_.filter(leaveTypes, item => item.leaveType.toLowerCase().includes(searchText.toLowerCase())));
+			setData(_.filter(leaveTypes, ['type', searchText.toLowerCase()]));
 			setPage(0);
 		} else {
 			setData(leaveTypes);
@@ -69,7 +69,7 @@ function LeaveTypeTable(props) {
 	}
 
 	function handleClick(item) {
-		// props.history.push(`/apps/e-commerce/products/${item.id}/${item.handle}`);
+		props.history.push(`/hr/leave_type/details/${item.id}`);
 	}
 
 	function handleCheck(event, id) {

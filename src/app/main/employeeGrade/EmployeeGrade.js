@@ -6,7 +6,7 @@ import EmployeeGradeTable from './components/EmployeeGradeTable';
 import EmployeeGradeModal from './components/EmployeeGradeModal';
 import reducer from './store/reducers/employeeGrade.reducer';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllEmployeeGrade } from './store/actions';
+import { getAllEmployeeGrade, getEntity } from './store/actions';
 import useEmployeeGrade from './hooks/useEmployeeGrade';
 
 const EmployeeGrade = () => {
@@ -16,7 +16,11 @@ const EmployeeGrade = () => {
   const customHook = useEmployeeGrade(state, dispatch);
 
   React.useEffect(() => {
-    dispatch(getAllEmployeeGrade());
+    dispatch(getAllEmployeeGrade({
+      offset: 0,
+      limit: 10
+    }));
+    dispatch(getEntity());
   }, []);
 
   return (
@@ -38,7 +42,7 @@ const EmployeeGrade = () => {
             ) : (
               <>
                 <EmployeeGradeTable customHook={customHook}/>
-                <EmployeeGradeModal customHook={customHook}/>
+                <EmployeeGradeModal customHook={{entity: state.entity, ...customHook}}/>
               </>
             )
           }

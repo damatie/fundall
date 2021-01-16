@@ -1,51 +1,73 @@
-import axios from 'axios';
 import swal from 'sweetalert2';
-import { useAuth } from 'app/hooks/useAuth';
-import { fetchHeaders } from 'app/shared/fetchHeaders';
+import api from 'app/services/api';
+import catchErrorMsg from 'utils/catchErrorMsg';
 
 
 export const GET_LEAVE_TYPE = 'GET_LEAVE_TYPE';
 export const SAVE_LEAVE_TYPE = 'SAVE_LEAVE_TYPE';
 export const LEAVE_TYPE_LOADING = 'LEAVE_TYPE_LOADING';
 export const LEAVE_TYPE_ERROR = 'LEAVE_TYPE_ERROR';
+export const GET_ONE_LEAVE_TYPE = 'GET ONE LEAVE TYPE';
 
-const header = fetchHeaders();
+export function saveLeaveTypes(data, push) {
+  return async () => {
+    try {
+      swal.fire({
+        text: 'Creating...',
+        allowOutsideClick: false
+      });
+      swal.showLoading();
+      const { data: { message } } = await api.post(`/leave-type/`, data);
+      swal.fire({
+        text: message,
+        icon: 'success'
+      });
+      push('/hr/leave_type');
+    } catch (e) {
+      swal.fire({
+        text: catchErrorMsg(e),
+        icon: 'error'
+      });
+    }
+  }
+};
 
-export function saveLeaveTypes(data) {
-  return dispatch => {
-    dispatch({
-      type: LEAVE_TYPE_LOADING
-    });
+export function updateLeaveTypes({id, model, push}) {
+  return async () => {
+    try {
+      swal.fire({
+        text: 'Updating...',
+        allowOutsideClick: false
+      });
+      swal.showLoading();
+      const { data: { message } } = await api.patch(`/leave-type/${id}`, model);
+      swal.fire({
+        text: message,
+        icon: 'success'
+      });
+      push('/hr/leave_type');
+    } catch (e) {
+      swal.fire({
+        text: catchErrorMsg(e),
+        icon: 'error'
+      });
+    }
+  }
+};
 
-    fetch('https://hris-cbit.herokuapp.com/api/v1/leave-type/', {
-      ...header.reqHeader(
-        'post', 
-        data
-      )
-    }).then(res => res.json()).then(data => {
-      if(data.Success) {
-        swal.fire({
-          title: 'New leave type',
-          text: data.message,
-          icon: 'success',
-          timer: 3000,
-        }) 
-      } else {
-        swal.fire({
-          title: 'New leave type',
-          text: data.message,
-          icon: 'error',
-          timer: 3000,
-        })
-        return dispatch({
-          type: LEAVE_TYPE_ERROR,
-          payload: 'Error'
-        });
-      }
-    }).catch(e => {
-      console.error(e);
-    })
-
-  
+export const getOneLeaveType = (id) => {
+  return async (dispatch) => {
+    try {
+      const { data: { data } } = await api.get(`/leave-type/${id}`);
+      dispatch({
+        type: GET_ONE_LEAVE_TYPE,
+        payload: data
+      })
+    } catch (e) {
+      dispatch({
+        type: GET_ONE_LEAVE_TYPE,
+        payload: []
+      })
+    }
   }
 }

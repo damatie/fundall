@@ -3,7 +3,6 @@ import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import errorMsg from '../../../../utils/errorMsg';
-import { useDispatch } from 'react-redux';
 import * as Actions from '../store/actions';
 
 const schema = yup.object().shape({
@@ -34,7 +33,13 @@ const schema = yup.object().shape({
       name: 'PIP Eligible',
       type: 'required',
     })
-  )
+  ),
+  entity: yup.mixed().required(
+    errorMsg({
+      name: 'Entity',
+      type: 'required',
+    })
+  ),
 });
 
 const useEmployeeGrade = (params, dispatch) => {
@@ -70,6 +75,10 @@ const useEmployeeGrade = (params, dispatch) => {
       case 'new':
         return '';
       case 'update':
+        if(name === 'entityName') {
+          const value = params.entity.filter(item => item.entityName === params.singleData.entityName);
+          return value[0];
+        }
         return params?.singleData[name];
     }
 
@@ -93,12 +102,28 @@ const useEmployeeGrade = (params, dispatch) => {
     }
   }
 
-  const onSubmit = (model) => {
+  const onSubmit = (value) => {
+    const model = {
+      model: {
+        entityName: value.entity.entityName,
+        entityId: value.entity.id,
+        gradeName: value.name,
+        gradeDescription: value.description,
+        pipEligibility: value.pip
+      },
+      pagination: {
+        limit: 10,
+        offset: 0
+      }
+      
+    };
     switch(params?.type) {
       case 'new':
-        dispatch(Actions.createEmployeeGrade(model));
+        dispatch(Actions.createEmployeeGrade({...model}));
+        break;
       case 'update':
-        dispatch(Actions.updateEmployeeGrade({ id: params?.id, model }));
+        dispatch(Actions.updateEmployeeGrade({ id: params.singleData?.id, ...model }));
+        break;
       default: 
         return model;
     }
@@ -116,8 +141,37 @@ const useEmployeeGrade = (params, dispatch) => {
   };
 
   const handleDelete = (id) => {
-    dispatch(Actions.deleteEmployeeGrade(id));
+    const params = {
+      id,
+      pagination: {
+        offset: 0,
+        count: 10
+      }
+    }
+    dispatch(Actions.deleteEmployeeGrade({...params}));
   };
+
+  const gotoPage = (newPage) => {
+    if(params?.term === '') {
+      return dispatch(Actions.getAllEmployeeGrade({
+        offset: newPage,
+        limit: 10
+      }));
+    }
+    return dispatch(Actions.filterEmployeeGrade({
+      term: params?.term,
+      offset: newPage,
+      limit: 10
+    }))
+  }
+
+  const handleFilter = (ev) => {
+    dispatch(Actions.filterEmployeeGrade({
+      term: ev.target.value,
+      offset: 0,
+      limit: 10
+    }))
+  }
 
   return {
     handleOpen,
@@ -135,6 +189,8 @@ const useEmployeeGrade = (params, dispatch) => {
     x: 'fucking test',
     state: params,
     getValues: getValues(),
+    gotoPage,
+    handleFilter
   };
 };
 

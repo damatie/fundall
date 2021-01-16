@@ -7,6 +7,7 @@ import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import UpdateBehaviouralAttribute from './components/UpdateBehaviouralAttribute';
 import BehaviouralAttributeContent from './components/BehaviouralAttributeContent';
+import BehaviouralAttributeContentModal from './components/BehaviouralAttributeContentModal';
 
 const BehaviouralAttributeDetails = () => {
   const [tabValue, setTabValue] = React.useState(0);
@@ -18,10 +19,11 @@ const BehaviouralAttributeDetails = () => {
   return (
     <PageLayout
       button={{
-        showButton: true,
+        showButton: tabValue === 1,
         btnTitle: 'Create',
         onClick: () => null,
       }}
+      noSearch={tabValue !== 1}
       header={{
         title: 'Behavioural Attribute Content',
         handleSearch: (ev) => console.log(ev)
@@ -46,6 +48,7 @@ const BehaviouralAttributeDetails = () => {
           {tabValue === 1 && (
             <>
               <BehaviouralAttributeContent/>
+              <BehaviouralAttributeContentModal />
             </>
           )}
         </div>
@@ -54,4 +57,5 @@ const BehaviouralAttributeDetails = () => {
   );
 };
 
-export default withReducer('behaviouralAttributeDetails', null)(BehaviouralAttributeDetails);
+withReducer('behaviouralAttribute', null)(BehaviouralAttributeDetails);
+export default withReducer('behaviouralAttributeContent', null)(BehaviouralAttributeDetails);
