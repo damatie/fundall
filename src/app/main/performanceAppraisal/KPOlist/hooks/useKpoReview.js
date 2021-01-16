@@ -10,11 +10,11 @@ const useKpoReview = (user) => {
   const { push } = useHistory();
 
   React.useEffect(() => {
-    if(role?.name.toUpperCase() === 'LINE MANAGER' && !user) {
+    // if(role?.name.toUpperCase() === 'LINE MANAGER' && !user) {
       dispatch(getKpoByDept(departmentId));
-    }
-    dispatch(getAssignedKpo(id));
-  }, [role]);
+    // }
+    // dispatch(getAssignedKpo(id));
+  }, []);
 
   const handleDelete = id => {
     console.log(id);

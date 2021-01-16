@@ -13,8 +13,33 @@ import kpoCategoryReducer from '../KPOcategoryList/store/reducers/categoryList.r
 import KpoContentPipScore from './components/KpoContentPipScore';
 import PersonalDevelopment from './components/PersonalDevelopment';
 import BehaviouralAttribute from './components/BehaviouralAttribute';
+import useKpoList from './hooks/useKpoList';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams, useHistory } from 'react-router-dom';
 
 const EmployeeKpoDetails = () => {
+  const dispatch = useDispatch();
+  const params = useParams();
+  const { push } = useHistory();
+
+  const EmployeeKpo = useSelector(state => state.kpo.employeeKpoList);
+  const { data: kpoCategory } = useSelector(state => state.kpoCategory);
+  const state = useSelector(state => state.kpo.kpoContentList);
+
+  const EmployeeKpoCustomHook = useKpoList({
+    dispatch,
+    id: params?.id,
+    state: EmployeeKpo,
+    push
+  });
+  const customHook = useKpoContentList({
+    config: {},
+    state,
+    dispatch,
+    params,
+    push,
+    kpoCategory
+  });
 
   const [tabValue, setTabValue] = React.useState(0);
   
@@ -22,11 +47,13 @@ const EmployeeKpoDetails = () => {
 		setTabValue(value);
   }
 
-  const { handleOpenModal } = useKpoContentList();
   
   return (
     <PageLayout
       noSearch={tabValue === 1 ? false : true}
+      prev={{
+        url: '/performance_appraisal/kpoList'
+      }}
       header={{
         icon: '',
         title: 'KPO Details',
@@ -35,7 +62,7 @@ const EmployeeKpoDetails = () => {
       button={{
         showButton: tabValue === 1 && true,
         btnTitle: 'Add KPO Content',
-        onClick: handleOpenModal
+        onClick: customHook.handleOpenModal
       }}
       contentToolbar={
         <Tabs
@@ -57,11 +84,11 @@ const EmployeeKpoDetails = () => {
       }
       content={
         <div className=" sm:p-24 ">
-          {tabValue === 0 && (<EditEmployeeKpo/>)}
+          {tabValue === 0 && (<EditEmployeeKpo customHook={EmployeeKpoCustomHook}/>)}
           {tabValue === 1 && (
             <>
-              <KpoContentList />
-              <CreateKpoContent />
+              <KpoContentList customHook={customHook} />
+              <CreateKpoContent customHook={customHook} />
             </>
           )}
           {tabValue === 2 && (<KpoComments />)}

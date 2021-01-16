@@ -1,5 +1,6 @@
 import api from "app/services/api";
 import swal from 'sweetalert2';
+import loading from "utils/loading";
 
 export const OPEN_ADD_KPO_CONTENT_MODAL = 'OPEN ADD KPO CONTENT MODAL';
 export const CLOSE_ADD_KPO_CONTENT_MODAL = 'CLOSE ADD KPO CONTENT MODAL';
@@ -32,7 +33,7 @@ export const getAllKpoContent = (kpoId) => {
 export const addKpoContent = (model) => {
   return async (dispatch) => {
     try {
-      swal.showLoading();
+      loading('Creating...');
       const { data: { success, message } } = await api.post(`/appraisal/kpo-content/`, model);
       if(success) {
         swal.fire({
@@ -72,14 +73,14 @@ export const getOneKpoContent = (id) => {
 export const updateKpoContent = (model) => {
   return async (dispatch) => {
     try {
-      swal.showLoading();
-      const { data: { message, success } } = await api.patch(`/appraisal/kpo-content/${model.id}`);
+      loading('Updating...');
+      const { data: { message, success } } = await api.patch(`/appraisal/kpo-content/${model.kpoId}`, model);
       if(success) {
         swal.fire({
           text: message,
           icon: 'success'
         });
-        dispatch(getAllKpoContent(model.kpoId));
+        dispatch(getOneKpoContent(model.kpoId));
       }
     } catch (e) {
       swal.fire({
@@ -92,9 +93,14 @@ export const updateKpoContent = (model) => {
 
 export const deleteKpoContent = ({id, kpoId}) => {
   return async (dispatch) => {
+    loading('Deleting...');
     try {
       swal.showLoading();
-      const { data: { message, success, error } } = await api.delete(`/appraisal/kpo-content/${id}`);
+      const { data: { message, success, error } } = await api.delete(`/appraisal/kpo-content/all/selected`, {
+        data: {
+          id
+        }
+      });
       if(success) {
         swal.fire({
           text: message,

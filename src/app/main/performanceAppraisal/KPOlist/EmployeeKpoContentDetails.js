@@ -7,11 +7,25 @@ import EditEmployeeKpoContent from './components/EditEmployeeKpoContent';
 import KpoContentTarget from './components/KpoContentTarget';
 import reducer from './store/reducers';
 import kpoCategoryReducer from '../KPOcategoryList/store/reducers/categoryList.reducer';
-import PipAchieved from './components/PipAchieved';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams, useHistory } from 'react-router-dom';
+import useKpoContent from './hooks/useKpoContent';
 
 const EmployeeKpoContentDetails = () => {
-
   const [tabValue, setTabValue] = React.useState(0);
+  const dispatch = useDispatch();
+  const params = useParams();
+  const { push } = useHistory();
+  const { data: kpoCategory } = useSelector(state => state.kpoCategory);
+  const state = useSelector(state => state.kpo.kpoContentList);
+  const customHook = useKpoContent({
+    config: {type: tabValue === 1 && 'quarter'},
+    state,
+    dispatch,
+    params,
+    push,
+    kpoCategory
+  });
   
   function handleChangeTab(event, value) {
 		setTabValue(value);
@@ -20,6 +34,9 @@ const EmployeeKpoContentDetails = () => {
   return (
     <PageLayout
       noSearch
+      prev={{
+        url: `/performance_appraisal/kpoList/details/${params.id}`
+      }}
       header={{
         icon: '',
         title: 'KPO Content Details',
@@ -38,18 +55,16 @@ const EmployeeKpoContentDetails = () => {
 				>
 					<Tab className="h-64 normal-case" label="KPO Content Details" />
 					<Tab className="h-64 normal-case" label="KPO Targets" />
-          <Tab className="h-64 normal-case" label="%PIP" />
 				</Tabs>
       }
       content={
         <div className=" sm:p-24 ">
-          {tabValue === 0 && (<EditEmployeeKpoContent />)}
+          {tabValue === 0 && (<EditEmployeeKpoContent customHook={customHook}/>)}
           {tabValue === 1 && (
             <>
-              <KpoContentTarget />
+              <KpoContentTarget customHook={customHook} />
             </>
           )}
-          {tabValue === 2 && (<PipAchieved />)}
         </div>
       }
     />

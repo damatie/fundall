@@ -29,7 +29,7 @@ const ListOfEmployeeKpo = ({user}) => {
 				// className: 'font-bold',
 				sortable: true,
 				Cell: ({ row: { original }}) => {
-					return <>{original.entity.entityName}</>
+					return <>{original?.entity?.entityName}</>
 				}
       },
       {
@@ -38,7 +38,7 @@ const ListOfEmployeeKpo = ({user}) => {
 				// className: 'font-bold',
 				sortable: true,
 				Cell: ({ row: { original }}) => {
-					return <>{original.department.departmentName}</>
+					return <>{original?.department?.departmentName}</>
 				}
 			},
 			{

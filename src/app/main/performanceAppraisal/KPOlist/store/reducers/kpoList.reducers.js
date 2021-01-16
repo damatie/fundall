@@ -1,11 +1,12 @@
-import { CLOSE_EMPLOYEE_KPO_LIST_MODAL, OPEN_EMPLOYEE_KPO_LIST_MODAL, GET_ONE_KPO, GET_ALL_KPO, CLEAR_KPO_DATA } from '../actions';
+import { CLOSE_EMPLOYEE_KPO_LIST_MODAL, OPEN_EMPLOYEE_KPO_LIST_MODAL, GET_ONE_KPO, GET_ALL_KPO, CLEAR_KPO_DATA, GET_JOBTITLE } from '../actions';
 
 const initialState = {
   open: false,
   kpoList: [],
   loading: true,
   kpo: {},
-  loadingSingleKpo: true
+  loadingSingleKpo: true,
+  jobTitles: [],
 };
 
 const kpoListReducer = (state = initialState, actions) => {
@@ -14,6 +15,11 @@ const kpoListReducer = (state = initialState, actions) => {
       return {
         ...state,
         open: true,
+      }
+    case GET_JOBTITLE:
+      return {
+        ...state,
+        jobTitles: actions.payload
       }
     case CLOSE_EMPLOYEE_KPO_LIST_MODAL:
       return {
