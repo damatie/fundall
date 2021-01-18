@@ -10,6 +10,8 @@ import kpoCategoryReducer from '../KPOcategoryList/store/reducers/categoryList.r
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
 import useKpoContent from './hooks/useKpoContent';
+import ModificationRequest from './components/ModificationRequest';
+import useModificationReq from './hooks/useModificationReq';
 
 const EmployeeKpoContentDetails = () => {
   const [tabValue, setTabValue] = React.useState(0);
@@ -26,6 +28,12 @@ const EmployeeKpoContentDetails = () => {
     push,
     kpoCategory
   });
+
+  const modificationReq = useModificationReq({
+    state,
+    dispatch,
+    role: 'hr manager'
+  })
   
   function handleChangeTab(event, value) {
 		setTabValue(value);
@@ -42,7 +50,11 @@ const EmployeeKpoContentDetails = () => {
         title: 'KPO Content Details',
         handleSearch: ({target: { value }}) => console.log(value),
       }}
-      button={{showButton: false}}
+      button={{
+        showButton: true,
+        btnComponent: <ModificationRequest role={modificationReq.role} status='Not Requested yet' handleClick={modificationReq.handleClick}/>
+        
+      }}
       contentToolbar={
         <Tabs
 					value={tabValue}
