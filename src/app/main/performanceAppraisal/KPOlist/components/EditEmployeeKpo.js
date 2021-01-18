@@ -53,7 +53,7 @@ const EditEmployeeKpo = ({customHook}) => {
                 <AutoCompleteInput
                   className='my-16'
                   name='lineManagerId'
-                  value={{ name: `${details?.lineManager.firstName} ${details?.lineManager.lastName}`, id: details.lineManagerId }}
+                  value={{ name: `${details?.lineManager?.firstName} ${details?.lineManager?.lastName}`, id: details.lineManagerId }}
                   label='Line Manager'
                   data={[{ name: 'Josh Maximum', id: 1 }]}
                   error={errors.lineManagerId}
@@ -65,7 +65,7 @@ const EditEmployeeKpo = ({customHook}) => {
                   className='my-16'
                   name='reviewingManagerId'
                   label='Reviewing Manager'
-                  value={{ name: `${details?.reviewingManager.firstName} ${details?.reviewingManager.lastName}`, id: details.reviewingManagerId }}
+                  value={{ name: `${details?.reviewingManager?.firstName} ${details?.reviewingManager?.lastName}`, id: details.reviewingManagerId }}
                   data={[{ name: 'David Chinweike', id: 2 }]}
                   error={errors.reviewingManagerId}
                   helperText={errors.reviewingManagerId?.message}

@@ -1,6 +1,7 @@
 import api from "app/services/api";
 import swal from 'sweetalert2';
 import loading from "utils/loading";
+import catchErrorMsg from 'utils/catchErrorMsg';
 
 export const OPEN_ADD_KPO_CONTENT_MODAL = 'OPEN ADD KPO CONTENT MODAL';
 export const CLOSE_ADD_KPO_CONTENT_MODAL = 'CLOSE ADD KPO CONTENT MODAL';
@@ -120,4 +121,24 @@ export const deleteKpoContent = ({id, kpoId}) => {
       });
     }
   };
+};
+
+export const modifications = ({id, requestType}) => {
+  return async (dispatch) => {
+    const loadingType = requestType === 'request' ? 'Requesting Modification...' : requestType === 'approve' ? 'Approving Modification Request' : requestType === 'reject' ? 'Rejecting Modification Request...' : '';
+    try {
+      loading(loadingType);
+      const { data: { message } } = await api.patch(`/appraisal/kpo-content/${requestType}/${id}`);
+      dispatch(getOneKpoContent(id));
+      swal.fire({
+        text: message,
+        icon: 'success'
+      });
+    } catch (e) {
+      swal.fire({
+        text: catchErrorMsg(e),
+        icon: 'error'
+      });
+    }
+  }
 };

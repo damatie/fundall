@@ -1,4 +1,5 @@
 import React from 'react';
+import { modifications } from '../store/actions';
 
 const useModificationReq = ({state, dispatch, role}) => {
 
@@ -9,16 +10,7 @@ const useModificationReq = ({state, dispatch, role}) => {
     
   }
   const handleClick = (action) => () => {
-    switch(action) {
-      case 'request':
-        return;
-      case 'approve':
-        return;
-      case 'reject':
-        return;
-      default:
-        return null;
-    }
+    dispatch(modifications(action));
   };
 
   return {
