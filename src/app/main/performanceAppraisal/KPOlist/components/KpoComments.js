@@ -16,6 +16,7 @@ const KpoComments = ({kpoSummary}) => {
   const lineManager = kpoSummary.lineManagerComment;
   const employee = kpoSummary.employeeComment;
   const reviewingManager = kpoSummary.reviewingManagerComment;
+  const {shouldShowButton, state} = kpoSummary
   return (
     <Paper className='w-1/2 flex flex-col mx-auto p-20'>
       <form onSubmit={lineManager.handleSubmit(lineManager.onSubmit)}>
@@ -28,6 +29,7 @@ const KpoComments = ({kpoSummary}) => {
             refs={lineManager.register}
             error={lineManager.errors?.strengths}
             message={lineManager.errors?.strengths?.message}
+            defaultValue={state.strengths}
           />
         </div>
 
@@ -37,6 +39,7 @@ const KpoComments = ({kpoSummary}) => {
             name='areaOfImprovements'
             className='my-16'
             multiline
+            defaultValue={state.areaOfImprovements}
             refs={lineManager.register}
             error={lineManager.errors?.areaOfImprovements}
             message={lineManager.errors?.areaOfImprovements?.message}
@@ -53,6 +56,7 @@ const KpoComments = ({kpoSummary}) => {
           aria-label="gender" 
           name="personnelOverallRating" 
           color='primary'
+          defaultValue={state.personnelOverallRating}
           onChange={({ target: { name, value }}) => { 
             lineManager.register({
               name,
@@ -74,20 +78,21 @@ const KpoComments = ({kpoSummary}) => {
           <Input
             name='lineManagerComment'
             className='my-16'
+            defaultValue={state.lineManagerComment}
             multiline
             refs={lineManager.register}
             error={lineManager.errors?.lineManagerComment}
             message={lineManager.errors?.lineManagerComment?.message}
           />
         </div>
-        <SharedButton
+        {shouldShowButton('lineManager') && (<SharedButton
           variant='contained'
           color='primary'
           type='submit'
           className='flex mx-auto w-1/2 mb-16'
         >
           Send
-        </SharedButton>
+        </SharedButton>)}
         <Divider />
       </form>
       <form onSubmit={reviewingManager.handleSubmit(reviewingManager.onSubmit)}>
@@ -102,14 +107,14 @@ const KpoComments = ({kpoSummary}) => {
             message={lineManager.errors?.reviewingManagerComment?.message}
           />
         </div>
-        <SharedButton
+        {shouldShowButton('reviewingManager') && (<SharedButton
           variant='contained'
           color='primary'
           type='submit'
           className='flex mx-auto w-1/2 mb-16'
         >
           Send
-        </SharedButton>
+        </SharedButton>)}
         <Divider />
       </form>
 
@@ -121,19 +126,20 @@ const KpoComments = ({kpoSummary}) => {
           name='employeeComment'
           className='my-16'
           multiline
-          refs={lineManager.register}
-          error={lineManager.errors?.employeeComment}
-          message={lineManager.errors?.employeeComment?.message}
+          defaultValue={state.employeeComment}
+          refs={employee.register}
+          error={employee.errors?.employeeComment}
+          message={employee.errors?.employeeComment?.message}
         />
       </div>
-      <SharedButton
+      {shouldShowButton('employee') && (<SharedButton
           variant='contained'
           color='primary'
           type='submit'
-          className='flex mx-auto w-1/2'
+          className='flex mx-auto w-1/2 mb-16'
         >
           Send
-        </SharedButton>
+        </SharedButton>)}
       </form>
     </Paper>
 

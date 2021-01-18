@@ -45,7 +45,7 @@ const EmployeeKpoDetails = () => {
 
   const kpoSummary = useKpoSummary({
     dispatch,
-    state,
+    state: EmployeeKpo.kpo,
     userInfo,
   })
 
@@ -87,7 +87,7 @@ const EmployeeKpoDetails = () => {
           <Tab className="h-64 normal-case" label="KPO Summary Review" />
           <Tab className="h-64 normal-case" label="%PIP" />
           <Tab className="h-64 normal-case" label="Behavioural Attribute" />
-          <Tab className="h-64 normal-case" label="Personal Development" />
+          <Tab className="h-64 normal-case" label="Personnel Development" />
 				</Tabs>
       }
       content={

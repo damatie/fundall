@@ -1,4 +1,4 @@
-// import React from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -133,32 +133,16 @@ const useReviewingManagerComment = ({dispatch, id}) => {
     handleSubmit,
   }
 };
-
-const checkIfAssigned = () => {
-
-};
-
-// const checkIf
 const useKpoSummary = ({dispatch, state, userInfo}) => {
-  const role = userInfo.role;
-  const userRole = () => {
-
-  };
-
   const shouldShowButton = (user) => {
-    if(role.toLowerCase() === 'employee' && role.toLowerCase()=== user) {
-      return true;
-    };
-    // if(user === 'linemanager') {
-    //   state
-    // }
-  }
+    return state[user].id === userInfo.id && state[user].email === userInfo.data.email;
+  };
   return {
-    lineManagerComment: useLineManagerComment({dispatch}),
-    employeeComment: useEmployeeComment({dispatch}),
-    reviewingManagerComment: useReviewingManagerComment({dispatch}),
+    lineManagerComment: useLineManagerComment({dispatch, id: state.id}),
+    employeeComment: useEmployeeComment({dispatch, id: state.id}),
+    reviewingManagerComment: useReviewingManagerComment({dispatch, id: state.id}),
     shouldShowButton,
-
+    state
   };
 };
 
