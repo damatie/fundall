@@ -1,6 +1,7 @@
 import api from "app/services/api";
 import swal from "sweetalert2";
 import catchErrorMsg from "utils/catchErrorMsg";
+import loading from "utils/loading";
 
 export const  OPEN_EMPLOYEE_KPO_LIST_MODAL = 'OPEN EMPLOYEE KPO LIST MODAL';
 export const CLOSE_EMPLOYEE_KPO_LIST_MODAL = 'CLOSE EMPLOYEE KPO LIST MODAL';
