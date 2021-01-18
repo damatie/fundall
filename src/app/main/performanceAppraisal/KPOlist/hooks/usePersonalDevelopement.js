@@ -3,6 +3,7 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import errorMsg from 'utils/errorMsg';
 import React from 'react';
+import { updatePersonalDevelopement, createPersonalDevelopement, deletePersonalDevelopement } from '../store/actions';
 
 const schema = yup.object().shape({
   name: yup.string(errorMsg({
@@ -21,7 +22,7 @@ const schema = yup.object().shape({
   }))
 });
 
-const usePersonalDevelopment = ({ dispatch, state }) => {
+const usePersonalDevelopment = ({ dispatch, state, update, handleCancel, data }) => {
   const  {
     errors,
     register,
@@ -37,9 +38,23 @@ const usePersonalDevelopment = ({ dispatch, state }) => {
     setOpen(!open);
   }
 
-  const onSubmit = (model) => {
-    console.log(model)
+  const onSubmit = (value) => {
+    const model = {
+      ...value,
+      employeeId: data.employeeId,
+      kpoId: data.id
+    }
+    if(update) {
+      dispatch(updatePersonalDevelopement({model, id: state.id}));
+    } else {
+      dispatch(createPersonalDevelopement(model));
+      handleCancel && handleCancel();
+    }
   };
+
+  const handleDelete = (id) => () => {
+    dispatch(deletePersonalDevelopement({id, kpoId: data.id}));
+  }
 
   return {
     errors,
@@ -47,7 +62,8 @@ const usePersonalDevelopment = ({ dispatch, state }) => {
     handleSubmit,
     onSubmit,
     toggleOpenState,
-    open
+    open,
+    handleDelete
   }
 };
 

@@ -162,3 +162,60 @@ export const kpoSummary = ({id, model, type}) => {
     }
   }
 };
+
+export const createPersonalDevelopement = (model) => {
+  return async (dispatch) => {
+    try {
+      loading('Creating...')
+      const { data: { message } } = await api.post(`/appraisal/personnel-development/`, model);
+      swal.fire({
+        text: message,
+        icon: 'success'
+      });
+      dispatch(getOneKpo(model.kpoId));
+    } catch (e) {
+      swal.fire({
+        text: catchErrorMsg(e),
+        icon: 'error'
+      });
+    }
+  }
+};
+
+export const updatePersonalDevelopement = ({model, id}) => {
+  return async (dispatch) => {
+    try {
+      loading('Updating...');
+      const { data: { message } } = await api.post(`/appraisal/personnel-development/${id}`, model);
+      swal.fire({
+        text: message,
+        icon: 'success'
+      });
+      dispatch(getOneKpo(model.kpoId));
+    } catch (e) {
+      swal.fire({
+        text: catchErrorMsg(e),
+        icon: 'error'
+      });
+    }
+  }
+};
+
+export const deletePersonalDevelopement = ({id, kpoId}) => {
+  return async (dispatch) => {
+    try {
+      loading('Deleting...');
+      const { data: { message } } = await api.delete(`/appraisal/personnel-development/${id}`);
+      swal.fire({
+        text: message,
+        icon: 'success'
+      });
+      dispatch(getOneKpo(kpoId));
+    } catch (e) {
+      swal.fire({
+        text: catchErrorMsg(e),
+        icon: 'error'
+      });
+    }
+  }
+}

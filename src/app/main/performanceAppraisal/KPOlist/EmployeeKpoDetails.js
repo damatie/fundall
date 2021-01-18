@@ -87,7 +87,7 @@ const EmployeeKpoDetails = () => {
           <Tab className="h-64 normal-case" label="KPO Summary Review" />
           <Tab className="h-64 normal-case" label="%PIP" />
           <Tab className="h-64 normal-case" label="Behavioural Attribute" />
-          <Tab className="h-64 normal-case" label="Personal Improvement" />
+          <Tab className="h-64 normal-case" label="Personal Development" />
 				</Tabs>
       }
       content={
@@ -102,7 +102,7 @@ const EmployeeKpoDetails = () => {
           {tabValue === 2 && (<KpoComments kpoSummary={kpoSummary}/>)}
           {tabValue === 3 && (<KpoContentPipScore />)}
           {tabValue === 4 && (<BehaviouralAttribute />)}
-          {tabValue === 5 && (<PersonalDevelopment />)}
+          {tabValue === 5 && (<PersonalDevelopment data={EmployeeKpo.kpo}/>)}
         </div>
       }
     />
