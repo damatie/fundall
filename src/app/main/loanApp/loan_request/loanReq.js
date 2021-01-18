@@ -86,7 +86,7 @@ function LoanReq(props) {
 								className="normal-case flex items-center sm:mb-12"
 								component={Link}
 								role="button"
-								to="/loan/request/list"
+								to={state && (state.fromFM || state.fromHR) ? "/loan/review/list" : "/loan/request/list"}
 								color="inherit"
 							>
 								<Icon className="text-20">

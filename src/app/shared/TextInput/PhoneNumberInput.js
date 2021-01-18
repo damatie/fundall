@@ -4,7 +4,7 @@ import { isValidPhoneNumber } from 'react-phone-number-input'
 import 'react-phone-input-2/lib/material.css';
 
 const PhoneNumberInput = (props) => {
-  const { country, value, onChange, setError, placeholder } = props;
+  const { country, value, onChange, setError, placeholder, disabled } = props;
 
   return (
     <PhoneInput
@@ -18,6 +18,7 @@ const PhoneNumberInput = (props) => {
       inputProps={{
         required: true,
       }}
+      disabled={disabled}
       specialLabel={placeholder ? placeholder : "Phone"}
       defaultErrorMessage='Phone number'
       isValid={(value, country) => {
