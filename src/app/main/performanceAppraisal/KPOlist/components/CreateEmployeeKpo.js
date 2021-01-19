@@ -9,7 +9,7 @@ import AutoCompleteInput from 'app/shared/TextInput/AutoComplete';
 import Input from 'app/shared/TextInput/Input';
 
 const CreateEmployeeKpo = ({customHook}) => {
-  const { handleCloseModal, open, register, errors, handleSubmit, onSubmit, control, jobTitles } = customHook;
+  const { getEmployeesByRole, handleCloseModal, open, register, errors, handleSubmit, onSubmit, control, jobTitles } = customHook;
   return (
     <SharedModal
       title='Create KPO'
@@ -50,7 +50,7 @@ const CreateEmployeeKpo = ({customHook}) => {
           className='my-16'
           name='lineManagerId'
           label='Line Manager'
-          data={[{name: 'Josh Maximum', id: 1}]}
+          data={getEmployeesByRole('linemanager')}
           error={errors.lineManagerId}
           helperText={errors.lineManagerId?.message}
           onChange={(ev, value) => register({name: 'lineManagerId', value: value?.id})}
@@ -60,7 +60,7 @@ const CreateEmployeeKpo = ({customHook}) => {
           className='my-16'
           name='reviewingManagerId'
           label='Reviewing Manager'
-          data={[{name: 'David chinweike', id: 2}]}
+          data={getEmployeesByRole('linemanager')}
           error={errors.reviewingManagerId}
           helperText={errors.reviewingManagerId?.message}
           onChange={(ev, value) => register({name: 'reviewingManagerId', value: value?.id})}

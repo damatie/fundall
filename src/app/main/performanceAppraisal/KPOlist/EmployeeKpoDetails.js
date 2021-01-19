@@ -17,6 +17,7 @@ import useKpoList from './hooks/useKpoList';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
 import useKpoSummary from './hooks/useKpoSummary';
+import useKpoPip from './hooks/useKpoPip';
 
 const EmployeeKpoDetails = () => {
   const dispatch = useDispatch();
@@ -27,12 +28,14 @@ const EmployeeKpoDetails = () => {
   const { data: kpoCategory } = useSelector(state => state.kpoCategory);
   const state = useSelector(state => state.kpo.kpoContentList);
   const userInfo = useSelector(state => state.auth.user);
+  const employees = useSelector(state => state.employeeList.data);
 
   const EmployeeKpoCustomHook = useKpoList({
     dispatch,
     id: params?.id,
     state: EmployeeKpo,
-    push
+    push,
+    employees
   });
   const customHook = useKpoContentList({
     config: {},
@@ -47,6 +50,11 @@ const EmployeeKpoDetails = () => {
     dispatch,
     state: EmployeeKpo.kpo,
     userInfo,
+  });
+  
+  const calculatePip = useKpoPip({
+    dispatch,
+    state: EmployeeKpo.kpo
   })
 
   const [tabValue, setTabValue] = React.useState(0);
@@ -100,7 +108,7 @@ const EmployeeKpoDetails = () => {
             </>
           )}
           {tabValue === 2 && (<KpoComments kpoSummary={kpoSummary}/>)}
-          {tabValue === 3 && (<KpoContentPipScore />)}
+          {tabValue === 3 && (<KpoContentPipScore calculatePip={calculatePip}/>)}
           {tabValue === 4 && (<BehaviouralAttribute />)}
           {tabValue === 5 && (<PersonalDevelopment data={EmployeeKpo.kpo}/>)}
         </div>

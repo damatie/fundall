@@ -218,4 +218,23 @@ export const deletePersonalDevelopement = ({id, kpoId}) => {
       });
     }
   }
-}
+};
+
+export const calculatePip = ({model, id}) => {
+  return async (dispatch) => {
+    try {
+      loading('Calculating...');
+      const { data: { message } } = await api.patch(`/appraisal/kpo/calculate-pip/${id}`, model);
+      swal.fire({
+        text: message,
+        icon: 'success'
+      });
+      dispatch(getOneKpo(id));
+    } catch (e) {
+      swal.fire({
+        text: catchErrorMsg(e),
+        icon: 'error'
+      });
+    }
+  }
+};

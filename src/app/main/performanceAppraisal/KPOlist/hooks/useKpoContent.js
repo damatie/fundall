@@ -77,10 +77,10 @@ const schema = (type) => {
             type: 'required'
           })
         ),
-        target: yup.string(
+        target: yup.number(
           errorMsg({
             name: 'Target',
-            type: 'string'
+            type: 'number'
           })
         ).required(
           errorMsg({
@@ -88,12 +88,12 @@ const schema = (type) => {
             type: 'required'
           })
         ),
-        kpoPipTarget: yup.string(
+        kpoPipTarget: yup.number(
           errorMsg({
             name: 'PIP Target',
-            type: 'string'
+            type: 'number'
           })
-        )
+        ),
       })
     }
   }
@@ -147,7 +147,7 @@ const useKpoContentList = ({config, state, dispatch, params, push, kpoCategory})
   const onSubmit = (type) => (model) => {
     const body = {
       ...model,
-      kpoId: kpoId || id 
+      kpoId: +kpoId || +id
     };
     if(id && !kpoId) {
       dispatch(Actions.addKpoContent(body));

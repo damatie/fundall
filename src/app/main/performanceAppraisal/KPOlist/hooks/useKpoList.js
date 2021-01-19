@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import errorMssg from '../../../../../utils/errorMsg';
+import userRole from 'utils/userRole';
 
 const schema = yup.object().shape({
   jobTitleId: yup.string(
@@ -42,7 +43,7 @@ const schema = yup.object().shape({
 })
 
 
-const useKpoList = ({dispatch, userId, state, push, id}) => {
+const useKpoList = ({dispatch, userId, state, push, id, employees}) => {
 
   const { open, kpoList, loading, kpo, loadingSingleKpo, jobTitles } = state;
 
@@ -87,6 +88,15 @@ const useKpoList = ({dispatch, userId, state, push, id}) => {
     })
   };
 
+  const getEmployeesByRole = (role) => {
+    return employees.filter((employee) => userRole(employee?.role?.name) === role).map(newEmployee => {
+      return {
+        name: `${newEmployee.firstName} ${newEmployee.lastName}`,
+        id: newEmployee.id
+      }
+    });
+  };
+
   const onSubmit = (value) => {
     const model = {
       ...value,
@@ -125,7 +135,8 @@ const useKpoList = ({dispatch, userId, state, push, id}) => {
     push,
     details: kpo,
     loadingSingleKpo,
-    jobTitles
+    jobTitles,
+    getEmployeesByRole
   };
 };
 
