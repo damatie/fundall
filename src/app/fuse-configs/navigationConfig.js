@@ -374,6 +374,14 @@ const navigationConfig = [
 		auth: authRoles?.manager,
 		children: [
 			{
+				id: 'recruitmentDashboard',
+				title: 'Dashboard',
+				type: 'item',
+				url: '/recruitment/dashboard',
+				icon: 'school',
+				auth: authRoles.manager,
+			},
+			{
 				id: 'listOfOpenings',
 				title: 'List of openings',
 				type: 'item',
