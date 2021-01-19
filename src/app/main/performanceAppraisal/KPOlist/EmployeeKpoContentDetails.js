@@ -10,6 +10,8 @@ import kpoCategoryReducer from '../KPOcategoryList/store/reducers/categoryList.r
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
 import useKpoContent from './hooks/useKpoContent';
+import ModificationRequest from './components/ModificationRequest';
+import useModificationReq from './hooks/useModificationReq';
 
 const EmployeeKpoContentDetails = () => {
   const [tabValue, setTabValue] = React.useState(0);
@@ -18,6 +20,7 @@ const EmployeeKpoContentDetails = () => {
   const { push } = useHistory();
   const { data: kpoCategory } = useSelector(state => state.kpoCategory);
   const state = useSelector(state => state.kpo.kpoContentList);
+  const role = useSelector(state => state.auth.user.role)
   const customHook = useKpoContent({
     config: {type: tabValue === 1 && 'quarter'},
     state,
@@ -26,6 +29,12 @@ const EmployeeKpoContentDetails = () => {
     push,
     kpoCategory
   });
+
+  const modificationReq = useModificationReq({
+    state,
+    dispatch,
+    role,
+  })
   
   function handleChangeTab(event, value) {
 		setTabValue(value);
@@ -42,7 +51,10 @@ const EmployeeKpoContentDetails = () => {
         title: 'KPO Content Details',
         handleSearch: ({target: { value }}) => console.log(value),
       }}
-      button={{showButton: false}}
+      button={{
+        showButton: true,
+        btnComponent: <ModificationRequest role={modificationReq.role} status={state.kpoContent.updateStatus ? state.kpoContent.updateStatus : 'No Request'} handleClick={modificationReq.handleClick}/>
+      }}
       contentToolbar={
         <Tabs
 					value={tabValue}
