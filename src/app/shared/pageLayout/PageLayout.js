@@ -14,7 +14,7 @@ const PageLayout = ({
   contentToolbar,
 	content,
 	noSearch,
-	noPrevious,
+	prev,
 	props,
   header: {
     icon,
@@ -45,7 +45,7 @@ const PageLayout = ({
 				<div className="flex flex-1 w-full items-center justify-between px-24">
 					<div className="flex flex-col items-start max-w-full">
 						<div className="flex items-center">
-							{noPrevious &&
+							{prev &&
 								<FuseAnimate animation="transition.expandIn" delay={300}>
 									{(isState) ? <Icon
 										className="text-20 text-black bg-white rounded-20 mr-16"
@@ -58,7 +58,7 @@ const PageLayout = ({
 									<Icon
 										className="text-20 text-black bg-white rounded-20 mr-16"
 										component={Link}
-										to={url}
+										to={prev.url}
 										role="button"
 									>
 										{mainTheme.direction === 'ltr' ? 'arrow_back' : 'arrow_forward'}

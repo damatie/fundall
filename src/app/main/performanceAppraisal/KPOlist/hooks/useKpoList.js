@@ -1,11 +1,9 @@
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import * as Actions from '../store/actions';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import errorMssg from '../../../../../utils/errorMsg';
-import { useParams, useHistory } from 'react-router-dom';
 
 const schema = yup.object().shape({
   jobTitleId: yup.string(
@@ -19,12 +17,6 @@ const schema = yup.object().shape({
       type: 'required',
     })
   ),
-  // kpoYear: yup.mixed().required(
-  //   errorMssg({
-  //     name: 'KpoYear',
-  //     type: 'required',
-  //   })
-  // ),
   lineManagerId: yup.number(
     errorMssg({
       name: 'Line Manager',
@@ -50,14 +42,9 @@ const schema = yup.object().shape({
 })
 
 
-const useKpoList = () => {
-  const dispatch = useDispatch();
+const useKpoList = ({dispatch, userId, state, push, id}) => {
 
-  const { open, kpoList, loading, kpo, loadingSingleKpo } = useSelector(state => state.kpo.employeeKpoList);
-  const userId = useSelector(state => state.profile?.data?.id)
-
-  const { id } = useParams();
-  const { push } = useHistory();
+  const { open, kpoList, loading, kpo, loadingSingleKpo, jobTitles } = state;
 
   const {
     errors,
@@ -68,9 +55,7 @@ const useKpoList = () => {
   } = useForm({
     mode: 'onBlur',
     resolver: yupResolver(schema),
-  })
-
-  // const [listOfKpo, setListOfKpo] = React.useState(kpoList);
+  });
 
   React.useEffect(() => {
     if(!id) {
@@ -80,12 +65,13 @@ const useKpoList = () => {
     } else {
       dispatch(Actions.getOneKpo(id));
     }
+    dispatch(Actions.getJobTitle());
   }, [userId, id]);
 
   React.useEffect(() => {
     if(id) {
-      register({name: 'lineManagerId', value: 1});
-      register({name: 'reviewingManagerId', value: 2});
+      register({name: 'lineManagerId', value: kpo.lineManagerId});
+      register({name: 'reviewingManagerId', value: kpo.reviewingManagerId});
     }
   }, []);
 
@@ -101,7 +87,11 @@ const useKpoList = () => {
     })
   };
 
-  const onSubmit = (model) => {
+  const onSubmit = (value) => {
+    const model = {
+      ...value,
+      kpoYear: `${new Date().getFullYear()}`
+    }
     if(id) {
       return dispatch(Actions.updateKpo({
         id,
@@ -109,7 +99,7 @@ const useKpoList = () => {
         model
       }));
     }
-    dispatch(Actions.createKpo({ userId, item: {...model, kpoYear: `${new Date().getFullYear()}`}}));
+    dispatch(Actions.createKpo({ userId, item: model }));
   };
 
   const handleDeleteKpo = (kpoId) => {
@@ -134,7 +124,8 @@ const useKpoList = () => {
     loading,
     push,
     details: kpo,
-    loadingSingleKpo
+    loadingSingleKpo,
+    jobTitles
   };
 };
 

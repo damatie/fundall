@@ -14,6 +14,7 @@ import * as departmentActions from 'app/main/HR/business_unit/department/store/a
 import withReducer from 'app/store/withReducer';
 import { CircularProgress } from '@material-ui/core';
 import { loaderStyles } from 'styles/loader';
+import GridSystem from 'app/shared/gridSystem';
 
 
 function NewLeaveOptionTab(props) {
@@ -21,7 +22,7 @@ function NewLeaveOptionTab(props) {
 	const loader = loaderStyles();
 	const leaveOption = useSelector(({ leaveOption }) => leaveOption.leaveOption);
 	const businessUnits = useSelector(({ businessUnits }) => businessUnits.businessUnits);
-	const departments = useSelector(({ departments }) => departments.departments);
+	const departments = useSelector(({ department }) => department.departments);
 
 	const [isFormValid, setIsFormValid] = useState(true);
 	const formRef = useRef(null);
@@ -67,7 +68,8 @@ function NewLeaveOptionTab(props) {
 				ref={formRef}
 				className="flex flex-col justify-center w-full"
 			>
-        <SelectFormsy
+				<GridSystem>
+				<SelectFormsy
           className="my-16"
           name="businessUnit"
           label="Business unit"
@@ -77,8 +79,8 @@ function NewLeaveOptionTab(props) {
           variant="outlined"
 					required
         >
-					{businessUnits.data?.map(item => (
-						<MenuItem value={item.entityName} onClick={e => {
+					{businessUnits.data?.map((item, index) => (
+						<MenuItem value={item.entityName} key={index} onClick={e => {
 							getDepartments(item.id);
 						}}>{item.entityName}</MenuItem>
 					))}
@@ -95,8 +97,8 @@ function NewLeaveOptionTab(props) {
           required
         >
 					{
-						departments?.data?.map(item => (
-							<MenuItem value="no">Human resources</MenuItem>
+						departments?.data?.map((item, index) => (
+							<MenuItem value={item.departmentName} key={index}>{item.departmentName}</MenuItem>
 						))
 					}
         </SelectFormsy>
@@ -258,6 +260,8 @@ function NewLeaveOptionTab(props) {
 					}}
           variant="outlined"
 				/>
+				</GridSystem>
+
 
 				<Button
 					type="submit"

@@ -1,17 +1,13 @@
 import EnhancedTable from 'app/shared/table/EnhancedTable';
 import React from 'react';
-import Checkbox from '@material-ui/core/Checkbox';
-import IconButton from '@material-ui/core/IconButton';
-import Icon from '@material-ui/core/Icon';
-import Typography from '@material-ui/core/Typography';
 import moment from 'moment';
 
 const BehaviouralAttributeTable = ({handleDelete, state, push}) => {
   const columns = React.useMemo(
 		() => [
 			{
-				Header: 'Name',
-				accessor: 'name',
+				Header: 'Title',
+				accessor: 'title',
 				// className: 'font-bold',
 				sortable: true,
 			},
@@ -26,6 +22,15 @@ const BehaviouralAttributeTable = ({handleDelete, state, push}) => {
 				align: 'right',
 				Cell: ({ row : { original }}) => {
 					return <>{moment(original.updatedAt).format('LLL')}</>
+				}
+			},
+
+			{
+				Header: 'Modified By',
+				// accessor: 'updatedAt',
+				align: 'right',
+				Cell: ({ row : { original }}) => {
+					return <>{`${original.modifier.firstName} ${original.modifier.lastName}`}</>
 				}
 			},
 		],

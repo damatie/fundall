@@ -6,11 +6,10 @@ import MenuItem from '@material-ui/core/MenuItem';
 import SharedButton from 'app/shared/button/SharedButton';
 import { Controller } from 'react-hook-form';
 import AutoCompleteInput from 'app/shared/TextInput/AutoComplete';
-import useKpoList from '../hooks/useKpoList';
 import Skeleton from '@material-ui/lab/Skeleton';
 
-const EditEmployeeKpo = () => {
-  const { register, errors, handleSubmit, onSubmit, control, details, loadingSingleKpo } = useKpoList();
+const EditEmployeeKpo = ({customHook}) => {
+  const { register, errors, handleSubmit, onSubmit, control, details, loadingSingleKpo, jobTitles } = customHook;
   return (
     <>
       {
@@ -26,18 +25,19 @@ const EditEmployeeKpo = () => {
                   defaultValue={details.jobTitleId}
                   as={
                     <SelectTextField
-                      // name='jobRole'
-                      label='Job Role'
+                      name='jobTitleId'
+                      label='Job Title'
                       className='my-10'
                       error={errors.jobTitleId}
                       message={errors.jobTitleId?.message}
                     >
-                      <MenuItem value={1}>
-                        Office Admin
-                      </MenuItem>
-                      <MenuItem value={2}>
-                        Dev Ops
-                      </MenuItem>
+                      {
+                        jobTitles.map(({name, id}) => (
+                          <MenuItem value={id} key={id}>
+                            {name}
+                          </MenuItem>
+                        ))
+                      }
                     </SelectTextField>
                   }
                   name='jobTitleId'
@@ -53,7 +53,7 @@ const EditEmployeeKpo = () => {
                 <AutoCompleteInput
                   className='my-16'
                   name='lineManagerId'
-                  value={{ name: details?.lineManager, id: details.lineManagerId }}
+                  value={{ name: `${details?.lineManager.firstName} ${details?.lineManager.lastName}`, id: details.lineManagerId }}
                   label='Line Manager'
                   data={[{ name: 'Josh Maximum', id: 1 }]}
                   error={errors.lineManagerId}
@@ -65,7 +65,7 @@ const EditEmployeeKpo = () => {
                   className='my-16'
                   name='reviewingManagerId'
                   label='Reviewing Manager'
-                  value={{ name: details?.reviewingManager, id: details.reviewingManagerId }}
+                  value={{ name: `${details?.reviewingManager.firstName} ${details?.reviewingManager.lastName}`, id: details.reviewingManagerId }}
                   data={[{ name: 'David Chinweike', id: 2 }]}
                   error={errors.reviewingManagerId}
                   helperText={errors.reviewingManagerId?.message}

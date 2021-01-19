@@ -8,8 +8,8 @@ import { Controller } from 'react-hook-form';
 import AutoCompleteInput from 'app/shared/TextInput/AutoComplete';
 import Input from 'app/shared/TextInput/Input';
 
-const CreateEmployeeKpo = () => {
-  const { handleCloseModal, open, register, errors, handleSubmit, onSubmit, control, } = useKpoList();
+const CreateEmployeeKpo = ({customHook}) => {
+  const { handleCloseModal, open, register, errors, handleSubmit, onSubmit, control, jobTitles } = customHook;
   return (
     <SharedModal
       title='Create KPO'
@@ -22,17 +22,18 @@ const CreateEmployeeKpo = () => {
           as={
             <SelectTextField
               name='jobTitleId'
-              label='Job Role'
+              label='Job Title'
               className='my-10'
               error={errors.jobTitleId}
               message={errors.jobTitleId?.message}
             >
-              <MenuItem value={1}>
-                Office Admin
-              </MenuItem>
-              <MenuItem value={2}>
-                Dev Ops
-              </MenuItem>
+              {
+                jobTitles.map(({name, id}) => (
+                  <MenuItem value={id} key={id}>
+                    {name}
+                  </MenuItem>
+                ))
+              }
             </SelectTextField>
           }
           name='jobTitleId'

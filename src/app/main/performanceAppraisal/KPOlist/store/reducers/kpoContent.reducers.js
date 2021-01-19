@@ -4,7 +4,8 @@ const initialState = {
   open: false,
   loading: true,
   data: [],
-  kpoContent: {}
+  kpoContent: {},
+  loadingContent: true
 };
 
 const kpoContentReducer = (state = initialState, actions) => {
@@ -28,7 +29,8 @@ const kpoContentReducer = (state = initialState, actions) => {
     case GET_ONE_KPO_CONTENT:
       return {
         ...state,
-        kpoContent: actions.payload
+        kpoContent: actions.payload,
+        loadingContent: false
       }
     default: {
       return state

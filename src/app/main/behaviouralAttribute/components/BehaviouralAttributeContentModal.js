@@ -4,42 +4,42 @@ import React from 'react';
 import SharedButton from 'app/shared/button/SharedButton';
 
 const BehaviouralAttributeContentModal = ({customHook, state}) => {
-  // const { 
-  //   modalTitle,
-  //   handleSubmit, 
-  //   onSubmit, 
-  //   handleClose, 
-  //   textFieldValue, 
-  //   buttonTitle,
-  //   errors,
-  //   register
-  // } = customHook;
+  const { 
+    modalTitle,
+    handleSubmit, 
+    onSubmit, 
+    handleClose, 
+    textFieldValue, 
+    buttonTitle,
+    errors,
+    register
+  } = customHook;
   return (
     <SharedModal
-      open={/*state.open*/ true}
-      title={/*modalTitle()*/ 'Behavioural Attribute Content'}
-      // handleClose={handleClose}
+      open={state.open}
+      title={modalTitle()}
+      handleClose={handleClose}
     >
-      <form /*onSubmit={handleSubmit(onSubmit)}*/>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <Input
           name='subject'
           label='title'
           className='my-16'
-          // defaultValue={textFieldValue('title')}
-          // error={errors.title}
-          // refs={register}
-          // message={errors.title?.message}
+          defaultValue={textFieldValue('subject')}
+          error={errors.title}
+          refs={register}
+          message={errors.title?.message}
         />
         
         <Input
           className='my-16'
           name='subtext'
           label='Description'
-          // defaultValue={textFieldValue('description')}
+          defaultValue={textFieldValue('subtext')}
           multiline
-          // error={errors.description}
-          // refs={register}
-          // message={errors.description?.message}
+          error={errors.description}
+          refs={register}
+          message={errors.description?.message}
         />
         
         <SharedButton
@@ -48,7 +48,7 @@ const BehaviouralAttributeContentModal = ({customHook, state}) => {
           type='submit'
           className='flex mx-auto'
         >
-          {/*buttonTitle()*/ 'Create'}
+          {buttonTitle()}
         </SharedButton>
       </form>
     </SharedModal>

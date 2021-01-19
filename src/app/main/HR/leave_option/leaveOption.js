@@ -125,5 +125,5 @@ function LeaveOption(props) {
 	);
 }
 withReducer('businessUnits', businessUnitsReducers)(LeaveOption);
-withReducer('departments', departmentsReducers)(LeaveOption);
+withReducer('department', departmentsReducers)(LeaveOption);
 export default withReducer('leaveOption', reducer)(LeaveOption);

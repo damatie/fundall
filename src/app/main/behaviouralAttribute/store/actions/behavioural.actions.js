@@ -80,7 +80,7 @@ export const deleteBehaviouralAttribute = (id) => {
         allowOutsideClick: false,
       });
       swal.showLoading();
-      const { data: { message } } = await api.post('/behavioral/attributes/header/all/selected', {
+      const { data: { message } } = await api.delete('/behavioral/attributes/header/all/selected', {
         data: {
           id
         }
