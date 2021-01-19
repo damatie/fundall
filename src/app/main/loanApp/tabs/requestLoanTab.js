@@ -26,13 +26,7 @@ import PhoneNumberInput from 'app/shared/TextInput/PhoneNumberInput';
 import { Grid } from '@material-ui/core';
 import SharedDropzone from 'app/shared/sharedDropZone';
 
-const useStyles = makeStyles(theme => ({
-	grid: {
-		display: 'grid',
-		gridTemplateColumns: '1fr 1fr',
-		gridGap: 20
-	}
-}));
+
 
 const durations = [
 	{ value: '1 month', id: 1 },
@@ -43,6 +37,7 @@ const durations = [
 	{ value: '6 months', id: 6 },
 ];
 
+const emailTest = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 function RequestLoanTab(props) {
 	// const classes = useStyles();
@@ -95,7 +90,9 @@ function RequestLoanTab(props) {
 				otherDetails.purpose.length < 10 ||
 				otherDetails.workPhone.length < 14 ||
 				otherDetails.homePhone.length < 14 ||
-				otherDetails.mobilePhone.length < 14
+				otherDetails.mobilePhone.length < 14 ||
+				!emailTest.test(otherDetails.email) ||
+				(otherDetails.amountApproved ? otherDetails.amountApproved > otherDetails.amountRequested : "")
 			)
 		) {
 			setIsFormValid(false)
@@ -117,6 +114,7 @@ function RequestLoanTab(props) {
 	}, [profile])
 
 	useEffect(() => {
+		console.log(state)
 		if (id) {
 			setOtherDetails({
 				amountRequested: state.amountRequested,
@@ -127,7 +125,7 @@ function RequestLoanTab(props) {
 				duration: state.duration,
 				purpose: state.purpose,
 				email: state.email,
-				amountApproved: ""
+				amountApproved: state.amountApproved ? state.amountApproved : ""
 			});
 
 			setCheck(state?.fromHR ? "hr" : state?.fromFM ? "fm" : null);
@@ -247,6 +245,7 @@ function RequestLoanTab(props) {
 								values={otherDetails?.amountApproved ?? ""}
 								name={"amountApproved"}
 								label={"Amount Approved"}
+								disabled={state.amountApproved}
 							/>
 						</div>
 					}
@@ -260,7 +259,7 @@ function RequestLoanTab(props) {
 						disabled={userCheck}
 						value={otherDetails.purpose}
 						multiline
-						// error={otherDetails.purpose?.length < 10 ? true : false}
+						error={(otherDetails.purpose?.length < 10 && otherDetails.purpose?.length > 0) ? true : false}
 						onChange={(e) => handleOtherDetails(e.target.value, "purpose")}
 						// validations={{
 						// 	minLength: 10
@@ -281,7 +280,7 @@ function RequestLoanTab(props) {
 					<SelectFormsy
 						className="mb-16"
 						name="duration"
-						label="Purpose Duration"
+						label="Loan Duration"
 						disabled={userCheck}
 						value={otherDetails.duration}
 						onChange={(e) => handleOtherDetails(e.target.value, "duration")}
