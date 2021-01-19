@@ -12,7 +12,7 @@ function RecruitmentHeader(props) {
     if (props.positionId) {
       return `/recruitment/position_details/${props.positionId}`;
     }
-    return '/recruitment';
+    return '/recruitment/dashboard';
   }
 
   return (
