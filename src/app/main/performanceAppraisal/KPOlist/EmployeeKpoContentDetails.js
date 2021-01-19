@@ -53,8 +53,7 @@ const EmployeeKpoContentDetails = () => {
       }}
       button={{
         showButton: true,
-        btnComponent: <ModificationRequest role={modificationReq.role} status='Not Requested yet' handleClick={modificationReq.handleClick}/>
-        
+        btnComponent: <ModificationRequest role={modificationReq.role} status={state.kpoContent.updateStatus ? state.kpoContent.updateStatus : 'No Request'} handleClick={modificationReq.handleClick}/>
       }}
       contentToolbar={
         <Tabs

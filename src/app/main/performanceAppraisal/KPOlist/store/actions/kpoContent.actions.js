@@ -82,6 +82,37 @@ export const updateKpoContent = (model) => {
           icon: 'success'
         });
         dispatch(getOneKpoContent(model.kpoId));
+      } else {
+        swal.fire({
+          text: message,
+          icon: 'error'
+        });
+      }
+    } catch (e) {
+      swal.fire({
+        text: e.response?.data.message || e.response?.data.error || 'Service Unavailable',
+        icon: 'error'
+      });
+    }
+  };
+};
+
+export const updateKpoContentQuarterly = (model) => {
+  return async (dispatch) => {
+    try {
+      loading('Updating...');
+      const { data: { message, success } } = await api.patch(`/appraisal/kpo-content/quarterly/${model.kpoId}`, model);
+      if(success) {
+        swal.fire({
+          text: message,
+          icon: 'success'
+        });
+        dispatch(getOneKpoContent(model.kpoId));
+      } else {
+        swal.fire({
+          text: message,
+          icon: 'error'
+        });
       }
     } catch (e) {
       swal.fire({

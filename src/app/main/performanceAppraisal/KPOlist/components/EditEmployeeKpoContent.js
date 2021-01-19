@@ -18,7 +18,7 @@ const EditEmployeeKpoContent = ({ customHook }) => {
           <Skeleton animation='wave' width='100%' height='350px' variant='rect' />
         ) : (
             <Paper variant="outlined" className='w-full p-20'>
-              <form onSubmit={handleSubmit(onSubmit)}>
+              <form onSubmit={handleSubmit(onSubmit('none'))}>
                 <Controller
                   control={control}
                   name='kpoCategoryId'
@@ -65,7 +65,7 @@ const EditEmployeeKpoContent = ({ customHook }) => {
                   type='number'
                 />
                 <Input
-                  name='kpoYear'
+                  name='kpoPipTarget'
                   label='%PIP Target'
                   className='my-16'
                   error={errors.kpoPipTarget}

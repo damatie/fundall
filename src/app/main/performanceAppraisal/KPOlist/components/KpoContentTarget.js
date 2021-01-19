@@ -43,7 +43,7 @@ const KpoContentTarget = ({customHook}) => {
   ]
   return (
     <Paper variant="outlined" className='w-1/2 flex flex-col mx-auto p-20'>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit('quarterly'))}>
         {
           inputs.map((item) => (
             <div key={item.name}>
