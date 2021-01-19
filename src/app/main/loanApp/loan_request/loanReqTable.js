@@ -303,16 +303,6 @@ function LoanReqTable(props) {
 								}}>{(loanDetails.amountApproved) ? formatToNaira(loanDetails.amountApproved) : 'Not Approved Yet'}</div></td>
 							</tr>
 
-							<tr className="owner">
-								<th>Deductable Amount</th>
-								<td>{(loanDetails.deductableAmount) ? formatToNaira(loanDetails.deductableAmount) : 'Not Approved Yet'}</td>
-							</tr>
-
-							<tr className="modified">
-								<th>Payment Mode</th>
-								<td>{loanDetails.paymentMode}</td>
-							</tr>
-
 							<tr className="created">
 								<th>Date Requested</th>
 								<td>{moment(loanDetails.dateRequested).format('LL')}</td>
@@ -323,19 +313,9 @@ function LoanReqTable(props) {
 								<td>{`${loanDetails.duration} Months`}</td>
 							</tr>
 
-							{/* <tr className="created">
-								<th>Line manager</th>
-								<td>{`${getEmployeeName(employeeList, loanDetails.departmentHead)} | (${returnResult(loanDetails.departmentHeadApprovalDate)})`}</td>
-							</tr> */}
-
-							{/* <tr className="created">
-								<th>Director of support service</th>
-								<td>{`${getEmployeeName(employeeList, loanDetails.supportDirector)} | (${returnResult(loanDetails.supportDirectorApprovalDate)})`}</td>
-							</tr> */}
-
 							<tr className="created">
 								<th>Finance Manager</th>
-								<td>{`${getEmployeeName(employeeList, loanDetails.financeManager)} | (${returnResult(loanDetails.financeManagerApprovalDate)})`}</td>
+								<td>{`${getEmployeeName(employeeList, loanDetails.financeManager)}`}</td>
 							</tr>
 
 							<tr className="created">
