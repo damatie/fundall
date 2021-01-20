@@ -48,7 +48,7 @@ const useStyles = makeStyles(theme => ({
     },
     pagination: {
         display: 'flex',
-        justifyContent: 'center',
+        // justifyContent: 'center',
         marginBottom: '32px',
         marginTop: '30px'
     },
@@ -67,7 +67,7 @@ const rows = [
     {
         id: 'trainingName',
         field: 'trainingName',
-        align: 'center',
+        // align: 'center',
         disablePadding: false,
         label: 'Training Name',
         sort: true
@@ -75,7 +75,7 @@ const rows = [
     {
         id: 'category',
         field: 'category',
-        align: 'center',
+        // align: 'center',
         disablePadding: false,
         label: 'Category',
         sort: true
@@ -83,7 +83,7 @@ const rows = [
     {
         id: 'employeeGrade',
         field: 'employeeGrade',
-        align: 'center',
+        // align: 'center',
         disablePadding: false,
         label: 'Grade',
         sort: true
@@ -91,7 +91,7 @@ const rows = [
     {
         id: 'companySeniority',
         field: 'companySeniority',
-        align: 'center',
+        // align: 'center',
         disablePadding: false,
         label: 'Company Seniority',
         sort: true
@@ -99,7 +99,7 @@ const rows = [
     {
         id: 'industrySeniority',
         field: 'industrySeniority',
-        align: 'center',
+        // align: 'center',
         disablePadding: false,
         label: 'Industry Seniority',
         sort: true
@@ -108,7 +108,7 @@ const rows = [
         id: 'startDate',
         type: 'date',
         field: "startDate",
-        align: 'center',
+        // align: 'center',
         disablePadding: false,
         label: 'Start Date',
         sort: true
@@ -117,7 +117,7 @@ const rows = [
         id: 'endDate',
         type: 'date',
         field: "endDate",
-        align: 'center',
+        // align: 'center',
         disablePadding: false,
         label: 'End Date',
         sort: true
@@ -411,13 +411,14 @@ function PersonalTraining(props) {
                                                 <Tab className="h-64 normal-case" label="Completed Trainings" />
                                                 <Tab className="h-64 normal-case" label="Rejected Trainings" />
                                             </Tabs>
-
-                                            <div className="w-full">
-                                                {tabValue === 0 && (<PersonalTrainingTable data={trainings?.pendingPersonalTrainings ?? []} rows={rows} type='default' handleClick={handleOpen} />)}
-                                                {tabValue === 1 && (<PersonalTrainingTable data={trainings?.reviewedPersonalTrainings ?? []} rows={rows} type='default' handleClick={handleOpen} />)}
-                                                {tabValue === 2 && (<PersonalTrainingTable data={trainings?.approvedPersonalTrainings ?? []} rows={rows} type='default' handleClick={handleOpen} />)}
-                                                {tabValue === 3 && (<PersonalTrainingTable data={trainings?.completedPersonalTrainings ?? []} rows={rows} type='default' handleClick={handleOpen} />)}
-                                                {tabValue === 4 && (<PersonalTrainingTable data={trainings?.rejectedPersonalTrainings ?? []} rows={rows} type='default' handleClick={handleOpen} />)}
+                                            <div className="widget flex w-full p-12">
+                                                <div className="w-full">
+                                                    {tabValue === 0 && (<PersonalTrainingTable data={trainings?.pendingPersonalTrainings ?? []} rows={rows} type='default' handleClick={handleOpen} />)}
+                                                    {tabValue === 1 && (<PersonalTrainingTable data={trainings?.reviewedPersonalTrainings ?? []} rows={rows} type='default' handleClick={handleOpen} />)}
+                                                    {tabValue === 2 && (<PersonalTrainingTable data={trainings?.approvedPersonalTrainings ?? []} rows={rows} type='default' handleClick={handleOpen} />)}
+                                                    {tabValue === 3 && (<PersonalTrainingTable data={trainings?.completedPersonalTrainings ?? []} rows={rows} type='default' handleClick={handleOpen} />)}
+                                                    {tabValue === 4 && (<PersonalTrainingTable data={trainings?.rejectedPersonalTrainings ?? []} rows={rows} type='default' handleClick={handleOpen} />)}
+                                                </div>
                                             </div>
 
 

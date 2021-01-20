@@ -11,7 +11,7 @@ import { withRouter } from 'react-router-dom';
 import SharedTableHead from 'app/shared/sharedTableHead';
 import { formatToNaira } from 'utils/formatNumber';
 import LoanStatus from 'app/main/loanApp/LoanStatus';
-import { Icon } from '@material-ui/core';
+import { Icon, Paper } from '@material-ui/core';
 
 function PersonalTrainingTable(props) {
     const [selected, setSelected] = useState([]);
@@ -59,52 +59,53 @@ function PersonalTrainingTable(props) {
     }
 
     return (
-        <div className="w-full flex flex-col">
-            <FuseScrollbars className="flex-grow overflow-x-auto">
-                <Table className="min-w-xl" aria-labelledby="tableTitle">
-                    <SharedTableHead
-                        numSelected={selected.length}
-                        order={order}
-                        onSelectAllClick={handleSelectAllClick}
-                        onRequestSort={handleRequestSort}
-                        rowCount={(data) ? data.length : 0}
-                        rows={props.rows}
-                        handleDelete={props.handleDelete}
-                        success={true}
-                    />
-                    <TableBody>
-                        {_.orderBy(
-                            data,
-                            [
-                                o => {
-                                    switch (order.id) {
-                                        case 'categories': {
-                                            return o.categories[0];
-                                        }
-                                        default: {
-                                            return o[order.id];
+        <Paper className="w-full rounded-8 shadow-none border-1">
+            <div className="w-full flex flex-col">
+                <FuseScrollbars className="flex-grow overflow-x-auto">
+                    <Table className="min-w-xl" aria-labelledby="tableTitle">
+                        <SharedTableHead
+                            numSelected={selected.length}
+                            order={order}
+                            onSelectAllClick={handleSelectAllClick}
+                            onRequestSort={handleRequestSort}
+                            rowCount={(data) ? data.length : 0}
+                            rows={props.rows}
+                            handleDelete={props.handleDelete}
+                            success={true}
+                        />
+                        <TableBody>
+                            {_.orderBy(
+                                data,
+                                [
+                                    o => {
+                                        switch (order.id) {
+                                            case 'categories': {
+                                                return o.categories[0];
+                                            }
+                                            default: {
+                                                return o[order.id];
+                                            }
                                         }
                                     }
-                                }
-                            ],
-                            [order.direction]
-                        )
-                            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                            .map((n, index) => {
-                                const isSelected = selected.indexOf(n.id) !== -1;
-                                return (
-                                    <TableRow
-                                        className="h-64 cursor-pointer"
-                                        hover
-                                        role="checkbox"
-                                        aria-checked={isSelected}
-                                        tabIndex={-1}
-                                        key={index * Math.random()}
-                                        selected={isSelected}
-                                        onClick={event => props.handleClick(n.training)}
-                                    >
-                                        <TableCells type={props.type} data={n} rows={props.rows} />
-                                        {/* <TableCell component="th" scope="row" align="right">
+                                ],
+                                [order.direction]
+                            )
+                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                .map((n, index) => {
+                                    const isSelected = selected.indexOf(n.id) !== -1;
+                                    return (
+                                        <TableRow
+                                            className="h-64 cursor-pointer"
+                                            hover
+                                            role="checkbox"
+                                            aria-checked={isSelected}
+                                            tabIndex={-1}
+                                            key={index * Math.random()}
+                                            selected={isSelected}
+                                            onClick={event => props.handleClick(n.training)}
+                                        >
+                                            <TableCells type={props.type} data={n} rows={props.rows} />
+                                            {/* <TableCell component="th" scope="row" align="right">
                                             {n.status === 'approved' ? (
                                                 <Icon className="text-green text-20">check_circle</Icon>
                                             ) : (
@@ -112,25 +113,26 @@ function PersonalTrainingTable(props) {
                                                 )}
                                         </TableCell> */}
 
-                                    </TableRow>
-                                );
-                            })}
-                    </TableBody>
-                </Table>
-            </FuseScrollbars>
+                                        </TableRow>
+                                    );
+                                })}
+                        </TableBody>
+                    </Table>
+                </FuseScrollbars>
 
-            <TablePagination
-                className="overflow-hidden"
-                component="div"
-                count={(data) ? data.length : 0}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                backIconButtonProps={{ 'aria-label': 'Previous Page' }}
-                nextIconButtonProps={{ 'aria-label': 'Next Page' }}
-                onChangePage={handleChangePage}
-                onChangeRowsPerPage={handleChangeRowsPerPage}
-            />
-        </div>
+                <TablePagination
+                    className="overflow-hidden"
+                    component="div"
+                    count={(data) ? data.length : 0}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    backIconButtonProps={{ 'aria-label': 'Previous Page' }}
+                    nextIconButtonProps={{ 'aria-label': 'Next Page' }}
+                    onChangePage={handleChangePage}
+                    onChangeRowsPerPage={handleChangeRowsPerPage}
+                />
+            </div>
+        </Paper>
     );
 };
 
@@ -150,7 +152,7 @@ const TableCells = (props) => {
                                     item.type === 'date' ?
                                         <TableCell component="th" scope="row" align={item.align} key={item.id}>
                                             {/* {moment(data[item.field]).format('LL')} */}
-                                            {props.data?.training[item.field]}
+                                            {new Date(props.data?.training[item.field]).toLocaleDateString()}
                                         </TableCell>
                                         :
                                         item.id === 'amount' ?
