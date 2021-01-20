@@ -17,7 +17,7 @@ import Typography from '@material-ui/core/Typography';
 import { Link } from 'react-router-dom';
 import Input from '@material-ui/core/Input';
 import Slide from '@material-ui/core/Slide';
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import { useDispatch, useSelector } from 'react-redux';
@@ -32,10 +32,10 @@ import Moment from 'react-moment';
 import { useAuth } from 'app/hooks/useAuth';
 
 const useStyles = makeStyles((theme) => ({
-	table: {
-		'& th': {
-			padding: '16px 0'
-		}
+  table: {
+    '& th': {
+      padding: '16px 0'
+    }
   },
   root: {
     width: '100%',
@@ -49,7 +49,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="right" ref={ref} {...props} />;
 });
 
-const TableWidget = (props) =>{
+const TableWidget = (props) => {
   const dispatch = useDispatch();
   const classes = useStyles();
   const [data, setData] = useState(props.rows);
@@ -59,9 +59,9 @@ const TableWidget = (props) =>{
   const [filter, setFilter] = useState('');
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-	const [order, setOrder] = useState({
-		direction: 'asc',
-		id: null
+  const [order, setOrder] = useState({
+    direction: 'asc',
+    id: null
   });
   const [selected, setSelected] = useState({});
 
@@ -73,34 +73,34 @@ const TableWidget = (props) =>{
     })
   }, [recruiter])
 
-	const createSortHandler = property => event =>  {
-		const id = property;
-		let direction = 'desc';
+  const createSortHandler = property => event => {
+    const id = property;
+    let direction = 'desc';
 
-		if (order.id === property && order.direction === 'desc') {
-			direction = 'asc';
-		}
+    if (order.id === property && order.direction === 'desc') {
+      direction = 'asc';
+    }
 
-		setOrder({
-			direction,
-			id
-		});
-	}
-
-  function handleChangePage(event, value) {
-		setPage(value);
-	}
-
-	function handleChangeRowsPerPage(event) {
-		setRowsPerPage(event.target.value);
+    setOrder({
+      direction,
+      id
+    });
   }
 
-  function handleFilter(event){
+  function handleChangePage(event, value) {
+    setPage(value);
+  }
+
+  function handleChangeRowsPerPage(event) {
+    setRowsPerPage(event.target.value);
+  }
+
+  function handleFilter(event) {
     console.log(event.target.value);
     setFilter(event.target.value);
   }
-  
-  function handleItemClick(event, item){
+
+  function handleItemClick(event, item) {
     console.log(item);
     setSelected(item);
     setOpen(true);
@@ -109,50 +109,50 @@ const TableWidget = (props) =>{
   function handleAssignRecruiter(hrId) {
     dispatch(Actions.assignRecruiter(hrId))
   }
-    
-  function CheckStatus(status){
-      switch (status) {
-        case "assigned to recruiter":
-          return (
-            <Typography className={'bg-green text-white inline text-11 font-500 px-8 py-4 rounded-4'}>
-              {status}
-            </Typography>
-          )
-          break;
-        case 'sent to hr': {
-          return (
-            <Typography className={'bg-blue text-white inline text-11 font-500 px-8 py-4 rounded-4'}>
-              {status}
-            </Typography>
-          )
-        }
-          
-        case "open":
-          const hrStatus = 'pending';
-          return (
-            <Typography className={'bg-orange text-white inline text-11 font-500 px-8 py-4 rounded-4'}>
-              {isHr() ? hrStatus: status}
-            </Typography>
-          )
-          break;
 
-        case "closed":
-          return (
-            <Typography
-              className={'text-white inline text-11 font-500 px-8 py-4 rounded-4'}
-              style={{backgroundColor: '#22292f'}}
-            >
-              {status}
-            </Typography>
-          )
-          break;
-          
-        default:
-          return (
-            status
-          )
-          break;
+  function CheckStatus(status) {
+    switch (status) {
+      case "assigned to recruiter":
+        return (
+          <Typography className={'bg-green text-white inline text-11 font-500 px-8 py-4 rounded-4'}>
+            {status}
+          </Typography>
+        )
+        break;
+      case 'sent to hr': {
+        return (
+          <Typography className={'bg-blue text-white inline text-11 font-500 px-8 py-4 rounded-4'}>
+            {status}
+          </Typography>
+        )
       }
+
+      case "open":
+        const hrStatus = 'pending';
+        return (
+          <Typography className={'bg-orange text-white inline text-11 font-500 px-8 py-4 rounded-4'}>
+            {isHr() ? hrStatus : status}
+          </Typography>
+        )
+        break;
+
+      case "closed":
+        return (
+          <Typography
+            className={'text-white inline text-11 font-500 px-8 py-4 rounded-4'}
+            style={{ backgroundColor: '#22292f' }}
+          >
+            {status}
+          </Typography>
+        )
+        break;
+
+      default:
+        return (
+          status
+        )
+        break;
+    }
   }
 
   const handleCloseHr = () => {
@@ -178,7 +178,7 @@ const TableWidget = (props) =>{
         { isHr() && <Typography
           onClick={() => setOpenHr(true)}
           className={'bg-green text-white inline text-11 font-500 px-8 py-4 ml-32 rounded-4'}
-          style={{cursor: 'pointer'}}
+          style={{ cursor: 'pointer' }}
         >
           Assign a recruiter
         </Typography>
@@ -188,19 +188,19 @@ const TableWidget = (props) =>{
   }
 
   useEffect(() => {
-		if (props.search.length >= 2) {
+    if (props.search.length >= 2) {
       setData(_.filter(props.rows, row => row.entity.entityName.toLowerCase().includes(props.search.toLowerCase())
-      || row.jobTitle.toLowerCase().includes(props.search.toLowerCase())
-      || row.createdAt.toLowerCase().includes(props.search.toLowerCase())
-      || row.employeeStatus.toLowerCase().includes(props.search.toLowerCase())));
-			setPage(0);
-		} else {
-			setData(props.rows);
-		}
+        || row.jobTitle.toLowerCase().includes(props.search.toLowerCase())
+        || row.createdAt.toLowerCase().includes(props.search.toLowerCase())
+        || row.employeeStatus.toLowerCase().includes(props.search.toLowerCase())));
+      setPage(0);
+    } else {
+      setData(props.rows);
+    }
   }, [props.rows, props.search]);
-        
-	return (
-		<Paper className="w-full rounded-8 shadow-none border-1">
+
+  return (
+    <Paper className="w-full rounded-8 shadow-none border-1">
       <React.Fragment>
         {/* Details Dialog */}
         <RecruitmentDialog
@@ -224,13 +224,13 @@ const TableWidget = (props) =>{
                 <th>Job title</th>
                 <td>{(selected.jobTitle) ? selected.jobTitle : ''}</td>
               </tr>
-              { selected.jobDescription && 
+              {selected.jobDescription &&
                 <tr className="jobDescription">
                   <th>Job Description</th>
                   <td>
                     <Typography
                       className={'bg-blue inline text-11 font-500 px-8 py-4 rounded-4'}
-                      style={{cursor: 'pointer', color: '#fff'}}
+                      style={{ cursor: 'pointer', color: '#fff' }}
                     >
                       <a className='color-white' href={selected.jobDescription} target="_blank" rel="noopener noreferrer">View Job Description</a>
                     </Typography>
@@ -241,7 +241,7 @@ const TableWidget = (props) =>{
                 <th>Recruiter</th>
                 <td>{selected.recruiter
                   ? `${selected.recruiter.lastName} ${selected.recruiter.firstName}`
-                  : displayButton() }
+                  : displayButton()}
                 </td>
               </tr>
               <tr className="employeeStatus">
@@ -250,19 +250,19 @@ const TableWidget = (props) =>{
               </tr>
               <tr className="urgency">
                 <th>Urgency</th>
-                <td>{ (selected.urgency) ? selected.urgency : '' } </td>
+                <td>{(selected.urgency) ? selected.urgency : ''} </td>
               </tr>
               <tr className="dueDate">
                 <th>Due date</th>
-                <td>{(selected.dueDate) ? <Moment format="ddd Do MMM, YYYY">{selected.dueDate}</Moment> : '' }</td>
+                <td>{(selected.dueDate) ? <Moment format="ddd Do MMM, YYYY">{selected.dueDate}</Moment> : ''}</td>
               </tr>
               <tr className="state">
                 <th>State</th>
-                <td>{ (selected.state) ? selected.state : '' } </td>
+                <td>{(selected.state) ? selected.state : ''} </td>
               </tr>
               <tr className="country">
                 <th>Country</th>
-                <td>{(selected.country) ? selected.country : '' }</td>
+                <td>{(selected.country) ? selected.country : ''}</td>
               </tr>
             </tbody>
           </table>
@@ -271,7 +271,7 @@ const TableWidget = (props) =>{
               component={Link}
               to={`/recruitment/position_details/${selected.id}`}
               className={'inline text-13 font-500 px-8 py-4 rounded-4'}
-              style={{cursor: 'pointer', background: '#192d3e', color: '#fff'}}
+              style={{ cursor: 'pointer', background: '#192d3e', color: '#fff' }}
             >
               View full detail
             </Typography>
@@ -285,7 +285,7 @@ const TableWidget = (props) =>{
           onClose={value => setOpenHr(value)}
           onAssign={value => setOpenHr(value)}
         >
-          <AssignRecruiterTab setOpenHr={setOpenHr}  selectedPosition={selected} />
+          <AssignRecruiterTab setOpenHr={setOpenHr} selectedPosition={selected} />
         </RecruitmentDialog>
         {/* Update Dialog */}
         <RecruitmentDialog
@@ -298,109 +298,109 @@ const TableWidget = (props) =>{
         </RecruitmentDialog>
       </React.Fragment>
 
-			<div className="table-responsive">
-				<Table className="w-full min-w-full">
-					<TableHead>
+      <div className="table-responsive">
+        <Table className="w-full min-w-full">
+          <TableHead>
             <TableRow className="h-64">
-                {props.columns.map(column => {
-                  if (!isHr() && column.label.toLowerCase() === 'actions') return;
-                  return (
-                    <TableCell
-                      key={column.id}
-                      align={column.align}
-                      padding={column.disablePadding ? 'none' : 'default'}
-                      sortDirection={order.id === column.id ? order.direction : false}
-                    >
-                      {column.sort && (
-                        <Tooltip
-                          title="Sort"
-                          placement={column.align === 'right' ? 'bottom-end' : 'bottom-start'}
-                          enterDelay={300}
+              {props.columns.map(column => {
+                if (!isHr() && column.label.toLowerCase() === 'actions') return;
+                return (
+                  <TableCell
+                    key={column.id}
+                    align={column.align}
+                    padding={column.disablePadding ? 'none' : 'default'}
+                    sortDirection={order.id === column.id ? order.direction : false}
+                  >
+                    {column.sort && (
+                      <Tooltip
+                        title="Sort"
+                        placement={column.align === 'right' ? 'bottom-end' : 'bottom-start'}
+                        enterDelay={300}
+                      >
+                        <TableSortLabel
+                          active={order.id === column.id}
+                          direction={order.direction}
+                          onClick={createSortHandler(column.id)}
                         >
-                          <TableSortLabel
-                            active={order.id === column.id}
-                            direction={order.direction}
-                            onClick={createSortHandler(column.id)}
-                          >
-                            {column.label}
-                          </TableSortLabel>
-                        </Tooltip>
-                      )}
-                    </TableCell>
-                  );
-                }, this)}
+                          {column.label}
+                        </TableSortLabel>
+                      </Tooltip>
+                    )}
+                  </TableCell>
+                );
+              }, this)}
             </TableRow>
-					</TableHead>
-					<TableBody>
-						{_.orderBy(
-								data,
-								[
-									o => {
-										switch (order.id) {
-											case 'categories': {
-												return o.categories[0];
-											}
-											default: {
-												return o[order.id];
-											}
-										}
-									}
-								],
-								[order.direction]
-							)
-								.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-								.map((n, i) => {
-								return (
-									<TableRow
-										key={i}
-										hover
-										onClick={event => {handleItemClick(event, n); setOpen(true) }}
-										// selected={n.id === selectedItemId}
+          </TableHead>
+          <TableBody>
+            {_.orderBy(
+              data,
+              [
+                o => {
+                  switch (order.id) {
+                    case 'categories': {
+                      return o.categories[0];
+                    }
+                    default: {
+                      return o[order.id];
+                    }
+                  }
+                }
+              ],
+              [order.direction]
+            )
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((n, i) => {
+                return (
+                  <TableRow
+                    key={i}
+                    hover
+                    onClick={event => { handleItemClick(event, n); setOpen(true) }}
+                    // selected={n.id === selectedItemId}
                     className="cursor-pointer"
-									>
-										<TableCell className="text-center" style={{padding: '0 16px'}}>
-											{n.entity.entityName}
-										</TableCell>
-										<TableCell>{n.jobTitle}</TableCell>
-										<TableCell className="text-center" style={{padding: '0 16px'}}>{n.employeeStatus}</TableCell>
-										<TableCell className="text-center" style={{padding: '0 16px'}}>{n.urgency}</TableCell>
-										<TableCell className="text-center"><Moment format="ddd Do MMM, YY | hh:mm:ss a">{n.createdAt}</Moment></TableCell>
-                    <TableCell className="text-center" style={{padding: '0 16px'}}>
-                        {CheckStatus(n.status)}
+                  >
+                    <TableCell className="text-center" style={{ padding: '0 16px' }}>
+                      {n.entity.entityName}
                     </TableCell>
-                    { isHr() && <TableCell className="text-center" style={{padding: '0 16px'}}>
+                    <TableCell>{n.jobTitle}</TableCell>
+                    <TableCell className="text-center" style={{ padding: '0 16px' }}>{n.employeeStatus}</TableCell>
+                    <TableCell className="text-center" style={{ padding: '0 16px' }}>{n.urgency}</TableCell>
+                    <TableCell className="text-center"><Moment format="ddd Do MMM, YY | hh:mm:ss a">{n.createdAt}</Moment></TableCell>
+                    <TableCell className="text-center" style={{ padding: '0 16px' }}>
+                      {CheckStatus(n.status)}
+                    </TableCell>
+                    { isHr() && <TableCell className="text-center" style={{ padding: '0 16px' }}>
                       <IconButton aria-label="delete" onClick={(event) => handleDeleteOpening(event, n.id)}>
-                        <DeleteIcon style={{color: 'red'}} />
+                        <DeleteIcon style={{ color: 'red' }} />
                       </IconButton>
                     </TableCell>}
-									</TableRow>
-								);
-							})}
-						</TableBody>
+                  </TableRow>
+                );
+              })}
+          </TableBody>
           <TableFooter>
-              <TableRow>
-                <TablePagination
-                    className="overflow-hidden"
-                    // component="div"
-                    count={data.length}
-                    colSpan={props.columns.length}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    backIconButtonProps={{
-                        'aria-label': 'Previous Page'
-                    }}
-                    nextIconButtonProps={{
-                        'aria-label': 'Next Page'
-                    }}
-                    onChangePage={handleChangePage}
-                    onChangeRowsPerPage={handleChangeRowsPerPage}
-                />
-              </TableRow>
-            </TableFooter>
-				</Table>
-			</div>
-		</Paper>
-	);
+            <TableRow>
+              <TablePagination
+                className="overflow-hidden"
+                // component="div"
+                count={data.length}
+                colSpan={props.columns.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                backIconButtonProps={{
+                  'aria-label': 'Previous Page'
+                }}
+                nextIconButtonProps={{
+                  'aria-label': 'Next Page'
+                }}
+                onChangePage={handleChangePage}
+                onChangeRowsPerPage={handleChangeRowsPerPage}
+              />
+            </TableRow>
+          </TableFooter>
+        </Table>
+      </div>
+    </Paper>
+  );
 }
 
 export default React.memo(TableWidget);

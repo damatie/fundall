@@ -6,7 +6,7 @@ const HRRecruitmentDashboardConfig = {
 	},
 	routes: [
 		{
-			path: '/hr/recruitment',
+			path: '/recruitment/dashboard',
 			component: React.lazy(() => import('./Dashboard'))
 		}
 	]

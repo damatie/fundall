@@ -31,7 +31,7 @@ function LoanDetailsTab({ setValue }) {
 
 	const { showBtn, handleApprove, handleReject, isValue, handleCloseModal, open, handleCancel } = useLoanManagement();
 
-	const { disabled, handleSubmit, handleChange, error, amountApproved, approve } = useApproveLoan();
+	const { disabled, handleSubmit, handleChange, error, approve } = useApproveLoan();
 
 	const { statement, handleStatement } = useLoanStatement(loan.data.loanData.status);
 
@@ -83,7 +83,7 @@ function LoanDetailsTab({ setValue }) {
 
 						<div className="mb-24">
 							<Typography className="font-bold mb-4 text-15">Loan Disbursed On</Typography>
-							<Typography>{isValue(loan.data.loanData.loanDisbursedOn)}</Typography>
+							<Typography>{isValue(loan.data.loanData.dateOfDisbursement)}</Typography>
 						</div>
 
 						<div className="flex items-center justify-evenly w-2/4 mx-auto">
@@ -103,11 +103,16 @@ function LoanDetailsTab({ setValue }) {
 										}
 									</CustomIconButton>
 
-									<CustomIconButton type='error' icon='cancel' onClick={handleReject}>
-										Reject
-									</CustomIconButton>
+									{
+										loan.data.loanData.status.toLowerCase() !== "disbursed" ?
+											<CustomIconButton type='error' icon='cancel' onClick={handleReject}>
+												Reject
+											</CustomIconButton> :
+											<></>
+									}
 								</>
-								: <></>}
+								: <></>
+							}
 
 							{statement ?
 								<>
