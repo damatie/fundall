@@ -29,7 +29,8 @@ const PageLayout = ({
 		btnIcon,
 		btnIconShow,
 		onClick,
-		hidden
+		hidden,
+		btnComponent,
   }
 }) => {
 
@@ -101,16 +102,24 @@ const PageLayout = ({
           {showButton && <div className="flex items-center max-w-full">
             <div className="flex flex-col min-w-0 mx-8 sm:mc-16">
               <FuseAnimate animation="transition.slideLeftIn" delay={300}>
-                <Button
-                  // className="mb-16"
-                  variant="contained"
-                  color="secondary"
-                  disableElevation
-                  onClick={onClick}
-                >
-				{btnIconShow &&  <Icon className="text-32">{btnIcon}</Icon> }
-                  {btnTitle}
-                </Button>
+								{
+									btnComponent ? (
+										<>
+										{btnComponent}
+										</>
+									) : (
+										<Button
+                  		// className="mb-16"
+											variant="contained"
+											color="secondary"
+											disableElevation
+											onClick={onClick}
+										>
+												{btnIconShow &&  <Icon className="text-32">{btnIcon}</Icon> }
+											{btnTitle}
+										</Button>
+									)
+								}
               </FuseAnimate>
             </div>
           </div>}

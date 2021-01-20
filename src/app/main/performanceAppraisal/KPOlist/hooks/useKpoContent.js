@@ -144,16 +144,20 @@ const useKpoContentList = ({config, state, dispatch, params, push, kpoCategory})
     dispatch({type: Actions.CLOSE_ADD_KPO_CONTENT_MODAL})
   };
 
-  const onSubmit = (model) => {
+  const onSubmit = (type) => (model) => {
     const body = {
       ...model,
       kpoId: kpoId || id 
     };
-
     if(id && !kpoId) {
       dispatch(Actions.addKpoContent(body));
     } else if (kpoId) {
-      dispatch(Actions.updateKpoContent(body))
+      if(type === 'quarterly') {
+        dispatch(Actions.updateKpoContentQuarterly(body));
+        return;
+      }
+      dispatch(Actions.updateKpoContent(body));
+      return;
     }
     return;
   };
@@ -166,21 +170,25 @@ const useKpoContentList = ({config, state, dispatch, params, push, kpoCategory})
   };
 
   const shouldShowInput = (name) => {
-    const status = kpoContent.status;
-    if(name === 'q1' && status === 0) {
-      return true;
-    } else if(name === 'q2' && status === 1) {
-      return true;
-    } else if(name === 'q3' && status === 2) {
-      return true;
-    } else if(name === 'q4' && status === 3) {
-      return true;
-    } else if ((name === 'kpoyearendscore' || name === 'kpoyearendremarks' || name === 'kpopipachieved') && status === 4) {
-      return true;
+    const { status, updateStatus } = kpoContent;
+    if(updateStatus !== 'approved' || !updateStatus) {
+      if(name === 'q1' && status === 0) {
+        return true;
+      } else if(name === 'q2' && status === 1) {
+        return true;
+      } else if(name === 'q3' && status === 2) {
+        return true;
+      } else if(name === 'q4' && status === 3) {
+        return true;
+      } else if ((name === 'kpoyearendscore' || name === 'kpoyearendremarks' || name === 'kpopipachieved') && status === 4) {
+        return true;
+      } else {
+        return false;
+      }
     } else {
-      return false;
+      return true;
     }
-  }
+  };
 
 
   return {
