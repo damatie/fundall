@@ -169,7 +169,7 @@ const TableWidget = (props) => {
     dispatch(Actions.deleteOpening(hrId));
   }
 
-  const isHr = () => userData.role.toUpperCase() === 'HR';
+  const isHr = () => userData.role.toUpperCase() === 'HR MANAGER';
 
   const displayButton = () => {
     return (
@@ -277,6 +277,7 @@ const TableWidget = (props) => {
             </Typography>
           </Grid>
         </RecruitmentDialog>
+
         {/* Assign Reecruiter Dialog */}
         <RecruitmentDialog
           transition={Transition}
@@ -287,6 +288,7 @@ const TableWidget = (props) => {
         >
           <AssignRecruiterTab setOpenHr={setOpenHr} selectedPosition={selected} />
         </RecruitmentDialog>
+
         {/* Update Dialog */}
         <RecruitmentDialog
           open={updateOpen}
