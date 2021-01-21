@@ -15,7 +15,7 @@ const CreateKpoContent = ({customHook}) => {
       open={open}
       handleClose={handleCloseModal}
     >
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit())}>
         <Controller
           control={control}
           name='kpoCategoryId'

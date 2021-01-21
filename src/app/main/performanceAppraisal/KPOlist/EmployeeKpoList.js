@@ -13,12 +13,14 @@ const EmployeeKpoList = () => {
   const dispatch = useDispatch();
   const { push } = useHistory();
   const state = useSelector(state => state.kpo.employeeKpoList);
-  const userId = useSelector(state => state.profile?.data?.id)
+  const userId = useSelector(state => state.profile?.data?.id);
+  const employees = useSelector(state => state.employeeList.data);
   const customHook = useKpoList({
     userId,
     dispatch,
     push,
-    state
+    state,
+    employees
   });
   return (
     <PageLayout

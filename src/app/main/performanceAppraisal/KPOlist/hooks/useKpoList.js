@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import errorMssg from '../../../../../utils/errorMsg';
+import userRole from 'utils/userRole';
 
 const schema = yup.object().shape({
   jobTitleId: yup.string(
@@ -42,7 +43,7 @@ const schema = yup.object().shape({
 })
 
 
-const useKpoList = ({dispatch, userId, state, push, id}) => {
+const useKpoList = ({dispatch, userId, state, push, id, employees, userInfo}) => {
 
   const { open, kpoList, loading, kpo, loadingSingleKpo, jobTitles } = state;
 
@@ -87,6 +88,19 @@ const useKpoList = ({dispatch, userId, state, push, id}) => {
     })
   };
 
+  const showSubmitBtn = (tabValue) => {
+    return (kpo.employeeId === userInfo.id && kpo.employee.email === userInfo.email && tabValue === 0);
+  }
+
+  const getEmployeesByRole = (role) => {
+    return employees.filter((employee) => userRole(employee?.role?.name) === role).map(newEmployee => {
+      return {
+        name: `${newEmployee.firstName} ${newEmployee.lastName}`,
+        id: newEmployee.id
+      }
+    });
+  };
+
   const onSubmit = (value) => {
     const model = {
       ...value,
@@ -110,6 +124,24 @@ const useKpoList = ({dispatch, userId, state, push, id}) => {
     }))
   };
 
+  const submitKpo = () => {
+    if(kpo.status === 'on-going') {
+      dispatch(Actions.submitKpo(id));
+      return;
+    }
+    dispatch(Actions.CompleteKpo(id));
+  };
+
+  const approveKpo = () => {
+    dispatch(Actions.approveKpo(id));
+  };
+
+
+
+  const submitButtonText = () => {
+    return kpo.status === 'on-going' ? 'Submit KPO for Review' : 'Complete KPO'
+  }
+
   return {
     handleCloseModal,
     handleOpenModal,
@@ -125,7 +157,12 @@ const useKpoList = ({dispatch, userId, state, push, id}) => {
     push,
     details: kpo,
     loadingSingleKpo,
-    jobTitles
+    jobTitles,
+    getEmployeesByRole,
+    showSubmitBtn,
+    submitKpo,
+    submitButtonText,
+    approveKpo
   };
 };
 

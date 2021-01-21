@@ -30,7 +30,7 @@ const BehaviouralAttributeTable = ({handleDelete, state, push}) => {
 				// accessor: 'updatedAt',
 				align: 'right',
 				Cell: ({ row : { original }}) => {
-					return <>{`${original.modifier.firstName} ${original.modifier.lastName}`}</>
+					return <>{`${original.modifier?.firstName} ${original.modifier?.lastName}`}</>
 				}
 			},
 		],

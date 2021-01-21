@@ -8,7 +8,7 @@ import { fetchHeaders } from 'app/shared/fetchHeaders';
 import { redirectUrl } from '../../redirectUrl';
 import { getBaseUrl } from 'app/shared/getBaseUrl';
 import { handleResponse } from 'app/auth/handleRes';
-import { GET_EMPLOYEE_PROFILE, LOADING_EMPLOYEE_PROFILE } from 'app/store/actions';
+import { GET_EMPLOYEE_PROFILE, LOADING_EMPLOYEE_PROFILE, getDepartmentEmployees } from 'app/store/actions';
 import { GET_NOTIFICATIONS, LOADING_NOTIFICATIONS } from 'app/main/notifications/store/actions';
 import api from 'app/services/api';
 
@@ -56,6 +56,7 @@ export function submitLogin(data, x) {
 				dispatch(getProfile({ id: data?.id, token }));
 				dispatch(UserActions.setUserData(userState));
 				// dispatch(getNotification(token));
+				dispatch(getDepartmentEmployees(data.department?.id));
 
 				return dispatch({
 					type: LOGIN_SUCCESS

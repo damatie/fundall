@@ -9,7 +9,7 @@ import AutoCompleteInput from 'app/shared/TextInput/AutoComplete';
 import Skeleton from '@material-ui/lab/Skeleton';
 
 const EditEmployeeKpo = ({customHook}) => {
-  const { register, errors, handleSubmit, onSubmit, control, details, loadingSingleKpo, jobTitles } = customHook;
+  const { getEmployeesByRole, register, errors, handleSubmit, onSubmit, control, details, loadingSingleKpo, jobTitles } = customHook;
   return (
     <>
       {
@@ -55,7 +55,7 @@ const EditEmployeeKpo = ({customHook}) => {
                   name='lineManagerId'
                   value={{ name: `${details?.lineManager?.firstName} ${details?.lineManager?.lastName}`, id: details.lineManagerId }}
                   label='Line Manager'
-                  data={[{ name: 'Josh Maximum', id: 1 }]}
+                  data={getEmployeesByRole('linemanager')}
                   error={errors.lineManagerId}
                   helperText={errors.lineManagerId?.message}
                   onChange={(ev, value) => register({ name: 'lineManagerId', value: value?.id })}
@@ -66,7 +66,7 @@ const EditEmployeeKpo = ({customHook}) => {
                   name='reviewingManagerId'
                   label='Reviewing Manager'
                   value={{ name: `${details?.reviewingManager?.firstName} ${details?.reviewingManager?.lastName}`, id: details.reviewingManagerId }}
-                  data={[{ name: 'David Chinweike', id: 2 }]}
+                  data={getEmployeesByRole('linemanager')}
                   error={errors.reviewingManagerId}
                   helperText={errors.reviewingManagerId?.message}
                   onChange={(ev, value) => register({ name: 'reviewingManagerId', value: value?.id })}

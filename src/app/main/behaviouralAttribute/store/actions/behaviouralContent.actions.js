@@ -51,7 +51,10 @@ export const createBehaviouralContent = (model) => {
         id: model.headerId,
         offset: 0,
         limit: 10
-      }))
+      }));
+      dispatch({
+        type: CLOSE_BEHAVIOURAL_CONTENT_MODAL
+      })
     } catch (e) {
       swal.fire({
         text: catchErrorMsg(e),

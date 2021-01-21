@@ -17,6 +17,9 @@ import useKpoList from './hooks/useKpoList';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
 import useKpoSummary from './hooks/useKpoSummary';
+import useKpoPip from './hooks/useKpoPip';
+import CustomIconButton from 'app/shared/button/CustomIconButton';
+import Button from '@material-ui/core/Button'
 
 const EmployeeKpoDetails = () => {
   const dispatch = useDispatch();
@@ -27,12 +30,15 @@ const EmployeeKpoDetails = () => {
   const { data: kpoCategory } = useSelector(state => state.kpoCategory);
   const state = useSelector(state => state.kpo.kpoContentList);
   const userInfo = useSelector(state => state.auth.user);
+  const employees = useSelector(state => state.employeeList.data);
 
   const EmployeeKpoCustomHook = useKpoList({
     dispatch,
     id: params?.id,
     state: EmployeeKpo,
-    push
+    push,
+    employees,
+    userInfo,
   });
   const customHook = useKpoContentList({
     config: {},
@@ -47,6 +53,11 @@ const EmployeeKpoDetails = () => {
     dispatch,
     state: EmployeeKpo.kpo,
     userInfo,
+  });
+  
+  const calculatePip = useKpoPip({
+    dispatch,
+    state: EmployeeKpo.kpo
   })
 
   const [tabValue, setTabValue] = React.useState(0);
@@ -68,9 +79,10 @@ const EmployeeKpoDetails = () => {
         handleSearch: ({target: { value }}) => console.log(value),
       }}
       button={{
-        showButton: tabValue === 1 && true,
-        btnTitle: 'Add KPO Content',
-        onClick: customHook.handleOpenModal
+        showButton: true,
+        btnComponent: tabValue !== 1 ? <CustomIconButton onClick={EmployeeKpoCustomHook.submitKpo} icon='check' type='success' className='w-full px-8'>{EmployeeKpoCustomHook.submitButtonText()}</CustomIconButton> : <Button variant="contained" color="secondary" onClick={customHook.handleOpenModal}>
+          Add KPO Content
+        </Button>
       }}
       contentToolbar={
         <Tabs
@@ -97,11 +109,14 @@ const EmployeeKpoDetails = () => {
             <>
               <KpoContentList customHook={customHook} />
               <CreateKpoContent customHook={customHook} />
+              <CustomIconButton type='success' className='flex flex-col my-10 mx-auto' onClick={EmployeeKpoCustomHook.approveKpo}>
+                Approve
+              </CustomIconButton>
             </>
           )}
           {tabValue === 2 && (<KpoComments kpoSummary={kpoSummary}/>)}
-          {tabValue === 3 && (<KpoContentPipScore />)}
-          {tabValue === 4 && (<BehaviouralAttribute />)}
+          {tabValue === 3 && (<KpoContentPipScore calculatePip={calculatePip}/>)}
+          {tabValue === 4 && (<BehaviouralAttribute kpoDetails={EmployeeKpo.kpo}/>)}
           {tabValue === 5 && (<PersonalDevelopment data={EmployeeKpo.kpo}/>)}
         </div>
       }

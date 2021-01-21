@@ -119,9 +119,6 @@ const KpoContentList = ({customHook}) => {
 			selectAll={(value) => console.log(value)}
 			handleDelete={handleDelete}
 		/>
-			<CustomIconButton type='success' className='flex flex-col my-10 mx-auto'>
-				Approve
-			</CustomIconButton>
 				</>
 			)
 		}

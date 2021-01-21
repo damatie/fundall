@@ -47,7 +47,8 @@ const PageLayout = ({
 					<div className="flex flex-col items-start max-w-full">
 						<div className="flex items-center">
 							{prev &&
-								<FuseAnimate animation="transition.expandIn" delay={300}>
+								// <FuseAnimate animation="transition.expandIn" delay={300}>
+								<>
 									{(isState) ? <Icon
 										className="text-20 text-black bg-white rounded-20 mr-16"
 										role="button"
@@ -65,7 +66,7 @@ const PageLayout = ({
 										{mainTheme.direction === 'ltr' ? 'arrow_back' : 'arrow_forward'}
 									</Icon>
 									}
-								</FuseAnimate>
+									</>
 							}
 							<FuseAnimate animation="transition.expandIn" delay={300}>
 								<Icon className="text-32">{icon}</Icon>
@@ -80,7 +81,7 @@ const PageLayout = ({
 
 					<div className="flex flex-1 items-center justify-center px-12">
 						{!noSearch && <ThemeProvider theme={mainTheme}>
-							<FuseAnimate animation="transition.slideDownIn" delay={300}>
+							{/* <FuseAnimate animation="transition.slideDownIn" delay={300}> */}
 								<Paper className="flex items-center w-full max-w-512 px-8 py-4 rounded-8" elevation={1}>
 									<Icon color="action">search</Icon>
 									<Input
@@ -95,15 +96,15 @@ const PageLayout = ({
 										onChange={handleSearch}
 									/>
 								</Paper>
-							</FuseAnimate>
+							{/* </FuseAnimate> */}
 						</ThemeProvider>}
 					</div>
 
           {showButton && <div className="flex items-center max-w-full">
             <div className="flex flex-col min-w-0 mx-8 sm:mc-16">
-              <FuseAnimate animation="transition.slideLeftIn" delay={300}>
+              {/* <FuseAnimate animation="transition.slideLeftIn" delay={300}> */}
 								{
-									btnComponent ? (
+									btnComponent !== false ? (
 										<>
 										{btnComponent}
 										</>
@@ -120,7 +121,7 @@ const PageLayout = ({
 										</Button>
 									)
 								}
-              </FuseAnimate>
+              {/* </FuseAnimate> */}
             </div>
           </div>}
 				</div>
