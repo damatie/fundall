@@ -1,9 +1,10 @@
-import { GET_KPO_BY_DEPT, GET_ASSIGNED_KPO } from '../actions';
+import { GET_KPO_BY_DEPT, GET_ASSIGNED_KPO, GET_ENTITIES } from '../actions';
 
 const initialState = {
   deptKpo: [],
   loading: true,
   assignedKpo: [],
+  entities: [],
 }
 
 const kpoReviewReducer = (state = initialState, actions) => {
@@ -17,7 +18,12 @@ const kpoReviewReducer = (state = initialState, actions) => {
     case GET_ASSIGNED_KPO:
       return {
         ...state,
-        assignedKpo: actions.payload
+        assignedKpo: actions.payload,
+      }
+    case GET_ENTITIES:
+      return {
+        ...state,
+        entities: actions.payload,
       }
     default: {
       return {
