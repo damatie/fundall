@@ -109,7 +109,7 @@ const EmployeeKpoDetails = () => {
           )}
           {tabValue === 2 && (<KpoComments kpoSummary={kpoSummary}/>)}
           {tabValue === 3 && (<KpoContentPipScore calculatePip={calculatePip}/>)}
-          {tabValue === 4 && (<BehaviouralAttribute />)}
+          {tabValue === 4 && (<BehaviouralAttribute kpoDetails={EmployeeKpo.kpo}/>)}
           {tabValue === 5 && (<PersonalDevelopment data={EmployeeKpo.kpo}/>)}
         </div>
       }
