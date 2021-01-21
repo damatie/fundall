@@ -95,7 +95,14 @@ function Layout1(props) {
 		if(token && id ){
 			dispatch(Actions.getEmployeeProfile(id))
 		}
+		
 	}, [dispatch]);
+
+	useEffect(() => {
+		if(profileState.data?.department) {
+			dispatch(Actions.getDepartmentEmployees(profileState.data.department.id))
+		}
+	}, [profileState.data]);
 
 	const appContext = useContext(AppContext);
 	const classes = useStyles(props);
