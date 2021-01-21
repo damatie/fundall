@@ -238,3 +238,60 @@ export const calculatePip = ({model, id}) => {
     }
   }
 };
+
+export const submitKpo = (id) => {
+  return async (dispatch) => {
+    try {
+      loading('Submitting...');
+      const { data: { message }} = await api.patch(`/appraisal/kpo/employee/submit/${id}`);
+      swal.fire({
+        text: message,
+        icon: 'success'
+      });
+      dispatch(getOneKpo(id));
+    } catch(e) {
+      swal.fire({
+        text: catchErrorMsg(e),
+        icon: 'error'
+      })
+    }
+  }
+};
+
+export const approveKpo = (id) => {
+  return async (dispatch) => {
+    try {
+      loading('Approving...');
+      const { data: { message }} = await api.patch(`/appraisal/kpo/lm/submit/${id}`);
+      swal.fire({
+        text: message,
+        icon: 'success'
+      });
+      dispatch(getOneKpo(id));
+    } catch(e) {
+      swal.fire({
+        text: catchErrorMsg(e),
+        icon: 'error'
+      })
+    }
+  }
+};
+
+export const CompleteKpo = (id) => {
+  return async (dispatch) => {
+    try {
+      loading('Completing...');
+      const { data: { message }} = await api.patch(`/appraisal/kpo/lm/complete/${id}`);
+      swal.fire({
+        text: message,
+        icon: 'success'
+      });
+      dispatch(getOneKpo(id));
+    } catch(e) {
+      swal.fire({
+        text: catchErrorMsg(e),
+        icon: 'error'
+      })
+    }
+  }
+};

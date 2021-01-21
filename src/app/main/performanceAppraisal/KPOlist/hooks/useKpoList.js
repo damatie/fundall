@@ -43,7 +43,7 @@ const schema = yup.object().shape({
 })
 
 
-const useKpoList = ({dispatch, userId, state, push, id, employees}) => {
+const useKpoList = ({dispatch, userId, state, push, id, employees, userInfo}) => {
 
   const { open, kpoList, loading, kpo, loadingSingleKpo, jobTitles } = state;
 
@@ -88,6 +88,10 @@ const useKpoList = ({dispatch, userId, state, push, id, employees}) => {
     })
   };
 
+  const showSubmitBtn = (tabValue) => {
+    return (kpo.employeeId === userInfo.id && kpo.employee.email === userInfo.email && tabValue === 0);
+  }
+
   const getEmployeesByRole = (role) => {
     return employees.filter((employee) => userRole(employee?.role?.name) === role).map(newEmployee => {
       return {
@@ -120,6 +124,24 @@ const useKpoList = ({dispatch, userId, state, push, id, employees}) => {
     }))
   };
 
+  const submitKpo = () => {
+    if(kpo.status === 'on-going') {
+      dispatch(Actions.submitKpo(id));
+      return;
+    }
+    dispatch(Actions.CompleteKpo(id));
+  };
+
+  const approveKpo = () => {
+    dispatch(Actions.approveKpo(id));
+  };
+
+
+
+  const submitButtonText = () => {
+    return kpo.status === 'on-going' ? 'Submit KPO for Review' : 'Complete KPO'
+  }
+
   return {
     handleCloseModal,
     handleOpenModal,
@@ -136,7 +158,11 @@ const useKpoList = ({dispatch, userId, state, push, id, employees}) => {
     details: kpo,
     loadingSingleKpo,
     jobTitles,
-    getEmployeesByRole
+    getEmployeesByRole,
+    showSubmitBtn,
+    submitKpo,
+    submitButtonText,
+    approveKpo
   };
 };
 

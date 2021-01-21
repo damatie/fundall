@@ -18,6 +18,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
 import useKpoSummary from './hooks/useKpoSummary';
 import useKpoPip from './hooks/useKpoPip';
+import CustomIconButton from 'app/shared/button/CustomIconButton';
+import Button from '@material-ui/core/Button'
 
 const EmployeeKpoDetails = () => {
   const dispatch = useDispatch();
@@ -35,7 +37,8 @@ const EmployeeKpoDetails = () => {
     id: params?.id,
     state: EmployeeKpo,
     push,
-    employees
+    employees,
+    userInfo,
   });
   const customHook = useKpoContentList({
     config: {},
@@ -76,9 +79,10 @@ const EmployeeKpoDetails = () => {
         handleSearch: ({target: { value }}) => console.log(value),
       }}
       button={{
-        showButton: tabValue === 1 && true,
-        btnTitle: 'Add KPO Content',
-        onClick: customHook.handleOpenModal
+        showButton: true,
+        btnComponent: tabValue !== 1 ? <CustomIconButton onClick={EmployeeKpoCustomHook.submitKpo} icon='check' type='success' className='w-full px-8'>{EmployeeKpoCustomHook.submitButtonText()}</CustomIconButton> : <Button variant="contained" color="secondary" onClick={customHook.handleOpenModal}>
+          Add KPO Content
+        </Button>
       }}
       contentToolbar={
         <Tabs
@@ -105,6 +109,9 @@ const EmployeeKpoDetails = () => {
             <>
               <KpoContentList customHook={customHook} />
               <CreateKpoContent customHook={customHook} />
+              <CustomIconButton type='success' className='flex flex-col my-10 mx-auto' onClick={EmployeeKpoCustomHook.approveKpo}>
+                Approve
+              </CustomIconButton>
             </>
           )}
           {tabValue === 2 && (<KpoComments kpoSummary={kpoSummary}/>)}
