@@ -65,49 +65,49 @@ const useStyles = makeStyles(theme => ({
 const columns = [
 	{
 		id: 'entityName',
-		align: 'center',
+		// align: 'center',
 		disablePadding: false,
 		label: 'Entity Name',
 		sort: true
 	},
 	{
 		id: 'jobTitle',
-		align: 'center',
+		// align: 'center',
 		disablePadding: false,
 		label: 'Job title',
 		sort: true
 	},
 	{
 		id: 'employeeStatus',
-		align: 'center',
+		// align: 'center',
 		disablePadding: false,
 		label: 'Employee status',
 		sort: true
 	},
 	{
 		id: 'urgency',
-		align: 'center',
+		// align: 'center',
 		disablePadding: false,
 		label: 'Urgency',
 		sort: true
 	},
 	{
 		id: 'createdAt',
-		align: 'center',
+		// align: 'center',
 		disablePadding: false,
 		label: 'Created At',
 		sort: true
 	},
 	{
 		id: 'status',
-		align: 'center',
+		// align: 'center',
 		disablePadding: false,
 		label: 'Status',
 		sort: true
 	},
 	{
 		id: 'actions',
-		align: 'center',
+		// align: 'center',
 		disablePadding: false,
 		label: 'Actions',
 		sort: true
