@@ -22,7 +22,6 @@ const useLoanManagement = () => {
 
   const { id } = useParams();
 
-  console.log(role, loan.data.loanData.status.toLowerCase())
   useEffect(() => {
     switch (loan.data.loanData.status.toLowerCase()) {
       case 'pending': {
@@ -82,6 +81,7 @@ const useLoanManagement = () => {
           purpose: loan.data.loanData.purpose,
           email: loan.data.loanData.email,
           loanForm: loan.data.loanData.formUrl,
+          amountApproved: loan.data.loanData.amountApproved,
           fromHR: loan.data.loanData.status.toLowerCase() === "pending" ? true : false,
           fromFM: loan.data.loanData.status.toLowerCase() === "reviewed" ? true : false
         }

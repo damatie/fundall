@@ -1,5 +1,7 @@
 import api from "app/services/api";
 import swal from 'sweetalert2';
+import loading from "utils/loading";
+import catchErrorMsg from 'utils/catchErrorMsg';
 
 export const OPEN_ADD_KPO_CONTENT_MODAL = 'OPEN ADD KPO CONTENT MODAL';
 export const CLOSE_ADD_KPO_CONTENT_MODAL = 'CLOSE ADD KPO CONTENT MODAL';
@@ -32,7 +34,7 @@ export const getAllKpoContent = (kpoId) => {
 export const addKpoContent = (model) => {
   return async (dispatch) => {
     try {
-      swal.showLoading();
+      loading('Creating...');
       const { data: { success, message } } = await api.post(`/appraisal/kpo-content/`, model);
       if(success) {
         swal.fire({
@@ -72,14 +74,45 @@ export const getOneKpoContent = (id) => {
 export const updateKpoContent = (model) => {
   return async (dispatch) => {
     try {
-      swal.showLoading();
-      const { data: { message, success } } = await api.patch(`/appraisal/kpo-content/${model.id}`);
+      loading('Updating...');
+      const { data: { message, success } } = await api.patch(`/appraisal/kpo-content/${model.kpoId}`, model);
       if(success) {
         swal.fire({
           text: message,
           icon: 'success'
         });
-        dispatch(getAllKpoContent(model.kpoId));
+        dispatch(getOneKpoContent(model.kpoId));
+      } else {
+        swal.fire({
+          text: message,
+          icon: 'error'
+        });
+      }
+    } catch (e) {
+      swal.fire({
+        text: e.response?.data.message || e.response?.data.error || 'Service Unavailable',
+        icon: 'error'
+      });
+    }
+  };
+};
+
+export const updateKpoContentQuarterly = (model) => {
+  return async (dispatch) => {
+    try {
+      loading('Updating...');
+      const { data: { message, success } } = await api.patch(`/appraisal/kpo-content/quarterly/${model.kpoId}`, model);
+      if(success) {
+        swal.fire({
+          text: message,
+          icon: 'success'
+        });
+        dispatch(getOneKpoContent(model.kpoId));
+      } else {
+        swal.fire({
+          text: message,
+          icon: 'error'
+        });
       }
     } catch (e) {
       swal.fire({
@@ -92,9 +125,14 @@ export const updateKpoContent = (model) => {
 
 export const deleteKpoContent = ({id, kpoId}) => {
   return async (dispatch) => {
+    loading('Deleting...');
     try {
       swal.showLoading();
-      const { data: { message, success, error } } = await api.delete(`/appraisal/kpo-content/${id}`);
+      const { data: { message, success, error } } = await api.delete(`/appraisal/kpo-content/all/selected`, {
+        data: {
+          id
+        }
+      });
       if(success) {
         swal.fire({
           text: message,
@@ -114,4 +152,24 @@ export const deleteKpoContent = ({id, kpoId}) => {
       });
     }
   };
+};
+
+export const modifications = ({id, requestType}) => {
+  return async (dispatch) => {
+    const loadingType = requestType === 'request' ? 'Requesting Modification...' : requestType === 'approve' ? 'Approving Modification Request' : requestType === 'reject' ? 'Rejecting Modification Request...' : '';
+    try {
+      loading(loadingType);
+      const { data: { message } } = await api.patch(`/appraisal/kpo-content/${requestType}/${id}`);
+      dispatch(getOneKpoContent(id));
+      swal.fire({
+        text: message,
+        icon: 'success'
+      });
+    } catch (e) {
+      swal.fire({
+        text: catchErrorMsg(e),
+        icon: 'error'
+      });
+    }
+  }
 };

@@ -1,23 +1,19 @@
 import EnhancedTable from 'app/shared/table/EnhancedTable';
 import React from 'react';
-import Checkbox from '@material-ui/core/Checkbox';
-import IconButton from '@material-ui/core/IconButton';
-import Icon from '@material-ui/core/Icon';
-import Typography from '@material-ui/core/Typography';
 import moment from 'moment';
 
-const BehaviouralAttributeContent = () => {
+const BehaviouralAttributeContent = ({data, customHook}) => {
   const columns = React.useMemo(
 		() => [
 			{
 				Header: 'Title',
-				accessor: 'name',
+				accessor: 'subject',
 				// className: 'font-bold',
 				sortable: true,
 			},
 			{
-				Header: 'Content',
-				accessor: 'description',
+				Header: 'Description',
+				accessor: 'subtext',
 				sortable: true,
       },
 			{
@@ -30,7 +26,7 @@ const BehaviouralAttributeContent = () => {
       },
       {
 				Header: 'Modified By',
-				accessor: 'updatedBy',
+				accessor: 'modifiedby',
 				align: 'right',
 			},
 		],
@@ -38,10 +34,10 @@ const BehaviouralAttributeContent = () => {
 	return (
 		<EnhancedTable
 			columns={columns}
-			data={[]}
+			data={data}
 			onRowClick={(ev, row) => {
 				if (row) {
-          // handleGetOne(row.values)
+          customHook.handleGetOne(row.values)
 				}
 			}}
 			checkbox={{
@@ -50,7 +46,7 @@ const BehaviouralAttributeContent = () => {
 				accessor: 'id',
 			}}
 			selectAll={(value) => console.log(value)}
-			handleDelete={(handleDelete) => null}
+			handleDelete={customHook.handleDelete}
 		/>
 	);
 };

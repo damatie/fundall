@@ -31,7 +31,7 @@ function LoanDetailsTab({ setValue }) {
 
 	const { showBtn, handleApprove, handleReject, isValue, handleCloseModal, open, handleCancel } = useLoanManagement();
 
-	const { disabled, handleSubmit, handleChange, error, amountApproved, approve } = useApproveLoan();
+	const { disabled, handleSubmit, handleChange, error, approve } = useApproveLoan();
 
 	const { statement, handleStatement } = useLoanStatement(loan.data.loanData.status);
 
@@ -58,16 +58,6 @@ function LoanDetailsTab({ setValue }) {
 						</div>
 
 						<div className="mb-24">
-							<Typography className="font-bold mb-4 text-15">Country</Typography>
-							<Typography>{loan.data.employeeInfo.country}</Typography>
-						</div>
-
-						<div className="mb-24">
-							<Typography className="font-bold mb-4 text-15">Residential Address</Typography>
-							<Typography>{loan.data.employeeInfo.residentialAddress}</Typography>
-						</div>
-
-						<div className="mb-24">
 							<Typography className="font-bold mb-4 text-15">Annual Pay</Typography>
 							<Typography>{formatToNaira(loan.data.loanData.annualPay)}</Typography>
 						</div>
@@ -82,71 +72,20 @@ function LoanDetailsTab({ setValue }) {
 						</div>
 
 						<div className="mb-24">
-							<Typography className="font-bold mb-4 text-15">Deductable Amount</Typography>
-							<Typography>{isValue(formatToNaira(loan.data.loanData.deductableAmount))}</Typography>
-						</div>
-						<div className="mb-24">
-							<Typography className="font-bold mb-4 text-15">Work Location</Typography>
-							<Typography>{loan.data.loanData.workLocation}</Typography>
-						</div>
-
-						<div className="mb-24">
-							<Typography className="font-bold mb-4 text-15">Payment Mode</Typography>
-							<Typography>{loan.data.loanData.paymentMode}</Typography>
-						</div>
-
-						<div className="mb-24">
-							<Typography className="font-bold mb-4 text-15">Date Requested</Typography>
-							<Typography>{loan.data.loanData.dateRequested}</Typography>
-						</div>
-
-						<div className="mb-24">
 							<Typography className="font-bold mb-4 text-15">Duration</Typography>
 							<Typography>{`${loan.data.loanData.duration} Months`}</Typography>
-						</div>
-
-						<div className="mb-24">
-							<Typography className="font-bold mb-4 text-15">Line manager</Typography>
-							<Typography>{loan.departmentHead}</Typography>
-						</div>
-
-						<div className="mb-24">
-							<Typography className="font-bold mb-4 text-15">Director of support service </Typography>
-							<Typography>{loan.supportDirector}</Typography>
-						</div>
-
-						<div className="mb-24">
-							<Typography className="font-bold mb-4 text-15">Finance Manager</Typography>
-							<Typography>{loan.financeManager}</Typography>
 						</div>
 
 						<div className="mb-24">
 							<Typography className="font-bold mb-4 text-15">Purpose</Typography>
 							<Typography>{loan.data.loanData.purpose}</Typography>
 						</div>
-						<div className="mb-24">
-							<Typography className="font-bold mb-4 text-15">Head of department Approver Date</Typography>
-							<Typography>{isValue(loan.data.loanData.departmentHeadApprovalDate)}</Typography>
-						</div>
 
-						<div className="mb-24">
-							<Typography className="font-bold mb-4 text-15">Director of support service Approver Date</Typography>
-							<Typography>{isValue(loan.data.loanData.supportDirectorApprovalDate)}</Typography>
-						</div>
 						<div className="mb-24">
 							<Typography className="font-bold mb-4 text-15">Loan Disbursed On</Typography>
-							<Typography>{isValue(loan.data.loanData.loanDisbursedOn)}</Typography>
+							<Typography>{isValue(loan.data.loanData.dateOfDisbursement)}</Typography>
 						</div>
 
-						<div className="mb-24">
-							<Typography className="font-bold mb-4 text-15">First Due Date</Typography>
-							<Typography>{`${isValue(loan.data.loanData.firstDueDate)}`}</Typography>
-						</div>
-
-						<div className="mb-24">
-							<Typography className="font-bold mb-4 text-15">Number Of Installements</Typography>
-							<Typography>{isValue(loan.data.loanData.numberOfInstallements)}</Typography>
-						</div>
 						<div className="flex items-center justify-evenly w-2/4 mx-auto">
 							{showBtn ?
 								<>
@@ -164,11 +103,16 @@ function LoanDetailsTab({ setValue }) {
 										}
 									</CustomIconButton>
 
-									<CustomIconButton type='error' icon='cancel' onClick={handleReject}>
-										Reject
-									</CustomIconButton>
+									{
+										loan.data.loanData.status.toLowerCase() !== "disbursed" ?
+											<CustomIconButton type='error' icon='cancel' onClick={handleReject}>
+												Reject
+											</CustomIconButton> :
+											<></>
+									}
 								</>
-								: <></>}
+								: <></>
+							}
 
 							{statement ?
 								<>

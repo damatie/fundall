@@ -6,9 +6,22 @@ import EmployeeKpoListTable from './components/EmployeeKpoListTable';
 import useKpoList from './hooks/useKpoList';
 import reducer from './store/reducers';
 import Skeleton from '@material-ui/lab/Skeleton';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
 const EmployeeKpoList = () => {
-  const { handleOpenModal, loading } = useKpoList();
+  const dispatch = useDispatch();
+  const { push } = useHistory();
+  const state = useSelector(state => state.kpo.employeeKpoList);
+  const userId = useSelector(state => state.profile?.data?.id);
+  const employees = useSelector(state => state.employeeList.data);
+  const customHook = useKpoList({
+    userId,
+    dispatch,
+    push,
+    state,
+    employees
+  });
   return (
     <PageLayout
       header={{
@@ -19,16 +32,16 @@ const EmployeeKpoList = () => {
       button={{
         showButton: true,
         btnTitle: 'Create KPO',
-        onClick: handleOpenModal
+        onClick: customHook.handleOpenModal
       }}
       content={
         <div className='p-24'>
-          {loading ? (
+          {customHook.loading ? (
             <Skeleton variant="rect" width='100%' height={400} animation="wave"/>
           ) : (
             <>
-              <EmployeeKpoListTable />
-              <CreateEmployeeKpo />
+              <EmployeeKpoListTable customHook={customHook}/>
+              <CreateEmployeeKpo customHook={customHook}/>
             </>
           )}
         </div>

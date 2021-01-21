@@ -8,20 +8,37 @@ import Tabs from '@material-ui/core/Tabs';
 import UpdateBehaviouralAttribute from './components/UpdateBehaviouralAttribute';
 import BehaviouralAttributeContent from './components/BehaviouralAttributeContent';
 import BehaviouralAttributeContentModal from './components/BehaviouralAttributeContentModal';
+import reducer from './store/reducer/behaviouralContent.reducer';
+import { getAllBehaviouralContent } from './store/actions';
+import { useParams } from 'react-router';
+import useBehaviouralAttribute from './hooks/useBehaviouralAttribute';
+import useBehaviouralContent from './hooks/useBehaviouralContent';
 
 const BehaviouralAttributeDetails = () => {
   const [tabValue, setTabValue] = React.useState(0);
+  const dispatch = useDispatch();
+  const { id } = useParams();
+  const state = useSelector(state => state.behaviouralAttributeContent);
+
+  const header = useBehaviouralAttribute(state, dispatch);
+  const content = useBehaviouralContent(state, dispatch);
   
   function handleChangeTab(event, value) {
 		setTabValue(value);
   }
+  
+  React.useEffect(() => {
+    dispatch(getAllBehaviouralContent({
+      id
+    }))
+  }, []);
 
   return (
     <PageLayout
       button={{
         showButton: tabValue === 1,
         btnTitle: 'Create',
-        onClick: () => null,
+        onClick: content.handleOpen,
       }}
       noSearch={tabValue !== 1}
       header={{
@@ -44,18 +61,25 @@ const BehaviouralAttributeDetails = () => {
       }
       content={
         <div className='p-24'>
-          {tabValue === 0 && (<UpdateBehaviouralAttribute/> )}
+          {
+            state.loading ? (
+              <Skeleton variant="rect" width='100%' height={400} animation="wave"/>
+            ) : (
+              <>
+              {tabValue === 0 && (<UpdateBehaviouralAttribute customHook={header}/> )}
           {tabValue === 1 && (
             <>
-              <BehaviouralAttributeContent/>
-              <BehaviouralAttributeContentModal />
+              <BehaviouralAttributeContent customHook={content}data={state.data}/>
+              <BehaviouralAttributeContentModal customHook={content} state={state}/>
             </>
           )}
+          </>
+            )
+          }
+          
         </div>
       }
     />
   );
 };
-
-withReducer('behaviouralAttribute', null)(BehaviouralAttributeDetails);
-export default withReducer('behaviouralAttributeContent', null)(BehaviouralAttributeDetails);
+export default withReducer('behaviouralAttributeContent', reducer)(BehaviouralAttributeDetails);

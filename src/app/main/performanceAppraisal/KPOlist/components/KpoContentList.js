@@ -4,7 +4,7 @@ import CustomIconButton from 'app/shared/button/CustomIconButton';
 import useKpoContentList from '../hooks/useKpoContent';
 import Skeleton from '@material-ui/lab/Skeleton';
 
-const KpoContentList = () => {
+const KpoContentList = ({customHook}) => {
   const columns = React.useMemo(
 		() => [
 			{
@@ -24,46 +24,78 @@ const KpoContentList = () => {
 			{
 				Header: 'Target',
 				accessor: 'target',
-				sortable: true
+				sortable: true,
+				Cell: ({ row }) => {
+          return <>{`${row.original.target}%`}</>;
+        },
+			},
+			{
+				Header: '%PIP Target',
+				accessor: 'pipA',
+				sortable: true,
+				Cell: ({ row }) => {
+          return <>{row.original.kpoPipTarget ? `${row.original.kpoPipTarget}%` : '-'}</>;
+        },
 			},
 			{
 				Header: 'Q1',
 				accessor: 'q1',
-				sortable: true
+				sortable: true,
+				Cell: ({ row }) => {
+          return <>{row.original.Q1 || '-'}</>;
+        },
       },
       {
 				Header: 'Q2',
 				accessor: 'q2',
-				sortable: true
+				sortable: true,
+				Cell: ({ row }) => {
+          return <>{row.original.Q2 || '-'}</>;
+        },
       },
       {
 				Header: 'Q3',
 				accessor: 'q3',
-				sortable: true
+				sortable: true,
+				Cell: ({ row }) => {
+          return <>{row.original.Q3 || '-'}</>;
+        },
       },
       {
 				Header: 'Q4',
 				accessor: 'q4',
-				sortable: true
+				sortable: true,
+				Cell: ({ row }) => {
+          return <>{row.original.Q4 || '-'}</>;
+        },
       },
       {
-				Header: 'Year end',
+				Header: 'Year-End Score',
 				accessor: 'yearEnd',
-				sortable: true
-      },
-      {
-				Header: '%PIP Target',
-				accessor: 'pipA',
-				sortable: true
+				sortable: true,
+				Cell: ({ row }) => {
+          return <>{row.original.kpoYearendScore || '-'}</>;
+        },
 			},
 			{
+				Header: 'Year-End Remarks',
+				accessor: 'remarks',
+				sortable: true,
+				Cell: ({ row }) => {
+          return <>{row.original.kpoYearendRemarks || '-'}</>;
+        },
+      },
+			{
 				Header: '%PIP Achieved',
-				accessor: 'pipC',
-				sortable: true
+				accessor: 'kpoPipAchieved',
+				sortable: true,
+				Cell: ({ row }) => {
+          return <>{row.original.kpoPipAchieved || '-'}</>;
+        },
 			},
 		],
 	);
-	const { kpoData, push, id, handleDelete, loading } = useKpoContentList();
+	const { kpoData, push, id, handleDelete, loading } = customHook;
 	return (
 		<>
 		{
@@ -87,9 +119,6 @@ const KpoContentList = () => {
 			selectAll={(value) => console.log(value)}
 			handleDelete={handleDelete}
 		/>
-			<CustomIconButton type='success' className='flex flex-col my-10 mx-auto'>
-				Approve
-			</CustomIconButton>
 				</>
 			)
 		}

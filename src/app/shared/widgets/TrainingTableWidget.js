@@ -28,6 +28,7 @@ import ApproveIcon from '@material-ui/icons/Check';
 import Grid from '@material-ui/core/Grid';
 // import WidgetModal from './WidgetModal';
 import { AppBar, Toolbar } from '@material-ui/core';
+import { formatToNaira } from 'utils/formatNumber';
 const useStyles = makeStyles({
 	table: {
 		'& th': {
@@ -195,7 +196,7 @@ const TableWidget = props => {
 
 									<tr className="cost">
 										<th>Cost</th>
-										<td>{selected ? selected.cost : ''}</td>
+										<td>{selected ? formatToNaira(selected.cost) : ''}</td>
 									</tr>
 
 									<tr className="location">
@@ -207,7 +208,6 @@ const TableWidget = props => {
 										<th>Certification</th>
 										<td>{(selected ? selected?.certification : '') ? 'Yes' : 'No'}</td>
 									</tr>
-
 
 									<tr className="catergory">
 										<th>Category</th>
@@ -337,7 +337,7 @@ const TableWidget = props => {
 				</div>
 			</React.Fragment>
 			<div className="flex items-center justify-between px-16 h-64 border-b-1">
-				<Typography className="text-16">{props.title}</Typography>
+				<Typography className="text-20">{props.title}</Typography>
 				<div className="flex items-center">
 					<Paper className="flex items-center w-full px-8 py-4 rounded-8">
 						<Icon color="action">search</Icon>
@@ -431,14 +431,14 @@ const TableWidget = props => {
 										// selected={n.id === selectedItemId}
 										className="cursor-pointer"
 									>
-										<TableCell className="text-center">
+										<TableCell >
 											{n?.employeeName}
 										</TableCell>
 										<TableCell>{n?.trainingName}</TableCell>
-										<TableCell className="text-center">{n?.cost}</TableCell>
-										<TableCell className="text-center">{n?.startDate}</TableCell>
-										<TableCell className="text-center">{n?.startDate}</TableCell>
-										<TableCell className="text-center">{CheckStatus(n?.status)}</TableCell>
+										<TableCell >{formatToNaira(n?.cost)}</TableCell>
+										<TableCell >{new Date(n?.startDate).toLocaleDateString()}</TableCell>
+										<TableCell >{new Date(n?.endDate).toLocaleDateString()}</TableCell>
+										<TableCell >{CheckStatus(n?.status)}</TableCell>
 									</TableRow>
 								);
 							})}

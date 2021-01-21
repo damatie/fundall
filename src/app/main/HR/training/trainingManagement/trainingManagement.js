@@ -166,42 +166,42 @@ function TrainingManagement(props) {
 	const columns = [
 		{
 			id: 'name',
-			align: 'center',
+			align: 'left',
 			disablePadding: false,
 			label: 'Employee Name',
 			sort: true
 		},
 		{
 			id: 'course_name',
-			align: 'center',
+			align: 'left',
 			disablePadding: false,
 			label: 'Training Name',
 			sort: true
 		},
 		{
 			id: 'cost',
-			align: 'center',
+			align: 'left',
 			disablePadding: false,
 			label: 'Cost',
 			sort: true
 		},
 		{
 			id: 'start_date',
-			align: 'center',
+			align: 'left',
 			disablePadding: false,
 			label: 'Start Date',
 			sort: true
 		},
 		{
 			id: 'end_date',
-			align: 'center',
+			align: 'left',
 			disablePadding: false,
 			label: 'End Date',
 			sort: true
 		},
 		{
 			id: 'status',
-			align: 'center',
+			align: 'left',
 			disablePadding: false,
 			label: 'Status',
 			sort: true
@@ -211,56 +211,56 @@ function TrainingManagement(props) {
 	const coursesColumn = [
 		{
 			id: 'name',
-			align: 'center',
+			align: 'left',
 			disablePadding: false,
 			label: 'Course Name',
 			sort: true
 		},
 		{
 			id: 'description',
-			align: 'center',
+			align: 'left',
 			disablePadding: false,
 			label: 'Description',
 			sort: true
 		},
 		{
 			id: 'category',
-			align: 'center',
+			align: 'left',
 			disablePadding: false,
 			label: 'Category',
 			sort: true
 		},
 		{
 			id: 'entity',
-			align: 'center',
+			align: 'left',
 			disablePadding: false,
 			label: 'Entity',
 			sort: true
 		},
 		{
 			id: 'department',
-			align: 'center',
+			align: 'left',
 			disablePadding: false,
 			label: 'Department',
 			sort: true
 		},
 		{
 			id: 'location',
-			align: 'center',
+			align: 'left',
 			disablePadding: false,
 			label: 'Location',
 			sort: true
 		},
 		{
 			id: 'cost',
-			align: 'center',
+			align: 'left',
 			disablePadding: false,
 			label: 'Cost',
 			sort: true
 		},
 		{
 			id: 'created',
-			align: 'center',
+			align: 'left',
 			disablePadding: false,
 			label: 'Created',
 			sort: true

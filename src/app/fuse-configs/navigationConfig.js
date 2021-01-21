@@ -321,6 +321,39 @@ const navigationConfig = [
 		translate: 'training',
 		type: 'group',
 		children: [
+			{
+				id: 'training_Dashboard',
+				title: 'Training Dashboard',
+				type: 'collapse',
+				// url: '/hr/training/management',
+				icon: 'dashboard',
+				children: [
+					{
+						id: 'staff_dashboard',
+						title: 'Employee Dashboard',
+						type: 'item',
+						icon: 'layers',
+						url: '/employee/training/dashboard',
+						auth: authRoles.staff,
+					},
+					{
+						id: 'line_manager_dashboard',
+						title: 'Line Manager Dashboard',
+						type: 'item',
+						icon: 'layers',
+						url: '/line_manager/training/dashboard',
+						auth: authRoles.staff,
+					},
+					{
+						id: 'finance_manager_dashboard',
+						title: 'Finance Manager Dashboard',
+						type: 'item',
+						icon: 'layers',
+						url: '/finance_manager/training/dashboard',
+						auth: authRoles.staff,
+					},
+				]
+			},
 
 			{
 				id: 'trainingManagement',
@@ -373,6 +406,14 @@ const navigationConfig = [
 		type: 'group',
 		auth: authRoles?.manager,
 		children: [
+			{
+				id: 'recruitmentDashboard',
+				title: 'Dashboard',
+				type: 'item',
+				url: '/recruitment/dashboard',
+				icon: 'school',
+				auth: authRoles.manager,
+			},
 			{
 				id: 'listOfOpenings',
 				title: 'List of openings',

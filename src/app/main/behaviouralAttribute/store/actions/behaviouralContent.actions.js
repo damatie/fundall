@@ -10,27 +10,16 @@ export const CLOSE_BEHAVIOURAL_CONTENT_MODAL = 'CLOSE BEHAVIOURAL CONTENT MODAL'
 export const getAllBehaviouralContent = ({id, offset, limit}) => {
   return async (dispatch) => {
     try {
-      const { data: { data } } = await api.get(`/behavioral/attributes/content/?limit=${limit}&offset=${offset}`);
+      const { data: { data } } = await api.get(`/behavioral/attributes/header/${id}
+      `);
       dispatch({
         type: GET_ALL_BEHAVIOURAL_CONTENT,
-        payload: {
-          rows: data.rows,
-          pagination: {
-            count: data.count,
-            offset,
-            limit,
-          },
-        }
+        payload: data
       })
     } catch (e) {
       dispatch({
         type: GET_ALL_BEHAVIOURAL_CONTENT,
-        payload: {
-          rows: [],
-          count: 0,
-          offset,
-          limit,
-        }
+        payload: {}
       })
     }
   }
@@ -59,10 +48,13 @@ export const createBehaviouralContent = (model) => {
         icon: 'success'
       });
       dispatch(getAllBehaviouralContent({
-        id: model.id,
+        id: model.headerId,
         offset: 0,
         limit: 10
-      }))
+      }));
+      dispatch({
+        type: CLOSE_BEHAVIOURAL_CONTENT_MODAL
+      })
     } catch (e) {
       swal.fire({
         text: catchErrorMsg(e),
@@ -72,7 +64,7 @@ export const createBehaviouralContent = (model) => {
   }
 };
 
-export const updateBehaviouralContent = ({id, model}) => {
+export const updateBehaviouralContent = ({id, model, headerId}) => {
   return async (dispatch) => {
     try {
       swal.fire({
@@ -86,7 +78,7 @@ export const updateBehaviouralContent = ({id, model}) => {
         icon: 'success'
       });
       dispatch(getAllBehaviouralContent({
-        id: model.id,
+        id: headerId,
         offset: 0,
         limit: 10
       }))
