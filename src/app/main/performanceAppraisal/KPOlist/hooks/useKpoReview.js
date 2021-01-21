@@ -23,7 +23,7 @@ const useKpoReview = ({dispatch, push, userInfo, kpoList}) => {
     isAssigned: assignedKpo.length !== 0,
     entities,
     handleFilter,
-    role: userRole(role.name),
+    role: userRole(role?.name),
   };
 };
 

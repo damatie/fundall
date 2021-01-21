@@ -7,11 +7,11 @@ export const GET_ENTITIES = 'GET ENTITIES';
 export const getKpoByDept = (id) => {
   return async (dispatch) => {
     try {
-      const { data: { data, success }} = await api.get(`/appraisal/kpo/dept/${id}`);
+      const { data: { data: { rows }, success }} = await api.get(`/appraisal/kpo/dept/${id}`);
       if(success) {
         dispatch({
           type: GET_KPO_BY_DEPT,
-          payload: data
+          payload: rows
         })
       }
     } catch (e) {
@@ -23,7 +23,7 @@ export const getKpoByDept = (id) => {
   };
 };
 
-export const getAssignedKpo = (id) => {
+export const getAssignedKpo = () => {
   return async (dispatch) => {
     try {
       const { data: { data: { rows }, success } } = await api.get(`/appraisal/kpo/get-review/`);
