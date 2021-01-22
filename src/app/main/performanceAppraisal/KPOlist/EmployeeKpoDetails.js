@@ -20,6 +20,7 @@ import useKpoSummary from './hooks/useKpoSummary';
 import useKpoPip from './hooks/useKpoPip';
 import CustomIconButton from 'app/shared/button/CustomIconButton';
 import Button from '@material-ui/core/Button'
+import userRole from 'utils/userRole';
 
 const EmployeeKpoDetails = () => {
   const dispatch = useDispatch();
@@ -46,7 +47,8 @@ const EmployeeKpoDetails = () => {
     dispatch,
     params,
     push,
-    kpoCategory
+    kpoCategory,
+    userInfo
   });
 
   const kpoSummary = useKpoSummary({
@@ -57,7 +59,8 @@ const EmployeeKpoDetails = () => {
   
   const calculatePip = useKpoPip({
     dispatch,
-    state: EmployeeKpo.kpo
+    state: EmployeeKpo.kpo,
+    role: userInfo.role
   })
 
   const [tabValue, setTabValue] = React.useState(0);
@@ -80,9 +83,26 @@ const EmployeeKpoDetails = () => {
       }}
       button={{
         showButton: true,
-        btnComponent: tabValue !== 1 ? <CustomIconButton onClick={EmployeeKpoCustomHook.submitKpo} icon='check' type='success' className='w-full px-8'>{EmployeeKpoCustomHook.submitButtonText()}</CustomIconButton> : <Button variant="contained" color="secondary" onClick={customHook.handleOpenModal}>
-          Add KPO Content
-        </Button>
+        btnComponent: tabValue !== 1 ? (
+          <CustomIconButton 
+            onClick={EmployeeKpoCustomHook.submitKpo} 
+            icon='check' 
+            type='success' 
+            className='w-full px-8'
+          >
+            {EmployeeKpoCustomHook.submitButtonText()}
+          </CustomIconButton>
+        ) : (
+          <>
+            {
+              EmployeeKpoCustomHook.shouldShowAddButton() && (
+                <Button variant="contained" color="secondary" onClick={customHook.handleOpenModal}>
+                  Add KPO Content
+                </Button>
+              )
+            }
+          </>
+        )
       }}
       contentToolbar={
         <Tabs
@@ -109,15 +129,23 @@ const EmployeeKpoDetails = () => {
             <>
               <KpoContentList customHook={customHook} />
               <CreateKpoContent customHook={customHook} />
-              <CustomIconButton type='success' className='flex flex-col my-10 mx-auto' onClick={EmployeeKpoCustomHook.approveKpo}>
-                Approve
-              </CustomIconButton>
+              {
+                userRole(userInfo.role) === 'linemanager' && (
+                  <CustomIconButton 
+                    type='success' 
+                    className='flex flex-col my-10 mx-auto' 
+                    onClick={EmployeeKpoCustomHook.approveKpo}
+                  >
+                    Approve
+                  </CustomIconButton>
+                )
+              }
             </>
           )}
           {tabValue === 2 && (<KpoComments kpoSummary={kpoSummary}/>)}
           {tabValue === 3 && (<KpoContentPipScore calculatePip={calculatePip}/>)}
-          {tabValue === 4 && (<BehaviouralAttribute kpoDetails={EmployeeKpo.kpo}/>)}
-          {tabValue === 5 && (<PersonalDevelopment data={EmployeeKpo.kpo}/>)}
+          {tabValue === 4 && (<BehaviouralAttribute kpoDetails={EmployeeKpo.kpo} role={userRole(userInfo.role)}/>)}
+          {tabValue === 5 && (<PersonalDevelopment data={EmployeeKpo.kpo} role={userRole(userInfo.role)}/>)}
         </div>
       }
     />

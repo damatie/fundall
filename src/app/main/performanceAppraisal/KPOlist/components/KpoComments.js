@@ -21,7 +21,7 @@ const KpoComments = ({kpoSummary}) => {
     <Paper className='w-1/2 flex flex-col mx-auto p-20'>
       <form onSubmit={lineManager.handleSubmit(lineManager.onSubmit)}>
         <div className='w-full'>
-          <Typography variant="subtitle1" color="initial">What are the key strengths identied that the employee has?</Typography>
+          <Typography variant="subtitle1" color="initial">What are the key strengths identified that the employee has?</Typography>
           <Input
             name='strengths'
             className='my-16'
@@ -102,9 +102,9 @@ const KpoComments = ({kpoSummary}) => {
             name='reviewingManagerComment'
             className='my-16'
             multiline
-            refs={lineManager.register}
-            error={lineManager.errors?.reviewingManagerComment}
-            message={lineManager.errors?.reviewingManagerComment?.message}
+            refs={reviewingManager.register}
+            error={reviewingManager.errors?.reviewingManagerComment}
+            message={reviewingManager.errors?.reviewingManagerComment?.message}
           />
         </div>
         {shouldShowButton('reviewingManager') && (<SharedButton

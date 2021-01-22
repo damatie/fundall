@@ -3,6 +3,7 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import errorMsg from 'utils/errorMsg';
 import { calculatePip } from '../store/actions';
+import userRole from 'utils/userRole';
 
 const schema = yup.object().shape({
   compensationComponent: yup.string(
@@ -29,7 +30,7 @@ const schema = yup.object().shape({
   ),
 });
 
-const useKpoPip = ({dispatch, state}) => {
+const useKpoPip = ({dispatch, state, role}) => {
   const {
     errors,
     register,
@@ -49,7 +50,9 @@ const useKpoPip = ({dispatch, state}) => {
     register,
     handleSubmit,
     onSubmit,
-    control
+    control,
+    pipEligible: state.pipEligible,
+    role: userRole(role),
   }
 };
 

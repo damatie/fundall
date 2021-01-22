@@ -136,6 +136,9 @@ const useKpoList = ({dispatch, userId, state, push, id, employees, userInfo}) =>
     dispatch(Actions.approveKpo(id));
   };
 
+  const shouldShowAddButton = () => {
+    return (userInfo.id === state.kpo.employee.id && userInfo.data.email === state.kpo.employee.email);
+  };
 
 
   const submitButtonText = () => {
@@ -162,7 +165,8 @@ const useKpoList = ({dispatch, userId, state, push, id, employees, userInfo}) =>
     showSubmitBtn,
     submitKpo,
     submitButtonText,
-    approveKpo
+    approveKpo,
+    shouldShowAddButton
   };
 };
 
