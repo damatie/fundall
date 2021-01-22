@@ -7,10 +7,9 @@ import usePersonalDevelopment from '../hooks/usePersonalDevelopement';
 import { useDispatch } from 'react-redux';
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
-import Grid from '@material-ui/core/Grid'
 import CustomIconButton from 'app/shared/button/CustomIconButton';
 
-const FormComponent = ({ state, update, handleCancel, data }) => {
+const FormComponent = ({ state, update, handleCancel, data, role }) => {
   const dispatch = useDispatch();
   const {
     errors,
@@ -28,9 +27,15 @@ const FormComponent = ({ state, update, handleCancel, data }) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       {update && (
-        <CustomIconButton type='error' icon='delete' className='w-1/4 my-16' onClick={handleDelete(state?.id)}>
-          Delete
-        </CustomIconButton>
+        <>
+        {
+          role === 'linemanager' && (
+            <CustomIconButton type='error' icon='delete' className='w-1/4 my-16' onClick={handleDelete(state?.id)}>
+              Delete
+            </CustomIconButton>
+          )
+        }
+        </>
       )}
       <div className="w-full">
         <Typography variant="subtitle1" color="initial">Personal Development Needs</Typography>
@@ -41,6 +46,7 @@ const FormComponent = ({ state, update, handleCancel, data }) => {
           message={errors.name?.message}
           refs={register}
           defaultValue={update && state?.name}
+          disabled={role !== 'linemanager'}
         />
       </div>
       <div className="w-full">
@@ -52,33 +58,42 @@ const FormComponent = ({ state, update, handleCancel, data }) => {
           message={errors.actionRequired?.message}
           refs={register}
           defaultValue={update && state?.actionRequired}
+          disabled={role !== 'linemanager'}
         />
       </div>
-      <SharedButton
-        variant='contained'
-        color='primary'
-        type='submit'
-        className='flex mx-auto w-1/4 my-16'
-      >
-        {!update ? 'Save' : 'Update'}
-      </SharedButton>
+      {
+        role === 'linemanager' && (
+          <SharedButton
+            variant='contained'
+            color='primary'
+            type='submit'
+            className='flex mx-auto w-1/4 my-16'
+          >
+            {!update ? 'Save' : 'Update'}
+          </SharedButton>
+        )
+      }
     </form>
   )
 }
-const PersonalDevelopment = ({ data }) => {
+const PersonalDevelopment = ({ data, role }) => {
   const [open, setOpen] = React.useState(false);
   return (
     <Paper variant="outlined" className='w-1/2 flex flex-col mx-auto p-20'>
-      <Button variant="contained" color="primary" className='w-1/4 mb-16' onClick={() => setOpen(!open)}>
-        {!open ? 'Add' : 'Cancel'}
-      </Button>
-      {open && (<FormComponent data={data} handleCancel={() => setOpen(false)} />)}
+      {
+        role === 'linemanager' && (
+          <Button variant="contained" color="primary" className='w-1/4 mb-16' onClick={() => setOpen(!open)}>
+            {!open ? 'Add' : 'Cancel'}
+          </Button>
+        )
+      }
+      {open && (<FormComponent data={data} handleCancel={() => setOpen(false)} role={role}/>)}
       <Divider />
       <section className='my-16'>
         {
           data.developmentNeeds.map(item => (
             <>
-              <FormComponent update data={data} state={item} />
+              <FormComponent update data={data} state={item} role={role}/>
               <Divider />
             </>
           ))

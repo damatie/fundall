@@ -472,7 +472,7 @@ const navigationConfig = [
 				id: 'kpoReview',
 				title: 'KPO Review',
 				type: 'item',
-				url: '/performance_appraisal/kpoList/review',
+				url: '/performance_appraisal/kpo/review',
 				icon: 'assignment',
 				auth: authRoles?.manager,
 			},

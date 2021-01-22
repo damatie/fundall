@@ -99,7 +99,7 @@ const schema = (type) => {
   }
 };
 
-const useKpoContentList = ({config, state, dispatch, params, push, kpoCategory}) => {
+const useKpoContentList = ({config, state, dispatch, params, push, kpoCategory, userInfo}) => {
   const { open, data, loading, kpoContent } = state;
   const { id, kpoContentId: kpoId } = params;
 
@@ -209,7 +209,8 @@ const useKpoContentList = ({config, state, dispatch, params, push, kpoCategory})
     loading,
     kpoCategory,
     shouldShowInput,
-    shouldDisableButton
+    shouldDisableButton,
+    pipEligibility: userInfo.data.employeeGrade.pipEligibility
   };
 };
 

@@ -20,20 +20,21 @@ const EmployeeKpoContentDetails = () => {
   const { push } = useHistory();
   const { data: kpoCategory } = useSelector(state => state.kpoCategory);
   const state = useSelector(state => state.kpo.kpoContentList);
-  const role = useSelector(state => state.auth.user.role)
+  const userInfo = useSelector(state => state.auth.user)
   const customHook = useKpoContent({
     config: {type: tabValue === 1 && 'quarter'},
     state,
     dispatch,
     params,
     push,
-    kpoCategory
+    kpoCategory,
+    userInfo
   });
 
   const modificationReq = useModificationReq({
     state,
     dispatch,
-    role,
+    role: userInfo.role
   })
   
   function handleChangeTab(event, value) {

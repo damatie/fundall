@@ -1,55 +1,69 @@
 import EnhancedTable from 'app/shared/table/EnhancedTable';
 import React from 'react';
-import useKpoList from '../hooks/useKpoList';
 import Grid from '@material-ui/core/Grid';
 import SelectTextField from 'app/shared/TextInput/SelectTextField';
 import MenuItem from '@material-ui/core/MenuItem';
-import useKpoReview from '../hooks/useKpoReview';
 import Skeleton from '@material-ui/lab/Skeleton';
 
-const ListOfEmployeeKpo = ({user}) => {
-	const { 
+const ListOfEmployeeKpo = ({ customHook, isAssigned, value, request }) => {
+	const {
 		deptKpo,
 		loading,
 		handleDelete,
 		push,
-		assignedKpo
-	} = useKpoReview(user);
+		assignedKpo,
+		handleFilter,
+		entities,
+		role,
+		kpoRequest,
+		handleOpen
+	} = customHook;
 	const columns = React.useMemo(
 		() => [
-      {
+			{
 				Header: 'Employee Name',
 				accessor: 'employeeName',
 				// className: 'font-bold',
-				sortable: true
-      },
-      {
+				sortable: true,
+				Cell: ({ row: { original: { employee  } } }) => {
+					return <>{`${employee.firstName} ${employee.lastName}`}</>
+				}
+			},
+			{
 				Header: 'Entity',
 				accessor: 'entity',
 				// className: 'font-bold',
 				sortable: true,
-				Cell: ({ row: { original }}) => {
+				Cell: ({ row: { original } }) => {
 					return <>{original?.entity?.entityName}</>
 				}
-      },
-      {
+			},
+			{
 				Header: 'Department',
 				accessor: 'department',
 				// className: 'font-bold',
 				sortable: true,
-				Cell: ({ row: { original }}) => {
+				Cell: ({ row: { original } }) => {
 					return <>{original?.department?.departmentName}</>
 				}
 			},
 			{
-				Header: 'Job Role',
+				Header: 'Job Title',
 				accessor: 'jobTitleId',
 				// className: 'font-bold',
+				sortable: true,
+				Cell: ({ row: { original: { jobTitle } } }) => {
+					return <>{jobTitle.name}</>
+				}
+			},
+			{
+				Header: 'Total Year-end Score',
+				accessor: 'totalYearendScore',
 				sortable: true
 			},
 			{
-				Header: 'Total Score',
-				accessor: 'personnelOverallRating',
+				Header: 'Total PIP Achieved',
+				accessor: 'totalPipAchieved',
 				sortable: true
 			},
 			{
@@ -61,19 +75,25 @@ const ListOfEmployeeKpo = ({user}) => {
 				Header: 'Date Completed',
 				accessor: 'dateCompleted',
 				sortable: true,
-				Cell: ({ row: { original }}) => {
+				Cell: ({ row: { original } }) => {
 					return <>{original.dateCompleted || 'On Going'}</>
 				}
-      },
-      {
+			},
+			{
 				Header: 'Line Manager',
 				accessor: 'lineManager',
-				sortable: true
-      },
-      {
+				sortable: true,
+				Cell: ({ row: { original: { lineManager } } }) => {
+					return <>{`${lineManager.firstName} ${lineManager.lastName}`}</>
+				}
+			},
+			{
 				Header: 'Reviewing Manager',
 				accessor: 'reviewingManager',
-				sortable: true
+				sortable: true,
+				Cell: ({ row: { original: { reviewingManager } } }) => {
+					return <>{`${reviewingManager.firstName} ${reviewingManager.lastName}`}</>
+				}
 			},
 		],
 	);
@@ -83,80 +103,60 @@ const ListOfEmployeeKpo = ({user}) => {
 				loading ? (
 					<Skeleton animation='wave' width='100%' height='350px' variant='rect' />
 				) : (
-		<EnhancedTable
-			columns={columns}
-			data={user !== 'reviewingManager' ? [deptKpo] : assignedKpo}
-			onRowClick={(ev, row) => {
-				if (row) {
-					push(`/performance_appraisal/kpoList/details/${row.original.id}`)
-				}
-			}}
-			checkbox={{
-				showCheckbox: true,
-				onClick: (value) => console.log(value),
-				accessor: 'id',
-			}}
-			selectAll={(value) => console.log(value)}
-      handleDelete={handleDelete}
-      toolBar={
-        <Toolbar />
-      }
-		/>
-				)
+						<EnhancedTable
+							columns={columns}
+							data={
+								isAssigned ? assignedKpo : request ? kpoRequest : deptKpo
+							}
+							onRowClick={(ev, row) => {
+								if (row && !request) {
+									push(`/performance_appraisal/kpoList/details/${row.original.id}`)
+								} else {
+									handleOpen(row.original);
+								}
+							}}
+							checkbox={{
+								showCheckbox: true,
+								onClick: (value) => console.log(value),
+								accessor: 'id',
+							}}
+							selectAll={(value) => console.log(value)}
+							handleDelete={handleDelete}
+							toolBar={
+								!isAssigned && role === 'hrmanager' && (
+									<Toolbar entities={entities} handleFilter={handleFilter} value={value}/>
+								)
+							}
+						/>
+					)
 			}
 		</>
-		
 	);
 };
 
 
-const Toolbar = () => {
-  return (
-    <Grid container spacing={1} className='w-2/5'>
-      {/* <Grid item lg={4} md={4} sm={4} xs={4}>
-        <SelectTextField
-          label='Entity'
-          className='mr-10'
-          size='small'
-        >
-          <MenuItem value="Active">
-            Office Admin
-          </MenuItem>
-          <MenuItem value="Inactive">
-            Dev Ops
-          </MenuItem>
-        </SelectTextField>
-      </Grid>
-      <Grid item lg={4} md={4} sm={4} xs={4}>
-      <SelectTextField
-          label='Department'
-          className='mr-10'
-          size='small'
-        >
-          <MenuItem value="Active">
-            Office Admin
-          </MenuItem>
-          <MenuItem value="Inactive">
-            Dev Ops
-          </MenuItem>
-        </SelectTextField>
-      </Grid> */}
-      <Grid item lg={4} md={4} sm={4} xs={4}>
-      <SelectTextField
-          label='Status'
-          className='mr-10'
-          size='small'
-        >
-          <MenuItem value="Active">
-            Office Admin
-          </MenuItem>
-          <MenuItem value="Inactive">
-            Dev Ops
-          </MenuItem>
-        </SelectTextField>
-      </Grid>
-    </Grid>
-  )
+const Toolbar = ({entities, handleFilter, value}) => {
+	return (
+		<Grid container spacing={1} className='w-2/5'>
+			<Grid item lg={5} md={4} sm={4} xs={4}>
+				<SelectTextField
+					label='Entities'
+					className='mr-10'
+					size='small'
+					onChange={handleFilter}
+					defaultValue={value}
+				>
+					{
+						entities.map(({entityName, id }) => (
+							<MenuItem value={id} key={id}>
+								{entityName}
+          		</MenuItem>
+						))
+					}
+				</SelectTextField>
+			</Grid>
+		</Grid>
+	)
 }
 
 
