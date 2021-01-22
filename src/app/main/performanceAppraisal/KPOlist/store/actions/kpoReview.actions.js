@@ -1,8 +1,15 @@
 import api from "app/services/api";
+import catchErrorMsg from 'utils/catchErrorMsg';
+import loading from 'utils/loading';
+import swal from 'sweetalert2';
 
 export const GET_KPO_BY_DEPT = 'GET KPO BY DEPT';
 export const GET_ASSIGNED_KPO = 'GET ASSIGNED KPO';
 export const GET_ENTITIES = 'GET ENTITIES';
+export const GET_KPO_BY_ROLE = 'GET KPO BY ROLE';
+export const OPEN_REQUEST_KPO_MODAL = 'OPEN REQUEST KPO MODAL';
+export const CLOSE_REQUEST_KPO_MODAL = 'CLOSE REQUEST KPO MODAL';
+export const GET_ONE_KPO_REQUEST  = 'GET ONE KPO REQUEST';
 
 export const getKpoByDept = (id) => {
   return async (dispatch) => {
@@ -76,3 +83,47 @@ export const getEntities = (id) => {
     }
   };
 };
+
+export const getKpoByStatus = ({status, requested}) => {
+  return async (dispatch) => {
+    try {
+      const { data: { data: { rows } } } = await api.get(`/appraisal/kpo/?status=${status}`);
+      if(requested) {
+        dispatch({
+          type: GET_KPO_BY_ROLE,
+          payload: rows
+        });
+      }
+    } catch {
+      dispatch({
+        type: GET_KPO_BY_ROLE,
+        payload: []
+      });
+    }
+  }
+};
+
+export const kpoReq = ({id, type}) => {
+  return async (dispatch) => {
+    try {
+      loading(type === 'approve' ? 'Approving...' : 'Rejection...');
+      const { data: { message } } = await api.patch(`/appraisal/kpo/create/request/${type}/${id}`);
+      swal.fire({
+        text: message,
+        icon: 'success',
+      });
+      dispatch(getKpoByStatus({
+        status: 'requested',
+        requested: true
+      }));
+      dispatch({
+        type: CLOSE_REQUEST_KPO_MODAL
+      })
+    } catch (e) {
+      swal.fire({
+        text: catchErrorMsg(e),
+        icon: 'error',
+      });
+    }
+  }
+}

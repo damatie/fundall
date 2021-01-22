@@ -69,7 +69,7 @@ const EmployeeKpoListTable = ({customHook}) => {
 			columns={columns}
 			data={listOfKpo}
 			onRowClick={(ev, row) => {
-				if (row) {
+				if (row && row.original.status !== 'rejected' && row.original.status !== 'requested') {
 					push(`/performance_appraisal/kpoList/details/${row.original.id}`)
 				}
 			}}

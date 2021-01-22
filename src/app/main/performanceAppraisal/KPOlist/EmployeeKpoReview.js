@@ -10,8 +10,9 @@ import Tabs from '@material-ui/core/Tabs';
 import useKpoReview from './hooks/useKpoReview';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getKpoByDept, getAssignedKpo, getKpoByEntity, getEntities } from './store/actions';
+import { getKpoByDept, getAssignedKpo, getKpoByEntity, getEntities, getKpoByStatus } from './store/actions';
 import userRole from 'utils/userRole';
+import KpoRequestModal from './components/KpoRequestModal';
 
 const EmployeeKpoReview = () => {
   const [tabValue, setTabValue] = React.useState(0);
@@ -30,6 +31,7 @@ const EmployeeKpoReview = () => {
   React.useEffect(() => {
     if(userRole(userInfo.role?.name) === 'hrmanager') {
       dispatch(getEntities(userInfo.entityId));
+      dispatch(getKpoByStatus({status: 'requested', requested: true}))
     }
   }, [userInfo]);
   
@@ -78,7 +80,10 @@ const EmployeeKpoReview = () => {
             <ListOfEmployeeKpo customHook={value} isAssigned/>
           )}
           {tabValue === 2 && (
-            <ListOfEmployeeKpo customHook={value} request/>
+            <>
+              <ListOfEmployeeKpo customHook={value} request/>
+              <KpoRequestModal customHook={value} />
+            </>
           )}
         </div>
       }

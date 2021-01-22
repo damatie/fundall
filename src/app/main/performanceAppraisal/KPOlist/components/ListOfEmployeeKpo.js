@@ -14,7 +14,9 @@ const ListOfEmployeeKpo = ({ customHook, isAssigned, value, request }) => {
 		assignedKpo,
 		handleFilter,
 		entities,
-		role
+		role,
+		kpoRequest,
+		handleOpen
 	} = customHook;
 	const columns = React.useMemo(
 		() => [
@@ -104,11 +106,13 @@ const ListOfEmployeeKpo = ({ customHook, isAssigned, value, request }) => {
 						<EnhancedTable
 							columns={columns}
 							data={
-								isAssigned ? assignedKpo : request ? [] : deptKpo
+								isAssigned ? assignedKpo : request ? kpoRequest : deptKpo
 							}
 							onRowClick={(ev, row) => {
-								if (row) {
+								if (row && !request) {
 									push(`/performance_appraisal/kpoList/details/${row.original.id}`)
+								} else {
+									handleOpen(row.original);
 								}
 							}}
 							checkbox={{
