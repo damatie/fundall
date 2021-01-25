@@ -102,6 +102,7 @@ const KpoComments = ({kpoSummary}) => {
             name='reviewingManagerComment'
             className='my-16'
             multiline
+            defaultValue={state.reviewingManagerComment}
             refs={reviewingManager.register}
             error={reviewingManager.errors?.reviewingManagerComment}
             message={reviewingManager.errors?.reviewingManagerComment?.message}
