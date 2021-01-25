@@ -87,7 +87,7 @@ function RequestLoanTab(props) {
 		if (
 			Object.values(detailsToCheck).includes("") ||
 			(
-				!fileInput[0] ||
+				((userCheck === "fm" && otherDetails.amountApproved !== otherDetails.amountRequested) ? false : !fileInput[0]) ||
 				otherDetails.purpose.length < 10 ||
 				otherDetails.workPhone.length < 14 ||
 				otherDetails.homePhone.length < 14 ||
@@ -128,9 +128,9 @@ function RequestLoanTab(props) {
 				email: state.email,
 				amountApproved: state.amountApproved ? state.amountApproved : "",
 			});
-			if (Number(state.amountApproved) > 0) {
-				setFileInput([state.loanForm]);
-			}
+			// if (Number(state.amountApproved) > 0) {
+			// 	setFileInput([state.loanForm]);
+			// }
 
 			setCheck(state?.fromHR ? "hr" : state?.fromFM ? "fm" : null);
 			return;
