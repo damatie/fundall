@@ -68,6 +68,24 @@ const useLoanManagement = () => {
     else if (loan.data.loanData.status.toLowerCase() === 'disbursed') {
       dispatch(Actions.closeLoan(id, history));
     }
+    // else if (loan.data.loanData.amountApproved > 0) {
+    //   dispatch(Actions.approveLoan({
+    //     id, body: {
+    //       amountRequested: loan.data.loanData.amountRequested,
+    //       mobilePhone: loan.data.loanData.mobilePhone,
+    //       annualPay: loan.data.loanData.annualPay,
+    //       workPhone: loan.data.loanData.workPhone,
+    //       homePhone: loan.data.loanData.homePhone,
+    //       duration: loan.data.loanData.duration,
+    //       purpose: loan.data.loanData.purpose,
+    //       email: loan.data.loanData.email,
+    //       loanForm: loan.data.loanData.formUrl,
+    //       amountApproved: loan.data.loanData.amountApproved,
+    //     },
+    //     url: "/loan/approve/finance/",
+    //     history
+    //   }))
+    // }
     else {
       history.push({
         pathname: "/loan/request/new/" + id,

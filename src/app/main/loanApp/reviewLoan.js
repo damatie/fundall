@@ -8,7 +8,7 @@ const config = {
 }
 const ReviewLoan = () => {
   return (
-    <LoanBanner  personalUrl={config.urlOne} title={config.title} salaryUrl={config.urlTwo}/>
+    <LoanBanner personalUrl={config.urlOne} title={config.title} salaryUrl={config.urlTwo} />
   );
 };
 
