@@ -49,7 +49,8 @@ export function submitLogin(data, x) {
 						email: data?.email ?? response.email,
 						shortcuts: ['loan_request', 'request_leave', 'blog_list', 'todo'],
 						department: data?.department,
-						details: data?.info
+						details: data?.info,
+						employeeGrade: data?.employeeGrade
 					}
 				};
 				localStorage.setItem('user_data', JSON.stringify(userState));

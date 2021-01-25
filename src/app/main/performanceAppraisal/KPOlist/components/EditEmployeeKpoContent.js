@@ -9,7 +9,7 @@ import Skeleton from '@material-ui/lab/Skeleton';
 
 const EditEmployeeKpoContent = ({ customHook }) => {
   const {
-    register, errors, handleSubmit, onSubmit, control, kpoDetails, kpoCategory, loadingContent
+    register, errors, handleSubmit, onSubmit, control, kpoDetails, kpoCategory, loadingContent, pipEligibility
   } = customHook;
   return (
     <section className='w-1/2 flex flex-col mx-auto p-20'>
@@ -64,16 +64,20 @@ const EditEmployeeKpoContent = ({ customHook }) => {
                   defaultValue={kpoDetails.target}
                   type='number'
                 />
-                <Input
-                  name='kpoPipTarget'
-                  label='%PIP Target'
-                  className='my-16'
-                  error={errors.kpoPipTarget}
-                  message={errors.kpoPipTarget?.message}
-                  refs={register}
-                  defaultValue={kpoDetails.kpoPipTarget}
-                  type='number'
-                />
+                {
+                  pipEligibility && (
+                    <Input
+                      name='kpoPipTarget'
+                      label='%PIP Target'
+                      className='my-16'
+                      error={errors.kpoPipTarget}
+                      message={errors.kpoPipTarget?.message}
+                      refs={register}
+                      defaultValue={kpoDetails.kpoPipTarget}
+                      type='number'
+                    />
+                  )
+                }
                 <SharedButton
                   variant='contained'
                   color='primary'

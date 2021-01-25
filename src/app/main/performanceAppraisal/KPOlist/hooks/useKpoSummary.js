@@ -4,6 +4,7 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import errorMsg from 'utils/errorMsg';
 import { kpoSummary } from '../store/actions';
+import swal from 'sweetalert2';
 
 const lineManagerSchema = yup.object().shape({
   strengths: yup.string(errorMsg({
@@ -56,7 +57,7 @@ const reviewingManagerSchema = yup.object().shape({
   }))
 });
 
-const useLineManagerComment = ({dispatch, id}) => {
+const useLineManagerComment = ({dispatch, id, state}) => {
   const {
     errors,
     register,
@@ -67,6 +68,21 @@ const useLineManagerComment = ({dispatch, id}) => {
   });
 
   const onSubmit = (model) => {
+    if(state.status === 'on-going') {
+      swal.fire({
+        text: 'KPO is still on-going',
+        icon: 'info'
+      });
+      return;
+    }
+    if(!state.behavioralAttributes) {
+      swal.fire({
+        text: 'Please you have to complete Behavoiural Attribute before you can add your comment',
+        icon: 'info',
+        timer: 3000
+      });
+      return;
+    }
     dispatch(kpoSummary({
       id,
       model,
@@ -82,7 +98,7 @@ const useLineManagerComment = ({dispatch, id}) => {
   }
 };
 
-const useEmployeeComment = ({dispatch, id}) => {
+const useEmployeeComment = ({dispatch, id, state}) => {
   const {
     errors,
     register,
@@ -93,6 +109,13 @@ const useEmployeeComment = ({dispatch, id}) => {
   });
 
   const onSubmit = (model) => {
+    if(state.status === 'on-going') {
+      swal.fire({
+        text: 'KPO is still on-going',
+        icon: 'info'
+      });
+      return;
+    }
     dispatch(kpoSummary({
       id,
       model,
@@ -108,7 +131,7 @@ const useEmployeeComment = ({dispatch, id}) => {
   }
 };
 
-const useReviewingManagerComment = ({dispatch, id}) => {
+const useReviewingManagerComment = ({dispatch, id, state}) => {
   const {
     errors,
     register,
@@ -119,6 +142,13 @@ const useReviewingManagerComment = ({dispatch, id}) => {
   });
 
   const onSubmit = (model) => {
+    if(state.status === 'on-going') {
+      swal.fire({
+        text: 'KPO is still on-going',
+        icon: 'info'
+      });
+      return;
+    }
     dispatch(kpoSummary({
       id,
       model,
@@ -138,9 +168,9 @@ const useKpoSummary = ({dispatch, state, userInfo}) => {
     return state[user].id === userInfo.id && state[user].email === userInfo.data.email;
   };
   return {
-    lineManagerComment: useLineManagerComment({dispatch, id: state.id}),
-    employeeComment: useEmployeeComment({dispatch, id: state.id}),
-    reviewingManagerComment: useReviewingManagerComment({dispatch, id: state.id}),
+    lineManagerComment: useLineManagerComment({dispatch, id: state.id, state}),
+    employeeComment: useEmployeeComment({dispatch, id: state.id, state}),
+    reviewingManagerComment: useReviewingManagerComment({dispatch, id: state.id, state}),
     shouldShowButton,
     state
   };

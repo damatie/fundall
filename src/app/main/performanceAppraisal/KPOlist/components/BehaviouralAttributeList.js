@@ -6,7 +6,7 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 
-const BehaviouralAttributeList = ({headerId, data, config, handleChange }) => {
+const BehaviouralAttributeList = ({headerId, data, config, handleChange, role }) => {
   const { type } = config;
   return (
       <section>
@@ -21,37 +21,34 @@ const BehaviouralAttributeList = ({headerId, data, config, handleChange }) => {
           <FormControlLabel
             value={"1"}
             control={<Radio color="primary" />}
-            label="Development Needed"
+            label="Development Needed(1)"
             labelPlacement="top"
+            disabled={role !== 'linemanager'}
           />
           <FormControlLabel
             value={"1.5"}
             control={<Radio color="primary" />}
-            label="Satisfactory"
+            label="Satisfactory(1.5)"
             labelPlacement="top"
+            disabled={role !== 'linemanager'}
           />
           <FormControlLabel
             value={"2"}
             control={<Radio color="primary" />}
-            label="Key Strength"
+            label="Key Strength(2)"
             labelPlacement="top"
+            disabled={role !== 'linemanager'}
           />
           <FormControlLabel
             value={"2.5"}
             control={<Radio color="primary" />}
-            label="Leader"
+            label="Leader(2.5)"
             labelPlacement="top"
+            disabled={role !== 'linemanager'}
           />
           </RadioGroup>
           </Grid>
         </Grid>
-        {/* <SharedButton
-          variant='contained'
-          className='my-10'
-          color='primary'
-        >
-          Save
-        </SharedButton> */}
       </section>
   );
 };

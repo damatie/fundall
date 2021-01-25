@@ -8,7 +8,7 @@ import useKpoContentList from '../hooks/useKpoContent';
 import { Controller } from 'react-hook-form';
 
 const CreateKpoContent = ({customHook}) => {
-  const { open, handleCloseModal, register, errors, handleSubmit, onSubmit, control, kpoCategory } = customHook;
+  const { open, handleCloseModal, register, errors, handleSubmit, onSubmit, control, kpoCategory, pipEligibility } = customHook;
   return (
     <SharedModal
       title='Add KPO Content'
@@ -57,15 +57,17 @@ const CreateKpoContent = ({customHook}) => {
           refs={register}
           type='number'
         />
-        <Input
-          className='my-16'
-          name='kpoPipTarget'
-          label='PIP Target'
-          error={errors.kpoPipTarget}
-          message={errors.kpoPipTarget?.message}
-          refs={register}
-          type='number'
-        />
+        {pipEligibility && (
+          <Input
+            className='my-16'
+            name='kpoPipTarget'
+            label='PIP Target'
+            error={errors.kpoPipTarget}
+            message={errors.kpoPipTarget?.message}
+            refs={register}
+            type='number'
+          />
+        )}
         <SharedButton
           variant='contained'
           color='primary'

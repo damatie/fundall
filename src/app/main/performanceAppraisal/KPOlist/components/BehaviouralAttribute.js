@@ -11,7 +11,7 @@ import SharedButton from 'app/shared/button/SharedButton';
 import Divider from '@material-ui/core/Divider';
 import Skeleton from '@material-ui/lab/Skeleton';
 
-const BehaviouralAttribute = ({ kpoDetails }) => {
+const BehaviouralAttribute = ({ kpoDetails, role }) => {
   const { data, loading, singleData } = useSelector(state => state.kpo.behaviouralAttribute);
   const dispatch = useDispatch();
   const { handleChange, handleSubmit } = useBehaviouralAttribute({ data, loading, singleData }, dispatch, kpoDetails);
@@ -41,7 +41,7 @@ const BehaviouralAttribute = ({ kpoDetails }) => {
                     <Typography variant="body1" color="initial">{item.description}</Typography>
                     {
                       item.contents.map(result => (
-                        <BehaviouralAttributeList handleChange={handleChange} headerId={item.id} data={result} config={{
+                        <BehaviouralAttributeList role={role} handleChange={handleChange} headerId={item.id} data={result} config={{
                           type: 'new'
                         }} />
                       ))
@@ -50,14 +50,18 @@ const BehaviouralAttribute = ({ kpoDetails }) => {
                   </div>
                 ))}
               </>
-              <SharedButton
-                variant='contained'
-                className='my-10 w-1/4 flex flex-col justify-center self-center'
-                color='primary'
-                onClick={handleSubmit}
-              >
-                Save
-              </SharedButton>
+              {
+                role === 'linemanager' && (
+                  <SharedButton
+                    variant='contained'
+                    className='my-10 w-1/4 flex flex-col justify-center self-center'
+                    color='primary'
+                    onClick={handleSubmit}
+                  >
+                    Save
+                  </SharedButton>
+                )
+              }
             </Paper>
           )
       }

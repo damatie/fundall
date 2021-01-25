@@ -32,7 +32,8 @@ const EmployeeKpoList = () => {
       button={{
         showButton: true,
         btnTitle: 'Create KPO',
-        onClick: customHook.handleOpenModal
+        onClick: customHook.handleOpenModal,
+        btnComponent: false,
       }}
       content={
         <div className='p-24'>
