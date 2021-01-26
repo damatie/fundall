@@ -34,8 +34,7 @@ const PageLayout = ({
   }
 }) => {
 
-  const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
-
+	const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
   return (
     <FusePageSimple
 			classes={{
@@ -104,7 +103,7 @@ const PageLayout = ({
             <div className="flex flex-col min-w-0 mx-8 sm:mc-16">
               {/* <FuseAnimate animation="transition.slideLeftIn" delay={300}> */}
 								{
-									btnComponent !== false ? (
+									btnComponent !== undefined && btnComponent !== false ? (
 										<>
 										{btnComponent}
 										</>
