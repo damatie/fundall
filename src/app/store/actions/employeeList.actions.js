@@ -23,7 +23,7 @@ export const getDepartmentEmployees = id => {
     }).then(res => res.json()).then(
       data => {
         console.log(data)
-        if(data.success) {
+        if (data.success) {
           dispatch({
             type: GET_DEPARTMENT_EMPLOYEE_SUCCESS
           });
@@ -54,7 +54,7 @@ export const getAllEmployee = role => {
       ...header.getRegHeader()
     }).then(res => res.json()).then(
       data => {
-        if(data.success) {
+        if (data.success) {
           dispatch({
             type: GET_DEPARTMENT_EMPLOYEE_SUCCESS
           });

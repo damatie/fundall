@@ -101,7 +101,7 @@ const getProfile = ({ id, token, }) => {
 			}
 		}).then(res => handleResponse(res)).then(
 			data => {
-				console.log(data.data)
+				// console.log(data)
 				localStorage.setItem('user_profile', JSON.stringify(data.data));
 				dispatch({
 					type: GET_EMPLOYEE_PROFILE,

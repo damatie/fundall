@@ -84,9 +84,10 @@ function RequestLoanTab(props) {
 
 		if (userCheck !== "fm") delete detailsToCheck.amountApproved;
 
-		if (!fileInput[0] ||
+		if (
 			Object.values(detailsToCheck).includes("") ||
 			(
+				((userCheck === "fm" && otherDetails.amountApproved !== otherDetails.amountRequested) ? false : !fileInput[0]) ||
 				otherDetails.purpose.length < 10 ||
 				otherDetails.workPhone.length < 14 ||
 				otherDetails.homePhone.length < 14 ||
@@ -125,8 +126,11 @@ function RequestLoanTab(props) {
 				duration: state.duration,
 				purpose: state.purpose,
 				email: state.email,
-				amountApproved: state.amountApproved ? state.amountApproved : ""
+				amountApproved: state.amountApproved ? state.amountApproved : "",
 			});
+			// if (Number(state.amountApproved) > 0) {
+			// 	setFileInput([state.loanForm]);
+			// }
 
 			setCheck(state?.fromHR ? "hr" : state?.fromFM ? "fm" : null);
 			return;
@@ -157,6 +161,7 @@ function RequestLoanTab(props) {
 	}
 
 	function handleSubmit(model) {
+		console.log({ ...model, ...otherDetails });
 		if (id) {
 			if (userCheck === "hr") {
 				dispatch(Actions.approveLoan({
@@ -352,78 +357,40 @@ function RequestLoanTab(props) {
 						placeholder={"Home Phone"}
 					/>
 
-					{/* 
-					<TextFieldFormsy
-						className="mb-16"
-						type="text"
-						name="workLocation"
-						label="Work location"
-						value={''}
-						validations={{
-							minLength: 1
-						}}
-						validationErrors={{
-							minLength: 'Min character length is 1'
-						}}
-						InputProps={{
-							endAdornment: (
-								<InputAdornment position="end">
-									<Icon className="text-20" color="action">
-										map
-								</Icon>
-								</InputAdornment>
-							)
-						}}
-						variant="outlined"
-						required
-					/> 
-					*/}
-
-					{/* 
-					<TextFieldFormsy
-						className="mb-16"
-						type="number"
-						name="otherDetails"
-						label="Phone number"
-						value={''}
-						validations={{
-							minLength: 1
-						}}
-						validationErrors={{
-							minLength: 'Min character length is 1'
-						}}
-						InputProps={{
-							endAdornment: (
-								<InputAdornment position="end">
-									<Icon className="text-20" color="action">
-										phone
-								</Icon>
-								</InputAdornment>
-							)
-						}}
-						variant="outlined"
-						required
-					/> 
-					*/}
-
-					{/* 
-					<AutoCompleteInput data={employees && formatDataList(employees, 'Line managers')} inputs={{ label: 'Line manager' }} setInput={setDepartmentHead} value={id ? { name: loan.data.departmentHead, id: loan.data.loanData.departmentHead } : {}} />
-					<AutoCompleteInput data={employees && formatDataList(employees, 'Director of support service')} inputs={{ label: 'Director of support service' }} setInput={setSupportDirector} value={id ? { name: loan.data.supportDirector, id: loan.data.loanData.supportDirector } : {}} />
-					<AutoCompleteInput data={employees && formatDataList(employees, 'Finance manager')} inputs={{ label: 'Finance manager' }} setInput={setFinanceManager} value={id ? { name: loan.data.financeManager, id: loan.data.loanData.financeManager } : {}} /> 
-					*/}
 				</GridSystem>
 
 				<Grid container spacing={3} className="mt-24 mb-16 w-full">
-					<Grid item lg={6}>
-						<ProgressBtn content={"Download form"} disable={true} />
-					</Grid>
-					<Grid item lg={6}>
-						<SharedDropzone
-							name={"Upload Signed document here"}
-							allowedTypes={'image/*, application/*'}
-							setValue={setFileInput}
-						/>
-					</Grid>
+					{
+						userCheck === "fm" ?
+							(otherDetails.amountApproved === otherDetails.amountRequested) ?
+								<>
+									<Grid item lg={6}>
+										<ProgressBtn content={"Download form"} disable={true} />
+									</Grid>
+									<Grid item lg={6}>
+										<SharedDropzone
+											name={"Upload Signed document here"}
+											allowedTypes={'image/*, application/*'}
+											setValue={setFileInput}
+										/>
+									</Grid>
+								</>
+								:
+								<div style={{ marginBottom: 50 }} />
+							:
+							<>
+								<Grid item lg={6}>
+									<ProgressBtn content={"Download form"} disable={true} />
+								</Grid>
+								<Grid item lg={6}>
+									<SharedDropzone
+										name={"Upload Signed document here"}
+										allowedTypes={'image/*, application/*'}
+										setValue={setFileInput}
+									/>
+								</Grid>
+							</>
+					}
 				</Grid>
 
 				{

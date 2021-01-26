@@ -1,14 +1,16 @@
 import { TextFieldFormsy, SelectFormsy } from '@fuse/core/formsy';
 import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
+// import Button from '@material-ui/core/Button';
 import Icon from '@material-ui/core/Icon';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import * as Actions from '../store/actions';
 import * as LocationActions from '../../../store/actions/index';
 import withReducer from 'app/store/withReducer';
 import reducer from '../store/reducers';
-import { DateTimePicker } from '@material-ui/pickers';
+import * as employeeActions from 'app/store/actions';
+
+// import { DateTimePicker } from '@material-ui/pickers';
 import Formsy from 'formsy-react';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -19,8 +21,8 @@ import { useDispatch, useSelector } from 'react-redux';
 // import * as rolesActions from 'app/main/HR/roles/store/actions';
 import ProgressBtn from 'app/shared/progressBtn';
 import GridSystem from 'app/shared/gridSystem';
-import { getBaseUrl } from 'app/shared/getBaseUrl';
-import { fetchHeaders } from 'app/shared/fetchHeaders'
+// import { getBaseUrl } from 'app/shared/getBaseUrl';
+// import { fetchHeaders } from 'app/shared/fetchHeaders'
 // import { State } from 'velocity-animate';
 
 // const baseUrl = getBaseUrl;
@@ -30,32 +32,49 @@ function NewOpening(props) {
 	const dispatch = useDispatch();
 	const entity = useSelector(({ createOpening }) => createOpening.entity.data);
 	const loading = useSelector(({ createOpening }) => createOpening.recruitment.loading);
-
-	// const country = useSelector(({ regions }) => regions.countries.map(country => country.name));
-	// const state = useSelector(({ regions }) => regions.states.map(state => state.name));
-	// const roles = useSelector(({ roles }) => roles.roles);
+	// const state = useSelector(state => state);
+	const employeeList = useSelector(state => state.employeeList.employeeList)
+	// const employeeList = useSelector(({ employeeList }) => employeeList)
 	const [department, setDepartment] = useState([]);
+	const [country, setCountry] = React.useState([]);
+	const state = useSelector(({ regions }) => regions.states.map(state => state.name));
 
 	const [details, setDetails] = useState({
 		departmentId: "",
 		entityId: "",
 		jobTitle: "",
+		requiredSkills: "",
 		reasonForEmployment: "",
 		duration: "",
 		employeeToBeReplaced: "",
+		employeeStatus: "",
 		positionType: "",
 		startDate: "",
 		endDate: "",
 		dueDate: "",
-		employeeGrade: ""
+		employeeGrade: "",
+		urgency: "",
+		country: "",
+		state: ""
 	});
+
+	useEffect(() => {
+		if (country.length > 0) return;
+		fetch('https://restcountries.eu/rest/v2/all')
+			.then(res => res.json())
+			.then(res => {
+				setCountry(res.map(country => country.name));
+			})
+			.catch(err => console.log(err))
+	}, [country])
 
 	const [isFormValid, setIsFormValid] = useState(true);
 	const formRef = useRef(null);
 
 	useEffect(() => {
-		console.log(entity)
-	}, [details])
+		console.log(details)
+		dispatch(employeeActions.getAllEmployee());
+	}, [dispatch])
 
 	const getDepartment = (entityName) => {
 		entity.map(entity => {
@@ -65,9 +84,9 @@ function NewOpening(props) {
 		})
 	}
 
-	// const getState = (country, input) => {
-	// 	if (input === 'country') dispatch(LocationActions.getStates(country));
-	// }
+	const getState = (country) => {
+		dispatch(LocationActions.getStates(country));
+	}
 
 	function disableButton() {
 		setIsFormValid(false);
@@ -99,6 +118,9 @@ function NewOpening(props) {
 		setDetails(state => ({ ...state, [name]: value }));
 		if (name === "entityId") {
 			getDepartment(value);
+		} else if (name === "country") {
+			console.log(value)
+			getState(value)
 		}
 	}
 
@@ -106,14 +128,19 @@ function NewOpening(props) {
 		{ name: 'entityId', label: 'Entity name *', data: entity, validations: "" },
 		{ name: 'departmentId', label: 'Department *', data: department, validations: "" },
 		{ name: 'jobTitle', label: 'Job Role ', validations: '', icon: 'account-hard-hat', type: 'text' },
-		{ name: 'reasonForEmployment', label: 'Employee status *', data: ['New Employee', 'Replacement', 'Industrial Training', 'National Service'] },
+		{ name: 'requiredSkills', label: 'Required Skills', validations: '', icon: 'account-hard-hat', type: 'text' },
+		{ name: 'reasonForEmployment', label: 'Reason for Employment *', data: ['New Employee', 'Replacement', 'Industrial Training', 'National Service'] },
+		{ name: 'employeeStatus', label: 'Employee Status ', validations: '', data: ["Full-Time", "Part-Time"] },
 		{ name: 'duration', label: 'Duration ', validations: '', type: 'text' },
-		{ name: 'employeeToBeReplaced', label: 'Employee To be Replaced', type: "text", validations: "" },
+		{ name: 'employeeToBeReplaced', label: 'Employee To be Replaced', data: employeeList },
 		{ name: 'positionType', label: 'Position Type *', data: ['Permanent', 'Temporary'] },
 		{ name: 'startDate', label: 'Start date *', validations: '', type: 'date' },
 		{ name: 'endDate', label: 'End date *', validations: '', type: 'date' },
 		{ name: 'dueDate', label: 'Desired Hire date *', validations: '', type: 'date' },
 		{ name: 'employeeGrade', label: 'Employee Grade *', validations: '', data: ["GL1", "GL2", "GL3", "GL4", "GL5"] },
+		{ name: 'urgency', label: 'Urgency *', data: ['Immediately', 'Urgent', 'Not urgent'] },
+		{ name: 'country', label: 'Country', validations: '', icon: '', data: country },
+		{ name: 'state', label: 'State', validations: '', icon: '', data: state },
 	];
 
 	const recruitmentForm = formInputs.map((input, i) => {
@@ -128,10 +155,6 @@ function NewOpening(props) {
 							label={input.label}
 							value={details[input.name]}
 							onChange={(e) => handleChange(input.name, e.target.value)}
-							// validations="isEmail"
-							// validationErrors={{
-							// 	isEmail: 'Please enter a valid email'
-							// }}
 							InputProps={{
 								endAdornment: (
 									<InputAdornment position="end">
@@ -148,7 +171,8 @@ function NewOpening(props) {
 				else {
 					return <></>
 				}
-			} else if (input.name === "employeeToBeReplaced") {
+			}
+			else if (input.name === "employeeToBeReplaced") {
 				if (details["reasonForEmployment"].toLowerCase() === "replacement") {
 					return (
 						<TextFieldFormsy
@@ -158,10 +182,6 @@ function NewOpening(props) {
 							label={input.label}
 							value={details[input.name]}
 							onChange={(e) => handleChange(input.name, e.target.value)}
-							// validations="isEmail"
-							// validationErrors={{
-							// 	isEmail: 'Please enter a valid email'
-							// }}
 							InputProps={{
 								endAdornment: (
 									<InputAdornment position="end">
@@ -178,7 +198,8 @@ function NewOpening(props) {
 				else {
 					return <></>
 				}
-			} else {
+			}
+			else {
 				return (
 					<>
 						<TextFieldFormsy
@@ -188,10 +209,6 @@ function NewOpening(props) {
 							label={input.label}
 							value={details[input.name]}
 							onChange={(e) => handleChange(input.name, e.target.value)}
-							// validations="isEmail"
-							// validationErrors={{
-							// 	isEmail: 'Please enter a valid email'
-							// }}
 							InputProps={{
 								endAdornment: (
 									<InputAdornment position="end">
@@ -218,10 +235,6 @@ function NewOpening(props) {
 							label={input.label}
 							value={details[input.name]}
 							onChange={(e) => handleChange(input.name, e.target.value)}
-							// validations="isEmail"
-							// validationErrors={{
-							// 	isEmail: 'Please enter a valid email'
-							// }}
 							InputProps={{
 								endAdornment: (
 									<InputAdornment position="end">
@@ -254,23 +267,47 @@ function NewOpening(props) {
 					</>
 				)
 			}
-		} else {
-			return (
-				<SelectFormsy
-					className="mb-16"
-					name={input.name}
-					label={input.label}
-					variant="outlined"
-					required
-					requiredError='Must not be None'
-					value={details[input.name]}
-					onChange={(e) => handleChange(input.name, e.target.value)}
-				>
-					{input.data.map((item, i) => (
-						<MenuItem value={checkValue(item)} key={i}>{checkName(item)}</MenuItem>
-					))}
-				</SelectFormsy>
-			)
+		}
+		else {
+			if (input.name === "employeeToBeReplaced") {
+				if (details["reasonForEmployment"].toLowerCase() === "replacement") {
+					return (
+						<SelectFormsy
+							className="mb-16"
+							name={input.name}
+							label={input.label}
+							variant="outlined"
+							required
+							requiredError='Must not be None'
+							value={details[input.name]}
+							onChange={(e) => handleChange(input.name, e.target.value)}
+						>
+							{input?.data?.map((item, i) => (
+								<MenuItem value={item.id} key={i}>{item.firstName} {item.lastName}</MenuItem>
+							))}
+						</SelectFormsy>
+					)
+				} else {
+					return <> </>;
+				}
+			} else {
+				return (
+					<SelectFormsy
+						className="mb-16"
+						name={input.name}
+						label={input.label}
+						variant="outlined"
+						required
+						requiredError='Must not be None'
+						value={details[input.name]}
+						onChange={(e) => handleChange(input.name, e.target.value)}
+					>
+						{input?.data?.map((item, i) => (
+							<MenuItem value={checkValue(item)} key={i}>{checkName(item)}</MenuItem>
+						))}
+					</SelectFormsy>
+				)
+			}
 		}
 	})
 

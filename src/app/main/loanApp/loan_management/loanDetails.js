@@ -1,7 +1,7 @@
 import FuseAnimate from '@fuse/core/FuseAnimate';
 import FusePageSimple from '@fuse/core/FusePageSimple';
 import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
+// import Button from '@material-ui/core/Button';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
@@ -43,11 +43,11 @@ function LoanDetails(props) {
 	const loan = useSelector(({ loan }) => loan.loan.data);
 	const loans = useSelector(({ loan }) => loan.loan);
 
-	const state = useLocation().state;
+	// const state = useLocation().state;
 
-	const [value, setValue] = useState('')
+	// const [value, setValue] = useState('')
 
-	const user = JSON.parse(localStorage.getItem('user_data'));
+	// const user = JSON.parse(localStorage.getItem('user_data'));
 
 
 	const theme = useTheme();
@@ -134,7 +134,7 @@ function LoanDetails(props) {
 					/>
 					{loan?.loan?.status === 'open' ? <Tab
 						classes={{
-							root: 'h-64' 
+							root: 'h-64'
 						}}
 						label="Loan Statement"
 					/> : ''}
@@ -142,7 +142,7 @@ function LoanDetails(props) {
 			}
 			content={
 				<div className="p-16 sm:p-24">
-					{selectedTab === 0 && <LoanDetailsTab setValue={setValue} />}
+					{selectedTab === 0 && <LoanDetailsTab />}
 					{selectedTab === 1 && <LoanStatementTab />}
 				</div>
 			}

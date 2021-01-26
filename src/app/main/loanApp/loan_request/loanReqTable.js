@@ -373,9 +373,6 @@ function LoanReqTable(props) {
 									<CustomIconButton onClick={e => confirmDisbursement(loanDetails.id)} icon='check_circle_outline' className={'bg-green hover:bg-green-A700 text-white w-1/2 mx-16'}>
 										Confirm Loan Disbursement
 									</CustomIconButton>
-									<CustomIconButton onClick={e => handleCancel(loanDetails.id)} icon='cancel' className={'bg-red hover:bg-red-A700 text-white w-1/2 mx-16'}>
-										Cancel Request
-									</CustomIconButton>
 								</div>
 								:
 								<></>

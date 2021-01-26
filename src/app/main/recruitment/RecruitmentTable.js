@@ -169,7 +169,7 @@ const TableWidget = (props) => {
     dispatch(Actions.deleteOpening(hrId));
   }
 
-  const isHr = () => userData.role.toUpperCase() === 'HR';
+  const isHr = () => userData.role.toUpperCase() === 'HR MANAGER';
 
   const displayButton = () => {
     return (
@@ -277,6 +277,7 @@ const TableWidget = (props) => {
             </Typography>
           </Grid>
         </RecruitmentDialog>
+
         {/* Assign Reecruiter Dialog */}
         <RecruitmentDialog
           transition={Transition}
@@ -287,6 +288,7 @@ const TableWidget = (props) => {
         >
           <AssignRecruiterTab setOpenHr={setOpenHr} selectedPosition={selected} />
         </RecruitmentDialog>
+
         {/* Update Dialog */}
         <RecruitmentDialog
           open={updateOpen}
@@ -358,17 +360,17 @@ const TableWidget = (props) => {
                     // selected={n.id === selectedItemId}
                     className="cursor-pointer"
                   >
-                    <TableCell className="text-center" style={{ padding: '0 16px' }}>
+                    <TableCell style={{ padding: '0 16px' }}>
                       {n.entity.entityName}
                     </TableCell>
                     <TableCell>{n.jobTitle}</TableCell>
-                    <TableCell className="text-center" style={{ padding: '0 16px' }}>{n.employeeStatus}</TableCell>
-                    <TableCell className="text-center" style={{ padding: '0 16px' }}>{n.urgency}</TableCell>
-                    <TableCell className="text-center"><Moment format="ddd Do MMM, YY | hh:mm:ss a">{n.createdAt}</Moment></TableCell>
-                    <TableCell className="text-center" style={{ padding: '0 16px' }}>
+                    <TableCell style={{ padding: '0 16px' }}>{n.employeeStatus}</TableCell>
+                    <TableCell style={{ padding: '0 16px' }}>{n.urgency}</TableCell>
+                    <TableCell>{new Date(n.createdAt).toLocaleDateString()}</TableCell>
+                    <TableCell style={{ padding: '0 16px' }}>
                       {CheckStatus(n.status)}
                     </TableCell>
-                    { isHr() && <TableCell className="text-center" style={{ padding: '0 16px' }}>
+                    { isHr() && <TableCell style={{ padding: '0 16px' }}>
                       <IconButton aria-label="delete" onClick={(event) => handleDeleteOpening(event, n.id)}>
                         <DeleteIcon style={{ color: 'red' }} />
                       </IconButton>
