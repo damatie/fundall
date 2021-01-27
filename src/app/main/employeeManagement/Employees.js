@@ -3,8 +3,13 @@ import React from 'react';
 import AddNewEmployee from './components/AddNewEmployee';
 import EmployeeTable from './components/EmployeeTable';
 import useEmployees from './hooks/useEmployees';
+import { useDispatch, useSelector } from 'react-redux';
+import reducer from './store/reducers/employees.reducer';
+import withReducer from 'app/store/withReducer';
 
 const Employees = () => {
+  const dispatch = useDispatch();
+  const { open } = useSelector(state => state.employeeMgt);
   const {
     control,
     errors,
@@ -16,7 +21,9 @@ const Employees = () => {
     handleDelete,
     handleSearch,
     handleFilter,
-  } = useEmployees();
+  } = useEmployees({
+    dispatch
+  });
 
   return (
     <PageLayout
@@ -40,7 +47,7 @@ const Employees = () => {
             handleFilter={handleFilter}
           />
           <AddNewEmployee
-            open={true}
+            open={open}
             handleClose={handleCloseModal}
             form={{
               handleSubmit,
@@ -56,4 +63,4 @@ const Employees = () => {
   );
 };
 
-export default Employees;
+export default withReducer('employeeMgt', reducer)(Employees);

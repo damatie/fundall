@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import errorMsg from 'utils/errorMsg';
+import * as Actions from '../store/actions';
 
 const schema = yup.object().shape({
   firstName: yup.string(
@@ -111,7 +112,7 @@ const schema = yup.object().shape({
   )
 });
 
-const useEmployees = () => {
+const useEmployees = ({dispatch}) => {
   const {
     control,
     errors,
@@ -127,11 +128,15 @@ const useEmployees = () => {
   };
 
   const handleOpenModal = () => {
-
+    dispatch({
+      type: Actions.OPEN_ADD_NEW_EMPLOYEE_MODAL
+    });
   };
 
   const handleCloseModal = () => {
-
+    dispatch({
+      type: Actions.CLOSE_ADD_NEW_EMPLOYEE_MODAL
+    });
   };
 
   const handleDelete = () => {
