@@ -38,7 +38,7 @@ const BehaviouralAttribute = ({ kpoDetails, role }) => {
                 { data.map(item => (
                   <div key={item?.id}>
                     <Typography variant="h6" color="initial" className='my-10 font-semibold'>{item.title}</Typography>
-                    <Typography variant="body1" color="initial">{item.description}</Typography>
+                    {/* <Typography variant="body1" color="initial">{item.description}</Typography> */}
                     {
                       item.contents.map(result => (
                         <BehaviouralAttributeList role={role} handleChange={handleChange} headerId={item.id} data={result} config={{
