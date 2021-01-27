@@ -5,68 +5,128 @@ import Input from 'app/shared/TextInput/Input';
 import GridSystem from 'app/shared/gridSystem';
 import MenuItem from '@material-ui/core/MenuItem';
 import SharedButton from 'app/shared/button/SharedButton';
-import Typography from '@material-ui/core/Typography'
+import Typography from '@material-ui/core/Typography';
+import { Controller } from 'react-hook-form';
 
-const AddNewEmployee = () => {
+const AddNewEmployee = ({
+  open,
+  handleClose,
+  form: {
+    handleSubmit,
+    onSubmit,
+    register,
+    control,
+    errors,
+  }
+}) => {
   return (
     <SharedModal
-      open={true}
-      handleClose={() => null}
+      open={open}
+      handleClose={handleClose}
       title='Create An Account'
     >
-      <form className='my-16'>
+      <form 
+        className='my-16'
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <GridSystem>
           <Input
             name='firstName'
             label='First Name'
+            refs={register}
+            error={errors.firstName}
+            message={errors.firstName?.message}
           />
           <Input
             name='middleName'
             label='Middle Name'
+            refs={register}
+            error={errors.middleName}
+            message={errors.middleName?.message}
           />
           <Input
             name='lastName'
             label='Last Name'
+            refs={register}
+            error={errors.lastName}
+            message={errors.lastName?.message}
           />
           <Input
             name='email'
             label='Official Email'
             type='email'
+            refs={register}
+            error={errors.email}
+            message={errors.email?.message}
           />
-          <SelectTextField
-            name='entity'
+          <Controller
+            name='entityId'
             label='Entity'
-          >
-            <MenuItem>
-              Entity
-            </MenuItem>
-          </SelectTextField>
-          <SelectTextField
-            name='department'
+            control={control}
+            as={
+              <SelectTextField
+                name='entityId'
+                label='Entity'
+                error={errors.entityId}
+                message={errors.entityId?.message}
+              >
+                <MenuItem value={1}>
+                  Entity
+                </MenuItem>
+              </SelectTextField>
+            }
+          />
+
+          <Controller
+            name='departmentId'
             label='Department'
-          >
-            <MenuItem>
-              department
-            </MenuItem>
-          </SelectTextField>
+            control={control}
+            as={
+              <SelectTextField
+                name='departmentId'
+                label='Department'
+                error={errors.departmentId}
+                message={errors.departmentId?.message}
+              >
+                <MenuItem value={1}>
+                  department
+                </MenuItem>
+              </SelectTextField>
+            }
+          />
           <Input
             name='employeeIdNumber'
             label='Employee ID Number'
-            type='number'
+            refs={register}
+            error={errors.employeeIdNumber}
+            message={errors.employeeIdNumber?.message}
           />
-          <SelectTextField
-            name='employeeGrade'
+
+          <Controller
+            name='employeeGradeId'
             label='Employee Grade'
-          >
-            <MenuItem>
-              employeeGrade
-            </MenuItem>
-          </SelectTextField>
+            control={control}
+            as={
+              <SelectTextField
+                name='employeeGradeId'
+                label='Employee Grade'
+                error={errors.employeeGradeId}
+                message={errors.employeeGradeId?.message}
+              >
+                <MenuItem value={1}>
+                  employeeGrade
+                </MenuItem>
+              </SelectTextField>
+            }
+          />
           <div>
             <Typography variant="subtitle1" color="initial">SRG Seniority Date</Typography>
             <Input
             name='srgSeniorityDate'
             type='date'
+            refs={register}
+            error={errors.srgSeniorityDate}
+            message={errors.srgSeniorityDate?.message}
           />
           </div>
         </GridSystem>
@@ -74,6 +134,7 @@ const AddNewEmployee = () => {
           color='secondary'
           variant='contained'
           className='flex flex-col items-center justify-center mx-auto my-16'
+          type='submit'
         >
           Submit
         </SharedButton>

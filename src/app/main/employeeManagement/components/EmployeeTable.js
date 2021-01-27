@@ -4,7 +4,7 @@ import Grid from '@material-ui/core/Grid';
 import MenuItem from '@material-ui/core/MenuItem';
 import SelectTextField from 'app/shared/TextInput/SelectTextField';
 
-const EmployeeTable = () => {
+const EmployeeTable = ({ data, push, handleDelete, handleFilter}) => {
   const columns = React.useMemo(
 		() => [
 			{
@@ -49,10 +49,10 @@ const EmployeeTable = () => {
   return (
     <EnhancedTable
       columns={columns}
-			data={[]}
+			data={data}
 			onRowClick={(ev, row) => {
 				if (row) {
-					// push(`/performance_appraisal/kpoList/details/${row.original.id}`)
+					push(`/employee_management/${row.original.id}`)
 				}
 			}}
 			checkbox={{
@@ -61,7 +61,7 @@ const EmployeeTable = () => {
 				accessor: 'id',
 			}}
 			selectAll={(value) => console.log(value)}
-      handleDelete={() => null}
+      handleDelete={handleDelete}
       toolBar={
         <Grid container spacing={1} alignItems='center'>
           <Grid item lg={1} md={2} sm={4} xs={4}>
@@ -71,6 +71,7 @@ const EmployeeTable = () => {
             <SelectTextField
               label="Entity"
               size='small'
+              onChange={handleFilter}
             >
               <MenuItem>
                 Entity
@@ -81,6 +82,7 @@ const EmployeeTable = () => {
             <SelectTextField
               label="Role"
               size='small'
+              onChange={handleFilter}
             >
               <MenuItem>
                 Role
