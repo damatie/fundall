@@ -51,6 +51,7 @@ import JobTitleConfig from 'app/main/jobTitle/JobTitleConfig';
 import EmployeeGradeConfig from 'app/main/employeeGrade/EmployeeGradeConfig';
 import BehaviouralAttributeConfig from 'app/main/behaviouralAttribute/BehaviouralAttributeConfig';
 import PermissionConfig from 'app/main/permission/PermissionConfig';
+import EmployeeMgtConfig from 'app/main/employeeManagement/employeeMgtConfig';
 
 const routeConfigs = [
 	// ExampleConfig,
@@ -102,7 +103,8 @@ const routeConfigs = [
 	JobTitleConfig,
 	EmployeeGradeConfig,
 	BehaviouralAttributeConfig,
-	PermissionConfig
+	PermissionConfig,
+	EmployeeMgtConfig,
 ];
 
 const checkIfLoggedIn = () => {
