@@ -12,9 +12,9 @@ const EmployeeTable = ({ data, push, handleDelete, handleFilter}) => {
 				accessor: 'name',
 				// className: 'font-bold',
 				sortable: true,
-				// Cell: ({ row: { original: { jobTitle }} }) => {
-				// 	return <>{jobTitle?.name}</>
-				// }
+				Cell: ({ row: { original: { firstName, lastName }} }) => {
+					return <>{`${firstName} ${lastName}`}</>
+				}
 			},
 			{
 				Header: 'EMAIL',
@@ -26,30 +26,39 @@ const EmployeeTable = ({ data, push, handleDelete, handleFilter}) => {
 				Header: 'DEPARTMENT',
 				accessor: 'department',
 				sortable: true,
-				// Cell: ({ row: { original: { personnelOverallRating }} }) => {
-				// 	return <>{personnelOverallRating || 'on-going'}</>
-				// }
+				Cell: ({ row: { original: { department }} }) => {
+					return <>{department.departmentName}</>
+				}
 			},
 			{
 				Header: 'ENTITY',
 				accessor: 'entity',
-				sortable: true
+				sortable: true,
+				Cell: ({ row: { original: { entity }} }) => {
+					return <>{entity.entityName}</>
+				}
 			},
 			{
 				Header: 'ROLE',
 				accessor: 'role',
 				sortable: true,
-				// Cell: ({ row: { original: { dateCompleted }} }) => {
-				// 	return <>{dateCompleted || 'on-going'}</>
-				// }
+				Cell: ({ row: { original: { role }} }) => {
+					return <>{role.name}</>
+				}
 			},
 		],
-  );
+	);
+	
+	const {
+		employees,
+		entities,
+		roles,
+	} = data;
   
   return (
     <EnhancedTable
       columns={columns}
-			data={data}
+			data={employees}
 			onRowClick={(ev, row) => {
 				if (row) {
 					push(`/employee_management/${row.original.id}`)
@@ -73,9 +82,13 @@ const EmployeeTable = ({ data, push, handleDelete, handleFilter}) => {
               size='small'
               onChange={handleFilter}
             >
-              <MenuItem>
-                Entity
-              </MenuItem>
+							{
+								entities.map(({id, entityName}) => (
+									<MenuItem key={id} value={id}>
+										{entityName}
+									</MenuItem>
+								))
+							}
             </SelectTextField>
           </Grid>
           <Grid item lg={2} md={2} sm={4} xs={4}>
@@ -84,9 +97,13 @@ const EmployeeTable = ({ data, push, handleDelete, handleFilter}) => {
               size='small'
               onChange={handleFilter}
             >
-              <MenuItem>
-                Role
-              </MenuItem>
+              {
+								roles.map(({id, name}) => (
+									<MenuItem key={id} value={id}>
+										{name}
+									</MenuItem>
+								))
+							}
             </SelectTextField>
           </Grid> 
         </Grid>

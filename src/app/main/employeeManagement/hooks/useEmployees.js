@@ -77,6 +77,17 @@ const schema = yup.object().shape({
       type: 'required',
     })
   ),
+  roleId: yup.string(
+    errorMsg({
+      name: 'Role',
+      type: 'string',
+    })
+  ).required(
+    errorMsg({
+      name: 'Role',
+      type: 'required',
+    })
+  ),
   employeeIdNumber: yup.string(
     errorMsg({
       name: 'Employee ID Number',
@@ -139,17 +150,21 @@ const useEmployees = ({dispatch}) => {
     });
   };
 
-  const handleDelete = () => {
-
+  const handleDelete = (id) => {
+    dispatch(Actions.deleteEmployee(id))
   };
 
   const handleSearch = () => {
 
   };
 
-  const handleFilter = () => {
-
+  const handleFilter = ({target: { value }}) => {
+    dispatch(Actions.filterEmployees(value));
   };
+
+  const handleGetDept = (id) => {
+    dispatch(Actions.getDept(id));
+  }
 
   return {
     control,
@@ -162,6 +177,7 @@ const useEmployees = ({dispatch}) => {
     handleDelete,
     handleSearch,
     handleFilter,
+    handleGetDept
   };
 };
 

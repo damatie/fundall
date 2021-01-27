@@ -6,10 +6,19 @@ import useEmployees from './hooks/useEmployees';
 import { useDispatch, useSelector } from 'react-redux';
 import reducer from './store/reducers/employees.reducer';
 import withReducer from 'app/store/withReducer';
+import *  as Actions from './store/actions';
+import Skeleton from '@material-ui/lab/Skeleton';
 
 const Employees = () => {
   const dispatch = useDispatch();
-  const { open } = useSelector(state => state.employeeMgt);
+  const { open, employees, entities, departments, roles, grades, loading } = useSelector(state => state.employeeMgt);
+
+  React.useEffect(() => {
+    dispatch(Actions.getEmployees());
+    dispatch(Actions.getEntities());
+    dispatch(Actions.getRoles());
+    dispatch(Actions.getGrades());
+  }, []);
   const {
     control,
     errors,
@@ -21,6 +30,7 @@ const Employees = () => {
     handleDelete,
     handleSearch,
     handleFilter,
+    handleGetDept
   } = useEmployees({
     dispatch
   });
@@ -30,7 +40,7 @@ const Employees = () => {
       header={{
         icon: '',
         title: 'Employee Managmenet',
-        handleSearch: ({target: { value }}) => handleSearch(value),
+        handleSearch: ({ target: { value } }) => handleSearch(value),
       }}
       button={{
         showButton: true,
@@ -40,23 +50,42 @@ const Employees = () => {
       }}
       content={
         <div className='p-24'>
-          <EmployeeTable
-            data={[]}
-            push={() => null}
-            handleDelete={handleDelete}
-            handleFilter={handleFilter}
-          />
-          <AddNewEmployee
-            open={open}
-            handleClose={handleCloseModal}
-            form={{
-              handleSubmit,
-              onSubmit,
-              register,
-              control,
-              errors,
-            }}
-          />
+          {
+            loading ? (
+              <Skeleton variant="rect" width='100%' height={400} animation="wave" />
+            ) : (
+                <>
+                  <EmployeeTable
+                    data={{
+                      employees,
+                      entities,
+                      roles,
+                    }}
+                    push={() => null}
+                    handleDelete={handleDelete}
+                    handleFilter={handleFilter}
+                  />
+                  <AddNewEmployee
+                    open={open}
+                    handleClose={handleCloseModal}
+                    data={{
+                      entities,
+                      departments,
+                      roles,
+                      grades,
+                    }}
+                    handleGetDept={handleGetDept}
+                    form={{
+                      handleSubmit,
+                      onSubmit,
+                      register,
+                      control,
+                      errors,
+                    }}
+                  />
+                </>
+              )
+          }
         </div>
       }
     />

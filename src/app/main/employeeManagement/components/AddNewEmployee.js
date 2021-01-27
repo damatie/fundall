@@ -17,7 +17,14 @@ const AddNewEmployee = ({
     register,
     control,
     errors,
-  }
+  },
+  data: {
+    entities,
+    departments,
+    roles,
+    grades,
+  },
+  handleGetDept
 }) => {
   return (
     <SharedModal
@@ -70,9 +77,13 @@ const AddNewEmployee = ({
                 error={errors.entityId}
                 message={errors.entityId?.message}
               >
-                <MenuItem value={1}>
-                  Entity
-                </MenuItem>
+                {
+                  entities.map(({id, entityName}) => (
+                    <MenuItem key={id} value={id} onClick={() => handleGetDept(id)}>
+                      {entityName}
+                    </MenuItem>
+                  ))
+							  }
               </SelectTextField>
             }
           />
@@ -88,9 +99,34 @@ const AddNewEmployee = ({
                 error={errors.departmentId}
                 message={errors.departmentId?.message}
               >
-                <MenuItem value={1}>
-                  department
-                </MenuItem>
+                {
+                  departments.map(({id, departmentName}) => (
+                    <MenuItem key={id} value={id}>
+                      {departmentName}
+                    </MenuItem>
+                  ))
+							  }
+              </SelectTextField>
+            }
+          />
+          <Controller
+            name='roleId'
+            label='Role'
+            control={control}
+            as={
+              <SelectTextField
+                name='roleId'
+                label='Role'
+                error={errors.roleId}
+                message={errors.roleId?.message}
+              >
+                {
+                  roles.map(({id, name}) => (
+                    <MenuItem key={id} value={id}>
+                      {name}
+                    </MenuItem>
+                  ))
+							  }
               </SelectTextField>
             }
           />
@@ -113,9 +149,13 @@ const AddNewEmployee = ({
                 error={errors.employeeGradeId}
                 message={errors.employeeGradeId?.message}
               >
-                <MenuItem value={1}>
-                  employeeGrade
-                </MenuItem>
+                {
+                  grades.map(({id, gradeName}) => (
+                    <MenuItem key={id} value={id}>
+                      {gradeName}
+                    </MenuItem>
+                  ))
+							  }
               </SelectTextField>
             }
           />
