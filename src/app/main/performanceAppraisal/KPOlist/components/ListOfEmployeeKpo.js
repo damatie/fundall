@@ -26,7 +26,7 @@ const ListOfEmployeeKpo = ({ customHook, isAssigned, value, request }) => {
 				// className: 'font-bold',
 				sortable: true,
 				Cell: ({ row: { original: { employee  } } }) => {
-					return <>{`${employee.firstName} ${employee.lastName}`}</>
+					return <>{`${employee?.firstName} ${employee?.lastName}`}</>
 				}
 			},
 			{
