@@ -76,7 +76,7 @@ const ListOfEmployeeKpo = ({ customHook, isAssigned, value, request }) => {
 				accessor: 'dateCompleted',
 				sortable: true,
 				Cell: ({ row: { original } }) => {
-					return <>{original.dateCompleted || 'On Going'}</>
+					return <>{original?.dateCompleted || 'On Going'}</>
 				}
 			},
 			{
@@ -84,7 +84,7 @@ const ListOfEmployeeKpo = ({ customHook, isAssigned, value, request }) => {
 				accessor: 'lineManager',
 				sortable: true,
 				Cell: ({ row: { original: { lineManager } } }) => {
-					return <>{`${lineManager.firstName} ${lineManager.lastName}`}</>
+					return <>{`${lineManager?.firstName} ${lineManager?.lastName}`}</>
 				}
 			},
 			{
@@ -92,7 +92,7 @@ const ListOfEmployeeKpo = ({ customHook, isAssigned, value, request }) => {
 				accessor: 'reviewingManager',
 				sortable: true,
 				Cell: ({ row: { original: { reviewingManager } } }) => {
-					return <>{`${reviewingManager.firstName} ${reviewingManager.lastName}`}</>
+					return <>{`${reviewingManager?.firstName} ${reviewingManager?.lastName}`}</>
 				}
 			},
 		],
