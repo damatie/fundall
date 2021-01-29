@@ -18,6 +18,7 @@ import * as Actions from 'app/store/actions';
 import { useAuth } from 'app/hooks/useAuth';
 import withReducer from 'app/store/withReducer';
 import reducer from 'app/store/reducers';
+import ChangePasswordModal from '../shared-components/ChangePasswordModal';
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -165,6 +166,7 @@ function Layout1(props) {
 					{config.rightSidePanel.display && <RightSideLayout1 />}
 
 					<FuseMessage />
+					<ChangePasswordModal />
 				</div>
 			);
 		}
@@ -217,6 +219,7 @@ function Layout1(props) {
 					{config.rightSidePanel.display && <RightSideLayout1 />}
 
 					<FuseMessage />
+					<ChangePasswordModal />
 				</div>
 			);
 		}
