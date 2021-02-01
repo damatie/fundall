@@ -21,7 +21,13 @@ const info = {
   srgn: 'DC-003',
   gender: 'Male',
   maritalStatus: 'Single',
-  nickname: 'Black'
+  nickname: 'Black',
+  officialEmail: 'test@test.com',
+  alternativeEmail: 'test@test.cc',
+  facebookHandle: 'https://timesheet-client.web.app/blog/1',
+  twitterHandle: 'https://timesheet-client.web.app/blog/1',
+  linkedInHandle: 'https://timesheet-client.web.app/blog/1',
+  instagramInHandle: 'https://timesheet-client.web.app/blog/1',
 }
 const EmployeeBasicInformation = () => {
   return (
@@ -31,7 +37,7 @@ const EmployeeBasicInformation = () => {
           <EmployeeProfile value={info}/>
         </Grid>
         <Grid item lg={6} md={6} sm={12} xs={12}>
-          <EmployeeEmail />
+          <EmployeeEmail value={info}/>
         </Grid>
         <Grid item lg={6} md={6} sm={12} xs={12}>
           <EmployeeTelephoneNumbers />

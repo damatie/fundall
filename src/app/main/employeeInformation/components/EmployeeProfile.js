@@ -92,7 +92,7 @@ const EmployeeProfile = ({ value }) => {
                   message={errors[input.name]?.message}
                   onChange={({ target: { name, value } }) => register({ name, value })}
                   defaultValue={input.defaultValue}
-                  // disabled={!shouldUpdate}
+                  disabled={!shouldUpdate}
                 >
                   {input.data.map((value) => (
                     <MenuItem key={value} value={value}>
@@ -108,13 +108,13 @@ const EmployeeProfile = ({ value }) => {
                 error={errors[input.name]}
                 message={errors[input.name]?.message}
                 refs={register}
-                // disabled={!shouldUpdate}
+                disabled={!shouldUpdate}
               />
             )
           })}
         </GridSystem>
-        {/* { */}
-          {/* // shouldUpdate && ( */}
+        {
+          shouldUpdate && (
             <SharedButton
               color='primary'
               variant='contained'
@@ -123,8 +123,8 @@ const EmployeeProfile = ({ value }) => {
             >
               Save
             </SharedButton>
-          {/* // ) */}
-        {/* } */}
+          )
+        }
       </form>
     </BasicCard>
   );

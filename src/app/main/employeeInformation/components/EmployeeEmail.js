@@ -2,57 +2,100 @@ import React from 'react';
 import Input from 'app/shared/TextInput/Input';
 import GridSystem from 'app/shared/gridSystem';
 import BasicCard from './BasicCard';
+import SharedButton from 'app/shared/button/SharedButton';
+import useEmployeeEmail from '../hooks/useEmployeeEmail';
 
-const EmployeeEmail = () => {
+const EmployeeEmail = ({value}) => {
   const inputs = React.useMemo(() => [
     {
-      name: '',
-      label: 'Office Email',
+      name: 'officialEmail',
+      label: 'Official Email',
       type: 'email',
-      defaultValue: ''
+      defaultValue: value.officialEmail
     },
     {
-      name: '',
+      name: 'alternativeEmail',
       label: 'Alternative Email',
       type: 'email',
-      defaultValue: ''
+      defaultValue: value.alternativeEmail
     },
     {
-      name: '',
+      name: 'facebookHandle',
       label: 'Facebook Handle',
       type: 'url',
-      defaultValue: ''
+      defaultValue: value.facebookHandle
     },
     {
-      name: '',
+      name: 'linkedInHandle',
       label: 'LinkedIn Handle',
       type: 'url',
-      defaultValue: ''
+      defaultValue: value.linkedInHandle
     },
     {
-      name: '',
+      name: 'instagramInHandle',
       label: 'Instagram Handle',
       type: 'url',
-      defaultValue: ''
+      defaultValue: value.instagramInHandle
     },
     {
-      name: '',
+      name: 'twitterHandle',
       label: 'Twitter Handle',
       type: 'url',
-      defaultValue: ''
+      defaultValue: value.twitterHandle
     }
-  ], []);
+  ], [value]);
+
+  const {
+    errors,
+    register,
+    handleSubmit,
+    shouldUpdate,
+    handleShouldUpdate,
+    onSubmit
+  } = useEmployeeEmail({
+    defaultValue: value
+  })
+
   return (
     <BasicCard
       title='Email'
+      button={
+        <SharedButton
+          color='secondary'
+          variant='contained'
+          onClick={handleShouldUpdate}
+        >
+          {shouldUpdate ? 'Cancel' : 'Edit'}
+        </SharedButton>
+      }
     >
-      <GridSystem>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <GridSystem>
+          {
+            inputs.map((input) => (
+              <Input
+                {...input}
+                error={errors[input.name]}
+                message={errors[input.name]?.message}
+                refs={register}
+                disabled={!shouldUpdate}
+              />
+            ))
+          }
+        </GridSystem>
         {
-          inputs.map((input) => (
-            <Input { ...input } />
-          ))
+          shouldUpdate && (
+            <SharedButton
+              color='primary'
+              variant='contained'
+              className='flex flex-col w-1/2 mx-auto my-16'
+              type='submit'
+            >
+              Save
+            </SharedButton>
+          )
         }
-      </GridSystem>
+      </form>
     </BasicCard>
   );
 };

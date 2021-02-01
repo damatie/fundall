@@ -105,8 +105,19 @@ const useEmployeeProfile = ({dispatch, defaultValue}) => {
   } = useForm({
     mode: 'onBlur',
     resolver: yupResolver(schema),
-    // defaultValue
+    defaultValue
   });
+
+  React.useEffect(() => {
+    register({
+      name: 'gender',
+      value: defaultValue.gender
+    });
+    register({
+      name: 'maritalStatus',
+      value: defaultValue.maritalStatus
+    });
+  }, [])
 
   const onSubmit = (value) => {
     console.log(value);
