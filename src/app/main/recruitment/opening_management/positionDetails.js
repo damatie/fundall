@@ -1,27 +1,27 @@
 import FuseAnimate from '@fuse/core/FuseAnimate';
-import FuseChipSelect from '@fuse/core/FuseChipSelect';
-import FuseLoading from '@fuse/core/FuseLoading';
+// import FuseChipSelect from '@fuse/core/FuseChipSelect';
+// import FuseLoading from '@fuse/core/FuseLoading';
 import FusePageSimple from '@fuse/core/FusePageSimple';
-import { useForm, useDeepCompareEffect } from '@fuse/hooks';
-import FuseUtils from '@fuse/utils';
+// import { useForm, useDeepCompareEffect } from '@fuse/hooks';
+// import FuseUtils from '@fuse/utils';
 import _ from '@lodash';
 import Button from '@material-ui/core/Button';
 import { orange } from '@material-ui/core/colors';
 import Icon from '@material-ui/core/Icon';
-import InputAdornment from '@material-ui/core/InputAdornment';
+// import InputAdornment from '@material-ui/core/InputAdornment';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
-import TextField from '@material-ui/core/TextField';
+// import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import Input from '@material-ui/core/Input';
-import Paper from '@material-ui/core/Paper';
+// import Input from '@material-ui/core/Input';
+// import Paper from '@material-ui/core/Paper';
 import withReducer from 'app/store/withReducer';
-import clsx from 'clsx';
+// import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
-import { ThemeProvider } from '@material-ui/core/styles';
+// import { ThemeProvider } from '@material-ui/core/styles';
 import * as Actions from '../store/actions';
 import reducer from '../store/reducers';
 import PositionDetailsTab from '../tabs/positionDetails';
@@ -68,49 +68,49 @@ const userData = useAuth().getUserData;
 
 const columns = [
 	{
-			id: 'name',
-			align: 'center',
-			disablePadding: false,
-			label: 'Name',
-			sort: true
+		id: 'name',
+		align: 'center',
+		disablePadding: false,
+		label: 'Name',
+		sort: true
 	},
 	{
-			id: 'email',
-			align: 'center',
-			disablePadding: false,
-			label: 'Email',
-			sort: true
+		id: 'email',
+		align: 'center',
+		disablePadding: false,
+		label: 'Email',
+		sort: true
 	},
 	{
-			id: 'phone',
-			align: 'center',
-			disablePadding: false,
-			label: 'Phone number',
-			sort: true
+		id: 'phone',
+		align: 'center',
+		disablePadding: false,
+		label: 'Phone number',
+		sort: true
 	},
 	{
-			id: 'createdAt',
-			align: 'center',
-			disablePadding: false,
-			label: 'Created At',
-			sort: true
+		id: 'createdAt',
+		align: 'center',
+		disablePadding: false,
+		label: 'Created At',
+		sort: true
 	},
 	{
-			id: 'status',
-			align: 'center',
-			disablePadding: false,
-			label: 'Status',
-			sort: true
+		id: 'status',
+		align: 'center',
+		disablePadding: false,
+		label: 'Status',
+		sort: true
 	},
 	{
-			id: 'actions',
-			align: 'center',
-			disablePadding: false,
-			label: 'Actions',
-			sort: true
+		id: 'actions',
+		align: 'center',
+		disablePadding: false,
+		label: 'Actions',
+		sort: true
 	},
 ];
-	
+
 function PositionDetails({ match }, props) {
 	const dispatch = useDispatch();
 	const theme = useTheme();
@@ -120,10 +120,10 @@ function PositionDetails({ match }, props) {
 	const position = useSelector(({ PositionDetails }) => PositionDetails.recruitment.onePosition);
 	const rows = useSelector(({ PositionDetails }) => PositionDetails.candidate.data);
 
-  const [tabValue, setTabValue] = useState(0);
-  
-  const positionId = match.params.positionId;
-	
+	const [tabValue, setTabValue] = useState(0);
+
+	const positionId = match.params.positionId;
+
 	useEffect(() => {
 		dispatch(Actions.getAllCandidates(positionId));
 		dispatch(Actions.getOneOpenPosition(positionId));
@@ -133,7 +133,7 @@ function PositionDetails({ match }, props) {
 		setTabValue(value);
 	}
 
-	const isHr = () => userData.role.toUpperCase() === 'HR';
+	const isHr = () => userData.role.toUpperCase() === 'HR MANAGER';
 
 	const { loading, close } = useSelector(state => state.PositionDetails.recruitment)
 
@@ -152,7 +152,7 @@ function PositionDetails({ match }, props) {
 									className="text-24 text-black bg-white rounded-20"
 									component={Link}
 									to="/recruitment/all"
-            			role="button"
+									role="button"
 								>arrow_back</Icon>
 							</FuseAnimate>
 							<FuseAnimate animation="transition.slideLeftIn" delay={300}>
@@ -164,9 +164,9 @@ function PositionDetails({ match }, props) {
 					</div>
 
 					<div className="flex items-center max-w-full">
-						{ isHr() && <div className="flex flex-col min-w-0 mx-8 sm:mc-16">
+						{isHr() && <div className="flex flex-col min-w-0 mx-8 sm:mc-16">
 							<FuseAnimate animation="transition.slideLeftIn" delay={300}>
-								{position.status !== 'sent to hr' && position.status !== 'closed' ? 
+								{(position.status !== 'sent to hr' || position.status !== 'closed') ?
 									<Button
 										className="mb-16"
 										component={Link}
@@ -176,9 +176,9 @@ function PositionDetails({ match }, props) {
 										color="secondary"
 									>
 										Add New Candidate
-									</Button> : 
-									<ProgressBtn success={close} loading={loading} color='red' content='Close Position' onClick={e => dispatch(Actions.closeOpening(positionId))}/>
-									}
+									</Button> :
+									<ProgressBtn success={close} loading={loading} color='red' content='Close Position' onClick={e => dispatch(Actions.closeOpening(positionId))} />
+								}
 							</FuseAnimate>
 						</div>}
 					</div>
@@ -201,10 +201,10 @@ function PositionDetails({ match }, props) {
 			}
 			content={
 				<div className=" sm:px-24 py-16 ">
-					{ tabValue === 0 && (
+					{tabValue === 0 && (
 						<PositionDetailsTab position={position} />
 					)}
-					{ tabValue === 1 && (
+					{tabValue === 1 && (
 						<ApplicantsTab position={position} columns={columns} rows={rows} />
 					)}
 				</div>

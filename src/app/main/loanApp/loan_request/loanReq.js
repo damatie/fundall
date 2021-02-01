@@ -11,61 +11,62 @@ import FuseAnimate from '@fuse/core/FuseAnimate';
 // import TextField from '@material-ui/core/TextField';
 // import clsx from 'clsx';
 import FusePageCarded from '@fuse/core/FusePageCarded';
-import { orange } from '@material-ui/core/colors';
+// import { orange } from '@material-ui/core/colors';
 import Icon from '@material-ui/core/Icon';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import withReducer from 'app/store/withReducer';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useParams, useHistory } from 'react-router-dom';
+import { Link, useParams, useHistory, useLocation } from 'react-router-dom';
 import RequestLoanTab from '../tabs/requestLoanTab';
 import reducer from '../store/reducers';
 import ProgressBtn from 'app/shared/progressBtn';
 import * as Actions from '../store/actions';
 
-const useStyles = makeStyles(theme => ({
-	productImageFeaturedStar: {
-		position: 'absolute',
-		top: 0,
-		right: 0,
-		color: orange[400],
-		opacity: 0
-	},
-	productImageUpload: {
-		transitionProperty: 'box-shadow',
-		transitionDuration: theme.transitions.duration.short,
-		transitionTimingFunction: theme.transitions.easing.easeInOut
-	},
-	productImageItem: {
-		transitionProperty: 'box-shadow',
-		transitionDuration: theme.transitions.duration.short,
-		transitionTimingFunction: theme.transitions.easing.easeInOut,
-		'&:hover': {
-			'& $productImageFeaturedStar': {
-				opacity: 0.8
-			}
-		},
-		'&.featured': {
-			pointerEvents: 'none',
-			boxShadow: theme.shadows[3],
-			'& $productImageFeaturedStar': {
-				opacity: 1
-			},
-			'&:hover $productImageFeaturedStar': {
-				opacity: 1
-			}
-		}
-	}
-}));
+// const useStyles = makeStyles(theme => ({
+// 	productImageFeaturedStar: {
+// 		position: 'absolute',
+// 		top: 0,
+// 		right: 0,
+// 		color: orange[400],
+// 		opacity: 0
+// 	},
+// 	productImageUpload: {
+// 		transitionProperty: 'box-shadow',
+// 		transitionDuration: theme.transitions.duration.short,
+// 		transitionTimingFunction: theme.transitions.easing.easeInOut
+// 	},
+// 	productImageItem: {
+// 		transitionProperty: 'box-shadow',
+// 		transitionDuration: theme.transitions.duration.short,
+// 		transitionTimingFunction: theme.transitions.easing.easeInOut,
+// 		'&:hover': {
+// 			'& $productImageFeaturedStar': {
+// 				opacity: 0.8
+// 			}
+// 		},
+// 		'&.featured': {
+// 			pointerEvents: 'none',
+// 			boxShadow: theme.shadows[3],
+// 			'& $productImageFeaturedStar': {
+// 				opacity: 1
+// 			},
+// 			'&:hover $productImageFeaturedStar': {
+// 				opacity: 1
+// 			}
+// 		}
+// 	}
+// }));
 
 function LoanReq(props) {
 	const dispatch = useDispatch();
 	const theme = useTheme();
 
-	const classes = useStyles(props);
+	// const classes = useStyles(props);
 
 	const { id } = useParams();
+	const { state } = useLocation();
 
 	const history = useHistory();
 
@@ -85,7 +86,7 @@ function LoanReq(props) {
 								className="normal-case flex items-center sm:mb-12"
 								component={Link}
 								role="button"
-								to="/loan/request/list"
+								to={state && (state.fromFM || state.fromHR) ? "/loan/review/list" : "/loan/request/list"}
 								color="inherit"
 							>
 								<Icon className="text-20">
@@ -109,13 +110,17 @@ function LoanReq(props) {
 						</FuseAnimate>
 						<div className="flex flex-col min-w-0 mx-8 sm:mc-16">
 							<FuseAnimate animation="transition.slideLeftIn" delay={300}>
-								{id ?
-									<ProgressBtn success={loan.success} loading={loan.closing} content='Cancel Loan' onClick={e => {
-										dispatch(Actions.cancelLoan(id, history))
-									}} color='red' /> :
-									<Typography className="text-16 sm:text-20 truncate">
-										New Loan Request
-										</Typography>}
+								{
+									id ?
+										!(state.fromFM || state.fromHR) ?
+											<ProgressBtn success={loan.success} loading={loan.closing} content='Cancel Loan' onClick={e => {
+												dispatch(Actions.cancelLoan(id, history))
+											}} color='red' /> :
+											<></> :
+										<Typography className="text-16 sm:text-20 truncate">
+											New Loan Request
+										</Typography>
+								}
 							</FuseAnimate>
 							{/* <FuseAnimate animation="transition.slideLeftIn" delay={300}>
 										<Typography variant="caption">Leave options details</Typography>

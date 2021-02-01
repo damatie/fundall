@@ -41,8 +41,8 @@ function TextFieldFormsy(props) {
 	const { helperText } = props;
 	const value = props.value || '';
 
-	function changeValue(event) {
-		props.setValue(event.currentTarget.value);
+	function changeValue(event, nextProp) {
+		props.setValue(event.currentTarget.value, nextProp);
 		if (props.onChange) {
 			props.onChange(event);
 		}

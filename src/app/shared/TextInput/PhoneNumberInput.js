@@ -1,12 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PhoneInput from 'react-phone-input-2';
-import startsWith from 'lodash.startswith';
-import clsx from 'clsx'
+import { isValidPhoneNumber } from 'react-phone-number-input'
 import 'react-phone-input-2/lib/material.css';
 
 const PhoneNumberInput = (props) => {
-  const { country, value, onChange, setError } = props;
-  
+  const { country, value, onChange, setError, placeholder, disabled } = props;
+
   return (
     <PhoneInput
       country={country}
@@ -19,16 +18,17 @@ const PhoneNumberInput = (props) => {
       inputProps={{
         required: true,
       }}
+      disabled={disabled}
+      specialLabel={placeholder ? placeholder : "Phone"}
       defaultErrorMessage='Phone number'
       isValid={(value, country) => {
         if ((value.length < 14 || value.length > 14) && value.length !== 3) {
-          if(setError) {
+          if (setError) {
             setError(true);
           }
-          
-          return 'Invalid Phone number: '+value+', '+country.name
+          return 'Invalid Phone number: +' + value + ', ' + country.name
         } else {
-          if(setError) {
+          if (setError) {
             setError(false);
           }
           return true;

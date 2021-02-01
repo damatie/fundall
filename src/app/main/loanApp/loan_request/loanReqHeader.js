@@ -1,9 +1,9 @@
 import FuseAnimate from '@fuse/core/FuseAnimate';
 import Button from '@material-ui/core/Button';
 import Icon from '@material-ui/core/Icon';
-import Input from '@material-ui/core/Input';
-import Paper from '@material-ui/core/Paper';
-import { ThemeProvider } from '@material-ui/core/styles';
+// import Input from '@material-ui/core/Input';
+// import Paper from '@material-ui/core/Paper';
+// import { ThemeProvider } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -27,7 +27,7 @@ function LoanReqHeader(props) {
 							color="inherit"
 						>
 							<Icon className="text-20">
-							arrow_back
+								arrow_back
 							</Icon>
 							<Typography className="hidden sm:flex mx-0 sm:mx-12" variant="h6">
 								Loan Request
@@ -40,9 +40,9 @@ function LoanReqHeader(props) {
 			<div className="flex flex-1 items-center justify-center px-12">
 				{/* <ThemeProvider theme={mainTheme}> */}
 				<div>
-					
+
 				</div>
-					{/* <FuseAnimate animation="transition.slideDownIn" delay={300}>
+				{/* <FuseAnimate animation="transition.slideDownIn" delay={300}>
 						<Paper className="flex items-center w-full max-w-512 px-8 py-4 rounded-8" elevation={1}>
 							<Icon color="action">search</Icon>
 

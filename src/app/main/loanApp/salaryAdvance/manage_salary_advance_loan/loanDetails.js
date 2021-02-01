@@ -16,7 +16,7 @@ import { fetchHeaders } from 'app/shared/fetchHeaders';
 // import swal from 'sweetalert2';
 import withReducer from 'app/store/withReducer';
 // import { useDeepCompareEffectNoCheck } from '@fuse/hooks/useDeepCompareEffect';
-import SALoanDetailsTab from '../../tabs/salaryAdvanceLoanDetailsTab';
+import  SALoanDetailsTab from '../../tabs/salaryAdvanceLoanDetailsTab';
 import reducers from '../../store/reducers';
 import * as Actions from '../../store/actions';
 // import SalaryAdvanceActionBtn from '../salaryAdvanceActionBtn';

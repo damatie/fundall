@@ -23,29 +23,29 @@ const rows = [
 		disablePadding: false,
 		label: 'Frist name',
 		sort: true
-  },
-  {
+	},
+	{
 		id: 'last_name',
 		align: 'left',
 		disablePadding: false,
 		label: 'Last name',
 		sort: true
-  },
-  {
+	},
+	{
 		id: 'email',
 		align: 'left',
 		disablePadding: false,
 		label: 'Email',
 		sort: true
-  },
-  {
+	},
+	{
 		id: 'role',
 		align: 'left',
 		disablePadding: false,
 		label: 'Role',
 		sort: true
-  },
-  {
+	},
+	{
 		id: 'assign',
 		align: 'right',
 		disablePadding: false,
@@ -56,7 +56,7 @@ const rows = [
 
 function DepartmentDetailTable(props) {
 	const dispatch = useDispatch();
-  const employeeList = useSelector(({ employeeList }) => employeeList)
+	const employeeList = useSelector(({ employeeList }) => employeeList)
 
 	const [selected, setSelected] = useState([]);
 	const [data, setData] = useState(employeeList.data);
@@ -68,7 +68,7 @@ function DepartmentDetailTable(props) {
 	});
 
 	useEffect(() => {
-    setData(employeeList.data)
+		setData(employeeList.data)
 	}, [dispatch]);
 
 	function handleRequestSort(event, property) {
@@ -95,8 +95,7 @@ function DepartmentDetailTable(props) {
 
 	function handleClick(item) {
 		// props.history.push(`/hr/roles/roles&permission/${item.id}`);
-  }
-  
+	}
 
 
 	function handleCheck(event, id) {
@@ -128,20 +127,20 @@ function DepartmentDetailTable(props) {
 		// dispatch(Actions.deleteRoles(selected));
 	};
 
-	if(employeeList.loading) {
-    return <div>Loading...</div>
+	if (employeeList.loading) {
+		return <div>Loading...</div>
 	}
 
 	return (
 		<div className="w-full flex flex-col">
 			<FuseScrollbars className="flex-grow overflow-x-auto">
 				<Table className="min-w-xl" aria-labelledby="tableTitle">
-				  <SharedTableHead
+					<SharedTableHead
 						numSelected={selected.length}
 						order={order}
 						onSelectAllClick={handleSelectAllClick}
 						onRequestSort={handleRequestSort}
-            rowCount={data.length}
+						rowCount={data.length}
 						rows={rows}
 						handleDelete={handleDelete}
 						success={true}
@@ -177,24 +176,24 @@ function DepartmentDetailTable(props) {
 										selected={isSelected}
 										onClick={event => handleClick(n)}
 									>
-                    <TableCell component="th" scope="row" align='left'>
-                     
+										<TableCell component="th" scope="row" align='left'>
+
 										</TableCell>
 
 										<TableCell component="th" scope="row" align='left'>
-                      {n.firstName}
+											{n.firstName}
 										</TableCell>
-                    <TableCell component="th" scope="row" align='left'>
-                      {n.lastName}
+										<TableCell component="th" scope="row" align='left'>
+											{n.lastName}
 										</TableCell>
-                    <TableCell component="th" scope="row" align='left'>
-                      {n.email}
+										<TableCell component="th" scope="row" align='left'>
+											{n.email}
 										</TableCell>
-                    <TableCell component="th" scope="row" align='left'>
-                      {n.role ? n.role.name : ''}
+										<TableCell component="th" scope="row" align='left'>
+											{n.role ? n.role.name : ''}
 										</TableCell>
-                    <TableCell component="th" scope="row" align='right'>
-                      <AssignLineManager id={n.id}/>
+										<TableCell component="th" scope="row" align='right'>
+											<AssignLineManager id={n.id} />
 										</TableCell>
 
 									</TableRow>
@@ -225,90 +224,90 @@ function DepartmentDetailTable(props) {
 
 const header = fetchHeaders()
 
-const AssignLineManager = ({ id })=> {
-  const [isLineManager, setIsLineManager] = useState(false);
-  const [success, setSuccess] = useState(false);
-  const [loading, setLoading] = useState(false);
+const AssignLineManager = ({ id }) => {
+	const [isLineManager, setIsLineManager] = useState(false);
+	const [success, setSuccess] = useState(false);
+	const [loading, setLoading] = useState(false);
 
-  const params = useParams();
+	const params = useParams();
 
-  useEffect(() => {
-    fetch(`https://hris-cbit.herokuapp.com/api/v1/lineManager/${id}`, {
-      ...header.getRegHeader()
-    }).then(res => res.json()).then(
-      data => {
-        if(data.success) {
-          setIsLineManager(true);
-          setSuccess(true);
-        } else {
-          setIsLineManager(false);
-          setSuccess(false);
-        }
-      }
-    ).catch(e => console.error(e))
-  }, [isLineManager]);
+	useEffect(() => {
+		fetch(`https://hris-cbit.herokuapp.com/api/v1/lineManager/${id}`, {
+			...header.getRegHeader()
+		}).then(res => res.json()).then(
+			data => {
+				if (data.success) {
+					setIsLineManager(true);
+					setSuccess(true);
+				} else {
+					setIsLineManager(false);
+					setSuccess(false);
+				}
+			}
+		).catch(e => console.error(e))
+	}, [isLineManager]);
 
 
-  const handleAssign = () => {
-    setLoading(true);
-    if(isLineManager) {
-      fetch(`https://hris-cbit.herokuapp.com/api/v1/lineManager/${id}`, {
-      ...header.reqHeader(
-        'delete',
-        {
-          departmentId: params.id,
-          employeeId: id
-        }
-      )
-    }).then(res => res.json()).then(
-      data => {
-        if(data.success) {
-          setLoading(false)
-          setSuccess(true);
-          setIsLineManager(false);
-          swal.fire({
-            title: 'Assign line manager',
-            text: data.message,
-            icon: 'success',
-            timer: 3000
-          })
-        } else {
-          setLoading(false)
-        }
-      }
-    ).catch(e => console.error(e))
-    } else {
-      fetch(`https://hris-cbit.herokuapp.com/api/v1/lineManager/add`, {
-      ...header.reqHeader(
-        'post',
-        {
-          departmentId: params.id,
-          employeeId: id
-        }
-      )
-    }).then(res => res.json()).then(
-      data => {
-        if(data.success) {
-          setLoading(false)
-          setSuccess(true);
-          setIsLineManager(true);
-          swal.fire({
-            title: 'Assign line manager',
-            text: data.message,
-            icon: 'success',
-            timer: 3000
-          })
-        } else {
-          setLoading(false)
-        }
-      }
-    ).catch(e => console.error(e))
-    }
-  }
+	const handleAssign = () => {
+		setLoading(true);
+		if (isLineManager) {
+			fetch(`https://hris-cbit.herokuapp.com/api/v1/lineManager/${id}`, {
+				...header.reqHeader(
+					'delete',
+					{
+						departmentId: params.id,
+						employeeId: id
+					}
+				)
+			}).then(res => res.json()).then(
+				data => {
+					if (data.success) {
+						setLoading(false)
+						setSuccess(true);
+						setIsLineManager(false);
+						swal.fire({
+							title: 'Assign line manager',
+							text: data.message,
+							icon: 'success',
+							timer: 3000
+						})
+					} else {
+						setLoading(false)
+					}
+				}
+			).catch(e => console.error(e))
+		} else {
+			fetch(`https://hris-cbit.herokuapp.com/api/v1/lineManager/add`, {
+				...header.reqHeader(
+					'post',
+					{
+						departmentId: params.id,
+						employeeId: id
+					}
+				)
+			}).then(res => res.json()).then(
+				data => {
+					if (data.success) {
+						setLoading(false)
+						setSuccess(true);
+						setIsLineManager(true);
+						swal.fire({
+							title: 'Assign line manager',
+							text: data.message,
+							icon: 'success',
+							timer: 3000
+						})
+					} else {
+						setLoading(false)
+					}
+				}
+			).catch(e => console.error(e))
+		}
+	}
 
-  return (
-    <ProgressBtn loading={loading} success={success} content={isLineManager ? 'unassign line manager' : 'assign line manager'} onClick={handleAssign}/>
-  );
+	return (
+		<ProgressBtn loading={loading} success={success} content={isLineManager ? 'unassign line manager' : 'assign line manager'} onClick={handleAssign} />
+	);
 };
 
 export default withRouter(DepartmentDetailTable);

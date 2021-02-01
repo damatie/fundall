@@ -37,13 +37,13 @@ const getSalaryAdvanceUrl = ({ type, status, role, id }) => {
   } else {
     switch (status.toLowerCase()) {
       case 'pending': {
-        return `/salary-advance/reject/linemanager/`;
+        return `/salary-advance/linemanager/reject/`;
       }
       case 'reviewed1': {
-        return `/salary-advance/reject/hrmanager/`;
+        return `/salary-advance/hrmanager/reject/`;
       }
       case 'reviewed2': {
-        return `/salary-advance/reject/finance/`;
+        return `/salary-advance/finance/reject/`;
       }
       default: {
         return;

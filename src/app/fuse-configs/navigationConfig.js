@@ -212,14 +212,14 @@ const navigationConfig = [
 				icon: 'monetization_on',
 				auth: authRoles?.staff,
 			},
-			{
-				id: 'loan_salary_advance_list',
-				title: 'Salary Advance Loans',
-				type: 'item',
-				url: '/loan/salary_advance/list',
-				icon: 'monetization_on',
-				auth: authRoles?.manager,
-			}
+			// {
+			// 	id: 'loan_salary_advance_list',
+			// 	title: 'Salary Advance Loans',
+			// 	type: 'item',
+			// 	url: '/loan/salary_advance/list',
+			// 	icon: 'monetization_on',
+			// 	auth: authRoles.managers,
+			// }
 		]
 	},
 	// Leave mgt navigations
@@ -361,7 +361,7 @@ const navigationConfig = [
 				type: 'item',
 				url: '/hr/training/management',
 				icon: 'school',
-				auth: authRoles?.manager,
+				auth: authRoles?.admin,
 			},
 			{
 				id: 'personalTraining',
@@ -377,7 +377,7 @@ const navigationConfig = [
 				type: 'item',
 				url: '/training/list',
 				icon: 'book',
-				auth: authRoles?.manager,
+				auth: authRoles?.lineManager,
 			},
 			{
 				id: 'courseCategory',
@@ -406,6 +406,14 @@ const navigationConfig = [
 		type: 'group',
 		auth: authRoles?.manager,
 		children: [
+			{
+				id: 'recruitmentDashboard',
+				title: 'Dashboard',
+				type: 'item',
+				url: '/recruitment/dashboard',
+				icon: 'school',
+				auth: authRoles.manager,
+			},
 			{
 				id: 'listOfOpenings',
 				title: 'List of openings',
@@ -508,7 +516,7 @@ const navigationConfig = [
 				type: 'item',
 				url: '/srep/all',
 				icon: 'list_alt',
-				auth: authRoles?.manager
+				auth: authRoles?.staff
 			},
 		]
 	},

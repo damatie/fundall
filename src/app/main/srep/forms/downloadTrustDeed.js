@@ -16,7 +16,7 @@ import IconButton from '@material-ui/core/IconButton';
 
 function UploadTrustDeed(props){
     
-    let fileUrls = (props.srepOtherFiles) ? props.srepOtherFiles.filter((f, id, self)=>{return self.indexOf(f) === id;} ).map(d => {return {fieldName: d.fieldname, url:d.url}}) : [];
+    let fileUrls = (props.srepOtherFiles) ? props.srepOtherFiles.filter((f, id, self)=>{return self.indexOf(f) === id;} ).map(d => {return {fieldName: d.fieldName, url:d.url}}) : [];
     const {
         beneficiaryIdentityUrl,
         beneficiaryPhotoUrl,

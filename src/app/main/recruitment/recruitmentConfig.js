@@ -9,12 +9,12 @@ const recruitmentConfig = {
 	routes: [
 		{
 			path: '/recruitment/create_opening',
-      component: React.lazy(() => import('./opening_management/createOpening'))
-    },
-    {
+			component: React.lazy(() => import('./opening_management/createOpening'))
+		},
+		{
 			path: '/recruitment/add_candidate/:positionId',
-      component: React.lazy(() => import('./candidate_management/addCandidate'))
-    },
+			component: React.lazy(() => import('./candidate_management/addCandidate'))
+		},
 		{
 			path: '/recruitment/position_details/:positionId',
 			component: React.lazy(() => import('./opening_management/positionDetails'))

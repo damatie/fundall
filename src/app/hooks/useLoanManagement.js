@@ -15,29 +15,32 @@ const useLoanManagement = () => {
   const [rejectEndpoint, setRejectEndpoint] = useState('');
 
   // redux state
-  const profile = useSelector(({ profile}) => profile.data);
-  const loan = useSelector(({ loan }) => loan.loan.data)
+  const profile = useSelector(({ profile }) => profile.data);
+  const loan = useSelector(({ loan }) => loan.loan.data);
+
   const role = profile.role.name;
 
   const { id } = useParams();
 
   useEffect(() => {
-    switch(loan.loanData.status) {
-      case 'pending' : {
-        setEnpoint('/loan/approve/hod/');
-        setRejectEndpoint('/loan/reject/hod/');
+    switch (loan.data.loanData.status.toLowerCase()) {
+      case 'pending': {
+        setEnpoint('/loan/approve/hr/');
+        setRejectEndpoint('/loan/reject/hr/');
         break;
       }
-      case 'reviewed' : {
-        setEnpoint('/loan/approve/support/');
-        setRejectEndpoint('/loan/reject/support/');
-        break;
-      }
-      case 'approved' : {
+      case 'reviewed': {
         setEnpoint('/loan/approve/finance/');
         setRejectEndpoint('/loan/reject/finance/');
         break;
       }
+
+      // case 'approved': {
+      //   setEnpoint('/loan/approve/support/');
+      //   setRejectEndpoint('/loan/reject/support/');
+      //   break;
+      // }
+
       default: {
         break;
       }
@@ -45,30 +48,78 @@ const useLoanManagement = () => {
   }, [loan]);
 
   useEffect(() => {
-    const ruleOne = role === 'Line managers' && loan.loanData.status === 'reviewed';
-    const ruleTwo = role === 'Director of support service' && loan.loanData.status === 'approved';
-    const ruleThree = role === 'Finance manager' && loan.loanData.status === 'open';
-    const ruleFour = loan.loanData.status === 'open' || loan.loanData.status === 'corrected' || loan.loanData.status === 'closed';
+    const ruleOne = role === 'Hr Manager' && loan.data.loanData.status.toLowerCase() === 'reviewed';
+    const ruleTwo = loan.data.loanData.status.toLowerCase() === 'approved';
+    const ruleThree = ((role === 'Finance Manager') && (loan.data.loanData.status.toLowerCase() === 'closed'));
+    const ruleFour = loan.data.loanData.status.toLowerCase() === 'open' || loan.data.loanData.status.toLowerCase() === 'corrected' || loan.data.loanData.status.toLowerCase() === 'closed';
 
     const combineRules = ruleOne || ruleTwo || ruleThree || ruleFour;
 
-    if(combineRules) {
+    if (combineRules) {
       setShowBtn(false);
     }
 
-  }, [loan.loanData.status]);
+  }, [loan.data.loanData.status]);
 
   const handleApprove = () => {
-    if(loan.loanData.status === 'approved') {
+    if (loan.data.loanData.status.toLowerCase() === 'approved') {
       handleOpenModal();
-    } else {
-      dispatch(Actions.approveLoan({
-        id,
-        body: {},
-        url: endpoint,
-      }));
     }
-  };
+    else if (loan.data.loanData.status.toLowerCase() === 'disbursed') {
+      dispatch(Actions.closeLoan(id, history));
+    }
+    // else if (loan.data.loanData.amountApproved > 0) {
+    //   dispatch(Actions.approveLoan({
+    //     id, body: {
+    //       amountRequested: loan.data.loanData.amountRequested,
+    //       mobilePhone: loan.data.loanData.mobilePhone,
+    //       annualPay: loan.data.loanData.annualPay,
+    //       workPhone: loan.data.loanData.workPhone,
+    //       homePhone: loan.data.loanData.homePhone,
+    //       duration: loan.data.loanData.duration,
+    //       purpose: loan.data.loanData.purpose,
+    //       email: loan.data.loanData.email,
+    //       loanForm: loan.data.loanData.formUrl,
+    //       amountApproved: loan.data.loanData.amountApproved,
+    //     },
+    //     url: "/loan/approve/finance/",
+    //     history
+    //   }))
+    // }
+    else {
+      history.push({
+        pathname: "/loan/request/new/" + id,
+        state: {
+          amountRequested: loan.data.loanData.amountRequested,
+          mobilePhone: loan.data.loanData.mobilePhone,
+          annualPay: loan.data.loanData.annualPay,
+          workPhone: loan.data.loanData.workPhone,
+          homePhone: loan.data.loanData.homePhone,
+          duration: loan.data.loanData.duration,
+          purpose: loan.data.loanData.purpose,
+          email: loan.data.loanData.email,
+          loanForm: loan.data.loanData.formUrl,
+          amountApproved: loan.data.loanData.amountApproved,
+          fromHR: loan.data.loanData.status.toLowerCase() === "pending" ? true : false,
+          fromFM: loan.data.loanData.status.toLowerCase() === "reviewed" ? true : false
+        }
+      });
+    }
+    //   else if (loan.data.loanData.amountApproved) {
+    // dispatch(Actions.confirmDisbursement({
+    //   id,
+    //   history: history
+    // }));
+  }
+  // } else {
+  // dispatch(Actions.approveLoan({
+  //   id,
+  //   body: {},
+  //   url: endpoint,
+  //   history: history
+  // }));
+  // }
+  // };
 
   const handleCancel = () => {
     dispatch(Actions.cancelLoan(id, history));
@@ -89,7 +140,7 @@ const useLoanManagement = () => {
   };
 
   const isValue = value => {
-    if(value) {
+    if (value) {
       return value;
     } else {
       return 'Not Yet'
@@ -109,8 +160,8 @@ const useLoanManagement = () => {
 
 export const useApproveLoan = () => {
   const loan = useSelector(({ loan }) => loan.loan.data);
-	const loans = useSelector(({ loan }) => loan.loan);
-	const { id } = useParams();
+  const loans = useSelector(({ loan }) => loan.loan);
+  const { id } = useParams();
   const [amountApproved, setAmountApproved] = useState('');
   const [approve, setApprove] = useState(true);
   const [disabled, setDisabled] = useState(false);
@@ -122,13 +173,13 @@ export const useApproveLoan = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-		if(loan.loanData.amountApproved) {
-			setAmountApproved(loan.loanData.amountApproved)
-		}
-  }, [loan.loanData.amountApproved]);
+    if (loan.data.loanData.amountApproved) {
+      setAmountApproved(loan.data.loanData.amountApproved)
+    }
+  }, [loan.data.loanData.amountApproved]);
 
   useEffect(() => {
-    if(parseInt(amountApproved) > loan.loanData.amountRequested) {
+    if (parseInt(amountApproved) > loan.data.loanData.amountRequested) {
       setError({
         isError: true,
         message: 'Please you can not approve amount that is greater than the requested amount'
@@ -141,25 +192,25 @@ export const useApproveLoan = () => {
       });
       setDisabled(false);
     }
-    if(amountApproved === '') {
+    if (amountApproved === '') {
       setDisabled(true);
     }
   }, [amountApproved])
 
   useEffect(() => {
-    if(parseInt(amountApproved) < loan.loanData.amountRequested && !loan.loanData.amountApproved) {
+    if (parseInt(amountApproved) < loan.data.loanData.amountRequested && !loan.data.loanData.amountApproved) {
       setApprove(false);
     } else {
       setApprove(true);
     }
-  }, [amountApproved, loan.loanData.amountApproved]);
-  
+  }, [amountApproved, loan.data.loanData.amountApproved]);
+
   const handleSubmit = e => {
-		e.preventDefault();
-		const params = {
-			amountApproved,
-			deductableAmount: `${amountApproved / loan.loanData.duration}`
-		}
+    e.preventDefault();
+    const params = {
+      amountApproved,
+      deductableAmount: `${amountApproved / loan.data.loanData.duration}`
+    }
     dispatch(Actions.approveLoan({
       id,
       body: params,
@@ -191,7 +242,7 @@ export const useLoanStatement = (status) => {
 
   useEffect(() => {
     console.log(status);
-    if(status === 'open') {
+    if (status === 'open') {
       setStatement(true);
     } else {
       setStatement(false);
@@ -201,33 +252,34 @@ export const useLoanStatement = (status) => {
   const handleStatement = () => {
     swal.showLoading();
     fetch(`${getBaseUrl()}/loan/statements/${id}`, {
-			...header.reqHeader(
-				'POST',
-				{
-					// amountApproved: 20000
-				}
-			),
-		}).then(res => res.json()).then(
-			data => {
-				if(data.message === 'Created!') {
-					swal.fire({
-						title: 'Loan Statement',
-						text: data.message,
-						icon: 'success',
-						timer: 3000
+      ...header.reqHeader(
+        'POST',
+        {
+          // amountApproved: 20000
+        }
+      ),
+    }).then(res => res.json()).then(
+      data => {
+        if (data.message === 'Created!') {
+          swal.fire({
+            title: 'Loan Statement',
+            text: data.message,
+            icon: 'success',
+            timer: 3000
           })
           dispatch(Actions.getLoan(id));
-				} else {
-					swal.fire({
-						title: 'Loan Statement',
-						text: data.message,
-						icon: 'error',
-						timer: 3000
-					})
-				}
-			}
-		).catch(e => {
-			console.error(e)});
+        } else {
+          swal.fire({
+            title: 'Loan Statement',
+            text: data.message,
+            icon: 'error',
+            timer: 3000
+          })
+        }
+      }
+    ).catch(e => {
+      console.error(e)
+    });
   };
 
   return {
