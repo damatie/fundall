@@ -31,7 +31,8 @@ const PageLayout = ({
 		onClick,
 		hidden,
 		btnComponent,
-  }
+	},
+	customHeader
 }) => {
 
 	const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
@@ -42,6 +43,7 @@ const PageLayout = ({
 				header: 'min-h-72 h-72 sm:h-136 sm:min-h-136'
 			}}
 			header={
+				customHeader ?  customHeader  :
 				<div className="flex flex-1 w-full items-center justify-between px-24">
 					<div className="flex flex-col items-start max-w-full">
 						<div className="flex items-center">

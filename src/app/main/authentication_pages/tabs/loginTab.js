@@ -54,8 +54,8 @@ function LoginTab(props) {
 				<TextFieldFormsy
 					className="mb-16"
 					type="text"
-					name="email"
-					label="Email"
+					name="officialEmail"
+					label="Official Email"
 					value=""
 					validations={{
 						isEmail: 'Please enter a valid email'

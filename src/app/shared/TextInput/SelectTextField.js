@@ -22,7 +22,7 @@ const SelectTextField = React.forwardRef((props, ref) => {
     register
   } = props;
   return (
-      <FormControl variant={variant || 'outlined'} size={size || 'medium'} className={`w-full my-10`}>
+      <FormControl variant={variant || 'outlined'} size={size || 'medium'} className={`w-full`}>
       <InputLabel error={error} id="demo-simple-select-outlined-label">{label}</InputLabel>
       <Select
         labelId={`${name}-id`}
