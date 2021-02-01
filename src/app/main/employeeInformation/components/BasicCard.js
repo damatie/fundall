@@ -5,7 +5,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography'
 
-const BasicCard = ({children, title}) => {
+const BasicCard = ({children, title, button}) => {
   return (
     <Card className="w-full mb-16">
       <AppBar position="static" elevation={0}>
@@ -14,7 +14,7 @@ const BasicCard = ({children, title}) => {
             {title}
 					</Typography>
           <section>
-            Button here
+            {button}
           </section>
         </Toolbar>
       </AppBar>

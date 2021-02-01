@@ -12,12 +12,23 @@ import EducationalQualification, { AddEducationalQualification } from './compone
 import EmergencyContacts, { AddEmergencyContact } from './components/EmergencyContacts';
 import SpouseAndDependants, { AddSpouseAndDependant } from './components/SpouseAndDependants';
 
+const info = {
+  title: 'Mr',
+  firstName: 'Dave',
+  lastName: 'Dave',
+  middleName: 'Dave',
+  surname: 'Dave',
+  srgn: 'DC-003',
+  gender: 'Male',
+  maritalStatus: 'Single',
+  nickname: 'Black'
+}
 const EmployeeBasicInformation = () => {
   return (
     <>
       <Grid container spacing={1}>
         <Grid item lg={6} md={6} sm={12} xs={12}>
-          <EmployeeProfile />
+          <EmployeeProfile value={info}/>
         </Grid>
         <Grid item lg={6} md={6} sm={12} xs={12}>
           <EmployeeEmail />

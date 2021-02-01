@@ -3,6 +3,10 @@ import React from 'react';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import EmployeeBasicInformation from './EmployeeBasicInformation';
+import GradeAndPromotion from './GradeAndPromotion';
+import EmployeeCompensation from './EmployeeCompensation';
+import EmployeeConfidentialInfo from './EmployeeConfidentialInfo';
+import CreateEmployeeInfo from './CreateEmployeeInfo';
 
 const EmployeeInformation = () => {
   const [tabValue, setTabValue] = React.useState(0);
@@ -10,6 +14,7 @@ const EmployeeInformation = () => {
 		setTabValue(value);
   }
   return (
+    <>
     <PageLayout
       header={{}}
       button={{}}
@@ -38,9 +43,23 @@ const EmployeeInformation = () => {
           {tabValue === 0 && (
             <EmployeeBasicInformation />
           )}
+          {tabValue === 1 && (
+            <GradeAndPromotion />
+          )}
+          {tabValue === 2 && (
+            <EmployeeCompensation />
+          )}
+          {tabValue === 3 && (
+            <>Stil Under Contruction</>
+          )}
+          {tabValue === 4 && (
+            <EmployeeConfidentialInfo />
+          )}
         </div>
       }
     />
+      {/* <CreateEmployeeInfo /> */}
+    </>
   );
 };
 

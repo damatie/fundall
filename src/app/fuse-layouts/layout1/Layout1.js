@@ -85,6 +85,13 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
+const isUserLoggedin = (user) => {
+	if(Object.entries(user).length <= 0) {
+		return false;
+	}
+	return true;
+}
+
 function Layout1(props) {
 	const config = useSelector(({ fuse }) => fuse.settings.current.layout.config);
 	const profileState = useSelector(({ profile }) => profile);
@@ -166,7 +173,7 @@ function Layout1(props) {
 					{config.rightSidePanel.display && <RightSideLayout1 />}
 
 					<FuseMessage />
-					<ChangePasswordModal />
+					{/* <ChangePasswordModal open={isUserLoggedin(profileState.data) ? profileState.data?.isActivated ? false : true : false}/> */}
 				</div>
 			);
 		}
@@ -219,7 +226,7 @@ function Layout1(props) {
 					{config.rightSidePanel.display && <RightSideLayout1 />}
 
 					<FuseMessage />
-					<ChangePasswordModal />
+					{/* <ChangePasswordModal open={isUserLoggedin(profileState.data) ? profileState.data?.isActivated ? false : true : false}/> */}
 				</div>
 			);
 		}

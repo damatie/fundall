@@ -4,83 +4,128 @@ import GridSystem from 'app/shared/gridSystem';
 import BasicCard from './BasicCard';
 import SelectTextField from 'app/shared/TextInput/SelectTextField';
 import MenuItem from '@material-ui/core/MenuItem';
+import useEmployeeProfile from '../hooks/useEmployeeProfile';
+import SharedButton from 'app/shared/button/SharedButton';
 
-const EmployeeProfile = () => {
-  const inputs = React.useMemo(() => 
+const EmployeeProfile = ({ value }) => {
+  const inputs = React.useMemo(() =>
     [
       {
-        name: '',
+        name: 'title',
         label: 'Title',
-        defaultValue: '',
+        defaultValue: value.title,
       },
       {
-        name: '',
+        name: 'firstName',
         label: 'First Name',
-        defaultValue: '',
+        defaultValue: value.firstName,
       },
       {
-        name: '',
+        name: 'middleName',
         label: 'Middle Name',
-        defaultValue: '',
+        defaultValue: value.middleName,
       },
       {
-        name: '',
+        name: 'surname',
         label: 'Surname',
-        defaultValue: '',
+        defaultValue: value.surname,
       },
       {
-        name: '',
+        name: 'srgn',
         label: 'SRGN',
-        defaultValue: '',
+        defaultValue: value.srgn,
       },
       {
-        name: '',
+        name: 'gender',
         label: 'Gender',
-        defaultValue: '',
+        defaultValue: value.gender,
         type: 'select',
         data: ['Male', 'Female', 'Others']
       },
       {
-        name: '',
+        name: 'maritalStatus',
         label: 'Marital Status',
-        defaultValue: '',
+        defaultValue: value.maritalStatus,
         type: 'select',
         data: ['Single', 'Married', 'Divorced', 'Complicated']
       },
       {
-        name: '',
+        name: 'nickname',
         label: 'Nickname',
-        defaultValue: '',
+        defaultValue: value.nickname,
       }
-    ] , []);
+    ], [value]);
+
+  const {
+    errors,
+    register,
+    handleSubmit,
+    shouldUpdate,
+    handleShouldUpdate,
+    onSubmit
+  } = useEmployeeProfile({
+    defaultValue: value
+  })
 
   return (
     <BasicCard
       title='Employee Profile Information'
+      button={
+        <SharedButton
+          color='secondary'
+          variant='contained'
+          onClick={handleShouldUpdate}
+        >
+          {shouldUpdate ? 'Cancel' : 'Edit'}
+        </SharedButton>
+      }
     >
-      <GridSystem>
-        {inputs.map((input) => {
-          if(input.type === 'select') {
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <GridSystem>
+          {inputs.map((input) => {
+            if (input.type === 'select') {
+              return (
+                <SelectTextField
+                  name={input.name}
+                  label={input.label}
+                  error={errors[input.name]}
+                  message={errors[input.name]?.message}
+                  onChange={({ target: { name, value } }) => register({ name, value })}
+                  defaultValue={input.defaultValue}
+                  // disabled={!shouldUpdate}
+                >
+                  {input.data.map((value) => (
+                    <MenuItem key={value} value={value}>
+                      {value}
+                    </MenuItem>
+                  ))}
+                </SelectTextField>
+              )
+            }
             return (
-              <SelectTextField
-                name={input.name}
-                label={input.label}
-              >
-                {input.data.map((value) =>(
-                  <MenuItem key={value} value={value}>
-                    {value}
-                  </MenuItem>
-                ))}
-              </SelectTextField>
+              <Input
+                {...input}
+                error={errors[input.name]}
+                message={errors[input.name]?.message}
+                refs={register}
+                // disabled={!shouldUpdate}
+              />
             )
-          }
-          return (
-            <Input
-              {...input}
-            />
-          )
-        })}
-      </GridSystem>
+          })}
+        </GridSystem>
+        {/* { */}
+          {/* // shouldUpdate && ( */}
+            <SharedButton
+              color='primary'
+              variant='contained'
+              className='flex flex-col w-1/2 mx-auto my-16'
+              type='submit'
+            >
+              Save
+            </SharedButton>
+          {/* // ) */}
+        {/* } */}
+      </form>
     </BasicCard>
   );
 };
