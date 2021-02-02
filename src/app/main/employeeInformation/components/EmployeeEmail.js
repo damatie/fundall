@@ -4,8 +4,9 @@ import GridSystem from 'app/shared/gridSystem';
 import BasicCard from './BasicCard';
 import SharedButton from 'app/shared/button/SharedButton';
 import useEmployeeEmail from '../hooks/useEmployeeEmail';
+import { useDispatch } from 'react-redux';
 
-const EmployeeEmail = ({value}) => {
+const EmployeeEmail = ({value, authState}) => {
   const inputs = React.useMemo(() => [
     {
       name: 'officialEmail',
@@ -44,7 +45,8 @@ const EmployeeEmail = ({value}) => {
       defaultValue: value.twitterHandle
     }
   ], [value]);
-
+  const dispatch = useDispatch();
+  
   const {
     errors,
     register,
@@ -53,7 +55,9 @@ const EmployeeEmail = ({value}) => {
     handleShouldUpdate,
     onSubmit
   } = useEmployeeEmail({
-    defaultValue: value
+    defaultValue: value,
+    state: authState,
+    dispatch
   })
 
   return (

@@ -54,7 +54,7 @@ function LoginTab(props) {
 				<TextFieldFormsy
 					className="mb-16"
 					type="text"
-					name="officialEmail"
+					name="email"
 					label="Official Email"
 					value=""
 					validations={{

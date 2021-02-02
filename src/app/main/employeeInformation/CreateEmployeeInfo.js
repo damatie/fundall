@@ -16,6 +16,7 @@ import { Controller } from 'react-hook-form';
 const CreateEmployeeInfo = () => {
 
   const { countries, states, cities } = useSelector(state => state.regions);
+  const state = useSelector(state => state.auth.user);
   const dispatch = useDispatch();
   const inputs = React.useMemo(() => [
     {
@@ -167,7 +168,8 @@ const CreateEmployeeInfo = () => {
     handleMenuItemClick,
     control
   } = useCreateEmployeeInfo({
-    dispatch
+    dispatch,
+    state
   });
 
   return (

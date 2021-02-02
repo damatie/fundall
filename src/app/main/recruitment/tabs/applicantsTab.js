@@ -77,9 +77,9 @@ const TableWidget = (props) => {
   const deleted = useSelector(state => state.PositionDetails.candidate.data);
 
   useEffect(() => {
-    updated?.map(data => {
-      if (data.id === selected.id) setSelected(data);
-    })
+    // updated && updated?.map(data => {
+    //   if (data.id === selected.id) setSelected(data);
+    // })
   }, [updated]);
 
   useEffect(() => {

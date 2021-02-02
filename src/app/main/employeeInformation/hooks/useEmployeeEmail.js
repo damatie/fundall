@@ -3,6 +3,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import errorMsg from 'utils/errorMsg';
 import React from 'react';
+import * as Actions from 'app/store/actions';
 
 const schema = yup.object().shape({
   officialEmail: yup.string(
@@ -95,7 +96,7 @@ const schema = yup.object().shape({
   ),
 });
 
-const useEmployeeEmail = ({defaultValue, dispatch}) => {
+const useEmployeeEmail = ({defaultValue, dispatch, state}) => {
   const [shouldUpdate, setShouldUpdate] = React.useState(false);
 
   const {
@@ -109,8 +110,7 @@ const useEmployeeEmail = ({defaultValue, dispatch}) => {
   });
 
   const onSubmit = (value) => {
-    console.log(value);
-    alert('hi');
+    dispatch(Actions.updateEmployeeProfile(state.id, value));
   };
 
   const handleShouldUpdate = () => {
