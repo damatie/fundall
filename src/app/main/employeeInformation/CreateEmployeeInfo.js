@@ -17,6 +17,7 @@ const CreateEmployeeInfo = () => {
 
   const { countries, states, cities } = useSelector(state => state.regions);
   const state = useSelector(state => state.auth.user);
+  const profile = useSelector(state => state.profile);
   const dispatch = useDispatch();
   const inputs = React.useMemo(() => [
     {
@@ -157,6 +158,7 @@ const CreateEmployeeInfo = () => {
 
   React.useEffect(() => {
     dispatch(Actions.getCountries());
+    dispatch(Actions.getEmployeeProfile(state.id));
   }, []);
 
   const {
@@ -174,7 +176,7 @@ const CreateEmployeeInfo = () => {
 
   return (
     <SharedModal
-      open={true}
+      open={/*profile.data?.info ? false : true*/false}
       handleClose={handleClose}
       title='Complete Registration'
     >

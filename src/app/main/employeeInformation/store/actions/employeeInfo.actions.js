@@ -8,7 +8,7 @@ export const createEmployeeInfo = ({id, data}) => {
   return async (dispatch) => {
     try {
       loading('Creating Your Info...')
-      const { data: { message, success } } = await api.post(`/auth/employee/${id}`, data);
+      const { data: { message, success } } = await api.post(`/auth/employee/info`, data);
       if(success) {
         dispatch(Actions.getEmployeeProfile(id));
         swal.fire({

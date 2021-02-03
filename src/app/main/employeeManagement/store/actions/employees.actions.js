@@ -10,11 +10,29 @@ export const GET_ENITIES = 'GET ENTITIES';
 export const GET_DEPARTMENTS = 'GET DEPARTMENTS';
 export const GET_ROLES = 'GET ROLES';
 export const EMPLOYEE_GRADES = 'EMPLOYEE GRADES';
+export const GET_JOBTITLE = 'JOB TITLE';
+
+export const getJobTitle = () => {
+  return async (dispatch) => {
+    try {
+      const { data: { data } } = await api.get('/appraisal/jobTitle/');
+      dispatch({
+        type: GET_JOBTITLE,
+        payload: data || []
+      });
+    } catch (e) {
+      dispatch({
+        type: GET_JOBTITLE,
+        payload: [],
+      });
+    }
+  }
+};
 
 export const getEmployees = () => {
   return async (dispatch) => {
     try {
-      const { data: { data, success } } = await api.get('/auth/employee/');
+      const { data: { data, success } } = await api.get('/auth/employee/data/all');
       if(success) {
         dispatch({
           type: GET_EMPLOYEES,

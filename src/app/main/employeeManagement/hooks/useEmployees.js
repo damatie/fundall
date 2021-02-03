@@ -66,6 +66,17 @@ const schema = yup.object().shape({
       type: 'required',
     })
   ),
+  jobTitleId: yup.string(
+    errorMsg({
+      name: 'Job Title',
+      type: 'string',
+    })
+  ).required(
+    errorMsg({
+      name: 'Job Title',
+      type: 'required',
+    })
+  ),
   departmentId: yup.string(
     errorMsg({
       name: 'Department',
@@ -88,14 +99,14 @@ const schema = yup.object().shape({
       type: 'required',
     })
   ),
-  employeeIdNumber: yup.string(
+  idNumber: yup.string(
     errorMsg({
-      name: 'Employee ID Number',
+      name: 'Employee ID Card Number',
       type: 'string',
     })
   ).required(
     errorMsg({
-      name: 'Employee ID Number',
+      name: 'Employee ID Card Number',
       type: 'required',
     })
   ),

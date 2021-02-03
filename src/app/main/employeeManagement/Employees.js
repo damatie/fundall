@@ -11,13 +11,14 @@ import Skeleton from '@material-ui/lab/Skeleton';
 
 const Employees = () => {
   const dispatch = useDispatch();
-  const { open, employees, entities, departments, roles, grades, loading } = useSelector(state => state.employeeMgt);
+  const { open, employees, entities, departments, roles, grades, loading, jobTitles } = useSelector(state => state.employeeMgt);
 
   React.useEffect(() => {
     dispatch(Actions.getEmployees());
     dispatch(Actions.getEntities());
     dispatch(Actions.getRoles());
     dispatch(Actions.getGrades());
+    dispatch(Actions.getJobTitle());
   }, []);
   const {
     control,
@@ -39,7 +40,7 @@ const Employees = () => {
     <PageLayout
       header={{
         icon: '',
-        title: 'Employee Managmenet',
+        title: 'Employee Management',
         handleSearch: ({ target: { value } }) => handleSearch(value),
       }}
       button={{
@@ -73,6 +74,7 @@ const Employees = () => {
                       departments,
                       roles,
                       grades,
+                      jobTitles,
                     }}
                     handleGetDept={handleGetDept}
                     form={{

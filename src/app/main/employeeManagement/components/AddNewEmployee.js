@@ -23,6 +23,7 @@ const AddNewEmployee = ({
     departments,
     roles,
     grades,
+    jobTitles
   },
   handleGetDept
 }) => {
@@ -109,6 +110,28 @@ const AddNewEmployee = ({
               </SelectTextField>
             }
           />
+
+          <Controller
+            name='jobTitleId'
+            label='Job Title'
+            control={control}
+            as={
+              <SelectTextField
+                // name='departmentId'
+                label='jobTitleId'
+                error={errors.jobTitleId}
+                message={errors.jobTitleId?.message}
+              >
+                {
+                  jobTitles.map(({id, name}) => (
+                    <MenuItem key={id} value={id}>
+                      {name}
+                    </MenuItem>
+                  ))
+							  }
+              </SelectTextField>
+            }
+          />
           <Controller
             name='roleId'
             label='Role'
@@ -131,11 +154,11 @@ const AddNewEmployee = ({
             }
           />
           <Input
-            name='employeeIdNumber'
-            label='Employee ID Number'
+            name='idNumber'
+            label='Employee ID Card Number'
             refs={register}
-            error={errors.employeeIdNumber}
-            message={errors.employeeIdNumber?.message}
+            error={errors.idNumber}
+            message={errors.idNumber?.message}
           />
 
           <Controller

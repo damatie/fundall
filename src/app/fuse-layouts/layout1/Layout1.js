@@ -173,7 +173,7 @@ function Layout1(props) {
 					{config.rightSidePanel.display && <RightSideLayout1 />}
 
 					<FuseMessage />
-					{/* <ChangePasswordModal open={isUserLoggedin(profileState.data) ? profileState.data?.isActivated ? false : true : false}/> */}
+					<ChangePasswordModal open={isUserLoggedin(profileState.data) ? profileState.data?.isActivated ? false : true : false}/>
 				</div>
 			);
 		}
@@ -226,7 +226,7 @@ function Layout1(props) {
 					{config.rightSidePanel.display && <RightSideLayout1 />}
 
 					<FuseMessage />
-					{/* <ChangePasswordModal open={isUserLoggedin(profileState.data) ? profileState.data?.isActivated ? false : true : false}/> */}
+					<ChangePasswordModal open={isUserLoggedin(profileState.data) ? profileState.data?.isActivated ? false : true : false}/>
 				</div>
 			);
 		}
