@@ -4,6 +4,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import errorMsg from 'utils/errorMsg';
 import swal from 'sweetalert2';
 import * as Actions from 'app/store/actions';
+import { createEmployeeInfo } from '../store/actions';
 
 const schema = yup.object().shape({
   title: yup.string(
@@ -242,7 +243,7 @@ const schema = yup.object().shape({
   ),
 });
 
-const useCreateEmployeeInfo = ({dispatch}) => {
+const useCreateEmployeeInfo = ({dispatch, state}) => {
   const {
     errors,
     register,
@@ -253,8 +254,8 @@ const useCreateEmployeeInfo = ({dispatch}) => {
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = (value) => {
-    console.log(value);
+  const onSubmit = async (data) => {
+    dispatch(createEmployeeInfo({id:state.id, data}));
   };
 
   const handleClose = () => {

@@ -23,6 +23,7 @@ const AddNewEmployee = ({
     departments,
     roles,
     grades,
+    jobTitles
   },
   handleGetDept
 }) => {
@@ -72,7 +73,7 @@ const AddNewEmployee = ({
             control={control}
             as={
               <SelectTextField
-                name='entityId'
+                // name='entityId'
                 label='Entity'
                 error={errors.entityId}
                 message={errors.entityId?.message}
@@ -94,7 +95,7 @@ const AddNewEmployee = ({
             control={control}
             as={
               <SelectTextField
-                name='departmentId'
+                // name='departmentId'
                 label='Department'
                 error={errors.departmentId}
                 message={errors.departmentId?.message}
@@ -109,13 +110,35 @@ const AddNewEmployee = ({
               </SelectTextField>
             }
           />
+
+          <Controller
+            name='jobTitleId'
+            label='Job Title'
+            control={control}
+            as={
+              <SelectTextField
+                // name='departmentId'
+                label='jobTitleId'
+                error={errors.jobTitleId}
+                message={errors.jobTitleId?.message}
+              >
+                {
+                  jobTitles.map(({id, name}) => (
+                    <MenuItem key={id} value={id}>
+                      {name}
+                    </MenuItem>
+                  ))
+							  }
+              </SelectTextField>
+            }
+          />
           <Controller
             name='roleId'
             label='Role'
             control={control}
             as={
               <SelectTextField
-                name='roleId'
+                // name='roleId'
                 label='Role'
                 error={errors.roleId}
                 message={errors.roleId?.message}
@@ -131,11 +154,11 @@ const AddNewEmployee = ({
             }
           />
           <Input
-            name='employeeIdNumber'
-            label='Employee ID Number'
+            name='idNumber'
+            label='Employee ID Card Number'
             refs={register}
-            error={errors.employeeIdNumber}
-            message={errors.employeeIdNumber?.message}
+            error={errors.idNumber}
+            message={errors.idNumber?.message}
           />
 
           <Controller
@@ -145,7 +168,7 @@ const AddNewEmployee = ({
             as={
               <SelectTextField
                 name='employeeGradeId'
-                label='Employee Grade'
+                // label='Employee Grade'
                 error={errors.employeeGradeId}
                 message={errors.employeeGradeId?.message}
               >

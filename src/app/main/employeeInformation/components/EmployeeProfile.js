@@ -6,8 +6,9 @@ import SelectTextField from 'app/shared/TextInput/SelectTextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import useEmployeeProfile from '../hooks/useEmployeeProfile';
 import SharedButton from 'app/shared/button/SharedButton';
+import { useDispatch } from 'react-redux';
 
-const EmployeeProfile = ({ value }) => {
+const EmployeeProfile = ({ value, authState }) => {
   const inputs = React.useMemo(() =>
     [
       {
@@ -56,6 +57,8 @@ const EmployeeProfile = ({ value }) => {
       }
     ], [value]);
 
+    const dispatch = useDispatch();
+
   const {
     errors,
     register,
@@ -64,7 +67,9 @@ const EmployeeProfile = ({ value }) => {
     handleShouldUpdate,
     onSubmit
   } = useEmployeeProfile({
-    defaultValue: value
+    defaultValue: value,
+    state: authState,
+    dispatch
   })
 
   return (

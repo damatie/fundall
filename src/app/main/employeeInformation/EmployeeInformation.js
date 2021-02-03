@@ -58,7 +58,7 @@ const EmployeeInformation = () => {
         </div>
       }
     />
-      {/* <CreateEmployeeInfo /> */}
+      <CreateEmployeeInfo />
     </>
   );
 };

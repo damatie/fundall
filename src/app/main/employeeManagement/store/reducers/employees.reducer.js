@@ -7,7 +7,8 @@ const initialState = {
   departments: [],
   roles: [],
   grades: [],
-  loading: true
+  loading: true,
+  jobTitles: [],
 }
 
 const employeesReducer = (state = initialState, actions) => {
@@ -16,6 +17,11 @@ const employeesReducer = (state = initialState, actions) => {
       return {
         ...state,
         open: true,
+      }
+    case Actions.GET_JOBTITLE:
+      return {
+        ...state,
+        jobTitles: actions.payload,
       }
     case Actions.CLOSE_ADD_NEW_EMPLOYEE_MODAL:
       return {

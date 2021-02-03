@@ -6,78 +6,136 @@ import BasicCard from './BasicCard';
 import PhoneInput from 'react-phone-input-2';
 import startsWith from 'lodash.startswith';
 import 'react-phone-input-2/lib/material.css';
+import { useDispatch } from 'react-redux';
+import useEmployeeTelephone from '../hooks/useEmployeeTelephone';
+import SharedButton from 'app/shared/button/SharedButton';
+import { Controller } from 'react-hook-form';
 
-const EmployeeTelephoneNumbers = () => {
+const EmployeeTelephoneNumbers = ({ value, authState }) => {
   const inputs = React.useMemo(() => [
     {
-      name: '',
+      name: 'officialNo',
       label: 'Official Mobile No',
-      defaultValue: '',
+      defaultValue: value.officialNo,
       type: 'phoneNumber',
     },
     {
-      name: '',
+      name: 'officeLine',
       label: 'Office Telephone Line',
-      defaultValue: '',
+      defaultValue: value.officeLine,
       type: 'number',
     },
     {
-      name: '',
+      name: 'officeExtension',
       label: 'Office Extension',
-      defaultValue: '',
+      defaultValue: value.officeExtension,
       type: 'number',
     },
     {
-      name: '',
+      name: 'privateMobileNumber',
       label: 'Private Mobile Number',
-      defaultValue: '',
+      defaultValue: value.privateMobileNumber,
       type: 'phoneNumber',
     }
   ], []);
+
+  const dispatch = useDispatch();
+
+  const {
+    errors,
+    register,
+    handleSubmit,
+    shouldUpdate,
+    handleShouldUpdate,
+    onSubmit,
+    control
+  } = useEmployeeTelephone({
+    dispatch,
+    defaultValue: value,
+    state: authState
+  })
+
   return (
     <BasicCard
       title='Telephone Number'
-    >
-      <Grid container spacing={1}>
-      {
-        inputs.map((input) => {
-          if(input.type === 'phoneNumber') {
-            return (
-              <Grid item lg={12}>
-                <div className='my-16'>
-                  <PhoneInput
-                    id="pNum"
-                    country='ng'
-                    // placeholder="Enter phone number"
-                    containerClass='w-full'
-                    inputClass='w-full'
-                    specialLabel={input.label}
-                    enableAreaCodes
-                    enableSearch
-                    // className={classes.phoneInput}
-                    // inputRef={register}
-                    // isValid={(inputNumber, onlyCountries) => {
-                    //   return onlyCountries.some((country) => {
-                    //     return startsWith(inputNumber, country.dialCode) || startsWith(country.dialCode, inputNumber);
-                    //   });
-                    // }}
-                  />
-                </div>
-              </Grid>
-            )
-            
-          }
-          return (
-            <Grid item lg={12}>
-              <div className='my-16'>
-                <Input {...input} />
-              </div>
-            </Grid>
-          )
-        })
+      button={
+        <SharedButton
+          color='secondary'
+          variant='contained'
+          onClick={handleShouldUpdate}
+        >
+          {shouldUpdate ? 'Cancel' : 'Edit'}
+        </SharedButton>
       }
-      </Grid>
-    </BasicCard> 
+    >
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Grid container spacing={1}>
+          {
+            inputs.map((input) => {
+              if (input.type === 'phoneNumber') {
+                return (
+                  <Grid item lg={12}>
+                    <div className='my-16'>
+                    <Controller
+                    as={
+                      <PhoneInput
+                        id={input.name}
+                        country='ng'
+                        // placeholder="Enter phone number"
+                        containerClass='w-full'
+                        inputClass='w-full'
+                        specialLabel={input.label}
+                        enableAreaCodes
+                        enableSearch
+                        inputRef={register}
+                        disabled={!shouldUpdate}
+                        isValid={(inputNumber, country, onlyCountries) => {
+                          return onlyCountries.some((country) => {
+                            return startsWith(inputNumber, country.dialCode) || startsWith(country.dialCode, inputNumber);
+                          });
+                        }}
+                      />
+                    }
+                    name={input.name}
+                    control={control}
+                    rules={{ required: true }}
+                  />
+                    </div>
+                  </Grid>
+                )
+
+              }
+              return (
+                <Grid item lg={12}>
+                  <div className='my-16'>
+                    <Input
+                      {...input}
+                      error={errors[input.name]}
+                      message={errors[input.name]?.message}
+                      refs={register}
+                      disabled={!shouldUpdate}
+                    />
+                  </div>
+                </Grid>
+              )
+            })
+          }
+        </Grid>
+        {
+          shouldUpdate && (
+            <SharedButton
+              color='primary'
+              variant='contained'
+              className='flex flex-col w-1/2 mx-auto my-16'
+              type='submit'
+            >
+              Save
+            </SharedButton>
+          )
+        }
+      </form>
+
+    </BasicCard>
   );
 };
 

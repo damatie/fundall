@@ -11,6 +11,7 @@ import TrainingAndExpertise, { AddTrainingAndExpertise } from './components/Trai
 import EducationalQualification, { AddEducationalQualification } from './components/EducationalQualifications';
 import EmergencyContacts, { AddEmergencyContact } from './components/EmergencyContacts';
 import SpouseAndDependants, { AddSpouseAndDependant } from './components/SpouseAndDependants';
+import { useSelector } from 'react-redux';
 
 const info = {
   title: 'Mr',
@@ -28,40 +29,45 @@ const info = {
   twitterHandle: 'https://timesheet-client.web.app/blog/1',
   linkedInHandle: 'https://timesheet-client.web.app/blog/1',
   instagramInHandle: 'https://timesheet-client.web.app/blog/1',
+  officialNo: '',
+  officeLine: '',
+  officeExtension: '',
+  privateMobileNumber: ''
 }
 const EmployeeBasicInformation = () => {
+  const authState = useSelector(state => state.auth.user)
   return (
     <>
       <Grid container spacing={1}>
         <Grid item lg={6} md={6} sm={12} xs={12}>
-          <EmployeeProfile value={info}/>
+          <EmployeeProfile value={info} authState={authState}/>
         </Grid>
         <Grid item lg={6} md={6} sm={12} xs={12}>
-          <EmployeeEmail value={info}/>
+          <EmployeeEmail value={info} authState={authState}/>
         </Grid>
         <Grid item lg={6} md={6} sm={12} xs={12}>
-          <EmployeeTelephoneNumbers />
+          <EmployeeTelephoneNumbers value={info} authState={authState}/>
         </Grid>
         <Grid item lg={6} md={6} sm={12} xs={12}>
-          <EmployeeWorkLocation />
+          <EmployeeWorkLocation value={info} authState={authState}/>
         </Grid>
         <Grid item lg={6} md={6} sm={12} xs={12}>
-          <EmployeeOrganization />
+          <EmployeeOrganization value={info} authState={authState}/>
         </Grid>
         <Grid item lg={6} md={6} sm={12} xs={12}>
-          <EmployeeVacation />
+          <EmployeeVacation authState={authState}/>
         </Grid>
         <Grid item lg={6} md={6} sm={12} xs={12}>
-          <TrainingAndExpertise />
+          <TrainingAndExpertise authState={authState}/>
         </Grid>
         <Grid item lg={6} md={6} sm={12} xs={12}>
-          <EducationalQualification />
+          <EducationalQualification authState={authState}/>
         </Grid>
         <Grid item lg={6} md={6} sm={12} xs={12}>
-          <EmergencyContacts />
+          <EmergencyContacts authState={authState}/>
         </Grid>
         <Grid item lg={6} md={6} sm={12} xs={12}>
-          <SpouseAndDependants />
+          <SpouseAndDependants authState={authState}/>
         </Grid>
       </Grid>
       <SharedModal
