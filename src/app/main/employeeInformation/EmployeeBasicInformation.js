@@ -29,6 +29,10 @@ const info = {
   twitterHandle: 'https://timesheet-client.web.app/blog/1',
   linkedInHandle: 'https://timesheet-client.web.app/blog/1',
   instagramInHandle: 'https://timesheet-client.web.app/blog/1',
+  officialNo: '',
+  officeLine: '',
+  officeExtension: '',
+  privateMobileNumber: ''
 }
 const EmployeeBasicInformation = () => {
   const authState = useSelector(state => state.auth.user)
@@ -42,13 +46,13 @@ const EmployeeBasicInformation = () => {
           <EmployeeEmail value={info} authState={authState}/>
         </Grid>
         <Grid item lg={6} md={6} sm={12} xs={12}>
-          <EmployeeTelephoneNumbers authState={authState}/>
+          <EmployeeTelephoneNumbers value={info} authState={authState}/>
         </Grid>
         <Grid item lg={6} md={6} sm={12} xs={12}>
-          <EmployeeWorkLocation authState={authState}/>
+          <EmployeeWorkLocation value={info} authState={authState}/>
         </Grid>
         <Grid item lg={6} md={6} sm={12} xs={12}>
-          <EmployeeOrganization authState={authState}/>
+          <EmployeeOrganization value={info} authState={authState}/>
         </Grid>
         <Grid item lg={6} md={6} sm={12} xs={12}>
           <EmployeeVacation authState={authState}/>

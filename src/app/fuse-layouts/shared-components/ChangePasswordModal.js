@@ -42,7 +42,7 @@ const ChangePasswordModal = ({open}) => {
       });
       dispatch(authActions.logoutUser());
       localStorage.clear();
-      window.location.assign('/auth/login')
+      window.location.assign('/auth/login');
     } catch (e) {
       swal.fire({
         text: catchErrorMsg(e),

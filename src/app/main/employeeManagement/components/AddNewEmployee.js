@@ -72,7 +72,7 @@ const AddNewEmployee = ({
             control={control}
             as={
               <SelectTextField
-                name='entityId'
+                // name='entityId'
                 label='Entity'
                 error={errors.entityId}
                 message={errors.entityId?.message}
@@ -94,7 +94,7 @@ const AddNewEmployee = ({
             control={control}
             as={
               <SelectTextField
-                name='departmentId'
+                // name='departmentId'
                 label='Department'
                 error={errors.departmentId}
                 message={errors.departmentId?.message}
@@ -115,7 +115,7 @@ const AddNewEmployee = ({
             control={control}
             as={
               <SelectTextField
-                name='roleId'
+                // name='roleId'
                 label='Role'
                 error={errors.roleId}
                 message={errors.roleId?.message}
@@ -145,7 +145,7 @@ const AddNewEmployee = ({
             as={
               <SelectTextField
                 name='employeeGradeId'
-                label='Employee Grade'
+                // label='Employee Grade'
                 error={errors.employeeGradeId}
                 message={errors.employeeGradeId?.message}
               >

@@ -135,7 +135,7 @@ const useEmployees = ({dispatch}) => {
   });
 
   const onSubmit = (value) => {
-    console.log(value);
+    dispatch(Actions.addEmployee(value));
   };
 
   const handleOpenModal = () => {
