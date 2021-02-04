@@ -15,7 +15,12 @@ export const createEmployeeInfo = ({id, data}) => {
           text: message,
           icon: 'success'
         });
+        return;
       }
+      swal.fire({
+        text: message,
+        icon: 'error'
+      });
     } catch (e) {
       swal.fire({
         text: catchErrorMsg(e),

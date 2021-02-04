@@ -5,6 +5,7 @@ import errorMsg from 'utils/errorMsg';
 import swal from 'sweetalert2';
 import * as Actions from 'app/store/actions';
 import { createEmployeeInfo } from '../store/actions';
+import React from 'react';
 
 const schema = yup.object().shape({
   title: yup.string(
@@ -241,6 +242,12 @@ const schema = yup.object().shape({
       name: 'Personal Assistant'
     })
   ),
+  // signature: yup.mixed().required(
+  //   errorMsg({
+  //     type: 'required',
+  //     name: 'signature'
+  //   })
+  // ),
 });
 
 const useCreateEmployeeInfo = ({dispatch, state}) => {
@@ -254,8 +261,25 @@ const useCreateEmployeeInfo = ({dispatch, state}) => {
     resolver: yupResolver(schema),
   });
 
+  const [signature, setSignature] = React.useState([]);
+
   const onSubmit = async (data) => {
-    dispatch(createEmployeeInfo({id:state.id, data}));
+    if(signature.length !== 0) {
+      const formData = new FormData();
+      const entries = {
+        ...data,
+        signature: signature[0],
+      }
+      for (const [key, value] of Object.entries(entries)) {
+        formData.append(key, value);
+      }
+      dispatch(createEmployeeInfo({ id:state.id, data: formData }));
+      return;
+    }
+    swal.fire({
+      text: 'Please enter your password',
+      icon: 'warn',
+    });
   };
 
   const handleClose = () => {
@@ -281,7 +305,8 @@ const useCreateEmployeeInfo = ({dispatch, state}) => {
     register,
     handleSubmit,
     handleMenuItemClick,
-    control
+    control,
+    setSignature
   };
 };
 

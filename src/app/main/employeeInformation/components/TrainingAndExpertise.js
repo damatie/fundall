@@ -2,8 +2,11 @@ import React from 'react';
 import Input from 'app/shared/TextInput/Input';
 import BasicCard from './BasicCard';
 import SharedButton from 'app/shared/button/SharedButton';
-import Divider from '@material-ui/core/Divider'
-import Grid from '@material-ui/core/Grid'
+import Divider from '@material-ui/core/Divider';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import IconButton from '@material-ui/core/IconButton';
+import Icon from '@material-ui/core/Icon';
 
 const data = [
   {
@@ -15,7 +18,45 @@ const data = [
     dateAcquired: new Date(),
   },
 ]
-const TrainingAndExpertise = () => {
+const TrainingAndExpertise = ({ handleOpen }) => {
+  const [shouldUpdate, setShouldUpdate] = React.useState(false);
+  return (
+    <BasicCard
+      title='Training And Expertise'
+      button={
+        <>
+          <SharedButton
+            variant='outlined'
+            color='secondary'
+            onClick={handleOpen('Training And Expertise')}
+            className='mx-16'
+          >
+            Add
+          </SharedButton>
+          <SharedButton
+            variant='contained'
+            color='secondary'
+            onClick={() => setShouldUpdate(!shouldUpdate)}
+          >
+            {shouldUpdate ? 'Cancel' : 'Edit'}
+          </SharedButton>
+        </>
+      }
+    >
+      {data.map((item, index) => (
+        <TrainingAndExpertiseDetails
+          item={item}
+          key={item?.id}
+          index={index}
+          shouldUpdate={shouldUpdate}
+          setShouldUpdate={setShouldUpdate}
+        />
+      ))}
+    </BasicCard>
+  );
+};
+
+const TrainingAndExpertiseDetails = ({ item, index, setShouldUpdate, shouldUpdate }) => {
   const inputs = React.useMemo(() => [
     {
       name: 'training',
@@ -30,33 +71,46 @@ const TrainingAndExpertise = () => {
       data: [],
     },
   ], []);
+  const handleUpdate = () => {
+    setShouldUpdate(false);
+  }
   return (
-    <BasicCard
-      title='Training And Expertise'
-    >
+    <>
+      <div className='flex flex-row items-center my-20'>
+        <Typography variant="subtitle1" color="initial">Training And Expertise ({index + 1})</Typography>
+        <IconButton
+          aria-label="delete"
+          onClick={() => null}>
+          <Icon className='text-red-500'>delete</Icon>
+        </IconButton>
+      </div>
       <form>
-        {data.map((item) => (
-          <>
-          <Grid container spacing={1}>
-              {
-                inputs.map((input) => {
-                  return (
-                    <Grid item lg={12} className='my-16'>
-                      <Input
-                        {...input}
-                        defaultValue={item[input.name]}
-                      />
-                    </Grid>
-                    
-                  )
-                })
-              }
-          </Grid>
-          <Divider className='my-16' />
-          </>
-        ))}
+        <Grid container spacing={1}>
+          {
+            inputs.map((input) => {
+              return (
+                <Grid item lg={12} className='my-16'>
+                  <Input
+                    {...input}
+                    defaultValue={item[input.name]}
+                    disabled={!shouldUpdate}
+                  />
+                </Grid>
+              )
+            })
+          }
+        </Grid>
+        {shouldUpdate && (<SharedButton
+          variant='contained'
+          color='primary'
+          className='w-1/2 flex flex-col mx-auto my-16'
+          onClick={handleUpdate}
+        >
+          Update
+        </SharedButton>)}
+        <Divider className='my-16' />
       </form>
-    </BasicCard>
+    </>
   );
 };
 
