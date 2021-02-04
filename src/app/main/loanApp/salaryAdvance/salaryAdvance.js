@@ -64,8 +64,9 @@ function SalaryAdvance(props) {
 	const theme = useTheme();
 
 	const classes = useStyles(props);
+	const role = useSelector(({ auth }) => auth.user.role)
 
-	const salaryAdvance = useSelector(({ salaryAdvance }) => salaryAdvance.salaryAdvance);
+	const salaryAdvance = useSelector(({ salaryAdvance }) => salaryAdvance);
 	const details = useSelector(({ salaryAdvance }) => salaryAdvance.salaryAdvances?.details);
 
 	const history = useHistory();
@@ -74,10 +75,15 @@ function SalaryAdvance(props) {
 	const { id } = useParams();
 
 	useEffect(() => {
+
 		if (id) {
 			dispatch(Actions.getSalaryAdvanceDetails(id));
 		}
 	}, [id, dispatch]);
+
+	useEffect(() => {
+		console.log(salaryAdvance, details);
+	}, [details])
 
 	return (
 		<FusePageCarded
@@ -94,7 +100,8 @@ function SalaryAdvance(props) {
 								component={Link}
 								role="button"
 								// onClick={() => history.goBack()}
-								to="/loan/request/salaryadvance_request/list"
+								// to={"/loan/request/salaryadvance_request/list"}
+								to={role.toLowerCase() !== "employee" ? "/loan/salary_advance/list" : "/loan/request/salaryadvance_request/list"}
 								color="inherit"
 							>
 								<Icon className="text-20">
