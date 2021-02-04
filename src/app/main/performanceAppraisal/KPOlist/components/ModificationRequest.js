@@ -4,7 +4,7 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid'
 import CustomIconButton from 'app/shared/button/CustomIconButton';
 
-const ModificationRequest = ({ status, role, handleClick }) => {
+const ModificationRequest = ({ status, role, handleClick, id }) => {
   return (
     <section>
       <Typography variant="subtitle1" color="initial"><strong>KPO Request Status</strong>:&nbsp;{status}</Typography>
@@ -15,7 +15,7 @@ const ModificationRequest = ({ status, role, handleClick }) => {
             <>
               {
                 status !== 'requested' && status !== 'approved' && (
-                  <Button variant="contained" color="secondary" onClick={handleClick('request')}>
+                  <Button variant="contained" color="secondary" onClick={handleClick({id, requestType: 'request'})}>
                     Request for Modification
                   </Button>
                 )
@@ -29,7 +29,7 @@ const ModificationRequest = ({ status, role, handleClick }) => {
                     <Grid item lg={6} md={6} sm={12} xs={12}>
                       <CustomIconButton
                         icon='check'
-                        onClick={handleClick('approve')}
+                        onClick={handleClick({id, requestType:'approve'})}
                         type='success'
                         className='w-full'
                       >
@@ -39,7 +39,7 @@ const ModificationRequest = ({ status, role, handleClick }) => {
                     <Grid item lg={6} md={6} sm={12} xs={12}>
                       <CustomIconButton
                         icon='delete'
-                        onClick={handleClick('reject')}
+                        onClick={handleClick({id, requestType:'reject'})}
                         type='error'
                         className='w-full'
                       >

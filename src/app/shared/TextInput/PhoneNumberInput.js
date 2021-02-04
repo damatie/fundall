@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import PhoneInput from 'react-phone-input-2';
-import { isValidPhoneNumber } from 'react-phone-number-input'
+// import { isValidPhoneNumber } from 'react-phone-number-input'
 import 'react-phone-input-2/lib/material.css';
 
 const PhoneNumberInput = (props) => {

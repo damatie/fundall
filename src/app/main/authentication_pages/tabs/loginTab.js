@@ -55,7 +55,7 @@ function LoginTab(props) {
 					className="mb-16"
 					type="text"
 					name="email"
-					label="Email"
+					label="Official Email"
 					value=""
 					validations={{
 						isEmail: 'Please enter a valid email'

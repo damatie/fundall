@@ -31,11 +31,11 @@ const PageLayout = ({
 		onClick,
 		hidden,
 		btnComponent,
-  }
+	},
+	customHeader
 }) => {
 
-  const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
-
+	const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
   return (
     <FusePageSimple
 			classes={{
@@ -43,6 +43,7 @@ const PageLayout = ({
 				header: 'min-h-72 h-72 sm:h-136 sm:min-h-136'
 			}}
 			header={
+				customHeader ?  customHeader  :
 				<div className="flex flex-1 w-full items-center justify-between px-24">
 					<div className="flex flex-col items-start max-w-full">
 						<div className="flex items-center">
@@ -104,7 +105,7 @@ const PageLayout = ({
             <div className="flex flex-col min-w-0 mx-8 sm:mc-16">
               {/* <FuseAnimate animation="transition.slideLeftIn" delay={300}> */}
 								{
-									btnComponent !== false ? (
+									btnComponent !== undefined && btnComponent !== false ? (
 										<>
 										{btnComponent}
 										</>

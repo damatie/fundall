@@ -2,6 +2,8 @@ import { fetchHeaders } from "app/shared/fetchHeaders";
 import { handleResponse } from "app/auth/handleRes";
 import swal from 'sweetalert2';
 import { getBaseUrl } from "app/shared/getBaseUrl";
+import loading from 'utils/loading';
+import catchErrorMsg from 'utils/catchErrorMsg';
 
 export const GET_EMPLOYEE_PROFILE = 'GET EMPLOYEE PROFILE';
 export const LOADING_EMPLOYEE_PROFILE = 'LOADING EMPLOYEE PROFILE';
@@ -34,6 +36,7 @@ export const getEmployeeProfile = id => {
 
 export const updateEmployeeProfile = (id, body) => {
   return dispatch => {
+    loading('updating...');
     dispatch({
       type: UPDATING_EMPLOYEE_PROFILE
     });
@@ -109,5 +112,5 @@ export const uploadImage = (id, body) => {
       }
     )
   }
-}
+};
 

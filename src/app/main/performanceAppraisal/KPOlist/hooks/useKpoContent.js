@@ -210,7 +210,7 @@ const useKpoContentList = ({config, state, dispatch, params, push, kpoCategory, 
     kpoCategory,
     shouldShowInput,
     shouldDisableButton,
-    pipEligibility: userInfo.data.employeeGrade.pipEligibility
+    pipEligibility: userInfo.data.employeeGrade?.pipEligibility
   };
 };
 

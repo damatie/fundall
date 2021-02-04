@@ -5,7 +5,7 @@ export const GET_COUNTRIES = 'GET COUNTRIES';
 export const GET_STATES = 'GET SATES';
 export const GET_CITIES = 'GET CITIES';
 
-const formatData = (data, field) => {
+export const formatData = (data, field) => {
   const arr = [];
   for(const i of data) {
     arr.push({

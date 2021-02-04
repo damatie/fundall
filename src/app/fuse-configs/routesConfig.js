@@ -51,6 +51,8 @@ import JobTitleConfig from 'app/main/jobTitle/JobTitleConfig';
 import EmployeeGradeConfig from 'app/main/employeeGrade/EmployeeGradeConfig';
 import BehaviouralAttributeConfig from 'app/main/behaviouralAttribute/BehaviouralAttributeConfig';
 import PermissionConfig from 'app/main/permission/PermissionConfig';
+import EmployeeMgtConfig from 'app/main/employeeManagement/employeeMgtConfig';
+import EmployeeInformationConfig from 'app/main/employeeInformation/employeeInformationConfig';
 
 const routeConfigs = [
 	// ExampleConfig,
@@ -61,7 +63,7 @@ const routeConfigs = [
 	EmployeeLoginConfig,
 	HrConfirmConfig,
 	EmployeeManagementConfig,
-	EmployeeProfilePageConfig,
+	// EmployeeProfilePageConfig,
 	EmployeeOnboardingConfig,
 	LeaveTypeConfig,
 	SignatureConfig,
@@ -102,7 +104,9 @@ const routeConfigs = [
 	JobTitleConfig,
 	EmployeeGradeConfig,
 	BehaviouralAttributeConfig,
-	PermissionConfig
+	PermissionConfig,
+	EmployeeMgtConfig,
+	EmployeeInformationConfig
 ];
 
 const checkIfLoggedIn = () => {

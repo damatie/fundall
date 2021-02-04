@@ -13,12 +13,12 @@ function entity(){
   return (userData.entityId) ? userData.entityId : 0;
 }
 
-export const getDepartments = () => {
+export const getDepartments = (id) => {
   return dispatch => {
     dispatch({
       type: DEPARTMENTS_LOADING
     })
-    fetch(`${getBaseUrl()}/department/all/${entity()}`, {
+    fetch(`${getBaseUrl()}/department/all/${id || entity()}`, {
       ...header.getRegHeader()
     }).then(res => res.json()).then(
       data => {

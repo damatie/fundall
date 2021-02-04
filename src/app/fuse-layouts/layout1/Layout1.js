@@ -18,6 +18,7 @@ import * as Actions from 'app/store/actions';
 import { useAuth } from 'app/hooks/useAuth';
 import withReducer from 'app/store/withReducer';
 import reducer from 'app/store/reducers';
+import ChangePasswordModal from '../shared-components/ChangePasswordModal';
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -83,6 +84,13 @@ const useStyles = makeStyles(theme => ({
 		zIndex: 2
 	}
 }));
+
+const isUserLoggedin = (user) => {
+	if(Object.entries(user).length <= 0) {
+		return false;
+	}
+	return true;
+}
 
 function Layout1(props) {
 	const config = useSelector(({ fuse }) => fuse.settings.current.layout.config);
@@ -165,6 +173,7 @@ function Layout1(props) {
 					{config.rightSidePanel.display && <RightSideLayout1 />}
 
 					<FuseMessage />
+					<ChangePasswordModal open={isUserLoggedin(profileState.data) ? profileState.data?.isActivated ? false : true : false}/>
 				</div>
 			);
 		}
@@ -217,6 +226,7 @@ function Layout1(props) {
 					{config.rightSidePanel.display && <RightSideLayout1 />}
 
 					<FuseMessage />
+					<ChangePasswordModal open={isUserLoggedin(profileState.data) ? profileState.data?.isActivated ? false : true : false}/>
 				</div>
 			);
 		}
