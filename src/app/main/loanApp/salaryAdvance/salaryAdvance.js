@@ -83,7 +83,7 @@ function SalaryAdvance(props) {
 
 	useEffect(() => {
 		// console.log(salaryAdvance, details);
-	}, [details])
+	}, [details, salaryAdvance])
 
 	return (
 		<FusePageCarded

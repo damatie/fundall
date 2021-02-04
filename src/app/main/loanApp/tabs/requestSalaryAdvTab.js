@@ -50,7 +50,7 @@ function RequestSalaryAdvTab(props) {
 	const [showDetails, setShowDetails] = useState(false);
 	const formRef = useRef(null);
 
-	const salaryAdvance = props.salaryAdvance;
+	const salaryAdvance = useSelector(({ salaryAdvance }) => salaryAdvance?.salaryAdvances);
 	const details = props.details;
 
 	const profile = useSelector(({ profile }) => profile);
@@ -77,6 +77,9 @@ function RequestSalaryAdvTab(props) {
 
 	useEffect(() => {
 		console.log(details, salaryAdvance);
+	}, [salaryAdvance])
+
+	useEffect(() => {
 		if (details && id) {
 			setAmount(details?.salaryAdvanceData?.amount);
 			setRepaymentDate(moment(details?.salaryAdvanceData?.repaymentDate, 'YYYY-MM-DD'));
@@ -137,7 +140,7 @@ function RequestSalaryAdvTab(props) {
 									values={amount}
 									handleChange={e => setAmount(e.target.value)}
 									name={"amount"}
-									helperText={amount > details?.salaryAdvanceData?.amount ? 'Please you can not request for an amount that is greater than the amount requested' : `Max Amount: ${new Intl.NumberFormat().format(details?.salaryAdvanceData?.amount)}`}
+									helperText={amount > details?.salaryAdvanceData?.amount ? 'Please you can not request for an amount that is greater than the amount requested' : `Max Amount: ${new Intl.NumberFormat().format(details?.salaryAdvanceData?.amount ?? 0)}`}
 									error={amount > details?.salaryAdvanceData?.amount}
 									required
 								/>
@@ -178,7 +181,7 @@ function RequestSalaryAdvTab(props) {
 								/>
 							</Grid>
 							<Grid item lg={4}>
-								<ProgressBtn success={salaryAdvance.success} loading={salaryAdvance.loading} content={
+								<ProgressBtn success={salaryAdvance?.success} loading={salaryAdvance?.loading} content={
 									(id && amount && repaymentDate && fileInput.length > 0) ?
 										location.state ?
 											"Approve Request" :
