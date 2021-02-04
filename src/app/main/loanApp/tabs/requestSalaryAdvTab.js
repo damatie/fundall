@@ -50,7 +50,7 @@ function RequestSalaryAdvTab(props) {
 	const [showDetails, setShowDetails] = useState(false);
 	const formRef = useRef(null);
 
-	const salaryAdvance = useSelector(({ salaryAdvance }) => salaryAdvance.salaryAdvance);
+	const salaryAdvance = props.salaryAdvance;
 	const details = props.details;
 
 	const profile = useSelector(({ profile }) => profile);
@@ -76,6 +76,7 @@ function RequestSalaryAdvTab(props) {
 	}, [showDetails, profile]);
 
 	useEffect(() => {
+		console.log(details, salaryAdvance);
 		if (details && id) {
 			setAmount(details?.salaryAdvanceData?.amount);
 			setRepaymentDate(moment(details?.salaryAdvanceData?.repaymentDate, 'YYYY-MM-DD'));
@@ -108,7 +109,7 @@ function RequestSalaryAdvTab(props) {
 		else if (id && location.state) {
 			let role = location.state;
 			role = role.toLowerCase().split(" ").join("");
-			if (role === 'financemanager') {
+			if (role === 'finance manager') {
 				role = 'finance'
 			}
 			dispatch(Actions.updateSalaryAdvanceByRole(id, model, fileInput[0], role, history))

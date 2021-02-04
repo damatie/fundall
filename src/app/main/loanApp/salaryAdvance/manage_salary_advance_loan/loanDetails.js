@@ -98,12 +98,12 @@ function LoanDetails(props) {
 							<div>
 								<FuseAnimate animation="transition.slideLeftIn" delay={300}>
 									<Typography className="md:mx-24" variant="h4" color="inherit">
-										{`${salaryAdvanceDetails?.details?.data.salaryAdvanceData?.name}`}
+										{`${salaryAdvanceDetails?.details?.data?.salaryAdvanceData?.name}`}
 									</Typography>
 
 								</FuseAnimate>
 								<Typography className="md:mx-24" variant='subtitle1' color="inherit">
-									{salaryAdvanceDetails.details?.data.employeeInfo?.email}
+									{salaryAdvanceDetails.details?.data?.employeeInfo?.email}
 								</Typography>
 							</div>
 

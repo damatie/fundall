@@ -66,8 +66,8 @@ function SalaryAdvance(props) {
 	const classes = useStyles(props);
 	const role = useSelector(({ auth }) => auth.user.role)
 
-	const salaryAdvance = useSelector(({ salaryAdvance }) => salaryAdvance);
-	const details = useSelector(({ salaryAdvance }) => salaryAdvance.salaryAdvances?.details);
+	const salaryAdvance = useSelector(({ salaryAdvance }) => salaryAdvance?.salaryAdvances);
+	const details = useSelector(({ salaryAdvance }) => salaryAdvance?.salaryAdvances?.details?.data);
 
 	const history = useHistory();
 	const location = useLocation();
@@ -82,7 +82,7 @@ function SalaryAdvance(props) {
 	}, [id, dispatch]);
 
 	useEffect(() => {
-		console.log(salaryAdvance, details);
+		// console.log(salaryAdvance, details);
 	}, [details])
 
 	return (
