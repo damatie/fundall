@@ -50,7 +50,7 @@ function RequestSalaryAdvTab(props) {
 	const [showDetails, setShowDetails] = useState(false);
 	const formRef = useRef(null);
 
-	const salaryAdvance = useSelector(({ salaryAdvance }) => salaryAdvance?.salaryAdvances);
+	const salaryAdvance = props.salaryAdvance;
 	const details = props.details;
 
 	const profile = useSelector(({ profile }) => profile);
@@ -73,10 +73,10 @@ function RequestSalaryAdvTab(props) {
 		if (profile.data?.id) {
 			setShowDetails(true);
 		}
-	}, [showDetails, profile]);
+	}, [showDetails, profile, props.state]);
 
 	useEffect(() => {
-		console.log(details, salaryAdvance);
+		// console.log(details, salaryAdvance);
 	}, [salaryAdvance, details])
 
 	useEffect(() => {
@@ -238,7 +238,7 @@ function RequestSalaryAdvTab(props) {
 					<p>loading...</p>
 			}
 		</div>
-	), [details, showDetails, amount, repaymentDate, fileInput, salaryAdvance, isFormValid])
+	), [details, showDetails, amount, repaymentDate, fileInput, salaryAdvance, isFormValid, props.state]);
 };
 
 

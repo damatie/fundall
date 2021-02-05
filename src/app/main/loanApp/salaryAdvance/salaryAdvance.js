@@ -65,6 +65,12 @@ function SalaryAdvance(props) {
 
 	const classes = useStyles(props);
 	const role = useSelector(({ auth }) => auth.user.role);
+	const state = useSelector(({ salaryAdvanceDetails }) => salaryAdvanceDetails?.salaryAdvances);
+
+	// const state = useSelector(({ salaryAdvance }) => salaryAdvance?.salaryAdvance ?? salaryAdvance?.salaryAdvances);
+
+	const salaryAdvanceDeet = useSelector(({ salaryAdvanceDetails }) => salaryAdvanceDetails?.salaryAdvances ?? salaryAdvanceDetails?.salaryAdvance);
+	const detailsDeet = useSelector(({ salaryAdvanceDetails }) => salaryAdvanceDetails?.salaryAdvances?.details?.data ?? salaryAdvanceDetails?.salaryAdvance?.details?.data);
 
 	const salaryAdvance = useSelector(({ salaryAdvance }) => salaryAdvance?.salaryAdvances ?? salaryAdvance?.salaryAdvance ?? {});
 	const details = useSelector(({ salaryAdvance }) => salaryAdvance?.salaryAdvances?.details?.data);
@@ -82,8 +88,8 @@ function SalaryAdvance(props) {
 	}, [id, dispatch]);
 
 	useEffect(() => {
-		// console.log(salaryAdvance, details);
-	}, [details, salaryAdvance])
+		console.log(salaryAdvance, details, state);
+	}, [details, salaryAdvance, state])
 
 	return (
 		<FusePageCarded
@@ -150,8 +156,9 @@ function SalaryAdvance(props) {
 			content={
 				<div className=" sm:p-24 ">
 					<RequestSalaryAdvTab
-						salaryAdvance={salaryAdvance}
-						details={details}
+						salaryAdvance={salaryAdvance ?? salaryAdvanceDeet}
+						details={details ?? detailsDeet}
+						state={state}
 					/>
 				</div>
 			}

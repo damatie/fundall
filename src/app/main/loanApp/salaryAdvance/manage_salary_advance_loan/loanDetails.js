@@ -16,7 +16,7 @@ import { fetchHeaders } from 'app/shared/fetchHeaders';
 // import swal from 'sweetalert2';
 import withReducer from 'app/store/withReducer';
 // import { useDeepCompareEffectNoCheck } from '@fuse/hooks/useDeepCompareEffect';
-import  SALoanDetailsTab from '../../tabs/salaryAdvanceLoanDetailsTab';
+import SALoanDetailsTab from '../../tabs/salaryAdvanceLoanDetailsTab';
 import reducers from '../../store/reducers';
 import * as Actions from '../../store/actions';
 // import SalaryAdvanceActionBtn from '../salaryAdvanceActionBtn';
@@ -80,7 +80,7 @@ function LoanDetails(props) {
 								role="button"
 								to="/loan/salary_advance/list"
 								color="inherit"
-								// onClick={e => history.goBack()}
+							// onClick={e => history.goBack()}
 							>
 								<Icon className="text-20">
 									{theme.direction === 'ltr' ? 'arrow_back' : 'arrow_forward'}
