@@ -64,9 +64,9 @@ function SalaryAdvance(props) {
 	const theme = useTheme();
 
 	const classes = useStyles(props);
-	const role = useSelector(({ auth }) => auth.user.role)
+	const role = useSelector(({ auth }) => auth.user.role);
 
-	const salaryAdvance = useSelector(({ salaryAdvance }) => salaryAdvance?.salaryAdvances);
+	const salaryAdvance = useSelector(({ salaryAdvance }) => salaryAdvance?.salaryAdvances ?? salaryAdvance?.salaryAdvance ?? {});
 	const details = useSelector(({ salaryAdvance }) => salaryAdvance?.salaryAdvances?.details?.data);
 
 	const history = useHistory();

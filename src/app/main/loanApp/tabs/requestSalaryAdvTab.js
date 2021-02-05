@@ -44,7 +44,7 @@ function RequestSalaryAdvTab(props) {
 
 	const [amount, setAmount] = useState('');
 	const [repaymentDate, setRepaymentDate] = useState(moment(new Date()));
-	const [fileInput, setFileInput] = useState("");
+	const [fileInput, setFileInput] = useState([]);
 
 	const [isFormValid, setIsFormValid] = useState(false);
 	const [showDetails, setShowDetails] = useState(false);
@@ -77,7 +77,34 @@ function RequestSalaryAdvTab(props) {
 
 	useEffect(() => {
 		console.log(details, salaryAdvance);
-	}, [salaryAdvance])
+	}, [salaryAdvance, details])
+
+	useEffect(() => {
+		if (details?.salaryAdvanceData?.amount) {
+			if (amount <= details?.salaryAdvanceData?.amount && Number(amount) && repaymentDate && fileInput[0]) {
+				enableButton();
+			} else {
+				disableButton();
+			}
+		}
+		else {
+			if (Number(amount) > 0 && repaymentDate && fileInput[0]) {
+				enableButton();
+			} else {
+				disableButton();
+			}
+		}
+		// console.log(amount, repaymentDate, fileInput, details?.salaryAdvanceData?.amount);
+		// if (details?.salaryAdvanceData?.amount) {
+
+		// } else {
+		// 	if (amount > 0 && repaymentDate && fileInput[0]) {
+		// 		enableButton()
+		// 	} else {
+		// 		disableButton()
+		// 	}
+		// }
+	}, [amount, repaymentDate, fileInput])
 
 	useEffect(() => {
 		if (details && id) {
@@ -112,7 +139,7 @@ function RequestSalaryAdvTab(props) {
 		else if (id && location.state) {
 			let role = location.state;
 			role = role.toLowerCase().split(" ").join("");
-			if (role === 'finance manager') {
+			if (role === 'financemanager') {
 				role = 'finance'
 			}
 			dispatch(Actions.updateSalaryAdvanceByRole(id, model, fileInput[0], role, history))
@@ -129,7 +156,7 @@ function RequestSalaryAdvTab(props) {
 					<Formsy
 						onValidSubmit={handleSubmit}
 						// onValid={enableButton}
-						onInvalid={disableButton}
+						// onInvalid={disableButton}
 						ref={formRef}
 						className="flex flex-col justify-center w-full"
 					>
@@ -140,8 +167,14 @@ function RequestSalaryAdvTab(props) {
 									values={amount}
 									handleChange={e => setAmount(e.target.value)}
 									name={"amount"}
-									helperText={amount > details?.salaryAdvanceData?.amount ? 'Please you can not request for an amount that is greater than the amount requested' : `Max Amount: ${new Intl.NumberFormat().format(details?.salaryAdvanceData?.amount ?? 0)}`}
-									error={amount > details?.salaryAdvanceData?.amount}
+									helperText={
+										details?.salaryAdvanceData?.amount ?
+											amount > details?.salaryAdvanceData?.amount ?
+												'Please you can not request for an amount that is greater than the amount requested' :
+												`Max Amount: ${new Intl.NumberFormat().format(details?.salaryAdvanceData?.amount ?? 0)}` :
+											""
+									}
+									error={details?.salaryAdvanceData?.amount && amount > details?.salaryAdvanceData?.amount ? true : false}
 									required
 								/>
 							</div>
@@ -187,7 +220,16 @@ function RequestSalaryAdvTab(props) {
 											"Approve Request" :
 											'Update Request' :
 										"Send Request to Line Manager"
-								} disable={(id && (amount <= details?.salaryAdvanceData?.amount) && repaymentDate && fileInput.length > 0) ? false : !isFormValid} />
+								} disable={
+									// (id && (
+									// details?.salaryAdvanceData?.amount ?
+									// 	amount <= details?.salaryAdvanceData?.amount ?
+									// 		true : false
+									// 	:
+									// 	false
+									// 	amount
+									// ) && repaymentDate && fileInput.length > 0) ? false : 
+									!isFormValid} />
 							</Grid>
 						</Grid>
 
@@ -196,7 +238,7 @@ function RequestSalaryAdvTab(props) {
 					<p>loading...</p>
 			}
 		</div>
-	), [details, showDetails, amount, repaymentDate, fileInput, salaryAdvance])
+	), [details, showDetails, amount, repaymentDate, fileInput, salaryAdvance, isFormValid])
 };
 
 
