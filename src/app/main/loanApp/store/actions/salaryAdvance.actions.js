@@ -54,10 +54,7 @@ export const getSalaryAdvanceDetails = id => {
         if (data.success) {
           dispatch({
             type: GET_SALARY_ADVANCE_DETAILS,
-            payload: {
-              ...data,
-
-            }
+            payload: data
           })
         }
       }

@@ -10,7 +10,7 @@ const intialState = {
 };
 
 export const salaryAdvanceReducer = (state = intialState, actions) => {
-  switch(actions.type) {
+  switch (actions.type) {
     case Actions.LOADING_SALARY_ADVANCE: {
       return {
         ...state,

@@ -64,9 +64,16 @@ function SalaryAdvance(props) {
 	const theme = useTheme();
 
 	const classes = useStyles(props);
+	const role = useSelector(({ auth }) => auth.user.role);
+	const state = useSelector(({ salaryAdvanceDetails }) => salaryAdvanceDetails?.salaryAdvances);
 
-	const salaryAdvance = useSelector(({ salaryAdvance }) => salaryAdvance.salaryAdvance);
-	const details = useSelector(({ salaryAdvance }) => salaryAdvance.salaryAdvances?.details);
+	// const state = useSelector(({ salaryAdvance }) => salaryAdvance?.salaryAdvance ?? salaryAdvance?.salaryAdvances);
+
+	const salaryAdvanceDeet = useSelector(({ salaryAdvanceDetails }) => salaryAdvanceDetails?.salaryAdvances ?? salaryAdvanceDetails?.salaryAdvance);
+	const detailsDeet = useSelector(({ salaryAdvanceDetails }) => salaryAdvanceDetails?.salaryAdvances?.details?.data ?? salaryAdvanceDetails?.salaryAdvance?.details?.data);
+
+	const salaryAdvance = useSelector(({ salaryAdvance }) => salaryAdvance?.salaryAdvances ?? salaryAdvance?.salaryAdvance ?? {});
+	const details = useSelector(({ salaryAdvance }) => salaryAdvance?.salaryAdvances?.details?.data);
 
 	const history = useHistory();
 	const location = useLocation();
@@ -74,10 +81,15 @@ function SalaryAdvance(props) {
 	const { id } = useParams();
 
 	useEffect(() => {
+
 		if (id) {
 			dispatch(Actions.getSalaryAdvanceDetails(id));
 		}
 	}, [id, dispatch]);
+
+	useEffect(() => {
+		console.log(salaryAdvance, details, state);
+	}, [details, salaryAdvance, state])
 
 	return (
 		<FusePageCarded
@@ -94,7 +106,8 @@ function SalaryAdvance(props) {
 								component={Link}
 								role="button"
 								// onClick={() => history.goBack()}
-								to="/loan/request/salaryadvance_request/list"
+								// to={"/loan/request/salaryadvance_request/list"}
+								to={role.toLowerCase() !== "employee" ? "/loan/salary_advance/list" : "/loan/request/salaryadvance_request/list"}
 								color="inherit"
 							>
 								<Icon className="text-20">
@@ -143,8 +156,9 @@ function SalaryAdvance(props) {
 			content={
 				<div className=" sm:p-24 ">
 					<RequestSalaryAdvTab
-						salaryAdvance={salaryAdvance}
-						details={details}
+						salaryAdvance={salaryAdvance ?? salaryAdvanceDeet}
+						details={details ?? detailsDeet}
+						state={state}
 					/>
 				</div>
 			}

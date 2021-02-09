@@ -16,7 +16,7 @@ import { fetchHeaders } from 'app/shared/fetchHeaders';
 // import swal from 'sweetalert2';
 import withReducer from 'app/store/withReducer';
 // import { useDeepCompareEffectNoCheck } from '@fuse/hooks/useDeepCompareEffect';
-import  SALoanDetailsTab from '../../tabs/salaryAdvanceLoanDetailsTab';
+import SALoanDetailsTab from '../../tabs/salaryAdvanceLoanDetailsTab';
 import reducers from '../../store/reducers';
 import * as Actions from '../../store/actions';
 // import SalaryAdvanceActionBtn from '../salaryAdvanceActionBtn';
@@ -80,7 +80,7 @@ function LoanDetails(props) {
 								role="button"
 								to="/loan/salary_advance/list"
 								color="inherit"
-								// onClick={e => history.goBack()}
+							// onClick={e => history.goBack()}
 							>
 								<Icon className="text-20">
 									{theme.direction === 'ltr' ? 'arrow_back' : 'arrow_forward'}
@@ -98,12 +98,12 @@ function LoanDetails(props) {
 							<div>
 								<FuseAnimate animation="transition.slideLeftIn" delay={300}>
 									<Typography className="md:mx-24" variant="h4" color="inherit">
-										{`${salaryAdvanceDetails?.details?.data.salaryAdvanceData?.name}`}
+										{`${salaryAdvanceDetails?.details?.data?.salaryAdvanceData?.name}`}
 									</Typography>
 
 								</FuseAnimate>
 								<Typography className="md:mx-24" variant='subtitle1' color="inherit">
-									{salaryAdvanceDetails.details?.data.employeeInfo?.email}
+									{salaryAdvanceDetails.details?.data?.employeeInfo?.email}
 								</Typography>
 							</div>
 

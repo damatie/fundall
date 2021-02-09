@@ -4,7 +4,7 @@ import * as Actions from 'app/main/loanApp/salaryAdvance/store/actions';
 import { useHistory } from 'react-router';
 
 const handleBtnVisibility = ({ role, status }) => {
-  status = status.toLowerCase();
+  status = status?.toLowerCase();
   const ruleOne = (role === 'Director of support service' || role === 'Line Manager') && (status === 'pending');
   const ruleTwo = role === 'Hr Manager' && (status === 'reviewed1');
   const ruleThree = role === 'Finance Manager' && (status === 'reviewed2');
@@ -64,10 +64,11 @@ const useSalaryAdvanceMgt = ({ loan, userRole, id }) => {
   let history = useHistory();
 
   useEffect(() => {
+    console.log(loan)
     setShowBtn(handleBtnVisibility(
       {
         role: userRole,
-        status: loan.salaryAdvanceData.status
+        status: loan?.salaryAdvanceData.status
       }
     ));
     setShowCancelBtn(loan.salaryAdvanceData.status === 'open');
@@ -90,12 +91,12 @@ const useSalaryAdvanceMgt = ({ loan, userRole, id }) => {
 
   const handleApprove = () => {
     console.log(loan.salaryAdvanceData.status);
-    if( loan.salaryAdvanceData.status.toLowerCase() === 'approved'){
+    if (loan.salaryAdvanceData.status.toLowerCase() === 'approved') {
       dispatch(Actions.approveSalaryAvance({
         id,
         url: approveUrl,
       }));
-    }else{
+    } else {
       history.push({
         pathname: "/loan/request/salaryadvance_request/new/" + id,
         state: userRole
