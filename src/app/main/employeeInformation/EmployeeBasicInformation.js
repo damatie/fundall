@@ -13,44 +13,55 @@ import EmergencyContacts, { AddEmergencyContact } from './components/EmergencyCo
 import SpouseAndDependants, { AddSpouseAndDependant } from './components/SpouseAndDependants';
 import { useSelector, useDispatch } from 'react-redux';
 import * as Actions from 'app/store/actions';
-
-const info = {
-  title: 'Mr',
-  firstName: 'Dave',
-  lastName: 'Dave',
-  middleName: 'Dave',
-  surname: 'Dave',
-  srgn: 'DC-003',
-  gender: 'Male',
-  maritalStatus: 'Single',
-  nickname: 'Black',
-  officialEmail: 'test@test.com',
-  alternativeEmail: 'test@test.cc',
-  facebookHandle: 'https://timesheet-client.web.app/blog/1',
-  twitterHandle: 'https://timesheet-client.web.app/blog/1',
-  linkedInHandle: 'https://timesheet-client.web.app/blog/1',
-  instagramInHandle: 'https://timesheet-client.web.app/blog/1',
-  officialNo: '',
-  officeLine: '',
-  officeExtension: '',
-  privateMobileNumber: ''
-}
+import reducer from './store/reducers';
+import withReducer from 'app/store/withReducer';
+import { openSharedModal, CLOSE_SHARED_MODAL } from './store/actions';
+// const info = {
+//   title: 'Mr',
+//   firstName: 'Dave',
+//   lastName: 'Dave',
+//   middleName: 'Dave',
+//   surname: 'Dave',
+//   srgn: 'DC-003',
+//   gender: 'Male',
+//   maritalStatus: 'Single',
+//   nickname: 'Black',
+//   officialEmail: 'test@test.com',
+//   alternativeEmail: 'test@test.cc',
+//   facebookHandle: 'https://timesheet-client.web.app/blog/1',
+//   twitterHandle: 'https://timesheet-client.web.app/blog/1',
+//   linkedInHandle: 'https://timesheet-client.web.app/blog/1',
+//   instagramInHandle: 'https://timesheet-client.web.app/blog/1',
+//   officialNo: '',
+//   officeLine: '',
+//   officeExtension: '',
+//   privateMobileNumber: ''
+// }
 const EmployeeBasicInformation = () => {
   const authState = useSelector(state => state.auth.user);
   const profile = useSelector(state => state.profile.data);
-  const [open, setOpen] = React.useState(false);
-  const [title, setTitle] = React.useState(null);
+  const { title, open } = useSelector(state => state.employeeInformation.employeeInfo);
+  const [info, setInfo] = React.useState({
+    ...profile,
+    info: null,
+    ...profile.info,
+  });
   const dispatch = useDispatch();
 
   React.useEffect(() => {
-    dispatch(Actions.getEmployeeProfile(authState.id));
+    // dispatch(Actions.getEmployeeProfile(authState.id));
   }, []);
 
-  const handleOpen = (name) => {
+  const handleOpen = (title) => {
     return () => {
-      setTitle(name);
-      setOpen(true);
+      openSharedModal(title)
     }
+  };
+
+  const handleClose = () => {
+    dispatch({
+      type: CLOSE_SHARED_MODAL
+    });
   }
   return (
     <>
@@ -89,7 +100,7 @@ const EmployeeBasicInformation = () => {
       <SharedModal
         title={title}
         open={open}
-        handleClose={() => setOpen(false)}
+        handleClose={handleClose}
       >
         {title === 'Travel And Vacation Schedule' && (<AddEmployeeVacation />)}
         {title === 'Training And Expertise' && (<AddTrainingAndExpertise />)}
@@ -101,4 +112,4 @@ const EmployeeBasicInformation = () => {
   );
 };
 
-export default EmployeeBasicInformation;
+export default withReducer('employeeInformation', reducer)(EmployeeBasicInformation);

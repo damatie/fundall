@@ -23,33 +23,6 @@ const CreateEmployeeInfo = () => {
   const dispatch = useDispatch();
   const inputs = React.useMemo(() => [
     {
-      name: 'title',
-      label: 'Title',
-    },
-    {
-      name: 'maritalStatus',
-      label: 'Marital Status',
-      type: 'select',
-      data: [
-        {
-          id: 'married',
-          name: 'Married'
-        },
-        {
-          id: 'single',
-          name: 'Single'
-        },
-        {
-          id: 'divorced',
-          name: 'Divorced'
-        },
-        {
-          id: 'complicated',
-          name: 'Complicated'
-        }
-      ],
-    },
-    {
       name: 'officeExtension',
       label: 'Office Extension',
       type: 'number',
@@ -70,51 +43,15 @@ const CreateEmployeeInfo = () => {
       type: 'phoneNumber',
     },
     {
-      name: 'contactAddress',
-      label: 'Contact Address',
-      // type: '',
-    },
-    {
       name: 'alternativeEmail',
       label: 'Alternative Email/Private Email',
       type: 'email',
-    },
-    {
-      name: 'gender',
-      label: 'Gender',
-      type: 'select',
-      data: [
-        {
-          id: 'male',
-          name: 'Male'
-        },
-        {
-          id: 'female',
-          name: 'Female'
-        },
-        {
-          id: 'others',
-          name: 'Others'
-        }
-      ],
     },
     {
       name: 'nationality',
       label: 'Nationality',
       type: 'select',
       data: countries,
-    },
-    {
-      name: 'country',
-      label: 'Country',
-      type: 'select',
-      data: countries,
-    },
-    {
-      name: 'cityOfResidence',
-      label: 'City',
-      type: 'select',
-      data: states,
     },
     {
       name: 'facebookHandle',

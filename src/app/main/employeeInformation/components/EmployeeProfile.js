@@ -6,9 +6,17 @@ import SelectTextField from 'app/shared/TextInput/SelectTextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import useEmployeeProfile from '../hooks/useEmployeeProfile';
 import SharedButton from 'app/shared/button/SharedButton';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { Controller } from 'react-hook-form';
+import * as Actions from 'app/store/actions';
+import 'react-phone-input-2/lib/material.css';
+import PhoneInput from 'react-phone-input-2';
+import startsWith from 'lodash.startswith';
+import Typography from '@material-ui/core/Typography'
 
 const EmployeeProfile = ({ value, authState }) => {
+  const { countries, states } = useSelector(state => state.regions);
+
   const inputs = React.useMemo(() =>
     [
       {
@@ -27,37 +35,107 @@ const EmployeeProfile = ({ value, authState }) => {
         defaultValue: value.middleName,
       },
       {
-        name: 'surname',
+        name: 'lastName',
         label: 'Surname',
-        defaultValue: value.surname,
+        defaultValue: value.lastName,
       },
       {
-        name: 'srgn',
-        label: 'SRGN',
-        defaultValue: value.srgn,
+        name: 'nickName',
+        label: 'Nick Name',
+        defaultValue: value.nickName
+      },
+      {
+        name: 'email',
+        label: 'Official Email',
+        defaultValue: value.email,
+      },
+      {
+        name: 'phoneNumber',
+        label: 'Mobile Number',
+        defaultValue: value.phoneNumber,
+        type: 'phoneNumber'
+      },
+      {
+        name: 'srgIdNumber',
+        label: 'SRG ID Number',
+        defaultValue: value.srgIdNumber,
       },
       {
         name: 'gender',
         label: 'Gender',
         defaultValue: value.gender,
         type: 'select',
-        data: ['Male', 'Female', 'Others']
+        data: [
+          {
+            id: 'male',
+            name: 'male'
+          },
+          {
+            id: 'female',
+            name: 'female'
+          },
+          {
+            id: 'others',
+            name: 'others'
+          }
+        ]
       },
       {
         name: 'maritalStatus',
         label: 'Marital Status',
         defaultValue: value.maritalStatus,
         type: 'select',
-        data: ['Single', 'Married', 'Divorced', 'Complicated']
+        data: [
+
+          {
+            id: 'single',
+            name: 'single',
+          },
+          {
+            id: 'married',
+            name: 'married',
+          },
+          {
+            id: 'divorced',
+            name: 'divorced',
+          },
+          {
+            id: 'complicated',
+            name: 'complicated',
+          }
+        ]
       },
       {
-        name: 'nickname',
-        label: 'Nickname',
-        defaultValue: value.nickname,
+        name: 'country',
+        label: 'Country',
+        defaultValue: value.country,
+        data: countries,
+        type: 'select'
+      },
+      {
+        name: 'cityOfResidence',
+        label: 'City of Residence',
+        defaultValue: value.cityOfResidence,
+        data: states,
+        type: 'select'
+      },
+      {
+        name: 'residentialAddress',
+        label: 'Residential Address',
+        defaultValue: value.residentialAddress,
       }
-    ], [value]);
+    ], [value, states, countries]);
 
-    const dispatch = useDispatch();
+  const dispatch = useDispatch();
+
+  React.useEffect(() => {
+    console.log(value);
+  }, [value]);
+
+  React.useEffect(() => {
+    dispatch(Actions.getCountries());
+    // dispatch(Actions.getEmployeeProfile(state.id));
+  }, []);
 
   const {
     errors,
@@ -65,7 +143,9 @@ const EmployeeProfile = ({ value, authState }) => {
     handleSubmit,
     shouldUpdate,
     handleShouldUpdate,
-    onSubmit
+    onSubmit,
+    control,
+    handleMenuItemClick
   } = useEmployeeProfile({
     defaultValue: value,
     state: authState,
@@ -90,22 +170,72 @@ const EmployeeProfile = ({ value, authState }) => {
           {inputs.map((input) => {
             if (input.type === 'select') {
               return (
-                <SelectTextField
+                <Controller
                   name={input.name}
-                  label={input.label}
-                  error={errors[input.name]}
-                  message={errors[input.name]?.message}
-                  onChange={({ target: { name, value } }) => register({ name, value })}
+                  control={control}
+                  rules={{ required: true }}
                   defaultValue={input.defaultValue}
-                  disabled={!shouldUpdate}
-                >
-                  {input.data.map((value) => (
-                    <MenuItem key={value} value={value}>
-                      {value}
-                    </MenuItem>
-                  ))}
-                </SelectTextField>
+                  as={
+                    <SelectTextField
+                      name={input.name}
+                      label={input.label}
+                      error={errors[input.name]}
+                      message={errors[input.name]?.message}
+                      defaultValue={input.defaultValue}
+                      disabled={!shouldUpdate}
+                      refs={register}
+                      
+                    >
+                      {input.data.map(({ id, name }) => (
+                        <MenuItem
+                          key={id}
+                          value={name}
+                          onClick={handleMenuItemClick({ value: id, name: input.name })}
+                        >
+                          {name}
+                        </MenuItem>
+                      ))}
+                    </SelectTextField>
+                  }
+                />
+
               )
+            }
+            if (input.type === 'phoneNumber') {
+              return (
+                // <Grid item lg={12}>
+                <div className=''>
+                  <Controller
+                    defaultValue={input.defaultValue}
+                    as={
+                      <PhoneInput
+                        disabled={!shouldUpdate}
+                        value={input.defaultValue}
+                        id={input.name}
+                        country='ng'
+                        // placeholder="Enter phone number"
+                        containerClass='w-full'
+                        inputClass='w-full'
+                        specialLabel={input.label}
+                        enableAreaCodes
+                        enableSearch
+                        inputRef={register}
+                        isValid={(inputNumber, country, onlyCountries) => {
+                          return onlyCountries.some((country) => {
+                            return startsWith(inputNumber, country.dialCode) || startsWith(country.dialCode, inputNumber);
+                          });
+                        }}
+                      />
+                    }
+                    name={input.name}
+                    control={control}
+                    rules={{ required: true }}
+                  />
+                  <Typography variant="caption" color="error">{errors[input.name]?.message}</Typography>
+                </div>
+                // </Grid>
+              )
+
             }
             return (
               <Input

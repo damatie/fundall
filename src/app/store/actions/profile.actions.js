@@ -40,7 +40,7 @@ export const updateEmployeeProfile = (id, body) => {
     dispatch({
       type: UPDATING_EMPLOYEE_PROFILE
     });
-    fetch(`${getBaseUrl()}/auth/employee/`,{
+    fetch(`${getBaseUrl()}/auth/employee/info`,{
       ...headers.reqHeader(
         'PATCH',
         body

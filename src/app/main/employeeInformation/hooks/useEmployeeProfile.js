@@ -4,6 +4,7 @@ import * as yup from 'yup';
 import errorMsg from 'utils/errorMsg';
 import React from 'react';
 import * as Actions from 'app/store/actions';
+import swal from 'sweetalert2';
 
 const schema = yup.object().shape({
   title: yup.string(
@@ -61,7 +62,7 @@ const schema = yup.object().shape({
       type: 'required',
     })
   ),
-  nickname: yup.string(
+  nickName: yup.string(
     errorMsg({
       name: 'Nickname',
       type: 'string',
@@ -83,7 +84,7 @@ const schema = yup.object().shape({
       type: 'required',
     })
   ),
-  srgn: yup.string(
+  srgIdNumber: yup.string(
     errorMsg({
       name: 'SRGN',
       type: 'string',
@@ -94,31 +95,64 @@ const schema = yup.object().shape({
       type: 'required',
     })
   ),
+  phoneNumber: yup.string(
+    errorMsg({
+      name: 'Phone Number',
+      type: 'string',
+    })
+  ).required(
+    errorMsg({
+      name: 'Phone Number',
+      type: 'required',
+    })
+  ),
+  country: yup.string(
+    errorMsg({
+      name: 'Country',
+      type: 'string',
+    })
+  ).required(
+    errorMsg({
+      name: 'Country',
+      type: 'required',
+    })
+  ),
+  cityOfResidence: yup.string(
+    errorMsg({
+      name: 'City of Residence',
+      type: 'string',
+    })
+  ).required(
+    errorMsg({
+      name: 'City of Residence',
+      type: 'required',
+    })
+  ),
+  residentialAddress: yup.string(
+    errorMsg({
+      name: 'Residential Address',
+      type: 'string',
+    })
+  ).required(
+    errorMsg({
+      name: 'Residential Address',
+      type: 'required',
+    })
+  )
 });
 
 const useEmployeeProfile = ({dispatch, defaultValue, state}) => {
   const [shouldUpdate, setShouldUpdate] = React.useState(false);
-
   const {
     errors,
     register,
-    handleSubmit
+    handleSubmit,
+    control
   } = useForm({
     mode: 'onBlur',
     resolver: yupResolver(schema),
     defaultValue
   });
-
-  React.useEffect(() => {
-    register({
-      name: 'gender',
-      value: defaultValue.gender
-    });
-    register({
-      name: 'maritalStatus',
-      value: defaultValue.maritalStatus
-    });
-  }, [])
 
   const onSubmit = (value) => {
     dispatch(Actions.updateEmployeeProfile(state.id, value))
@@ -128,13 +162,25 @@ const useEmployeeProfile = ({dispatch, defaultValue, state}) => {
     setShouldUpdate(!shouldUpdate);
   }
 
+  const handleMenuItemClick = ({ value, name }) => () => {
+    if(name === 'country') {
+      dispatch(Actions.getStates(value));
+      swal.fire({
+        text: 'Please select your city of residence',
+        icon: 'info',
+      });
+    }
+  }
+
   return {
     errors,
     register,
     handleSubmit,
     shouldUpdate,
     handleShouldUpdate,
-    onSubmit
+    onSubmit,
+    control,
+    handleMenuItemClick
   };
 };
 

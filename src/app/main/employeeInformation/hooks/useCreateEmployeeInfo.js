@@ -8,28 +8,6 @@ import { createEmployeeInfo } from '../store/actions';
 import React from 'react';
 
 const schema = yup.object().shape({
-  title: yup.string(
-    errorMsg({
-      type: 'string',
-      name: 'Title'
-    })
-  ).required(
-    errorMsg({
-      type: 'required',
-      name: 'Title'
-    })
-  ),
-  maritalStatus: yup.string(
-    errorMsg({
-      type: 'string',
-      name: 'Marital Status'
-    })
-  ).required(
-    errorMsg({
-      type: 'required',
-      name: 'Marital Status'
-    })
-  ),
   officeExtension: yup.string(
     errorMsg({
       type: 'string',
@@ -74,28 +52,7 @@ const schema = yup.object().shape({
       name: 'Official Mobile No'
     })
   ),
-  cityOfResidence: yup.string(
-    errorMsg({
-      type: 'string',
-      name: 'City'
-    })
-  ).required(
-    errorMsg({
-      type: 'required',
-      name: 'City'
-    })
-  ),
-  contactAddress: yup.string(
-    errorMsg({
-      type: 'string',
-      name: 'Contact Address'
-    })
-  ).required(
-    errorMsg({
-      type: 'required',
-      name: 'Contact Address'
-    })
-  ),
+  
   alternativeEmail: yup.string(
     errorMsg({
       type: 'string',
@@ -112,17 +69,6 @@ const schema = yup.object().shape({
       name: 'Alternative Email/Private Email'
     })
   ),
-  gender: yup.string(
-    errorMsg({
-      type: 'string',
-      name: 'Gender'
-    })
-  ).required(
-    errorMsg({
-      type: 'required',
-      name: 'Gender'
-    })
-  ),
   nationality: yup.string(
     errorMsg({
       type: 'string',
@@ -132,17 +78,6 @@ const schema = yup.object().shape({
     errorMsg({
       type: 'required',
       name: 'Nationality'
-    })
-  ),
-  country: yup.string(
-    errorMsg({
-      type: 'string',
-      name: 'Country'
-    })
-  ).required(
-    errorMsg({
-      type: 'required',
-      name: 'Country'
     })
   ),
   facebookHandle: yup.string(
