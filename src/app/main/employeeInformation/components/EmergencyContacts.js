@@ -9,6 +9,9 @@ import Divider from '@material-ui/core/Divider';
 import PhoneInput from 'react-phone-input-2';
 import startsWith from 'lodash.startswith';
 import 'react-phone-input-2/lib/material.css';
+import Typography from '@material-ui/core/Typography';
+import IconButton from '@material-ui/core/IconButton';
+import Icon from '@material-ui/core/Icon';
 
 const data = [
   {
@@ -30,7 +33,45 @@ const data = [
     relationship: 'sister'
   },
 ]
-const EmergencyContacts = () => {
+const EmergencyContacts = ({ handleOpen }) => {
+  const [shouldUpdate, setShouldUpdate] = React.useState(false);
+  return (
+    <BasicCard
+      title='Emergency Contact'
+      button={
+        <>
+          <SharedButton
+            variant='outlined'
+            color='secondary'
+            onClick={handleOpen('Emergency Contact')}
+            className='mx-16'
+          >
+            Add
+          </SharedButton>
+          <SharedButton
+            variant='contained'
+            color='secondary'
+            onClick={() => setShouldUpdate(!shouldUpdate)}
+          >
+            {shouldUpdate ? 'Cancel' : 'Edit'}
+          </SharedButton>
+        </>
+      }
+    >
+      {data.map((item, index) => (
+        <EmergencyContactsDetails
+          item={item}
+          key={item?.id}
+          index={index}
+          shouldUpdate={shouldUpdate}
+          setShouldUpdate={setShouldUpdate}
+        />
+      ))}
+    </BasicCard>
+  );
+};
+
+const EmergencyContactsDetails = ({ item, index, setShouldUpdate, shouldUpdate }) => {
   const inputs = React.useMemo(() => [
     {
       name: 'name',
@@ -75,73 +116,80 @@ const EmergencyContacts = () => {
       data: [],
     },
   ], []);
+  const handleUpdate = () => {
+    setShouldUpdate(false);
+  }
   return (
-    <BasicCard
-      title='Emergency Contact'
-    >
+    <>
+      <div className='flex flex-row items-center my-20'>
+        <Typography variant="subtitle1" color="initial">Emergency Contact ({index + 1})</Typography>
+        <IconButton
+          aria-label="delete"
+          onClick={() => null}>
+          <Icon className='text-red-500'>delete</Icon>
+        </IconButton>
+      </div>
       <form>
-        {data.map((item) => (
-          <>
-            <GridSystem>
-              {
-                inputs.map((input) => {
-                  if (input.type === 'select') {
-                    return (
-                      <SelectTextField
-                        name={input.name}
-                        label={input.label}
-                        defaultValue={item[input.name]}
-                      >
-                        {input.data.map((value) => (
-                          <MenuItem key={value} value={value}>
-                            {value}
-                          </MenuItem>
-                        ))}
-                      </SelectTextField>
-                    )
-                  }
-                  if(input.type === 'phoneNumber') {
-                    return (
-                      // <Grid item lg={12}>
-                        // <div className='my-16'>
-                          <PhoneInput
-                            id="pNum"
-                            country='ng'
-                            // placeholder="Enter phone number"
-                            containerClass='w-full'
-                            inputClass='w-full'
-                            specialLabel={input.label}
-                            enableAreaCodes
-                            enableSearch
-                            // className={classes.phoneInput}
-                            // inputRef={register}
-                            // isValid={(inputNumber, onlyCountries) => {
-                            //   return onlyCountries.some((country) => {
-                            //     return startsWith(inputNumber, country.dialCode) || startsWith(country.dialCode, inputNumber);
-                            //   });
-                            // }}
-                          />
-                        // </div>
-                      // </Grid>
-                    )
-                    
-                  }
-                  return (
-                    <Input
-                      {...input}
-                      defaultValue={item[input.name]}
-                    />
-                  )
-                })
+        <GridSystem>
+          {
+            inputs.map((input) => {
+              if (input.type === 'select') {
+                return (
+                  <SelectTextField
+                    name={input.name}
+                    label={input.label}
+                    defaultValue={item[input.name]}
+                    disabled={!shouldUpdate}
+                  >
+                    {input.data.map((value) => (
+                      <MenuItem key={value} value={value}>
+                        {value}
+                      </MenuItem>
+                    ))}
+                  </SelectTextField>
+                )
               }
-            </GridSystem>
-            <Divider className='my-16' />
-          </>
-        ))}
+              if (input.type === 'phoneNumber') {
+                return (
+                  // <Grid item lg={12}>
+                  // <div className='my-16'>
+                  <PhoneInput
+                    id="pNum"
+                    country='ng'
+                    // placeholder="Enter phone number"
+                    containerClass='w-full'
+                    inputClass='w-full'
+                    specialLabel={input.label}
+                    enableAreaCodes
+                    enableSearch
+                    disabled={!shouldUpdate}
+                  />
+                )
+
+              }
+              return (
+                <Input
+                  {...input}
+                  defaultValue={item[input.name]}
+                  disabled={!shouldUpdate}
+                />
+              )
+            })
+          }
+        </GridSystem>
+        {shouldUpdate && (<SharedButton
+          variant='contained'
+          color='primary'
+          className='w-1/2 flex flex-col mx-auto my-16'
+          onClick={handleUpdate}
+        >
+          Update
+        </SharedButton>)}
       </form>
-    </BasicCard>
-  );
-};
+      <Divider className='my-16' />
+    </>
+  )
+}
 
 export const AddEmergencyContact = () => {
   const inputs = React.useMemo(() => [
@@ -209,31 +257,31 @@ export const AddEmergencyContact = () => {
 
           )
         }
-        if(input.type === 'phoneNumber') {
+        if (input.type === 'phoneNumber') {
           return (
             // <Grid item lg={12}>
-              <div className='my-16'>
-                <PhoneInput
-                  id="pNum"
-                  country='ng'
-                  // placeholder="Enter phone number"
-                  containerClass='w-full'
-                  inputClass='w-full'
-                  specialLabel={input.label}
-                  enableAreaCodes
-                  enableSearch
-                  // className={classes.phoneInput}
-                  // inputRef={register}
-                  // isValid={(inputNumber, onlyCountries) => {
-                  //   return onlyCountries.some((country) => {
-                  //     return startsWith(inputNumber, country.dialCode) || startsWith(country.dialCode, inputNumber);
-                  //   });
-                  // }}
-                />
-              </div>
+            <div className='my-16'>
+              <PhoneInput
+                id="pNum"
+                country='ng'
+                // placeholder="Enter phone number"
+                containerClass='w-full'
+                inputClass='w-full'
+                specialLabel={input.label}
+                enableAreaCodes
+                enableSearch
+              // className={classes.phoneInput}
+              // inputRef={register}
+              // isValid={(inputNumber, onlyCountries) => {
+              //   return onlyCountries.some((country) => {
+              //     return startsWith(inputNumber, country.dialCode) || startsWith(country.dialCode, inputNumber);
+              //   });
+              // }}
+              />
+            </div>
             // </Grid>
           )
-          
+
         }
         return (
           <div className='my-20'>

@@ -6,12 +6,14 @@ import SelectTextField from 'app/shared/TextInput/SelectTextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import PhoneInput from 'react-phone-input-2';
 import startsWith from 'lodash.startswith';
+import Typography from '@material-ui/core/Typography'
 import 'react-phone-input-2/lib/material.css';
 import SharedButton from 'app/shared/button/SharedButton';
 import useCreateEmployeeInfo from './hooks/useCreateEmployeeInfo';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Actions from 'app/store/actions';
 import { Controller } from 'react-hook-form';
+import SharedDropzone from 'app/shared/sharedDropZone';
 
 const CreateEmployeeInfo = () => {
 
@@ -20,33 +22,6 @@ const CreateEmployeeInfo = () => {
   const profile = useSelector(state => state.profile);
   const dispatch = useDispatch();
   const inputs = React.useMemo(() => [
-    {
-      name: 'title',
-      label: 'Title',
-    },
-    {
-      name: 'maritalStatus',
-      label: 'Marital Status',
-      type: 'select',
-      data: [
-        {
-          id: 'married',
-          name: 'Married'
-        },
-        {
-          id: 'single',
-          name: 'Single'
-        },
-        {
-          id: 'divorced',
-          name: 'Divorced'
-        },
-        {
-          id: 'complicated',
-          name: 'Complicated'
-        }
-      ],
-    },
     {
       name: 'officeExtension',
       label: 'Office Extension',
@@ -68,51 +43,15 @@ const CreateEmployeeInfo = () => {
       type: 'phoneNumber',
     },
     {
-      name: 'contactAddress',
-      label: 'Contact Address',
-      // type: '',
-    },
-    {
       name: 'alternativeEmail',
       label: 'Alternative Email/Private Email',
       type: 'email',
-    },
-    {
-      name: 'gender',
-      label: 'Gender',
-      type: 'select',
-      data: [
-        {
-          id: 'male',
-          name: 'Male'
-        },
-        {
-          id: 'female',
-          name: 'Female'
-        },
-        {
-          id: 'others',
-          name: 'Others'
-        }
-      ],
     },
     {
       name: 'nationality',
       label: 'Nationality',
       type: 'select',
       data: countries,
-    },
-    {
-      name: 'country',
-      label: 'Country',
-      type: 'select',
-      data: countries,
-    },
-    {
-      name: 'cityOfResidence',
-      label: 'City',
-      type: 'select',
-      data: states,
     },
     {
       name: 'facebookHandle',
@@ -158,7 +97,7 @@ const CreateEmployeeInfo = () => {
 
   React.useEffect(() => {
     dispatch(Actions.getCountries());
-    dispatch(Actions.getEmployeeProfile(state.id));
+    // dispatch(Actions.getEmployeeProfile(state.id));
   }, []);
 
   const {
@@ -168,7 +107,8 @@ const CreateEmployeeInfo = () => {
     register,
     handleSubmit,
     handleMenuItemClick,
-    control
+    control,
+    setSignature
   } = useCreateEmployeeInfo({
     dispatch,
     state
@@ -176,7 +116,7 @@ const CreateEmployeeInfo = () => {
 
   return (
     <SharedModal
-      open={/*profile.data?.info ? false : true*/false}
+      open={profile.data?.info ? false : true}
       handleClose={handleClose}
       title='Complete Registration'
     >
@@ -247,6 +187,13 @@ const CreateEmployeeInfo = () => {
             )
           })}
         </GridSystem>
+        <div>
+        <Typography variant="body2" color="initial" className='my-20'>{'Signature'}</Typography>
+          <SharedDropzone
+            setValue={setSignature}
+            name='signature'
+          />
+        </div>
         <SharedButton
           variant='contained'
           color='primary'

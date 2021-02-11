@@ -3,7 +3,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import errorMsg from 'utils/errorMsg';
 import React from 'react';
-import * as Actions from 'app/store/actions';
+import { getDept } from 'app/main/employeeManagement/store/actions';
+import { updateEmployeeInfo } from '../store/actions';
 
 const schema = yup.object().shape({
   employeeManager1: yup.string(
@@ -50,73 +51,58 @@ const schema = yup.object().shape({
       name: 'Personal Assistant'
     })
   ),
-  jobTitle: yup.string(
-    errorMsg({
-      type: 'string',
-      name: 'Job Title'
-    })
-  ).required(
-    errorMsg({
-      type: 'required',
-      name: 'Job Title'
-    })
-  ),
-  entity: yup.string(
-    errorMsg({
-      type: 'string',
-      name: 'Employee SRG Entity'
-    })
-  ).required(
-    errorMsg({
-      type: 'required',
-      name: 'Employee SRG Entity'
-    })
-  ),
-  department: yup.string(
-    errorMsg({
-      type: 'string',
-      name: 'Department/Function'
-    })
-  ).required(
-    errorMsg({
-      type: 'required',
-      name: 'Department/Function'
-    })
-  ),
-  srgSeniorityDate: yup.string(
-    errorMsg({
-      type: 'string',
-      name: 'SRG Seniority'
-    })
-  ).required(
+  // jobTitle: yup.string(
+  //   errorMsg({
+  //     type: 'string',
+  //     name: 'Job Title'
+  //   })
+  // ).required(
+  //   errorMsg({
+  //     type: 'required',
+  //     name: 'Job Title'
+  //   })
+  // ),
+  // entity: yup.string(
+  //   errorMsg({
+  //     type: 'string',
+  //     name: 'Employee SRG Entity'
+  //   })
+  // ).required(
+  //   errorMsg({
+  //     type: 'required',
+  //     name: 'Employee SRG Entity'
+  //   })
+  // ),
+  // department: yup.string(
+  //   errorMsg({
+  //     type: 'string',
+  //     name: 'Department/Function'
+  //   })
+  // ).required(
+  //   errorMsg({
+  //     type: 'required',
+  //     name: 'Department/Function'
+  //   })
+  // ),
+  SRGSeniority: yup.mixed().required(
     errorMsg({
       type: 'required',
       name: 'SRG Seniority'
     })
   ),
-  industrySeniorityDate: yup.string(
-    errorMsg({
-      type: 'string',
-      name: 'Industry Seniority'
-    })
-  ).required(
+  industrySeniority: yup.mixed().required(
     errorMsg({
       type: 'required',
       name: 'Industry Seniority'
     })
   ),
-  employeeStartDate: yup.string(
-    errorMsg({
-      type: 'string',
-      name: 'Employee Start Date'
-    })
-  ).required(
+  startDate: yup.mixed().required(
     errorMsg({
       type: 'required',
       name: 'Employee Start Date'
     })
   ),
-  employmentStatus: yup.string(
+  contractType: yup.string(
     errorMsg({
       type: 'string',
       name: 'Employment Status'
@@ -144,7 +130,7 @@ const useEmployeeOrganization = ({ dispatch, state, defaultValue }) => {
   });
 
   const onSubmit = (value) => {
-    dispatch(Actions.updateEmployeeProfile(state.id, value));
+    dispatch(updateEmployeeInfo({id: state.id, value}));
   };
 
   const handleShouldUpdate = () => {
@@ -152,9 +138,8 @@ const useEmployeeOrganization = ({ dispatch, state, defaultValue }) => {
   };
 
   const handleMenuItemClick = ({ value, name }) => () => {
-    if(name === 'entity') {
-      console.log(value);
-      dispatch(Actions.getDepartments(2));
+    if(name === 'entityId') {
+      dispatch(getDept(value));
     }
   }
 
