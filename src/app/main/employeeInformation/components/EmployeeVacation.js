@@ -14,29 +14,16 @@ import useTravelAndVacation from '../hooks/useTravelAndVacation';
 import { useDispatch, useSelector } from 'react-redux';
 import { Controller } from 'react-hook-form';
 import { getTravelAndVacation } from '../store/actions';
-// const data = [
-//   {
-//     activity: 'Recruitment Workshop',
-//     endDate: '12-04-2019',
-//     startDate: '12-07-2019',
-//     location: 'Lagos',
-//     id: 1
-//   },
-//   {
-//     activity: 'Vacation',
-//     endDate: '12-07-2019',
-//     startDate: '12/2/2020',
-//     location: 'Monaco',
-//     id: 2
-//   }
-// ]
 const EmployeeVacation = ({ handleOpen }) => {
   const [shouldUpdate, setShouldUpdate] = React.useState(false);
+
   const { data } = useSelector(state => state.employeeInformation.travel);
   const dispatch = useDispatch();
+
   React.useEffect(() => {
     dispatch(getTravelAndVacation());
   }, []);
+
   return (
     <BasicCard
       title='Travel And Vacation Schedule'
@@ -114,7 +101,7 @@ const EmployeeVacationDetails = ({ item, index, setShouldUpdate, shouldUpdate })
   })
 
   const close = () => {
-     setShouldUpdate(false)
+    setShouldUpdate(false)
   };
 
   return (
@@ -131,22 +118,6 @@ const EmployeeVacationDetails = ({ item, index, setShouldUpdate, shouldUpdate })
         <GridSystem>
           {
             inputs.map((input) => {
-              // if (input.type === 'select') {
-              //   return (
-              //     <SelectTextField
-              //       name={input.name}
-              //       label={input.label}
-              //       defaultValue={item[input.name]}
-              //       disabled={!shouldUpdate}
-              //     >
-              //       {input.data.map((value) => (
-              //         <MenuItem key={value} value={value}>
-              //           {value}
-              //         </MenuItem>
-              //       ))}
-              //     </SelectTextField>
-              //   )
-              // }
               if (input.type === 'date') {
                 return (
                   <Controller
@@ -164,7 +135,7 @@ const EmployeeVacationDetails = ({ item, index, setShouldUpdate, shouldUpdate })
                         format={'MMMM Do, YYYY'}
                         error={errors[input.name]}
                         helperText={errors[input.name]?.message}
-                      disabled={!shouldUpdate}
+                        disabled={!shouldUpdate}
                       />
                     }
                   />
@@ -238,23 +209,6 @@ export const AddEmployeeVacation = () => {
   return (
     <form onSubmit={handleSubmit(onSubmit())}>
       {inputs.map((input) => {
-        // if (input.type === 'select') {
-        //   return (
-        //     <div className='my-20'>
-        //       <SelectTextField
-        //         name={input.name}
-        //         label={input.label}
-        //       >
-        //         {input.data.map((value) => (
-        //           <MenuItem key={value} value={value}>
-        //             {value}
-        //           </MenuItem>
-        //         ))}
-        //       </SelectTextField>
-        //     </div>
-
-        //   )
-        // }
         if (input.type === 'date') {
           return (
             <Controller

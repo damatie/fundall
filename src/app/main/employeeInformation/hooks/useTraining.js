@@ -37,6 +37,7 @@ const schema = yup.object().shape({
 const useTrainingAndExpertise = ({ dispatch }) => {
   const {
     errors,
+    control,
     register,
     handleSubmit
   } = useForm({
@@ -44,9 +45,10 @@ const useTrainingAndExpertise = ({ dispatch }) => {
     resolver: yupResolver(schema)
   });
 
-  const onSubmit = (id) => (formData) => {
+  const onSubmit = (id, close) => (formData) => {
     if(id) {
       dispatch(updateTrainingAndExpertise({ id, data:formData }));
+      close();
       return;
     }
     dispatch(addTrainingAndExpertise(formData));
@@ -61,7 +63,8 @@ const useTrainingAndExpertise = ({ dispatch }) => {
     handleDelete,
     errors,
     register,
-    handleSubmit
+    handleSubmit,
+    control
   };
 };
 

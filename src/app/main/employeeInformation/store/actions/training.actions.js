@@ -9,7 +9,7 @@ export const GET_TRAINING_EXPERTISE = 'GET TRAINING AND EXPERTISE';
 export const getTrainingAndExpertise = () => {
   return async (dispatch) => {
     try {
-      const { data: { data } } = await api.get('/trainingAndExpertise/');
+      const { data: { data } } = await api.get('/training/expertise/');
       dispatch({
         type: GET_TRAINING_EXPERTISE,
         payload: data || []
@@ -27,7 +27,7 @@ export const addTrainingAndExpertise = (value) => {
   return async (dispatch) => {
     try {
       loading('Saving...');
-      const { data: { data, message } } = await api.post('/trainingAndExpertise/', value);
+      const { data: { data, message } } = await api.post('/training/expertise/', value);
       swal.fire({
         text: message,
         icon: 'success',
@@ -51,7 +51,7 @@ export const updateTrainingAndExpertise = ({id, data}) => {
   return async (dispatch) => {
     try {
       loading('Updating...');
-      const { data: { message } } = await api.patch(`/trainingAndExpertise/${id}`, data);
+      const { data: { message } } = await api.patch(`/training/expertise/${id}`, data);
       swal.fire({
         text: message,
         icon: 'success',
@@ -82,7 +82,7 @@ export const deleteTrainingAndExpertise = (id) => {
       }).then( async (result) => {
         if (result.isConfirmed) {
           loading('Deleting...');
-          const { data: { message } } = await api.delete(`/trainingAndExpertise/${id}`);
+          const { data: { message } } = await api.delete(`/training/expertise/${id}`);
           swal.fire({
             text: message,
             icon: 'success',
