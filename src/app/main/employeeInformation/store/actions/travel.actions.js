@@ -9,7 +9,7 @@ export const GET_TRAVEL_VACATION = 'GET TRAVEL AND VACATION';
 export const getTravelAndVacation = () => {
   return async (dispatch) => {
     try {
-      const { data: { data } } = await api.get('/travel/');
+      const { data: { data } } = await api.get('/travel/vacation');
       dispatch({
         type: GET_TRAVEL_VACATION,
         payload: data || []
@@ -27,7 +27,7 @@ export const addTravelAndVacation = (value) => {
   return async (dispatch) => {
     try {
       loading('Saving...');
-      const { data: { data, message } } = await api.post('/travel/', value);
+      const { data: { data, message } } = await api.post('/travel/vacation', value);
       swal.fire({
         text: message,
         icon: 'success',
@@ -51,7 +51,7 @@ export const updateTravelAndVacation = ({id, data}) => {
   return async (dispatch) => {
     try {
       loading('Updating...');
-      const { data: { message } } = await api.patch(`/travel/${id}`, data);
+      const { data: { message } } = await api.patch(`/travel/vacation/${id}`, data);
       swal.fire({
         text: message,
         icon: 'success',
@@ -82,7 +82,7 @@ export const deleteTravelAndVacation = (id) => {
       }).then( async (result) => {
         if (result.isConfirmed) {
           loading('Deleting...');
-          const { data: { message } } = await api.delete(`/travel/${id}`);
+          const { data: { message } } = await api.delete(`/travel/vacation/${id}`);
           swal.fire({
             text: message,
             icon: 'success',

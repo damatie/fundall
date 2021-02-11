@@ -16,27 +16,7 @@ import * as Actions from 'app/store/actions';
 import reducer from './store/reducers';
 import withReducer from 'app/store/withReducer';
 import { openSharedModal, CLOSE_SHARED_MODAL } from './store/actions';
-// const info = {
-//   title: 'Mr',
-//   firstName: 'Dave',
-//   lastName: 'Dave',
-//   middleName: 'Dave',
-//   surname: 'Dave',
-//   srgn: 'DC-003',
-//   gender: 'Male',
-//   maritalStatus: 'Single',
-//   nickname: 'Black',
-//   officialEmail: 'test@test.com',
-//   alternativeEmail: 'test@test.cc',
-//   facebookHandle: 'https://timesheet-client.web.app/blog/1',
-//   twitterHandle: 'https://timesheet-client.web.app/blog/1',
-//   linkedInHandle: 'https://timesheet-client.web.app/blog/1',
-//   instagramInHandle: 'https://timesheet-client.web.app/blog/1',
-//   officialNo: '',
-//   officeLine: '',
-//   officeExtension: '',
-//   privateMobileNumber: ''
-// }
+
 const EmployeeBasicInformation = () => {
   const authState = useSelector(state => state.auth.user);
   const profile = useSelector(state => state.profile.data);
@@ -54,7 +34,7 @@ const EmployeeBasicInformation = () => {
 
   const handleOpen = (title) => {
     return () => {
-      openSharedModal(title)
+      dispatch(openSharedModal(title));
     }
   };
 

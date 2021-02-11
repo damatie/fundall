@@ -32,25 +32,25 @@ const schema = yup.object().shape({
       type: 'required',
     })
   ),
-  startYear: yup.string(
+  startDate: yup.string(
     errorMsg({
-      name: 'Start Year',
+      name: 'Start Date',
       type: 'string',
     })
   ).required(
     errorMsg({
-      name: 'Start Year',
+      name: 'Start Date',
       type: 'required',
     })
   ),
-  endYear: yup.string(
+  endDate: yup.string(
     errorMsg({
-      name: 'End Year',
+      name: 'End Date',
       type: 'string',
     })
   ).required(
     errorMsg({
-      name: 'End Year',
+      name: 'End Date',
       type: 'required',
     })
   ),
@@ -60,15 +60,17 @@ const useTravelAndVacation = ({ dispatch }) => {
   const {
     errors,
     register,
-    handleSubmit
+    handleSubmit,
+    control
   } = useForm({
     mode: 'onBlur',
     resolver: yupResolver(schema)
   });
 
-  const onSubmit = (id) => (formData) => {
+  const onSubmit = (id, close) => (formData) => {
     if(id) {
       dispatch(updateTravelAndVacation({ id, data:formData }));
+      close();
       return;
     }
     dispatch(addTravelAndVacation(formData));
@@ -83,7 +85,8 @@ const useTravelAndVacation = ({ dispatch }) => {
     handleDelete,
     errors,
     register,
-    handleSubmit
+    handleSubmit,
+    control
   };
 };
 
