@@ -5,15 +5,14 @@ import BasicCard from './BasicCard';
 import SharedButton from 'app/shared/button/SharedButton';
 import useEmployeeEmail from '../hooks/useEmployeeEmail';
 import { useDispatch } from 'react-redux';
+import { Controller } from 'react-hook-form';
+import PhoneInput from 'react-phone-input-2';
+import startsWith from 'lodash.startswith';
+import 'react-phone-input-2/lib/material.css';
+import Typography from '@material-ui/core/Typography';
 
-const EmployeeEmail = ({value, authState}) => {
+const EmployeeEmail = ({ value, authState }) => {
   const inputs = React.useMemo(() => [
-    {
-      name: 'officialEmail',
-      label: 'Official Email',
-      type: 'email',
-      defaultValue: value.officialEmail
-    },
     {
       name: 'alternativeEmail',
       label: 'Alternative Email',
@@ -21,10 +20,10 @@ const EmployeeEmail = ({value, authState}) => {
       defaultValue: value.alternativeEmail
     },
     {
-      name: 'facebookHandle',
+      name: 'faceBookHandle',
       label: 'Facebook Handle',
       type: 'url',
-      defaultValue: value.facebookHandle
+      defaultValue: value.faceBookHandle
     },
     {
       name: 'linkedInHandle',
@@ -43,17 +42,42 @@ const EmployeeEmail = ({value, authState}) => {
       label: 'Twitter Handle',
       type: 'url',
       defaultValue: value.twitterHandle
-    }
+    },
+    {
+      name: 'zipCode',
+      type: 'number',
+      label: 'Postal / Zip Code',
+      defaultValue: value.zipCode,
+    },
+    {
+      name: 'officialNo',
+      label: 'Official Mobile No',
+      defaultValue: value.officialNo,
+      type: 'phoneNumber',
+    },
+    {
+      name: 'officeLine',
+      label: 'Office Telephone Line',
+      defaultValue: value.officeLine,
+      type: 'number',
+    },
+    {
+      name: 'officeExtension',
+      label: 'Office Extension',
+      defaultValue: value.officeExtension,
+      type: 'number',
+    },
   ], [value]);
   const dispatch = useDispatch();
-  
+
   const {
     errors,
     register,
     handleSubmit,
     shouldUpdate,
     handleShouldUpdate,
-    onSubmit
+    onSubmit,
+    control
   } = useEmployeeEmail({
     defaultValue: value,
     state: authState,
@@ -62,7 +86,7 @@ const EmployeeEmail = ({value, authState}) => {
 
   return (
     <BasicCard
-      title='Email'
+      title='Employee Information'
       button={
         <SharedButton
           color='secondary'
@@ -76,15 +100,51 @@ const EmployeeEmail = ({value, authState}) => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <GridSystem>
           {
-            inputs.map((input) => (
-              <Input
+            inputs.map((input) => {
+              if (input.type === 'phoneNumber') {
+                return (
+                  // <Grid item lg={12}>
+                  <div>
+                    <Controller
+                      defaultValue={input.defaultValue}
+                      as={
+                        <PhoneInput
+                          id={input.name}
+                          country='ng'
+                          // placeholder="Enter phone number"
+                          value={input.defaultValue}
+                          containerClass='w-full'
+                          inputClass='w-full'
+                          specialLabel={input.label}
+                          enableAreaCodes
+                          enableSearch
+                          inputRef={register}
+                          disabled={!shouldUpdate}
+                          isValid={(inputNumber, country, onlyCountries) => {
+                            return onlyCountries.some((country) => {
+                              return startsWith(inputNumber, country.dialCode) || startsWith(country.dialCode, inputNumber);
+                            });
+                          }}
+                        />
+                      }
+                      name={input.name}
+                      control={control}
+                      rules={{ required: true }}
+                    />
+                    <Typography variant="caption" color="error">{errors[input.name]?.message}</Typography>
+                  </div>
+                  // </Grid>
+                )
+
+              }
+              return (<Input
                 {...input}
                 error={errors[input.name]}
                 message={errors[input.name]?.message}
                 refs={register}
                 disabled={!shouldUpdate}
-              />
-            ))
+              />)
+            })
           }
         </GridSystem>
         {

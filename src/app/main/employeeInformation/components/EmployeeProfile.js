@@ -154,7 +154,7 @@ const EmployeeProfile = ({ value, authState }) => {
 
   return (
     <BasicCard
-      title='Employee Profile Information'
+      title='Employee Profile'
       button={
         <SharedButton
           color='secondary'

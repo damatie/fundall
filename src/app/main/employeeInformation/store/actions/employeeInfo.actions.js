@@ -32,6 +32,31 @@ export const createEmployeeInfo = ({id, data}) => {
     }
   }
 };
+export const updateEmployeeInfo = ({id, value}) => {
+  return async (dispatch) => {
+    try {
+      loading('Updating Info...')
+      const { data: { message, success } } = await api.patch(`/info/`, value);
+      if(success) {
+        dispatch(Actions.getEmployeeProfile(id));
+        swal.fire({
+          text: message,
+          icon: 'success'
+        });
+        return;
+      }
+      swal.fire({
+        text: message,
+        icon: 'error'
+      });
+    } catch (e) {
+      swal.fire({
+        text: catchErrorMsg(e),
+        icon: 'error'
+      })
+    }
+  }
+};
 
 export const openSharedModal = (title) => {
   return (dispatch) => {

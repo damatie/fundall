@@ -3,25 +3,9 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import errorMsg from 'utils/errorMsg';
 import React from 'react';
-import * as Actions from 'app/store/actions';
+import { updateEmployeeInfo } from '../store/actions';
 
 const schema = yup.object().shape({
-  officialEmail: yup.string(
-    errorMsg({
-      type: 'string',
-      name: 'Official Email'
-    })
-  ).email(
-    errorMsg({
-      type: 'email',
-      name: 'Official Email'
-    })
-  ).required(
-    errorMsg({
-      type: 'required',
-      name: 'Official Email'
-    })
-  ),
   alternativeEmail: yup.string(
     errorMsg({
       type: 'string',
@@ -38,7 +22,7 @@ const schema = yup.object().shape({
       name: 'Alternative Email/Private Email'
     })
   ),
-  facebookHandle: yup.string(
+  faceBookHandle: yup.string(
     errorMsg({
       type: 'string',
       name: 'Facebook Handle'
@@ -94,6 +78,50 @@ const schema = yup.object().shape({
       name: 'Linkedin Handle'
     })
   ),
+  officeExtension: yup.string(
+    errorMsg({
+      type: 'string',
+      name: 'Office Extension'
+    })
+  ).required(
+    errorMsg({
+      type: 'required',
+      name: 'Office Extension'
+    })
+  ),
+  officeLine: yup.string(
+    errorMsg({
+      type: 'string',
+      name: 'Office Telephone Line'
+    })
+  ).required(
+    errorMsg({
+      type: 'required',
+      name: 'Office Telephone Line'
+    })
+  ),
+  officialNo: yup.string(
+    errorMsg({
+      type: 'string',
+      name: 'Official Mobile No'
+    })
+  ).required(
+    errorMsg({
+      type: 'required',
+      name: 'Official Mobile No'
+    })
+  ),
+  zipCode: yup.string(
+    errorMsg({
+      type: 'string',
+      name: 'Postal/Zip Code'
+    })
+  ).required(
+    errorMsg({
+      type: 'required',
+      name: 'Postal/Zip Code'
+    })
+  ),
 });
 
 const useEmployeeEmail = ({defaultValue, dispatch, state}) => {
@@ -102,7 +130,8 @@ const useEmployeeEmail = ({defaultValue, dispatch, state}) => {
   const {
     errors,
     register,
-    handleSubmit
+    handleSubmit,
+    control
   } = useForm({
     mode: 'onBlur',
     resolver: yupResolver(schema),
@@ -110,7 +139,7 @@ const useEmployeeEmail = ({defaultValue, dispatch, state}) => {
   });
 
   const onSubmit = (value) => {
-    dispatch(Actions.updateEmployeeProfile(state.id, value));
+    dispatch(updateEmployeeInfo({id: state.id, value}));
   };
 
   const handleShouldUpdate = () => {
@@ -123,7 +152,8 @@ const useEmployeeEmail = ({defaultValue, dispatch, state}) => {
     handleSubmit,
     shouldUpdate,
     handleShouldUpdate,
-    onSubmit
+    onSubmit,
+    control
   };
 };
 

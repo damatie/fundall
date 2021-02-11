@@ -72,12 +72,12 @@ const EmployeeBasicInformation = () => {
         <Grid item lg={6} md={6} sm={12} xs={12}>
           <EmployeeEmail value={info} authState={authState}/>
         </Grid>
-        <Grid item lg={6} md={6} sm={12} xs={12}>
+        {/* <Grid item lg={6} md={6} sm={12} xs={12}>
           <EmployeeTelephoneNumbers value={info} authState={authState}/>
         </Grid>
         <Grid item lg={6} md={6} sm={12} xs={12}>
           <EmployeeWorkLocation value={info} authState={authState}/>
-        </Grid>
+        </Grid> */}
         <Grid item lg={6} md={6} sm={12} xs={12}>
           <EmployeeOrganization value={info} authState={authState}/>
         </Grid>
