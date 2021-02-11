@@ -12,21 +12,25 @@ import 'react-phone-input-2/lib/material.css';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import Icon from '@material-ui/core/Icon';
+import { DatePicker } from '@material-ui/pickers';
+import useSpouseDependant from '../hooks/useSpouseDependants';
+import { useDispatch, useSelector } from 'react-redux';
+import { Controller } from 'react-hook-form';
+import { getSpouseDependant } from '../store/actions';
+import { getCountries } from 'app/store/actions';
 
-const data = [
-  {
-    firstName: 'Recruitment Workshop',
-    lastName: '12-04-2019',
-    relationship: 'sister'
-  },
-  {
-    firstName: 'Recruitment Workshop',
-    lastName: '12-04-2019',
-    relationship: 'sister'
-  },
-]
 const SpouseAndDependants = ({ handleOpen }) => {
   const [shouldUpdate, setShouldUpdate] = React.useState(false);
+
+  const { data } = useSelector(state => state.employeeInformation.spouseDependant);
+
+  const dispatch = useDispatch();
+
+  React.useEffect(() => {
+    dispatch(getSpouseDependant());
+    dispatch(getCountries());
+  }, []);
+
   return (
     <BasicCard
       title='Spouse / Dependants'
@@ -64,6 +68,10 @@ const SpouseAndDependants = ({ handleOpen }) => {
 };
 
 const SpouseAndDependantsDetails = ({ item, index, setShouldUpdate, shouldUpdate }) => {
+  const { countries } = useSelector(state => state.regions);
+
+  const dispatch = useDispatch();
+
   const inputs = React.useMemo(() => [
     {
       name: 'firstName',
@@ -78,43 +86,182 @@ const SpouseAndDependantsDetails = ({ item, index, setShouldUpdate, shouldUpdate
       data: [],
     },
     {
+      name: 'gender',
+      label: 'Gender',
+      type: 'select',
+      data: [
+        {
+          name: 'male',
+          id: 'male',
+        },
+        {
+          name: 'female',
+          id: 'female',
+        },
+        {
+          name: 'others',
+          id: 'others',
+        },
+      ],
+    },
+    {
+      name: 'birthday',
+      label: 'Birthday',
+      type: 'date',
+      data: [],
+    },
+    {
+      name: 'nationality',
+      label: 'Nationality',
+      type: 'select',
+      data: countries,
+    },
+    {
+      name: 'educationalLevel',
+      label: 'Educational Level',
+      type: '',
+      data: [],
+    },
+    {
       name: 'relationship',
       label: 'Relationship',
       type: 'select',
-      data: [],
+      data: [
+        {
+          name: 'wife',
+          id: 'wife',
+        },
+        {
+          name: 'children',
+          id: 'children',
+        },
+        {
+          name: 'brother',
+          id: 'brother',
+        },
+        {
+          name: 'sister',
+          id: 'sister'
+        }
+      ],
     },
-  ], []);
-  const handleUpdate = () => {
+  ], [countries]);
+
+  const close = () => {
     setShouldUpdate(false);
   }
+
+  const {
+    onSubmit,
+    errors,
+    register,
+    handleSubmit,
+    control,
+    handleDelete
+  } = useSpouseDependant({
+    dispatch,
+  })
+
   return (
     <>
       <div className='flex flex-row items-center my-20'>
         <Typography variant="subtitle1" color="initial">Spouse / Dependants ({index + 1})</Typography>
         <IconButton
           aria-label="delete"
-          onClick={() => null}>
+          onClick={() => handleDelete(item.id)}>
           <Icon className='text-red-500'>delete</Icon>
         </IconButton>
       </div>
-      <form>
+      <form onSubmit={handleSubmit(onSubmit(item.id, close))}>
         <GridSystem>
           {
             inputs.map((input) => {
               if (input.type === 'select') {
                 return (
-                  <SelectTextField
+                  <Controller
                     name={input.name}
-                    label={input.label}
+                    control={control}
+                    rules={{ required: true }}
                     defaultValue={item[input.name]}
-                    disabled={!shouldUpdate}
-                  >
-                    {input.data.map((value) => (
-                      <MenuItem key={value} value={value}>
-                        {value}
-                      </MenuItem>
-                    ))}
-                  </SelectTextField>
+                    as={
+                      <SelectTextField
+                        name={input.name}
+                        label={input.label}
+                        error={errors[input.name]}
+                        message={errors[input.name]?.message}
+                        defaultValue={item[input.name]}
+                        disabled={!shouldUpdate}
+                        refs={register}
+                      >
+                        {input.data.map(({ id, name }) => (
+                          <MenuItem
+                            key={id}
+                            value={name}
+                          >
+                            {name}
+                          </MenuItem>
+                        ))}
+                      </SelectTextField>
+                    }
+                  />
+                )
+              }
+              if (input.type === 'phoneNumber') {
+                return (
+                  <div>
+                    <Controller
+                      defaultValue={item[input.name]}
+                      as={
+                        <PhoneInput
+                          value={item[input.name]}
+                          disabled={!shouldUpdate}
+                          value={item[input.name]}
+                          id={input.name}
+                          country='ng'
+                          // placeholder="Enter phone number"
+                          containerClass='w-full'
+                          inputClass='w-full'
+                          specialLabel={input.label}
+                          enableAreaCodes
+                          enableSearch
+                          inputRef={register}
+                          isValid={(inputNumber, country, onlyCountries) => {
+                            return onlyCountries.some((country) => {
+                              return startsWith(inputNumber, country.dialCode) || startsWith(country.dialCode, inputNumber);
+                            });
+                          }}
+                        />
+                      }
+                      name={input.name}
+                      control={control}
+                      rules={{ required: true }}
+                    />
+                    <Typography variant="caption" color="error">{errors[input.name]?.message}</Typography>
+                  </div>
+                )
+
+              }
+              if (input.type === 'date') {
+                return (
+                  <Controller
+                    control={control}
+                    defaultValue={item[input.name]}
+                    name={input.name}
+                    as={
+                      <DatePicker
+                        inputVariant="outlined"
+                        inputRef={register}
+                        label={input.label}
+                        className="w-full"
+                        value={item[input.name]}
+                        // maxDate={dob}
+                        format={'MMMM Do, YYYY'}
+                        error={errors[input.name]}
+                        helperText={errors[input.name]?.message}
+                        disabled={!shouldUpdate}
+                      />
+                    }
+                  />
                 )
               }
               return (
@@ -122,6 +269,9 @@ const SpouseAndDependantsDetails = ({ item, index, setShouldUpdate, shouldUpdate
                   {...input}
                   defaultValue={item[input.name]}
                   disabled={!shouldUpdate}
+                  error={errors[input.name]}
+                  message={errors[input.name]?.message}
+                  refs={register}
                 />
               )
             })
@@ -131,18 +281,21 @@ const SpouseAndDependantsDetails = ({ item, index, setShouldUpdate, shouldUpdate
           variant='contained'
           color='primary'
           className='w-1/2 flex flex-col mx-auto my-16'
-          onClick={handleUpdate}
+          type='submit'
         >
           Update
         </SharedButton>)}
       </form>
-
       <Divider className='my-16' />
     </>
   )
 }
 
 export const AddSpouseAndDependant = () => {
+  const { countries } = useSelector(state => state.regions);
+
+  const dispatch = useDispatch();
+
   const inputs = React.useMemo(() => [
     {
       name: 'firstName',
@@ -157,71 +310,188 @@ export const AddSpouseAndDependant = () => {
       data: [],
     },
     {
+      name: 'gender',
+      label: 'Gender',
+      type: 'select',
+      data: [
+        {
+          name: 'male',
+          id: 'male',
+        },
+        {
+          name: 'female',
+          id: 'female',
+        },
+        {
+          name: 'others',
+          id: 'others',
+        },
+      ],
+    },
+    {
+      name: 'birthday',
+      label: 'Birthday',
+      type: 'date',
+      data: [],
+    },
+    {
+      name: 'nationality',
+      label: 'Nationality',
+      type: 'select',
+      data: countries,
+    },
+    {
+      name: 'educationalLevel',
+      label: 'Educational Level',
+      type: '',
+      data: [],
+    },
+    {
       name: 'relationship',
       label: 'Relationship',
       type: 'select',
-      data: [],
+      data: [
+        {
+          name: 'wife',
+          id: 'wife',
+        },
+        {
+          name: 'children',
+          id: 'children',
+        },
+        {
+          name: 'brother',
+          id: 'brother',
+        },
+        {
+          name: 'sister',
+          id: 'sister'
+        }
+      ],
     },
-  ], []);
+  ], [countries]);
+
+  const {
+    onSubmit,
+    errors,
+    register,
+    handleSubmit,
+    control
+  } = useSpouseDependant({
+    dispatch,
+  })
 
   return (
-    <form>
-      {inputs.map((input) => {
-        if (input.type === 'select') {
-          return (
-            <div className='my-20'>
-              <SelectTextField
-                name={input.name}
-                label={input.label}
-              >
-                {input.data.map((value) => (
-                  <MenuItem key={value} value={value}>
-                    {value}
-                  </MenuItem>
-                ))}
-              </SelectTextField>
-            </div>
+    <form onSubmit={handleSubmit(onSubmit())}>
+      <GridSystem>
+        {
+          inputs.map((input) => {
+            if (input.type === 'select') {
+              return (
+                <Controller
+                  name={input.name}
+                  control={control}
+                  rules={{ required: true }}
+                  // defaultValue={item[input.name]}
+                  as={
+                    <SelectTextField
+                      name={input.name}
+                      label={input.label}
+                      error={errors[input.name]}
+                      message={errors[input.name]?.message}
+                      // defaultValue={item[input.name]}
+                      // disabled={!shouldUpdate}
+                      refs={register}
+                    >
+                      {input.data.map(({ id, name }) => (
+                        <MenuItem
+                          key={id}
+                          value={name}
+                        >
+                          {name}
+                        </MenuItem>
+                      ))}
+                    </SelectTextField>
+                  }
+                />
+              )
+            }
+            if (input.type === 'phoneNumber') {
+              return (
+                <div>
+                  <Controller
+                    // defaultValue={item[input.name]}
+                    as={
+                      <PhoneInput
+                        // value={item[input.name]}
+                        // disabled={!shouldUpdate}
+                        // value={item[input.name]}
+                        id={input.name}
+                        country='ng'
+                        // placeholder="Enter phone number"
+                        containerClass='w-full'
+                        inputClass='w-full'
+                        specialLabel={input.label}
+                        enableAreaCodes
+                        enableSearch
+                        inputRef={register}
+                        isValid={(inputNumber, country, onlyCountries) => {
+                          return onlyCountries.some((country) => {
+                            return startsWith(inputNumber, country.dialCode) || startsWith(country.dialCode, inputNumber);
+                          });
+                        }}
+                      />
+                    }
+                    name={input.name}
+                    control={control}
+                    rules={{ required: true }}
+                  />
+                  <Typography variant="caption" color="error">{errors[input.name]?.message}</Typography>
+                </div>
+              )
 
-          )
-        }
-        if (input.type === 'phoneNumber') {
-          return (
-            // <Grid item lg={12}>
-            <div className='my-16'>
-              <PhoneInput
-                id="pNum"
-                country='ng'
-                // placeholder="Enter phone number"
-                containerClass='w-full'
-                inputClass='w-full'
-                specialLabel={input.label}
-                enableAreaCodes
-                enableSearch
-              // className={classes.phoneInput}
-              // inputRef={register}
-              // isValid={(inputNumber, onlyCountries) => {
-              //   return onlyCountries.some((country) => {
-              //     return startsWith(inputNumber, country.dialCode) || startsWith(country.dialCode, inputNumber);
-              //   });
-              // }}
+            }
+            if (input.type === 'date') {
+              return (
+                <Controller
+                  control={control}
+                  // defaultValue={item[input.name]}
+                  name={input.name}
+                  as={
+                    <DatePicker
+                      inputVariant="outlined"
+                      inputRef={register}
+                      label={input.label}
+                      className="w-full"
+                      // value={item[input.name]}
+                      // maxDate={dob}
+                      format={'MMMM Do, YYYY'}
+                      error={errors[input.name]}
+                      helperText={errors[input.name]?.message}
+                    // disabled={!shouldUpdate}
+                    />
+                  }
+                />
+              )
+            }
+            return (
+              <Input
+                {...input}
+                // defaultValue={item[input.name]}
+                // disabled={!shouldUpdate}
+                error={errors[input.name]}
+                message={errors[input.name]?.message}
+                refs={register}
               />
-            </div>
-            // </Grid>
-          )
-
+            )
+          })
         }
-        return (
-          <div className='my-20'>
-            <Input
-              {...input}
-            />
-          </div>
-        )
-      })}
+      </GridSystem>
       <SharedButton
         variant='contained'
-        color='secondary'
-        className='flex mx-auto'
+        color='primary'
+        className='flex mx-auto w-1/2 my-16'
+        type='submit'
       >
         Add
       </SharedButton>
