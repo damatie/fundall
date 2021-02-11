@@ -93,15 +93,17 @@ const useEmergencyContact = ({ dispatch }) => {
   const {
     errors,
     register,
-    handleSubmit
+    handleSubmit,
+    control
   } = useForm({
     mode: 'onBlur',
     resolver: yupResolver(schema)
   });
 
-  const onSubmit = (id) => (formData) => {
+  const onSubmit = (id, close) => (formData) => {
     if(id) {
       dispatch(updateEmergencyContact({ id, data:formData }));
+      close();
       return;
     }
     dispatch(addEmergencyContact(formData));
@@ -116,7 +118,8 @@ const useEmergencyContact = ({ dispatch }) => {
     handleDelete,
     errors,
     register,
-    handleSubmit
+    handleSubmit,
+    control
   };
 };
 

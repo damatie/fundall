@@ -12,29 +12,23 @@ import 'react-phone-input-2/lib/material.css';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import Icon from '@material-ui/core/Icon';
+import { useSelector, useDispatch } from 'react-redux';
+import useEmergencyContact from '../hooks/useEmergencyContact';
+import { Controller } from 'react-hook-form';
+import { getEmergencyContact } from '../store/actions';
+import { getCountries } from 'app/store/actions';
 
-const data = [
-  {
-    name: 'Recruitment Workshop',
-    address: '12-04-2019',
-    contactNumber: '12-07-2019',
-    email: 'Lagos',
-    Nationality: 'BSC',
-    gender: 'Upper balable',
-    relationship: 'sister'
-  },
-  {
-    name: 'Recruitment Workshop',
-    address: '12-04-2019',
-    contactNumber: '12-07-2019',
-    email: 'Lagos',
-    Nationality: 'BSC',
-    gender: 'Upper balable',
-    relationship: 'sister'
-  },
-]
 const EmergencyContacts = ({ handleOpen }) => {
   const [shouldUpdate, setShouldUpdate] = React.useState(false);
+  const dispatch = useDispatch();
+  const { data } = useSelector(state => state.employeeInformation.emergencyContact);
+
+  React.useEffect(() => {
+    dispatch(getEmergencyContact());
+    dispatch(getCountries());
+  }, []);
+
+
   return (
     <BasicCard
       title='Emergency Contact'
@@ -72,10 +66,20 @@ const EmergencyContacts = ({ handleOpen }) => {
 };
 
 const EmergencyContactsDetails = ({ item, index, setShouldUpdate, shouldUpdate }) => {
+  const { countries } = useSelector(state => state.regions);
+
+  const dispatch = useDispatch();
+
   const inputs = React.useMemo(() => [
     {
-      name: 'name',
-      label: 'Name',
+      name: 'firstName',
+      label: 'First Name',
+      type: '',
+      data: [],
+    },
+    {
+      name: 'lastName',
+      label: 'Last Name',
       type: '',
       data: [],
     },
@@ -92,78 +96,146 @@ const EmergencyContactsDetails = ({ item, index, setShouldUpdate, shouldUpdate }
       data: [],
     },
     {
-      name: 'email',
-      label: 'Email',
-      type: 'email',
-      data: [],
-    },
-    {
       name: 'nationality',
       label: 'Nationality',
       type: 'select',
-      data: [],
+      data: countries,
     },
     {
       name: 'gender',
       label: 'Gender',
       type: 'select',
-      data: [],
+      data: [
+        {
+          name: 'male',
+          id: 'male',
+        },
+        {
+          name: 'female',
+          id: 'female',
+        },
+        {
+          name: 'others',
+          id: 'others',
+        },
+      ],
     },
     {
       name: 'relationship',
       label: 'Relationship',
-      type: '',
-      data: [],
+      type: 'select',
+      data: [
+        {
+          name: 'wife',
+          id: 'wife',
+        },
+        {
+          name: 'children',
+          id: 'children',
+        },
+        {
+          name: 'brother',
+          id: 'brother',
+        },
+        {
+          name: 'sister',
+          id: 'sister'
+        }
+      ],
     },
-  ], []);
-  const handleUpdate = () => {
+  ], [countries]);
+
+  const close = () => {
     setShouldUpdate(false);
   }
+
+  const {
+    onSubmit,
+    handleDelete,
+    errors,
+    register,
+    handleSubmit,
+    control
+  } = useEmergencyContact({
+    dispatch,
+  })
+
   return (
     <>
       <div className='flex flex-row items-center my-20'>
         <Typography variant="subtitle1" color="initial">Emergency Contact ({index + 1})</Typography>
         <IconButton
           aria-label="delete"
-          onClick={() => null}>
+          onClick={() => handleDelete(item.id)}>
           <Icon className='text-red-500'>delete</Icon>
         </IconButton>
       </div>
-      <form>
+      <form onSubmit={handleSubmit(onSubmit(item.id, close))}>
         <GridSystem>
           {
             inputs.map((input) => {
               if (input.type === 'select') {
                 return (
-                  <SelectTextField
+                  <Controller
                     name={input.name}
-                    label={input.label}
+                    control={control}
+                    rules={{ required: true }}
                     defaultValue={item[input.name]}
-                    disabled={!shouldUpdate}
-                  >
-                    {input.data.map((value) => (
-                      <MenuItem key={value} value={value}>
-                        {value}
-                      </MenuItem>
-                    ))}
-                  </SelectTextField>
+                    as={
+                      <SelectTextField
+                        name={input.name}
+                        label={input.label}
+                        error={errors[input.name]}
+                        message={errors[input.name]?.message}
+                        defaultValue={item[input.name]}
+                        disabled={!shouldUpdate}
+                        refs={register}
+                      >
+                        {input.data.map(({ id, name }) => (
+                          <MenuItem
+                            key={id}
+                            value={name}
+                          >
+                            {name}
+                          </MenuItem>
+                        ))}
+                      </SelectTextField>
+                    }
+                  />
                 )
               }
               if (input.type === 'phoneNumber') {
                 return (
-                  // <Grid item lg={12}>
-                  // <div className='my-16'>
-                  <PhoneInput
-                    id="pNum"
-                    country='ng'
-                    // placeholder="Enter phone number"
-                    containerClass='w-full'
-                    inputClass='w-full'
-                    specialLabel={input.label}
-                    enableAreaCodes
-                    enableSearch
-                    disabled={!shouldUpdate}
-                  />
+                  <div>
+                    <Controller
+                      defaultValue={item[input.name]}
+                      as={
+                        <PhoneInput
+                          value={item[input.name]}
+                          disabled={!shouldUpdate}
+                          value={input.defaultValue}
+                          id={input.name}
+                          country='ng'
+                          // placeholder="Enter phone number"
+                          containerClass='w-full'
+                          inputClass='w-full'
+                          specialLabel={input.label}
+                          enableAreaCodes
+                          enableSearch
+                          inputRef={register}
+                          isValid={(inputNumber, country, onlyCountries) => {
+                            return onlyCountries.some((country) => {
+                              return startsWith(inputNumber, country.dialCode) || startsWith(country.dialCode, inputNumber);
+                            });
+                          }}
+                        />
+                      }
+                      name={input.name}
+                      control={control}
+                      rules={{ required: true }}
+                    />
+                    <Typography variant="caption" color="error">{errors[input.name]?.message}</Typography>
+                  </div>
                 )
 
               }
@@ -172,6 +244,9 @@ const EmergencyContactsDetails = ({ item, index, setShouldUpdate, shouldUpdate }
                   {...input}
                   defaultValue={item[input.name]}
                   disabled={!shouldUpdate}
+                  error={errors[input.name]}
+                  message={errors[input.name]?.message}
+                  refs={register}
                 />
               )
             })
@@ -181,7 +256,7 @@ const EmergencyContactsDetails = ({ item, index, setShouldUpdate, shouldUpdate }
           variant='contained'
           color='primary'
           className='w-1/2 flex flex-col mx-auto my-16'
-          onClick={handleUpdate}
+          type='submit'
         >
           Update
         </SharedButton>)}
@@ -192,10 +267,20 @@ const EmergencyContactsDetails = ({ item, index, setShouldUpdate, shouldUpdate }
 }
 
 export const AddEmergencyContact = () => {
+  const { countries } = useSelector(state => state.regions);
+
+  const dispatch = useDispatch();
+
   const inputs = React.useMemo(() => [
     {
-      name: 'name',
-      label: 'Name',
+      name: 'firstName',
+      label: 'First Name',
+      type: '',
+      data: [],
+    },
+    {
+      name: 'lastName',
+      label: 'Last Name',
       type: '',
       data: [],
     },
@@ -212,89 +297,144 @@ export const AddEmergencyContact = () => {
       data: [],
     },
     {
-      name: 'email',
-      label: 'Email',
-      type: 'email',
-      data: [],
-    },
-    {
       name: 'nationality',
       label: 'Nationality',
       type: 'select',
-      data: [],
+      data: countries,
     },
     {
       name: 'gender',
       label: 'Gender',
       type: 'select',
-      data: [],
+      data: [
+        {
+          name: 'male',
+          id: 'male',
+        },
+        {
+          name: 'female',
+          id: 'female',
+        },
+        {
+          name: 'others',
+          id: 'others',
+        },
+      ],
     },
     {
       name: 'relationship',
       label: 'Relationship',
-      type: '',
-      data: [],
+      type: 'select',
+      data: [
+        {
+          name: 'wife',
+          id: 'wife',
+        },
+        {
+          name: 'children',
+          id: 'children',
+        },
+        {
+          name: 'brother',
+          id: 'brother',
+        },
+        {
+          name: 'sister',
+          id: 'sister'
+        }
+      ],
     },
-  ], []);
+  ], [countries]);
+
+  const {
+    onSubmit,
+    errors,
+    register,
+    handleSubmit,
+    control
+  } = useEmergencyContact({
+    dispatch,
+  })
 
   return (
-    <form>
-      {inputs.map((input) => {
-        if (input.type === 'select') {
-          return (
-            <div className='my-20'>
-              <SelectTextField
-                name={input.name}
-                label={input.label}
-              >
-                {input.data.map((value) => (
-                  <MenuItem key={value} value={value}>
-                    {value}
-                  </MenuItem>
-                ))}
-              </SelectTextField>
-            </div>
+    <form onSubmit={handleSubmit(onSubmit())} className='my-16'>
+      <GridSystem>
+        {
+          inputs.map((input) => {
+            if (input.type === 'select') {
+              return (
+                <Controller
+                  name={input.name}
+                  control={control}
+                  rules={{ required: true }}
+                  as={
+                    <SelectTextField
+                      name={input.name}
+                      label={input.label}
+                      error={errors[input.name]}
+                      message={errors[input.name]?.message}
+                      refs={register}
+                    >
+                      {input.data.map(({ id, name }) => (
+                        <MenuItem
+                          key={id}
+                          value={name}
+                        >
+                          {name}
+                        </MenuItem>
+                      ))}
+                    </SelectTextField>
+                  }
+                />
+              )
+            }
+            if (input.type === 'phoneNumber') {
+              return (
+                <div>
+                  <Controller
+                    as={
+                      <PhoneInput
+                        id={input.name}
+                        country='ng'
+                        // placeholder="Enter phone number"
+                        containerClass='w-full'
+                        inputClass='w-full'
+                        specialLabel={input.label}
+                        enableAreaCodes
+                        enableSearch
+                        inputRef={register}
+                        isValid={(inputNumber, country, onlyCountries) => {
+                          return onlyCountries.some((country) => {
+                            return startsWith(inputNumber, country.dialCode) || startsWith(country.dialCode, inputNumber);
+                          });
+                        }}
+                      />
+                    }
+                    name={input.name}
+                    control={control}
+                    rules={{ required: true }}
+                  />
+                  <Typography variant="caption" color="error">{errors[input.name]?.message}</Typography>
+                </div>
+              )
 
-          )
-        }
-        if (input.type === 'phoneNumber') {
-          return (
-            // <Grid item lg={12}>
-            <div className='my-16'>
-              <PhoneInput
-                id="pNum"
-                country='ng'
-                // placeholder="Enter phone number"
-                containerClass='w-full'
-                inputClass='w-full'
-                specialLabel={input.label}
-                enableAreaCodes
-                enableSearch
-              // className={classes.phoneInput}
-              // inputRef={register}
-              // isValid={(inputNumber, onlyCountries) => {
-              //   return onlyCountries.some((country) => {
-              //     return startsWith(inputNumber, country.dialCode) || startsWith(country.dialCode, inputNumber);
-              //   });
-              // }}
+            }
+            return (
+              <Input
+                {...input}
+                error={errors[input.name]}
+                message={errors[input.name]?.message}
+                refs={register}
               />
-            </div>
-            // </Grid>
-          )
-
+            )
+          })
         }
-        return (
-          <div className='my-20'>
-            <Input
-              {...input}
-            />
-          </div>
-        )
-      })}
+      </GridSystem>
       <SharedButton
         variant='contained'
-        color='secondary'
-        className='flex mx-auto'
+        color='primary'
+        className='flex w-1/2 mx-auto my-16'
+        type='submit'
       >
         Add
       </SharedButton>

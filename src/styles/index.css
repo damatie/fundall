@@ -112,7 +112,7 @@ input:-webkit-autofill {
     display: none;
 }
 
-.MuiInputBase-root .Mui-disabled {
+.MuiInputBase-root .Mui-disabled, .MuiFormLabel-root .Mui-disabled {
     color: #000 !important;
     cursor: not-allowed !important;
 }

@@ -59,20 +59,7 @@ const EmployeeBio = () => {
       type: 'select',
       data: ['Single', 'Married', 'Divorced', 'Complicated']
     },
-    {
-      name: '',
-      label: 'Employee State of Origin',
-      defaultValue: '',
-      type: 'select',
-      data: ['Single', 'Married', 'Divorced', 'Complicated']
-    },
-    {
-      name: '',
-      label: 'Employee LGA / County',
-      defaultValue: '',
-      type: 'select',
-      data: ['Single', 'Married', 'Divorced', 'Complicated']
-    },
+    
     {
       name: '',
       label: 'Employee Nationality',
@@ -80,24 +67,7 @@ const EmployeeBio = () => {
       type: 'select',
       data: ['Single', 'Married', 'Divorced', 'Complicated']
     },
-    {
-      name: '',
-      label: 'Employee DOB',
-      defaultValue: '',
-      type: 'date',
-    },
-    {
-      name: '',
-      label: 'Passport Number',
-      defaultValue: '',
-      type: '',
-    },
-    {
-      name: '',
-      label: 'Passport Expiration Date',
-      defaultValue: '',
-      type: 'date',
-    },
+    
   ] , []);
 
   return (

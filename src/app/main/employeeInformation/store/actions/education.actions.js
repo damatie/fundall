@@ -9,7 +9,7 @@ export const GET_EDUCATIONS = 'GET EDUCATIONS';
 export const getEducation = () => {
   return async (dispatch) => {
     try {
-      const { data: { data } } = await api.get('/auth/eduQualification/');
+      const { data: { data } } = await api.get('/eduQualification/');
       dispatch({
         type: GET_EDUCATIONS,
         payload: data || []
@@ -27,7 +27,7 @@ export const addEducation = (value) => {
   return async (dispatch) => {
     try {
       loading('Saving...');
-      const { data: { data, message } } = await api.post('/auth/eduQualification/', value);
+      const { data: { data, message } } = await api.post('/eduQualification/', value);
       swal.fire({
         text: message,
         icon: 'success',
@@ -51,7 +51,7 @@ export const updateEducation = ({id, data}) => {
   return async (dispatch) => {
     try {
       loading('Updating...');
-      const { data: { message } } = await api.patch(`/auth/eduQualification/${id}`, data);
+      const { data: { message } } = await api.patch(`/eduQualification/${id}`, data);
       swal.fire({
         text: message,
         icon: 'success',
@@ -82,7 +82,7 @@ export const deleteEducation = (id) => {
       }).then( async (result) => {
         if (result.isConfirmed) {
           loading('Deleting...');
-          const { data: { message } } = await api.delete(`/auth/eduQualification/${id}`);
+          const { data: { message } } = await api.delete(`/eduQualification/${id}`);
           swal.fire({
             text: message,
             icon: 'success',

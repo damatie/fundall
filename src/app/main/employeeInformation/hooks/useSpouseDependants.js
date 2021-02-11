@@ -93,15 +93,17 @@ const useSpouseDependants = ({ dispatch }) => {
   const {
     errors,
     register,
-    handleSubmit
+    handleSubmit,
+    control
   } = useForm({
     mode: 'onBlur',
     resolver: yupResolver(schema)
   });
 
-  const onSubmit = (id) => (formData) => {
+  const onSubmit = (id, close) => (formData) => {
     if(id) {
       dispatch(updateSpouseDependant({ id, data:formData }));
+      close();
       return;
     }
     dispatch(addSpouseDependant(formData));
@@ -116,7 +118,8 @@ const useSpouseDependants = ({ dispatch }) => {
     handleDelete,
     errors,
     register,
-    handleSubmit
+    handleSubmit,
+    control
   };
 };
 

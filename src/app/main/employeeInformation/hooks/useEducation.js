@@ -56,23 +56,23 @@ const schema = yup.object().shape({
   ),
   startYear: yup.string(
     errorMsg({
-      name: 'Start Year',
+      name: 'Start Date',
       type: 'string',
     })
   ).required(
     errorMsg({
-      name: 'Start Year',
+      name: 'Start Date',
       type: 'required',
     })
   ),
   endYear: yup.string(
     errorMsg({
-      name: 'End Year',
+      name: 'End Date',
       type: 'string',
     })
   ).required(
     errorMsg({
-      name: 'End Year',
+      name: 'End Date',
       type: 'required',
     })
   ),
@@ -82,15 +82,17 @@ const useEducation = ({ dispatch }) => {
   const {
     errors,
     register,
-    handleSubmit
+    handleSubmit,
+    control
   } = useForm({
     mode: 'onBlur',
     resolver: yupResolver(schema)
   });
 
-  const onSubmit = (id) => (formData) => {
+  const onSubmit = (id, close) => (formData) => {
     if(id) {
       dispatch(updateEducation({ id, data:formData }));
+      close();
       return;
     }
     dispatch(addEducation(formData));
@@ -105,7 +107,8 @@ const useEducation = ({ dispatch }) => {
     handleDelete,
     errors,
     register,
-    handleSubmit
+    handleSubmit,
+    control
   };
 };
 

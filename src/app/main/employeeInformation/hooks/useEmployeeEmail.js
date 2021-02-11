@@ -4,6 +4,7 @@ import * as yup from 'yup';
 import errorMsg from 'utils/errorMsg';
 import React from 'react';
 import { updateEmployeeInfo } from '../store/actions';
+import * as Actions from 'app/store/actions';
 
 const schema = yup.object().shape({
   alternativeEmail: yup.string(
@@ -122,6 +123,83 @@ const schema = yup.object().shape({
       name: 'Postal/Zip Code'
     })
   ),
+  DOB: yup.string(
+    errorMsg({
+      type: 'string',
+      name: 'Employee DOB'
+    })
+  ).required(
+    errorMsg({
+      type: 'required',
+      name: 'Employee DOB'
+    })
+  ),
+  nationality: yup.string(
+    errorMsg({
+      type: 'string',
+      name: 'Employee County'
+    })
+  ).required(
+    errorMsg({
+      type: 'required',
+      name: 'Employee County'
+    })
+  ),
+  stateOfOrigin: yup.string(
+    errorMsg({
+      type: 'string',
+      name: 'Employee State of Origin'
+    })
+  ).required(
+    errorMsg({
+      type: 'required',
+      name: 'Employee State of Origin'
+    })
+  ),
+  LGA: yup.string(
+    errorMsg({
+      type: 'string',
+      name: 'Employee LGA / City'
+    })
+  ).required(
+    errorMsg({
+      type: 'required',
+      name: 'Employee LGA / City'
+    })
+  ),
+  nearestAirportToResidence: yup.string(
+    errorMsg({
+      type: 'string',
+      name: 'Nearest Airport to Residence'
+    })
+  ).required(
+    errorMsg({
+      type: 'required',
+      name: 'Nearest Airport to Residence'
+    })
+  ),
+  internationalPassportNumber: yup.string(
+    errorMsg({
+      type: 'string',
+      name: 'Passport Number'
+    })
+  ).required(
+    errorMsg({
+      type: 'required',
+      name: 'Passport Number'
+    })
+  ),
+  internationalPassportNumberExpirationDate: yup.string(
+    errorMsg({
+      type: 'string',
+      name: 'Passport Expiration Date'
+    })
+  ).required(
+    errorMsg({
+      type: 'required',
+      name: 'Passport Expiration Date'
+    })
+  )
 });
 
 const useEmployeeEmail = ({defaultValue, dispatch, state}) => {
@@ -146,6 +224,19 @@ const useEmployeeEmail = ({defaultValue, dispatch, state}) => {
     setShouldUpdate(!shouldUpdate);
   };
 
+  const handleMenuItemClick = ({ value, name }) => () => {
+    if(name === 'nationality') {
+      dispatch(Actions.getStates(value));
+      // swal.fire({
+      //   text: 'Please select your city of residence',
+      //   icon: 'info',
+      // });
+    }
+    if(name === 'stateOfOrigin') {
+      dispatch(Actions.getCitites(value));
+    }
+  }
+
   return {
     errors,
     register,
@@ -153,7 +244,8 @@ const useEmployeeEmail = ({defaultValue, dispatch, state}) => {
     shouldUpdate,
     handleShouldUpdate,
     onSubmit,
-    control
+    control,
+    handleMenuItemClick
   };
 };
 

@@ -9,27 +9,23 @@ import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import Icon from '@material-ui/core/Icon';
+import { DatePicker } from '@material-ui/pickers';
+import useEducation from '../hooks/useEducation';
+import { useDispatch, useSelector } from 'react-redux';
+import { Controller } from 'react-hook-form';
+import { getEducation } from '../store/actions';
 
-const data = [
-  {
-    institute: 'Recruitment Workshop',
-    endDate: '12-04-2019',
-    startDate: '12-07-2019',
-    department: 'Lagos',
-    qualification: 'BSC',
-    grade: 'Upper balable',
-  },
-  {
-    institute: 'Recruitment Workshop',
-    endDate: '12-04-2019',
-    startDate: '12-07-2019',
-    department: 'Lagos',
-    qualification: 'BSC',
-    grade: 'Upper balable',
-  },
-]
 const EducationalQualification = ({ handleOpen }) => {
   const [shouldUpdate, setShouldUpdate] = React.useState(false);
+
+  const { data } = useSelector(state => state.employeeInformation.education);
+
+  const dispatch = useDispatch();
+
+  React.useEffect(() => {
+    dispatch(getEducation());
+  }, []);
+
   return (
     <BasicCard
       title='Educational Qualification'
@@ -69,7 +65,7 @@ const EducationalQualification = ({ handleOpen }) => {
 const EducationalQualificationDetails = ({ item, index, setShouldUpdate, shouldUpdate }) => {
   const inputs = React.useMemo(() => [
     {
-      name: 'institute',
+      name: 'school',
       label: 'Institute/School',
       type: '',
       data: [],
@@ -93,49 +89,101 @@ const EducationalQualificationDetails = ({ item, index, setShouldUpdate, shouldU
       data: [],
     },
     {
-      name: 'startDate',
-      label: 'Start Date',
+      name: 'startYear',
+      label: 'Start Year',
       type: 'date',
       data: [],
     },
     {
-      name: 'endDate',
-      label: 'End Date',
+      name: 'endYear',
+      label: 'End Year',
       type: 'date',
       data: [],
     },
   ], []);
-  const handleUpdate = () => {
+
+  const dispatch = useDispatch();
+
+  const close = () => {
     setShouldUpdate(false);
   }
+
+  const {
+    onSubmit,
+    errors,
+    register,
+    handleSubmit,
+    control,
+    handleDelete
+  } = useEducation({
+    dispatch,
+  })
   return (
     <>
       <div className='flex flex-row items-center my-20'>
         <Typography variant="subtitle1" color="initial">Educational Qualification ({index + 1})</Typography>
         <IconButton
           aria-label="delete"
-          onClick={() => null}>
+          onClick={() => handleDelete(item.id)}>
           <Icon className='text-red-500'>delete</Icon>
         </IconButton>
       </div>
-      <form>
+      <form onSubmit={handleSubmit(onSubmit(item.id, close))}>
         <GridSystem>
           {
             inputs.map((input) => {
               if (input.type === 'select') {
                 return (
-                  <SelectTextField
+                  <Controller
                     name={input.name}
-                    label={input.label}
+                    control={control}
+                    rules={{ required: true }}
                     defaultValue={item[input.name]}
-                    disabled={!shouldUpdate}
-                  >
-                    {input.data.map((value) => (
-                      <MenuItem key={value} value={value}>
-                        {value}
-                      </MenuItem>
-                    ))}
-                  </SelectTextField>
+                    as={
+                      <SelectTextField
+                        name={input.name}
+                        label={input.label}
+                        error={errors[input.name]}
+                        message={errors[input.name]?.message}
+                        defaultValue={item[input.name]}
+                        disabled={!shouldUpdate}
+                        refs={register}
+                      >
+                        {input.data.map(({ id, name }) => (
+                          <MenuItem
+                            key={id}
+                            value={name}
+                          >
+                            {name}
+                          </MenuItem>
+                        ))}
+                      </SelectTextField>
+                    }
+                  />
+                )
+              }
+              if (input.type === 'date') {
+                return (
+                  <Controller
+                    control={control}
+                    defaultValue={item[input.name]}
+                    name={input.name}
+                    as={
+                      <DatePicker
+                        inputVariant="outlined"
+                        inputRef={register}
+                        label={input.label}
+                        className="w-full"
+                        value={item[input.name]}
+                        views={["year"]}
+                        // maxDate={dob}
+                        // format={'MMMM Do, YYYY'}
+                        error={errors[input.name]}
+                        helperText={errors[input.name]?.message}
+                        disabled={!shouldUpdate}
+                      />
+                    }
+                  />
                 )
               }
               return (
@@ -143,6 +191,9 @@ const EducationalQualificationDetails = ({ item, index, setShouldUpdate, shouldU
                   {...input}
                   defaultValue={item[input.name]}
                   disabled={!shouldUpdate}
+                  error={errors[input.name]}
+                  message={errors[input.name]?.message}
+                  refs={register}
                 />
               )
             })
@@ -152,7 +203,7 @@ const EducationalQualificationDetails = ({ item, index, setShouldUpdate, shouldU
           variant='contained'
           color='primary'
           className='w-1/2 flex flex-col mx-auto my-16'
-          onClick={handleUpdate}
+          type='submit'
         >
           Update
         </SharedButton>)}
@@ -166,7 +217,7 @@ const EducationalQualificationDetails = ({ item, index, setShouldUpdate, shouldU
 export const AddEducationalQualification = () => {
   const inputs = React.useMemo(() => [
     {
-      name: 'institute',
+      name: 'school',
       label: 'Institute/School',
       type: '',
       data: [],
@@ -190,51 +241,108 @@ export const AddEducationalQualification = () => {
       data: [],
     },
     {
-      name: 'startDate',
-      label: 'Start Date',
+      name: 'startYear',
+      label: 'Start Year',
       type: 'date',
       data: [],
     },
     {
-      name: 'endDate',
-      label: 'End Date',
+      name: 'endYear',
+      label: 'End Year',
       type: 'date',
       data: [],
     },
   ], []);
 
-  return (
-    <form>
-      {inputs.map((input) => {
-        if (input.type === 'select') {
-          return (
-            <div className='my-20'>
-              <SelectTextField
-                name={input.name}
-                label={input.label}
-              >
-                {input.data.map((value) => (
-                  <MenuItem key={value} value={value}>
-                    {value}
-                  </MenuItem>
-                ))}
-              </SelectTextField>
-            </div>
+  const dispatch = useDispatch();
 
-          )
+  const {
+    onSubmit,
+    errors,
+    register,
+    handleSubmit,
+    control
+  } = useEducation({
+    dispatch,
+  })
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit())}>
+      <GridSystem>
+        {
+          inputs.map((input) => {
+            if (input.type === 'select') {
+              return (
+                <Controller
+                  name={input.name}
+                  control={control}
+                  rules={{ required: true }}
+                  // defaultValue={item[input.name]}
+                  as={
+                    <SelectTextField
+                      name={input.name}
+                      label={input.label}
+                      error={errors[input.name]}
+                      message={errors[input.name]?.message}
+                      // defaultValue={item[input.name]}
+                      // disabled={!shouldUpdate}
+                      refs={register}
+                    >
+                      {input.data.map(({ id, name }) => (
+                        <MenuItem
+                          key={id}
+                          value={name}
+                        >
+                          {name}
+                        </MenuItem>
+                      ))}
+                    </SelectTextField>
+                  }
+                />
+              )
+            }
+            if (input.type === 'date') {
+              return (
+                <Controller
+                  control={control}
+                  // defaultValue={item[input.name]}
+                  name={input.name}
+                  as={
+                    <DatePicker
+                      inputVariant="outlined"
+                      inputRef={register}
+                      label={input.label}
+                      views={["year"]}
+                      className="w-full"
+                      // value={item[input.name]}
+                      // maxDate={dob}
+                      // format={'MMMM Do, YYYY'}
+                      error={errors[input.name]}
+                      helperText={errors[input.name]?.message}
+                    // disabled={!shouldUpdate}
+                    />
+                  }
+                />
+              )
+            }
+            return (
+              <Input
+                {...input}
+                // defaultValue={item[input.name]}
+                // disabled={!shouldUpdate}
+                error={errors[input.name]}
+                message={errors[input.name]?.message}
+                refs={register}
+              />
+            )
+          })
         }
-        return (
-          <div className='my-20'>
-            <Input
-              {...input}
-            />
-          </div>
-        )
-      })}
+      </GridSystem>
       <SharedButton
         variant='contained'
-        color='secondary'
-        className='flex mx-auto'
+        color='primary'
+        className='flex mx-auto w-1/2 my-16'
+        type='submit'
       >
         Add
       </SharedButton>
