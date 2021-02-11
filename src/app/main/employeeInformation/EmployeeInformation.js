@@ -35,7 +35,7 @@ const EmployeeInformation = () => {
 					<Tab className="h-64 normal-case" label="Grade And Promotion" />
           <Tab className="h-64 normal-case" label="Compensation" />
           <Tab className="h-64 normal-case" label="Seperation" />
-          <Tab className="h-64 normal-case" label="Confidential Information" />
+          {/* <Tab className="h-64 normal-case" label="Confidential Information" /> */}
 				</Tabs>
       }
       content={
@@ -52,9 +52,9 @@ const EmployeeInformation = () => {
           {tabValue === 3 && (
             <>Stil Under Contruction</>
           )}
-          {tabValue === 4 && (
+          {/* {tabValue === 4 && (
             <EmployeeConfidentialInfo />
-          )}
+          )} */}
         </div>
       }
     />

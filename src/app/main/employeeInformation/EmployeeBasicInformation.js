@@ -16,6 +16,7 @@ import * as Actions from 'app/store/actions';
 import reducer from './store/reducers';
 import withReducer from 'app/store/withReducer';
 import { openSharedModal, CLOSE_SHARED_MODAL } from './store/actions';
+import EmployeeNextOfKin from './components/EmployeeNextOfKin';
 
 const EmployeeBasicInformation = () => {
   const authState = useSelector(state => state.auth.user);
@@ -75,6 +76,9 @@ const EmployeeBasicInformation = () => {
         </Grid>
         <Grid item lg={6} md={6} sm={12} xs={12}>
           <SpouseAndDependants authState={authState} handleOpen={handleOpen}/>
+        </Grid>
+        <Grid item lg={6} md={6} sm={12} xs={12}>
+          <EmployeeNextOfKin authState={authState} handleOpen={handleOpen} />
         </Grid>
       </Grid>
       <SharedModal
