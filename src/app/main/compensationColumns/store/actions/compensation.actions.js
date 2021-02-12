@@ -1,4 +1,4 @@
-import swal from from 'sweetalert2';
+import swal from 'sweetalert2';
 import catchErrorMsg from 'utils/catchErrorMsg';
 import loading from 'utils/loading';
 import confirm from 'utils/confirm';
@@ -37,6 +37,9 @@ export const addCompensationColumn = (value) => {
         timer: 1500
       });
       dispatch(getCompensationColumns());
+      dispatch({
+        type: CLOSE_COMPENSATION_COLUMNS_MODAL,
+      })
     } catch (e) {
       swal.fire({
         text: catchErrorMsg(e),
@@ -51,13 +54,16 @@ export const updateCompensationColumn = ({id,value}) => {
   return async(dispatch) => {
     try {
       loading('Updating Compensation Column');
-      const { data: { message } }  = await api.post(`/compensation/${id}`, value);
+      const { data: { message } }  = await api.patch(`/compensation/${id}`, value);
       swal.fire({
         text: message,
         icon: 'success',
         timer: 1500
       });
       dispatch(getCompensationColumns());
+      dispatch({
+        type: CLOSE_COMPENSATION_COLUMNS_MODAL,
+      })
     } catch (e) {
       swal.fire({
         text: catchErrorMsg(e),

@@ -2,6 +2,7 @@ import {
   GET_COMPENSATION_COLUMNS,
   OPEN_COMPENSATION_COLUMNS_MODAL,
   CLOSE_COMPENSATION_COLUMNS_MODAL, 
+  GET_ONE_COMPENSATION_COLUMN
 } from '../actions';
 
 const initialState = {
@@ -29,12 +30,14 @@ const compensationReducer = (state = initialState, actions) => {
       return {
         ...state,
         open: false,
-        type: 'new'
+        type: 'new',
+        details: {}
       }
     case GET_ONE_COMPENSATION_COLUMN:
       return {
+        ...state,
         open: true,
-        type: 'update',
+        type: 'details',
         details: actions.payload
       }
     default:

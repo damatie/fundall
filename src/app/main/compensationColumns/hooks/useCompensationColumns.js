@@ -35,7 +35,7 @@ const useCompensationColumns = ({ dispatch, state }) => {
   });
 
   const handleDelete = (id) => {
-    dispatch(deleteCompensationColumn(id));
+    dispatch(deleteCompensationColumn(id[0]));
   };
 
   const handleOpen = () => {

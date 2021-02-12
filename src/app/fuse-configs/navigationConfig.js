@@ -33,22 +33,6 @@ const navigationConfig = [
 				icon: 'group_add',
 				url: '/employee_management',
 				auth: authRoles?.admin,
-				// children: [
-				// 	{
-				// 		id: 'employee_list',
-				// 		title: 'Employee management',
-				// 		type: 'item',
-				// 		url: '/hr/employee_management',
-				// 		exact: true
-				// 	},
-				// 	{
-				// 		id: 'new_employee',
-				// 		title: 'New employee',
-				// 		type: 'item',
-				// 		url: '/hr/employee_management/new',
-				// 		exact: true
-				// 	},
-				// ]
 			},
 			{
 				id: 'Telephone_directory',
@@ -92,6 +76,15 @@ const navigationConfig = [
 				auth: authRoles?.admin,
 				type: 'item',
 				url: '/roles/permissions',
+			},
+			{
+				id: 'compensationColumns',
+				title: 'Compensation Columns',
+				translate: 'Compensation Columns',
+				icon: 'view_week',
+				auth: authRoles?.admin,
+				type: 'item',
+				url: '/compensation/columns',
 			},
 		]
 	},
