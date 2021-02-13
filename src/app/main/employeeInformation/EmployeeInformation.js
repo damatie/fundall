@@ -7,6 +7,8 @@ import GradeAndPromotion from './GradeAndPromotion';
 import EmployeeCompensation from './EmployeeCompensation';
 import EmployeeConfidentialInfo from './EmployeeConfidentialInfo';
 import CreateEmployeeInfo from './CreateEmployeeInfo';
+import reducer from './store/reducers';
+import withReducer from 'app/store/withReducer';
 
 const EmployeeInformation = () => {
   const [tabValue, setTabValue] = React.useState(0);
@@ -63,4 +65,4 @@ const EmployeeInformation = () => {
   );
 };
 
-export default EmployeeInformation;
+export default withReducer('employeeInformation', reducer)(EmployeeInformation);

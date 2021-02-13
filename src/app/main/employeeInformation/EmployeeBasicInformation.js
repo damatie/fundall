@@ -13,8 +13,6 @@ import EmergencyContacts, { AddEmergencyContact } from './components/EmergencyCo
 import SpouseAndDependants, { AddSpouseAndDependant } from './components/SpouseAndDependants';
 import { useSelector, useDispatch } from 'react-redux';
 import * as Actions from 'app/store/actions';
-import reducer from './store/reducers';
-import withReducer from 'app/store/withReducer';
 import { openSharedModal, CLOSE_SHARED_MODAL } from './store/actions';
 import EmployeeNextOfKin from './components/EmployeeNextOfKin';
 
@@ -96,4 +94,4 @@ const EmployeeBasicInformation = () => {
   );
 };
 
-export default withReducer('employeeInformation', reducer)(EmployeeBasicInformation);
+export default EmployeeBasicInformation;
