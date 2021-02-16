@@ -53,6 +53,7 @@ import BehaviouralAttributeConfig from 'app/main/behaviouralAttribute/Behavioura
 import PermissionConfig from 'app/main/permission/PermissionConfig';
 import EmployeeMgtConfig from 'app/main/employeeManagement/employeeMgtConfig';
 import EmployeeInformationConfig from 'app/main/employeeInformation/employeeInformationConfig';
+import AttendanceConfig from 'app/main/attendance/attendanceConfig';
 
 const routeConfigs = [
 	// ExampleConfig,
@@ -89,6 +90,7 @@ const routeConfigs = [
 	PersonalTrainingConfig,
 	MainBlogConfig,
 	RecruitmentConfig,
+	AttendanceConfig,
 	ContactsAppConfig,
 	DisciplinaryCaseConfig,
 	CheckListConfig,

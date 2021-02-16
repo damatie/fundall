@@ -20,9 +20,9 @@ function RecruitmentDialog(props) {
 		<Dialog
 			open={props.open}
 			TransitionComponent={props.transition && props.transition}
-			onClose={handleClose}
 			fullWidth={true}
 			maxWidth={'sm'}
+			onClose={handleClose}
 			aria-labelledby="form-dialog-title"
 		>
 			<DialogTitle id="form-dialog-title">

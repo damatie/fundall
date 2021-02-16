@@ -95,6 +95,31 @@ const navigationConfig = [
 			},
 		]
 	},
+	{
+		id: 'attendance',
+		title: 'Attandance Management',
+		translate: 'Attandance Management',
+		type: 'group',
+		children: [
+			{
+				id: 'attendance_dashboard',
+				title: 'Dashboard',
+				type: 'item',
+				url: '/attendance/dashboard',
+				icon: 'add_comment',
+				auth: authRoles.staff,
+			},
+			{
+				id: 'attendance_list',
+				title: 'Attendance',
+				type: 'item',
+				url: '/activity/list',
+				icon: 'add_comment',
+				auth: authRoles.admin,
+			}
+		]
+	},
+
 	// Blog navigations
 	{
 		id: 'blog',
