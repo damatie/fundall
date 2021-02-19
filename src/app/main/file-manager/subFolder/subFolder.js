@@ -116,6 +116,7 @@ function SubFolder(props) {
 		<PageLayout
                 noSearch
                 noPrevious
+				prev={true}
 				props={props}
 				header={{
 					icon: (mainFolder.id === 1 || mainFolder.name.toUpperCase().includes('PUBLIC')) ? 'folder_shared' : 'folder',

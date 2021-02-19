@@ -36,38 +36,38 @@ const useStyles = makeStyles(theme => ({
 
 const columns = [
 	{
-		id: 'employee_name',
+		id: 'beneficiary_name',
 		align: 'center',
 		disablePadding: false,
-		label: 'Name',
+		label: 'Name of Beneficiary',
 		sort: true
 	},
 	{
-		id: 'email',
+		id: 'beneficiary_email',
 		align: 'center',
 		disablePadding: false,
-		label: 'Email',
+		label: 'Beneficiary Email',
 		sort: true
 	},
 	{
-		id: 'job_role',
+		id: 'employee_relationship',
 		align: 'center',
 		disablePadding: false,
-		label: 'Job Role',
+		label: 'Relationship to Employee',
 		sort: true
 	},
 	{
-		id: 'dept',
+		id: 'capital_fund',
 		align: 'center',
 		disablePadding: false,
-		label: 'Dept',
+		label: 'Capital Fund to be Contributed',
 		sort: true
 	},
 	{
-		id: 'entity',
+		id: 'status',
 		align: 'center',
 		disablePadding: false,
-		label: 'Entity',
+		label: 'Status',
 		sort: true
 	},
 	{
@@ -95,7 +95,7 @@ function Srep(props) {
 		dispatch(UtilActions.getRoles());
 		dispatch(UtilActions.getEntities());
 		dispatch(UtilActions.getDepartments());
-		if(userData.role.toUpperCase() === 'EMPLOYEE'){
+		if(userData.role.toUpperCase() === 'EMPLOYEE' || userData.role.toUpperCase() === 'LINE MANAGER'){
 			dispatch(Actions.getSrepByEmployeeID(userId));
 		}else{
 			dispatch(Actions.getSrep());
