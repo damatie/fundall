@@ -295,18 +295,22 @@ const SrepTable = (props) =>{
 									>
 										<TableCell className="text-center" style={{padding: '0 16px'}}
 										onClick={event => {handleItemClick(event, n); setOpen(true) }}>
-											{(n) ? `${n.beneficiaryName}` : ''}
+											{(n.employee) ? `${n.employee.firstName} ${n.employee.lastName}` : ''}
 										</TableCell>
 										<TableCell className="text-center" style={{padding: '0 16px'}}
-										onClick={event => {handleItemClick(event, n); setOpen(true) }}>{(n) ? n.beneficiaryEmail : ''}</TableCell>
+										onClick={event => {handleItemClick(event, n); setOpen(true) }}>{(n.employee) ? n.employee.email : ''}</TableCell>
                                         <TableCell className="text-center" style={{padding: '0 16px'}}
 										onClick={event => {handleItemClick(event, n); setOpen(true) }}>
-                                            {(n) ? n.beneficiaryRelationship.toUpperCase() : ''}  
-                                        </TableCell>
-                                        <TableCell className="text-justify" style={{padding: '0 60px'}}
-										onClick={event => {handleItemClick(event, n); setOpen(true) }}>
-                                            {(n) ? formatCurrency('₦', n.capitalFund) : ''}
+                                            {(n.employee) ? getRole(n.employee.roleId) : ''}
 										</TableCell>
+                                        <TableCell className="text-center" style={{padding: '0 16px'}}
+										onClick={event => {handleItemClick(event, n); setOpen(true) }}>
+                                            {(n.employee) ? getDepartment(n.employee.departmentId) : ''}  
+                                        </TableCell>
+                                        <TableCell className="text-center" style={{padding: '0 16px'}}
+										onClick={event => {handleItemClick(event, n); setOpen(true) }}>
+                                            {(n.employee) ? getEntity(n.employee.entityId) : ''}  
+                                        </TableCell>
                                         <TableCell className="text-center" style={{padding: '0 16px'}}
 										onClick={event => {handleItemClick(event, n); setOpen(true) }}>
                                             {(n) ? CheckStatus(n.status) : ''}  

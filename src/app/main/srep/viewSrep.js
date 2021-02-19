@@ -19,6 +19,7 @@ import withReducer from 'app/store/withReducer';
 import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useLocation } from "react-router-dom";
 import { Link, useParams } from 'react-router-dom';
 import { ThemeProvider } from '@material-ui/core/styles';
 import * as Actions from './store/actions';
@@ -41,6 +42,8 @@ function ViewSrep({ match }, props) {
 	const theme = useTheme();
 
 	const classes = useStyles(props);
+    const location = useLocation();
+    const employeeRole = (location.state) ? location.state.employeeRole : '';
 	const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
 	const srepData = useSelector(({ ViewSrep }) => ViewSrep.srep.data);
 	const roles = useSelector(({ roles }) => roles.roleList);
@@ -50,7 +53,6 @@ function ViewSrep({ match }, props) {
     const [anchorEl, setAnchorEl] = useState(null);
     const [tabValue, setTabValue] = useState(0);
     const open = Boolean(anchorEl);
-    
     const srepId = match.params.srepId;
 	
 	useEffect(() => {
@@ -155,7 +157,11 @@ function ViewSrep({ match }, props) {
     }
 
     const goBack = () =>{
-        window.location = '/srep/all'
+        if(employeeRole === 'EMPLOYEE' || employeeRole === 'LINE MANAGER'){
+            window.location = '/srep/myapplications'
+        }else{
+            window.location = '/srep/all'
+        }
     }
     
 

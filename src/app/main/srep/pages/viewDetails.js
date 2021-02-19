@@ -211,9 +211,9 @@ function AddTrustDeed(props) {
                                             <Typography className="font-bold mb-4 text-15">Employee Grade</Typography>
                                             <Typography>
                                                 {info ? (
-                                                    <div> {info.gradeLevel} </div>
+                                                    info.gradeLevel
                                                 ) : (
-                                                    <div><SkeletonLoader height="3em" width="60%" /></div>
+                                                    <SkeletonLoader height="3em" width="60%" />
                                                 )}
                                             </Typography>
                                         </div>
@@ -274,7 +274,7 @@ function AddTrustDeed(props) {
                                         variant="contained"
                                         color="primary"
                                         className={classes.approveBtn}
-                                        onClick={()=>{window.location = '/srep/all'}}
+                                        onClick={(ev)=>{props.goBack()}}
                                     >
                                         Close
                                     </Button>

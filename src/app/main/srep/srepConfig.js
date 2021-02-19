@@ -20,7 +20,7 @@ const SrepConfig = {
 			component: React.lazy(() => import('../srep/viewSrep'))
 		},
 		{
-			path: '/srep/employee/dashboard',
+			path: '/srep/myapplications',
 			component: React.lazy(() => import('./dashboards/EmployeeSrepDashboard'))
 		},
 		{

@@ -285,7 +285,7 @@ const SubFolderTable = (props) =>{
                                         style ={{height: "200"}}
 									>
                                         <TableCell className="max-w-64 w-64 p-0 text-center" onClick={event => {handleItemClick(event, n)}}>
-                                            <Icon className={clsx(classes.typeIcon, (n.folderId === 1 || n.documentMainFolder.name.toUpperCase().includes('PUBLIC')) ? 'folder_shared' : 'folder')} />
+                                            <Icon className={clsx(classes.typeIcon, (n.folderId === 1 || (n.documentMainFolder && n.documentMainFolder.name.toUpperCase().includes('PUBLIC'))) ? 'folder_shared' : 'folder')} />
                                         </TableCell>
 										<TableCell className="text-center" style={{padding: '0 16px'}}
                                             onClick={event => { handleItemClick(event, n)}}>
