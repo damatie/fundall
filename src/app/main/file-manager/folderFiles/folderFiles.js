@@ -126,6 +126,7 @@ function FolderFiles(props) {
 		<PageLayout
             noSearch
             noPrevious
+            prev={true}
             props={props}
             header={{
                 icon: (subFolder.folderId === 1) ? 'folder_shared' : 'folder',

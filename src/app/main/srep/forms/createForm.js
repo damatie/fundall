@@ -97,7 +97,7 @@ function CreateForm(props) {
 	function checkFiles(){
 		return (identity.length === 0 ||  
 			benIdentity.length === 0 || adProof.length === 0 || 
-			photo.length === 0 || benPhoto.length === 0 || !telNo || !phoneNo)
+			photo.length === 0 || benPhoto.length === 0 || !telNo || !phoneNo || amount <= 999)
 	}
 
 	const identityTypes = [
@@ -237,6 +237,7 @@ function CreateForm(props) {
 										values={amount}
 										handleChange={e => setAmount(e.target.value)}
 										name={"capital_fund"}
+										helperText={'₦1,000 is the minimum amount allowed'}
 										// label={"Amount requested"}
 										required
 									/>

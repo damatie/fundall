@@ -155,9 +155,9 @@ function AddTrustDeed(props) {
                                             <Typography className="font-bold mb-4 text-15">Employee Name</Typography>
                                             <Typography>
                                                 {employee ? (
-                                                    `${employee.firstName} ${employee.lastName}`
+                                                    <div>{`${employee.firstName} ${employee.lastName}`}</div>
                                                 ) : (
-                                                    <SkeletonLoader height="3em" width="60%" />
+                                                    <div><SkeletonLoader height="3em" width="60%" /></div>
                                                 )}
                                             </Typography>
                                         </div>
@@ -166,9 +166,9 @@ function AddTrustDeed(props) {
                                             <Typography className="font-bold mb-4 text-15">Employment ID</Typography>
                                             <Typography>
                                                 {info ? (
-                                                    info.employeeNumber
+                                                    <div>{info.employeeNumber}</div>
                                                 ) : (
-                                                    <SkeletonLoader height="3em" width="60%" />
+                                                    <div><SkeletonLoader height="3em" width="60%" /></div>
                                                 )}
                                             </Typography>
                                         </div>
@@ -179,9 +179,9 @@ function AddTrustDeed(props) {
                                             <Typography className="font-bold mb-4 text-15">Department</Typography>
                                             <Typography>
                                                 {employee ? (
-                                                    getDepartment(employee.departmentId)
+                                                    <div>{getDepartment(employee.departmentId)}</div>
                                                 ) : (
-                                                    <SkeletonLoader height="3em" width="60%" />
+                                                    <div><SkeletonLoader height="3em" width="60%" /></div>
                                                 )}
                                             </Typography>
                                         </div>
@@ -189,9 +189,9 @@ function AddTrustDeed(props) {
                                             <Typography className="font-bold mb-4 text-15">Job Role</Typography>
                                             <Typography>
                                                 {employee ? (
-                                                    getRole(employee.roleId)
+                                                    <div>{getRole(employee.roleId)}</div>
                                                 ) : (
-                                                    <SkeletonLoader height="3em" width="60%" />
+                                                    <div><SkeletonLoader height="3em" width="60%" /></div>
                                                 )}
                                             </Typography>
                                         </div>
@@ -201,9 +201,9 @@ function AddTrustDeed(props) {
                                             <Typography className="font-bold mb-4 text-15">Entity</Typography>
                                             <Typography>
                                                 {employee ? (
-                                                    getEntity(employee.entityId)
+                                                    <div>{getEntity(employee.entityId)}</div>
                                                 ) : (
-                                                    <SkeletonLoader height="3em" width="60%" />
+                                                    <div><SkeletonLoader height="3em" width="60%" /></div>
                                                 )}
                                             </Typography>
                                         </div>
@@ -211,9 +211,9 @@ function AddTrustDeed(props) {
                                             <Typography className="font-bold mb-4 text-15">Employee Grade</Typography>
                                             <Typography>
                                                 {info ? (
-                                                    info.gradeLevel
+                                                    <div> {info.gradeLevel} </div>
                                                 ) : (
-                                                    <SkeletonLoader height="3em" width="60%" />
+                                                    <div><SkeletonLoader height="3em" width="60%" /></div>
                                                 )}
                                             </Typography>
                                         </div>

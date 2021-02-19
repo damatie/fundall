@@ -28,6 +28,7 @@ import RejectIcon from '@material-ui/icons/Cancel';
 import ApproveIcon from '@material-ui/icons/Check';
 import MenuIcon from '@material-ui/icons/Menu';
 import Grid from '@material-ui/core/Grid';
+import {formatCurrency} from 'app/shared/formatCurrency';
 const useStyles = makeStyles({
 	table: {
 		'& th': {
@@ -294,21 +295,21 @@ const SrepTable = (props) =>{
 									>
 										<TableCell className="text-center" style={{padding: '0 16px'}}
 										onClick={event => {handleItemClick(event, n); setOpen(true) }}>
-											{(n.employee) ? `${n.employee.firstName} ${n.employee.lastName}` : ''}
+											{(n) ? `${n.beneficiaryName}` : ''}
 										</TableCell>
 										<TableCell className="text-center" style={{padding: '0 16px'}}
-										onClick={event => {handleItemClick(event, n); setOpen(true) }}>{(n.employee) ? n.employee.email : ''}</TableCell>
+										onClick={event => {handleItemClick(event, n); setOpen(true) }}>{(n) ? n.beneficiaryEmail : ''}</TableCell>
                                         <TableCell className="text-center" style={{padding: '0 16px'}}
 										onClick={event => {handleItemClick(event, n); setOpen(true) }}>
-                                            {(n.employee) ? getRole(n.employee.roleId) : ''}
+                                            {(n) ? n.beneficiaryRelationship.toUpperCase() : ''}  
+                                        </TableCell>
+                                        <TableCell className="text-justify" style={{padding: '0 60px'}}
+										onClick={event => {handleItemClick(event, n); setOpen(true) }}>
+                                            {(n) ? formatCurrency('₦', n.capitalFund) : ''}
 										</TableCell>
                                         <TableCell className="text-center" style={{padding: '0 16px'}}
 										onClick={event => {handleItemClick(event, n); setOpen(true) }}>
-                                            {(n.employee) ? getDepartment(n.employee.departmentId) : ''}  
-                                        </TableCell>
-                                        <TableCell className="text-center" style={{padding: '0 16px'}}
-										onClick={event => {handleItemClick(event, n); setOpen(true) }}>
-                                            {(n.employee) ? getEntity(n.employee.entityId) : ''}  
+                                            {(n) ? CheckStatus(n.status) : ''}  
                                         </TableCell>
                                         <TableCell className="text-center" style={{padding: '0 16px'}}>
                                         <IconButton aria-label="delete" onClick={(event) => handleDelete(event, n.id)} disabled={parseInt(props.userId) !== n.employeeId || n.status !== 'pending'}>

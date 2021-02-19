@@ -22,7 +22,8 @@ function UploadTrustDeed(props){
         beneficiaryPhotoUrl,
         employeePhotoUrl,
         residentialProofUrl,
-        identityUrl
+        identityUrl,
+        identityType
     } = props.srepData;
 
     const downloadFile = (fieldName, fileUrl) => {
@@ -76,7 +77,7 @@ function UploadTrustDeed(props){
                         className="mb-24 w-auto rounded-lg"
                         onClick={() => {downloadFile('', identityUrl)}}
                     >
-                        Download International Passport
+                        Download {identityType} document
                     </Button>
                 </div>
                 <div>
