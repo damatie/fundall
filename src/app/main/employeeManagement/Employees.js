@@ -8,10 +8,12 @@ import reducer from './store/reducers/employees.reducer';
 import withReducer from 'app/store/withReducer';
 import *  as Actions from './store/actions';
 import Skeleton from '@material-ui/lab/Skeleton';
+import { useHistory } from 'react-router';
 
 const Employees = () => {
   const dispatch = useDispatch();
   const { open, employees, entities, departments, roles, grades, loading, jobTitles } = useSelector(state => state.employeeMgt);
+  const { push } = useHistory();
 
   React.useEffect(() => {
     dispatch(Actions.getEmployees());
@@ -62,7 +64,7 @@ const Employees = () => {
                       entities,
                       roles,
                     }}
-                    push={() => null}
+                    push={push}
                     handleDelete={handleDelete}
                     handleFilter={handleFilter}
                   />

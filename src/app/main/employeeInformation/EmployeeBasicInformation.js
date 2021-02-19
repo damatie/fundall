@@ -18,18 +18,8 @@ import EmployeeNextOfKin from './components/EmployeeNextOfKin';
 
 const EmployeeBasicInformation = () => {
   const authState = useSelector(state => state.auth.user);
-  const profile = useSelector(state => state.profile.data);
-  const { title, open } = useSelector(state => state.employeeInformation.employeeInfo);
-  const [info, setInfo] = React.useState({
-    ...profile,
-    info: null,
-    ...profile.info,
-  });
+  const { title, open, info } = useSelector(state => state.employeeInformation.employeeInfo);
   const dispatch = useDispatch();
-
-  React.useEffect(() => {
-    // dispatch(Actions.getEmployeeProfile(authState.id));
-  }, []);
 
   const handleOpen = (title) => {
     return () => {

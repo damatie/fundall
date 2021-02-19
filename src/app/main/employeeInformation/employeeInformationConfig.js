@@ -5,6 +5,10 @@ const EmployeeInformationConfig = {
 		layout: {}
 	},
 	routes: [
+		// {
+		// 	path: '/employee/profile/:id',
+		// 	component: React.lazy(() => import('./'))
+		// },
 		{
 			path: '/employee/profile/',
 			component: React.lazy(() => import('./EmployeeInformation'))
