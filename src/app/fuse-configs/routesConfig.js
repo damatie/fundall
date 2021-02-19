@@ -54,6 +54,7 @@ import PermissionConfig from 'app/main/permission/PermissionConfig';
 import EmployeeMgtConfig from 'app/main/employeeManagement/employeeMgtConfig';
 import EmployeeInformationConfig from 'app/main/employeeInformation/employeeInformationConfig';
 import AttendanceConfig from 'app/main/attendance/attendanceConfig';
+import CompensationColumnsConfig from 'app/main/compensationColumns/CompensationColumnsConfig';
 
 const routeConfigs = [
 	// ExampleConfig,
@@ -108,7 +109,8 @@ const routeConfigs = [
 	BehaviouralAttributeConfig,
 	PermissionConfig,
 	EmployeeMgtConfig,
-	EmployeeInformationConfig
+	EmployeeInformationConfig,
+	CompensationColumnsConfig
 ];
 
 const checkIfLoggedIn = () => {

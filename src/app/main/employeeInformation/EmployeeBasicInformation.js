@@ -11,31 +11,37 @@ import TrainingAndExpertise, { AddTrainingAndExpertise } from './components/Trai
 import EducationalQualification, { AddEducationalQualification } from './components/EducationalQualifications';
 import EmergencyContacts, { AddEmergencyContact } from './components/EmergencyContacts';
 import SpouseAndDependants, { AddSpouseAndDependant } from './components/SpouseAndDependants';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import * as Actions from 'app/store/actions';
+import { openSharedModal, CLOSE_SHARED_MODAL } from './store/actions';
+import EmployeeNextOfKin from './components/EmployeeNextOfKin';
 
-const info = {
-  title: 'Mr',
-  firstName: 'Dave',
-  lastName: 'Dave',
-  middleName: 'Dave',
-  surname: 'Dave',
-  srgn: 'DC-003',
-  gender: 'Male',
-  maritalStatus: 'Single',
-  nickname: 'Black',
-  officialEmail: 'test@test.com',
-  alternativeEmail: 'test@test.cc',
-  facebookHandle: 'https://timesheet-client.web.app/blog/1',
-  twitterHandle: 'https://timesheet-client.web.app/blog/1',
-  linkedInHandle: 'https://timesheet-client.web.app/blog/1',
-  instagramInHandle: 'https://timesheet-client.web.app/blog/1',
-  officialNo: '',
-  officeLine: '',
-  officeExtension: '',
-  privateMobileNumber: ''
-}
 const EmployeeBasicInformation = () => {
-  const authState = useSelector(state => state.auth.user)
+  const authState = useSelector(state => state.auth.user);
+  const profile = useSelector(state => state.profile.data);
+  const { title, open } = useSelector(state => state.employeeInformation.employeeInfo);
+  const [info, setInfo] = React.useState({
+    ...profile,
+    info: null,
+    ...profile.info,
+  });
+  const dispatch = useDispatch();
+
+  React.useEffect(() => {
+    // dispatch(Actions.getEmployeeProfile(authState.id));
+  }, []);
+
+  const handleOpen = (title) => {
+    return () => {
+      dispatch(openSharedModal(title));
+    }
+  };
+
+  const handleClose = () => {
+    dispatch({
+      type: CLOSE_SHARED_MODAL
+    });
+  }
   return (
     <>
       <Grid container spacing={1}>
@@ -45,41 +51,44 @@ const EmployeeBasicInformation = () => {
         <Grid item lg={6} md={6} sm={12} xs={12}>
           <EmployeeEmail value={info} authState={authState}/>
         </Grid>
-        <Grid item lg={6} md={6} sm={12} xs={12}>
+        {/* <Grid item lg={6} md={6} sm={12} xs={12}>
           <EmployeeTelephoneNumbers value={info} authState={authState}/>
         </Grid>
         <Grid item lg={6} md={6} sm={12} xs={12}>
           <EmployeeWorkLocation value={info} authState={authState}/>
-        </Grid>
+        </Grid> */}
         <Grid item lg={6} md={6} sm={12} xs={12}>
           <EmployeeOrganization value={info} authState={authState}/>
         </Grid>
         <Grid item lg={6} md={6} sm={12} xs={12}>
-          <EmployeeVacation authState={authState}/>
+          <EmployeeVacation authState={authState} handleOpen={handleOpen}/>
         </Grid>
         <Grid item lg={6} md={6} sm={12} xs={12}>
-          <TrainingAndExpertise authState={authState}/>
+          <TrainingAndExpertise authState={authState} handleOpen={handleOpen}/>
         </Grid>
         <Grid item lg={6} md={6} sm={12} xs={12}>
-          <EducationalQualification authState={authState}/>
+          <EducationalQualification authState={authState} handleOpen={handleOpen}/>
         </Grid>
         <Grid item lg={6} md={6} sm={12} xs={12}>
-          <EmergencyContacts authState={authState}/>
+          <EmergencyContacts authState={authState} handleOpen={handleOpen}/>
         </Grid>
         <Grid item lg={6} md={6} sm={12} xs={12}>
-          <SpouseAndDependants authState={authState}/>
+          <SpouseAndDependants authState={authState} handleOpen={handleOpen}/>
+        </Grid>
+        <Grid item lg={6} md={6} sm={12} xs={12}>
+          <EmployeeNextOfKin authState={authState} handleOpen={handleOpen} />
         </Grid>
       </Grid>
       <SharedModal
-        title='Modal Title'
-        open={false}
-        handleClose={() => null}
+        title={title}
+        open={open}
+        handleClose={handleClose}
       >
-        {/* <AddEmployeeVacation /> */}
-        {/* <AddTrainingAndExpertise /> */}
-        {/* <AddEducationalQualification /> */}
-        {/* <AddEmergencyContact /> */}
-        <AddSpouseAndDependant />
+        {title === 'Travel And Vacation Schedule' && (<AddEmployeeVacation />)}
+        {title === 'Training And Expertise' && (<AddTrainingAndExpertise />)}
+        {title === 'Educational Qualification' && (<AddEducationalQualification />)}
+        {title === 'Emergency Contact' && (<AddEmergencyContact />)}
+        {title === 'Spouse / Dependants' && (<AddSpouseAndDependant />)}
       </SharedModal>
     </>
   );

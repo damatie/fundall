@@ -5,30 +5,9 @@ import errorMsg from 'utils/errorMsg';
 import swal from 'sweetalert2';
 import * as Actions from 'app/store/actions';
 import { createEmployeeInfo } from '../store/actions';
+import React from 'react';
 
 const schema = yup.object().shape({
-  title: yup.string(
-    errorMsg({
-      type: 'string',
-      name: 'Title'
-    })
-  ).required(
-    errorMsg({
-      type: 'required',
-      name: 'Title'
-    })
-  ),
-  maritalStatus: yup.string(
-    errorMsg({
-      type: 'string',
-      name: 'Marital Status'
-    })
-  ).required(
-    errorMsg({
-      type: 'required',
-      name: 'Marital Status'
-    })
-  ),
   officeExtension: yup.string(
     errorMsg({
       type: 'string',
@@ -73,28 +52,7 @@ const schema = yup.object().shape({
       name: 'Official Mobile No'
     })
   ),
-  cityOfResidence: yup.string(
-    errorMsg({
-      type: 'string',
-      name: 'City'
-    })
-  ).required(
-    errorMsg({
-      type: 'required',
-      name: 'City'
-    })
-  ),
-  contactAddress: yup.string(
-    errorMsg({
-      type: 'string',
-      name: 'Contact Address'
-    })
-  ).required(
-    errorMsg({
-      type: 'required',
-      name: 'Contact Address'
-    })
-  ),
+  
   alternativeEmail: yup.string(
     errorMsg({
       type: 'string',
@@ -111,17 +69,6 @@ const schema = yup.object().shape({
       name: 'Alternative Email/Private Email'
     })
   ),
-  gender: yup.string(
-    errorMsg({
-      type: 'string',
-      name: 'Gender'
-    })
-  ).required(
-    errorMsg({
-      type: 'required',
-      name: 'Gender'
-    })
-  ),
   nationality: yup.string(
     errorMsg({
       type: 'string',
@@ -131,17 +78,6 @@ const schema = yup.object().shape({
     errorMsg({
       type: 'required',
       name: 'Nationality'
-    })
-  ),
-  country: yup.string(
-    errorMsg({
-      type: 'string',
-      name: 'Country'
-    })
-  ).required(
-    errorMsg({
-      type: 'required',
-      name: 'Country'
     })
   ),
   facebookHandle: yup.string(
@@ -241,6 +177,12 @@ const schema = yup.object().shape({
       name: 'Personal Assistant'
     })
   ),
+  // signature: yup.mixed().required(
+  //   errorMsg({
+  //     type: 'required',
+  //     name: 'signature'
+  //   })
+  // ),
 });
 
 const useCreateEmployeeInfo = ({dispatch, state}) => {
@@ -254,8 +196,25 @@ const useCreateEmployeeInfo = ({dispatch, state}) => {
     resolver: yupResolver(schema),
   });
 
+  const [signature, setSignature] = React.useState([]);
+
   const onSubmit = async (data) => {
-    dispatch(createEmployeeInfo({id:state.id, data}));
+    if(signature.length !== 0) {
+      const formData = new FormData();
+      const entries = {
+        ...data,
+        signature: signature[0],
+      }
+      for (const [key, value] of Object.entries(entries)) {
+        formData.append(key, value);
+      }
+      dispatch(createEmployeeInfo({ id:state.id, data: formData }));
+      return;
+    }
+    swal.fire({
+      text: 'Please enter your password',
+      icon: 'warn',
+    });
   };
 
   const handleClose = () => {
@@ -281,7 +240,8 @@ const useCreateEmployeeInfo = ({dispatch, state}) => {
     register,
     handleSubmit,
     handleMenuItemClick,
-    control
+    control,
+    setSignature
   };
 };
 

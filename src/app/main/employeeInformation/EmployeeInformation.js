@@ -7,6 +7,8 @@ import GradeAndPromotion from './GradeAndPromotion';
 import EmployeeCompensation from './EmployeeCompensation';
 import EmployeeConfidentialInfo from './EmployeeConfidentialInfo';
 import CreateEmployeeInfo from './CreateEmployeeInfo';
+import reducer from './store/reducers';
+import withReducer from 'app/store/withReducer';
 
 const EmployeeInformation = () => {
   const [tabValue, setTabValue] = React.useState(0);
@@ -35,7 +37,7 @@ const EmployeeInformation = () => {
 					<Tab className="h-64 normal-case" label="Grade And Promotion" />
           <Tab className="h-64 normal-case" label="Compensation" />
           <Tab className="h-64 normal-case" label="Seperation" />
-          <Tab className="h-64 normal-case" label="Confidential Information" />
+          {/* <Tab className="h-64 normal-case" label="Confidential Information" /> */}
 				</Tabs>
       }
       content={
@@ -52,9 +54,9 @@ const EmployeeInformation = () => {
           {tabValue === 3 && (
             <>Stil Under Contruction</>
           )}
-          {tabValue === 4 && (
+          {/* {tabValue === 4 && (
             <EmployeeConfidentialInfo />
-          )}
+          )} */}
         </div>
       }
     />
@@ -63,4 +65,4 @@ const EmployeeInformation = () => {
   );
 };
 
-export default EmployeeInformation;
+export default withReducer('employeeInformation', reducer)(EmployeeInformation);
