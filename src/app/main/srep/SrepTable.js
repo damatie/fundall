@@ -63,7 +63,7 @@ const SrepTable = (props) =>{
         let entities = props.entities;
         if(entities){
             const entity = entities.find(entity => {return parseInt(entity.id) === parseInt(entityId)});
-            return (entity) ? entity.name : '';
+            return (entity) ? entity.entityName : '';
         }
         return '';
     }

@@ -5,12 +5,11 @@ import SharedButton from 'app/shared/button/SharedButton';
 import { Controller } from 'react-hook-form';
 import SelectTextField from 'app/shared/TextInput/SelectTextField';
 import MenuItem from '@material-ui/core/MenuItem';
-import { useSelector } from 'react-redux';
-import useEmployeeGrade from '../hooks/useEmployeeGrade';
 
-const EmployeeGradeModal = () => {
-  const state = useSelector(state => state.employeeGrade);
-  const { textFieldValue, onSubmit, handleSubmit, errors, register, control, handleClose, buttonTitle, modalTitle } = useEmployeeGrade(state);
+const EmployeeGradeModal = ({ customHook }) => {
+
+  const { entity, textFieldValue, onSubmit, handleSubmit, errors, register, control, handleClose, buttonTitle, modalTitle, state } = customHook;
+
   return (
     <SharedModal
       open={state.open}
@@ -22,31 +21,57 @@ const EmployeeGradeModal = () => {
           name='name'
           label='Name'
           className='my-16'
-          defaultValue={textFieldValue('name')}
+          defaultValue={textFieldValue('gradeName')}
           error={errors.name}
-          refs={register}
+          ref={register}
           message={errors.name?.message}
+        />
+        <Controller
+          name='entity'
+          control={control}
+          defaultValue={textFieldValue('entityName')}
+          label='Entity'
+         as={
+           <SelectTextField
+           data-testid='entity'
+            name='entity'
+            label='Entity'
+            defaultValue={textFieldValue('entityName')}
+            error={errors.entity}
+            message={errors.entity?.message}
+           >
+             {
+               entity.map((item) => (
+                <MenuItem value={item}>
+                  {item.entityName}
+                </MenuItem>
+               ))
+             }
+           </SelectTextField>
+         }
         />
         
         <Input
           className='my-16'
           name='description'
           label='Description'
-          defaultValue={textFieldValue('description')}
+          defaultValue={textFieldValue('gradeDescription')}
           multiline
           error={errors.description}
-          refs={register}
+          ref={register}
           message={errors.description?.message}
         />
         <Controller
           name='pip'
           control={control}
-          defaultValue={textFieldValue('pip')}
+          defaultValue={textFieldValue('pipEligibility')}
+          label='PIP Eligible'
          as={
            <SelectTextField
+           data-testid='pip'
             name='pip'
             label='PIP Eligible'
-            defaultValue={textFieldValue('pip')}
+            defaultValue={textFieldValue('pipEligibility')}
             error={errors.pip}
             message={errors.pip?.message}
            >
@@ -64,6 +89,7 @@ const EmployeeGradeModal = () => {
           color='primary'
           type='submit'
           className='flex mx-auto'
+          data-testid='button'
         >
           {buttonTitle()}
         </SharedButton>

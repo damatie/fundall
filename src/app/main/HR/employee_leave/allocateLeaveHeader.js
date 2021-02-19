@@ -43,7 +43,7 @@ const suggestion = ['Support service'].map(item => ({
 
 const AllocateLeaveHead = () => {
   const businessUnits = useSelector(({ businessUnits }) => businessUnits.businessUnits);
-  const departments = useSelector(({ departments }) => departments.departments);
+  const departments = useSelector(state => state.department.departments);
   const [isFormValid, setIsFormValid] = useState(false);
   const formRef = useRef(null);
   const dispatch = useDispatch();
@@ -63,8 +63,9 @@ const AllocateLeaveHead = () => {
     setIsFormValid(true);
   }
 
-  const handleDepartment = id => {
-    dispatch(departmentActions.getDepartments(id));
+  const handleDepartment = (ev) => {
+    console.log(ev.target.value);
+    dispatch(departmentActions.getDepartments(ev.target.value));
     dispatch({
       type: employeeListActions.RESET_DEPARTMENT_EMPLOYEE_LIST
     })
@@ -103,11 +104,11 @@ const AllocateLeaveHead = () => {
           label="Entities"
           // value="none"
           variant="outlined"
-          onChange={e => handleDepartment(e.target.value) }
+          onChange={handleDepartment}
           required
           size='small'
         >
-          {businessUnits.data.map(item => (
+          {businessUnits?.data?.map(item => (
             <MenuItem value={item.id}>{item.entityName}</MenuItem>
           ))}
         </SelectFormsy>
@@ -125,10 +126,9 @@ const AllocateLeaveHead = () => {
           required
           size='small'
         >
-          {departments.data.length !== 0 ? departments.data.map(item => (
+          {departments?.data?.map(item => (
             <MenuItem value={item.id}>{item.departmentName}</MenuItem>
-          )) : 
-          <h3>No department</h3>}
+          ))}
         </SelectFormsy>
 
       {/* </div> */}

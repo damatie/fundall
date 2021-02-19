@@ -8,9 +8,14 @@ const BehaviouralAttributeConfig = {
   },
   routes: [
     {
+      path: '/behaviouralAttribute/content/:id',
+      component: React.lazy(() => import('./BehaviouralAttributeDetails'))
+    },
+    {
       path: '/behaviouralAttribute/all',
       component: React.lazy(() => import('./BehaviouralAttribute'))
-    }
+    },
+
   ]
 };
 

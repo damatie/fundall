@@ -3,7 +3,6 @@ import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import errorMsg from '../../../../utils/errorMsg';
-import { useDispatch, useSelector } from 'react-redux';
 import * as Actions from '../store/actions';
 
 const schema = yup.object().shape({
@@ -32,7 +31,7 @@ const schema = yup.object().shape({
 });
 
 
-const useJobTitle = () => {
+const useJobTitle = ({dispatch, state}) => {
   const {
     register,
     errors,
@@ -42,13 +41,7 @@ const useJobTitle = () => {
     resolver: yupResolver(schema),
     defaultValues: {}
   });
-
-  const dispatch = useDispatch();
-  const { data, open, singleData, type, loading } = useSelector(state => state.jobTitle);
-
-  React.useEffect(() => {
-    dispatch(Actions.getAllJobTitle());
-  }, []);
+  const { data, open, singleData, type, loading } = state;
 
   const onSubmit = (model) => {
     switch(type) {
@@ -103,7 +96,8 @@ const useJobTitle = () => {
     handleDelete,
     open,
     type,
-    loading
+    loading,
+    x: 'fucking test'
   };
 };
 

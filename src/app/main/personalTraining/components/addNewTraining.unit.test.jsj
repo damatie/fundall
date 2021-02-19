@@ -1,0 +1,23 @@
+import React from 'react'
+// import { render, fireEvent, screen } from '../test/components.unit.wrapper';
+// import AddNewTraining from "./addNewTraining";
+import { render, screen } from '@testing-library/react';
+import { getByText } from "@testing-library/dom"
+// import { JSDOM } from "jsdom";
+
+// it('Renders the connected app with initialState', () => {
+
+//     // beforeEach(() => {
+//     //     // global.document = new JSDOM(documentHTML, { url });
+//     // })
+
+//     render(<div>redux user</div>, {})
+
+//     expect(screen.getByText(/redux user/i)).toBeInTheDocument()
+// });
+
+test('should wait for me to be', () => {
+    // getByText(container, 'Print Username').click()
+
+    expect(screen.getByText(/redux user/i)).toBeI
+})

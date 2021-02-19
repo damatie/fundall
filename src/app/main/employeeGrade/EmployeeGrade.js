@@ -6,16 +6,21 @@ import EmployeeGradeTable from './components/EmployeeGradeTable';
 import EmployeeGradeModal from './components/EmployeeGradeModal';
 import reducer from './store/reducers/employeeGrade.reducer';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllEmployeeGrade } from './store/actions';
+import { getAllEmployeeGrade, getEntity } from './store/actions';
 import useEmployeeGrade from './hooks/useEmployeeGrade';
 
 const EmployeeGrade = () => {
 
   const dispatch = useDispatch();
   const state = useSelector(state => state.employeeGrade);
-  const { handleOpen } = useEmployeeGrade(state);
+  const customHook = useEmployeeGrade(state, dispatch);
+
   React.useEffect(() => {
-    dispatch(getAllEmployeeGrade());
+    dispatch(getAllEmployeeGrade({
+      offset: 0,
+      limit: 10
+    }));
+    dispatch(getEntity());
   }, []);
 
   return (
@@ -23,7 +28,7 @@ const EmployeeGrade = () => {
       button={{
         showButton: true,
         btnTitle: 'Add Employee Grade',
-        onClick: handleOpen,
+        onClick: customHook.handleOpen,
       }}
       header={{
         title: 'Employee Grade',
@@ -36,8 +41,8 @@ const EmployeeGrade = () => {
               <Skeleton variant="rect" width='100%' height={400} animation="wave"/>
             ) : (
               <>
-                <EmployeeGradeTable/>
-                <EmployeeGradeModal />
+                <EmployeeGradeTable customHook={customHook}/>
+                <EmployeeGradeModal customHook={{entity: state.entity, ...customHook}}/>
               </>
             )
           }

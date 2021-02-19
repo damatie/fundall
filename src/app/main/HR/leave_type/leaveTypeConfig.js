@@ -7,6 +7,10 @@ const LeaveTypeConfig = {
 	},
 	routes: [
 		{
+			path: '/hr/leave_type/details/:id',
+			component: React.lazy(() => import('./newLeaveType'))
+		},
+		{
 			path: '/hr/leave_type/new',
 			component: React.lazy(() => import('./newLeaveType'))
 		},

@@ -24,7 +24,7 @@ const HrConfirmConfig = {
 			}
 		}
 	},
-	auth: authRoles.onlyGuest,
+	// auth: authRoles.onlyGuest,
 	routes: [
 		{
 			path: '/hr/confirmation/',

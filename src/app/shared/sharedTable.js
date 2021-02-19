@@ -177,7 +177,7 @@ const TableCells = (props) => {
 											:
 											item.id === 'status' ?
 												<TableCell component="th" scope="row" align={item.align} key={item.id}>
-													<LoanStatus status={props.data.status} />
+													<LoanStatus status={props.data[item.field]} />
 												</TableCell>
 												:
 												<TableCell component="th" scope="row" align={item.align} key={item.id}>

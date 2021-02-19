@@ -50,6 +50,7 @@ import LoanDashboardConfig from "app/main/loanApp/dashboard/loanDashboardConfig"
 import JobTitleConfig from 'app/main/jobTitle/JobTitleConfig';
 import EmployeeGradeConfig from 'app/main/employeeGrade/EmployeeGradeConfig';
 import BehaviouralAttributeConfig from 'app/main/behaviouralAttribute/BehaviouralAttributeConfig';
+import PermissionConfig from 'app/main/permission/PermissionConfig';
 
 const routeConfigs = [
 	// ExampleConfig,
@@ -100,7 +101,8 @@ const routeConfigs = [
 	LoanDashboardConfig,
 	JobTitleConfig,
 	EmployeeGradeConfig,
-	BehaviouralAttributeConfig
+	BehaviouralAttributeConfig,
+	PermissionConfig
 ];
 
 const checkIfLoggedIn = () => {

@@ -10,6 +10,9 @@ import withReducer from 'app/store/withReducer';
 import useKpoContentList from './hooks/useKpoContent';
 import KpoComments from './components/KpoComments';
 import kpoCategoryReducer from '../KPOcategoryList/store/reducers/categoryList.reducer';
+import KpoContentPipScore from './components/KpoContentPipScore';
+import PersonalDevelopment from './components/PersonalDevelopment';
+import BehaviouralAttribute from './components/BehaviouralAttribute';
 
 const EmployeeKpoDetails = () => {
 
@@ -46,7 +49,10 @@ const EmployeeKpoDetails = () => {
 				>
 					<Tab className="h-64 normal-case" label="KPO Details" />
 					<Tab className="h-64 normal-case" label="KPO Content" />
-          <Tab className="h-64 normal-case" label="KPO Comment" />
+          <Tab className="h-64 normal-case" label="KPO Summary Review" />
+          <Tab className="h-64 normal-case" label="%PIP" />
+          <Tab className="h-64 normal-case" label="Behavioural Attribute" />
+          <Tab className="h-64 normal-case" label="Personal Improvement" />
 				</Tabs>
       }
       content={
@@ -59,6 +65,9 @@ const EmployeeKpoDetails = () => {
             </>
           )}
           {tabValue === 2 && (<KpoComments />)}
+          {tabValue === 3 && (<KpoContentPipScore />)}
+          {tabValue === 4 && (<BehaviouralAttribute />)}
+          {tabValue === 5 && (<PersonalDevelopment />)}
         </div>
       }
     />

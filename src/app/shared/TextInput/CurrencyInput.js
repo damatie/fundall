@@ -1,5 +1,5 @@
 import NumberFormat from 'react-number-format';
-import React from 'react';
+import React, { useEffect } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Icon from '@material-ui/core/Icon';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -27,7 +27,11 @@ function NumberFormatCustom(props) {
 };
 
 const CurrencyInput = (props) => {
-  const {handleChange, className, values, name, label, error, helperText, disabled } = props;
+  let { handleChange, className, values, name, label, error, helperText, disabled } = props;
+
+  if (values) {
+    values = Number(values)
+  }
 
   return (
     <TextField
@@ -39,7 +43,7 @@ const CurrencyInput = (props) => {
       onChange={handleChange}
       name={name}
       variant='outlined'
-      style={{width: '100%'}}
+      style={{ width: '100%' }}
       id="formatted-numberformat-input"
       required
       disabled={disabled ? disabled : false}

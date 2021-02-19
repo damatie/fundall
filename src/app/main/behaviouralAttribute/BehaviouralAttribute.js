@@ -8,21 +8,27 @@ import BehaviouralAttributeModal from './components/BehaviouralAttributeModal';
 import { getAllBehaviouralAttribute } from './store/actions';
 import reducer from './store/reducer/behavioural.reducer';
 import useBehaviouralAttribute from './hooks/useBehaviouralAttribute';
+import { useHistory } from 'react-router-dom';
 
 const BehaviouralAttribute = () => {
 
   const dispatch = useDispatch();
+  const push = useHistory();
   const state = useSelector(state => state.behaviouralAttribute);
-  const { handleOpen } = useBehaviouralAttribute(state)
+  const customHook = useBehaviouralAttribute(state, dispatch);
+
   React.useEffect(() => {
-    dispatch(getAllBehaviouralAttribute());
+    dispatch(getAllBehaviouralAttribute({
+      offset: 0,
+      limit: 10
+    }));
   }, []);
   return (
     <PageLayout
       button={{
         showButton: true,
         btnTitle: 'Create',
-        onClick: handleOpen,
+        onClick: customHook.handleOpen,
       }}
       header={{
         title: 'Behavioural Attribute',
@@ -35,8 +41,8 @@ const BehaviouralAttribute = () => {
               <Skeleton variant="rect" width='100%' height={400} animation="wave"/>
             ): (
               <>
-                <BehaviouralAttributeTable/>
-                <BehaviouralAttributeModal />
+                <BehaviouralAttributeTable handleDelete={customHook.handleDelete} state={state} push={push}/>
+                <BehaviouralAttributeModal customHook={customHook} state={state}/>
               </>
             )
           }

@@ -106,7 +106,7 @@ function LeaveManagement(props) {
 					</div>
       }
       contentToolbar={
-				user.role === 'HR' ? 
+				user.role.toUpperCase() === 'HR MANAGER' ? 
 				<Tabs
 					value={tabValue}
 					onChange={handleChangeTab}
@@ -136,17 +136,17 @@ function LeaveManagement(props) {
 				</Tabs> 
 			}
 			content={
-				user.role === 'HR' ? 
+				user.role.toUpperCase() === 'HR MANAGER' ? 
         <div className=" sm:p-24 ">
           {/* {tabValue === 0 && (<LeaveTableTab data={leaveRequest.pendingLeaves} user={props.config}/>)} */}
-          {tabValue === 0 && (<LeaveTableTab data={leaveRequest.reviewedLeaves} user={props.config} />)}
-          {tabValue === 1 && (<LeaveTableTab data={leaveRequest.approvedLeaves} user={props.config} />)}
+          {tabValue === 0 && (<LeaveTableTab data={leaveRequest?.reviewedLeaves || []} user={props.config} />)}
+          {tabValue === 1 && (<LeaveTableTab data={leaveRequest?.approvedLeaves || []} user={props.config} />)}
         </div>
 				:
 				<div className=" sm:p-24 ">
-          {tabValue === 0 && (<LeaveTableTab data={leaveRequest.pendingLeaves} user={props.config}/>)}
+          {tabValue === 0 && (<LeaveTableTab data={leaveRequest?.pendingLeaves || []} user={props.config}/>)}
           {/* {tabValue === 1 && (<LeaveTableTab data={leaveRequest.reviewedLeaves} user={props.config} />)} */}
-          {tabValue === 1 && (<LeaveTableTab data={leaveRequest.approvedLeaves} user={props.config} />)}
+          {tabValue === 1 && (<LeaveTableTab data={leaveRequest?.approvedLeaves || []} user={props.config} />)}
         </div>
 			}
 			innerScroll

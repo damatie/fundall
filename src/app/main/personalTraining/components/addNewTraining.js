@@ -1,5 +1,6 @@
 import { AppBar, Button, Dialog, DialogActions, DialogContent, FormControl, InputLabel, MenuItem, OutlinedInput, Select, TextField, Toolbar, Typography } from '@material-ui/core'
-import { DateTimePicker } from '@material-ui/pickers'
+import { FormatListBulletedOutlined } from '@material-ui/icons';
+import { DateTimePicker, DatePicker } from '@material-ui/pickers'
 import CurrencyInput from 'app/shared/TextInput/CurrencyInput';
 import React, { useEffect, useState } from 'react'
 
@@ -14,22 +15,37 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
         cost: "",
         description: "",
         employeeGrade: "",
-        companySeniority: 0,
-        industrySeniority: 0,
+        companySeniority: '0',
+        industrySeniority: "0",
         certification: false,
-        startDate: new Date(),
-        endDate: new Date(),
+        startDate: "",
+        endDate: "",
         state: "",
         country: "",
         trainingCategoryId: 0
     });
     const [canBeSubmitted, setCanBeSubmitted] = useState(false)
+    const [errorEndDate, setErrorEndDate] = useState("Select End Date");
+    const [errorStartDate, setErrorStartDate] = useState("Select Start Date");
+    const [titleError, setTitleError] = useState("")
+    const [descriptionError, setDescriptionError] = useState("")
 
     const handleChange = (name, value) => {
         if (name === "entity") {
             let id = entities.find(element => element.name = value);
             changeDepartment(id.id);
         }
+
+        else if (name === "endDate") {
+            if (!formstate.startDate) {
+                setErrorEndDate("must select a start date");
+                setTimeout(() => {
+                    setErrorEndDate("")
+                }, 2000);
+                return;
+            }
+        }
+
         else if (name === "category") {
             let id = entities.find(element => element.name = value);
             let courseData = { trainingCourseId: data?.id }
@@ -48,12 +64,24 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
     const handleSubmit = (e) => {
         e.preventDefault();
 
+        if (Date.parse(formstate.startDate) >= Date.parse(formstate.endDate)) {
+            setErrorStartDate("Start date cannot be greater than the end date");
+            return
+        } else if (formstate.name?.length < 10) {
+            setTitleError("Minimum required length is 10");
+            return;
+        }
+        else if (formstate.description?.length < 25) {
+            setDescriptionError("Minimum required length is 25");
+            return;
+        }
+
         let payload = formstate;
         payload.cost = Number(payload.cost);
         payload.industrySeniority = Number(payload.industrySeniority);
         payload.companySeniority = Number(payload.companySeniority);
 
-        // console.log(payload, e);
+        // console.log(payload);
         if (data) {
             update(payload, data.id)
         } else {
@@ -63,6 +91,14 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
         setFormstate({});
         handleClose();
     }
+
+    useEffect(() => {
+        if (formstate?.name?.length > 10) { setTitleError("") }
+    }, [formstate?.name]);
+
+    useEffect(() => {
+        if (formstate?.description?.length > 25) { setDescriptionError("") }
+    }, [formstate?.description]);
 
     useEffect(() => {
         if (data) {
@@ -94,28 +130,49 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
                 }
             }
         }
-    }, [data, departments])
+    }, [data, departments]);
 
     useEffect(() => {
         if (formstate.entity) {
-            setFormstate({ formstate });
+            setFormstate(formstate);
         }
-
         // console.log(formstate, departments);
-    }, [departments, data])
-
-    // useEffect(() => {
-    //     //reload when data changes
-    // }, [data])
+    }, [departments, data]);
 
     useEffect(() => {
-        if (Object.entries(formstate).length !== "") {
+        //reload when data changes
+    }, [data]);
+
+    useEffect(() => {
+        if (Object.values(formstate).includes("")) {
+            // console.log(formstate);
+            setCanBeSubmitted(false)
+        } else {
             setCanBeSubmitted(true)
         }
-    }, [formstate])
+    }, [formstate]);
+
+    const persistedData = {
+        department: "",
+        category: "",
+        entity: "",
+        jobRole: "",
+        name: "",
+        cost: "",
+        description: "",
+        employeeGrade: "",
+        companySeniority: '0',
+        industrySeniority: "0",
+        certification: false,
+        startDate: "",
+        endDate: "",
+        state: "",
+        country: "",
+        trainingCategoryId: 0
+    };
 
     return (
-        <Dialog open={open} onClose={() => { handleClose(); setFormstate({}); }} fullWidth>
+        <Dialog open={open} onClose={() => { handleClose(); setFormstate(persistedData); }} fullWidth>
             <AppBar position="static">
                 <Toolbar className="flex w-full">
                     <Typography variant="subtitle1" color="inherit">
@@ -132,13 +189,17 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
                         variant="outlined"
                         onChange={(e) => handleChange("name", e.target.value)}
                         label="Course Title"
+                        required
                         value={formstate?.name}
                         className="w-full mb-24"
+                        error={Boolean(titleError)}
+                        helperText={titleError}
                     />
 
                     <FormControl className="flex w-full mb-24" variant="outlined">
                         <InputLabel htmlFor="category-label-placeholder"> Category </InputLabel>
                         <Select
+                            required
                             value={formstate?.category}
                             onChange={(e) => handleChange(e.target.name, e.target.value)}
                             input={
@@ -291,6 +352,7 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
                         onChange={(e) => handleChange("industrySeniority", e.target.value)}
                         label="Industry Senority"
                         className="w-full mb-24"
+                    // helperText={"must be more than 25 characters"}
                     />
 
                     <TextField
@@ -310,25 +372,39 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
                         value={formstate?.description}
                         onChange={(e) => handleChange("description", e.target.value)}
                         label="Decription"
+                        required
+                        error={Boolean(descriptionError)}
                         className="w-full mb-24"
+                        helperText={descriptionError}
                     />
 
-                    <DateTimePicker
+                    <DatePicker
                         label="Start"
                         inputVariant="outlined"
+                        disablePast
                         value={formstate?.startDate}
                         onChange={date => handleChange("startDate", date)}
                         className="mt-8 mb-16 w-full"
-                        format={'MMMM Do, YYYY hh:mm a'}
+                        format={'MMMM Do, YYYY'}
+                        helperText={!formstate?.startDate ? errorStartDate : ""}
+                        // error={Boolean(errorStartDate)}
+                        error={formstate?.startDate ? false : true}
+                    // maxDate={formstate.endDate > formstate.startDate}
                     />
 
-                    <DateTimePicker
+                    <DatePicker
                         label="End"
+                        // disablePast
                         inputVariant="outlined"
                         value={formstate?.endDate}
                         onChange={date => handleChange("endDate", date)}
                         className="mt-8 mb-16 w-full"
-                        format={'MMMM Do, YYYY hh:mm a'}
+                        format={'MMMM Do, YYYY'}
+                        minDate={formstate?.startDate}
+                        error={formstate?.endDate ? false : true}
+                        // error={Boolean(errorEndDate)}
+                        // disableFuture
+                        helperText={!formstate?.endDate ? errorEndDate : ""}
                     />
 
                     <TextField

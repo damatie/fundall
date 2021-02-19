@@ -46,8 +46,8 @@ function SelectFormsy(props) {
 		}
 	}
 
-	function changeValue(event) {
-		props.setValue(event.target.value);
+	function changeValue(event, nextProp) {
+		props.setValue(event.target.value, nextProp);
 		if (props.onChange) {
 			props.onChange(event);
 		}

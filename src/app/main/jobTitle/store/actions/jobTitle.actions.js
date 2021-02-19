@@ -9,7 +9,7 @@ export const GET_ONE_JOB_TITLE = 'GET ONE JOB TITLE';
 export const getAllJobTitle = () => {
   return async (dispatch) => {
     try {
-      const { data: { data, success }} = await api.get('/appraisal/jobTitle/all');
+      const { data: { data, success }} = await api.get('/appraisal/jobTitle/');
       if(success) {
         dispatch({
           type: GET_ALL_JOB_TITLE,
@@ -28,8 +28,12 @@ export const getAllJobTitle = () => {
 export const createJobTitle = (model) => {
   return async (dispatch) => {
     try {
+      swal.fire({
+        text: 'Creating...',
+        allowClickOutside: false,
+      });
       swal.showLoading();
-      const { data: { success, message } } = await api.post('/appraisal/jobTitle/new', model);
+      const { data: { success, message } } = await api.post('/appraisal/jobTitle/', model);
       if(success) {
         swal.fire({
           text: message,
@@ -43,7 +47,7 @@ export const createJobTitle = (model) => {
       }
     } catch (e) {
       swal.fire({
-        text: e.reponse?.data.message || e.reponse?.data.error || 'Service not avaialable',
+        text: e.response?.data.message || e.response?.data.error || 'Service not avaialable',
         icon: 'error'
       });
     }
@@ -53,8 +57,12 @@ export const createJobTitle = (model) => {
 export const updateJobTitle = ({id, model}) => {
   return async (dispatch) => {
     try {
+      swal.fire({
+        text: 'Updating...',
+        allowClickOutside: false,
+      });
       swal.showLoading();
-      const { data: { success, message } } = await api.patch(`/appraisal/jobTitle/update/${id}`, model);
+      const { data: { success, message } } = await api.patch(`/appraisal/jobTitle/${id}`, model);
       if(success) {
         swal.fire({
           text: message,
@@ -74,8 +82,16 @@ export const updateJobTitle = ({id, model}) => {
 export const deleteJobTitle = (id) => {
   return async (dispatch) => {
     try {
+      swal.fire({
+        text: 'Deleting...',
+        allowClickOutside: false,
+      });
       swal.showLoading();
-      const { data: { success, message } } = await api.delete(`${id}`,);
+      const { data: { success, message } } = await api.delete(`/appraisal/jobTitle/all/selected`, {
+        data: {
+          id
+        }
+      });
       if(success) {
         swal.fire({
           text: message,

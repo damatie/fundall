@@ -1,14 +1,9 @@
 import EnhancedTable from 'app/shared/table/EnhancedTable';
 import React from 'react';
-import Checkbox from '@material-ui/core/Checkbox';
-import IconButton from '@material-ui/core/IconButton';
-import Icon from '@material-ui/core/Icon';
-import Typography from '@material-ui/core/Typography';
 import moment from 'moment';
-import useJobTitle from '../hooks/useJobTitle';
 
-const JobTitleTable = () => {
-	const { data, handleDelete, handleGetOne } = useJobTitle();
+const JobTitleTable = ({customHook}) => {
+	const { data, handleDelete, handleGetOne } = customHook;
   const columns = React.useMemo(
 		() => [
 			{
@@ -23,6 +18,12 @@ const JobTitleTable = () => {
 				sortable: true,
 				align: 'center'
 			},
+			// {
+			// 	Header: 'Entity',
+			// 	accessor: 'entity',
+			// 	sortable: true,
+			// 	align: 'center'
+			// },
 			{
 				Header: 'Modified',
 				accessor: 'updatedAt',
@@ -32,18 +33,26 @@ const JobTitleTable = () => {
 					return <>{moment(original.updatedAt).format('LLL')}</>
 				}
 			},
+			// {
+			// 	Header: 'Modified By',
+			// 	accessor: 'modifiedBy',
+			// 	sortable: true,
+			// 	align: 'center'
+			// },
+			
 		],
 	);
 
 	return (
 		<EnhancedTable
 			columns={columns}
-			data={data}
+			data={data || []}
 			onRowClick={(ev, row) => {
 				if (row) {
           handleGetOne(row.values)
 				}
 			}}
+			// toolBar={<TableToolbar/>}
 			checkbox={{
 				showCheckbox: true,
 				onClick: (value) => console.log(value),

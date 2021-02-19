@@ -19,17 +19,17 @@ const PageLayout = ({
   header: {
     icon,
     title,
-	handleSearch,
-	url,
-	isState,
+		handleSearch,
+		url,
+		isState,
   },
   button: {
     showButton,
-	btnTitle,
-	btnIcon,
-	btnIconShow,
-	onClick,
-	hidden
+		btnTitle,
+		btnIcon,
+		btnIconShow,
+		onClick,
+		hidden
   }
 }) => {
 

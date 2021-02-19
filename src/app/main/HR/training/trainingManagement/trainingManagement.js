@@ -58,7 +58,6 @@ function TrainingManagement(props) {
 
 	const approvedTrainings = useSelector(({ TrainingManagement }) => TrainingManagement.trainings.approvedTrainings);
 	const rejectedTrainings = useSelector(({ TrainingManagement }) => TrainingManagement.trainings.rejectedTrainings);
-	const pendingTrainings = useSelector(({ TrainingManagement }) => TrainingManagement.trainings.pendingTrainings);
 	const reviewedTrainings = useSelector(({ TrainingManagement }) => TrainingManagement.trainings.reviewedTrainings);
 
 	let totalCourses = useSelector(({ TrainingManagement }) => TrainingManagement.courses.totalCourses.rows);
@@ -66,7 +65,7 @@ function TrainingManagement(props) {
 	// const rejectedCourses = useSelector(({ TrainingManagement }) => TrainingManagement.courses.rejectedCourses);
 	// const pendingCourses = useSelector(({ TrainingManagement }) => TrainingManagement.courses.pendingCourses);
 	const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
-	const [data, setData] = useState({});
+	const [data, setData] = useState(null);
 
 	const roles = useSelector(({ TrainingManagement }) => TrainingManagement.categories.roles);
 	const entities = useSelector(({ TrainingManagement }) => TrainingManagement.categories.entities);
@@ -93,7 +92,7 @@ function TrainingManagement(props) {
 
 	useEffect(() => {
 		// console.log(totalCourses, state);
-	}, [addNew, data,])
+	}, [addNew, data])
 
 	const submitNewTraining = (value) => {
 		dispatch(TrainingListActions.createTraining(value, history));
@@ -116,7 +115,6 @@ function TrainingManagement(props) {
 	const userData = useAuth().getUserData;
 
 	useEffect(() => {
-		dispatch(Actions.getPendingTraining());
 		dispatch(Actions.getReviewedTraining());
 		dispatch(Actions.getApprovedTraining());
 		dispatch(Actions.getRejectedTraining());
@@ -329,19 +327,16 @@ function TrainingManagement(props) {
 									animation: 'transition.slideUpBigIn'
 								}}
 							>
-								<div className="widget flex w-full sm:w-1/2 md:w-1/5 p-12">
+								<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
 									<CardWidget count={totalTrainings.length} title={'Total'} color="black" />
 								</div>
-								<div className="widget flex w-full sm:w-1/2 md:w-1/5 p-12">
-									<CardWidget count={reviewedTrainings.length} title={'Reviewed'} color="yellow" />
+								<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
+									<CardWidget count={reviewedTrainings.length} title={'Reviewed'} color="orange" />
 								</div>
-								<div className="widget flex w-full sm:w-1/2 md:w-1/5 p-12">
-									<CardWidget count={pendingTrainings.length} title={'Pending'} color="blue" />
-								</div>
-								<div className="widget flex w-full sm:w-1/2 md:w-1/5 p-12">
+								<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
 									<CardWidget count={approvedTrainings.length} title={'Approved'} color="green" />
 								</div>
-								<div className="widget flex w-full sm:w-1/2 md:w-1/5 p-12">
+								<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
 									<CardWidget count={rejectedTrainings.length} title={'Rejected'} color="red" />
 								</div>
 								<div className="widget flex w-full p-12">

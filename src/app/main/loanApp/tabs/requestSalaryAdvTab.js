@@ -11,6 +11,9 @@ import GridSystem from 'app/shared/gridSystem';
 import employeesReducers from 'app/main/HR/employee_management/store/reducers';
 import * as employeesActions from 'app/main/HR/employee_management/store/actions';
 import CurrencyInput from 'app/shared/TextInput/CurrencyInput';
+import moment from 'moment';
+import Typography from '@material-ui/core/Typography';
+import { DatePicker } from '@material-ui/pickers';
 
 // import AutoCompleteInput from 'app/shared/TextInput/AutoComplete';
 // import { formatDataList } from 'utils/formatData';
@@ -39,8 +42,8 @@ import SharedDropzone from 'app/shared/sharedDropZone';
 function RequestSalaryAdvTab(props) {
 	const dispatch = useDispatch();
 
-	const [amount, setAmount] = useState(0);
-	// const [repaymentDate, setRepaymentDate] = useState('');
+	const [amount, setAmount] = useState('');
+	const [repaymentDate, setRepaymentDate] = useState(moment(new Date()));
 	const [fileInput, setFileInput] = useState("");
 
 	const [isFormValid, setIsFormValid] = useState(false);
@@ -74,8 +77,9 @@ function RequestSalaryAdvTab(props) {
 	useEffect(() => {
 		if (details && id) {
 			setAmount(details.data?.salaryAdvanceData.amount);
+			setRepaymentDate(moment(details.data?.salaryAdvanceData.repaymentDate, 'YYYY-MM-DD'));
 		}
-	}, [details, amount, id]);
+	}, [details, amount, repaymentDate, id]);
 
 	function enableButton() {
 		setIsFormValid(true);
@@ -87,6 +91,8 @@ function RequestSalaryAdvTab(props) {
 
 	function handleSubmit(model) {
 		model.amount = Number(amount);
+		model.repaymentDate = repaymentDate.format("YYYY-MM-DD");
+		// console.log(model)
 		if (id && !location.state) {
 			dispatch(Actions.updateSalaryAdvance(id, model, fileInput[0], history));
 		}
@@ -116,15 +122,17 @@ function RequestSalaryAdvTab(props) {
 					>
 						<GridSystem>
 							<div>
+								<Typography variant='body1' className="mt-16 mb-8">Amount Requested *</Typography>
 								<CurrencyInput
 									values={amount}
 									handleChange={e => setAmount(e.target.value)}
 									name={"amount"}
-									label={"Amount requested"}
+									// label={"Amount requested"}
+									required
 								/>
 							</div>
 
-							<div>
+							{/* <div>
 								<TextFieldFormsy
 									className="w-full"
 									variant="outlined"
@@ -132,6 +140,17 @@ function RequestSalaryAdvTab(props) {
 									type="date"
 									name={"repaymentDate"}
 									required
+								/>
+							</div> */}
+							<div>
+								<Typography variant='body1' className="mt-16 mb-8">Repayment Date *</Typography>
+								<DatePicker
+									inputVariant="outlined"
+									value={repaymentDate}
+									onChange={date => setRepaymentDate(date)}
+									className="mt-8 mb-16 w-full"
+									minDate={moment(new Date())}
+									format={'MMMM Do, YYYY hh:mm a'}
 								/>
 							</div>
 						</GridSystem>
@@ -149,12 +168,12 @@ function RequestSalaryAdvTab(props) {
 							</Grid>
 							<Grid item lg={4}>
 								<ProgressBtn success={salaryAdvance.success} loading={salaryAdvance.loading} content={
-									(id && amount && fileInput.length > 0) ?
+									(id && amount && repaymentDate && fileInput.length > 0) ?
 										location.state ?
 											"Approve Request" :
 											'Update Request' :
 										"Send Request to Line Manager"
-								} disable={(id && amount && fileInput.length > 0) ? false : !isFormValid} />
+								} disable={(id && amount && repaymentDate && fileInput.length > 0) ? false : !isFormValid} />
 							</Grid>
 						</Grid>
 
@@ -163,7 +182,7 @@ function RequestSalaryAdvTab(props) {
 					<p>loading...</p>
 			}
 		</div>
-	), [details, showDetails, amount, fileInput, salaryAdvance])
+	), [details, showDetails, amount, repaymentDate, fileInput, salaryAdvance])
 };
 
 

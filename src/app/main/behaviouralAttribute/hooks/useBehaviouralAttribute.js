@@ -3,18 +3,17 @@ import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import errorMsg from '../../../../utils/errorMsg';
-import { useDispatch } from 'react-redux';
 import * as Actions from '../store/actions';
 
 const schema = yup.object().shape({
-  name: yup.string(
+  title: yup.string(
     errorMsg({
-      name: 'Name',
+      name: 'Title',
       type: 'string',
     })
   ).required(
     errorMsg({
-      name: 'Name',
+      name: 'Title',
       type: 'required',
     })
   ),
@@ -31,7 +30,7 @@ const schema = yup.object().shape({
   ),
 });
 
-const useBehaviouralAttribute = (params) => {
+const useBehaviouralAttribute = (params, dispatch) => {
   const {
     errors,
     handleSubmit,
@@ -41,8 +40,6 @@ const useBehaviouralAttribute = (params) => {
     mode: 'onBlur',
     resolver: yupResolver(schema),
   });
-
-  const dispatch = useDispatch();
 
   const handleOpen = () => {
     dispatch({
@@ -90,8 +87,10 @@ const useBehaviouralAttribute = (params) => {
     switch(params?.type) {
       case 'new':
         dispatch(Actions.createBehaviouralAttribute(model));
+        break;
       case 'update':
         dispatch(Actions.updateBehaviouralAttribute({ id: params?.id, model }));
+        break;
       default: 
         return model;
     }
