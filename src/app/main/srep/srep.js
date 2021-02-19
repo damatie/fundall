@@ -36,31 +36,38 @@ const useStyles = makeStyles(theme => ({
 
 const columns = [
 	{
-		id: 'beneficiary_name',
+		id: 'employee_name',
 		align: 'center',
 		disablePadding: false,
-		label: 'Name of Beneficiary',
+		label: 'Name',
 		sort: true
 	},
 	{
-		id: 'beneficiary_email',
+		id: 'email',
 		align: 'center',
 		disablePadding: false,
-		label: 'Beneficiary Email',
+		label: 'Email',
 		sort: true
 	},
 	{
-		id: 'employee_relationship',
+		id: 'job_role',
 		align: 'center',
 		disablePadding: false,
-		label: 'Relationship to Employee',
+		label: 'Job Role',
 		sort: true
 	},
 	{
-		id: 'capital_fund',
+		id: 'dept',
 		align: 'center',
 		disablePadding: false,
-		label: 'Capital Fund to be Contributed',
+		label: 'Dept',
+		sort: true
+	},
+	{
+		id: 'entity',
+		align: 'center',
+		disablePadding: false,
+		label: 'Entity',
 		sort: true
 	},
 	{
@@ -89,6 +96,8 @@ function Srep(props) {
 	const departments = useSelector(({ departments }) => departments.deparmentList);
 	const entities = useSelector(({ entities }) => entities.entityList);
 	const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
+	const data = (srep) ? (srep.data) ? srep.data : [] : [];
+	console.log({data});
 
 	const classes = useStyles(props);
 	useEffect(() => {
@@ -136,20 +145,20 @@ function Srep(props) {
 							}}
 						>
 							<div className="widget flex w-full sm:w-1/2 md:w-1/5 p-12">
-								<CardWidget count={(srep.length > 0) ? srep.length : 0} title={'Total'} color="yellow" />
+								<CardWidget count={(data.length > 0) ? data.length : 0} title={'Total'} color="yellow" />
 							</div>
 							<div className="widget flex w-full sm:w-1/2 md:w-1/5 p-12">
-								<CardWidget count={(srep.length > 0) ? srep.filter(t => t.status === 'pending').length : 0} title={'Pending'} color="blue" />
+								<CardWidget count={(data.length > 0) ? data.filter(t => t.status === 'pending').length : 0} title={'Pending'} color="blue" />
 							</div>
 							<div className="widget flex w-full sm:w-1/2 md:w-1/5 p-12">
-								<CardWidget count={(srep.length > 0) ? srep.filter(t => t.status === 'approved').length : 0} title={'Approved'} color="green" />
+								<CardWidget count={(data.length > 0) ? data.filter(t => t.status === 'approved').length : 0} title={'Approved'} color="green" />
 							</div>
 							<div className="widget flex w-full sm:w-1/2 md:w-1/5 p-12">
-								<CardWidget count={(srep.length > 0) ? srep.filter(t => t.status === 'rejected').length : 0} title={'Rejected'} color="red" />
+								<CardWidget count={(data.length > 0) ? data.filter(t => t.status === 'rejected').length : 0} title={'Rejected'} color="red" />
 							</div>
 							<div className="widget flex w-full sm:w-1/2 md:w-1/5 p-12">
 								<CardWidget
-									count={(srep.length > 0) ? srep.filter(t => t.status === 'reviewed').length : 0}
+									count={(srep.length > 0) ? data.filter(t => t.status === 'reviewed').length : 0}
 									title={'Reviewed'}
 									color="orange"
 								/>
@@ -168,7 +177,7 @@ function Srep(props) {
 									// allowAuth={checkRole()}
 									type="default"
 									columns={columns}
-									rows={srep}
+									rows={data}
 									props={props}
 									role={userData.role.toUpperCase()}
 									roles={roles}

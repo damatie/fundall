@@ -1,6 +1,7 @@
 import { getBaseUrl } from 'app/shared/getBaseUrl';
 import { useAuth } from 'app/hooks/useAuth';
 import { fetchHeaders } from 'app/shared/fetchHeaders'
+import {formatCurrency} from 'app/shared/formatCurrency';
 import swal from 'sweetalert2';
 
 export const LOADING_SREP = 'LOADING SREP';
@@ -29,10 +30,28 @@ export function getSrep() {
 		fetch(`${baseUrl()}/srep`, { ...headers.getRegHeader() })
 			.then(res => res.json()).then(async data => {
                 console.log(data);
+				let srep = [];
+				let count = 0;
 				if (data.success && data.data) {
+					console.log(data.data);
+					srep = data.data && data.data.map(srep => {
+						count++;
+						return {
+							id: srep.id,
+							sn: count,
+							name: srep.beneficiaryName,
+							relationship: srep.beneficiaryRelationship.toUpperCase(),
+							fund: formatCurrency('₦', srep.capitalFund),
+							status: srep.status
+						}
+					});
+					console.log({srep});
 					dispatch({
 						type: GET_SREP_SUCCESS,
-						payload: data.data,
+						payload: {
+							data: data.data,
+							srep: srep
+						},
 					})
 				} else {
 					dispatch({
@@ -58,10 +77,28 @@ export function getSrepByEmployeeID(id) {
 		fetch(`${baseUrl()}/srep/employee/${id}`, { ...headers.getRegHeader() })
 			.then(res => res.json()).then(async data => {
                 console.log(data);
+				let srep = [];
+				let count = 0;
 				if (data.success && data.data) {
+					console.log(data.data);
+					srep = data.data && data.data.map(srep => {
+						count++;
+						return {
+							id: srep.id,
+							sn: count,
+							name: srep.beneficiaryName,
+							relationship: srep.beneficiaryRelationship.toUpperCase(),
+							fund: formatCurrency('₦', srep.capitalFund),
+							status: srep.status
+						}
+					});
+					console.log({srep});
 					dispatch({
 						type: GET_SREP_SUCCESS,
-						payload: data.data,
+						payload: {
+							data: data.data,
+							srep: srep
+						},
 					})
 				} else {
 					dispatch({
