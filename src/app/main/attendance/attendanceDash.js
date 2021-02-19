@@ -4,22 +4,12 @@ import Button from '@material-ui/core/Button';
 import Icon from '@material-ui/core/Icon';
 import Tabs from '@material-ui/core/Tabs';
 import Typography from '@material-ui/core/Typography';
-// import Input from '@material-ui/core/Input';
 import Paper from '@material-ui/core/Paper';
-// import withReducer from 'app/store/withReducer';
 import React, { useEffect, useState } from 'react';
-// import { useDispatch, useSelector } from 'react-redux';
-// import { Link } from 'react-router-dom';
-// import { ThemeProvider } from '@material-ui/core/styles';
 import * as Actions from './store/actions';
 import reducer from './store/reducers';
-// import Table from '../RecruitmentTable';
-// import { useAuth } from 'app/hooks/useAuth';
-import AttendanceTable from './shared/table';
+import AttendanceTable from './shared/attendancetable';
 import { Dialog, DialogActions, DialogContent, DialogTitle, InputAdornment, MenuItem, Select, Tab } from '@material-ui/core';
-// import RecruitmentDialog from '../recruitment/RecruitmentDialog';
-// import { SelectFormsy, TextFieldFormsy } from '@fuse/core/formsy';
-// import Select from '@material-ui/core/Select';
 import Formsy from 'formsy-react';
 import withReducer from 'app/store/withReducer';
 import { useDispatch, useSelector } from 'react-redux';
@@ -27,98 +17,97 @@ import Swal from 'sweetalert2';
 
 const columns = [
     {
-        id: 'entityName',
-        // align: 'center',
+        id: 'activities',
         disablePadding: false,
-        label: 'Activity Name',
+        label: 'Activities',
         sort: true
     },
     {
-        id: 'activityCode',
-        // align: 'center',
+        id: 'date',
         disablePadding: false,
-        label: 'Activity Code',
-        sort: true
-    },
-    {
-        id: 'activityType',
-        // align: 'center',
-        disablePadding: false,
-        label: 'Activity Type',
-        sort: true
-    },
-    {
-        id: 'modified',
-        // align: 'center',
-        disablePadding: false,
-        label: 'Modified By',
+        label: 'Date',
         sort: true
     },
     {
         id: 'status',
-        // align: 'center',
         disablePadding: false,
         label: 'Status',
         sort: true
-    },
-    {
-        id: 'actions',
-        // align: 'center',
-        disablePadding: false,
-        label: 'Actions',
-        sort: true
-    },
+    }
 ];
 
 function AttendanceDashboard(props) {
 
     const [selected, setSelected] = useState([]);
     const dispatch = useDispatch();
+    const [payload, setPayload] = useState({})
+
+    const activities = useSelector(({ activity }) => activity.activities.activities)
+    const attendanceHistory = useSelector(({ activity }) => activity.activities.attendanceHistory?.rows ?? [])
+
+    const [defaultValue, setDefaultValue] = useState("")
+    const [open, setOpen] = useState(false)
+
+    useEffect(() => {
+        dispatch(Actions.fetchOwnAttendance());
+        dispatch(Actions.fetchActivities());
+    }, [dispatch]);
+
+    useEffect(() => {
+    }, [selected])
+
+    useEffect(() => {
+        // console.log(activities, attendanceHistory)
+    }, [activities, attendanceHistory])
+
+    const handleSubmit = () => {
+        setOpen(false)
+        Actions.markAttendance(payload);
+    }
 
     const handleClose = () => {
         setOpen(false)
     }
 
-    const handleSubmit = () => {
-
-    }
-
     const handleChange = (value) => {
+
         let exist = selected.includes(value);
 
         if (!value) return;
 
         if (!exist) {
-            console.log(selected)
-            if (selected.length === 2) return Swal.fire("Cannot select more than 2 activities!");
+            if (selected.length === 2) return Swal.fire("Cannot select more than 2 activities!", "please unselect before re-selecting");
+
             setSelected([].concat(selected).concat(value));
+
+            let tempActivities = payload?.activities;
+            let newActivity = activities.filter(element => element.name === value);
+
+            setPayload({
+                activities: tempActivities ? [].concat(newActivity).concat(tempActivities) : newActivity,
+                date: new Date().toLocaleDateString()
+            });
+            setDefaultValue("");
+
         } else {
-            console.log("i run: ", selected)
+
             let newArr = selected;
-            newArr.splice(selected.indexOf(value), 1);
-            console.log("i run too: ", newArr)
-            setSelected([].concat(newArr));
+            let oldActivities = payload.activities;
+
+            let index = newArr.findIndex(element => element.name === value);
+
+            oldActivities.splice(newArr.indexOf(value), 1);
+            newArr.splice(index, 1);
+
+            setSelected([].concat(newArr));;
+            setPayload({
+                activities: oldActivities,
+                date: new Date().toLocaleDateString()
+            });
+
+            setDefaultValue("");
         }
     }
-
-    // const dispatch = useDispatch();
-
-    // const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
-    const rows = [];
-
-    const activities = useSelector(({ activity }) => activity.activities.activities)
-    // const userData = useAuth().getUserData;
-
-    const [search, setSearch] = useState('');
-    const [open, setOpen] = useState(false)
-
-    useEffect(() => {
-        dispatch(Actions.fetchActivities());
-    }, [dispatch])
-
-    useEffect(() => {
-        console.log(activities)
-    }, [activities])
 
     return (
         <FusePageSimple
@@ -142,8 +131,6 @@ function AttendanceDashboard(props) {
                             <div className="flex flex-col min-w-0 mx-8 sm:mc-16">
                                 <Button
                                     className="mb-16"
-                                    // component={Link}
-                                    // to="/attendance/activity/new"
                                     role='button'
                                     onClick={() => setOpen(!open)}
                                     variant="contained"
@@ -181,15 +168,9 @@ function AttendanceDashboard(props) {
                                         className="mb-16 w-full"
                                         name="status"
                                         label="Status"
-                                        // multiple
-                                        // value={[]}
-                                        // disabled={userCheck}
-                                        // value={otherDetails.duration}
+                                        value={defaultValue}
                                         onChange={(e) => handleChange(e.target.value)}
-                                        // validations="not-equals:none"
-                                        // validationError="requried"
                                         variant="outlined"
-                                        // disabled={userCheck}
                                         required
                                     >
                                         <MenuItem value={""}>Select activities</MenuItem>
@@ -213,25 +194,11 @@ function AttendanceDashboard(props) {
                     </Dialog>
                 </>
             }
-            contentToolbar={
-                <Tabs
-                    // value={tabValue}
-                    // onChange={handleChangeTab}
-                    indicatorColor="primary"
-                    textColor="primary"
-                    variant="scrollable"
-                    scrollButtons="off"
-                    className="w-full border-b-1 px-24"
-                >
-                    <Tab className="text-14 font-600 normal-case" label="Activity List" />
-                </Tabs>
-            }
             content={
                 <Paper className="m-20">
                     <AttendanceTable
                         columns={columns}
-                        rows={rows}
-                        search={search}
+                        rows={attendanceHistory}
                     />
                 </Paper>
             }

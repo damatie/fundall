@@ -4,7 +4,8 @@ const initialState = {
     loading: true,
     data: [],
     activities: [],
-    activity: {}
+    activity: {},
+    attendanceHistory: {}
 };
 
 const Activities = (state = initialState, action) => {
@@ -21,6 +22,13 @@ const Activities = (state = initialState, action) => {
                 ...state,
                 loading: true,
                 activity: action.payload
+            }
+        }
+        case Actions.GET_ATTENDANCE: {
+            return {
+                ...state,
+                loading: true,
+                attendanceHistory: action.payload
             }
         }
         default: {

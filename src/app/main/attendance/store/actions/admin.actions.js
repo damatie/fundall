@@ -4,6 +4,7 @@ import { getBaseUrl } from "app/shared/getBaseUrl";
 
 export const GET_ACTIVITY = 'GET ACTIVITY';
 export const GET_ACTIVITIES = 'GET ACTIVITIES';
+export const GET_ATTENDANCE = 'GET ATTENDANCE';
 
 const header = fetchHeaders();
 
@@ -21,6 +22,27 @@ export const fetchActivities = () => {
                 } else {
                     dispatch({
                         type: GET_ACTIVITIES, payload: []
+                    });
+                }
+            }
+        )
+    }
+}
+
+export const fetchOwnAttendance = (offset = 0, limit = 20) => {
+    return dispatch => {
+        fetch(`${getBaseUrl()}/attendance/all/history?offset=${offset}&limit=${limit}`, {
+            ...header.getRegHeader()
+        }).then(res => res.json()).then(
+            data => {
+                if (data.success) {
+                    console.log(data);
+                    dispatch({
+                        type: GET_ATTENDANCE, payload: data.data
+                    });
+                } else {
+                    dispatch({
+                        type: GET_ATTENDANCE, payload: []
                     });
                 }
             }
@@ -138,6 +160,37 @@ export function createActivity(model, history) {
                         icon: 'success'
                     })
                     history.push("/activity/list");
+                } else {
+                    swal.fire({
+                        title: data.message,
+                        timer: 3000,
+                        icon: 'error'
+                    })
+                }
+            }).catch(err => {
+                console.log(err);
+                swal.fire({
+                    title: err.message,
+                    text: 'Oops! Something went wrong. Check your network',
+                    timer: 3000,
+                    icon: 'error'
+                })
+            })
+}
+
+export function markAttendance(model) {
+    console.log(model);
+    swal.showLoading();
+    fetch(`${getBaseUrl()}/attendance`, { ...header.reqHeader('POST', model) })
+        .then(res => res.json()).then(
+            data => {
+                console.log(data)
+                if (data.success) {
+                    swal.fire({
+                        title: data.message,
+                        timer: 3000,
+                        icon: 'success'
+                    })
                 } else {
                     swal.fire({
                         title: data.message,
