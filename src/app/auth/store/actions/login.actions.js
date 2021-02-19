@@ -8,7 +8,7 @@ import { fetchHeaders } from 'app/shared/fetchHeaders';
 import { redirectUrl } from '../../redirectUrl';
 import { getBaseUrl } from 'app/shared/getBaseUrl';
 import { handleResponse } from 'app/auth/handleRes';
-import { GET_EMPLOYEE_PROFILE, LOADING_EMPLOYEE_PROFILE } from 'app/store/actions';
+import { GET_EMPLOYEE_PROFILE, LOADING_EMPLOYEE_PROFILE, getDepartmentEmployees } from 'app/store/actions';
 import { GET_NOTIFICATIONS, LOADING_NOTIFICATIONS } from 'app/main/notifications/store/actions';
 import api from 'app/services/api';
 
@@ -49,13 +49,15 @@ export function submitLogin(data, x) {
 						email: data?.email ?? response.email,
 						shortcuts: ['loan_request', 'request_leave', 'blog_list', 'todo'],
 						department: data?.department,
-						details: data?.info
+						details: data?.info,
+						employeeGrade: data?.employeeGrade
 					}
 				};
 				localStorage.setItem('user_data', JSON.stringify(userState));
 				dispatch(getProfile({ id: data?.id, token }));
 				dispatch(UserActions.setUserData(userState));
 				// dispatch(getNotification(token));
+				dispatch(getDepartmentEmployees(data.department?.id));
 
 				return dispatch({
 					type: LOGIN_SUCCESS
@@ -99,11 +101,10 @@ const getProfile = ({ id, token, }) => {
 			}
 		}).then(res => handleResponse(res)).then(
 			data => {
-				console.log(data.data)
 				localStorage.setItem('user_profile', JSON.stringify(data.data));
 				dispatch({
 					type: GET_EMPLOYEE_PROFILE,
-					payload: data.data
+					payload: data.data || {}
 				})
 			}
 		)

@@ -145,7 +145,10 @@ const EnhancedTable = ({ columns, data, onRowClick, checkbox, selectAll, toolBar
 		pagination?.setPageSize(Number(event.target.value)) || setPageSize(Number(event.target.value));
 	};
 
-	
+	const DeleteRow = () => {
+		handleDelete(selectedItems);
+		setSelectedItems([]);
+	}
 
 	const classes = useStyles();
 
@@ -162,7 +165,7 @@ const EnhancedTable = ({ columns, data, onRowClick, checkbox, selectAll, toolBar
 							<Typography className={classes.title} color="inherit" variant="subtitle1" component="div">
 							{selectedItems.length}
 							</Typography>
-							<IconButton onClick={() => {handleDelete && handleDelete(selectedItems)}}>
+							<IconButton onClick={() => {handleDelete && DeleteRow(selectedItems)}}>
 								<Icon>delete</Icon>
 							</IconButton>
 						</>

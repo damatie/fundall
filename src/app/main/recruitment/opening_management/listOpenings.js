@@ -64,56 +64,56 @@ const useStyles = makeStyles(theme => ({
 
 const columns = [
 	{
-			id: 'entityName',
-			align: 'center',
-			disablePadding: false,
-			label: 'Entity Name',
-			sort: true
+		id: 'entityName',
+		// align: 'center',
+		disablePadding: false,
+		label: 'Entity Name',
+		sort: true
 	},
 	{
-			id: 'jobTitle',
-			align: 'center',
-			disablePadding: false,
-			label: 'Job title',
-			sort: true
+		id: 'jobTitle',
+		// align: 'center',
+		disablePadding: false,
+		label: 'Job title',
+		sort: true
 	},
 	{
-			id: 'employeeStatus',
-			align: 'center',
-			disablePadding: false,
-			label: 'Employee status',
-			sort: true
+		id: 'employeeStatus',
+		// align: 'center',
+		disablePadding: false,
+		label: 'Employee status',
+		sort: true
 	},
 	{
-			id: 'urgency',
-			align: 'center',
-			disablePadding: false,
-			label: 'Urgency',
-			sort: true
+		id: 'urgency',
+		// align: 'center',
+		disablePadding: false,
+		label: 'Urgency',
+		sort: true
 	},
 	{
-			id: 'createdAt',
-			align: 'center',
-			disablePadding: false,
-			label: 'Created At',
-			sort: true
+		id: 'createdAt',
+		// align: 'center',
+		disablePadding: false,
+		label: 'Created At',
+		sort: true
 	},
 	{
-			id: 'status',
-			align: 'center',
-			disablePadding: false,
-			label: 'Status',
-			sort: true
+		id: 'status',
+		// align: 'center',
+		disablePadding: false,
+		label: 'Status',
+		sort: true
 	},
 	{
-			id: 'actions',
-			align: 'center',
-			disablePadding: false,
-			label: 'Actions',
-			sort: true
+		id: 'actions',
+		// align: 'center',
+		disablePadding: false,
+		label: 'Actions',
+		sort: true
 	},
 ];
-	
+
 function Recruitment(props) {
 	const dispatch = useDispatch();
 
@@ -128,7 +128,7 @@ function Recruitment(props) {
 	const [pendingRows, setPendingRows] = useState([]);
 	const [closedRow, setClosedRow] = useState([]);
 	const [tabValue, setTabValue] = useState(0);
-	
+
 	useEffect(() => {
 		dispatch(Actions.getAllOpenPositions());
 		dispatch(Actions.getEntities());
@@ -144,7 +144,7 @@ function Recruitment(props) {
 		setTabValue(value);
 	}
 
-	const isLineManager = () => userData.role.toUpperCase() === 'LINE MANAGERS';
+	const isManager = () => userData.role.toUpperCase() === 'LINE MANAGER' || "HR MANAGER";
 
 	return (
 		<FusePageSimple
@@ -188,7 +188,7 @@ function Recruitment(props) {
 						</ThemeProvider>
 					</div>
 
-					{isLineManager() &&
+					{isManager() &&
 						<div className="flex items-center max-w-full">
 							<div className="flex flex-col min-w-0 mx-8 sm:mc-16">
 								<FuseAnimate animation="transition.slideLeftIn" delay={300}>
@@ -227,28 +227,28 @@ function Recruitment(props) {
 			}
 			content={
 				<div className=" sm:px-24 py-16 ">
-					{ tabValue === 0 && (
+					{tabValue === 0 && (
 						<Table
 							columns={columns}
 							rows={rows}
 							search={search}
 						/>
 					)}
-					{ tabValue === 1 && (
+					{tabValue === 1 && (
 						<Table
 							columns={columns}
 							rows={approvedRows}
 							search={search}
 						/>
 					)}
-					{ tabValue === 2 && (
+					{tabValue === 2 && (
 						<Table
 							columns={columns}
 							rows={pendingRows}
 							search={search}
 						/>
 					)}
-					{ tabValue === 3 && (
+					{tabValue === 3 && (
 						<Table
 							columns={columns}
 							rows={closedRow}

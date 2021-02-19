@@ -50,6 +50,7 @@ export const approveLoan = ({ id, body, url, history }) => {
           history.push({
             pathname: '/loan/review/list'
           });
+          window.location.reload();
         } else {
           swal.fire({
             title: 'Approve Loan',
@@ -86,9 +87,16 @@ export const confirmDisbursement = ({ id, history }) => {
             type: LOAN_SUCCESS
           })
           dispatch(getLoan(id));
-          history.push({
-            pathname: '/loan/request/list'
-          });
+          dispatch(getEmployeeLoanDusbursed());
+          dispatch(getEmployeeLoanApproved());
+          dispatch(getEmployeeLoanClosed());
+          dispatch(getEmployeeLoanCorrected());
+          dispatch(getEmployeeLoanPending());
+          dispatch(getEmployeeLoanReviewed());
+          dispatch(getEmployeeLoanRejected());
+
+          // window.location.reload();
+
         } else {
           swal.fire({
             title: 'Approve Loan',
@@ -134,7 +142,8 @@ export const rejectLoan = ({ id, url }, history) => {
                 })
                 history.push({
                   pathname: '/loan/review/list'
-                })
+                });
+                window.location.reload();
               } else {
                 swal.fire({
                   title: 'Reject Loan',
@@ -186,7 +195,7 @@ export const applyLoan = (body, history) => {
           // dispatch(getEmployeeLoanPending())
           // dispatch(getEmployeeLoanRejected())
           // dispatch(getEmployeeLoanReviewed())
-          history.push('/loan/request/list')
+          history.push('/loan/request/list');
         }
         else {
           swal.fire({
@@ -321,7 +330,8 @@ export const closeLoan = (id, history) => {
           dispatch({
             type: CLOSED_SUCCESS
           });
-          history.push('/loan/review/list')
+          history.push('/loan/review/list');
+          window.location.reload();
         } else {
           swal.fire({
             title: 'Loan',

@@ -1,21 +1,40 @@
 import api from "app/services/api";
 import swal from "sweetalert2";
+import catchErrorMsg from "utils/catchErrorMsg";
+import loading from "utils/loading";
 
 export const  OPEN_EMPLOYEE_KPO_LIST_MODAL = 'OPEN EMPLOYEE KPO LIST MODAL';
 export const CLOSE_EMPLOYEE_KPO_LIST_MODAL = 'CLOSE EMPLOYEE KPO LIST MODAL';
 export const GET_ALL_KPO = 'GET ALL KPO';
 export const GET_ONE_KPO = 'GET ONE KPO';
 export const CLEAR_KPO_DATA = 'CLEAR KPO DATA';
+export const GET_JOBTITLE = 'GET JOBTITLE';
 
+export const getJobTitle = () => {
+  return async (dispatch) => {
+    try {
+      const { data: { data, success }} = await api.get('/appraisal/jobTitle/');
+      dispatch({
+        type: GET_JOBTITLE,
+        payload: data
+      })
+    } catch (e) {
+      dispatch({
+        type: GET_JOBTITLE,
+        payload: []
+      })
+    }
+  }
+}
 
 export const getAllKpo = (userId) => {
   return async (dispatch) => {
     try {
-      const { data: { data, success }} = await api.get(`/appraisal/kpo/emply/${userId}`);
+      const { data: { data, success }} = await api.get(`/appraisal/kpo/employee/${userId}`);
       if(success) {
         dispatch({
           type: GET_ALL_KPO,
-          payload: data
+          payload: data.rows
         });
       }
     } catch(e) {
@@ -50,6 +69,10 @@ export const getOneKpo = (id) => {
 export const deleteKpo = ({id, userId}) => {
   return async (dispatch) => {
     try {
+      swal.fire({
+        text: 'Deleting...',
+        allowOutsideClick: false
+      })
       swal.showLoading();
       const { data: { success, message } } = await api.delete(`/appraisal/kpo/${id}`);
       if(success) {
@@ -71,6 +94,10 @@ export const deleteKpo = ({id, userId}) => {
 export const updateKpo = ({id, userId, model}) => {
   return async (dispatch) => {
     try {
+      swal.fire({
+        text: 'Updating...',
+        allowOutsideClick: false
+      })
       swal.showLoading();
       const { data: { success, message } } = await api.patch(`/appraisal/kpo/${id}`, model);
       if(success) {
@@ -92,6 +119,10 @@ export const updateKpo = ({id, userId, model}) => {
 export const createKpo = ({userId, item}) => {
   return async (dispatch) => {
     try {
+      swal.fire({
+        text: 'Creating...',
+        allowOutsideClick: false
+      })
       swal.showLoading();
       const { data: { success, message } } = await api.post('/appraisal/kpo/', item);
       if(success) {
@@ -111,4 +142,156 @@ export const createKpo = ({userId, item}) => {
       });
     }
   };
+};
+
+export const kpoSummary = ({id, model, type}) => {
+  return async (dispatch) => {
+    try {
+      loading('Adding Comment...');
+      const { data: { message } } = await api.patch(`/appraisal/kpo/${type}/${id}`, model);
+      swal.fire({
+        text: message,
+        icon: 'success'
+      });
+      dispatch(getOneKpo(id));
+    } catch (e) {
+      swal.fire({
+        text: catchErrorMsg(e),
+        icon: 'error'
+      });
+    }
+  }
+};
+
+export const createPersonalDevelopement = (model) => {
+  return async (dispatch) => {
+    try {
+      loading('Creating...')
+      const { data: { message } } = await api.post(`/appraisal/personnel-development/`, model);
+      swal.fire({
+        text: message,
+        icon: 'success'
+      });
+      dispatch(getOneKpo(model.kpoId));
+    } catch (e) {
+      swal.fire({
+        text: catchErrorMsg(e),
+        icon: 'error'
+      });
+    }
+  }
+};
+
+export const updatePersonalDevelopement = ({model, id}) => {
+  return async (dispatch) => {
+    try {
+      loading('Updating...');
+      const { data: { message } } = await api.post(`/appraisal/personnel-development/${id}`, model);
+      swal.fire({
+        text: message,
+        icon: 'success'
+      });
+      dispatch(getOneKpo(model.kpoId));
+    } catch (e) {
+      swal.fire({
+        text: catchErrorMsg(e),
+        icon: 'error'
+      });
+    }
+  }
+};
+
+export const deletePersonalDevelopement = ({id, kpoId}) => {
+  return async (dispatch) => {
+    try {
+      loading('Deleting...');
+      const { data: { message } } = await api.delete(`/appraisal/personnel-development/${id}`);
+      swal.fire({
+        text: message,
+        icon: 'success'
+      });
+      dispatch(getOneKpo(kpoId));
+    } catch (e) {
+      swal.fire({
+        text: catchErrorMsg(e),
+        icon: 'error'
+      });
+    }
+  }
+};
+
+export const calculatePip = ({model, id}) => {
+  return async (dispatch) => {
+    try {
+      loading('Calculating...');
+      const { data: { message } } = await api.patch(`/appraisal/kpo/calculate-pip/${id}`, model);
+      swal.fire({
+        text: message,
+        icon: 'success'
+      });
+      dispatch(getOneKpo(id));
+    } catch (e) {
+      swal.fire({
+        text: catchErrorMsg(e),
+        icon: 'error'
+      });
+    }
+  }
+};
+
+export const submitKpo = (id) => {
+  return async (dispatch) => {
+    try {
+      loading('Submitting...');
+      const { data: { message }} = await api.patch(`/appraisal/kpo/employee/submit/${id}`);
+      swal.fire({
+        text: message,
+        icon: 'success'
+      });
+      dispatch(getOneKpo(id));
+    } catch(e) {
+      swal.fire({
+        text: catchErrorMsg(e),
+        icon: 'error'
+      })
+    }
+  }
+};
+
+export const approveKpo = (id) => {
+  return async (dispatch) => {
+    try {
+      loading('Approving...');
+      const { data: { message }} = await api.patch(`/appraisal/kpo/lm/submit/${id}`);
+      swal.fire({
+        text: message,
+        icon: 'success'
+      });
+      dispatch(getOneKpo(id));
+    } catch(e) {
+      swal.fire({
+        text: catchErrorMsg(e),
+        icon: 'error'
+      })
+    }
+  }
+};
+
+export const CompleteKpo = (id) => {
+  return async (dispatch) => {
+    try {
+      loading('Completing...');
+      const { data: { message }} = await api.patch(`/appraisal/kpo/lm/complete/${id}`);
+      swal.fire({
+        text: message,
+        icon: 'success'
+      });
+      dispatch(getOneKpo(id));
+    } catch(e) {
+      swal.fire({
+        text: catchErrorMsg(e),
+        icon: 'error'
+      })
+    }
+  }
 };

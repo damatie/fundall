@@ -1,7 +1,7 @@
 import { GET_ALL_BEHAVIOURAL_ATTRIBUTE, GET_ONE_BEHAVIOURAL_ATTRIBUTE } from '../actions';
 
 const initialState = {
-  laoding: true,
+  loading: true,
   data: [],
   singleData: []
 };
@@ -11,12 +11,14 @@ const behaviouralAttribute = (state = initialState, actions) => {
     case GET_ALL_BEHAVIOURAL_ATTRIBUTE:
       return {
         ...state,
-        data: actions.payload
+        data: actions.payload,
+        loading: false
       }
     case GET_ONE_BEHAVIOURAL_ATTRIBUTE:
       return {
         ...state,
-        singleData: actions.payload
+        singleData: actions.payload,
+        loading: false
       }
     default: {
       return state;

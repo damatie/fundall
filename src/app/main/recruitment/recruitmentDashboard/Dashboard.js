@@ -94,7 +94,7 @@ const data3 = {
 			pointHoverBorderWidth: 2,
 			pointRadius: 1,
 			pointHitRadius: 10,
-			data: [65, 59, 80, 81, 40, 12, 19 ]
+			data: [65, 59, 80, 81, 40, 12, 19]
 		}
 	]
 };
@@ -231,7 +231,7 @@ function Recruitment(props) {
 				>
 					<FuseAnimate animation="transition.slideUpIn" duration={400} delay={100}>
 						<Typography color="inherit" className="text-24 sm:text-40 font-light">
-							HR RECRUITMENT DASHBOARD
+							RECRUITMENT DASHBOARD
 						</Typography>
 					</FuseAnimate>
 					<Icon className={classes.headerIcon}> school </Icon>
@@ -250,20 +250,20 @@ function Recruitment(props) {
 						}}
 					>
 						<div className="widget flex flex-wrap w-full">
-							<div className="widget flex w-full sm:w-1/2 md:w-1/5 p-12">
+							{/* <div className="widget flex w-full sm:w-1/2 md:w-1/5 p-12">
 								<CardWidget count={998} title={"Total Openings"} color="orange" />
-							</div>
-							<div className="widget flex w-full sm:w-1/2 md:w-1/5 p-12">
+							</div> */}
+							<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
 								<CardWidget count={77} title={"Total Applicants"} color="purple" />
 							</div>
-							<div className="widget flex w-full sm:w-1/2 md:w-1/5 p-12">
+							<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
 								<CardWidget count={57} title={"Shortlisted Applicants"} color="blue" />
 							</div>
-							<div className="widget flex w-full sm:w-1/2 md:w-1/5 p-12">
-								<CardWidget count={22} title={"Rejected Applicants"} color="red" />
-							</div>
-							<div className="widget flex w-full sm:w-1/2 md:w-1/5 p-12">
+							<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
 								<CardWidget count={4} title={"Hired Applicants"} color="green" />
+							</div>
+							<div className="widget flex w-full sm:w-1/2 md:w-1/4 p-12">
+								<CardWidget count={22} title={"Rejected Applicants"} color="red" />
 							</div>
 						</div>
 

@@ -1,13 +1,21 @@
 import EnhancedTable from 'app/shared/table/EnhancedTable';
 import React from 'react';
-import useKpoList from '../hooks/useKpoList';
 
-const EmployeeKpoListTable = () => {
+const EmployeeKpoListTable = ({customHook}) => {
 	const columns = React.useMemo(
 		() => [
 			{
-				Header: 'Job Role',
+				Header: 'Job Title',
 				accessor: 'jobTitle',
+				// className: 'font-bold',
+				sortable: true,
+				Cell: ({ row: { original: { jobTitle }} }) => {
+					return <>{jobTitle?.name}</>
+				}
+			},
+			{
+				Header: 'Status',
+				accessor: 'status',
 				// className: 'font-bold',
 				sortable: true
 			},
@@ -16,7 +24,7 @@ const EmployeeKpoListTable = () => {
 				accessor: 'personnelOverallRating',
 				sortable: true,
 				Cell: ({ row: { original: { personnelOverallRating }} }) => {
-					return <>{personnelOverallRating || 'On Going'}</>
+					return <>{personnelOverallRating || 'on-going'}</>
 				}
 			},
 			{
@@ -29,18 +37,24 @@ const EmployeeKpoListTable = () => {
 				accessor: 'dateCompleted',
 				sortable: true,
 				Cell: ({ row: { original: { dateCompleted }} }) => {
-					return <>{dateCompleted || 'On Going'}</>
+					return <>{dateCompleted || 'on-going'}</>
 				}
 			},
       {
 				Header: 'Line Manager',
 				accessor: 'lineManager',
-				sortable: true
+				sortable: true,
+				Cell: ({ row: { original: {  lineManager }} }) => {
+					return <>{`${lineManager?.firstName} ${lineManager?.lastName}`}</>
+				}
       },
       {
 				Header: 'Reviewing Manager',
 				accessor: 'reviewingManager',
-				sortable: true
+				sortable: true,
+				Cell: ({ row: { original: {  reviewingManager }} }) => {
+					return <>{`${reviewingManager?.firstName} ${reviewingManager?.lastName}`}</>
+				}
 			},
 		],
 	);
@@ -49,13 +63,13 @@ const EmployeeKpoListTable = () => {
 		listOfKpo,
 		handleDeleteKpo,
 		push
-	} = useKpoList();
+	} = customHook;
 	return (
 		<EnhancedTable
 			columns={columns}
 			data={listOfKpo}
 			onRowClick={(ev, row) => {
-				if (row) {
+				if (row && row.original.status !== 'rejected' && row.original.status !== 'requested') {
 					push(`/performance_appraisal/kpoList/details/${row.original.id}`)
 				}
 			}}

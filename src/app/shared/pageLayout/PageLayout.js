@@ -14,7 +14,7 @@ const PageLayout = ({
   contentToolbar,
 	content,
 	noSearch,
-	noPrevious,
+	prev,
 	props,
   header: {
     icon,
@@ -29,12 +29,13 @@ const PageLayout = ({
 		btnIcon,
 		btnIconShow,
 		onClick,
-		hidden
-  }
+		hidden,
+		btnComponent,
+	},
+	customHeader
 }) => {
 
-  const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
-
+	const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
   return (
     <FusePageSimple
 			classes={{
@@ -42,11 +43,13 @@ const PageLayout = ({
 				header: 'min-h-72 h-72 sm:h-136 sm:min-h-136'
 			}}
 			header={
+				customHeader ?  customHeader  :
 				<div className="flex flex-1 w-full items-center justify-between px-24">
 					<div className="flex flex-col items-start max-w-full">
 						<div className="flex items-center">
-							{noPrevious &&
-								<FuseAnimate animation="transition.expandIn" delay={300}>
+							{prev &&
+								// <FuseAnimate animation="transition.expandIn" delay={300}>
+								<>
 									{(isState) ? <Icon
 										className="text-20 text-black bg-white rounded-20 mr-16"
 										role="button"
@@ -58,13 +61,13 @@ const PageLayout = ({
 									<Icon
 										className="text-20 text-black bg-white rounded-20 mr-16"
 										component={Link}
-										to={url}
+										to={prev.url}
 										role="button"
 									>
 										{mainTheme.direction === 'ltr' ? 'arrow_back' : 'arrow_forward'}
 									</Icon>
 									}
-								</FuseAnimate>
+									</>
 							}
 							<FuseAnimate animation="transition.expandIn" delay={300}>
 								<Icon className="text-32">{icon}</Icon>
@@ -79,7 +82,7 @@ const PageLayout = ({
 
 					<div className="flex flex-1 items-center justify-center px-12">
 						{!noSearch && <ThemeProvider theme={mainTheme}>
-							<FuseAnimate animation="transition.slideDownIn" delay={300}>
+							{/* <FuseAnimate animation="transition.slideDownIn" delay={300}> */}
 								<Paper className="flex items-center w-full max-w-512 px-8 py-4 rounded-8" elevation={1}>
 									<Icon color="action">search</Icon>
 									<Input
@@ -94,24 +97,32 @@ const PageLayout = ({
 										onChange={handleSearch}
 									/>
 								</Paper>
-							</FuseAnimate>
+							{/* </FuseAnimate> */}
 						</ThemeProvider>}
 					</div>
 
           {showButton && <div className="flex items-center max-w-full">
             <div className="flex flex-col min-w-0 mx-8 sm:mc-16">
-              <FuseAnimate animation="transition.slideLeftIn" delay={300}>
-                <Button
-                  // className="mb-16"
-                  variant="contained"
-                  color="secondary"
-                  disableElevation
-                  onClick={onClick}
-                >
-				{btnIconShow &&  <Icon className="text-32">{btnIcon}</Icon> }
-                  {btnTitle}
-                </Button>
-              </FuseAnimate>
+              {/* <FuseAnimate animation="transition.slideLeftIn" delay={300}> */}
+								{
+									btnComponent !== undefined && btnComponent !== false ? (
+										<>
+										{btnComponent}
+										</>
+									) : (
+										<Button
+                  		// className="mb-16"
+											variant="contained"
+											color="secondary"
+											disableElevation
+											onClick={onClick}
+										>
+												{btnIconShow &&  <Icon className="text-32">{btnIcon}</Icon> }
+											{btnTitle}
+										</Button>
+									)
+								}
+              {/* </FuseAnimate> */}
             </div>
           </div>}
 				</div>

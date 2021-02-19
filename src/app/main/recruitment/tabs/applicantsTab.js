@@ -18,7 +18,7 @@ import Typography from '@material-ui/core/Typography';
 import { Link, useParams } from 'react-router-dom';
 import Input from '@material-ui/core/Input';
 import Slide from '@material-ui/core/Slide';
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import { useDispatch, useSelector } from 'react-redux';
@@ -38,10 +38,10 @@ import { handleResponse } from 'app/auth/handleRes';
 import swal from 'sweetalert2';
 
 const useStyles = makeStyles((theme) => ({
-	table: {
-		'& th': {
-			padding: '16px 0'
-		}
+  table: {
+    '& th': {
+      padding: '16px 0'
+    }
   },
   root: {
     width: '100%',
@@ -53,7 +53,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="right" ref={ref} {...props} />;
 });
 
-const TableWidget = (props) =>{
+const TableWidget = (props) => {
   const dispatch = useDispatch();
   const classes = useStyles();
   const [data, setData] = useState(props.rows);
@@ -63,9 +63,9 @@ const TableWidget = (props) =>{
   const [filter, setFilter] = useState('');
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-	const [order, setOrder] = useState({
-		direction: 'asc',
-		id: null
+  const [order, setOrder] = useState({
+    direction: 'asc',
+    id: null
   });
   const [selected, setSelected] = useState({});
 
@@ -77,9 +77,9 @@ const TableWidget = (props) =>{
   const deleted = useSelector(state => state.PositionDetails.candidate.data);
 
   useEffect(() => {
-    updated.map(data => {
-      if (data.id === selected.id) setSelected(data);
-    })
+    // updated && updated?.map(data => {
+    //   if (data.id === selected.id) setSelected(data);
+    // })
   }, [updated]);
 
   useEffect(() => {
@@ -90,34 +90,34 @@ const TableWidget = (props) =>{
     if (success === true) setUpdateOpen(false)
   }, [success])
 
-	const createSortHandler = property => event =>  {
-		const id = property;
-		let direction = 'desc';
+  const createSortHandler = property => event => {
+    const id = property;
+    let direction = 'desc';
 
-		if (order.id === property && order.direction === 'desc') {
-			direction = 'asc';
-		}
+    if (order.id === property && order.direction === 'desc') {
+      direction = 'asc';
+    }
 
-		setOrder({
-			direction,
-			id
-		});
-	}
-
-  function handleChangePage(event, value) {
-		setPage(value);
-	}
-
-	function handleChangeRowsPerPage(event) {
-		setRowsPerPage(event.target.value);
+    setOrder({
+      direction,
+      id
+    });
   }
 
-  function handleFilter(event){
+  function handleChangePage(event, value) {
+    setPage(value);
+  }
+
+  function handleChangeRowsPerPage(event) {
+    setRowsPerPage(event.target.value);
+  }
+
+  function handleFilter(event) {
     console.log(event.target.value);
     setFilter(event.target.value);
   }
-  
-  function handleItemClick(event, item){
+
+  function handleItemClick(event, item) {
     console.log(item);
     setSelected(item);
     setOpen(true);
@@ -128,17 +128,17 @@ const TableWidget = (props) =>{
   }
 
   function handleReject(candidateId) {
-    const model = {...selected, status: 'Rejected'};
+    const model = { ...selected, status: 'Rejected' };
     handleCandidateUpdate(model, candidateId);
   }
 
   function handleAccept(candidateId) {
-    const model = {...selected, status: 'Accepted'};
+    const model = { ...selected, status: 'Accepted' };
     handleCandidateUpdate(model, candidateId);
   }
-    
-  function CheckStatus(status){
-      switch (status) {
+
+  function CheckStatus(status) {
+    switch (status) {
 
       case "accepted":
         return (
@@ -147,7 +147,7 @@ const TableWidget = (props) =>{
           </Typography>
         )
         break;
-          
+
       case "open":
         return (
           <Typography className={'bg-blue text-white inline text-11 font-500 px-8 py-4 rounded-4'}>
@@ -156,22 +156,22 @@ const TableWidget = (props) =>{
         )
         break;
 
-        case "rejected":
+      case "rejected":
         return (
           <Typography className={'bg-red text-white inline text-11 font-500 px-8 py-4 rounded-4'}>
             {status}
           </Typography>
         )
         break;
-          
-        default:
-          return (
-            <Typography className={'bg-orange text-white inline text-11 font-500 px-8 py-4 rounded-4'}>
-              {status}
-            </Typography>
-          )
-          break;
-      }
+
+      default:
+        return (
+          <Typography className={'bg-orange text-white inline text-11 font-500 px-8 py-4 rounded-4'}>
+            {status}
+          </Typography>
+        )
+        break;
+    }
   }
 
   const handleDeleteCandidate = (event, candidateId) => {
@@ -180,20 +180,20 @@ const TableWidget = (props) =>{
     dispatch(Actions.deleteCandidate(candidateId));
   }
 
-  function handleSearch(event){
+  function handleSearch(event) {
     setSearch(event.target.value);
   }
 
   useEffect(() => {
-		if (search.length >= 2) {
-      setData(_.filter(props.rows, row => row.candidateName.toLowerCase().includes(props.search.toLowerCase())
-      || row.candidateEmail.toLowerCase().includes(props.search.toLowerCase())
-      || row.createdAt.toLowerCase().includes(props.search.toLowerCase())
-      || row.employeeStatus.toLowerCase().includes(props.search.toLowerCase())));
-			setPage(0);
-		} else {
-			setData(props.rows);
-		}
+    if (search.length >= 2) {
+      setData(_.filter(props.rows, row => row.candidateName.toLowerCase().includes(props.search?.toLowerCase())
+        || row.candidateEmail.toLowerCase().includes(props.search?.toLowerCase())
+        || row.createdAt.toLowerCase().includes(props.search?.toLowerCase())
+        || row.employeeStatus.toLowerCase().includes(props.search?.toLowerCase())));
+      setPage(0);
+    } else {
+      setData(props.rows);
+    }
   }, [props.rows, search]);
 
   const [progress, setProgress] = useState({
@@ -203,7 +203,7 @@ const TableWidget = (props) =>{
 
   const headers = fetchHeaders();
 
-  const checkStatus = () => (selected.status.toLowerCase() !== 'accepted' && selected.status.toLowerCase() !== 'rejected');
+  const checkStatus = () => (selected.status?.toLowerCase() !== 'accepted' && selected.status?.toLowerCase() !== 'rejected');
 
   const subCandidate = async () => {
     setProgress({
@@ -214,7 +214,7 @@ const TableWidget = (props) =>{
       ...headers.reqHeader('PATCH', {})
     }).then(res => handleResponse(res));
 
-    if(result.success) {
+    if (result.success) {
       setProgress({
         loading: false,
         success: true,
@@ -239,9 +239,9 @@ const TableWidget = (props) =>{
       })
     }
   }
-        
-	return (
-		<Paper className="w-full rounded-8 shadow-none border-1">
+
+  return (
+    <Paper className="w-full rounded-8 shadow-none border-1">
       <React.Fragment>
         {/* Details Dialog */}
         <RecruitmentDialog
@@ -267,13 +267,13 @@ const TableWidget = (props) =>{
               </tr>
               <tr className="resume">
                 <th>Resume</th>
-                <td>{selected.resume ? 
+                <td>{selected.resume ?
                   <Typography
                     className={'bg-blue inline text-11 font-500 px-8 py-4 rounded-4'}
-                    style={{cursor: 'pointer', color: '#fff'}}
+                    style={{ cursor: 'pointer', color: '#fff' }}
                   >
                     <a className='color-white' href={selected.resume} target="_blank" rel="noopener noreferrer">View resume</a>
-                  </Typography> : '' }
+                  </Typography> : ''}
                 </td>
               </tr>
               <tr className="status">
@@ -284,17 +284,17 @@ const TableWidget = (props) =>{
           </table>
           {selected.status && checkStatus() ? <Grid container className="items-center w-full pt-20" justify="center" alignItems="center">
             <Button
-              className="bg-red text-white" 
+              className="bg-red text-white"
               startIcon={<RejectIcon />}
-              onClick={() => {handleReject(selected.id); setOpen(false); }}
+              onClick={() => { handleReject(selected.id); setOpen(false); }}
             >
               Reject
             </Button>
             &nbsp;
             <Button
-              className="bg-green text-white" 
+              className="bg-green text-white"
               startIcon={<ApproveIcon />}
-              onClick={ev => {handleAccept(selected.id); setOpen(false); }}
+              onClick={ev => { handleAccept(selected.id); setOpen(false); }}
             >
               Accept
             </Button>
@@ -312,7 +312,7 @@ const TableWidget = (props) =>{
       </React.Fragment>
 
       <div className="flex items-center justify-between px-16 h-64 border-b-1">
-				<Typography className="text-16">{props.title}</Typography>
+        <Typography className="text-16">{props.title}</Typography>
         <div className="flex items-center">
           <Paper className="flex items-center w-full px-8 py-4 rounded-8">
             <Icon color="action">search</Icon>
@@ -323,117 +323,117 @@ const TableWidget = (props) =>{
               fullWidth
               value={search}
               inputProps={{
-                  'aria-label': 'Search'
+                'aria-label': 'Search'
               }}
               onChange={ev => handleSearch(ev)}
             />
           </Paper>
         </div>
-			</div>
+      </div>
 
-			<div className="table-responsive">
-				<Table className="w-full min-w-full">
-					<TableHead>
+      <div className="table-responsive">
+        <Table className="w-full min-w-full">
+          <TableHead>
             <TableRow className="h-64">
-                {props.columns.map(column => {
-                  return (
-                    <TableCell
-                      key={column.id}
-                      align={column.align}
-                      padding={column.disablePadding ? 'none' : 'default'}
-                      sortDirection={order.id === column.id ? order.direction : false}
-                    >
-                      {column.sort && (
-                        <Tooltip
-                          title="Sort"
-                          placement={column.align === 'right' ? 'bottom-end' : 'bottom-start'}
-                          enterDelay={300}
+              {props.columns.map(column => {
+                return (
+                  <TableCell
+                    key={column.id}
+                    align={column.align}
+                    padding={column.disablePadding ? 'none' : 'default'}
+                    sortDirection={order.id === column.id ? order.direction : false}
+                  >
+                    {column.sort && (
+                      <Tooltip
+                        title="Sort"
+                        placement={column.align === 'right' ? 'bottom-end' : 'bottom-start'}
+                        enterDelay={300}
+                      >
+                        <TableSortLabel
+                          active={order.id === column.id}
+                          direction={order.direction}
+                          onClick={createSortHandler(column.id)}
                         >
-                          <TableSortLabel
-                            active={order.id === column.id}
-                            direction={order.direction}
-                            onClick={createSortHandler(column.id)}
-                          >
-                            {column.label}
-                          </TableSortLabel>
-                        </Tooltip>
-                      )}
-                    </TableCell>
-                  );
-                }, this)}
+                          {column.label}
+                        </TableSortLabel>
+                      </Tooltip>
+                    )}
+                  </TableCell>
+                );
+              }, this)}
             </TableRow>
-					</TableHead>
-					<TableBody>
-						{_.orderBy(
-								data,
-								[
-									o => {
-										switch (order.id) {
-											case 'categories': {
-												return o.categories[0];
-											}
-											default: {
-												return o[order.id];
-											}
-										}
-									}
-								],
-								[order.direction]
-							)
-								.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-								.map((n, i) => {
-								return (
-									<TableRow
-										key={i}
-										hover
-										onClick={event => {handleItemClick(event, n); setOpen(true) }}
-										// selected={n.id === selectedItemId}
+          </TableHead>
+          <TableBody>
+            {_.orderBy(
+              data,
+              [
+                o => {
+                  switch (order.id) {
+                    case 'categories': {
+                      return o.categories[0];
+                    }
+                    default: {
+                      return o[order.id];
+                    }
+                  }
+                }
+              ],
+              [order.direction]
+            )
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((n, i) => {
+                return (
+                  <TableRow
+                    key={i}
+                    hover
+                    onClick={event => { handleItemClick(event, n); setOpen(true) }}
+                    // selected={n.id === selectedItemId}
                     className="cursor-pointer"
-									>
-										<TableCell className="text-center" style={{padding: '0 16px'}}>
-											{n.candidateName}
-										</TableCell>
-										<TableCell className="text-center">{n.candidateEmail}</TableCell>
-										<TableCell className="text-center" style={{padding: '0 16px'}}>{n.candidatePhoneNumber}</TableCell>
-										<TableCell className="text-center"><Moment format="ddd Do MMM, YY | hh:mm:ss a">{n.createdAt}</Moment></TableCell>
-                    <TableCell className="text-center" style={{padding: '0 16px'}}>
-                        {CheckStatus(n.status.toLowerCase())}
+                  >
+                    <TableCell className="text-center" style={{ padding: '0 16px' }}>
+                      {n.candidateName}
                     </TableCell>
-                    <TableCell className="text-center" style={{padding: '0 16px'}}>
+                    <TableCell className="text-center">{n.candidateEmail}</TableCell>
+                    <TableCell className="text-center" style={{ padding: '0 16px' }}>{n.candidatePhoneNumber}</TableCell>
+                    <TableCell className="text-center"><Moment format="ddd Do MMM, YY | hh:mm:ss a">{n.createdAt}</Moment></TableCell>
+                    <TableCell className="text-center" style={{ padding: '0 16px' }}>
+                      {CheckStatus(n.status?.toLowerCase())}
+                    </TableCell>
+                    <TableCell className="text-center" style={{ padding: '0 16px' }}>
                       <IconButton aria-label="delete" onClick={(event) => handleDeleteCandidate(event, n.id)}>
-                        <DeleteIcon style={{color: 'red'}} />
+                        <DeleteIcon style={{ color: 'red' }} />
                       </IconButton>
                     </TableCell>
-									</TableRow>
-								);
-							})}
-						</TableBody>
+                  </TableRow>
+                );
+              })}
+          </TableBody>
           <TableFooter>
-              <TableRow>
-                <TablePagination
-                    className="overflow-hidden"
-                    // component="div"
-                    count={data.length}
-                    colSpan={props.columns.length}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    backIconButtonProps={{
-                        'aria-label': 'Previous Page'
-                    }}
-                    nextIconButtonProps={{
-                        'aria-label': 'Next Page'
-                    }}
-                    onChangePage={handleChangePage}
-                    onChangeRowsPerPage={handleChangeRowsPerPage}
-                />
-              </TableRow>
-            </TableFooter>
-				</Table>
-			</div>
+            <TableRow>
+              <TablePagination
+                className="overflow-hidden"
+                // component="div"
+                count={data.length}
+                colSpan={props.columns.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                backIconButtonProps={{
+                  'aria-label': 'Previous Page'
+                }}
+                nextIconButtonProps={{
+                  'aria-label': 'Next Page'
+                }}
+                onChangePage={handleChangePage}
+                onChangeRowsPerPage={handleChangeRowsPerPage}
+              />
+            </TableRow>
+          </TableFooter>
+        </Table>
+      </div>
 
-      {status.toLowerCase() !== 'sent to hr' ? <ProgressBtn content='Submit Candidate' onClick={subCandidate} success={progress.success} loading={progress.loading}/> : <></>}
-		</Paper>
-	);
+      {status?.toLowerCase() !== 'sent to hr' ? <ProgressBtn content='Submit Candidate' onClick={subCandidate} success={progress.success} loading={progress.loading} /> : <></>}
+    </Paper>
+  );
 }
 
 export default React.memo(TableWidget);

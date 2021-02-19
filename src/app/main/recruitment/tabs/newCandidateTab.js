@@ -12,6 +12,7 @@ import GridSystem from 'app/shared/gridSystem';
 import DropZone from '../../../shared/dropZonePdf';
 import withReducer from 'app/store/withReducer';
 import * as reducers from '../store/reducers';
+import { MenuItem } from '@material-ui/core';
 
 function AddCandidate(props) {
 	const dispatch = useDispatch();
@@ -39,39 +40,54 @@ function AddCandidate(props) {
 	}
 
 	const formInputs = [
-		{name: 'candidateName', label: 'Candidate name', validations: {minLength: 2}, icon: 'person', type: 'text'},
-		{name: 'candidateEmail', label: 'Candidate email', validations: 'isEmail', icon: 'email', type: 'text'},
-		{name: 'candidatePhoneNumber', label: 'Candidate phone Number', icon: 'phone', type: 'number'},
-		{name: 'employeeStatus', label: 'Employee status', validations: {minLength: 2}, icon: 'email', type: 'text'},
+		{ name: 'candidateName', label: 'Candidate name', validations: { minLength: 10 }, icon: 'person', type: 'text' },
+		{ name: 'candidateEmail', label: 'Candidate email', validations: 'isEmail', icon: 'email', type: 'text' },
+		{ name: 'candidatePhoneNumber', label: 'Candidate phone Number', validations: { minLength: 11 }, icon: 'phone', type: 'number' },
+		{ name: 'employeeStatus', label: 'Employee status', validations: { minLength: 9 }, icon: 'email', data: ["Full-Time", "Part-Time"] },
 	];
 
-	const recruitmentForm = formInputs.map((input, i) => {
-			return (
-				<TextFieldFormsy
-					className="mb-16"
-					type={input.type}
-					name={input.name}
-					label={input.label}
-					validations={input.validations}
-					validationErrors={{
-						isEmail: 'Please enter a valid email',
-						minLength: `${input.label} must be atleast 2 characters`,
-					}}
-					InputProps={{
-						endAdornment: (
-							<InputAdornment position="end">
-								<Icon className="text-20" color="action">
-									{input.icon}
-								</Icon>
-							</InputAdornment>
-						)
-					}}
-					variant="outlined"
-					requiredError='Field is required'
-					required
-				/>
-			)
-	})
+	const recruitmentForm = formInputs.map((input, i) =>
+		input?.data ?
+			// <></>
+			<SelectFormsy
+				className="mb-16"
+				name={input.name}
+				label={input.label}
+				variant="outlined"
+				required
+				requiredError='Must not be None'
+				// value={details[input.name]}
+				// onChange={(e) => handleChange(input.name, e.target.value)}
+			>
+				{input.data.map((item, i) => (
+					<MenuItem value={item} key={i}>{item}</MenuItem>
+				))}
+			</SelectFormsy>
+			:
+			<TextFieldFormsy
+				className="mb-16"
+				type={input.type}
+				name={input.name}
+				label={input.label}
+				validations={input.validations}
+				validationErrors={{
+					isEmail: 'Please enter a valid email',
+					minLength: `${input.label} must be atleast ${input.validations?.minLength ?? ""} characters`,
+				}}
+				InputProps={{
+					endAdornment: (
+						<InputAdornment position="end">
+							<Icon className="text-20" color="action">
+								{input.icon}
+							</Icon>
+						</InputAdornment>
+					)
+				}}
+				variant="outlined"
+				requiredError='Field is required'
+				required
+			/>
+	)
 
 	return (
 		<div className="w-full">
@@ -83,10 +99,10 @@ function AddCandidate(props) {
 				className="flex flex-col justify-center w-full"
 			>
 				<GridSystem>
-					{ recruitmentForm }
+					{recruitmentForm}
 				</GridSystem>
-        <Typography variant='body1' className="mt-16 mb-8">Upload resume *</Typography>
-        <DropZone setValue={setFile} />
+				<Typography variant='body1' className="mt-16 mb-8">Upload resume *</Typography>
+				<DropZone setValue={setFile} />
 				<ProgressBtn success={candidate.success} loading={candidate.loading} content='Add candidate' disable={!isFormValid || file.length === 0} />
 			</Formsy>
 		</div>

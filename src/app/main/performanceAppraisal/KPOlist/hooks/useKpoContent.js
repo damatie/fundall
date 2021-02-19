@@ -1,70 +1,55 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import * as Actions from '../store/actions';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import errorMsg from '../../../../../utils/errorMsg';
-import { useHistory, useParams } from 'react-router-dom';
 import { getAllCategory } from '../../KPOcategoryList/store/actions';
 
 const schema = (type) => {
   switch(type){
     case 'quarter':
       return yup.object().shape({
-        q1: yup.string(
+        Q1: yup.string(
           errorMsg({
             name: 'Q1',
             type: 'string'
           })
-        ).required(
-          errorMsg({
-            name: 'Q1',
-            type: 'required'
-          })
         ),
-        q2: yup.string(
+        Q2: yup.string(
           errorMsg({
             name: 'Q2',
             type: 'string'
           })
-        ).required(
-          errorMsg({
-            name: 'Q2',
-            type: 'required'
-          })
         ),
-        q3: yup.string(
+        Q3: yup.string(
           errorMsg({
             name: 'Q3',
             type: 'string'
           })
-        ).required(
-          errorMsg({
-            name: 'Q3',
-            type: 'required'
-          })
         ),
-        q4: yup.string(
+        Q4: yup.string(
           errorMsg({
             name: 'Q4',
             type: 'string'
           })
-        ).required(
-          errorMsg({
-            name: 'Q4',
-            type: 'required'
-          })
         ),
-        yearEnd: yup.string(
+        kpoYearendScore: yup.string(
           errorMsg({
             name: 'Year End',
             type: 'string'
           })
-        ).required(
+        ),
+        kpoYearendRemarks: yup.string(
           errorMsg({
-            name: 'Year End',
-            type: 'required'
+            name: 'Year End Remarks',
+            type: 'string'
+          })
+        ),
+        kpoPipAchieved: yup.string(
+          errorMsg({
+            name: 'Year End Remarks',
+            type: 'string'
           })
         )
       })
@@ -92,60 +77,64 @@ const schema = (type) => {
             type: 'required'
           })
         ),
-        target: yup.string(
+        target: yup.number(
           errorMsg({
             name: 'Target',
-            type: 'string'
+            type: 'number'
           })
         ).required(
           errorMsg({
             name: 'Target',
             type: 'required'
           })
-        )
+        ),
+        kpoPipTarget: yup.number(
+          errorMsg({
+            name: 'PIP Target',
+            type: 'number'
+          })
+        ),
       })
     }
   }
 };
 
-const kpoDetails = {
-  kpoCategory: 1,
-  description: 'lorem ipsum dorem ipsam...',
-  target: 'Less then 90%',
-  q1: '70%',
-  q2: '80%',
-  q3: '',
-  q4: '',
-  yearEnd: '',
-  id: 2
-}
-
-const useKpoContentList = (config) => {
-  const { open, data, loading } = useSelector(state => state.kpo.kpoContentList);
-  const { data: kpoCategory } = useSelector(state => state.kpoCategory);
-  const dispatch = useDispatch();
-  const { push } = useHistory();
-  const { id, kpoContentId: kpoId } = useParams();
-  const params = useParams();
+const useKpoContentList = ({config, state, dispatch, params, push, kpoCategory, userInfo}) => {
+  const { open, data, loading, kpoContent } = state;
+  const { id, kpoContentId: kpoId } = params;
 
   const {
     register,
     handleSubmit,
     errors,
-    control
+    control,
+    getValues
   } = useForm({
     mode: 'onBlur',
     resolver: yupResolver(schema(config?.type))
   });
 
+  const [shouldDisableButton, setShouldDisableButton] = React.useState(!!kpoContent.status === 4);
+
   React.useEffect(() => {
-    console.log(params);
     if(kpoId) {
       dispatch(Actions.getOneKpoContent(kpoId))
     }
     dispatch(Actions.getAllKpoContent(id));
     dispatch(getAllCategory());
   }, []);
+
+  // React.useEffect(() => {
+  //   // return !!(getValues().kpoYearendScore && getValues().kpoYearendRemarks && getValues().kpoPipAchieved)
+  //   if(kpoContent.status === 4) {
+  //     // setShouldDisableButton(true)
+  //     if(getValues().kpoYearendScore) {
+  //       console.log(getValues().kpoYearendScore)
+  //     }
+  //   }
+  // }, [getValues().kpoYearendScore]);
+
+  
 
   const handleOpenModal = () => {
     dispatch({type: Actions.OPEN_ADD_KPO_CONTENT_MODAL})
@@ -155,16 +144,20 @@ const useKpoContentList = (config) => {
     dispatch({type: Actions.CLOSE_ADD_KPO_CONTENT_MODAL})
   };
 
-  const onSubmit = (model) => {
+  const onSubmit = (type) => (model) => {
     const body = {
       ...model,
-      kpoId: id
+      kpoId: +kpoId || +id
     };
-
-    if(id) {
+    if(id && !kpoId) {
       dispatch(Actions.addKpoContent(body));
     } else if (kpoId) {
-      dispatch(Actions.updateKpoContent(body))
+      if(type === 'quarterly') {
+        dispatch(Actions.updateKpoContentQuarterly(body));
+        return;
+      }
+      dispatch(Actions.updateKpoContent(body));
+      return;
     }
     return;
   };
@@ -176,7 +169,30 @@ const useKpoContentList = (config) => {
     }));
   };
 
+  const shouldShowInput = (name) => {
+    const { status, updateStatus } = kpoContent;
+    if(updateStatus !== 'approved' || !updateStatus) {
+      if(name === 'q1' && status === 0) {
+        return true;
+      } else if(name === 'q2' && status === 1) {
+        return true;
+      } else if(name === 'q3' && status === 2) {
+        return true;
+      } else if(name === 'q4' && status === 3) {
+        return true;
+      } else if ((name === 'kpoyearendscore' || name === 'kpoyearendremarks' || name === 'kpopipachieved') && status === 4) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return true;
+    }
+  };
+
+
   return {
+    ...state,
     open,
     handleOpenModal,
     handleCloseModal,
@@ -189,9 +205,12 @@ const useKpoContentList = (config) => {
     push,
     id,
     handleDelete,
-    kpoDetails,
+    kpoDetails: kpoContent,
     loading,
-    kpoCategory
+    kpoCategory,
+    shouldShowInput,
+    shouldDisableButton,
+    pipEligibility: userInfo.data.employeeGrade?.pipEligibility
   };
 };
 

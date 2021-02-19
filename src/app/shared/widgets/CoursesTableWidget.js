@@ -26,6 +26,7 @@ import clsx from 'clsx';
 import Moment from 'react-moment';
 import ApproveIcon from '@material-ui/icons/Check';
 import { AppBar, Toolbar } from '@material-ui/core';
+import { formatToNaira } from 'utils/formatNumber';
 
 const useStyles = makeStyles({
     table: {
@@ -132,7 +133,7 @@ const CoursesTableWidget = (props) => {
                                 <tbody>
                                     <tr className="cost">
                                         <th>Cost</th>
-                                        <td>{selected.cost}</td>
+                                        <td>{formatToNaira(selected.cost)}</td>
                                     </tr>
 
                                     <tr className="location">
@@ -207,7 +208,7 @@ const CoursesTableWidget = (props) => {
                 </div>
             </React.Fragment>
             <div className="flex items-center justify-between px-16 h-64 border-b-1">
-                <Typography className="text-16">{props.title}</Typography>
+                <Typography className="text-20">{props.title}</Typography>
                 <div className="flex items-center">
                     <Paper className="flex items-center w-full px-8 py-4 rounded-8">
                         <Icon color="action">search</Icon>
@@ -238,6 +239,7 @@ const CoursesTableWidget = (props) => {
                         </FormControl>
                     </div>
                 </div> */}
+
             </div>
             <div className="table-responsive">
                 <Table className="w-full min-w-full">
@@ -306,9 +308,9 @@ const CoursesTableWidget = (props) => {
                                             <TableCell className=" hidden sm:table-cell">{n.entity}</TableCell>
                                             <TableCell className=" hidden sm:table-cell">{n.department}</TableCell>
                                             <TableCell className=" hidden sm:table-cell">{n.state}, {n.country}</TableCell>
-                                            <TableCell className=''>{n.cost}</TableCell>
+                                            <TableCell className=''>{formatToNaira(n.cost)}</TableCell>
                                             <TableCell className="">
-                                                <Moment format="ddd Do MMM, YY | hh:mm:ss a">{n.createdAt}</Moment>
+                                                {new Date(n.createdAt).toLocaleDateString()}
                                             </TableCell>
                                         </TableRow>
                                     );

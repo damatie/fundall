@@ -184,82 +184,82 @@ function LoanReqTab(props) {
 
 	return (
 		<div className="w-full flex flex-col">
-			<FuseScrollbars className="flex-grow overflow-x-auto">
-				<Table className="min-w-xl" aria-labelledby="tableTitle">
-					<SharedTableHead
-						numSelected={selected.length}
-						order={order}
-						onSelectAllClick={handleSelectAllClick}
-						onRequestSort={handleRequestSort}
-						rowCount={data.length}
-						rows={rows}
-						handleDelete={handleDelete}
-						success={true}
-					/>
-					<TableBody>
-						{_.orderBy(
-							data,
-							[
-								o => {
-									switch (order.id) {
-										case 'categories': {
-											return o.categories[0];
-										}
-										default: {
-											return o[order.id];
-										}
+			{/* <FuseScrollbars className="flex-grow overflow-x-auto"> */}
+			<Table className="min-w-xl" aria-labelledby="tableTitle">
+				<SharedTableHead
+					numSelected={selected.length}
+					order={order}
+					onSelectAllClick={handleSelectAllClick}
+					onRequestSort={handleRequestSort}
+					rowCount={data.length}
+					rows={rows}
+					handleDelete={handleDelete}
+					success={true}
+				/>
+				<TableBody>
+					{_.orderBy(
+						data,
+						[
+							o => {
+								switch (order.id) {
+									case 'categories': {
+										return o.categories[0];
+									}
+									default: {
+										return o[order.id];
 									}
 								}
-							],
-							[order.direction]
-						)
-							.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-							.map(n => {
-								const isSelected = selected.indexOf(n.id) !== -1;
-								return (
-									<TableRow
-										className="h-64 cursor-pointer"
-										hover
-										role="checkbox"
-										aria-checked={isSelected}
-										tabIndex={-1}
-										key={Math.random()}
-										selected={isSelected}
-										onClick={event => handleClick(n)}
-									>
-										<TableCell component="th" scope="row" align='left'></TableCell>
+							}
+						],
+						[order.direction]
+					)
+						.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+						.map(n => {
+							const isSelected = selected.indexOf(n.id) !== -1;
+							return (
+								<TableRow
+									className="h-64 cursor-pointer"
+									hover
+									role="checkbox"
+									aria-checked={isSelected}
+									tabIndex={-1}
+									key={Math.random()}
+									selected={isSelected}
+									onClick={event => handleClick(n)}
+								>
+									<TableCell component="th" scope="row" align='left'></TableCell>
 
-										<TableCell component="th" scope="row" align='left'>
-											{`${n.employee.firstName} ${n.employee.lastName}`}
-										</TableCell>
-										<TableCell component="th" scope="row" align='left'>
-											{`${n.employee.email}`}
-										</TableCell>
-										<TableCell component="th" scope="row" align='left'>
-											{n.loan.jobRole}
-										</TableCell>
-										<TableCell component="th" scope="row" align='left'>
-											{n.loan.department}
-										</TableCell>
-										<TableCell component="th" scope="row" align='left'>
-											{n.loan.entity}
-										</TableCell>
-										{/* <TableCell component="th" scope="row" align='left'>
+									<TableCell component="th" scope="row" align='left'>
+										{`${n.employee.firstName} ${n.employee.lastName}`}
+									</TableCell>
+									<TableCell component="th" scope="row" align='left'>
+										{`${n.employee.email}`}
+									</TableCell>
+									<TableCell component="th" scope="row" align='left'>
+										{n.loan.jobRole}
+									</TableCell>
+									<TableCell component="th" scope="row" align='left'>
+										{n.loan.department}
+									</TableCell>
+									<TableCell component="th" scope="row" align='left'>
+										{n.loan.entity}
+									</TableCell>
+									{/* <TableCell component="th" scope="row" align='left'>
 											{n.loan.jobRole}
 										</TableCell> */}
-										<TableCell component="th" scope="row" align='left'>
-											{`₦ ${compareInput(n.loan.amountRequested)}`}
-										</TableCell>
-										<TableCell component="th" scope="row" align='left'>
-											{`${compareInput(n.loan.duration)} months`}
-										</TableCell>
+									<TableCell component="th" scope="row" align='left'>
+										{`₦ ${compareInput(n.loan.amountRequested)}`}
+									</TableCell>
+									<TableCell component="th" scope="row" align='left'>
+										{`${compareInput(n.loan.duration)} months`}
+									</TableCell>
 
-									</TableRow>
-								);
-							})}
-					</TableBody>
-				</Table>
-			</FuseScrollbars>
+								</TableRow>
+							);
+						})}
+				</TableBody>
+			</Table>
+			{/* </FuseScrollbars> */}
 
 			<TablePagination
 				className="overflow-hidden"

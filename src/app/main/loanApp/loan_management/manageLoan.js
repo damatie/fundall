@@ -1,4 +1,4 @@
-import FuseAnimate from '@fuse/core/FuseAnimate';
+// import FuseAnimate from '@fuse/core/FuseAnimate';
 import FuseChipSelect from '@fuse/core/FuseChipSelect';
 import FuseLoading from '@fuse/core/FuseLoading';
 import FusePageCarded from '@fuse/core/FusePageCarded';
@@ -115,35 +115,35 @@ function ManageLoan(props) {
 			header={
 				<div className="flex flex-1 w-full items-center justify-between">
 					<div className="flex justify-between w-full">
-						<FuseAnimate animation="transition.slideRightIn" delay={300}>
+						{/* <FuseAnimate animation="transition.slideRightIn" delay={300}> */}
+						<Typography
+							className="normal-case flex items-center sm:mb-12"
+							component={Link}
+							role="button"
+							to="/loan/review/"
+							color="inherit"
+						>
+							<Icon className="text-20">
+								arrow_back
+								</Icon>
+							<Typography className="hidden sm:flex mx-0 sm:mx-12" variant="h6">
+								Loan Review
+									</Typography>
+						</Typography>
+						{/* </FuseAnimate> */}
+						<div className="flex items-center max-w-full">
+							{/* <FuseAnimate animation="transition.slideRightIn" delay={300}> */}
 							<Typography
 								className="normal-case flex items-center sm:mb-12"
-								component={Link}
 								role="button"
-								to="/loan/review/"
 								color="inherit"
 							>
 								<Icon className="text-20">
-									arrow_back
-								</Icon>
-								<Typography className="hidden sm:flex mx-0 sm:mx-12" variant="h6">
-									Loan Review
-									</Typography>
-							</Typography>
-						</FuseAnimate>
-						<div className="flex items-center max-w-full">
-							<FuseAnimate animation="transition.slideRightIn" delay={300}>
-								<Typography
-									className="normal-case flex items-center sm:mb-12"
-									role="button"
-									color="inherit"
-								>
-									<Icon className="text-20">
-										monetization_on
+									monetization_on
 										</Icon>
-									<span className="mx-4">Loan Management</span>
-								</Typography>
-							</FuseAnimate>
+								<span className="mx-4">Loan Management</span>
+							</Typography>
+							{/* </FuseAnimate> */}
 						</div>
 					</div>
 
@@ -175,7 +175,7 @@ function ManageLoan(props) {
 					>
 
 						<Tab className="h-64 normal-case" label="Pending Loan" />
-						<Tab className="h-64 normal-case" label="Reviewed Loan" />
+						{/* <Tab className="h-64 normal-case" label="Reviewed Loan" /> */}
 						<Tab className="h-64 normal-case" label="Approved Loan" />
 						<Tab className="h-64 normal-case" label="Disbursed Loan" />
 						<Tab className="h-64 normal-case" label="Open Loan" />
@@ -190,12 +190,12 @@ function ManageLoan(props) {
 					</div> : <></>}
 
 					{profile.role?.name === 'Finance Manager' ? <div className=" sm:p-24 ">
-						{tabValue === 0 && (<LoanReqTab loans={loans.pendingLoan} />)}
-						{tabValue === 1 && (<LoanReqTab loans={loans.reviewedLoan} />)}
-						{tabValue === 2 && (<LoanReqTab loans={loans.approvedLoan} />)}
-						{tabValue === 3 && (<LoanReqTab loans={loans.disbursedLoan} />)}
-						{tabValue === 4 && (<LoanReqTab loans={loans.openLoan} />)}
-						{tabValue === 5 && (<LoanReqTab loans={loans.closedLoan} />)}
+						{/* {tabValue === 0 && (<LoanReqTab loans={loans.pendingLoan} />)} */}
+						{tabValue === 0 && (<LoanReqTab loans={loans.reviewedLoan} />)}
+						{tabValue === 1 && (<LoanReqTab loans={loans.approvedLoan} />)}
+						{tabValue === 2 && (<LoanReqTab loans={loans.disbursedLoan} />)}
+						{tabValue === 3 && (<LoanReqTab loans={loans.openLoan} />)}
+						{tabValue === 4 && (<LoanReqTab loans={loans.closedLoan} />)}
 					</div> : <></>}
 				</>
 			}

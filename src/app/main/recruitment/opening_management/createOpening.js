@@ -1,22 +1,22 @@
 import FusePageCarded from '@fuse/core/FusePageCarded';
-import { useForm, useDeepCompareEffect } from '@fuse/hooks';
-import FuseUtils from '@fuse/utils';
+// import { useForm, useDeepCompareEffect } from '@fuse/hooks';
+// import FuseUtils from '@fuse/utils';
 import _ from '@lodash';
-import Button from '@material-ui/core/Button';
+// import Button from '@material-ui/core/Button';
 import { orange } from '@material-ui/core/colors';
-import Icon from '@material-ui/core/Icon';
-import InputAdornment from '@material-ui/core/InputAdornment';
+// import Icon from '@material-ui/core/Icon';
+// import InputAdornment from '@material-ui/core/InputAdornment';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useParams } from 'react-router-dom';
+// import { Link, useParams } from 'react-router-dom';
 import * as Actions from '../store/actions';
 import withReducer from 'app/store/withReducer';
 import reducer from '../store/reducers';
 import NewOpeningTab from '../tabs/newOpeningTab';
-import entityReducer from 'app/main/HR/business_unit/store/reducers';
-import departmentReducer from 'app/main/HR/business_unit/department/store/reducers';
-import rolesReducer from 'app/main/HR/roles/store/reducers';
+// import entityReducer from 'app/main/HR/business_unit/store/reducers';
+// import departmentReducer from 'app/main/HR/business_unit/department/store/reducers';
+// import rolesReducer from 'app/main/HR/roles/store/reducers';
 import Header from '../recruitmentHeader';
 
 const useStyles = makeStyles(theme => ({
@@ -56,7 +56,7 @@ const useStyles = makeStyles(theme => ({
 
 function CreateOpening(props) {
 	const dispatch = useDispatch();
-	const classes = useStyles(props);
+	// const classes = useStyles(props);
 
 	useEffect(() => {
 		dispatch(Actions.getEntities());
@@ -72,9 +72,9 @@ function CreateOpening(props) {
 				<Header heading='New opening' />
 			}
 			content={
-					<div className=" sm:p-24 ">
-						<NewOpeningTab />
-					</div>
+				<div className=" sm:p-24 ">
+					<NewOpeningTab />
+				</div>
 			}
 			innerScroll
 		/>

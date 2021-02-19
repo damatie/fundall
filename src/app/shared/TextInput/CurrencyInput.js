@@ -1,5 +1,5 @@
 import NumberFormat from 'react-number-format';
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Icon from '@material-ui/core/Icon';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -29,15 +29,12 @@ function NumberFormatCustom(props) {
 const CurrencyInput = (props) => {
   let { handleChange, className, values, name, label, error, helperText, disabled } = props;
 
-  if (values) {
-    values = Number(values)
-  }
-
-  return (
+  return useMemo(() =>
+  (
     <TextField
       className={className}
       label={label}
-      defaultValue={values}
+      value={String(values)}
       error={error}
       helperText={helperText}
       onChange={handleChange}
@@ -59,6 +56,7 @@ const CurrencyInput = (props) => {
       }}
     />
   )
+    , [values, error, disabled, name, className])
 };
 
 export default CurrencyInput;

@@ -26,13 +26,7 @@ import PhoneNumberInput from 'app/shared/TextInput/PhoneNumberInput';
 import { Grid } from '@material-ui/core';
 import SharedDropzone from 'app/shared/sharedDropZone';
 
-const useStyles = makeStyles(theme => ({
-	grid: {
-		display: 'grid',
-		gridTemplateColumns: '1fr 1fr',
-		gridGap: 20
-	}
-}));
+
 
 const durations = [
 	{ value: '1 month', id: 1 },
@@ -43,9 +37,11 @@ const durations = [
 	{ value: '6 months', id: 6 },
 ];
 
+const emailTest = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 function RequestLoanTab(props) {
 	// const classes = useStyles();
+
 	const dispatch = useDispatch();
 	const history = useHistory();
 
@@ -53,19 +49,21 @@ function RequestLoanTab(props) {
 	const [userCheck, setCheck] = useState(null);
 
 	const [isFormValid, setIsFormValid] = useState(false);
-	// const annualRef = useRef(null);
 	const formRef = useRef(null);
 
 	const [otherDetails, setOtherDetails] = useState({
 		workPhone: "", mobilePhone: "", homePhone: "", annualPay: "",
-		amountRequested: "", purpose: "", duration: "", email: ""
+		amountRequested: "", purpose: "", duration: "", email: "",
+		amountApproved: ""
 	});
 	const [fileInput, setFileInput] = useState([]);
 
-	// const isInput = () => supportDirector && departmentHead && financeManager;
-
 	const { id } = useParams();
 	const { state } = useLocation();
+
+	useEffect(() => {
+		// console.log(state)
+	}, [id])
 
 	useEffect(() => {
 		//reload when the file comes in
@@ -73,8 +71,6 @@ function RequestLoanTab(props) {
 
 	const loan = useSelector(state => state.loan.loan);
 	const profile = useSelector(({ profile }) => profile);
-	// const employeeList = useSelector(({ employeeList }) => employeeList);
-	// const employees = useSelector(({ employees }) => employees.employees.data)
 
 	useEffect(() => {
 		if (!profile.loading) {
@@ -84,24 +80,43 @@ function RequestLoanTab(props) {
 	}, [profile.data]);
 
 	useEffect(() => {
-		if (!fileInput[0] ||
-			Object.values(otherDetails).includes("") ||
+		let detailsToCheck = otherDetails;
+
+		if (userCheck !== "fm") delete detailsToCheck.amountApproved;
+
+		if (
+			Object.values(detailsToCheck).includes("") ||
 			(
+				((userCheck === "fm" && otherDetails.amountApproved !== otherDetails.amountRequested) ? false : !fileInput[0]) ||
 				otherDetails.purpose.length < 10 ||
 				otherDetails.workPhone.length < 14 ||
 				otherDetails.homePhone.length < 14 ||
-				otherDetails.mobilePhone.length < 14
+				otherDetails.mobilePhone.length < 14 ||
+				!emailTest.test(otherDetails.email) ||
+				(otherDetails.amountApproved ? otherDetails.amountApproved > otherDetails.amountRequested : "")
 			)
 		) {
 			setIsFormValid(false)
 		} else {
 			setIsFormValid(true)
 		}
-	}, [otherDetails, fileInput])
+	}, [otherDetails, fileInput, userCheck])
 
 	useEffect(() => {
+		if (!userCheck && profile && profile?.data) {
+			setOtherDetails(state => ({
+				...state,
+				email: profile.data?.email ?? "",
+				homePhone: profile.data?.phoneNumber ?? "",
+				workPhone: profile.data?.info?.officeLine ?? "",
+				mobilePhone: profile.data?.phoneNumber ?? ""
+			}))
+		}
+	}, [profile])
+
+	useEffect(() => {
+		console.log(state)
 		if (id) {
-			console.log(state)
 			setOtherDetails({
 				amountRequested: state.amountRequested,
 				mobilePhone: state.mobilePhone,
@@ -110,15 +125,28 @@ function RequestLoanTab(props) {
 				homePhone: state.homePhone,
 				duration: state.duration,
 				purpose: state.purpose,
-				email: state.email
+				email: state.email,
+				amountApproved: state.amountApproved ? state.amountApproved : "",
 			});
+			// if (Number(state.amountApproved) > 0) {
+			// 	setFileInput([state.loanForm]);
+			// }
 
 			setCheck(state?.fromHR ? "hr" : state?.fromFM ? "fm" : null);
 			return;
 		}
 	}, [id, state]);
 
-
+	// useEffect(() => {
+	// 	if (userCheck === "fm") {
+	// 		if (otherDetails?.amountApproved?.length < 1)
+	// 			setIsFormValid(false)
+	// 		else {
+	// 			console.log("now approve")
+	// 			setIsFormValid(true)
+	// 		}
+	// 	}
+	// }, [userCheck, otherDetails?.amountApproved])
 
 	function disableButton() {
 		setIsFormValid(false);
@@ -129,10 +157,11 @@ function RequestLoanTab(props) {
 	}
 
 	const handleOtherDetails = (value, key) => {
-		setOtherDetails({ ...otherDetails, [key]: value });
+		setOtherDetails(otherDetails => ({ ...otherDetails, [key]: value }));
 	}
 
 	function handleSubmit(model) {
+		console.log({ ...model, ...otherDetails });
 		if (id) {
 			if (userCheck === "hr") {
 				dispatch(Actions.approveLoan({
@@ -189,6 +218,7 @@ function RequestLoanTab(props) {
 							handleChange={e =>
 								handleOtherDetails(e.target.value, "amountRequested")
 							}
+							disabled={userCheck}
 							defaultValue={otherDetails.amountRequested}
 							values={otherDetails.amountRequested}
 							helperText={otherDetails.amountRequested > otherDetails.annualPay * 20 / 100 ? 'Please you can not request for an amount that is greater than 20% of your annual payment' : `Max Amount: ${new Intl.NumberFormat().format(otherDetails.annualPay * 20 / 100)}`}
@@ -202,6 +232,7 @@ function RequestLoanTab(props) {
 						<CurrencyInput
 							handleChange={e => handleOtherDetails(e.target.value, "annualPay")}
 							values={otherDetails.annualPay}
+							disabled={userCheck}
 							helperText={otherDetails.annualPay > 3000000 ? `Please you have exceed you maximum amount of ${Intl.NumberFormat().format(3000000)}` : ''}
 							error={otherDetails.annualPay > 3000000}
 							name={"annualPay"}
@@ -214,9 +245,12 @@ function RequestLoanTab(props) {
 						<div>
 							<CurrencyInput
 								handleChange={e => handleOtherDetails(e.target.value, "amountApproved")}
+								helperText={otherDetails.amountApproved > otherDetails.amountRequested ? `Please you have exceed the amount requested of ₦ ${Intl.NumberFormat().format(otherDetails.amountRequested)}` : ''}
+								error={otherDetails.amountApproved > otherDetails.amountRequested}
 								values={otherDetails?.amountApproved ?? ""}
 								name={"amountApproved"}
 								label={"Amount Approved"}
+								disabled={state.amountApproved}
 							/>
 						</div>
 					}
@@ -227,9 +261,10 @@ function RequestLoanTab(props) {
 						label="Purpose"
 						rows='5'
 						required
+						disabled={userCheck}
 						value={otherDetails.purpose}
 						multiline
-						// error={otherDetails.purpose?.length < 10 ? true : false}
+						error={(otherDetails.purpose?.length < 10 && otherDetails.purpose?.length > 0) ? true : false}
 						onChange={(e) => handleOtherDetails(e.target.value, "purpose")}
 						// validations={{
 						// 	minLength: 10
@@ -250,12 +285,14 @@ function RequestLoanTab(props) {
 					<SelectFormsy
 						className="mb-16"
 						name="duration"
-						label="Purpose Duration"
+						label="Loan Duration"
+						disabled={userCheck}
 						value={otherDetails.duration}
 						onChange={(e) => handleOtherDetails(e.target.value, "duration")}
 						// validations="not-equals:none"
 						// validationError="requried"
 						variant="outlined"
+						disabled={userCheck}
 						required
 					>
 						{durations.map(item => (
@@ -268,6 +305,7 @@ function RequestLoanTab(props) {
 						type="email"
 						name="email"
 						label="Email address"
+						disabled={userCheck}
 						value={otherDetails.email}
 						onChange={(e) => handleOtherDetails(e.target.value, "email")}
 						validations={{
@@ -296,12 +334,13 @@ function RequestLoanTab(props) {
 						value={otherDetails.workPhone}
 						onChange={(e) => handleOtherDetails(e, "workPhone")}
 						country={'ng'}
+						disabled={userCheck}
 						placeholder={"Work Phone"}
 					/>
 
 					<PhoneNumberInput
 						required
-						// setError={setError}
+						disabled={userCheck}
 						value={otherDetails.mobilePhone}
 						onChange={(e) => handleOtherDetails(e, "mobilePhone")}
 						country={'ng'}
@@ -310,92 +349,48 @@ function RequestLoanTab(props) {
 
 					<PhoneNumberInput
 						required
+						disabled={userCheck}
 						// setError={setError}
 						value={otherDetails.homePhone}
 						onChange={(e) => handleOtherDetails(e, "homePhone")}
 						country={'ng'}
 						placeholder={"Home Phone"}
-						// validations={{
-						// 	minLength: 10,
-						// 	maxLength: 10
-						// }}
-						// validationErrors={{
-						// 	minLength: 'Min character length is 10'
-						// }}
 					/>
 
-					{/* 
-					<TextFieldFormsy
-						className="mb-16"
-						type="text"
-						name="workLocation"
-						label="Work location"
-						value={''}
-						validations={{
-							minLength: 1
-						}}
-						validationErrors={{
-							minLength: 'Min character length is 1'
-						}}
-						InputProps={{
-							endAdornment: (
-								<InputAdornment position="end">
-									<Icon className="text-20" color="action">
-										map
-								</Icon>
-								</InputAdornment>
-							)
-						}}
-						variant="outlined"
-						required
-					/> 
-					*/}
-
-					{/* 
-					<TextFieldFormsy
-						className="mb-16"
-						type="number"
-						name="otherDetails"
-						label="Phone number"
-						value={''}
-						validations={{
-							minLength: 1
-						}}
-						validationErrors={{
-							minLength: 'Min character length is 1'
-						}}
-						InputProps={{
-							endAdornment: (
-								<InputAdornment position="end">
-									<Icon className="text-20" color="action">
-										phone
-								</Icon>
-								</InputAdornment>
-							)
-						}}
-						variant="outlined"
-						required
-					/> 
-					*/}
-
-					{/* 
-					<AutoCompleteInput data={employees && formatDataList(employees, 'Line managers')} inputs={{ label: 'Line manager' }} setInput={setDepartmentHead} value={id ? { name: loan.data.departmentHead, id: loan.data.loanData.departmentHead } : {}} />
-					<AutoCompleteInput data={employees && formatDataList(employees, 'Director of support service')} inputs={{ label: 'Director of support service' }} setInput={setSupportDirector} value={id ? { name: loan.data.supportDirector, id: loan.data.loanData.supportDirector } : {}} />
-					<AutoCompleteInput data={employees && formatDataList(employees, 'Finance manager')} inputs={{ label: 'Finance manager' }} setInput={setFinanceManager} value={id ? { name: loan.data.financeManager, id: loan.data.loanData.financeManager } : {}} /> 
-					*/}
 				</GridSystem>
 
 				<Grid container spacing={3} className="mt-24 mb-16 w-full">
-					<Grid item lg={6}>
-						<ProgressBtn content={"Download form"} disable={true} />
-					</Grid>
-					<Grid item lg={6}>
-						<SharedDropzone
-							name={"Upload Signed document here"}
-							allowedTypes={'image/*, application/*'}
-							setValue={setFileInput}
-						/>
-					</Grid>
+					{
+						userCheck === "fm" ?
+							(otherDetails.amountApproved === otherDetails.amountRequested) ?
+								<>
+									<Grid item lg={6}>
+										<ProgressBtn content={"Download form"} disable={true} />
+									</Grid>
+									<Grid item lg={6}>
+										<SharedDropzone
+											name={"Upload Signed document here"}
+											allowedTypes={'image/*, application/*'}
+											setValue={setFileInput}
+										/>
+									</Grid>
+								</>
+								:
+								<div style={{ marginBottom: 50 }} />
+							:
+							<>
+								<Grid item lg={6}>
+									<ProgressBtn content={"Download form"} disable={true} />
+								</Grid>
+								<Grid item lg={6}>
+									<SharedDropzone
+										name={"Upload Signed document here"}
+										allowedTypes={'image/*, application/*'}
+										setValue={setFileInput}
+									/>
+								</Grid>
+							</>
+					}
 				</Grid>
 
 				{
