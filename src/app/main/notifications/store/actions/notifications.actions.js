@@ -22,6 +22,11 @@ export const getNotifications = () => {
             type: GET_NOTIFICATIONS,
             payload: desSort(data.data)
           });
+        } else {
+          if (data.message === "Invalid Token") {
+            localStorage.clear();
+            window.location.href = "/";
+          }
         }
       }
     ).catch(e => console.error(e));

@@ -179,32 +179,36 @@ export function createActivity(model, history) {
 }
 
 export function markAttendance(model) {
-    console.log(model);
-    swal.showLoading();
-    fetch(`${getBaseUrl()}/attendance`, { ...header.reqHeader('POST', model) })
-        .then(res => res.json()).then(
-            data => {
-                console.log(data)
-                if (data.success) {
+    
+    return dispatch => {
+        console.log(model);
+        swal.showLoading();
+        fetch(`${getBaseUrl()}/attendance`, { ...header.reqHeader('POST', model) })
+            .then(res => res.json()).then(
+                data => {
+                    console.log(data)
+                    if (data.success) {
+                        swal.fire({
+                            title: data.message,
+                            timer: 3000,
+                            icon: 'success'
+                        })
+                        dispatch(fetchOwnAttendance());
+                    } else {
+                        swal.fire({
+                            title: data.message,
+                            timer: 3000,
+                            icon: 'error'
+                        })
+                    }
+                }).catch(err => {
+                    console.log(err);
                     swal.fire({
-                        title: data.message,
-                        timer: 3000,
-                        icon: 'success'
-                    })
-                } else {
-                    swal.fire({
-                        title: data.message,
+                        title: err.message,
+                        text: 'Oops! Something went wrong. Check your network',
                         timer: 3000,
                         icon: 'error'
                     })
-                }
-            }).catch(err => {
-                console.log(err);
-                swal.fire({
-                    title: err.message,
-                    text: 'Oops! Something went wrong. Check your network',
-                    timer: 3000,
-                    icon: 'error'
                 })
-            })
+    }
 }

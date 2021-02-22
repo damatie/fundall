@@ -9,56 +9,16 @@ import TableRow from '@material-ui/core/TableRow';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Tooltip from '@material-ui/core/Tooltip';
-// import Typography from '@material-ui/core/Typography';
-// import { Link } from 'react-router-dom';
-// import Slide from '@material-ui/core/Slide';
-import React, { useState, useEffect } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-// import clsx from 'clsx';
-// import { useDispatch, useSelector } from 'react-redux';
-// import * as Actions from '../store/actions';
-// import Grid from '@material-ui/core/Grid';
-// import IconButton from '@material-ui/core/IconButton';
-// import DeleteIcon from '@material-ui/icons/Delete';
-// import EditIcon from '@material-ui/icons/Edit';
-// import RecruitmentDialog from './RecruitmentDialog';
-// import UpdatePositionTab from './tabs/updatePositionTab';
-// import AssignRecruiterTab from './tabs/assignRecruiterTab';
-// import Moment from 'react-moment';
-import { useAuth } from 'app/hooks/useAuth';
-import { useHistory } from 'react-router';
-// import RecruitmentDialog from 'app/main/recruitment/RecruitmentDialog';
-
-// const useStyles = makeStyles((theme) => ({
-//     table: {
-//         '& th': {
-//             padding: '16px 0'
-//         }
-//     },
-//     root: {
-//         width: '100%',
-//         backgroundColor: theme.palette.background.paper,
-//     },
-// }));
-
-const userData = useAuth().getUserData;
+import React, { useState } from 'react';
 
 const AttendanceTable = (props) => {
-    // const history = useHistory();
-    // const dispatch = useDispatch();
-    // const classes = useStyles();
     const [data, setData] = useState(props.rows);
-    // const [open, setOpen] = useState(false);
-    // const [updateOpen, setUpdateOpen] = useState(false);
-    // const [openHr, setOpenHr] = useState(false);
-    // const [filter, setFilter] = useState('');
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [order, setOrder] = useState({
         direction: 'asc',
         id: null
     });
-    // const [selected, setSelected] = useState({});
 
     const createSortHandler = property => event => {
         const id = property;
@@ -141,14 +101,12 @@ const AttendanceTable = (props) => {
                                     <TableRow
                                         key={i}
                                         hover
-                                        // onClick={event => { handleItemClick(event, n); setOpen(true) }}
-                                        // selected={n.id === selectedItemId}
                                         className="cursor-pointer"
                                     >
                                         <TableCell style={{ padding: '16px' }}>
                                             {
                                                 n.activities.map((item, index) =>
-                                                    index === n.activities.length -1?
+                                                    index === n.activities.length - 1 ?
                                                         <span>{item.name}.</span> :
                                                         <span>{item.name},  </span>
                                                 )
@@ -167,7 +125,6 @@ const AttendanceTable = (props) => {
                         <TableRow>
                             <TablePagination
                                 className="overflow-hidden"
-                                // component="div"
                                 count={props.rows.length}
                                 colSpan={props.columns.length}
                                 rowsPerPage={rowsPerPage}
@@ -189,4 +146,4 @@ const AttendanceTable = (props) => {
     );
 }
 
-export default React.memo(AttendanceTable);
+export default AttendanceTable;

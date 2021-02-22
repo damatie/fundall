@@ -5,7 +5,7 @@ import Icon from '@material-ui/core/Icon';
 import Tabs from '@material-ui/core/Tabs';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import * as Actions from './store/actions';
 import reducer from './store/reducers';
 import AttendanceTable from './shared/attendancetable';
@@ -57,12 +57,12 @@ function AttendanceDashboard(props) {
     }, [selected])
 
     useEffect(() => {
-        // console.log(activities, attendanceHistory)
+        console.log(activities, attendanceHistory)
     }, [activities, attendanceHistory])
 
     const handleSubmit = () => {
-        setOpen(false)
-        Actions.markAttendance(payload);
+        setOpen(false);
+        dispatch(Actions.markAttendance(payload));
     }
 
     const handleClose = () => {
@@ -175,7 +175,7 @@ function AttendanceDashboard(props) {
                                     >
                                         <MenuItem value={""}>Select activities</MenuItem>
                                         {activities.map(item => (
-                                            <MenuItem value={item.name} key={item.id}>{item.name}</MenuItem>
+                                            <MenuItem value={item.name} key={item.id}>{item.name}:&nbsp;&nbsp;&nbsp;<span className={"smallText"}>({item.type})</span></MenuItem>
                                         ))}
                                     </Select>
 
@@ -196,10 +196,14 @@ function AttendanceDashboard(props) {
             }
             content={
                 <Paper className="m-20">
-                    <AttendanceTable
-                        columns={columns}
-                        rows={attendanceHistory}
-                    />
+                    {
+                        useMemo(() =>
+                        (<AttendanceTable
+                            columns={columns}
+                            rows={attendanceHistory}
+                        />)
+                            , [columns, attendanceHistory])
+                    }
                 </Paper>
             }
             innerScroll
