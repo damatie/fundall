@@ -19,6 +19,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
+import SaveIcon from '@material-ui/icons/Save';
 import ActionMenu from './components/actionMenu';
 import MenuIcon from '@material-ui/icons/MoreVert';
 import Cancel from '@material-ui/icons/CancelRounded';
@@ -164,6 +165,10 @@ const SubFolderTable = (props) =>{
 
     const handleCloseRename = () =>{
         setRename(0);
+    }
+
+    const handleSaveChange = () =>{
+        setRename(0);
         const payload = {
             name,
             description
@@ -280,7 +285,7 @@ const SubFolderTable = (props) =>{
                                         style ={{height: "200"}}
 									>
                                         <TableCell className="max-w-64 w-64 p-0 text-center" onClick={event => {handleItemClick(event, n)}}>
-                                            <Icon className={clsx(classes.typeIcon, (n.folderId === 1 || n.documentMainFolder.name.toUpperCase().includes('PUBLIC')) ? 'folder_shared' : 'folder')} />
+                                            <Icon className={clsx(classes.typeIcon, (n.folderId === 1 || (n.documentMainFolder && n.documentMainFolder.name.toUpperCase().includes('PUBLIC'))) ? 'folder_shared' : 'folder')} />
                                         </TableCell>
 										<TableCell className="text-center" style={{padding: '0 16px'}}
                                             onClick={event => { handleItemClick(event, n)}}>
@@ -358,9 +363,17 @@ const SubFolderTable = (props) =>{
                                             {(n.employee) ? `${n.employee.firstName} ${n.employee.lastName}` : ''}
                                         </TableCell>
                                         <TableCell className="text-center" style={{padding: '0 16px'}}>
-                                        <IconButton aria-label="edit" onClick={(event) => {setSelected(n); handleOpenRename() }} disabled={parseInt(props.userId) !== n.createdBy}>
-                                            <EditIcon style={{color: (parseInt(props.userId) !== n.createdBy) ? 'grey' : 'skyblue'}} />
-                                        </IconButton>
+                                            {
+                                                (rename === n.id) ?
+                                                    <IconButton aria-label="save" onClick={(event) => {setSelected(n); handleSaveChange() }} >
+                                                        <SaveIcon style={{color: 'skyblue'}} />
+                                                    </IconButton>
+                                                :
+                                                    <IconButton aria-label="edit" onClick={(event) => {setSelected(n); handleOpenRename() }} disabled={parseInt(props.userId) !== n.createdBy}>
+                                                        <EditIcon style={{color: (parseInt(props.userId) !== n.createdBy) ? 'grey' : 'skyblue'}} />
+                                                    </IconButton>
+                                            }
+                                        
                                         <IconButton aria-label="delete" onClick={(event) => {setSelected(n); handleDelete(n.id, n.name)}} disabled={parseInt(props.userId) !== n.createdBy}>
                                             <DeleteIcon style={{color: (parseInt(props.userId) !== n.createdBy) ? 'grey' : 'red'}} />
                                         </IconButton> 

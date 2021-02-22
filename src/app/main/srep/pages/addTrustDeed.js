@@ -326,7 +326,7 @@ function AddTrustDeed(props) {
                                             <Typography className="font-bold mb-4 text-15">Relationship to Employee</Typography>
                                             <Typography>
                                                 {beneficiaryRelationship ? (
-                                                    beneficiaryRelationship
+                                                    beneficiaryRelationship.toUpperCase()
                                                 ) : (
                                                     <SkeletonLoader height="3em" width="60%" />
                                                 )}
@@ -383,7 +383,7 @@ function AddTrustDeed(props) {
                         <div className="sm:w-full mb-20">
                             {
                                 (isOnlyHr()) ?
-                                    <UploadTrustDeed srepId={id} employee={employee} srepOtherFiles={srepOtherFiles} setHideBtn={setHideBtn}/>
+                                    <UploadTrustDeed srepId={id} srepData={props.srepData} employee={employee} srepOtherFiles={srepOtherFiles} setHideBtn={setHideBtn}/>
                                 :
                                     <DownloadTrustDeed srepData={props.srepData} srepId={id} employee={employee} srepOtherFiles={srepOtherFiles}/>
                             }

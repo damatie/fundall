@@ -28,6 +28,7 @@ import RejectIcon from '@material-ui/icons/Cancel';
 import ApproveIcon from '@material-ui/icons/Check';
 import MenuIcon from '@material-ui/icons/Menu';
 import Grid from '@material-ui/core/Grid';
+import {formatCurrency} from 'app/shared/formatCurrency';
 const useStyles = makeStyles({
 	table: {
 		'& th': {
@@ -309,6 +310,10 @@ const SrepTable = (props) =>{
                                         <TableCell className="text-center" style={{padding: '0 16px'}}
 										onClick={event => {handleItemClick(event, n); setOpen(true) }}>
                                             {(n.employee) ? getEntity(n.employee.entityId) : ''}  
+                                        </TableCell>
+                                        <TableCell className="text-center" style={{padding: '0 16px'}}
+										onClick={event => {handleItemClick(event, n); setOpen(true) }}>
+                                            {(n) ? CheckStatus(n.status) : ''}  
                                         </TableCell>
                                         <TableCell className="text-center" style={{padding: '0 16px'}}>
                                         <IconButton aria-label="delete" onClick={(event) => handleDelete(event, n.id)} disabled={parseInt(props.userId) !== n.employeeId || n.status !== 'pending'}>

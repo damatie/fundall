@@ -530,11 +530,19 @@ const navigationConfig = [
 			},
 			{
 				id: 'listSREP',
+				title: 'My Application',
+				type: 'item',
+				url: '/srep/myapplications',
+				icon: 'list_alt',
+				auth: authRoles?.staff
+			},
+			{
+				id: 'listSREPs',
 				title: 'All Application',
 				type: 'item',
 				url: '/srep/all',
 				icon: 'list_alt',
-				auth: authRoles?.staff
+				auth: authRoles?.admin
 			},
 		]
 	},
