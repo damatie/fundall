@@ -239,9 +239,17 @@ function CreateForm(props) {
 										name={"capital_fund"}
 										helperText={'₦1,000 is the minimum amount allowed'}
 										// label={"Amount requested"}
+										validations={{
+											minLength: 4
+										}}
+										error={amount <= 999}
+										validationErrors={{
+											minLength: 'Min character length is 1'
+										}}
 										required
 									/>
 								</div>
+								<Typography variant='h5' className="mt-16 mb-8">Beneficiary Details</Typography>
 								</GridSystem>
 								<Typography variant='h5' className="mt-16 mb-8">Beneficiary Details</Typography>
 								<GridSystem>

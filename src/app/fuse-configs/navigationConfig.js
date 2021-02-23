@@ -517,7 +517,7 @@ const navigationConfig = [
 				type: 'item',
 				url: '/srep/all',
 				icon: 'list_alt',
-				auth: authRoles?.admin
+				auth: authRoles?.mainManager
 			},
 		]
 	},
