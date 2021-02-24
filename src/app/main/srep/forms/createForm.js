@@ -135,7 +135,7 @@ function CreateForm(props) {
 								<Icon
 									className="text-20 text-black bg-white rounded-20"
 									component={Link}
-									  to='/srep/all'
+									  to='/srep/myapplications'
 									role="button"
 								>
 									{theme.direction === 'ltr' ? 'arrow_back' : 'arrow_forward'}

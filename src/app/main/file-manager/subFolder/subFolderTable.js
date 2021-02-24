@@ -317,7 +317,7 @@ const SubFolderTable = (props) =>{
                                                         handleDelete={handleDelete}
                                                         anchorEl={anchorEl}
                                                         folderId={selected && selected.folderId}
-                                                        documentMainFolderName={selected ? selected.documentMainFolder.name : ''}
+                                                        documentMainFolderName={(selected && selected.documentMainFolder) ? selected.documentMainFolder.name : ''}
                                                         roles={(selected) ? props.roles.filter(role => !selected.access.includes(role.id.toString())) : []}
                                                     />
                                                     <FolderDetails 
