@@ -39,6 +39,7 @@ function CreateForm(props) {
 
 	const [isFormValid, setIsFormValid] = useState(true);
 	const [file, setFile] = useState('');
+	const [hasChange, setHasChange] = useState(false);
 	const [dob, setDob] = useState(moment(new Date()));
 	const [identity, setIdentity] = useState('');
 	const [benIdentity, setBenIdentity] = useState('');
@@ -235,21 +236,20 @@ function CreateForm(props) {
 									/> */}
 									<CurrencyInput
 										values={amount}
-										handleChange={e => setAmount(e.target.value)}
+										handleChange={e => { setAmount(e.target.value); setHasChange(true) }}
 										name={"capital_fund"}
 										helperText={'₦1,000 is the minimum amount allowed'}
 										// label={"Amount requested"}
 										validations={{
 											minLength: 4
 										}}
-										error={amount <= 999}
+										error={amount <= 999 && hasChange === true}
 										validationErrors={{
 											minLength: 'Min character length is 1'
 										}}
 										required
 									/>
 								</div>
-								<Typography variant='h5' className="mt-16 mb-8">Beneficiary Details</Typography>
 								</GridSystem>
 								<Typography variant='h5' className="mt-16 mb-8">Beneficiary Details</Typography>
 								<GridSystem>
