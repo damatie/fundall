@@ -9,7 +9,7 @@ import TableRow from '@material-ui/core/TableRow';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Tooltip from '@material-ui/core/Tooltip';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const AttendanceTable = (props) => {
     const [data, setData] = useState(props.rows);

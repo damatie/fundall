@@ -54,6 +54,7 @@ import PermissionConfig from 'app/main/permission/PermissionConfig';
 import EmployeeMgtConfig from 'app/main/employeeManagement/employeeMgtConfig';
 import EmployeeInformationConfig from 'app/main/employeeInformation/employeeInformationConfig';
 import AttendanceConfig from 'app/main/attendance/attendanceConfig';
+import ExitManagement from 'app/main/exitMgt/exitConfig';
 import CompensationColumnsConfig from 'app/main/compensationColumns/CompensationColumnsConfig';
 
 const routeConfigs = [
@@ -65,6 +66,7 @@ const routeConfigs = [
 	EmployeeLoginConfig,
 	HrConfirmConfig,
 	EmployeeManagementConfig,
+	ExitManagement,
 	// EmployeeProfilePageConfig,
 	EmployeeOnboardingConfig,
 	LeaveTypeConfig,

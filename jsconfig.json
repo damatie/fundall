@@ -4,5 +4,5 @@
     },
     "include": [
         "src"
-    ]
+, "src/app/main/exitMgt/.js"    ]
 }

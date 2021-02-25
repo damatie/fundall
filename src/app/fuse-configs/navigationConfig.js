@@ -89,6 +89,38 @@ const navigationConfig = [
 		]
 	},
 	{
+		id: 'exitMgt',
+		title: 'Exit Management',
+		translate: 'Exit Management',
+		type: 'group',
+		children: [
+			{
+				id: 'employee_exit_dashboard',
+				title: 'Dashboard',
+				type: 'item',
+				url: '/exit/home',
+				icon: 'add_comment',
+				auth: authRoles.staff,
+			},
+			{
+				id: 'line_manager_exit_dashboard',
+				title: 'Department Dashboard',
+				type: 'item',
+				url: '/exit/list/department',
+				icon: 'add_comment',
+				auth: authRoles.lineManager,
+			},
+			{
+				id: 'admin_exit_dashboard',
+				title: 'Admin Dashboard',
+				type: 'item',
+				url: '/exit/list/company',
+				icon: 'add_comment',
+				auth: authRoles.admin
+			}
+		]
+	},
+	{
 		id: 'attendance',
 		title: 'Attandance Management',
 		translate: 'Attandance Management',
@@ -96,7 +128,7 @@ const navigationConfig = [
 		children: [
 			{
 				id: 'attendance_dashboard',
-				title: 'Dashboard',
+				title: 'Personal Dashboard',
 				type: 'item',
 				url: '/attendance/dashboard',
 				icon: 'add_comment',
@@ -104,7 +136,7 @@ const navigationConfig = [
 			},
 			{
 				id: 'attendance_list',
-				title: 'Attendance',
+				title: 'Attendance Dashboard',
 				type: 'item',
 				url: '/activity/list',
 				icon: 'add_comment',

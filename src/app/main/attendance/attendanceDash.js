@@ -198,10 +198,11 @@ function AttendanceDashboard(props) {
                 <Paper className="m-20">
                     {
                         useMemo(() =>
-                        (<AttendanceTable
-                            columns={columns}
-                            rows={attendanceHistory}
-                        />)
+                        (
+                            <AttendanceTable
+                                columns={columns}
+                                rows={attendanceHistory}
+                            />)
                             , [columns, attendanceHistory])
                     }
                 </Paper>
