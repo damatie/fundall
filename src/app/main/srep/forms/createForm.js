@@ -39,6 +39,7 @@ function CreateForm(props) {
 
 	const [isFormValid, setIsFormValid] = useState(true);
 	const [file, setFile] = useState('');
+	const [hasChange, setHasChange] = useState(false);
 	const [dob, setDob] = useState(moment(new Date()));
 	const [identity, setIdentity] = useState('');
 	const [benIdentity, setBenIdentity] = useState('');
@@ -134,7 +135,7 @@ function CreateForm(props) {
 								<Icon
 									className="text-20 text-black bg-white rounded-20"
 									component={Link}
-									  to='/srep/all'
+									  to='/srep/myapplications'
 									role="button"
 								>
 									{theme.direction === 'ltr' ? 'arrow_back' : 'arrow_forward'}
@@ -235,10 +236,17 @@ function CreateForm(props) {
 									/> */}
 									<CurrencyInput
 										values={amount}
-										handleChange={e => setAmount(e.target.value)}
+										handleChange={e => { setAmount(e.target.value); setHasChange(true) }}
 										name={"capital_fund"}
 										helperText={'₦1,000 is the minimum amount allowed'}
 										// label={"Amount requested"}
+										validations={{
+											minLength: 4
+										}}
+										error={amount <= 999 && hasChange === true}
+										validationErrors={{
+											minLength: 'Min character length is 1'
+										}}
 										required
 									/>
 								</div>
