@@ -14,7 +14,7 @@ import SpouseAndDependants, { AddSpouseAndDependant } from './components/SpouseA
 import { useSelector, useDispatch } from 'react-redux';
 import * as Actions from 'app/store/actions';
 import { openSharedModal, CLOSE_SHARED_MODAL } from './store/actions';
-import EmployeeNextOfKin from './components/EmployeeNextOfKin';
+import EmployeeNextOfKin, { AddEmployeeNextOfKin } from './components/EmployeeNextOfKin';
 
 const EmployeeBasicInformation = () => {
   const authState = useSelector(state => state.auth.user);
@@ -79,6 +79,7 @@ const EmployeeBasicInformation = () => {
         {title === 'Educational Qualification' && (<AddEducationalQualification />)}
         {title === 'Emergency Contact' && (<AddEmergencyContact />)}
         {title === 'Spouse / Dependants' && (<AddSpouseAndDependant />)}
+        {title === 'Employee Next of Kin' && (<AddEmployeeNextOfKin />)}
       </SharedModal>
     </>
   );

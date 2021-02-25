@@ -12,7 +12,8 @@ import * as Actions from 'app/store/actions';
 import 'react-phone-input-2/lib/material.css';
 import PhoneInput from 'react-phone-input-2';
 import startsWith from 'lodash.startswith';
-import Typography from '@material-ui/core/Typography'
+import Typography from '@material-ui/core/Typography';
+import userPermission from '../logic/userPermission';
 
 const EmployeeProfile = ({ value, authState }) => {
   const { countries, states } = useSelector(state => state.regions);
@@ -128,9 +129,11 @@ const EmployeeProfile = ({ value, authState }) => {
 
   const dispatch = useDispatch();
 
-  React.useEffect(() => {
-    console.log(value);
-  }, [value]);
+  const { canEdit } = userPermission({
+    role: authState.role,
+    userId: authState.id,
+    profileId: value.employeeId,
+  });
 
   React.useEffect(() => {
     dispatch(Actions.getCountries());
@@ -156,13 +159,13 @@ const EmployeeProfile = ({ value, authState }) => {
     <BasicCard
       title='Employee Profile'
       button={
-        <SharedButton
+        canEdit() && (<SharedButton
           color='secondary'
           variant='contained'
           onClick={handleShouldUpdate}
         >
           {shouldUpdate ? 'Cancel' : 'Edit'}
-        </SharedButton>
+        </SharedButton>)
       }
     >
       <form onSubmit={handleSubmit(onSubmit)}>

@@ -12,15 +12,33 @@ import useTrainingAndExpertise from '../hooks/useTraining';
 import { useDispatch, useSelector } from 'react-redux';
 import { Controller } from 'react-hook-form';
 import { getTrainingAndExpertise } from '../store/actions';
+import { useParams } from 'react-router';
+import userPermission from '../logic/userPermission';
 
 const TrainingAndExpertise = ({ handleOpen }) => {
   const [shouldUpdate, setShouldUpdate] = React.useState(false);
 
-  const { data } = useSelector(state => state.employeeInformation.training);
+  const params = useParams();
+  const authState = useSelector(state => state.auth.user);
+  const getUserId = !!params?.id ? params?.id : authState.id;
+
+  const {
+    training: { data },
+    employeeInfo: {
+      info: { employeeId }
+    }
+  } = useSelector(state => state.employeeInformation);
+
   const dispatch = useDispatch();
 
+  const { canDelete, canEdit, canAdd } = userPermission({
+    role: authState.role,
+    userId: authState.id,
+    profileId: employeeId,
+  });
+
   React.useEffect(() => {
-    dispatch(getTrainingAndExpertise());
+    dispatch(getTrainingAndExpertise(getUserId));
   }, []);
 
   return (
@@ -28,21 +46,31 @@ const TrainingAndExpertise = ({ handleOpen }) => {
       title='Training And Expertise'
       button={
         <>
-          <SharedButton
-            variant='outlined'
-            color='secondary'
-            onClick={handleOpen('Training And Expertise')}
-            className='mx-16'
-          >
-            Add
-          </SharedButton>
-          <SharedButton
-            variant='contained'
-            color='secondary'
-            onClick={() => setShouldUpdate(!shouldUpdate)}
-          >
-            {shouldUpdate ? 'Cancel' : 'Edit'}
-          </SharedButton>
+          <>
+            {
+              canAdd() && (<SharedButton
+                variant='outlined'
+                color='secondary'
+                onClick={handleOpen('Training And Expertise')}
+                className='mx-16'
+              >
+                Add
+              </SharedButton>)
+            }
+          </>
+          <>
+            {
+              canEdit() && (
+                <SharedButton
+                  variant='contained'
+                  color='secondary'
+                  onClick={() => setShouldUpdate(!shouldUpdate)}
+                >
+                  {shouldUpdate ? 'Cancel' : 'Edit'}
+                </SharedButton>)
+            }
+
+          </>
         </>
       }
     >
@@ -53,13 +81,14 @@ const TrainingAndExpertise = ({ handleOpen }) => {
           index={index}
           shouldUpdate={shouldUpdate}
           setShouldUpdate={setShouldUpdate}
+          canDelete={canDelete}
         />
       ))}
     </BasicCard>
   );
 };
 
-const TrainingAndExpertiseDetails = ({ item, index, setShouldUpdate, shouldUpdate }) => {
+const TrainingAndExpertiseDetails = ({ item, index, setShouldUpdate, shouldUpdate, canDelete }) => {
   const inputs = React.useMemo(() => [
     {
       name: 'training',
@@ -75,6 +104,12 @@ const TrainingAndExpertiseDetails = ({ item, index, setShouldUpdate, shouldUpdat
     },
   ], []);
 
+  const {
+    employeeInfo: {
+      info: { employeeId }
+    }
+  } = useSelector(state => state.employeeInformation);
+
   const dispatch = useDispatch();
 
   const {
@@ -85,7 +120,8 @@ const TrainingAndExpertiseDetails = ({ item, index, setShouldUpdate, shouldUpdat
     handleDelete,
     control
   } = useTrainingAndExpertise({
-    dispatch
+    dispatch,
+    employeeId
   })
 
   const close = () => {
@@ -95,11 +131,11 @@ const TrainingAndExpertiseDetails = ({ item, index, setShouldUpdate, shouldUpdat
     <>
       <div className='flex flex-row items-center my-20'>
         <Typography variant="subtitle1" color="initial">Training And Expertise ({index + 1})</Typography>
-        <IconButton
+        {canDelete() && (<IconButton
           aria-label="delete"
           onClick={() => handleDelete(item.id)}>
           <Icon className='text-red-500'>delete</Icon>
-        </IconButton>
+        </IconButton>)}
       </div>
       <form onSubmit={handleSubmit(onSubmit(item.id, close))}>
         {/* <GridSystem> */}
@@ -172,6 +208,12 @@ export const AddTrainingAndExpertise = () => {
     },
   ], []);
 
+  const {
+    employeeInfo: {
+      info: { employeeId }
+    }
+  } = useSelector(state => state.employeeInformation);
+
   const dispatch = useDispatch();
 
   const {
@@ -181,7 +223,8 @@ export const AddTrainingAndExpertise = () => {
     handleSubmit,
     control
   } = useTrainingAndExpertise({
-    dispatch
+    dispatch,
+    employeeId
   })
 
   return (

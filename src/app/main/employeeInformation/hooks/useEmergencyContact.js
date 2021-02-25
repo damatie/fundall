@@ -89,7 +89,7 @@ const schema = yup.object().shape({
   ),
 });
 
-const useEmergencyContact = ({ dispatch }) => {
+const useEmergencyContact = ({ dispatch, employeeId }) => {
   const {
     errors,
     register,
@@ -102,15 +102,15 @@ const useEmergencyContact = ({ dispatch }) => {
 
   const onSubmit = (id, close) => (formData) => {
     if(id) {
-      dispatch(updateEmergencyContact({ id, data:formData }));
+      dispatch(updateEmergencyContact({ id, data:formData, employeeId }));
       close();
       return;
     }
-    dispatch(addEmergencyContact(formData));
+    dispatch(addEmergencyContact({formData, employeeId}));
   };
 
   const handleDelete = (id) => {
-    dispatch(deleteEmergencyContact(id));
+    dispatch(deleteEmergencyContact({id, employeeId}));
   };
   
   return {

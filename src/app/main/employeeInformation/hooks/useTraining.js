@@ -34,7 +34,7 @@ const schema = yup.object().shape({
   ),
 });
 
-const useTrainingAndExpertise = ({ dispatch }) => {
+const useTrainingAndExpertise = ({ dispatch, employeeId }) => {
   const {
     errors,
     control,
@@ -47,15 +47,15 @@ const useTrainingAndExpertise = ({ dispatch }) => {
 
   const onSubmit = (id, close) => (formData) => {
     if(id) {
-      dispatch(updateTrainingAndExpertise({ id, data:formData }));
+      dispatch(updateTrainingAndExpertise({ id, data:formData, employeeId }));
       close();
       return;
     }
-    dispatch(addTrainingAndExpertise(formData));
+    dispatch(addTrainingAndExpertise({formData, employeeId}));
   };
 
   const handleDelete = (id) => {
-    dispatch(deleteTrainingAndExpertise(id));
+    dispatch(deleteTrainingAndExpertise({id, employeeId}));
   };
   
   return {

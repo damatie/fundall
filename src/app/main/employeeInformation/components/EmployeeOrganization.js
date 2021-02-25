@@ -11,10 +11,12 @@ import SharedButton from 'app/shared/button/SharedButton';
 import { useSelector, useDispatch } from 'react-redux';
 import useEmployeeOrganization from '../hooks/useEmployeeOrganization';
 import { DatePicker } from '@material-ui/pickers';
+import userPermission from '../logic/userPermission';
 
 const EmployeeOrganization = ({ value, authState }) => {
   const { entities, departments, jobTitles } = useSelector(state => state.employeeInformation.organization);
   const dispatch = useDispatch();
+  
   const inputs = React.useMemo(() => [
     {
       name: 'entityId',
@@ -113,6 +115,12 @@ const EmployeeOrganization = ({ value, authState }) => {
     }
   ], [entities, departments, jobTitles]);
 
+  const { canEdit } = userPermission({
+    role: authState.role,
+    userId: authState.id,
+    profileId: value.employeeId,
+  });
+
   const {
     handleMenuItemClick,
     errors,
@@ -138,13 +146,13 @@ const EmployeeOrganization = ({ value, authState }) => {
     <BasicCard
       title='Organization'
       button={
-        <SharedButton
+        canEdit() && (<SharedButton
           color='secondary'
           variant='contained'
           onClick={handleShouldUpdate}
         >
           {shouldUpdate ? 'Cancel' : 'Edit'}
-        </SharedButton>
+        </SharedButton>)
       }
     >
       <form onSubmit={handleSubmit(onSubmit)}>

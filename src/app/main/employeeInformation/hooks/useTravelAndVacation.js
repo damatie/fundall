@@ -56,7 +56,7 @@ const schema = yup.object().shape({
   ),
 });
 
-const useTravelAndVacation = ({ dispatch }) => {
+const useTravelAndVacation = ({ dispatch, employeeId }) => {
   const {
     errors,
     register,
@@ -69,15 +69,15 @@ const useTravelAndVacation = ({ dispatch }) => {
 
   const onSubmit = (id, close) => (formData) => {
     if(id) {
-      dispatch(updateTravelAndVacation({ id, data:formData }));
+      dispatch(updateTravelAndVacation({ id, data:formData, employeeId }));
       close();
       return;
     }
-    dispatch(addTravelAndVacation(formData));
+    dispatch(addTravelAndVacation({formData, employeeId}));
   };
 
   const handleDelete = (id) => {
-    dispatch(deleteTravelAndVacation(id));
+    dispatch(deleteTravelAndVacation({id, employeeId}));
   };
   
   return {

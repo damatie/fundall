@@ -4,81 +4,103 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import errorMsg from 'utils/errorMsg';
 import {
-  addEducation,
-  deleteEducation,
-  updateEducation,
+  addNextOfKin,
+  deleteNextOfKin,
+  updateNextOfKin,
 } from '../store/actions';
 
 const schema = yup.object().shape({
-  school: yup.string(
+  firstName: yup.string(
     errorMsg({
-      name: 'School',
+      name: 'First Name',
       type: 'string',
     })
   ).required(
     errorMsg({
-      name: 'School',
+      name: 'First Name',
       type: 'required',
     })
   ),
-  department: yup.string(
+  lastName: yup.string(
     errorMsg({
-      name: 'Department',
+      name: 'Last Name',
       type: 'string',
     })
   ).required(
     errorMsg({
-      name: 'Department',
+      name: 'Last Name',
       type: 'required',
     })
   ),
-  qualification: yup.string(
+  birthday: yup.string(
     errorMsg({
-      name: 'Qualification',
+      name: 'Birthday',
       type: 'string',
     })
   ).required(
     errorMsg({
-      name: 'Qualification',
+      name: 'Birthday',
       type: 'required',
     })
   ),
-  grade: yup.string(
+  phoneNo: yup.string(
     errorMsg({
-      name: 'Grade',
+      name: 'Contact Number',
       type: 'string',
     })
   ).required(
     errorMsg({
-      name: 'Grade',
+      name: 'Contact Number',
       type: 'required',
     })
   ),
-  startYear: yup.string(
+  address: yup.string(
     errorMsg({
-      name: 'Start Date',
+      name: 'Address',
       type: 'string',
     })
   ).required(
     errorMsg({
-      name: 'Start Date',
+      name: 'Address',
       type: 'required',
     })
   ),
-  endYear: yup.string(
+  nationality: yup.string(
     errorMsg({
-      name: 'End Date',
+      name: 'Nationality',
       type: 'string',
     })
   ).required(
     errorMsg({
-      name: 'End Date',
+      name: 'Nationality',
+      type: 'required',
+    })
+  ),
+  gender: yup.string(
+    errorMsg({
+      name: 'Gender',
+      type: 'string',
+    })
+  ).required(
+    errorMsg({
+      name: 'Gender',
+      type: 'required',
+    })
+  ),
+  relationship: yup.string(
+    errorMsg({
+      name: 'Relationship',
+      type: 'string',
+    })
+  ).required(
+    errorMsg({
+      name: 'Relationship',
       type: 'required',
     })
   ),
 });
 
-const useEducation = ({ dispatch, employeeId }) => {
+const useNextOfKin = ({ dispatch, employeeId }) => {
   const {
     errors,
     register,
@@ -91,17 +113,17 @@ const useEducation = ({ dispatch, employeeId }) => {
 
   const onSubmit = (id, close) => (formData) => {
     if(id) {
-      dispatch(updateEducation({ id, data:formData, employeeId }));
+      dispatch(updateNextOfKin({ id, data:formData, employeeId }));
       close();
       return;
     }
-    dispatch(addEducation({formData, employeeId}));
+    dispatch(addNextOfKin({formData, employeeId}));
   };
 
   const handleDelete = (id) => {
-    dispatch(deleteEducation({id, employeeId}));
+    dispatch(deleteNextOfKin({id, employeeId}));
   };
-
+  
   return {
     onSubmit,
     handleDelete,
@@ -112,4 +134,4 @@ const useEducation = ({ dispatch, employeeId }) => {
   };
 };
 
-export default useEducation;
+export default useNextOfKin;

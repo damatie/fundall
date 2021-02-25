@@ -6,10 +6,10 @@ import { CLOSE_SHARED_MODAL } from './employeeInfo.actions';
 
 export const GET_EDUCATIONS = 'GET EDUCATIONS';
 
-export const getEducation = () => {
+export const getEducation = (id) => {
   return async (dispatch) => {
     try {
-      const { data: { data } } = await api.get('/eduQualification/');
+      const { data: { data } } = await api.get(`/eduQualification/${id}`);
       dispatch({
         type: GET_EDUCATIONS,
         payload: data || []
@@ -23,17 +23,17 @@ export const getEducation = () => {
   }
 };
 
-export const addEducation = (value) => {
+export const addEducation = ({formData, employeeId}) => {
   return async (dispatch) => {
     try {
       loading('Saving...');
-      const { data: { data, message } } = await api.post('/eduQualification/', value);
+      const { data: { data, message } } = await api.post('/eduQualification/', formData);
       swal.fire({
         text: message,
         icon: 'success',
         timer: 1500
       });
-      dispatch(getEducation());
+      dispatch(getEducation(employeeId));
       dispatch({
         type: CLOSE_SHARED_MODAL
       });
@@ -47,7 +47,7 @@ export const addEducation = (value) => {
   }
 };
 
-export const updateEducation = ({id, data}) => {
+export const updateEducation = ({id, data, employeeId}) => {
   return async (dispatch) => {
     try {
       loading('Updating...');
@@ -57,7 +57,7 @@ export const updateEducation = ({id, data}) => {
         icon: 'success',
         timer: 1500
       });
-      dispatch(getEducation());
+      dispatch(getEducation(employeeId));
     } catch (e) {
       swal.fire({
         text: catchErrorMsg(e),
@@ -68,7 +68,7 @@ export const updateEducation = ({id, data}) => {
   }
 };
 
-export const deleteEducation = (id) => {
+export const deleteEducation = ({id,employeeId}) => {
   return async (dispatch) => {
     try {
       swal.fire({
@@ -87,7 +87,7 @@ export const deleteEducation = (id) => {
             text: message,
             icon: 'success',
           });
-          dispatch(getEducation());
+          dispatch(getEducation(employeeId));
         }
       });
     } catch (e) {

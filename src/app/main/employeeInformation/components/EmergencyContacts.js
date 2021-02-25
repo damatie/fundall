@@ -17,14 +17,33 @@ import useEmergencyContact from '../hooks/useEmergencyContact';
 import { Controller } from 'react-hook-form';
 import { getEmergencyContact } from '../store/actions';
 import { getCountries } from 'app/store/actions';
+import { useParams } from 'react-router';
+import userPermission from '../logic/userPermission';
 
 const EmergencyContacts = ({ handleOpen }) => {
   const [shouldUpdate, setShouldUpdate] = React.useState(false);
+
+  const params = useParams();
+  const authState = useSelector(state => state.auth.user);
+  let getUserId = params?.id ||  authState.id;
+
+  const {
+    emergencyContact: { data },
+    employeeInfo: {
+      info: { employeeId }
+    }
+  } = useSelector(state => state.employeeInformation);
+
   const dispatch = useDispatch();
-  const { data } = useSelector(state => state.employeeInformation.emergencyContact);
+
+  const { canDelete, canEdit, canAdd } = userPermission({
+    role: authState.role,
+    userId: authState.id,
+    profileId: employeeId,
+  });
 
   React.useEffect(() => {
-    dispatch(getEmergencyContact());
+    dispatch(getEmergencyContact(getUserId));
     dispatch(getCountries());
   }, []);
 
@@ -34,21 +53,31 @@ const EmergencyContacts = ({ handleOpen }) => {
       title='Emergency Contact'
       button={
         <>
-          <SharedButton
-            variant='outlined'
-            color='secondary'
-            onClick={handleOpen('Emergency Contact')}
-            className='mx-16'
-          >
-            Add
-          </SharedButton>
-          <SharedButton
-            variant='contained'
-            color='secondary'
-            onClick={() => setShouldUpdate(!shouldUpdate)}
-          >
-            {shouldUpdate ? 'Cancel' : 'Edit'}
-          </SharedButton>
+          <>
+            {
+              canAdd() && (<SharedButton
+                variant='outlined'
+                color='secondary'
+                onClick={handleOpen('Emergency Contact')}
+                className='mx-16'
+              >
+                Add
+              </SharedButton>)
+            }
+          </>
+          <>
+            {
+              canEdit() && (
+                <SharedButton
+                  variant='contained'
+                  color='secondary'
+                  onClick={() => setShouldUpdate(!shouldUpdate)}
+                >
+                  {shouldUpdate ? 'Cancel' : 'Edit'}
+                </SharedButton>)
+            }
+
+          </>
         </>
       }
     >
@@ -59,14 +88,21 @@ const EmergencyContacts = ({ handleOpen }) => {
           index={index}
           shouldUpdate={shouldUpdate}
           setShouldUpdate={setShouldUpdate}
+          canDelete={canDelete}
         />
       ))}
     </BasicCard>
   );
 };
 
-const EmergencyContactsDetails = ({ item, index, setShouldUpdate, shouldUpdate }) => {
+const EmergencyContactsDetails = ({ item, index, setShouldUpdate, shouldUpdate, canDelete }) => {
   const { countries } = useSelector(state => state.regions);
+
+  const {
+    employeeInfo: {
+      info: { employeeId }
+    }
+  } = useSelector(state => state.employeeInformation);
 
   const dispatch = useDispatch();
 
@@ -145,6 +181,7 @@ const EmergencyContactsDetails = ({ item, index, setShouldUpdate, shouldUpdate }
     },
   ], [countries]);
 
+
   const close = () => {
     setShouldUpdate(false);
   }
@@ -158,17 +195,18 @@ const EmergencyContactsDetails = ({ item, index, setShouldUpdate, shouldUpdate }
     control
   } = useEmergencyContact({
     dispatch,
+    employeeId
   })
 
   return (
     <>
       <div className='flex flex-row items-center my-20'>
         <Typography variant="subtitle1" color="initial">Emergency Contact ({index + 1})</Typography>
-        <IconButton
+        {canDelete() && (<IconButton
           aria-label="delete"
           onClick={() => handleDelete(item.id)}>
           <Icon className='text-red-500'>delete</Icon>
-        </IconButton>
+        </IconButton>)}
       </div>
       <form onSubmit={handleSubmit(onSubmit(item.id, close))}>
         <GridSystem>
@@ -347,6 +385,12 @@ export const AddEmergencyContact = () => {
   ], [countries]);
 
   const {
+    employeeInfo: {
+      info: { employeeId }
+    }
+  } = useSelector(state => state.employeeInformation);
+
+  const {
     onSubmit,
     errors,
     register,
@@ -354,6 +398,7 @@ export const AddEmergencyContact = () => {
     control
   } = useEmergencyContact({
     dispatch,
+    employeeId
   })
 
   return (
