@@ -12,6 +12,7 @@ import BarChart from 'app/shared/charts/BarChart';
 import EnhancedTable from 'app/shared/table/EnhancedTable';
 import Paper from '@material-ui/core/Paper';
 import SelectTextField from 'app/shared/TextInput/SelectTextField';
+import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import Grid from '@material-ui/core/Grid';
 import * as Actions from '../store/actions';
@@ -59,9 +60,10 @@ function EmployeeSrepDashboard(props) {
   const dispatch = useDispatch();
 	const srep = useSelector(({ srep }) => srep.srep.data);
 
-	const rows = (srep) ? (srep.srep) ? srep.srep : [] : [];
+	const rows = React.useMemo(
+    () => (srep) ? (srep.srep) ? srep.srep : [] : []);
   const [data, setData] = useState(rows);
-  const [filter, setFilter] = useState('');
+  const [filter, setFilter] = useState('all');
 
   console.log({data})
 
@@ -105,6 +107,14 @@ function EmployeeSrepDashboard(props) {
 		dispatch(Actions.getSrepByEmployeeID(userId));
 	}, [dispatch]);
 
+  useEffect(() => {
+		if (filter !== '' || filter !== 'all') {
+      setData(_.filter(rows, row => row.status.toLowerCase() === filter.toLowerCase()));
+		} else {
+			setData(rows);
+		}
+	}, [filter]);
+
   const handleClick = (event, value) => {
     console.log(value);
     // props.history.push(`/srep/details/${value.original.id}`);
@@ -116,17 +126,23 @@ function EmployeeSrepDashboard(props) {
     });
   }
 
+  const handleFilter = (event) => {
+    console.log(event.target.value);
+    setFilter(event.target.value);
+  }
+
   return (
-    <SimplePage title='EMPLOYEE SREP DASHBOARD'>
+    <SimplePage title='EMPLOYEE SREP DASHBOARD' backBtn >
       <Paper className='p-20 mx-10 rounded-8'>
       <Grid container spacing={1} alignItems='center'>
           <Grid item lg={2}>
             <SelectTextField
               value={'all'}
               size='small'
+              value={filter} onChange={ev => handleFilter(ev)}
             >
               {['all', 'Approved', 'Pending', 'Rejected'].map(item => (
-                <MenuItem value={item}>
+                <MenuItem value={item} key={item}>
                   {item}
                 </MenuItem>
               ))}
@@ -138,7 +154,7 @@ function EmployeeSrepDashboard(props) {
         </Grid>
         <EnhancedTable
           columns={columns}
-          data={rows}
+          data={(filter !== 'all') ? data : rows}
           onRowClick={handleClick}
         />
       </Paper>

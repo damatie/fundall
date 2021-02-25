@@ -44,7 +44,7 @@ const useStyles = makeStyles(theme => ({
 
 function SimplePage(props) {
 	
-  const { title, children, onClick } = props;
+  const { title, children, onClick, backBtn } = props;
   const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
 
 	const classes = useStyles(props);
@@ -66,9 +66,11 @@ function SimplePage(props) {
 					<Icon className={classes.headerIcon}> school </Icon>
 				</div>
 				<div className={classes.header}>
-					<IconButton className={classes.previousBtn} aria-label="go back" component="span" onClick={onClick}>
-						<ArrowBackIcon />
-					</IconButton>
+					{!backBtn &&
+						<IconButton className={classes.previousBtn} aria-label="go back" component="span" onClick={onClick}>
+							<ArrowBackIcon />
+						</IconButton>
+					}
 				</div>
 				<div className="flex flex-col flex-1 w-full mx-auto px-8 sm:px-16 py-24">
             { children }
