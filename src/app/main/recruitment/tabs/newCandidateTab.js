@@ -56,8 +56,8 @@ function AddCandidate(props) {
 				variant="outlined"
 				required
 				requiredError='Must not be None'
-				// value={details[input.name]}
-				// onChange={(e) => handleChange(input.name, e.target.value)}
+			// value={details[input.name]}
+			// onChange={(e) => handleChange(input.name, e.target.value)}
 			>
 				{input.data.map((item, i) => (
 					<MenuItem value={item} key={i}>{item}</MenuItem>
@@ -101,6 +101,7 @@ function AddCandidate(props) {
 				<GridSystem>
 					{recruitmentForm}
 				</GridSystem>
+				
 				<Typography variant='body1' className="mt-16 mb-8">Upload resume *</Typography>
 				<DropZone setValue={setFile} />
 				<ProgressBtn success={candidate.success} loading={candidate.loading} content='Add candidate' disable={!isFormValid || file.length === 0} />

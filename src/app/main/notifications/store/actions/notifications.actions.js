@@ -22,6 +22,13 @@ export const getNotifications = () => {
             type: GET_NOTIFICATIONS,
             payload: desSort(data.data)
           });
+        } else {
+          if (localStorage.getItem("jwt_access_token") && data.message === "Invalid Token") {
+            localStorage.clear();
+            
+            console.log(localStorage.getItem("jwt_access_token"))
+            // window.location.href = "/";
+          }
         }
       }
     ).catch(e => console.error(e));

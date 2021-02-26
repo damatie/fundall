@@ -132,7 +132,7 @@ function Recruitment(props) {
 	useEffect(() => {
 		dispatch(Actions.getAllOpenPositions());
 		dispatch(Actions.getEntities());
-	}, [])
+	}, [dispatch])
 
 	useEffect(() => {
 		setApprovedRows(rows.filter(row => row.recruiter !== null));

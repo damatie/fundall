@@ -75,18 +75,18 @@ function MainBlog() {
 	console.log(data);
 	const blogPost = data.length > 0
 		? data.map(blog => {
-				return blog.post;
-		  })
+			return blog.post;
+		})
 		: Array.from(posts).map(blog => {
-				return blog.post;
-		  });
+			return blog.post;
+		});
 	const blogAuthor = data
 		? Array.from(data).map(blog => {
-				return blog.author;
-		  })
+			return blog.author;
+		})
 		: Array.from(posts).map(blog => {
-				return blog.author;
-		  });
+			return blog.author;
+		});
 
 	useEffect(() => {
 		dispatch(Actions.getPosts(rowsPerPage, 0));
@@ -115,8 +115,8 @@ function MainBlog() {
 
 	const handleChangePage = (event, value) => {
 		console.log(value);
-		let newPage = value-1;
-		dispatch(Actions.getPosts(rowsPerPage, newPage*rowsPerPage));
+		let newPage = value - 1;
+		dispatch(Actions.getPosts(rowsPerPage, newPage * rowsPerPage));
 		// scroll.scrollToTop();
 		setPage(value);
 		// window.scrollTo(0,0);
@@ -194,19 +194,19 @@ function MainBlog() {
 									</FuseAnimate>
 								</div>
 							</div>
-							{ checkRole() && 
-							(<div className="flex flex-1 items-end">
-								<FuseAnimate animation="transition.expandIn" delay={600}>
-									<Fab
-										color="secondary"
-										aria-label="add"
-										className="absolute bottom-0 ltr:left-0 rtl:right-0 mx-16 -mb-28 z-999"
-										onClick={handleClickOpen}
-									>
-										<Icon>add</Icon>
-									</Fab>
-								</FuseAnimate>
-							</div>)
+							{checkRole() &&
+								(<div className="flex flex-1 items-end">
+									<FuseAnimate animation="transition.expandIn" delay={600}>
+										<Fab
+											color="secondary"
+											aria-label="add"
+											className="absolute bottom-0 ltr:left-0 rtl:right-0 mx-16 -mb-28 z-999"
+											onClick={handleClickOpen}
+										>
+											<Icon>add</Icon>
+										</Fab>
+									</FuseAnimate>
+								</div>)
 							}
 						</div>
 					</ThemeProvider>
@@ -239,42 +239,42 @@ function MainBlog() {
 											(blogPost.length <= 0 ? (
 												<h1>Loading...</h1>
 											) : (
-												blogPost.map((blog, i) => (
-													<BlogListContent blog={blog} author={blogAuthor[i]} key={i} />
-												))
-											))}
+													blogPost.map((blog, i) => (
+														<BlogListContent blog={blog} author={blogAuthor[i]} key={i} />
+													))
+												))}
 										{tabValue === 1 &&
 											(week.length === 0 ? (
 												<NoPost />
 											) : (
-												week.map((blog, i) => (
-													<BlogListContent blog={blog} author={blogAuthor[i]} key={i} />
-												))
-											))}
+													week.map((blog, i) => (
+														<BlogListContent blog={blog} author={blogAuthor[i]} key={i} />
+													))
+												))}
 										{tabValue === 2 &&
 											(month.length === 0 ? (
 												<NoPost />
 											) : (
-												month.map((blog, i) => (
-													<BlogListContent blog={blog} author={blogAuthor[i]} key={i} />
-												))
-											))}
+													month.map((blog, i) => (
+														<BlogListContent blog={blog} author={blogAuthor[i]} key={i} />
+													))
+												))}
 										{tabValue === 3 &&
 											(year.length === 0 ? (
 												<NoPost />
 											) : (
-												year.map((blog, i) => (
-													<BlogListContent blog={blog} author={blogAuthor[i]} key={i} />
-												))
-											))}
+													year.map((blog, i) => (
+														<BlogListContent blog={blog} author={blogAuthor[i]} key={i} />
+													))
+												))}
 										{tabValue === 4 &&
 											(blogPost.length <= 0 ? (
 												<h1>Loading...</h1>
 											) : (
-												blogPost.map((blog, i) => (
-													<BlogListContent blog={blog} author={blogAuthor[i]} key={i} />
-												))
-											))}
+													blogPost.map((blog, i) => (
+														<BlogListContent blog={blog} author={blogAuthor[i]} key={i} />
+													))
+												))}
 									</div>
 								}
 							</Grid>
@@ -283,7 +283,7 @@ function MainBlog() {
 							</Grid>
 						</Grid>
 						<div className={classes.pagination}>
-							<Pagination count={Math.round(totalNo/rowsPerPage)} page={page} onChange={handleChangePage} color="primary" />
+							<Pagination count={Math.round(totalNo / rowsPerPage)} page={page} onChange={handleChangePage} color="primary" />
 						</div>
 					</div>
 				}

@@ -32,9 +32,11 @@ function NewOpening(props) {
 	const dispatch = useDispatch();
 	const entity = useSelector(({ createOpening }) => createOpening.entity.data);
 	const loading = useSelector(({ createOpening }) => createOpening.recruitment.loading);
+
 	// const state = useSelector(state => state);
-	const employeeList = useSelector(state => state.employeeList.employeeList)
 	// const employeeList = useSelector(({ employeeList }) => employeeList)
+
+	const employeeList = useSelector(state => state.employeeList.employeeList)
 	const [department, setDepartment] = useState([]);
 	const [country, setCountry] = React.useState([]);
 	const state = useSelector(({ regions }) => regions.states.map(state => state.name));

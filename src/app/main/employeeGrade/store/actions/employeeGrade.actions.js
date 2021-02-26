@@ -9,10 +9,10 @@ export const GET_ONE_EMPLOYEE_GRADE = 'GET ONE EMPLOYEE GRADE';
 export const GET_ENTITY = 'GET ENTITY';
 export const FILTER_EMPLOYEE_GRADE = 'FILTER EMPLOYEE GRADE';
 
-export const getAllEmployeeGrade = ({offset, limit}) => {
+export const getAllEmployeeGrade = ({ offset, limit }) => {
   return async (dispatch) => {
     try {
-      const { data: { data }} = await api.get(`/employee-grade?offset=${offset}&limit=${limit}`);
+      const { data: { data } } = await api.get(`/employee-grade?offset=${offset}&limit=${limit}`);
       dispatch({
         type: GET_ALL_EMPLOYEE_GRADE,
         payload: {
@@ -40,7 +40,7 @@ export const getAllEmployeeGrade = ({offset, limit}) => {
   }
 };
 
-export const createEmployeeGrade = ({pagination, model}) => {
+export const createEmployeeGrade = ({ pagination, model }) => {
   return async (dispatch) => {
     swal.fire({
       text: 'Creating...',
@@ -49,12 +49,12 @@ export const createEmployeeGrade = ({pagination, model}) => {
     swal.showLoading();
     try {
       const { data: { success, message } } = await api.post('/employee-grade/', model);
-      if(success) {
+      if (success) {
         swal.fire({
           text: message,
           icon: 'success',
         })
-        dispatch(getAllEmployeeGrade({...pagination}));
+        dispatch(getAllEmployeeGrade({ ...pagination }));
         dispatch({
           type: CLOSE_EMPLOYEE_GRADE_MODAL
         })
@@ -68,7 +68,7 @@ export const createEmployeeGrade = ({pagination, model}) => {
   };
 };
 
-export const updateEmployeeGrade = ({id, model, pagination}) => {
+export const updateEmployeeGrade = ({ id, model, pagination }) => {
   return async (dispatch) => {
     swal.fire({
       text: 'Updating...',
@@ -77,12 +77,12 @@ export const updateEmployeeGrade = ({id, model, pagination}) => {
     swal.showLoading();
     try {
       const { data: { success, message } } = await api.patch(`/employee-grade/${id}`, model);
-      if(success) {
+      if (success) {
         swal.fire({
           text: message,
           icon: 'success',
         })
-        dispatch(getAllEmployeeGrade({...pagination}));
+        dispatch(getAllEmployeeGrade({ ...pagination }));
         dispatch({
           type: CLOSE_EMPLOYEE_GRADE_MODAL
         })
@@ -96,7 +96,7 @@ export const updateEmployeeGrade = ({id, model, pagination}) => {
   };
 };
 
-export const deleteEmployeeGrade = ({id, pagination}) => {
+export const deleteEmployeeGrade = ({ id, pagination }) => {
   return async (dispatch) => {
     try {
       swal.fire({
@@ -104,13 +104,13 @@ export const deleteEmployeeGrade = ({id, pagination}) => {
         allowOutsideClick: false
       })
       swal.showLoading();
-      const { data: { message } } = await api.delete('/employee-grade/all/selected', { data: { id } } );
+      const { data: { message } } = await api.delete('/employee-grade/all/selected', { data: { id } });
       swal.fire({
         text: message,
         icon: 'success',
       })
       window.location.reload();
-      dispatch(getAllEmployeeGrade({...pagination}));
+      dispatch(getAllEmployeeGrade({ ...pagination }));
     } catch (e) {
       swal.fire({
         text: catchErrorMsg(e),
@@ -124,13 +124,13 @@ export const getEntity = () => {
   return async (dispatch) => {
     try {
       const { data: { data, success } } = await api.get('/entity/all');
-      if(success) {
+      if (success) {
         dispatch({
           type: GET_ENTITY,
           payload: data
         })
       }
-    } catch(e) {
+    } catch (e) {
       dispatch({
         type: GET_ENTITY,
         payload: []
@@ -139,10 +139,10 @@ export const getEntity = () => {
   }
 };
 
-export const filterEmployeeGrade = ({ term, offset, limit}) => {
+export const filterEmployeeGrade = ({ term, offset, limit }) => {
   return async (dispatch) => {
     try {
-      const { data: { data: { count, rows } }} = await api.get(`/employee-grade?offset=${offset}&limit=${limit}&term=${term}`);
+      const { data: { data: { count, rows } } } = await api.get(`/employee-grade?offset=${offset}&limit=${limit}&term=${term}`);
       dispatch({
         type: FILTER_EMPLOYEE_GRADE,
         payload: {
