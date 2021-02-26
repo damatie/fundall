@@ -17,7 +17,7 @@ function NewExitRequest(props) {
     const dispatch = useDispatch();
     const history = useHistory();
 
-    // const [details, setDetails] = useState({});
+    const [details, setDetails] = useState({});
 
     const formOptions = (value) =>
         value === "better" ?
@@ -47,8 +47,7 @@ function NewExitRequest(props) {
                     `Moderately ${value}`,
                     `Slightly ${value}`,
                     `Not at all ${value}`
-                ]
-        ;
+                ];
 
     const scale1 = [
         "A great deal",
@@ -72,6 +71,7 @@ function NewExitRequest(props) {
     function handleSubmit(model) {
 
         let objectKeys = Object.keys(model);
+        console.log(model, details)
 
         let payload = {
             answers: generateAnswer(objectKeys, model)
@@ -93,18 +93,19 @@ function NewExitRequest(props) {
         return answers;
     }
 
-    // const handleChange = (name, value) => {
-    // setDetails(state => ({ ...state, [name]: value }));
-    // };
+    const handleChange = (name, value) => {
+        setDetails(state => ({ ...state, [name]: value }));
+    };
 
     const formInputs = [
         { name: 'question1', label: 'What are your reasons for leaving this company?', validations: "", type: "text" },
         { name: 'question2', label: 'How effectively were your skills put to use at this company?', validations: "", data: formOptions("effectively") },
-        { name: 'question3', label: 'How much room for professional growth did you have at this company?', validations: "", data: formOptions("easy") },
-        { name: 'question4', label: 'How well were you paid for the work you did at this company?', validations: "", data: scale1 },
-        { name: 'question5', label: 'How fairly were you treated by your supervisor at this company? ', validations: "", data: formOptions("well") },
-        { name: 'question6', label: 'How consistently did your supervisor reward you for good work? ', validations: "", data: formOptions("fairly") },
-        { name: 'question7', label: 'How realistic were the expectations of your supervisor? ', validations: "", data: formOptions("consistently") },
+        { name: 'question3', label: 'How easy was it to get the resources you needed to do your job well at this company?', validations: "", data: formOptions("easy") },
+        { name: 'question3', label: 'How much room for professional growth did you have at this company?', validations: "", data: scale1 },
+        { name: 'question4', label: 'How well were you paid for the work you did at this company?', validations: "", data: formOptions("well") },
+        { name: 'question5', label: 'How fairly were you treated by your supervisor at this company? ', validations: "", data: formOptions("fairly") },
+        { name: 'question6', label: 'How consistently did your supervisor reward you for good work? ', validations: "", data: formOptions("consistently") },
+        { name: 'question7', label: 'How realistic were the expectations of your supervisor? ', validations: "", data: formOptions("realistic") },
         { name: 'question8', label: 'How reasonable were the decisions made by your supervisor? ', validations: "", data: formOptions("reasonable") },
         { name: 'question9', label: "How often did your supervisor listen to employees' opinions when making decisions? ", validations: "", data: formOptions("often") },
         { name: 'question10', label: "How easy was it for employees to disagree with the decisions made by your supervisor? ", validations: "", data: formOptions("easy") },

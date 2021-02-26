@@ -178,14 +178,17 @@ const ExitMgtTable = (props) => {
                             <Typography variant={"subtitle1"} >{selected?.position}</Typography>
                         </div>
 
+
                         {
                             isHR() ?
                                 <>
+                                    <Typography variant={"h6"} className={"mb-20"} >Exit Form Details </Typography>
+
                                     {
                                         selected?.answers?.map((item, index) => (
                                             <div className={"mb-20"} key={index}>
-                                                <Typography variant={"caption"} >{item.question} </Typography>
-                                                <Typography variant={"subtitle1"} >{item.answer}</Typography>
+                                                <Typography variant={"subtitle1"} >Q: {item.question} </Typography>
+                                                <Typography variant={"caption"}>A : {item.answer}</Typography>
                                             </div>
                                         ))
                                     }
@@ -197,7 +200,7 @@ const ExitMgtTable = (props) => {
 
 
                                     <div className="w-full mt-20">
-                                        <Typography variant={"h6"}> Kindly fill the table below after you have returned the various items mentioned.</Typography>
+                                        <Typography variant={"h6"}> Kindly verify the various items mentioned are returned.</Typography>
 
                                         <Formsy
                                             onValidSubmit={handleHRApprove}
