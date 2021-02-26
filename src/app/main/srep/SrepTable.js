@@ -231,7 +231,8 @@ const SrepTable = (props) =>{
                                 </MenuItem>
                                 <MenuItem value="approved">Approved</MenuItem>
                                 <MenuItem value="rejected">Rejected</MenuItem>
-                                <MenuItem value="pending">Pending</MenuItem>
+                                {(props.role !== 'FINANCE MANAGER') && <MenuItem value="pending">Pending</MenuItem>}
+                                <MenuItem value="reviewed">Reviewed</MenuItem>
                             </Select>
                         </FormControl>
                     </div>

@@ -38,6 +38,8 @@ export function getSrep(role = null) {
 					console.log({role})
 					if(role && role !== 'HR MANAGER'){
 						items = data.data && data.data.filter(srep => srep.status !== 'pending');
+					}else{
+						items = data.data
 					}
 					srep = data.data && data.data.map(srep => {
 						count++;
