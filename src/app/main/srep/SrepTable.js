@@ -21,14 +21,7 @@ import React, {useState, useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
-import clsx from 'clsx';
-import Moment from 'react-moment';
-import RejectIcon from '@material-ui/icons/Cancel';
-import ApproveIcon from '@material-ui/icons/Check';
-import MenuIcon from '@material-ui/icons/Menu';
-import Grid from '@material-ui/core/Grid';
-import {formatCurrency} from 'app/shared/formatCurrency';
+import { useAuth } from 'app/hooks/useAuth';
 const useStyles = makeStyles({
 	table: {
 		'& th': {
@@ -36,6 +29,9 @@ const useStyles = makeStyles({
 		}
 	}
 });
+
+const userId = useAuth().getId;
+const userData = useAuth().getUserData;
 const SrepTable = (props) =>{
     const dispatch = useDispatch();
     const [data, setData] = useState(props.rows);
@@ -110,7 +106,14 @@ const SrepTable = (props) =>{
     }
 
     function handleItemClick(event, item){
-        props.props.history.push(`/srep/details/${item.id}`);
+        // props.props.history.push(`/srep/details/${item.id}`);
+        props.props.history.push({
+            pathname: `/srep/details/${item.id}`, 
+            state: {
+                employeeRole: userData.role.toUpperCase(),
+                backUrl: '/srep/all'
+            }
+        });
     }
 
     const handleDelete = (event, id) => {

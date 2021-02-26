@@ -121,7 +121,8 @@ function EmployeeSrepDashboard(props) {
     props.history.push({
         pathname: `/srep/details/${value.original.id}`, 
         state: {
-            employeeRole: userData.role.toUpperCase()
+            employeeRole: userData.role.toUpperCase(),
+            backUrl: '/srep/myapplications'
         }
     });
   }
