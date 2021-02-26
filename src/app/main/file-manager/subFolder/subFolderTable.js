@@ -22,14 +22,12 @@ import EditIcon from '@material-ui/icons/Edit';
 import SaveIcon from '@material-ui/icons/Save';
 import ActionMenu from './components/actionMenu';
 import MenuIcon from '@material-ui/icons/MoreVert';
-import Cancel from '@material-ui/icons/CancelRounded';
 import Button from '@material-ui/core/Button';
 import moment from 'moment';
 import {capitalizeWords} from 'app/shared/capitalizeWords';
 import clsx from 'clsx';
 import FolderDetails from './components/folderDetails';
 import RenameFolder from './components/renameFolder';
-import InputAdornment from '@material-ui/core/InputAdornment';
 const useStyles = makeStyles({
 	table: {
 		'& th': {
@@ -137,8 +135,8 @@ const SubFolderTable = (props) =>{
     }
 
     const handleDelete = (id, name) => {
-        console.log(id)
-        console.log(name)
+        // console.log(id)
+        // console.log(name)
         dispatch(Actions.deleteSubFolder(props.mainFolder.id, id, name));
         handleClose();
     }
@@ -151,15 +149,17 @@ const SubFolderTable = (props) =>{
         return text;
     }
 
-    const grantAccess = (roleId) => {
-        dispatch(Actions.grantSubFolderAccess(selected.folderId, selected.id, selected.name, roleId));
+    const grantAccess = (roleId, type) => {
+        console.log(type)
+        dispatch(Actions.grantSubFolderAccess(selected.folderId, selected.id, selected.name, roleId, type));
         handleClose();
     }
 
-    const handleOpenRename = () => {
-        setRename(selected.id);
-        setName(selected.name);
-        setDescription(selected.description);
+    const handleOpenRename = (item) => {
+        setSelected(item)
+        setRename(item.id);
+        setName(item.name);
+        setDescription(item.description);
         handleClose();
     }
 
@@ -310,6 +310,7 @@ const SubFolderTable = (props) =>{
                                                         <MenuIcon />
                                                     </Button>
                                                     <ActionMenu 
+                                                        selected={selected}
                                                         viewDetails={viewDetails} 
                                                         handleClose={handleClose} 
                                                         grantAccess={grantAccess}
@@ -318,7 +319,7 @@ const SubFolderTable = (props) =>{
                                                         anchorEl={anchorEl}
                                                         folderId={selected && selected.folderId}
                                                         documentMainFolderName={(selected && selected.documentMainFolder) ? selected.documentMainFolder.name : ''}
-                                                        roles={(selected) ? props.roles.filter(role => !selected.access.includes(role.id.toString())) : []}
+                                                        roles={(selected) ? props.roles.filter(role => (role.name.toUpperCase() !== props.userRole.toUpperCase())) : []}
                                                     />
                                                     <FolderDetails 
                                                         title={selected && selected.name}
@@ -369,7 +370,7 @@ const SubFolderTable = (props) =>{
                                                         <SaveIcon style={{color: 'skyblue'}} />
                                                     </IconButton>
                                                 :
-                                                    <IconButton aria-label="edit" onClick={(event) => {setSelected(n); handleOpenRename() }} disabled={parseInt(props.userId) !== n.createdBy}>
+                                                    <IconButton aria-label="edit" onClick={(event) => {setSelected(n); handleOpenRename(n) }} disabled={parseInt(props.userId) !== n.createdBy}>
                                                         <EditIcon style={{color: (parseInt(props.userId) !== n.createdBy) ? 'grey' : 'skyblue'}} />
                                                     </IconButton>
                                             }

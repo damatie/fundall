@@ -22,7 +22,7 @@ const baseUrl = getBaseUrl;
 const headers = fetchHeaders();
 const auth = useAuth;
 
-export function getSrep() {
+export function getSrep(role = null) {
 	return dispatch => {
 		dispatch({
 			type: LOADING_SREP
@@ -32,8 +32,15 @@ export function getSrep() {
                 console.log(data);
 				let srep = [];
 				let count = 0;
+				let items = [];
 				if (data.success && data.data) {
 					console.log(data.data);
+					console.log({role})
+					if(role && role !== 'HR MANAGER'){
+						items = data.data && data.data.filter(srep => srep.status !== 'pending');
+					}else{
+						items = data.data
+					}
 					srep = data.data && data.data.map(srep => {
 						count++;
 						return {
@@ -49,7 +56,7 @@ export function getSrep() {
 					dispatch({
 						type: GET_SREP_SUCCESS,
 						payload: {
-							data: data.data,
+							data: items,
 							srep: srep
 						},
 					})

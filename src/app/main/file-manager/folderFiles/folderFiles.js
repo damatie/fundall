@@ -67,6 +67,7 @@ const userProfile = useAuth().getUserProfile;
 function FolderFiles(props) {
 	const dispatch = useDispatch();
     const location = useLocation();
+	const pathName = location.pathname.split('/').pop().replace('_', ' ');
     const mainFolder = (location.state) ? location.state.mainFolders : '';
     const subFolder = (location.state) ? location.state.subFolders : '';
     const subFoldersFile = useSelector(({folderFiles}) => folderFiles.folders.files);
@@ -129,7 +130,7 @@ function FolderFiles(props) {
             prev={true}
             props={props}
             header={{
-                icon: (subFolder.folderId === 1) ? 'folder_shared' : 'folder',
+                icon: ((subFolder) && subFolder.folderId === 1) ? 'folder_shared' : 'folder',
                 title: `Document Library / ${mainFolder.name} / ${subFolder.name}`,
                 showLink: true,
                 url: `/library/folders/${convertText(mainFolder.name)}`,

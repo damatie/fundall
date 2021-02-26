@@ -44,6 +44,7 @@ function ViewSrep({ match }, props) {
 	const classes = useStyles(props);
     const location = useLocation();
     const employeeRole = (location.state) ? location.state.employeeRole : '';
+    const backUrl = (location.state) ? location.state.backUrl : '';
 	const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
 	const srepData = useSelector(({ ViewSrep }) => ViewSrep.srep.data);
 	const roles = useSelector(({ roles }) => roles.roleList);
@@ -157,11 +158,7 @@ function ViewSrep({ match }, props) {
     }
 
     const goBack = () =>{
-        if(employeeRole === 'EMPLOYEE' || employeeRole === 'LINE MANAGER'){
-            window.location = '/srep/myapplications'
-        }else{
-            window.location = '/srep/all'
-        }
+        window.location = backUrl
     }
     
 
