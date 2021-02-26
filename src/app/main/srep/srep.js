@@ -161,7 +161,7 @@ function Srep(props) {
 							</div>
 							<div className="widget flex w-full sm:w-1/2 md:w-1/5 p-12">
 								<CardWidget
-									count={(srep.length > 0) ? data.filter(t => t.status === 'reviewed').length : 0}
+									count={(data.length > 0) ? data.filter(t => t.status === 'reviewed').length : 0}
 									title={'Reviewed'}
 									color="orange"
 								/>
