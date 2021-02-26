@@ -59,11 +59,11 @@ export default function ActionMenu(props) {
 						</Button>
 					</MenuItem>
 				)}
-				<MenuItem onClick={ev => props.handleRename(props.selected)}>Rename</MenuItem>
-				<MenuItem onClick={ev => props.handleDelete(props.selected.id, props.selected.name)}>Delete</MenuItem>
+				<MenuItem onClick={ev => props.handleRename(props.selected)} disabled={parseInt(props.userId) !== props.selected.createdBy}>Rename</MenuItem>
+				<MenuItem onClick={ev => props.handleDelete(props.selected.id, props.selected.name)} disabled={parseInt(props.userId) !== props.selected.createdBy}>Delete</MenuItem>
 				<MenuItem
 					onClick={ev => {
-						props.viewDetails();
+						props.viewDetails(props.selected);
 					}}
 				>
 					Details
