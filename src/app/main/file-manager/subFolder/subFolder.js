@@ -1,7 +1,7 @@
 import FuseAnimateGroup from '@fuse/core/FuseAnimateGroup';
 import PageLayout from 'app/shared/pageLayout/PageLayout';
 import withReducer from 'app/store/withReducer';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { useLocation } from "react-router-dom";
@@ -12,7 +12,6 @@ import reducer from '../store/reducers';
 import SubFolderTable from './subFolderTable';
 import { useAuth } from 'app/hooks/useAuth';
 import CreateFolder from './components/createFolder';
-import { BurstModeOutlined } from '@material-ui/icons';
 
 const columns = [
 	{
@@ -72,15 +71,18 @@ const userProfile = useAuth().getUserProfile;
 function SubFolder(props) {
     const dispatch = useDispatch();
     const location = useLocation();
-    const mainFolder = (location.state) ? location.state.mainFolders : '';
+	const pathName = location.pathname.split('/').pop().replace('_', ' ');
+	const mainFolders = useSelector(({subFolder}) => subFolder.folders.mainFolders);
+    let mainFolder = (location.state) ? location.state.mainFolders : '';
     const subFolders = useSelector(({subFolder}) => subFolder.folders.subFolders);
     const success = useSelector(({subFolder}) => subFolder.folders.success);
 	const roles = useSelector(({ roles }) => roles.roleList);
 	const [open, setOpen] = React.useState(false);
 	const roleId = userProfile.roleId;
+	const roleName = userProfile.role.name;
 
 	useEffect(() => {
-        if(!mainFolder || mainFolder === ''){
+        if(!mainFolder){
             window.location = '/library/folders';
         }
         dispatch(UtilActions.getRoles())
@@ -90,6 +92,7 @@ function SubFolder(props) {
         })
     }, [dispatch, mainFolder]);
 
+	console.log(mainFolders)
     const handleOpenModal = () => {
         setOpen(true);
     }
@@ -104,9 +107,7 @@ function SubFolder(props) {
 	}
 	
 	const getAccess = () => {
-		console.log(roleId);
-		console.log(mainFolder.access);
-		if(mainFolder.id === 2){
+		if((mainFolder && mainFolder.id === 2) || (mainFolder && mainFolder.name.toUpperCase().includes("PRIVATE"))){
 			return mainFolder.access.includes(roleId.toString());
 		}
 		return true
@@ -119,8 +120,8 @@ function SubFolder(props) {
 				prev={true}
 				props={props}
 				header={{
-					icon: (mainFolder.id === 1 || mainFolder.name.toUpperCase().includes('PUBLIC')) ? 'folder_shared' : 'folder',
-                    title: `Document Library / ${(mainFolder) ? mainFolder.name : ''}`,
+					icon: (mainFolder.id === 1 || (mainFolder && mainFolder.name.toUpperCase().includes('PUBLIC'))) ? 'folder_shared' : 'folder',
+                    title: `Document Library / ${(mainFolder) ? mainFolder.name : pathName}`,
                     handleSearch: ({target: { value }}) => console.log(value),
                     showLink: true,
                     url: '/library/folders',
@@ -152,6 +153,7 @@ function SubFolder(props) {
                                     mainFolder={mainFolder}
 									roles={roles}
 									userId={userId}
+									userRole={roleName}
 								/>
 							</div>
                             <CreateFolder 

@@ -313,16 +313,16 @@ export function deleteSubFolder(mainId, folderId, name) {
 
 }
 
-export function grantSubFolderAccess(mainId, folderId, folderName, roleId) {
+export function grantSubFolderAccess(mainId, folderId, folderName, roleId, type) {
 	return dispatch => {
 		swal.fire({
-			title: `Are you sure want to grant access to ${folderName}?`,
+			title: `Are you sure want to ${type.toLowerCase()} access to ${folderName}?`,
 			text: "You won't be able to revert this!",
 			icon: 'warning',
 			showCancelButton: true,
 			confirmButtonColor: '#3085d6',
 			cancelButtonColor: '#d33',
-			confirmButtonText: 'Yes, Grant it!',
+			confirmButtonText: `Yes, ${type} it!`,
 			showLoaderOnConfirm: true,
 			preConfirm: () => {
 				swal.fire({
@@ -330,7 +330,7 @@ export function grantSubFolderAccess(mainId, folderId, folderName, roleId) {
             allowOutsideClick: false
         });
 				swal.showLoading();
-				api.patch(`library/folder/${mainId}/sub/${folderId}/access`, {roleId})
+				api.patch(`library/folder/${mainId}/sub/${folderId}/access/${type.toLowerCase()}`, {roleId})
                 .then(({data: { success, message, data }}) => {
                     console.log(data);
                     if(success){
@@ -346,7 +346,7 @@ export function grantSubFolderAccess(mainId, folderId, folderName, roleId) {
                         :
                             dispatch(getSubFolder(mainId))
                             swal.fire({
-                                title: 'Grant Access',
+                                title: `${type} Access`,
                                 text: message,
                                 icon: 'success'
                             });
@@ -360,7 +360,7 @@ export function grantSubFolderAccess(mainId, folderId, folderName, roleId) {
                             loading: false
                         })
                         swal.fire({
-                            title: 'Grant Access',
+                            title: `${type} Access`,
                             text: message,
                             icon: 'error'
                         });
@@ -369,7 +369,7 @@ export function grantSubFolderAccess(mainId, folderId, folderName, roleId) {
                 .catch(err => {
                     console.error(err);
                     swal.fire({
-                        title: 'Grant Access',
+                        title: `${type} Access`,
                         text: err.message,
                         icon: 'error'
                     });

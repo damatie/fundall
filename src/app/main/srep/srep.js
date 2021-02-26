@@ -107,9 +107,10 @@ function Srep(props) {
 		if(userData.role.toUpperCase() === 'EMPLOYEE' || userData.role.toUpperCase() === 'LINE MANAGER'){
 			dispatch(Actions.getSrepByEmployeeID(userId));
 		}else{
-			dispatch(Actions.getSrep());
+			dispatch(Actions.getSrep(userData.role.toUpperCase()));
 		}
 	}, [dispatch]);
+
 
 	return (
 		<ThemeProvider theme={mainTheme}>
@@ -147,9 +148,11 @@ function Srep(props) {
 							<div className="widget flex w-full sm:w-1/2 md:w-1/5 p-12">
 								<CardWidget count={(data.length > 0) ? data.length : 0} title={'Total'} color="yellow" />
 							</div>
-							<div className="widget flex w-full sm:w-1/2 md:w-1/5 p-12">
-								<CardWidget count={(data.length > 0) ? data.filter(t => t.status === 'pending').length : 0} title={'Pending'} color="blue" />
-							</div>
+							{ (userData.role.toUpperCase() !== 'FINANCE MANAGER') &&
+								<div className="widget flex w-full sm:w-1/2 md:w-1/5 p-12">
+									<CardWidget count={(data.length > 0) ? data.filter(t => t.status === 'pending').length : 0} title={'Pending'} color="blue" />
+								</div>
+							}
 							<div className="widget flex w-full sm:w-1/2 md:w-1/5 p-12">
 								<CardWidget count={(data.length > 0) ? data.filter(t => t.status === 'approved').length : 0} title={'Approved'} color="green" />
 							</div>
