@@ -17,14 +17,45 @@ function NewExitRequest(props) {
     const dispatch = useDispatch();
     const history = useHistory();
 
-    const [details, setDetails] = useState({});
+    // const [details, setDetails] = useState({});
 
-    const effectiveData = [
-        "Extremely effectively",
-        "Very effectively",
-        "Moderately effectively ",
-        "Slightly effectively ",
-        "Not at all effectively "
+    const formOptions = (value) =>
+        value === "better" ?
+            [
+                `Much better`,
+                `Somewhat better`,
+                `Slightly better`,
+                `About the same`,
+                `Slightly worse`,
+                `Somewhat worse`,
+                `much worse`
+            ] :
+            value === "like" ?
+                [
+                    `Liked a great deal`,
+                    `Liked a moderate amount`,
+                    `Liked a little`,
+                    `Neither liked nor disliked`,
+                    `Disliked a little`,
+                    `Disliked a moderate amount`,
+                    `Disliked a great deal `
+                ]
+                :
+                [
+                    `Extremely ${value}`,
+                    `Very ${value}`,
+                    `Moderately ${value}`,
+                    `Slightly ${value}`,
+                    `Not at all ${value}`
+                ]
+        ;
+
+    const scale1 = [
+        "A great deal",
+        "A lot",
+        "A Moderate amount ",
+        "A Little ",
+        "Not at all"
     ]
 
     const [isFormValid, setIsFormValid] = useState(true);
@@ -62,31 +93,31 @@ function NewExitRequest(props) {
         return answers;
     }
 
-    const handleChange = (name, value) => {
-        setDetails(state => ({ ...state, [name]: value }));
-    };
+    // const handleChange = (name, value) => {
+    // setDetails(state => ({ ...state, [name]: value }));
+    // };
 
     const formInputs = [
         { name: 'question1', label: 'What are your reasons for leaving this company?', validations: "", type: "text" },
-        { name: 'question2', label: 'How effectively were your skills put to use at this company?', validations: "", data: effectiveData },
-        { name: 'question3', label: 'How much room for professional growth did you have at this company?', validations: "", data: effectiveData },
-        { name: 'question4', label: 'How well were you paid for the work you did at this company?', validations: "", data: effectiveData },
-        { name: 'question5', label: 'How fairly were you treated by your supervisor at this company? ', validations: "", data: effectiveData },
-        { name: 'question6', label: 'How consistently did your supervisor reward you for good work? ', validations: "", data: effectiveData },
-        { name: 'question7', label: 'How realistic were the expectations of your supervisor? ', validations: "", data: effectiveData },
-        { name: 'question8', label: 'How reasonable were the decisions made by your supervisor? ', validations: "", data: effectiveData },
-        { name: 'question9', label: "How often did your supervisor listen to employees' opinions when making decisions? ", validations: "", data: effectiveData },
-        { name: 'question10', label: "How easy was it for employees to disagree with the decisions made by your supervisor? ", validations: "", data: effectiveData },
-        { name: 'question11', label: "How well did your supervisor handle employee problems? ", validations: "", data: effectiveData },
-        { name: 'question12', label: "How well did the members of your team work together to reach a common goal? ", validations: "", data: effectiveData },
-        { name: 'question13', label: "In a typical week, how often did you feel stressed at work? ", validations: "", data: effectiveData },
-        { name: 'question14', label: "How easy was it to balance your work life and personal life while working at this company? ", validations: "", data: effectiveData },
-        { name: 'question15', label: "How safe did you feel at your employer's workplace? ", validations: "", data: effectiveData },
-        { name: 'question16', label: "How comfortable was your employer's work environment? ", validations: "", data: effectiveData },
-        { name: 'question17', label: "How positive was your employer's work environment? ", validations: "", data: effectiveData },
-        { name: 'question18', label: "Was your employer's health insurance plan better, worse, or about the same as those of other employers?", validations: "", data: effectiveData },
+        { name: 'question2', label: 'How effectively were your skills put to use at this company?', validations: "", data: formOptions("effectively") },
+        { name: 'question3', label: 'How much room for professional growth did you have at this company?', validations: "", data: formOptions("easy") },
+        { name: 'question4', label: 'How well were you paid for the work you did at this company?', validations: "", data: scale1 },
+        { name: 'question5', label: 'How fairly were you treated by your supervisor at this company? ', validations: "", data: formOptions("well") },
+        { name: 'question6', label: 'How consistently did your supervisor reward you for good work? ', validations: "", data: formOptions("fairly") },
+        { name: 'question7', label: 'How realistic were the expectations of your supervisor? ', validations: "", data: formOptions("consistently") },
+        { name: 'question8', label: 'How reasonable were the decisions made by your supervisor? ', validations: "", data: formOptions("reasonable") },
+        { name: 'question9', label: "How often did your supervisor listen to employees' opinions when making decisions? ", validations: "", data: formOptions("often") },
+        { name: 'question10', label: "How easy was it for employees to disagree with the decisions made by your supervisor? ", validations: "", data: formOptions("easy") },
+        { name: 'question11', label: "How well did your supervisor handle employee problems? ", validations: "", data: formOptions("well") },
+        { name: 'question12', label: "How well did the members of your team work together to reach a common goal? ", validations: "", data: formOptions("well") },
+        { name: 'question13', label: "In a typical week, how often did you feel stressed at work? ", validations: "", data: formOptions("often") },
+        { name: 'question14', label: "How easy was it to balance your work life and personal life while working at this company? ", validations: "", data: formOptions("easy") },
+        { name: 'question15', label: "How safe did you feel at your employer's workplace? ", validations: "", data: formOptions("safe") },
+        { name: 'question16', label: "How comfortable was your employer's work environment? ", validations: "", data: formOptions("comfortable") },
+        { name: 'question17', label: "How positive was your employer's work environment? ", validations: "", data: formOptions("positive") },
+        { name: 'question18', label: "Was your employer's health insurance plan better, worse, or about the same as those of other employers?", validations: "", data: formOptions("better") },
         { name: 'question19', label: "What actions can your employer take to build a better workplace? ", validations: "", type: "text" },
-        { name: 'question20', label: "Overall, did you like working with your employer, neither like nor dislike it, or dislike it? ", validations: "", data: effectiveData }
+        { name: 'question20', label: "Overall, did you like working with your employer, neither like nor dislike it, or dislike it? ", validations: "", data: formOptions("like") }
     ];
 
     const exitRequestForm = formInputs.map((input, i) => {
@@ -146,8 +177,8 @@ function NewExitRequest(props) {
                     variant="outlined"
                     required
                     requiredError='Must not be None'
-                    // value={details[input.name]}
-                    onChange={(e) => handleChange(input.name, e.target.value)}
+                // value={details[input.name]}
+                // onChange={(e) => handleChange(input.name, e.target.value)}
                 >
                     {input?.data?.map((item, i) => (
                         <MenuItem value={item} key={i}>{item}</MenuItem>
