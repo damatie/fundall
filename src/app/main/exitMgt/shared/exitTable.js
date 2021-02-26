@@ -147,7 +147,7 @@ const ExitMgtTable = (props) => {
     }
 
     useEffect(() => {
-    }, [data, employeeList])
+    }, [data, employeeList, props.rows])
 
     function handleChangePage(event, value) {
         setPage(value);
