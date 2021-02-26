@@ -106,12 +106,12 @@ function SubFolder(props) {
         handleCloseModal();
 	}
 	
-	const getAccess = () => {
-		if((mainFolder && mainFolder.id === 2) || (mainFolder && mainFolder.name.toUpperCase().includes("PRIVATE"))){
-			return mainFolder.access.includes(roleId.toString());
-		}
-		return true
-    }
+	// const getAccess = () => {
+	// 	if((mainFolder && mainFolder.id === 2) || (mainFolder && mainFolder.name.toUpperCase().includes("PRIVATE"))){
+	// 		return mainFolder.access.includes(roleId.toString());
+	// 	}
+	// 	return true
+    // }
 
 	return (
 		<PageLayout
@@ -128,7 +128,7 @@ function SubFolder(props) {
 					isState: true
                 }}
                 button={{
-                    showButton: getAccess(),
+                    showButton: true,
                     btnTitle: 'Create Folder',
                     onClick: handleOpenModal,
                     btnIconShow: true,
