@@ -176,7 +176,8 @@ const SubFolderTable = (props) =>{
         dispatch(Actions.updateSubFolder(selected.folderId, selected.id, payload));
     }
 
-    const viewDetails = () => {
+    const viewDetails = (item) => {
+        setSelected(item);
         setOpen(true);
         handleClose();
     }
@@ -316,6 +317,7 @@ const SubFolderTable = (props) =>{
                                                         grantAccess={grantAccess}
                                                         handleRename={handleOpenRename}
                                                         handleDelete={handleDelete}
+                                                        userId={parseInt(props.userId)}
                                                         anchorEl={anchorEl}
                                                         folderId={selected && selected.folderId}
                                                         documentMainFolderName={(selected && selected.documentMainFolder) ? selected.documentMainFolder.name : ''}
