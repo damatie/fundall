@@ -2,21 +2,23 @@ export const useAuth = item => {
   const auth = localStorage.getItem('jwt_access_token');
   const data = localStorage.getItem('user_data');
   const profile = localStorage.getItem('user_profile');
+
   let token = '';
   let userData = '';
   let userProfile = '';
-  if(auth) {
+
+  if (auth) {
     token = JSON.parse(auth);
   } else {
     token = '';
   }
-  if(data) {
+  if (data) {
     userData = JSON.parse(data);
   } else {
     userData = '';
   }
 
-  if(profile) {
+  if (profile) {
     userProfile = JSON.parse(profile);
   }
 
