@@ -17,11 +17,14 @@ export const getRoles = () => {
     }).then(res => res.json()).then(
       data => {
         // console.log(data)
+        let items = []
         if(data.success) {
+          items = data.data.filter((obj, index, self) => self.map(itm => itm.name.toLowerCase())
+          .indexOf(obj.name.toLowerCase()) === index)
           dispatch({
             type: GET_ROLES_SUCCESS,
-            payload: data.data
-          });
+            payload: items
+          })
         } else {
           dispatch({
             type: GET_ROLES_ERROR,

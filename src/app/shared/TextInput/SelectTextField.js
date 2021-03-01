@@ -34,7 +34,8 @@ const SelectTextField = React.forwardRef((props, ref) => {
         ref={register || ref}
         name={name}
         onChange={onChange}
-        defaultValue={value}
+        value={value}
+        // defaultValue={value}
         onBlur={onBlur}
         inputRef={register}
         {...props}

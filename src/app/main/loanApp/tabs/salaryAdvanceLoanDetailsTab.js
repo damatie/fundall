@@ -37,6 +37,10 @@ function SALoanDetailsTab({ setValue }) {
 		id,
 	});
 
+	useEffect(() => {
+		console.log(salaryAdvanceDetails);
+	}, [salaryAdvanceDetails])
+
 	return (
 		<div className="md:flex">
 			<div className="flex w-full">
@@ -57,12 +61,12 @@ function SALoanDetailsTab({ setValue }) {
 					<CardContent>
 						<div className="mb-24">
 							<Typography className="font-bold mb-4 text-15">Email</Typography>
-							<Typography>{salaryAdvanceDetails?.details.data.employeeInfo.email}</Typography>
+							<Typography>{salaryAdvanceDetails?.details?.data?.employeeInfo.email}</Typography>
 						</div>
 
 						<div className="mb-24">
 							<Typography className="font-bold mb-4 text-15">Department</Typography>
-							<Typography>{salaryAdvanceDetails?.details.data.salaryAdvanceData.department}</Typography>
+							<Typography>{salaryAdvanceDetails?.details?.data?.salaryAdvanceData?.department}</Typography>
 						</div>
 
 						{/* <div className="mb-24">
@@ -77,7 +81,7 @@ function SALoanDetailsTab({ setValue }) {
 
 						<div className="mb-24">
 							<Typography className="font-bold mb-4 text-15">Amount Requested</Typography>
-							<Typography>{formatToNaira(salaryAdvanceDetails?.details.data.salaryAdvanceData.amount)}</Typography>
+							<Typography>{formatToNaira(salaryAdvanceDetails?.details?.data?.salaryAdvanceData?.amount)}</Typography>
 						</div>
 
 						{/* <div className="mb-24">
@@ -128,8 +132,8 @@ function SALoanDetailsTab({ setValue }) {
 												Disbursed
 											</CustomIconButton>
 										</>
-									:
-									<></>
+										:
+										<></>
 							}
 
 							{

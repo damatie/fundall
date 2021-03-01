@@ -19,16 +19,15 @@ import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
+import SaveIcon from '@material-ui/icons/Save';
 import ActionMenu from './components/actionMenu';
 import MenuIcon from '@material-ui/icons/MoreVert';
-import Cancel from '@material-ui/icons/CancelRounded';
 import Button from '@material-ui/core/Button';
 import moment from 'moment';
 import {capitalizeWords} from 'app/shared/capitalizeWords';
 import clsx from 'clsx';
 import FolderDetails from './components/folderDetails';
 import RenameFolder from './components/renameFolder';
-import InputAdornment from '@material-ui/core/InputAdornment';
 const useStyles = makeStyles({
 	table: {
 		'& th': {
@@ -136,8 +135,8 @@ const SubFolderTable = (props) =>{
     }
 
     const handleDelete = (id, name) => {
-        console.log(id)
-        console.log(name)
+        // console.log(id)
+        // console.log(name)
         dispatch(Actions.deleteSubFolder(props.mainFolder.id, id, name));
         handleClose();
     }
@@ -150,19 +149,25 @@ const SubFolderTable = (props) =>{
         return text;
     }
 
-    const grantAccess = (roleId) => {
-        dispatch(Actions.grantSubFolderAccess(selected.folderId, selected.id, selected.name, roleId));
+    const grantAccess = (roleId, type) => {
+        console.log(type)
+        dispatch(Actions.grantSubFolderAccess(selected.folderId, selected.id, selected.name, roleId, type));
         handleClose();
     }
 
-    const handleOpenRename = () => {
-        setRename(selected.id);
-        setName(selected.name);
-        setDescription(selected.description);
+    const handleOpenRename = (item) => {
+        setSelected(item)
+        setRename(item.id);
+        setName(item.name);
+        setDescription(item.description);
         handleClose();
     }
 
     const handleCloseRename = () =>{
+        setRename(0);
+    }
+
+    const handleSaveChange = () =>{
         setRename(0);
         const payload = {
             name,
@@ -171,7 +176,8 @@ const SubFolderTable = (props) =>{
         dispatch(Actions.updateSubFolder(selected.folderId, selected.id, payload));
     }
 
-    const viewDetails = () => {
+    const viewDetails = (item) => {
+        setSelected(item);
         setOpen(true);
         handleClose();
     }
@@ -280,7 +286,7 @@ const SubFolderTable = (props) =>{
                                         style ={{height: "200"}}
 									>
                                         <TableCell className="max-w-64 w-64 p-0 text-center" onClick={event => {handleItemClick(event, n)}}>
-                                            <Icon className={clsx(classes.typeIcon, (n.folderId === 1 || n.documentMainFolder.name.toUpperCase().includes('PUBLIC')) ? 'folder_shared' : 'folder')} />
+                                            <Icon className={clsx(classes.typeIcon, (n.folderId === 1 || (n.documentMainFolder && n.documentMainFolder.name.toUpperCase().includes('PUBLIC'))) ? 'folder_shared' : 'folder')} />
                                         </TableCell>
 										<TableCell className="text-center" style={{padding: '0 16px'}}
                                             onClick={event => { handleItemClick(event, n)}}>
@@ -305,15 +311,17 @@ const SubFolderTable = (props) =>{
                                                         <MenuIcon />
                                                     </Button>
                                                     <ActionMenu 
+                                                        selected={selected}
                                                         viewDetails={viewDetails} 
                                                         handleClose={handleClose} 
                                                         grantAccess={grantAccess}
                                                         handleRename={handleOpenRename}
                                                         handleDelete={handleDelete}
+                                                        userId={parseInt(props.userId)}
                                                         anchorEl={anchorEl}
                                                         folderId={selected && selected.folderId}
-                                                        documentMainFolderName={selected ? selected.documentMainFolder.name : ''}
-                                                        roles={(selected) ? props.roles.filter(role => !selected.access.includes(role.id.toString())) : []}
+                                                        documentMainFolderName={(selected && selected.documentMainFolder) ? selected.documentMainFolder.name : ''}
+                                                        roles={(selected) ? props.roles.filter(role => (role.name.toUpperCase() !== props.userRole.toUpperCase())) : []}
                                                     />
                                                     <FolderDetails 
                                                         title={selected && selected.name}
@@ -358,9 +366,17 @@ const SubFolderTable = (props) =>{
                                             {(n.employee) ? `${n.employee.firstName} ${n.employee.lastName}` : ''}
                                         </TableCell>
                                         <TableCell className="text-center" style={{padding: '0 16px'}}>
-                                        <IconButton aria-label="edit" onClick={(event) => {setSelected(n); handleOpenRename() }} disabled={parseInt(props.userId) !== n.createdBy}>
-                                            <EditIcon style={{color: (parseInt(props.userId) !== n.createdBy) ? 'grey' : 'skyblue'}} />
-                                        </IconButton>
+                                            {
+                                                (rename === n.id) ?
+                                                    <IconButton aria-label="save" onClick={(event) => {setSelected(n); handleSaveChange() }} >
+                                                        <SaveIcon style={{color: 'skyblue'}} />
+                                                    </IconButton>
+                                                :
+                                                    <IconButton aria-label="edit" onClick={(event) => {setSelected(n); handleOpenRename(n) }} disabled={parseInt(props.userId) !== n.createdBy}>
+                                                        <EditIcon style={{color: (parseInt(props.userId) !== n.createdBy) ? 'grey' : 'skyblue'}} />
+                                                    </IconButton>
+                                            }
+                                        
                                         <IconButton aria-label="delete" onClick={(event) => {setSelected(n); handleDelete(n.id, n.name)}} disabled={parseInt(props.userId) !== n.createdBy}>
                                             <DeleteIcon style={{color: (parseInt(props.userId) !== n.createdBy) ? 'grey' : 'red'}} />
                                         </IconButton> 

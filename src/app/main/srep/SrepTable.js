@@ -21,13 +21,7 @@ import React, {useState, useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
-import clsx from 'clsx';
-import Moment from 'react-moment';
-import RejectIcon from '@material-ui/icons/Cancel';
-import ApproveIcon from '@material-ui/icons/Check';
-import MenuIcon from '@material-ui/icons/Menu';
-import Grid from '@material-ui/core/Grid';
+import { useAuth } from 'app/hooks/useAuth';
 const useStyles = makeStyles({
 	table: {
 		'& th': {
@@ -35,6 +29,9 @@ const useStyles = makeStyles({
 		}
 	}
 });
+
+const userId = useAuth().getId;
+const userData = useAuth().getUserData;
 const SrepTable = (props) =>{
     const dispatch = useDispatch();
     const [data, setData] = useState(props.rows);
@@ -109,7 +106,14 @@ const SrepTable = (props) =>{
     }
 
     function handleItemClick(event, item){
-        props.props.history.push(`/srep/details/${item.id}`);
+        // props.props.history.push(`/srep/details/${item.id}`);
+        props.props.history.push({
+            pathname: `/srep/details/${item.id}`, 
+            state: {
+                employeeRole: userData.role.toUpperCase(),
+                backUrl: '/srep/all'
+            }
+        });
     }
 
     const handleDelete = (event, id) => {
@@ -227,7 +231,8 @@ const SrepTable = (props) =>{
                                 </MenuItem>
                                 <MenuItem value="approved">Approved</MenuItem>
                                 <MenuItem value="rejected">Rejected</MenuItem>
-                                <MenuItem value="pending">Pending</MenuItem>
+                                {(props.role !== 'FINANCE MANAGER') && <MenuItem value="pending">Pending</MenuItem>}
+                                <MenuItem value="reviewed">Reviewed</MenuItem>
                             </Select>
                         </FormControl>
                     </div>
@@ -309,6 +314,10 @@ const SrepTable = (props) =>{
                                         <TableCell className="text-center" style={{padding: '0 16px'}}
 										onClick={event => {handleItemClick(event, n); setOpen(true) }}>
                                             {(n.employee) ? getEntity(n.employee.entityId) : ''}  
+                                        </TableCell>
+                                        <TableCell className="text-center" style={{padding: '0 16px'}}
+										onClick={event => {handleItemClick(event, n); setOpen(true) }}>
+                                            {(n) ? CheckStatus(n.status) : ''}  
                                         </TableCell>
                                         <TableCell className="text-center" style={{padding: '0 16px'}}>
                                         <IconButton aria-label="delete" onClick={(event) => handleDelete(event, n.id)} disabled={parseInt(props.userId) !== n.employeeId || n.status !== 'pending'}>

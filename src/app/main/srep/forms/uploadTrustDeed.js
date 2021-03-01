@@ -33,10 +33,25 @@ function UploadTrustDeed(props){
     const files = (props.srepOtherFiles) ? props.srepOtherFiles.filter((f, id, self)=>{return self.indexOf(f) === id;} ).map(d => {return d.fieldName}) : [];
     let fileUrls = (props.srepOtherFiles) ? props.srepOtherFiles.filter((f, id, self)=>{return self.indexOf(f) === id;} ).map(d => {return {fieldName: d.fieldName, url:d.url}}) : [];
     
-    const downloadFile = (fieldName) => {
-        console.log(fileUrls);
-        let url = fileUrls.find(file => {return file.fieldName === fieldName});
-        url = url.url;
+    const {
+        beneficiaryIdentityUrl,
+        beneficiaryPhotoUrl,
+        employeePhotoUrl,
+        residentialProofUrl,
+        identityUrl,
+        identityType
+    } = props.srepData;
+
+    const downloadFile = (fieldName, fileUrl) => {
+        let url = '';
+        if(!fileUrl){
+            console.log(fileUrls);
+            url = fileUrls.find(file => {return file.fieldName === fieldName});
+            url = url.url;
+        }else{
+            url = fileUrl
+        }
+
 		const link = document.createElement('a');
 		link.href = url;
 		link.setAttribute('target', '_blank');
@@ -105,7 +120,7 @@ function UploadTrustDeed(props){
                     <div>
                         {(files.includes('trustDeed') || trustDeedSuccess ) ?
                             <div>
-                                <Button variant="outlined" onClick={() => {downloadFile('trustDeed')}} color="primary" className="mt-24 w-auto rounded-lg" >
+                                <Button variant="outlined" onClick={() => {downloadFile('trustDeed', '')}} color="primary" className="mt-24 w-auto rounded-lg" >
                                     Download Trust Deed
                                 </Button>
                             </div>
@@ -120,7 +135,7 @@ function UploadTrustDeed(props){
                     <div>
                         {(files.includes('trustAccDetail') || trustAccDetailSuccess ) ?
                             <div>
-                                <Button variant="outlined"  onClick={() => {downloadFile('trustAccDetail')}} color="primary" className="mt-24 w-auto rounded-lg" >
+                                <Button variant="outlined"  onClick={() => {downloadFile('trustAccDetail', '')}} color="primary" className="mt-24 w-auto rounded-lg" >
                                     Download Trust Account Details
                                 </Button>
                             </div>
@@ -132,13 +147,56 @@ function UploadTrustDeed(props){
                             </div>
                         }
                     </div>
+                    <div className="mt-24">
                     <Button
                         variant="outlined"
                         color="primary"
-                        className="mt-24 w-auto rounded-lg"
+                        className="mb-24 w-auto rounded-lg"
+                        onClick={() => {downloadFile('', employeePhotoUrl)}}
                     >
-                        Download Employee Documents
+                        Download Employee Photograph
                     </Button>
+                </div>
+                <div>
+                    <Button
+                        variant="outlined"
+                        color="primary"
+                        className="mb-24 w-auto rounded-lg"
+                        onClick={() => {downloadFile('', beneficiaryPhotoUrl)}}
+                    >
+                        Download Beneficiary Photograph
+                    </Button>
+                </div>
+                <div>
+                    <Button
+                        variant="outlined"
+                        color="primary"
+                        className="mb-24 w-auto rounded-lg"
+                        onClick={() => {downloadFile('', identityUrl)}}
+                    >
+                        Download {identityType} document
+                    </Button>
+                </div>
+                <div>
+                    <Button
+                        variant="outlined"
+                        color="primary"
+                        className="mb-24 w-auto rounded-lg"
+                        onClick={() => {downloadFile('', residentialProofUrl)}}
+                    >
+                        Download Proof of Address
+                    </Button>
+                </div>
+                <div>
+                    <Button
+                        variant="outlined"
+                        color="primary"
+                        className="mb-24 item-justify w-auto rounded-lg"
+                        onClick={() => {downloadFile('', beneficiaryIdentityUrl)}}
+                    >
+                        Download Employee Parentship to Beneficiary
+                    </Button>
+                </div>
                 </CardContent>
             </Card>
         </div>

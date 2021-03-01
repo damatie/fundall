@@ -1,6 +1,6 @@
 import { getBaseUrl } from 'app/shared/getBaseUrl';
 import swal from 'sweetalert2';
-import {fetchHeaders} from 'app/shared/fetchHeaders'
+import { fetchHeaders } from 'app/shared/fetchHeaders'
 
 export const GET_POSTS = 'GET POSTS';
 export const GET_ONE_POST = 'GET ONE POST';
@@ -16,82 +16,82 @@ export const DELETE_POST_ERROR = 'DELETE POST ERROR';
 
 const basUrl = getBaseUrl;
 const headers = fetchHeaders();
-export function getPosts(limit = 10, offset= 0) {
-	console.log("Limit: "+limit);
-	console.log("Offset: "+offset);
+export function getPosts(limit = 10, offset = 0) {
+	console.log("Limit: " + limit);
+	console.log("Offset: " + offset);
 	return dispatch => {
 		dispatch({
 			type: LOADING_POSTS
 		});
-		fetch(`${basUrl()}/posts/all/paginate?limit=${limit}&offset=${offset}`, {...headers.getRegHeader()})
-		.then(res => res.json()).then(async data => {
-			console.log(data);
-			data.message === 'Success' ? 
-				(data.data) ?
-					dispatch({
-						type: GET_POSTS,
-						payload: data.data,
-						totalNo: data.totalNumber
-					})
-				:
+		fetch(`${basUrl()}/posts/all/paginate?limit=${limit}&offset=${offset}`, { ...headers.getRegHeader() })
+			.then(res => res.json()).then(async data => {
+				console.log(data);
+				data.message === 'Success' ?
+					(data.data) ?
+						dispatch({
+							type: GET_POSTS,
+							payload: data.data,
+							totalNo: data.totalNumber
+						})
+						:
+						dispatch({
+							type: GET_POSTS,
+							payload: [],
+							totalNo: 0
+						})
+					:
 					dispatch({
 						type: GET_POSTS,
 						payload: [],
 						totalNo: 0
 					})
-			:
+			}).catch(err => {
+				console.log(err);
 				dispatch({
 					type: GET_POSTS,
 					payload: [],
 					totalNo: 0
 				})
-		}).catch(err => {
-			console.log(err);
-			dispatch({
-				type: GET_POSTS,
-				payload: [],
-				totalNo: 0
 			})
-		})
 	}
 }
 
-export function getPostById(id){
+export function getPostById(id) {
 	console.log(id);
 	return dispatch => {
 		dispatch({
 			type: LOADING_POSTS
 		});
-		fetch(`${basUrl()}/posts/${id}`, {...headers.getRegHeader()})
-		.then(res => res.json()).then(async data => {
-			console.log(data);
-			data.message === 'Success' ? 
-				(data.data) ?
-					dispatch({
-						type: GET_ONE_POST,
-						payload: data.data
-					})
-				:
+		fetch(`${basUrl()}/posts/${id}`, { ...headers.getRegHeader() })
+			.then(res => res.json()).then(async data => {
+				console.log(data);
+				data.message === 'Success' ?
+					(data.data) ?
+						dispatch({
+							type: GET_ONE_POST,
+							payload: data.data
+						})
+						:
+						dispatch({
+							type: GET_ONE_POST,
+							payload: []
+						})
+					:
 					dispatch({
 						type: GET_ONE_POST,
 						payload: []
 					})
-			:
+			}).catch(err => {
+				console.log(err);
 				dispatch({
 					type: GET_ONE_POST,
 					payload: []
 				})
-		}).catch(err => {
-			console.log(err);
-			dispatch({
-				type: GET_ONE_POST,
-				payload: []
 			})
-		})
 	}
 }
 
-export function createPost(payload){
+export function createPost(payload) {
 	swal.fire("Processing ...");
 	swal.showLoading();
 	return dispatch => {
@@ -99,7 +99,7 @@ export function createPost(payload){
 			type: LOADING_POSTS
 		})
 		for (var pair of payload.entries()) {
-			console.log(pair[0]+ ', ' + pair[1]); 
+			console.log(pair[0] + ', ' + pair[1]);
 		}
 		fetch(`${basUrl()}/posts/`, { ...headers.fdHeader('POST', payload) }
 		).then(res => res.json()).then(async data => {
@@ -117,8 +117,8 @@ export function createPost(payload){
 					text: (data.message) ? data.message : data.error,
 					timer: 3000,
 					icon: 'success'
-				}).then(function(){
-				  window.location.href = "/main/blogs";
+				}).then(function () {
+					window.location.href = "/main/blogs";
 				});
 			} else {
 				swal.fire({
@@ -146,7 +146,7 @@ export function createPost(payload){
 	}
 }
 
-export function updatePost(payload, id){
+export function updatePost(payload, id) {
 	swal.fire("Processing ...");
 	swal.showLoading();
 	return dispatch => {
@@ -154,7 +154,7 @@ export function updatePost(payload, id){
 			type: LOADING_POSTS
 		})
 		for (var pair of payload.entries()) {
-			console.log(pair[0]+ ', ' + pair[1]); 
+			console.log(pair[0] + ', ' + pair[1]);
 		}
 		fetch(`${basUrl()}/posts/${id}`, { ...headers.fdHeader('PUT', payload) }
 		).then(res => res.json()).then(async data => {
@@ -173,8 +173,8 @@ export function updatePost(payload, id){
 					text: (data.message) ? data.message : data.error,
 					timer: 3000,
 					icon: 'success'
-				}).then(function(){
-				  window.location.href = "/main/blogs";
+				}).then(function () {
+					window.location.href = "/main/blogs";
 				});
 			} else {
 				swal.fire({
@@ -202,7 +202,7 @@ export function updatePost(payload, id){
 	}
 }
 
-export function likeAndUnlike(postId, employeeId){
+export function likeAndUnlike(postId, employeeId) {
 	return dispatch => {
 		dispatch({
 			type: LOADING_POSTS
@@ -213,7 +213,7 @@ export function likeAndUnlike(postId, employeeId){
 			if (data.success) {
 				dispatch({
 					type: LIKE_OR_UNLIKE_POST_SUCCESS,
-					payload: {...data, employeeId}
+					payload: { ...data, employeeId }
 				})
 			} else {
 				dispatch({

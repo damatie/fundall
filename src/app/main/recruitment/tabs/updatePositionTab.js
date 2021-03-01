@@ -123,7 +123,7 @@ function NewOpening(props) {
 
 	useEffect(() => {
 
-	}, [details.reasonForEmployment])
+	}, [details])
 
 	useEffect(() => {
 		if (!details.state) {
@@ -159,25 +159,34 @@ function NewOpening(props) {
 	];
 
 	useEffect(() => {
-		const { employeeStatus, dueDate, requiredSkills, jobTitle, entity, department, country, state, urgency } = props.selectedPosition;
+		console.log(props.selectedPosition)
+		const { employeeStatus, dueDate, requiredSkills, jobTitle, entity, department, country, state, urgency, reasonForEmployment } = props.selectedPosition;
 		setDetails({
 			departmentId: department.id,
 			entityId: entity.id,
 			jobTitle,
 			employeeStatus,
-			duration: props.selectedPosition?.duration,
+			duration: props.selectedPosition?.duration ?? "",
 			requiredSkills,
-			employeeToBeReplaced: props.selectedPosition?.employeeToBeReplaced,
-			positionType: props.selectedPosition?.positionType,
-			startDate: props.selectedPosition?.startDate,
-			endDate: props.selectedPosition?.endDate,
+			employeeToBeReplaced: props.selectedPosition?.employeeToBeReplaced ?? "",
+			positionType: props.selectedPosition?.positionType ?? "",
+			startDate: props.selectedPosition?.startDate ?? "",
+			endDate: props.selectedPosition?.endDate ?? "",
 			dueDate,
-			employeeGrade: props.selectedPosition?.employeeGrade,
+			employeeGrade: props.selectedPosition?.employeeGrade ?? "",
 			urgency,
 			country,
+			reasonForEmployment,
 			state
-		})
-	}, [props.selectedPosition])
+		});
+		// getState(country);
+	}, [props.selectedPosition,]);
+
+	useEffect(() => {
+		if (props?.selectedPosition?.country) {
+			getState(props?.selectedPosition?.country);
+		}
+	}, [props.selectedPosition?.country])
 
 	const recruitmentForm = formInputs.map((input, i) => {
 		if (input.type === 'text') {
