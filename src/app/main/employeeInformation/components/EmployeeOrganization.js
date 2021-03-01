@@ -11,10 +11,21 @@ import SharedButton from 'app/shared/button/SharedButton';
 import { useSelector, useDispatch } from 'react-redux';
 import useEmployeeOrganization from '../hooks/useEmployeeOrganization';
 import { DatePicker } from '@material-ui/pickers';
+import userPermission from '../logic/userPermission';
 
 const EmployeeOrganization = ({ value, authState }) => {
-  const { entities, departments, jobTitles } = useSelector(state => state.employeeInformation.organization);
+  const { 
+    organization: {
+      entities,
+      departments,
+    },
+    jobTitle,
+    employeeGrade,
+    roles, 
+  } = useSelector(state => state.employeeInformation);
+
   const dispatch = useDispatch();
+  
   const inputs = React.useMemo(() => [
     {
       name: 'entityId',
@@ -32,14 +43,30 @@ const EmployeeOrganization = ({ value, authState }) => {
       defaultValue: value.departmentId,
       fieldName: 'departmentName',
     },
+
     {
       name: 'jobTitleId',
       label: 'Job TItle',
       type: 'select',
-      fieldName: '',
-      data: jobTitles,
+      data: jobTitle.data,
       defaultValue: value.jobTitleId,
       fieldName: 'name'
+    },
+    {
+      name: 'roleId',
+      label: 'Role',
+      type: 'select',
+      data: roles.roles,
+      defaultValue: value.role.id,
+      fieldName: 'name'
+    },
+    {
+      name: 'employeeGrade',
+      label: 'Employee Grade',
+      type: 'select',
+      data: employeeGrade.data,
+      defaultValue: value.employeeGrade.id,
+      fieldName: 'gradeName'
     },
     {
       name: 'employeeManager1',
@@ -91,6 +118,13 @@ const EmployeeOrganization = ({ value, authState }) => {
       defaultValue: value.startDate,
     },
     {
+      name: 'confirmationDate',
+      label: 'Confirmation Date',
+      type: 'date',
+      data: [],
+      defaultValue: value.confirmationDate,
+    },
+    {
       name: 'contractType',
       label: 'Employment Status',
       type: 'select',
@@ -111,7 +145,13 @@ const EmployeeOrganization = ({ value, authState }) => {
       defaultValue: value.contractType,
       fieldName: 'name'
     }
-  ], [entities, departments, jobTitles]);
+  ], [entities, departments, jobTitle, employeeGrade, roles]);
+
+  const { canEditOrganization } = userPermission({
+    role: authState.role,
+    userId: authState.id,
+    profileId: value.employeeId,
+  });
 
   const {
     handleMenuItemClick,
@@ -138,13 +178,13 @@ const EmployeeOrganization = ({ value, authState }) => {
     <BasicCard
       title='Organization'
       button={
-        <SharedButton
+        canEditOrganization() && (<SharedButton
           color='secondary'
           variant='contained'
           onClick={handleShouldUpdate}
         >
           {shouldUpdate ? 'Cancel' : 'Edit'}
-        </SharedButton>
+        </SharedButton>)
       }
     >
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -156,11 +196,12 @@ const EmployeeOrganization = ({ value, authState }) => {
                   name={input.name}
                   control={control}
                   defaultValue={input.defaultValue}
+                  key={input.name}
                   as={
                     <SelectTextField
                       defaultValue={input.defaultValue}
                       disabled={
-                        input.name === 'entityId' || input.name === 'departmentId' || input.name === 'jobTitleId' ? true : !shouldUpdate
+                        input.name === 'entityId' || input.name === 'departmentId' || input.name === 'jobTitleId' ||input.name === 'employeeGrade' || input.name === 'roleId' ? true : !shouldUpdate
                       }
                       label={input.label}
                       error={errors[input.name]}
@@ -186,6 +227,7 @@ const EmployeeOrganization = ({ value, authState }) => {
                   control={control}
                   defaultValue={input.defaultValue}
                   name={input.name}
+                  key={input.name}
                   as={
                     <DatePicker
                       inputVariant="outlined"
@@ -210,6 +252,7 @@ const EmployeeOrganization = ({ value, authState }) => {
                 message={errors[input.name]?.message}
                 refs={register}
                 disabled={!shouldUpdate}
+                key={input.name}
               />
             )
           })}

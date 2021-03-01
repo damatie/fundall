@@ -6,10 +6,10 @@ import { CLOSE_SHARED_MODAL } from './employeeInfo.actions';
 
 export const GET_EMERGENCY_CONTACTS = 'GET EMERGENCY CONTACTS';
 
-export const getEmergencyContact = () => {
+export const getEmergencyContact = (id) => {
   return async (dispatch) => {
     try {
-      const { data: { data } } = await api.get('/emergency_contact/');
+      const { data: { data } } = await api.get(`/emergency_contact/${id}`);
       dispatch({
         type: GET_EMERGENCY_CONTACTS,
         payload: data || []
@@ -23,17 +23,17 @@ export const getEmergencyContact = () => {
   }
 };
 
-export const addEmergencyContact = (value) => {
+export const addEmergencyContact = ({formData, employeeId}) => {
   return async (dispatch) => {
     try {
       loading('Saving...');
-      const { data: { data, message } } = await api.post('/emergency_contact/', value);
+      const { data: { data, message } } = await api.post('/emergency_contact/', formData);
       swal.fire({
         text: message,
         icon: 'success',
         timer: 1500
       });
-      dispatch(getEmergencyContact());
+      dispatch(getEmergencyContact(employeeId));
       dispatch({
         type: CLOSE_SHARED_MODAL
       });
@@ -47,7 +47,7 @@ export const addEmergencyContact = (value) => {
   }
 };
 
-export const updateEmergencyContact = ({id, data}) => {
+export const updateEmergencyContact = ({id, data, employeeId}) => {
   return async (dispatch) => {
     try {
       loading('Updating...');
@@ -57,7 +57,7 @@ export const updateEmergencyContact = ({id, data}) => {
         icon: 'success',
         timer: 1500
       });
-      dispatch(getEmergencyContact());
+      dispatch(getEmergencyContact(employeeId));
     } catch (e) {
       swal.fire({
         text: catchErrorMsg(e),
@@ -68,7 +68,7 @@ export const updateEmergencyContact = ({id, data}) => {
   }
 };
 
-export const deleteEmergencyContact = (id) => {
+export const deleteEmergencyContact = ({id, employeeId}) => {
   return async (dispatch) => {
     try {
       swal.fire({
@@ -87,7 +87,7 @@ export const deleteEmergencyContact = (id) => {
             text: message,
             icon: 'success',
           });
-          dispatch(getEmergencyContact());
+          dispatch(getEmergencyContact(employeeId));
         }
       });
     } catch (e) {

@@ -32,7 +32,7 @@ const navigationConfig = [
 				type: 'item',
 				icon: 'group_add',
 				url: '/employee_management',
-				auth: authRoles?.admin,
+				auth: authRoles?.manager,
 			},
 			{
 				id: 'Telephone_directory',

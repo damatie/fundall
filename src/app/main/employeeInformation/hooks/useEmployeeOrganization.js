@@ -129,7 +129,17 @@ const useEmployeeOrganization = ({ dispatch, state, defaultValue }) => {
     defaultValue
   });
 
-  const onSubmit = (value) => {
+  const onSubmit = (formData) => {
+    const value = {
+      employeeManager1: formData.employeeManager1,
+      employeeManager2: formData.employeeManager2,
+      reviewingManager: formData.reviewingManager,
+      personalAssistant: formData.personalAssistant,
+      SRGSeniority: formData.SRGSeniority,
+      industrySeniority: formData.industrySeniority,
+      startDate: formData.startDate,
+      contractType: formData.contractType,
+    }
     dispatch(updateEmployeeInfo({id: state.id, value}));
   };
 

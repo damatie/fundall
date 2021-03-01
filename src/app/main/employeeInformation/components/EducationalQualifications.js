@@ -14,16 +14,33 @@ import useEducation from '../hooks/useEducation';
 import { useDispatch, useSelector } from 'react-redux';
 import { Controller } from 'react-hook-form';
 import { getEducation } from '../store/actions';
+import { useParams } from 'react-router';
+import userPermission from '../logic/userPermission';
 
 const EducationalQualification = ({ handleOpen }) => {
   const [shouldUpdate, setShouldUpdate] = React.useState(false);
 
-  const { data } = useSelector(state => state.employeeInformation.education);
+  const params = useParams();
+  const authState = useSelector(state => state.auth.user);
+  const getUserId = !!params?.id ? params?.id : authState.id;
+
+  const {
+    education: { data },
+    employeeInfo: {
+      info: { employeeId }
+    }
+  } = useSelector(state => state.employeeInformation);
 
   const dispatch = useDispatch();
 
+  const { canDelete, canEdit, canAdd } = userPermission({
+    role: authState.role,
+    userId: authState.id,
+    profileId: employeeId,
+  });
+
   React.useEffect(() => {
-    dispatch(getEducation());
+    dispatch(getEducation(getUserId));
   }, []);
 
   return (
@@ -31,38 +48,51 @@ const EducationalQualification = ({ handleOpen }) => {
       title='Educational Qualification'
       button={
         <>
-          <SharedButton
-            variant='outlined'
-            color='secondary'
-            onClick={handleOpen('Educational Qualification')}
-            className='mx-16'
-          >
-            Add
-          </SharedButton>
-          <SharedButton
-            variant='contained'
-            color='secondary'
-            onClick={() => setShouldUpdate(!shouldUpdate)}
-          >
-            {shouldUpdate ? 'Cancel' : 'Edit'}
-          </SharedButton>
+          <>
+            {
+              canAdd() && (<SharedButton
+                variant='outlined'
+                color='secondary'
+                onClick={handleOpen('Educational Qualification')}
+                className='mx-16'
+              >
+                Add
+              </SharedButton>)
+            }
+          </>
+          <>
+            {
+              canEdit() && (
+                <SharedButton
+                  variant='contained'
+                  color='secondary'
+                  onClick={() => setShouldUpdate(!shouldUpdate)}
+                >
+                  {shouldUpdate ? 'Cancel' : 'Edit'}
+                </SharedButton>)
+            }
+
+          </>
         </>
       }
     >
-      {data.map((item, index) => (
-        <EducationalQualificationDetails
-          item={item}
-          key={item?.id}
-          index={index}
-          shouldUpdate={shouldUpdate}
-          setShouldUpdate={setShouldUpdate}
-        />
-      ))}
+      {
+        data.map((item, index) => (
+          <EducationalQualificationDetails
+            item={item}
+            key={item?.id}
+            index={index}
+            shouldUpdate={shouldUpdate}
+            setShouldUpdate={setShouldUpdate}
+            canDelete={canDelete}
+          />
+        ))
+      }
     </BasicCard>
   );
 };
 
-const EducationalQualificationDetails = ({ item, index, setShouldUpdate, shouldUpdate }) => {
+const EducationalQualificationDetails = ({ item, index, setShouldUpdate, shouldUpdate, canDelete }) => {
   const inputs = React.useMemo(() => [
     {
       name: 'school',
@@ -102,6 +132,12 @@ const EducationalQualificationDetails = ({ item, index, setShouldUpdate, shouldU
     },
   ], []);
 
+  const {
+    employeeInfo: {
+      info: { employeeId }
+    }
+  } = useSelector(state => state.employeeInformation);
+
   const dispatch = useDispatch();
 
   const close = () => {
@@ -117,16 +153,17 @@ const EducationalQualificationDetails = ({ item, index, setShouldUpdate, shouldU
     handleDelete
   } = useEducation({
     dispatch,
+    employeeId
   })
   return (
     <>
       <div className='flex flex-row items-center my-20'>
         <Typography variant="subtitle1" color="initial">Educational Qualification ({index + 1})</Typography>
-        <IconButton
+        {canDelete() && (<IconButton
           aria-label="delete"
           onClick={() => handleDelete(item.id)}>
           <Icon className='text-red-500'>delete</Icon>
-        </IconButton>
+        </IconButton>)}
       </div>
       <form onSubmit={handleSubmit(onSubmit(item.id, close))}>
         <GridSystem>
@@ -254,6 +291,12 @@ export const AddEducationalQualification = () => {
     },
   ], []);
 
+  const {
+    employeeInfo: {
+      info: { employeeId }
+    }
+  } = useSelector(state => state.employeeInformation);
+
   const dispatch = useDispatch();
 
   const {
@@ -264,6 +307,7 @@ export const AddEducationalQualification = () => {
     control
   } = useEducation({
     dispatch,
+    employeeId
   })
 
   return (
