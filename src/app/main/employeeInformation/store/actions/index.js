@@ -5,3 +5,4 @@ export * from './training.actions';
 export * from './emergencyContact.actions';
 export * from './nextOfKin.actions';
 export * from './spouseDependant.actions';
+export * from './promotionHistory.actions';

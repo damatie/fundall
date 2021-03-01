@@ -13,6 +13,9 @@ import { getEmployeeInfo } from './store/actions';
 import { useParams } from 'react-router';
 import Skeleton from '@material-ui/lab/Skeleton';
 import { useDispatch, useSelector } from 'react-redux';
+import { getAllEmployeeGrade } from 'app/main/employeeGrade/store/actions';
+import { getAllJobTitle } from 'app/main/jobTitle/store/actions';
+import { getAllRoles } from 'app/main/permission/store/actions';
 
 const EmployeeInformation = () => {
   const [tabValue, setTabValue] = React.useState(0);
@@ -28,6 +31,12 @@ const EmployeeInformation = () => {
       return;
     }
     dispatch(getEmployeeInfo(authState.id));
+  }, []);
+
+  React.useEffect(() => {
+    dispatch(getAllEmployeeGrade({ offset: 0, limit: 10000 }));
+    dispatch(getAllJobTitle());
+    dispatch(getAllRoles())
   }, []);
 
   function handleChangeTab(event, value) {

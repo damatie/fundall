@@ -23,8 +23,12 @@ const userPermission = ({role, userId, profileId}) => {
     return userRole(role) === 'financemanager';
   }
 
+  const canEditOrganization = () => {
+    return userRole(role) === 'hrmanager' 
+  }
 
-  return { canEdit, canAdd, canView, canDelete, editCompensation }
+
+  return { canEdit, canAdd, canView, canDelete, editCompensation, canEditOrganization }
 };
 
 export default userPermission;
