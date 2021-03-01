@@ -23,11 +23,10 @@ export const getNotifications = () => {
             payload: desSort(data.data)
           });
         } else {
-          if (localStorage.getItem("jwt_access_token") && data.message === "Invalid Token") {
+          console.log(data.message)
+          if (data.message === "Invalid Token" && window.location.pathname !== "/auth/login") {
             localStorage.clear();
-            
-            console.log(localStorage.getItem("jwt_access_token"))
-            // window.location.href = "/";
+            window.location.href = "/auth/login";
           }
         }
       }

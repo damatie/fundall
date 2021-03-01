@@ -101,32 +101,13 @@ const getProfile = ({ id, token, }) => {
 			}
 		}).then(res => handleResponse(res)).then(
 			data => {
-				localStorage.setItem('user_profile', JSON.stringify(data.data));
-				dispatch({
-					type: GET_EMPLOYEE_PROFILE,
-					payload: data.data || {}
-				})
-			}
-		)
-	}
-}
-
-const getNotification = token => {
-	return dispatch => {
-		dispatch({
-			type: LOADING_NOTIFICATIONS
-		});
-		fetch(`${getBaseUrl()}/notification`, {
-			headers: {
-				authorization: `JWT ${token}`
-			}
-		}).then(res => handleResponse(res)).then(
-			data => {
-				console.log(data)
-				dispatch({
-					type: GET_NOTIFICATIONS,
-					payload: (data.data) ? data.data : []
-				})
+				if (data.data) {
+					localStorage.setItem('user_profile', JSON.stringify(data.data));
+					dispatch({
+						type: GET_EMPLOYEE_PROFILE,
+						payload: data.data || {}
+					});
+				}
 			}
 		)
 	}
