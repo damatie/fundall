@@ -34,7 +34,10 @@ const KPOcategoryTable = () => {
 			{
 				Header: 'Modified by',
 				accessor: 'modifiedBy',
-				sortable: true
+				sortable: true,
+				Cell: ({ row : { original }}) => {
+					return <>{`${original.modifier.firstName} ${original.modifier.lastName}`}</>
+				}
 			},
 			{
 				Header: 'Status',

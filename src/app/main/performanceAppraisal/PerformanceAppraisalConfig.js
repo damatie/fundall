@@ -32,6 +32,14 @@ const PerformanceAppraisalConfig = {
 			component: React.lazy(() => import('./KPOlist/EmployeeKpoDetails'))
 		},
 		{
+			path: '/performance_appraisal/kpo/review/details/:id/kpoContent/:kpoContentId',
+			component: React.lazy(() => import('./KPOlist/EmployeeKpoContentDetails'))
+		},
+		{
+			path: '/performance_appraisal/kpo/review/details/:id',
+			component: React.lazy(() => import('./KPOlist/EmployeeKpoDetails'))
+		},
+		{
 			path: '/performance_appraisal/kpo/review',
 			component: React.lazy(() => import('./KPOlist/EmployeeKpoReview'))
 		},

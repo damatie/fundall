@@ -11,6 +11,10 @@ export const OPEN_REQUEST_KPO_MODAL = 'OPEN REQUEST KPO MODAL';
 export const CLOSE_REQUEST_KPO_MODAL = 'CLOSE REQUEST KPO MODAL';
 export const GET_ONE_KPO_REQUEST  = 'GET ONE KPO REQUEST';
 
+const getApprovedKpo = (data) => {
+  return data.filter((item) => item.status !== 'requested' && item.status !== 'rejected');
+};
+
 export const getKpoByDept = (id) => {
   return async (dispatch) => {
     try {
@@ -18,7 +22,7 @@ export const getKpoByDept = (id) => {
       if(success) {
         dispatch({
           type: GET_KPO_BY_DEPT,
-          payload: rows
+          payload: getApprovedKpo(rows)
         })
       }
     } catch (e) {
@@ -37,7 +41,7 @@ export const getAssignedKpo = () => {
       if(success) {
         dispatch({
           type: GET_ASSIGNED_KPO,
-          payload: rows,
+          payload: getApprovedKpo(rows),
         })
       }
     } catch (e) {
@@ -55,7 +59,7 @@ export const getKpoByEntity = (id) => {
       const { data: { data: { rows } }} = await api.get(`/appraisal/kpo/entity/${id}`);
       dispatch({
         type: GET_KPO_BY_DEPT,
-        payload: rows
+        payload: getApprovedKpo(rows)
       });
     } catch (e) {
       dispatch({

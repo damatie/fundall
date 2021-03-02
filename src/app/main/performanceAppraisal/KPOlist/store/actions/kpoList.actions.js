@@ -10,6 +10,10 @@ export const GET_ONE_KPO = 'GET ONE KPO';
 export const CLEAR_KPO_DATA = 'CLEAR KPO DATA';
 export const GET_JOBTITLE = 'GET JOBTITLE';
 
+const getApprovedKpo = (data) => {
+  return data.filter((item) => item.status !== 'rejected');
+};
+
 export const getJobTitle = () => {
   return async (dispatch) => {
     try {
@@ -34,7 +38,7 @@ export const getAllKpo = (userId) => {
       if(success) {
         dispatch({
           type: GET_ALL_KPO,
-          payload: data.rows
+          payload: getApprovedKpo(data.rows)
         });
       }
     } catch(e) {
@@ -106,7 +110,12 @@ export const updateKpo = ({id, userId, model}) => {
           icon: 'success'
         });
         dispatch(getAllKpo(userId));
+        return;
       }
+      swal.fire({
+        text: message,
+        icon: 'warning'
+      });
     } catch (e) {
       swal.fire({
         text: e.response?.data.message || e.response?.data.error || 'Service Unavailable',
