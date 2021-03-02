@@ -3,6 +3,7 @@ import EnhancedTable from 'app/shared/table/EnhancedTable';
 import CustomIconButton from 'app/shared/button/CustomIconButton';
 import useKpoContentList from '../hooks/useKpoContent';
 import Skeleton from '@material-ui/lab/Skeleton';
+import { useLocation } from 'react-router-dom';
 
 const KpoContentList = ({customHook}) => {
   const columns = React.useMemo(
@@ -96,6 +97,14 @@ const KpoContentList = ({customHook}) => {
 		],
 	);
 	const { kpoData, push, id, handleDelete, loading } = customHook;
+
+	const location = useLocation();
+  const [url, setUrl] = React.useState(`/performance_appraisal/kpoList/details/${id}/kpoContent`);
+
+  React.useEffect(() => {
+    location.pathname === `/performance_appraisal/kpo/review/details/${id}` && setUrl(`/performance_appraisal/kpo/review/details/${id}/kpoContent`);
+  }, []);
+
 	return (
 		<>
 		{
@@ -108,7 +117,7 @@ const KpoContentList = ({customHook}) => {
 			data={kpoData || []}
 			onRowClick={(ev, row) => {
 				if (row) {
-					push(`/performance_appraisal/kpoList/details/${id}/kpoContent/${row.original.id}`)
+					push(`${url}/${row.original.id}`)
 				}
 			}}
 			checkbox={{

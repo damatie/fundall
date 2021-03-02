@@ -70,11 +70,11 @@ const useKpoList = ({dispatch, userId, state, push, id, employees, userInfo}) =>
   }, [userId, id]);
 
   React.useEffect(() => {
-    if(id) {
-      register({name: 'lineManagerId', value: kpo.lineManagerId});
-      register({name: 'reviewingManagerId', value: kpo.reviewingManagerId});
+    if(id && Object.entries(kpo).length > 0) {
+      register({name: 'lineManagerId', value: kpo?.lineManagerId});
+      register({name: 'reviewingManagerId', value: kpo?.reviewingManagerId});
     }
-  }, []);
+  }, [kpo]);
 
   const handleCloseModal = () => {
     dispatch({
@@ -137,12 +137,21 @@ const useKpoList = ({dispatch, userId, state, push, id, employees, userInfo}) =>
   };
 
   const shouldShowAddButton = () => {
-    return (userInfo.id === state.kpo.employee.id && userInfo.data.email === state.kpo.employee.email);
+    return (userInfo?.id === state.kpo.employee.id && userInfo.data.email === state.kpo.employee.email);
   };
 
 
   const submitButtonText = () => {
     return kpo.status === 'on-going' ? 'Submit KPO for Review' : 'Complete KPO'
+  };
+
+  const showActionButton = (user) => {
+    if(user?.id === state.kpo.employee?.id && userInfo.data.email === state.kpo.employee?.email && kpo.status === 'on-going') return true;
+    if(userRole(userInfo.role) === 'linemanager' && kpo.status !== 'on-going' && kpo.status !== 'pending' && kpo.status !== 'reviewed1' && kpo.status !== 'reviewed2' && kpo.status !== 'completed') return true;
+  }
+
+  const showApproveButton = () => {
+    if(userRole(userInfo.role) === 'linemanager' && kpo.status !== 'on-going' && kpo.status !== 'pending' && kpo.status !== 'reviewed1' && kpo.status === 'reviewed2') return true;
   }
 
   return {
@@ -166,7 +175,9 @@ const useKpoList = ({dispatch, userId, state, push, id, employees, userInfo}) =>
     submitKpo,
     submitButtonText,
     approveKpo,
-    shouldShowAddButton
+    shouldShowAddButton,
+    showActionButton,
+    showApproveButton
   };
 };
 

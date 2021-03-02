@@ -110,7 +110,7 @@ const ListOfEmployeeKpo = ({ customHook, isAssigned, value, request }) => {
 							}
 							onRowClick={(ev, row) => {
 								if (row && !request) {
-									push(`/performance_appraisal/kpoList/details/${row.original.id}`)
+									push(`/performance_appraisal/kpo/review/details/${row.original.id}`)
 								} else {
 									handleOpen(row.original);
 								}

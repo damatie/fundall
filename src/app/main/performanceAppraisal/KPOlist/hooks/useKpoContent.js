@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import errorMsg from '../../../../../utils/errorMsg';
 import { getAllCategory } from '../../KPOcategoryList/store/actions';
+import userRole from 'utils/userRole';
 
 const schema = (type) => {
   switch(type){
@@ -114,7 +115,7 @@ const useKpoContentList = ({config, state, dispatch, params, push, kpoCategory, 
     resolver: yupResolver(schema(config?.type))
   });
 
-  const [shouldDisableButton, setShouldDisableButton] = React.useState(!!kpoContent.status === 4);
+  const [shouldDisableButton, setShouldDisableButton] = React.useState(false);
 
   React.useEffect(() => {
     if(kpoId) {
@@ -124,15 +125,12 @@ const useKpoContentList = ({config, state, dispatch, params, push, kpoCategory, 
     dispatch(getAllCategory());
   }, []);
 
-  // React.useEffect(() => {
-  //   // return !!(getValues().kpoYearendScore && getValues().kpoYearendRemarks && getValues().kpoPipAchieved)
-  //   if(kpoContent.status === 4) {
-  //     // setShouldDisableButton(true)
-  //     if(getValues().kpoYearendScore) {
-  //       console.log(getValues().kpoYearendScore)
-  //     }
-  //   }
-  // }, [getValues().kpoYearendScore]);
+  React.useEffect(() => {
+    // return !!(getValues().kpoYearendScore && getValues().kpoYearendRemarks && getValues().kpoPipAchieved)
+    if(kpoContent.status === 4 && userRole(userInfo.role) !== 'linemanager') {
+      setShouldDisableButton(true);
+    }
+  }, [kpoContent]);
 
   
 

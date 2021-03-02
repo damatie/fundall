@@ -8,7 +8,7 @@ import KpoContentTarget from './components/KpoContentTarget';
 import reducer from './store/reducers';
 import kpoCategoryReducer from '../KPOcategoryList/store/reducers/categoryList.reducer';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams, useHistory, useLocation } from 'react-router-dom';
 import useKpoContent from './hooks/useKpoContent';
 import ModificationRequest from './components/ModificationRequest';
 import useModificationReq from './hooks/useModificationReq';
@@ -18,6 +18,12 @@ const EmployeeKpoContentDetails = () => {
   const dispatch = useDispatch();
   const params = useParams();
   const { push } = useHistory();
+  const location = useLocation();
+  const [prevUrl, setPrevUrl] = React.useState(`/performance_appraisal/kpoList/details/${params.id}`);
+
+  React.useEffect(() => {
+    location.pathname === `/performance_appraisal/kpo/review/details/${params.id}/kpoContent/${params.kpoContentId}` && setPrevUrl(`/performance_appraisal/kpo/review/details/${params.id}`);
+  }, [])
   const { data: kpoCategory } = useSelector(state => state.kpoCategory);
   const state = useSelector(state => state.kpo.kpoContentList);
   const userInfo = useSelector(state => state.auth.user)
@@ -45,7 +51,7 @@ const EmployeeKpoContentDetails = () => {
     <PageLayout
       noSearch
       prev={{
-        url: `/performance_appraisal/kpoList/details/${params.id}`
+        url: prevUrl
       }}
       header={{
         icon: '',
