@@ -14,6 +14,7 @@ import Formsy from 'formsy-react';
 import withReducer from 'app/store/withReducer';
 import { useDispatch, useSelector } from 'react-redux';
 import Swal from 'sweetalert2';
+import ProgressBtn from 'app/shared/progressBtn';
 
 const columns = [
     {
@@ -61,6 +62,10 @@ function AttendanceDashboard(props) {
     }, [activities, attendanceHistory])
 
     const handleSubmit = () => {
+        if (selected.length < 2) {
+            Swal.fire("Must select 2 activities!");
+            return;
+        };
         setOpen(false);
         dispatch(Actions.markAttendance(payload));
     }
@@ -94,7 +99,7 @@ function AttendanceDashboard(props) {
             let newArr = selected;
             let oldActivities = payload.activities;
 
-            let index = newArr.findIndex(element => element.name === value);
+            let index = newArr.findIndex(element => element === value);
 
             oldActivities.splice(newArr.indexOf(value), 1);
             newArr.splice(index, 1);
@@ -187,9 +192,10 @@ function AttendanceDashboard(props) {
                             <Button onClick={handleClose} color="primary">
                                 Close
                             </Button>
-                            <Button onClick={handleSubmit} color="primary">
+                            <ProgressBtn content={"Submit"} onClick={handleSubmit} color={"primary"} />
+                            {/* <Button onClick={handleSubmit} color="primary" disabled={selected.length < 2}>
                                 Submit
-                            </Button>
+                            </Button> */}
                         </DialogActions>
                     </Dialog>
                 </>

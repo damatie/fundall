@@ -20,6 +20,10 @@ const AttendanceTable = (props) => {
         id: null
     });
 
+    useEffect(() => {
+        setData(props.rows);
+    }, [props.rows]);
+
     const createSortHandler = property => event => {
         const id = property;
         let direction = 'desc';
