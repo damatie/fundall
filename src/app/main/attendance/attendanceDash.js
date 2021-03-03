@@ -99,7 +99,7 @@ function AttendanceDashboard(props) {
             let newArr = selected;
             let oldActivities = payload.activities;
 
-            let index = newArr.findIndex(element => element.name === value);
+            let index = newArr.findIndex(element => element === value);
 
             oldActivities.splice(newArr.indexOf(value), 1);
             newArr.splice(index, 1);
