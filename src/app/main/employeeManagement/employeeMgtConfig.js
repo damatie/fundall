@@ -6,6 +6,10 @@ const EmployeeMgtConfig = {
 	},
 	routes: [
 		{
+			path: '/employee_management/:id',
+			component: React.lazy(() => import('../employeeInformation/EmployeeInformation'))
+		},
+		{
 			path: '/employee_management/',
 			component: React.lazy(() => import('./Employees'))
 		},

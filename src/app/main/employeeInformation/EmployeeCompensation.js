@@ -7,17 +7,30 @@ import { Controller } from 'react-hook-form';
 import SharedButton from 'app/shared/button/SharedButton';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCompensationColumns } from 'app/main/compensationColumns/store/actions';
+import userPermission from './logic/userPermission';
+import Skeleton from '@material-ui/lab/Skeleton';
 
 const EmployeeCompensation = () => {
   const dispatch = useDispatch();
 
-  const profile = useSelector(state => state.profile.data);
+  const authState = useSelector(state => state.auth.user);
 
-  const { data, loading } = useSelector(state => state.employeeInformation.compensationColumns);
+  const {
+    compensationColumns: { data, loading },
+    employeeInfo: {
+      info
+    }
+  } = useSelector(state => state.employeeInformation);
 
   React.useEffect(() => {
     dispatch(getCompensationColumns());
   }, []);
+
+  const { editCompensation, canEdit } = userPermission({
+    role: authState.role,
+    userId: authState.id,
+    profileId: info.id,
+  });
 
   const {
     onSubmit,
@@ -30,23 +43,27 @@ const EmployeeCompensation = () => {
     shouldUpdate
   } = useEmployeeCompensation({
     dispatch,
-    state: profile
+    state: info
   });
 
   return (
     <BasicCard
       title='Compensation'
       button={
-        <SharedButton
+        (editCompensation() || canEdit()) && (<SharedButton
           color='secondary'
           variant='contained'
           onClick={handleShouldUpdate}
         >
           {shouldUpdate ? 'Cancel' : 'Edit'}
-        </SharedButton>
+        </SharedButton>)
       }
     >
-      <form onSubmit={handleSubmit(onSubmit)}>
+      {
+        loading ? (
+          <Skeleton variant="rect" width='100%' height={400} animation="wave" />
+        ) : (
+          <form onSubmit={handleSubmit(onSubmit)}>
         <GridSystem>
           {
             compensationColumns(data).map((input) => (
@@ -54,7 +71,7 @@ const EmployeeCompensation = () => {
                 name={input.name}
                 control={control}
                 rules={{ required: true }}
-                defaultValue={!!profile.info.compensationDetails && profile.info.compensationDetails[input.name]}
+                defaultValue={!!info.compensationDetails && info.compensationDetails[input.name]}
                 as={
                   <Input
                     {...input}
@@ -62,7 +79,7 @@ const EmployeeCompensation = () => {
                     message={errors[input.name]?.message}
                     ref={register}
                     type='number'
-                    defaultValue={!!profile.info.compensationDetails && profile.info.compensationDetails[input.name]}
+                    defaultValue={!!info.compensationDetails && info.compensationDetails[input.name]}
                     disabled={!shouldUpdate}
                   />
                 }
@@ -83,6 +100,8 @@ const EmployeeCompensation = () => {
           )
         }
       </form>
+        )
+      }
     </BasicCard>
   );
 };

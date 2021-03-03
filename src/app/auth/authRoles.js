@@ -4,11 +4,11 @@
 
 const roles = () => {
 	return {
-		admin: ['Hr Manager', 'Hr Admin'],
-		staff: ['Employee', 'Line Manager', 'Finance Manager', 'Hr Manager', 'Hr Admin'],
-		manager: ['Line Manager', 'Finance Manager', 'Hr Manager', 'Hr Admin'],
-		mainManager: ['Finance Manager', 'Hr Manager', 'Hr Admin'],
-		lineManager: ["Line Manager"]
+		admin: ['HR MANAGER', 'HR ADMIN'],
+		staff: ['EMPLOYEE', 'LINE MANAGER', 'FINANCE MANAGER', 'HR MANAGER', 'HR ADMIN', 'REVIEWING MANAGER'],
+		manager: ['LINE MANAGER', 'FINANCE MANAGER', 'HR MANAGER', 'HR ADMIN', 'REVIEWING MANAGER'],
+		lineManager: ["LINE MANAGER"],
+		financeManager: ['FINANCE MANAGER'],
 	};
 }
 const authRoles = roles();

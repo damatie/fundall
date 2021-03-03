@@ -89,7 +89,7 @@ const schema = yup.object().shape({
   ),
 });
 
-const useSpouseDependants = ({ dispatch }) => {
+const useSpouseDependants = ({ dispatch, employeeId }) => {
   const {
     errors,
     register,
@@ -102,15 +102,15 @@ const useSpouseDependants = ({ dispatch }) => {
 
   const onSubmit = (id, close) => (formData) => {
     if(id) {
-      dispatch(updateSpouseDependant({ id, data:formData }));
+      dispatch(updateSpouseDependant({ id, data:formData, employeeId }));
       close();
       return;
     }
-    dispatch(addSpouseDependant(formData));
+    dispatch(addSpouseDependant({formData, employeeId}));
   };
 
   const handleDelete = (id) => {
-    dispatch(deleteSpouseDependant(id));
+    dispatch(deleteSpouseDependant({id, employeeId}));
   };
   
   return {

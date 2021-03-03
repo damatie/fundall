@@ -33,7 +33,7 @@ export function submitLogin(data, x) {
 				localStorage.setItem('jwt_access_token', JSON.stringify(token));
 
 				const userState = {
-					role: data?.role.name ?? x.toUpperCase(),
+					role: data?.role.name.toUpperCase() ?? x.toUpperCase(),
 					redirectUrl: '/employee/dashboard',
 					id: data?.id,
 					data: {

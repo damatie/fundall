@@ -6,10 +6,10 @@ import { CLOSE_SHARED_MODAL } from './employeeInfo.actions';
 
 export const GET_TRAVEL_VACATION = 'GET TRAVEL AND VACATION';
 
-export const getTravelAndVacation = () => {
+export const getTravelAndVacation = (id) => {
   return async (dispatch) => {
     try {
-      const { data: { data } } = await api.get('/travel/vacation');
+      const { data: { data } } = await api.get(`/travel/vacation/${id}`);
       dispatch({
         type: GET_TRAVEL_VACATION,
         payload: data || []
@@ -23,17 +23,17 @@ export const getTravelAndVacation = () => {
   }
 };
 
-export const addTravelAndVacation = (value) => {
+export const addTravelAndVacation = ({formData, employeeId}) => {
   return async (dispatch) => {
     try {
       loading('Saving...');
-      const { data: { data, message } } = await api.post('/travel/vacation', value);
+      const { data: { data, message } } = await api.post('/travel/vacation', formData);
       swal.fire({
         text: message,
         icon: 'success',
         timer: 1500
       });
-      dispatch(getTravelAndVacation());
+      dispatch(getTravelAndVacation(employeeId));
       dispatch({
         type: CLOSE_SHARED_MODAL
       });
@@ -47,7 +47,7 @@ export const addTravelAndVacation = (value) => {
   }
 };
 
-export const updateTravelAndVacation = ({id, data}) => {
+export const updateTravelAndVacation = ({id, data, employeeId}) => {
   return async (dispatch) => {
     try {
       loading('Updating...');
@@ -57,7 +57,7 @@ export const updateTravelAndVacation = ({id, data}) => {
         icon: 'success',
         timer: 1500
       });
-      dispatch(getTravelAndVacation());
+      dispatch(getTravelAndVacation(employeeId));
     } catch (e) {
       swal.fire({
         text: catchErrorMsg(e),
@@ -68,7 +68,7 @@ export const updateTravelAndVacation = ({id, data}) => {
   }
 };
 
-export const deleteTravelAndVacation = (id) => {
+export const deleteTravelAndVacation = ({id, employeeId}) => {
   return async (dispatch) => {
     try {
       swal.fire({
@@ -87,7 +87,7 @@ export const deleteTravelAndVacation = (id) => {
             text: message,
             icon: 'success',
           });
-          dispatch(getTravelAndVacation());
+          dispatch(getTravelAndVacation(employeeId));
         }
       });
     } catch (e) {

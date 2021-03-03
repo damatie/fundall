@@ -14,10 +14,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as Actions from 'app/store/actions';
 import { Controller } from 'react-hook-form';
 import SharedDropzone from 'app/shared/sharedDropZone';
+import { useParams } from 'react-router';
 
 const CreateEmployeeInfo = () => {
 
   const { countries, states, cities } = useSelector(state => state.regions);
+  const params = useParams();
   const state = useSelector(state => state.auth.user);
   const profile = useSelector(state => state.profile);
   const dispatch = useDispatch();
@@ -98,6 +100,7 @@ const CreateEmployeeInfo = () => {
   React.useEffect(() => {
     dispatch(Actions.getCountries());
     // dispatch(Actions.getEmployeeProfile(state.id));
+    console.log(params);
   }, []);
 
   const {
@@ -116,7 +119,7 @@ const CreateEmployeeInfo = () => {
 
   return (
     <SharedModal
-      open={profile.data?.info ? false : true}
+      open={!!params?.id ? false : (profile.data?.info ? false : true)}
       handleClose={handleClose}
       title='Complete Registration'
     >

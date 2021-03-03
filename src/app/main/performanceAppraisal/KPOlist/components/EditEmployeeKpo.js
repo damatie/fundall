@@ -8,7 +8,7 @@ import { Controller } from 'react-hook-form';
 import AutoCompleteInput from 'app/shared/TextInput/AutoComplete';
 import Skeleton from '@material-ui/lab/Skeleton';
 
-const EditEmployeeKpo = ({customHook}) => {
+const EditEmployeeKpo = ({ customHook }) => {
   const { getEmployeesByRole, register, errors, handleSubmit, onSubmit, control, details, loadingSingleKpo, jobTitles } = customHook;
   return (
     <>
@@ -30,9 +30,10 @@ const EditEmployeeKpo = ({customHook}) => {
                       className='my-10'
                       error={errors.jobTitleId}
                       message={errors.jobTitleId?.message}
+                      refs={register}
                     >
                       {
-                        jobTitles.map(({name, id}) => (
+                        jobTitles.map(({ name, id }) => (
                           <MenuItem value={id} key={id}>
                             {name}
                           </MenuItem>
@@ -49,7 +50,6 @@ const EditEmployeeKpo = ({customHook}) => {
                   label='PIP Target'
                   multiline
                 /> */}
-
                 <AutoCompleteInput
                   className='my-16'
                   name='lineManagerId'
@@ -60,7 +60,6 @@ const EditEmployeeKpo = ({customHook}) => {
                   helperText={errors.lineManagerId?.message}
                   onChange={(ev, value) => register({ name: 'lineManagerId', value: value?.id })}
                 />
-
                 <AutoCompleteInput
                   className='my-16'
                   name='reviewingManagerId'

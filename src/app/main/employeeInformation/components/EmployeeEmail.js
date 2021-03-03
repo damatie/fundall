@@ -13,6 +13,7 @@ import Typography from '@material-ui/core/Typography';
 import { DatePicker } from '@material-ui/pickers';
 import SelectTextField from 'app/shared/TextInput/SelectTextField';
 import MenuItem from '@material-ui/core/MenuItem';
+import userPermission from '../logic/userPermission';
 
 const EmployeeEmail = ({ value, authState }) => {
   const { countries, states, cities } = useSelector(state => state.regions);
@@ -121,6 +122,12 @@ const EmployeeEmail = ({ value, authState }) => {
 
   const dispatch = useDispatch();
 
+  const { canEdit } = userPermission({
+    role: authState.role,
+    userId: authState.id,
+    profileId: value.employeeId,
+  });
+
   const {
     errors,
     register,
@@ -140,13 +147,13 @@ const EmployeeEmail = ({ value, authState }) => {
     <BasicCard
       title='Employee Information'
       button={
-        <SharedButton
+        canEdit() && (<SharedButton
           color='secondary'
           variant='contained'
           onClick={handleShouldUpdate}
         >
           {shouldUpdate ? 'Cancel' : 'Edit'}
-        </SharedButton>
+        </SharedButton>)
       }
     >
       <form onSubmit={handleSubmit(onSubmit)}>

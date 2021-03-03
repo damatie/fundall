@@ -32,7 +32,7 @@ const navigationConfig = [
 				type: 'item',
 				icon: 'group_add',
 				url: '/employee_management',
-				auth: authRoles?.admin,
+				auth: authRoles?.manager,
 			},
 			{
 				id: 'Telephone_directory',
@@ -574,7 +574,7 @@ const navigationConfig = [
 				type: 'item',
 				url: '/srep/all',
 				icon: 'list_alt',
-				auth: authRoles?.mainManager
+				auth: authRoles?.manager
 			},
 		]
 	},

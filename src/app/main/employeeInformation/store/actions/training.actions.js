@@ -6,10 +6,10 @@ import { CLOSE_SHARED_MODAL } from './employeeInfo.actions';
 
 export const GET_TRAINING_EXPERTISE = 'GET TRAINING AND EXPERTISE';
 
-export const getTrainingAndExpertise = () => {
+export const getTrainingAndExpertise = (id) => {
   return async (dispatch) => {
     try {
-      const { data: { data } } = await api.get('/training/expertise/');
+      const { data: { data } } = await api.get(`/training/expertise/${id}`);
       dispatch({
         type: GET_TRAINING_EXPERTISE,
         payload: data || []
@@ -23,17 +23,17 @@ export const getTrainingAndExpertise = () => {
   }
 };
 
-export const addTrainingAndExpertise = (value) => {
+export const addTrainingAndExpertise = ({formData, employeeId}) => {
   return async (dispatch) => {
     try {
       loading('Saving...');
-      const { data: { data, message } } = await api.post('/training/expertise/', value);
+      const { data: { data, message } } = await api.post('/training/expertise/', formData);
       swal.fire({
         text: message,
         icon: 'success',
         timer: 1500
       });
-      dispatch(getTrainingAndExpertise());
+      dispatch(getTrainingAndExpertise(employeeId));
       dispatch({
         type: CLOSE_SHARED_MODAL
       });
@@ -47,7 +47,7 @@ export const addTrainingAndExpertise = (value) => {
   }
 };
 
-export const updateTrainingAndExpertise = ({id, data}) => {
+export const updateTrainingAndExpertise = ({id, data, employeeId}) => {
   return async (dispatch) => {
     try {
       loading('Updating...');
@@ -57,7 +57,7 @@ export const updateTrainingAndExpertise = ({id, data}) => {
         icon: 'success',
         timer: 1500
       });
-      dispatch(getTrainingAndExpertise());
+      dispatch(getTrainingAndExpertise(employeeId));
     } catch (e) {
       swal.fire({
         text: catchErrorMsg(e),
@@ -68,7 +68,7 @@ export const updateTrainingAndExpertise = ({id, data}) => {
   }
 };
 
-export const deleteTrainingAndExpertise = (id) => {
+export const deleteTrainingAndExpertise = ({id, employeeId}) => {
   return async (dispatch) => {
     try {
       swal.fire({
@@ -87,7 +87,7 @@ export const deleteTrainingAndExpertise = (id) => {
             text: message,
             icon: 'success',
           });
-          dispatch(getTrainingAndExpertise());
+          dispatch(getTrainingAndExpertise(employeeId));
         }
       });
     } catch (e) {

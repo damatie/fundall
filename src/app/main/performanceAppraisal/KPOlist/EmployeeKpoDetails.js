@@ -15,7 +15,7 @@ import PersonalDevelopment from './components/PersonalDevelopment';
 import BehaviouralAttribute from './components/BehaviouralAttribute';
 import useKpoList from './hooks/useKpoList';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams, useHistory, useLocation } from 'react-router-dom';
 import useKpoSummary from './hooks/useKpoSummary';
 import useKpoPip from './hooks/useKpoPip';
 import CustomIconButton from 'app/shared/button/CustomIconButton';
@@ -26,11 +26,17 @@ const EmployeeKpoDetails = () => {
   const dispatch = useDispatch();
   const params = useParams();
   const { push } = useHistory();
+  const location = useLocation();
+  const [prevUrl, setPrevUrl] = React.useState('/performance_appraisal/kpoList');
+
+  React.useEffect(() => {
+    location.pathname === `/performance_appraisal/kpo/review/details/${params.id}` && setPrevUrl('/performance_appraisal/kpo/review/');
+  }, [])
 
   const EmployeeKpo = useSelector(state => state.kpo.employeeKpoList);
   const { data: kpoCategory } = useSelector(state => state.kpoCategory);
   const state = useSelector(state => state.kpo.kpoContentList);
-  const userInfo = useSelector(state => state.auth.user);
+  const userInfo = useSelector(state => state.auth?.user);
   const employees = useSelector(state => state.employeeList.data);
 
   const EmployeeKpoCustomHook = useKpoList({
@@ -56,7 +62,7 @@ const EmployeeKpoDetails = () => {
     state: EmployeeKpo.kpo,
     userInfo,
   });
-  
+
   const calculatePip = useKpoPip({
     dispatch,
     state: EmployeeKpo.kpo,
@@ -64,76 +70,83 @@ const EmployeeKpoDetails = () => {
   })
 
   const [tabValue, setTabValue] = React.useState(0);
-  
+
   function handleChangeTab(event, value) {
-		setTabValue(value);
+    setTabValue(value);
   }
 
-  
+
   return (
     <PageLayout
       noSearch={tabValue === 1 ? false : true}
       prev={{
-        url: '/performance_appraisal/kpoList'
+        url: prevUrl
       }}
       header={{
         icon: '',
         title: 'KPO Details',
-        handleSearch: ({target: { value }}) => console.log(value),
+        handleSearch: ({ target: { value } }) => console.log(value),
       }}
       button={{
         showButton: true,
         btnComponent: tabValue !== 1 ? (
-          <CustomIconButton 
-            onClick={EmployeeKpoCustomHook.submitKpo} 
-            icon='check' 
-            type='success' 
-            className='w-full px-8'
-          >
-            {EmployeeKpoCustomHook.submitButtonText()}
-          </CustomIconButton>
-        ) : (
           <>
             {
-              EmployeeKpoCustomHook.shouldShowAddButton() && (
-                <Button variant="contained" color="secondary" onClick={customHook.handleOpenModal}>
-                  Add KPO Content
-                </Button>
+              EmployeeKpoCustomHook.showActionButton(userInfo) && (
+                <CustomIconButton
+                  onClick={EmployeeKpoCustomHook.submitKpo}
+                  icon='check'
+                  type='success'
+                  className='w-full px-8'
+                >
+                  {EmployeeKpoCustomHook.submitButtonText()}
+                </CustomIconButton>
               )
             }
           </>
-        )
+
+        ) : (
+            <>
+              {
+                EmployeeKpoCustomHook.shouldShowAddButton() && (
+                  <Button variant="contained" color="secondary" onClick={customHook.handleOpenModal}>
+                    Add KPO Content
+                  </Button>
+                )
+              }
+            </>
+          )
       }}
       contentToolbar={
         <Tabs
-					value={tabValue}
-					onChange={handleChangeTab}
-					indicatorColor="primary"
-					textColor="primary"
-					variant="scrollable"
-					scrollButtons="auto"
-					classes={{ root: 'w-full h-64' }}
-				>
-					<Tab className="h-64 normal-case" label="KPO Details" />
-					<Tab className="h-64 normal-case" label="KPO Content" />
+          value={tabValue}
+          onChange={handleChangeTab}
+          indicatorColor="primary"
+          textColor="primary"
+          variant="scrollable"
+          scrollButtons="auto"
+          classes={{ root: 'w-full h-64' }}
+        >
+          <Tab className="h-64 normal-case" label="KPO Details" />
+          <Tab className="h-64 normal-case" label="KPO Content" />
           <Tab className="h-64 normal-case" label="KPO Summary Review" />
           <Tab className="h-64 normal-case" label="%PIP" />
           <Tab className="h-64 normal-case" label="Behavioural Attribute" />
           <Tab className="h-64 normal-case" label="Personnel Development" />
-				</Tabs>
+        </Tabs>
       }
       content={
         <div className=" sm:p-24 ">
-          {tabValue === 0 && (<EditEmployeeKpo customHook={EmployeeKpoCustomHook}/>)}
+          {tabValue === 0 && (<EditEmployeeKpo customHook={EmployeeKpoCustomHook} />)}
           {tabValue === 1 && (
             <>
               <KpoContentList customHook={customHook} />
               <CreateKpoContent customHook={customHook} />
               {
-                userRole(userInfo.role) === 'linemanager' && (
-                  <CustomIconButton 
-                    type='success' 
-                    className='flex flex-col my-10 mx-auto' 
+                EmployeeKpoCustomHook.showApproveButton() && (
+                  <CustomIconButton
+                    type='success'
+                    className='flex flex-col my-10 mx-auto'
                     onClick={EmployeeKpoCustomHook.approveKpo}
                   >
                     Approve
@@ -142,10 +155,10 @@ const EmployeeKpoDetails = () => {
               }
             </>
           )}
-          {tabValue === 2 && (<KpoComments kpoSummary={kpoSummary}/>)}
-          {tabValue === 3 && (<KpoContentPipScore calculatePip={calculatePip}/>)}
-          {tabValue === 4 && (<BehaviouralAttribute kpoDetails={EmployeeKpo.kpo} role={userRole(userInfo.role)}/>)}
-          {tabValue === 5 && (<PersonalDevelopment data={EmployeeKpo.kpo} role={userRole(userInfo.role)}/>)}
+          {tabValue === 2 && (<KpoComments kpoSummary={kpoSummary} />)}
+          {tabValue === 3 && (<KpoContentPipScore calculatePip={calculatePip} />)}
+          {tabValue === 4 && (<BehaviouralAttribute kpoDetails={EmployeeKpo.kpo} role={userRole(userInfo.role)} />)}
+          {tabValue === 5 && (<PersonalDevelopment data={EmployeeKpo.kpo} role={userRole(userInfo.role)} />)}
         </div>
       }
     />
@@ -153,4 +166,4 @@ const EmployeeKpoDetails = () => {
 };
 
 withReducer('kpoCategory', kpoCategoryReducer)(EmployeeKpoDetails);
-export default withReducer('kpo', reducer )(EmployeeKpoDetails);
+export default withReducer('kpo', reducer)(EmployeeKpoDetails);

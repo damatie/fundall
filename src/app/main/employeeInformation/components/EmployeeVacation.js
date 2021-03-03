@@ -14,14 +14,33 @@ import useTravelAndVacation from '../hooks/useTravelAndVacation';
 import { useDispatch, useSelector } from 'react-redux';
 import { Controller } from 'react-hook-form';
 import { getTravelAndVacation } from '../store/actions';
+import { useParams } from 'react-router';
+import userPermission from '../logic/userPermission';
+
 const EmployeeVacation = ({ handleOpen }) => {
   const [shouldUpdate, setShouldUpdate] = React.useState(false);
 
-  const { data } = useSelector(state => state.employeeInformation.travel);
+  const params = useParams();
+  const authState = useSelector(state => state.auth.user);
+  const getUserId = !!params?.id ? params?.id : authState.id;
+
+  const {
+    travel: { data },
+    employeeInfo: {
+      info: { employeeId }
+    }
+  } = useSelector(state => state.employeeInformation);
+
   const dispatch = useDispatch();
 
+  const { canDelete, canEdit, canAdd } = userPermission({
+    role: authState.role,
+    userId: authState.id,
+    profileId: employeeId,
+  });
+
   React.useEffect(() => {
-    dispatch(getTravelAndVacation());
+    dispatch(getTravelAndVacation(getUserId));
   }, []);
 
   return (
@@ -29,21 +48,31 @@ const EmployeeVacation = ({ handleOpen }) => {
       title='Travel And Vacation Schedule'
       button={
         <>
-          <SharedButton
-            variant='outlined'
-            color='secondary'
-            onClick={handleOpen('Travel And Vacation Schedule')}
-            className='mx-16'
-          >
-            Add
-          </SharedButton>
-          <SharedButton
-            variant='contained'
-            color='secondary'
-            onClick={() => setShouldUpdate(!shouldUpdate)}
-          >
-            {shouldUpdate ? 'Cancel' : 'Edit'}
-          </SharedButton>
+          <>
+            {
+              canAdd() && (<SharedButton
+                variant='outlined'
+                color='secondary'
+                onClick={handleOpen('Travel And Vacation Schedule')}
+                className='mx-16'
+              >
+                Add
+              </SharedButton>)
+            }
+          </>
+          <>
+            {
+              canEdit() && (
+                <SharedButton
+                  variant='contained'
+                  color='secondary'
+                  onClick={() => setShouldUpdate(!shouldUpdate)}
+                >
+                  {shouldUpdate ? 'Cancel' : 'Edit'}
+                </SharedButton>)
+            }
+
+          </>
         </>
       }
     >
@@ -54,13 +83,14 @@ const EmployeeVacation = ({ handleOpen }) => {
           index={index}
           shouldUpdate={shouldUpdate}
           setShouldUpdate={setShouldUpdate}
+          canDelete={canDelete}
         />
       ))}
     </BasicCard>
   );
 };
 
-const EmployeeVacationDetails = ({ item, index, setShouldUpdate, shouldUpdate }) => {
+const EmployeeVacationDetails = ({ item, index, setShouldUpdate, shouldUpdate, canDelete }) => {
 
   const inputs = React.useMemo(() => [
     {
@@ -87,6 +117,12 @@ const EmployeeVacationDetails = ({ item, index, setShouldUpdate, shouldUpdate })
     }
   ], []);
 
+  const {
+    employeeInfo: {
+      info: { employeeId }
+    }
+  } = useSelector(state => state.employeeInformation);
+
   const dispatch = useDispatch();
 
   const {
@@ -97,7 +133,8 @@ const EmployeeVacationDetails = ({ item, index, setShouldUpdate, shouldUpdate })
     handleDelete,
     control
   } = useTravelAndVacation({
-    dispatch
+    dispatch,
+    employeeId
   })
 
   const close = () => {
@@ -108,11 +145,11 @@ const EmployeeVacationDetails = ({ item, index, setShouldUpdate, shouldUpdate })
     <>
       <div className='flex flex-row items-center my-20'>
         <Typography variant="subtitle1" color="initial">Travel And Vacation Schedule ({index + 1})</Typography>
-        <IconButton
+        {canDelete() && (<IconButton
           aria-label="delete"
           onClick={() => handleDelete(item.id)}>
           <Icon className='text-red-500'>delete</Icon>
-        </IconButton>
+        </IconButton>)}
       </div>
       <form onSubmit={handleSubmit(onSubmit(item.id, close))}>
         <GridSystem>
@@ -197,13 +234,20 @@ export const AddEmployeeVacation = () => {
   ], []);
 
   const {
+    employeeInfo: {
+      info: { employeeId }
+    }
+  } = useSelector(state => state.employeeInformation);
+
+  const {
     onSubmit,
     errors,
     register,
     handleSubmit,
     control
   } = useTravelAndVacation({
-    dispatch
+    dispatch,
+    employeeId
   })
 
   return (
