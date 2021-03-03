@@ -125,7 +125,7 @@ export const lineManagerAccept = (id) => {
 
     return dispatch => {
         fetch(`${getBaseUrl()}/employee_exit/lm/approve/${id}`, {
-            ...header.getRegHeader("PATCH")
+            ...header.reqHeader("PATCH")
         }).then(res => res.json()).then(
             data => {
                 if (data.success) {
