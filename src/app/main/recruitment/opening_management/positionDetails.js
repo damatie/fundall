@@ -29,41 +29,6 @@ import ApplicantsTab from '../tabs/applicantsTab';
 import { useAuth } from 'app/hooks/useAuth';
 import ProgressBtn from 'app/shared/progressBtn';
 
-const useStyles = makeStyles(theme => ({
-	productImageFeaturedStar: {
-		position: 'absolute',
-		top: 0,
-		right: 0,
-		color: orange[400],
-		opacity: 0
-	},
-	productImageUpload: {
-		transitionProperty: 'box-shadow',
-		transitionDuration: theme.transitions.duration.short,
-		transitionTimingFunction: theme.transitions.easing.easeInOut
-	},
-	productImageItem: {
-		transitionProperty: 'box-shadow',
-		transitionDuration: theme.transitions.duration.short,
-		transitionTimingFunction: theme.transitions.easing.easeInOut,
-		'&:hover': {
-			'& $productImageFeaturedStar': {
-				opacity: 0.8
-			}
-		},
-		'&.featured': {
-			pointerEvents: 'none',
-			boxShadow: theme.shadows[3],
-			'& $productImageFeaturedStar': {
-				opacity: 1
-			},
-			'&:hover $productImageFeaturedStar': {
-				opacity: 1
-			}
-		}
-	}
-}));
-
 const userData = useAuth().getUserData;
 
 const columns = [
@@ -113,10 +78,6 @@ const columns = [
 
 function PositionDetails({ match }, props) {
 	const dispatch = useDispatch();
-	const theme = useTheme();
-
-	const classes = useStyles(props);
-	const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
 	const position = useSelector(({ PositionDetails }) => PositionDetails.recruitment.onePosition);
 	const rows = useSelector(({ PositionDetails }) => PositionDetails.candidate.data);
 
@@ -164,23 +125,25 @@ function PositionDetails({ match }, props) {
 					</div>
 
 					<div className="flex items-center max-w-full">
-						{isHr() && <div className="flex flex-col min-w-0 mx-8 sm:mc-16">
-							<FuseAnimate animation="transition.slideLeftIn" delay={300}>
-								{(position.status !== 'sent to hr' || position.status !== 'closed') ?
-									<Button
-										className="mb-16"
-										component={Link}
-										to={`/recruitment/add_candidate/${positionId}`}
-										role='button'
-										variant="contained"
-										color="secondary"
-									>
-										Add New Candidate
-									</Button> :
-									<ProgressBtn success={close} loading={loading} color='red' content='Close Position' onClick={e => dispatch(Actions.closeOpening(positionId))} />
-								}
-							</FuseAnimate>
-						</div>}
+						{isHr() &&
+							<div className="flex flex-col min-w-0 mx-8 sm:mc-16">
+								<FuseAnimate animation="transition.slideLeftIn" delay={300}>
+									{
+										(position.status !== 'sent to hr' || position.status !== 'closed') ?
+											<Button
+												className="mb-16"
+												component={Link}
+												to={`/recruitment/add_candidate/${positionId}`}
+												role='button'
+												variant="contained"
+												color="secondary"
+											>
+												Add New Candidate
+											</Button> :
+											<ProgressBtn success={close} loading={loading} color='red' content='Close Position' onClick={e => dispatch(Actions.closeOpening(positionId))} />
+									}
+								</FuseAnimate>
+							</div>}
 					</div>
 				</div>
 			}
@@ -195,7 +158,8 @@ function PositionDetails({ match }, props) {
 					className="w-full border-b-1 px-24"
 				>
 					<Tab className="text-14 font-600 normal-case" label="Details" />
-					<Tab className="text-14 font-600 normal-case" label="List of applicants" />
+
+					{isHr() && <Tab className="text-14 font-600 normal-case" label="List of applicants" />}
 					{/* <Tab className="text-14 font-600 normal-case" label="Accepted applicants" /> */}
 				</Tabs>
 			}
@@ -204,7 +168,7 @@ function PositionDetails({ match }, props) {
 					{tabValue === 0 && (
 						<PositionDetailsTab position={position} />
 					)}
-					{tabValue === 1 && (
+					{isHr() && tabValue === 1 && (
 						<ApplicantsTab position={position} columns={columns} rows={rows} />
 					)}
 				</div>

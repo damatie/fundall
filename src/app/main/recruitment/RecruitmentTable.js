@@ -206,7 +206,7 @@ const TableWidget = (props) => {
         <RecruitmentDialog
           title='Detail of Opening'
           open={open}
-          update='Update Position'
+          update={!isHr() ? 'Update Position' : ""}
           onClose={value => setOpen(value)}
           onUpdate={value => setUpdateOpen(value)}
         >
@@ -237,13 +237,13 @@ const TableWidget = (props) => {
                   </td>
                 </tr>
               }
-              <tr className="assignedRecruiter">
+              {/* <tr className="assignedRecruiter">
                 <th>Recruiter</th>
                 <td>{selected.recruiter
                   ? `${selected.recruiter.lastName} ${selected.recruiter.firstName}`
                   : displayButton()}
                 </td>
-              </tr>
+              </tr> */}
               <tr className="employeeStatus">
                 <th>Employee Status</th>
                 <td>{(selected.employeeStatus) ? selected.employeeStatus : ''}</td>
@@ -279,7 +279,7 @@ const TableWidget = (props) => {
         </RecruitmentDialog>
 
         {/* Assign Reecruiter Dialog */}
-        <RecruitmentDialog
+        {/* <RecruitmentDialog
           transition={Transition}
           title='Assign Recruiter'
           open={openHr}
@@ -287,7 +287,7 @@ const TableWidget = (props) => {
           onAssign={value => setOpenHr(value)}
         >
           <AssignRecruiterTab setOpenHr={setOpenHr} selectedPosition={selected} />
-        </RecruitmentDialog>
+        </RecruitmentDialog> */}
 
         {/* Update Dialog */}
         <RecruitmentDialog

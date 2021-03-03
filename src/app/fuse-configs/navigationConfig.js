@@ -454,7 +454,7 @@ const navigationConfig = [
 		title: 'Recruitment',
 		translate: 'recruitment',
 		type: 'group',
-		auth: authRoles?.manager,
+		auth: authRoles.manager,
 		children: [
 			{
 				id: 'recruitmentDashboard',
