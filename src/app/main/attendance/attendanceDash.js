@@ -9,7 +9,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import * as Actions from './store/actions';
 import reducer from './store/reducers';
 import AttendanceTable from './shared/attendancetable';
-import { Dialog, DialogActions, DialogContent, DialogTitle, InputAdornment, MenuItem, Select, Tab } from '@material-ui/core';
+import { Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, FormControlLabel, FormGroup, FormHelperText, FormLabel, InputAdornment, makeStyles, MenuItem, Select, Tab } from '@material-ui/core';
 import Formsy from 'formsy-react';
 import withReducer from 'app/store/withReducer';
 import { useDispatch, useSelector } from 'react-redux';
@@ -37,11 +37,22 @@ const columns = [
     }
 ];
 
+const useStyles = makeStyles((theme) => ({
+    root: {
+        display: 'flex',
+    },
+    formControl: {
+        margin: theme.spacing(3),
+    },
+}));
+
 function AttendanceDashboard(props) {
+    const classes = useStyles();
 
     const [selected, setSelected] = useState([]);
     const dispatch = useDispatch();
-    const [payload, setPayload] = useState({})
+    const [payload, setPayload] = useState({});
+
 
     const activities = useSelector(({ activity }) => activity.activities.activities)
     const attendanceHistory = useSelector(({ activity }) => activity.activities.attendanceHistory?.rows ?? [])
@@ -55,7 +66,7 @@ function AttendanceDashboard(props) {
     }, [dispatch]);
 
     useEffect(() => {
-    }, [selected])
+    }, [selected]);
 
     useEffect(() => {
         console.log(activities, attendanceHistory)
@@ -74,7 +85,7 @@ function AttendanceDashboard(props) {
         setOpen(false)
     }
 
-    const handleChange = (value) => {
+    const handleChange2 = (value) => {
 
         let exist = selected.includes(value);
 
@@ -112,6 +123,10 @@ function AttendanceDashboard(props) {
 
             setDefaultValue("");
         }
+    }
+
+    const handleChange = (event, value) => {
+        handleChange2(value);
     }
 
     return (
@@ -155,36 +170,25 @@ function AttendanceDashboard(props) {
                         TransitionComponent={props.transition && props.transition}
                         fullWidth={true}
                         maxWidth={'sm'}
-                    // onUpdate={value => setUpdateOpen(value)}
                     >
                         <DialogTitle>
-                            <span>Activity for today</span>
+                            <span>Activities for today</span>
                         </DialogTitle>
 
                         <DialogContent>
                             <div className={"p-40"}>
-                                <Formsy
-                                    onSubmit={handleSubmit}
-                                    className="flex flex-col justify-center w-full"
-                                >
-                                    <label>{selected.join(", ")}</label>
-                                    <Select
-                                        id="demo-mutiple-chip"
-                                        className="mb-16 w-full"
-                                        name="status"
-                                        label="Status"
-                                        value={defaultValue}
-                                        onChange={(e) => handleChange(e.target.value)}
-                                        variant="outlined"
-                                        required
-                                    >
-                                        <MenuItem value={""}>Select activities</MenuItem>
+                                <FormControl required error={selected.length < 2} component="fieldset" className={classes.formControl}>
+                                    <FormGroup>
                                         {activities.map(item => (
-                                            <MenuItem value={item.name} key={item.id}>{item.name}:&nbsp;&nbsp;&nbsp;<span className={"smallText"}>({item.type})</span></MenuItem>
+                                            <FormControlLabel
+                                                control={<Checkbox checked={selected.includes(item.name)} onChange={(e) => handleChange(e, item.name)} name="gilad" />}
+                                                label={`${item.name}: ${item.type}`}
+                                                key={item.id}
+                                            />
                                         ))}
-                                    </Select>
-
-                                </Formsy>
+                                    </FormGroup>
+                                    <FormHelperText>Select 2 activities for attendance</FormHelperText>
+                                </FormControl>
                             </div>
                         </DialogContent>
 
@@ -193,9 +197,6 @@ function AttendanceDashboard(props) {
                                 Close
                             </Button>
                             <ProgressBtn content={"Submit"} onClick={handleSubmit} color={"primary"} />
-                            {/* <Button onClick={handleSubmit} color="primary" disabled={selected.length < 2}>
-                                Submit
-                            </Button> */}
                         </DialogActions>
                     </Dialog>
                 </>

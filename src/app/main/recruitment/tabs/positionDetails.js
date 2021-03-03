@@ -103,51 +103,53 @@ function Details(props) {
 								</CardContent>
 							</Card>
 
-							<Card className="w-full mb-16">
-								<AppBar position="static" elevation={0}>
-									<Toolbar className="px-8">
-										<Typography variant="subtitle1" color="inherit" className="flex-1 px-12">
-											Contact
-										</Typography>
-									</Toolbar>
-								</AppBar>
-
-								<CardContent>
-									<div className="mb-16">
-										<Typography className="font-bold mb-4 text-15">Recruiter</Typography>
-										<Typography>{recruiter ? `${recruiter.lastName} ${recruiter.firstName}` : 'No recruiter assigned'}</Typography>
-									</div>
-								</CardContent>
-							</Card>
-
 							{
-								role?.name === "Hr Manager" ?
-									<Card className="w-full mb-16">
-										<AppBar position="static" elevation={0}>
-											<Toolbar className="px-8">
-												<Typography variant="subtitle1" color="inherit" className="flex-1 px-12">
-													Share
+								role?.name.toUpperCase() === "HR MANAGER" ?
+									<>
+										<Card className="w-full mb-16">
+											<AppBar position="static" elevation={0}>
+												<Toolbar className="px-8">
+													<Typography variant="subtitle1" color="inherit" className="flex-1 px-12">
+														Contact
+										</Typography>
+												</Toolbar>
+											</AppBar>
+
+											<CardContent>
+												<div className="mb-16">
+													<Typography className="font-bold mb-4 text-15">Recruiter</Typography>
+													<Typography>{recruiter ? `${recruiter.lastName} ${recruiter.firstName}` : 'No recruiter assigned'}</Typography>
+												</div>
+											</CardContent>
+										</Card>
+
+										<Card className="w-full mb-16">
+											<AppBar position="static" elevation={0}>
+												<Toolbar className="px-8">
+													<Typography variant="subtitle1" color="inherit" className="flex-1 px-12">
+														Share
 												</Typography>
-											</Toolbar>
-										</AppBar>
+												</Toolbar>
+											</AppBar>
 
-										<CardContent>
-											<div className="mb-16 d-flex">
-												<IconButton aria-label="share on facebook" className="mr-12" color={"primary"}>
-													{/* <Facebook /> */}
-													<Facebook url={urls.fb} />
-												</IconButton>
+											<CardContent>
+												<div className="mb-16 d-flex">
+													<IconButton aria-label="share on facebook" className="mr-12" color={"primary"}>
+														{/* <Facebook /> */}
+														<Facebook url={urls.fb} />
+													</IconButton>
 
-												<IconButton aria-label="share via email" className="mr-12" color={"primary"}>
-													<Email url={urls.fb} subject={"New Recruitment"} />
-												</IconButton>
+													<IconButton aria-label="share via email" className="mr-12" color={"primary"}>
+														<Email url={urls.fb} subject={"New Recruitment"} />
+													</IconButton>
 
-												<IconButton aria-label="share on instagram" className="mr-12" color={"primary"}>
-													<Twitter url={urls.twitter} shareText={"New Recruitment"} />
-												</IconButton>
-											</div>
-										</CardContent>
-									</Card>
+													<IconButton aria-label="share on instagram" className="mr-12" color={"primary"}>
+														<Twitter url={urls.twitter} shareText={"New Recruitment"} />
+													</IconButton>
+												</div>
+											</CardContent>
+										</Card>
+									</>
 									:
 									<></>
 							}

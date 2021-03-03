@@ -36,6 +36,7 @@ import { fetchHeaders } from 'app/shared/fetchHeaders';
 import { getBaseUrl } from 'app/shared/getBaseUrl';
 import { handleResponse } from 'app/auth/handleRes';
 import swal from 'sweetalert2';
+import { useAuth } from 'app/hooks/useAuth';
 
 const useStyles = makeStyles((theme) => ({
   table: {
@@ -70,6 +71,9 @@ const TableWidget = (props) => {
   const [selected, setSelected] = useState({});
 
   const { positionId } = useParams();
+
+  const userData = useAuth().getUserData;
+  const isHr = () => userData.role.toUpperCase() === 'HR MANAGER';
 
   const status = useSelector(state => state.PositionDetails.recruitment.onePosition.status);
   const { success } = useSelector(state => state.PositionDetails.candidate);
@@ -431,7 +435,7 @@ const TableWidget = (props) => {
         </Table>
       </div>
 
-      {status?.toLowerCase() !== 'sent to hr' ? <ProgressBtn content='Submit Candidate' onClick={subCandidate} success={progress.success} loading={progress.loading} /> : <></>}
+      {(status?.toLowerCase() !== 'sent to hr' || isHr().toUpperCase() === "HR MANAGER") ? <ProgressBtn content='Submit Candidate' onClick={subCandidate} success={progress.success} loading={progress.loading} /> : <></>}
     </Paper>
   );
 }
