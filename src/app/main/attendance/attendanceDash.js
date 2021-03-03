@@ -178,6 +178,7 @@ function AttendanceDashboard(props) {
                         <DialogContent>
                             <div className={"p-40"}>
                                 <FormControl required error={selected.length < 2} component="fieldset" className={classes.formControl}>
+                                    <FormLabel>Select 2 activities for attendance</FormLabel>
                                     <FormGroup>
                                         {activities.map(item => (
                                             <FormControlLabel
@@ -187,7 +188,6 @@ function AttendanceDashboard(props) {
                                             />
                                         ))}
                                     </FormGroup>
-                                    <FormHelperText>Select 2 activities for attendance</FormHelperText>
                                 </FormControl>
                             </div>
                         </DialogContent>
