@@ -144,7 +144,7 @@ function Recruitment(props) {
 		setTabValue(value);
 	}
 
-	const isManager = () => userData.role.toUpperCase() === 'LINE MANAGER' || "HR MANAGER";
+	const isManager = () => userData.role.toUpperCase() === 'LINE MANAGER';
 
 	return (
 		<FusePageSimple
