@@ -470,7 +470,7 @@ const navigationConfig = [
 				type: 'item',
 				url: '/recruitment/all',
 				icon: 'school',
-				auth: authRoles?.manager,
+				auth: authRoles.manager,
 			},
 			{
 				id: 'createOpening',
@@ -478,7 +478,7 @@ const navigationConfig = [
 				type: 'item',
 				url: '/recruitment/create_opening',
 				icon: 'group',
-				auth: authRoles?.manager,
+				auth: authRoles.lineManager,
 			},
 		]
 	},
