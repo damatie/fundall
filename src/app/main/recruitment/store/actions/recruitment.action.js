@@ -34,13 +34,13 @@ export function getAllOpenPositions() {
 		dispatch({
 			type: LOADING_POSITIONS
 		});
-		fetch(`${basUrl()}/recruitment/all`, {...headers.getRegHeader()})
+		fetch(`${basUrl()}/recruitment/all`, { ...headers.getRegHeader() })
 			.then(res => res.json()).then(async data => {
 				if (data.success) {
 					dispatch({
-            type: GET_ALL_OPEN_POSITIONS_SUCCESS,
-            payload: data.data
-          })
+						type: GET_ALL_OPEN_POSITIONS_SUCCESS,
+						payload: data.data
+					})
 				} else {
 					dispatch({
 						type: GET_ALL_OPEN_POSITIONS_ERROR,
@@ -62,14 +62,14 @@ export function getOneOpenPosition(positionId) {
 		dispatch({
 			type: LOADING_POSITIONS
 		});
-		fetch(`${basUrl()}/recruitment/one/${positionId}`, {...headers.getRegHeader()})
+		fetch(`${basUrl()}/recruitment/one/${positionId}`, { ...headers.getRegHeader() })
 			.then(res => res.json()).then(async data => {
 				console.log(data);
 				if (data.success) {
 					dispatch({
-            type: GET_ONE_OPEN_POSITIONS_SUCCESS,
-            payload: data.data
-          })
+						type: GET_ONE_OPEN_POSITIONS_SUCCESS,
+						payload: data.data
+					})
 				} else {
 					dispatch({
 						type: GET_ONE_OPEN_POSITIONS_ERROR,
@@ -91,29 +91,29 @@ export function createOpening(model) {
 		dispatch({
 			type: LOADING_POSITIONS
 		});
-		fetch(`${basUrl()}/recruitment/new`, {...headers.reqHeader('POST', model)})
+		fetch(`${basUrl()}/recruitment/new`, { ...headers.reqHeader('POST', model) })
 			.then(res => res.json()).then(async data => {
 				if (data.success) {
 					dispatch({
 						type: CREATE_OPENING_SUCCESS,
-          })
-          // .then(() => {
-          //   dispatch(getAllOpenPositions())
-          // });
-          swal.fire({
-            title: data.message,
-            timer: 3000,
-            icon: 'success'
-          })
-          .then(function(){
-            window.location.href = "/recruitment/all";
-          });
+					})
+					// .then(() => {
+					//   dispatch(getAllOpenPositions())
+					// });
+					swal.fire({
+						title: data.message,
+						timer: 3000,
+						icon: 'success'
+					})
+						.then(function () {
+							window.location.href = "/recruitment/all";
+						});
 				} else {
-          swal.fire({
-            title: data.message,
-            timer: 3000,
-            icon: 'error'
-          })
+					swal.fire({
+						title: data.message,
+						timer: 3000,
+						icon: 'error'
+					})
 					dispatch({
 						type: CREATE_OPENING_ERROR,
 						payload: [],
@@ -124,13 +124,13 @@ export function createOpening(model) {
 				dispatch({
 					type: CREATE_OPENING_ERROR,
 					payload: [],
-        })
-        swal.fire({
-          title: err.message,
-          text: 'Oops! Something went wrong. Check your network',
-          timer: 3000,
-          icon: 'error'
-        })
+				})
+				swal.fire({
+					title: err.message,
+					text: 'Oops! Something went wrong. Check your network',
+					timer: 3000,
+					icon: 'error'
+				})
 			})
 	}
 }
@@ -140,24 +140,24 @@ export function assignRecruiter(hrId, formData) {
 		dispatch({
 			type: LOADING_POSITIONS
 		});
-		fetch(`${basUrl()}/recruitment/assign/${hrId}`, {...headers.formDHeader('PATCH', formData)})
+		fetch(`${basUrl()}/recruitment/assign/${hrId}`, { ...headers.formDHeader('PATCH', formData) })
 			.then(res => res.json()).then(async data => {
 				if (data.success) {
 					dispatch({
 						type: ASSIGN_RECRUITER_SUCCESS,
-          })
-          swal.fire({
-            title: data.message,
-            timer: 3000,
-            icon: 'success'
+					})
+					swal.fire({
+						title: data.message,
+						timer: 3000,
+						icon: 'success'
 					})
 					dispatch(getAllOpenPositions());
 				} else {
-          swal.fire({
-            title: data.message,
-            timer: 3000,
-            icon: 'error'
-          })
+					swal.fire({
+						title: data.message,
+						timer: 3000,
+						icon: 'error'
+					})
 					dispatch({
 						type: ASSIGN_RECRUITER_ERROR,
 						payload: [],
@@ -168,13 +168,13 @@ export function assignRecruiter(hrId, formData) {
 				dispatch({
 					type: ASSIGN_RECRUITER_ERROR,
 					payload: [],
-        })
-        swal.fire({
-          title: err.message,
-          text: 'Oops! Something went wrong. Check your network',
-          timer: 3000,
-          icon: 'error'
-        })
+				})
+				swal.fire({
+					title: err.message,
+					text: 'Oops! Something went wrong. Check your network',
+					timer: 3000,
+					icon: 'error'
+				})
 			})
 	}
 }
@@ -237,7 +237,7 @@ export function deleteOpening(hrId) {
 
 export function closeOpening(id) {
 	return dispatch => {
-		
+
 
 		swal.fire({
 			title: 'Are you sure?',
@@ -291,7 +291,7 @@ export function closeOpening(id) {
 
 }
 
-export function updateOpening(payload, positionId){
+export function updateOpening(payload, positionId) {
 	swal.fire("Processing ...");
 	swal.showLoading();
 	return dispatch => {

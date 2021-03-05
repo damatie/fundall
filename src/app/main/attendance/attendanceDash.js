@@ -2,7 +2,6 @@ import FusePageSimple from '@fuse/core/FusePageSimple';
 import _ from '@lodash';
 import Button from '@material-ui/core/Button';
 import Icon from '@material-ui/core/Icon';
-import Tabs from '@material-ui/core/Tabs';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -10,7 +9,6 @@ import * as Actions from './store/actions';
 import reducer from './store/reducers';
 import AttendanceTable from './shared/attendancetable';
 import { Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, FormControlLabel, FormGroup, FormHelperText, FormLabel, InputAdornment, makeStyles, MenuItem, Select, Tab } from '@material-ui/core';
-import Formsy from 'formsy-react';
 import withReducer from 'app/store/withReducer';
 import { useDispatch, useSelector } from 'react-redux';
 import Swal from 'sweetalert2';
@@ -47,6 +45,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function AttendanceDashboard(props) {
+
     const classes = useStyles();
 
     const [selected, setSelected] = useState([]);
@@ -79,6 +78,9 @@ function AttendanceDashboard(props) {
         };
         setOpen(false);
         dispatch(Actions.markAttendance(payload));
+        
+        setSelected([]);
+        setPayload({});
     }
 
     const handleClose = () => {
@@ -180,13 +182,17 @@ function AttendanceDashboard(props) {
                                 <FormControl required error={selected.length < 2} component="fieldset" className={classes.formControl}>
                                     <FormLabel>Select 2 activities for attendance</FormLabel>
                                     <FormGroup>
-                                        {activities.map(item => (
-                                            <FormControlLabel
-                                                control={<Checkbox checked={selected.includes(item.name)} onChange={(e) => handleChange(e, item.name)} name="gilad" />}
-                                                label={`${item.name}: ${item.type}`}
-                                                key={item.id}
-                                            />
-                                        ))}
+                                        {
+                                            activities.length > 0 ?
+                                                activities.map(item => (
+                                                    <FormControlLabel
+                                                        control={<Checkbox checked={selected.includes(item.name)} onChange={(e) => handleChange(e, item.name)} name="gilad" />}
+                                                        label={`${item.name}: ${item.type}`}
+                                                        key={item.id}
+                                                    />
+                                                )) :
+                                                <Typography variant={"h3"}>Loading</Typography>
+                                        }
                                     </FormGroup>
                                 </FormControl>
                             </div>
@@ -217,6 +223,6 @@ function AttendanceDashboard(props) {
             innerScroll
         />
     );
-}
+};
 
 export default withReducer('activity', reducer)(AttendanceDashboard);
