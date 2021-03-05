@@ -1,7 +1,6 @@
 import { TextFieldFormsy, SelectFormsy } from '@fuse/core/formsy';
 import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
-// import Button from '@material-ui/core/Button';
 import Icon from '@material-ui/core/Icon';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import * as Actions from '../store/actions';
@@ -10,31 +9,16 @@ import withReducer from 'app/store/withReducer';
 import reducer from '../store/reducers';
 import * as employeeActions from 'app/store/actions';
 
-// import { DateTimePicker } from '@material-ui/pickers';
 import Formsy from 'formsy-react';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-// import { Redirect } from 'react-router';
-// import moment from 'moment';
-// import * as entityActions from 'app/main/HR/business_unit/store/actions';
-// import * as departmentActions from 'app/main/HR/business_unit/department/store/actions';
-// import * as rolesActions from 'app/main/HR/roles/store/actions';
 import ProgressBtn from 'app/shared/progressBtn';
 import GridSystem from 'app/shared/gridSystem';
-// import { getBaseUrl } from 'app/shared/getBaseUrl';
-// import { fetchHeaders } from 'app/shared/fetchHeaders'
-// import { State } from 'velocity-animate';
-
-// const baseUrl = getBaseUrl;
-// const headers = fetchHeaders();
 
 function NewOpening(props) {
 	const dispatch = useDispatch();
 	const entity = useSelector(({ createOpening }) => createOpening.entity.data);
 	const loading = useSelector(({ createOpening }) => createOpening.recruitment.loading);
-
-	// const state = useSelector(state => state);
-	// const employeeList = useSelector(({ employeeList }) => employeeList)
 
 	const employeeList = useSelector(state => state.employeeList.employeeList)
 	const [department, setDepartment] = useState([]);
