@@ -19,6 +19,7 @@ import { getEmergencyContact } from '../store/actions';
 import { getCountries } from 'app/store/actions';
 import { useParams } from 'react-router';
 import userPermission from '../logic/userPermission';
+import { NoData } from 'app/shared/NoData';
 
 const EmergencyContacts = ({ handleOpen }) => {
   const [shouldUpdate, setShouldUpdate] = React.useState(false);
@@ -81,7 +82,10 @@ const EmergencyContacts = ({ handleOpen }) => {
         </>
       }
     >
-      {data.map((item, index) => (
+      {data.length === 0 ? (
+        <NoData title='Emergency Contact' />
+      ) : 
+      data.map((item, index) => (
         <EmergencyContactsDetails
           item={item}
           key={item?.id}

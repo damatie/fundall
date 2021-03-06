@@ -20,6 +20,7 @@ import { getNextOfKin } from '../store/actions';
 import { getCountries } from 'app/store/actions';
 import { useParams } from 'react-router';
 import userPermission from '../logic/userPermission';
+import { NoData } from 'app/shared/NoData';
 
 const EmployeeNextOfKin = ({ handleOpen }) => {
   const [shouldUpdate, setShouldUpdate] = React.useState(false);
@@ -81,7 +82,10 @@ const EmployeeNextOfKin = ({ handleOpen }) => {
         </>
       }
     >
-      {data.map((item, index) => (
+      { data.length === 0 ? (
+        <NoData title='Employee Next of Kin' />
+      ) :
+      data.map((item, index) => (
         <EmployeeNextOfKinDetails
           item={item}
           key={item?.id}

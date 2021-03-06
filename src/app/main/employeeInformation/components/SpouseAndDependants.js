@@ -20,6 +20,7 @@ import { getSpouseDependant } from '../store/actions';
 import { getCountries } from 'app/store/actions';
 import { useParams } from 'react-router';
 import userPermission from '../logic/userPermission';
+import { NoData } from 'app/shared/NoData';
 
 const SpouseAndDependants = ({ handleOpen }) => {
   const [shouldUpdate, setShouldUpdate] = React.useState(false);
@@ -81,7 +82,10 @@ const SpouseAndDependants = ({ handleOpen }) => {
         </>
       }
     >
-      {data.map((item, index) => (
+      {data.length === 0 ? (
+        <NoData title='Spouse / Dependants' />
+      ) :
+      data.map((item, index) => (
         <SpouseAndDependantsDetails
           item={item}
           key={item?.id}
