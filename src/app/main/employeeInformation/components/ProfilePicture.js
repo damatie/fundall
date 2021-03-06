@@ -19,9 +19,9 @@ const ProfilePicture = () => {
 
   useEffect(() => {
     if(id) {
-      setProfile(employeePic.employee.info.profilePicture);
+      // setProfile(employeePic.employee.info.profilePicture);
     } else {
-      setProfile(picture.profilePicture);
+      // setProfile(picture.profilePicture);
     }
   }, []);
 

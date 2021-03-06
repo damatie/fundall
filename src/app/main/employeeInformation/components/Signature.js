@@ -2,9 +2,10 @@ import SharedModal from 'app/shared/modal/SharedModal';
 import React from 'react';
 import SharedDropzone from 'app/shared/sharedDropZone';
 import SharedButton from 'app/shared/button/SharedButton';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { updateEmployeeInfo } from '../store/actions';
-import Typography from '@material-ui/core/Typography'
+import Typography from '@material-ui/core/Typography';
+import userPermission from '../logic/userPermission';
 
 const { useState } = React;
 
@@ -17,6 +18,20 @@ const Signature = ({ value }) => {
   const [open, setOpen] = useState(false);
 
   const dispatch = useDispatch();
+
+  const authState = useSelector(state => state.auth.user);
+
+  const {
+    employeeInfo: {
+      info: { employeeId }
+    }
+  } = useSelector(state => state.employeeInformation);
+
+  const { canDelete, canEdit, canAdd } = userPermission({
+    role: authState.role,
+    userId: authState.id,
+    profileId: employeeId,
+  });
 
   const handleUpdate = () => {
     setUpdate((prev) => !prev);
@@ -63,14 +78,14 @@ const Signature = ({ value }) => {
       >
         <section>
           <header className='w-full flex flex-row justify-end'>
-            <SharedButton
+            {canAdd() && (<SharedButton
               variant="contained"
               className='w-5/12'
               color="secondary"
               onClick={handleUpdate}
             >
               {update ? 'Cancel' : 'Update'}
-            </SharedButton>
+            </SharedButton>)}
           </header>
           <section className='m-8'>
             {
