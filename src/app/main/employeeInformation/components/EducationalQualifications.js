@@ -16,6 +16,7 @@ import { Controller } from 'react-hook-form';
 import { getEducation } from '../store/actions';
 import { useParams } from 'react-router';
 import userPermission from '../logic/userPermission';
+import { NoData } from 'app/shared/NoData';
 
 const EducationalQualification = ({ handleOpen }) => {
   const [shouldUpdate, setShouldUpdate] = React.useState(false);
@@ -77,6 +78,9 @@ const EducationalQualification = ({ handleOpen }) => {
       }
     >
       {
+        data.length === 0 ? (
+          <NoData title='Educational Qualification'/>
+        ) :
         data.map((item, index) => (
           <EducationalQualificationDetails
             item={item}

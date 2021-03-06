@@ -14,6 +14,7 @@ import { Controller } from 'react-hook-form';
 import { getTrainingAndExpertise } from '../store/actions';
 import { useParams } from 'react-router';
 import userPermission from '../logic/userPermission';
+import { NoData } from 'app/shared/NoData';
 
 const TrainingAndExpertise = ({ handleOpen }) => {
   const [shouldUpdate, setShouldUpdate] = React.useState(false);
@@ -74,7 +75,10 @@ const TrainingAndExpertise = ({ handleOpen }) => {
         </>
       }
     >
-      {data.map((item, index) => (
+      { data.length === 0 ? (
+        <NoData title='Training And Expertise' />
+      ) :
+      data.map((item, index) => (
         <TrainingAndExpertiseDetails
           item={item}
           key={item?.id}

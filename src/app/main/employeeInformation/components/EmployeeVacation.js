@@ -16,6 +16,7 @@ import { Controller } from 'react-hook-form';
 import { getTravelAndVacation } from '../store/actions';
 import { useParams } from 'react-router';
 import userPermission from '../logic/userPermission';
+import { NoData } from 'app/shared/NoData';
 
 const EmployeeVacation = ({ handleOpen }) => {
   const [shouldUpdate, setShouldUpdate] = React.useState(false);
@@ -76,7 +77,9 @@ const EmployeeVacation = ({ handleOpen }) => {
         </>
       }
     >
-      {data.map((item, index) => (
+      {data.length === 0 ? (
+        <NoData title='Travel And Vacation Schedule' />
+      ) : data.map((item, index) => (
         <EmployeeVacationDetails
           item={item}
           key={item?.id}
