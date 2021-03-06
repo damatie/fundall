@@ -16,10 +16,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getAllEmployeeGrade } from 'app/main/employeeGrade/store/actions';
 import { getAllJobTitle } from 'app/main/jobTitle/store/actions';
 import { getAllRoles } from 'app/main/permission/store/actions';
+import ProfilePicture from './components/ProfilePicture';
+import Signature from './components/Signature';
 
 const EmployeeInformation = () => {
   const [tabValue, setTabValue] = React.useState(0);
-  const { loading } = useSelector(state => state.employeeInformation.employeeInfo);
+  const { loading, info } = useSelector(state => state.employeeInformation.employeeInfo);
   const authState = useSelector(state => state.auth.user);
 
   const params = useParams();
@@ -47,8 +49,17 @@ const EmployeeInformation = () => {
       <PageLayout
         header={{}}
         button={{}}
+        headerClass='h-192'
         customHeader={
-          <div className='h-80'>Header</div>
+          <section className='h-full w-full p-4'>
+            <section className='flex flex-row items-center justify-center p-4'>
+              <ProfilePicture />
+            </section>
+            <Signature value={{
+              signature: info.signature,
+              id: info.employeeId
+            }} />
+          </section>
         }
         contentToolbar={
           <Tabs
@@ -73,21 +84,21 @@ const EmployeeInformation = () => {
               loading ? (
                 <Skeleton variant="rect" width='100%' height={400} animation="wave" />
               ) : (
-                  <>
-                    {tabValue === 0 && (
-                      <EmployeeBasicInformation />
-                    )}
-                    {tabValue === 1 && (
-                      <GradeAndPromotion />
-                    )}
-                    {tabValue === 2 && (
-                      <EmployeeCompensation />
-                    )}
-                    {tabValue === 3 && (
-                      <>Stil Under Contruction</>
-                    )}
-                  </>
-                )
+                <>
+                  {tabValue === 0 && (
+                    <EmployeeBasicInformation />
+                  )}
+                  {tabValue === 1 && (
+                    <GradeAndPromotion />
+                  )}
+                  {tabValue === 2 && (
+                    <EmployeeCompensation />
+                  )}
+                  {tabValue === 3 && (
+                    <>Stil Under Contruction</>
+                  )}
+                </>
+              )
             }
           </div>
         }
