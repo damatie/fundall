@@ -57,7 +57,7 @@ const EmployeeOrganization = ({ value, authState }) => {
       label: 'Role',
       type: 'select',
       data: roles.roles,
-      defaultValue: value.role.id,
+      defaultValue: value.role?.id,
       fieldName: 'name'
     },
     {
@@ -65,7 +65,7 @@ const EmployeeOrganization = ({ value, authState }) => {
       label: 'Employee Grade',
       type: 'select',
       data: employeeGrade.data,
-      defaultValue: value.employeeGrade.id,
+      defaultValue: value.employeeGrade?.id,
       fieldName: 'gradeName'
     },
     {

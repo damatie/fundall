@@ -18,27 +18,34 @@ const KpoContentTarget = ({customHook}) => {
   const inputs = [
     {
       name: 'Q1',
+      type: 'number'
     },
     {
       name: 'Q2',
+      type: 'number'
     },
     {
       name: 'Q3',
+      type: 'number'
     },
     {
       name: 'Q4',
+      type: 'number'
     },
     {
       name: 'kpoYearendScore',
-      label: 'Year-End Score'
+      label: 'Year-End Score',
+      type: 'number'
     },
     {
       name: 'kpoYearendRemarks',
-      label: 'Year-End Remarks'
+      label: 'Year-End Remarks',
+      type: 'text'
     },
     {
       name: 'kpoPipAchieved',
-      label: 'PIP Achieved'
+      label: 'PIP Achieved',
+      type: 'number'
     }
   ]
   return (
@@ -57,7 +64,7 @@ const KpoContentTarget = ({customHook}) => {
                     message={errors[item.name]?.message}
                     refs={register}
                     defaultValue={kpoDetails[item.name]}
-                    type='number'
+                    type={item.type}
                   />
                 ) : (
                   <Typography 

@@ -130,6 +130,9 @@ const useKpoContentList = ({config, state, dispatch, params, push, kpoCategory, 
     if(kpoContent.status === 4 && userRole(userInfo.role) !== 'linemanager') {
       setShouldDisableButton(true);
     }
+    if(userRole(userInfo.role) !== 'linemanager' && kpoContent.updateStatus === 'approved') {
+      setShouldDisableButton(true);
+    }
   }, [kpoContent]);
 
   
@@ -150,7 +153,7 @@ const useKpoContentList = ({config, state, dispatch, params, push, kpoCategory, 
     if(id && !kpoId) {
       dispatch(Actions.addKpoContent(body));
     } else if (kpoId) {
-      if(type === 'quarterly') {
+      if(type === 'quarterly' && kpoContent.updateStatus !== 'approved') {
         dispatch(Actions.updateKpoContentQuarterly(body));
         return;
       }
@@ -178,13 +181,25 @@ const useKpoContentList = ({config, state, dispatch, params, push, kpoCategory, 
         return true;
       } else if(name === 'q4' && status === 3) {
         return true;
-      } else if ((name === 'kpoyearendscore' || name === 'kpoyearendremarks' || name === 'kpopipachieved') && status === 4) {
+      } else if ((name === 'kpoyearendscore' || name === 'kpoyearendremarks' || name === 'kpopipachieved') && status === 4 && userRole(userInfo.role) === 'linemanager') {
         return true;
       } else {
         return false;
       }
     } else {
-      return true;
+      if(name === 'q1' && status > 0 && userRole(userInfo.role) === 'linemanager') {
+        return true;
+      } else if(name === 'q2' && status > 1 && userRole(userInfo.role) === 'linemanager') {
+        return true;
+      } else if(name === 'q3' && status > 2 && userRole(userInfo.role) === 'linemanager') {
+        return true;
+      } else if(name === 'q4' && status > 3 && userRole(userInfo.role) === 'linemanager') {
+        return true;
+      } else if ((name === 'kpoyearendscore' || name === 'kpoyearendremarks' || name === 'kpopipachieved') && status > 4 && userRole(userInfo.role) === 'linemanager') {
+        return true;
+      } else {
+        return false;
+      }
     }
   };
 

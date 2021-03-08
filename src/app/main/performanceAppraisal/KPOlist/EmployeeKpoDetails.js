@@ -21,6 +21,7 @@ import useKpoPip from './hooks/useKpoPip';
 import CustomIconButton from 'app/shared/button/CustomIconButton';
 import Button from '@material-ui/core/Button'
 import userRole from 'utils/userRole';
+import PipInformation from './components/PipInformation';
 
 const EmployeeKpoDetails = () => {
   const dispatch = useDispatch();
@@ -156,7 +157,17 @@ const EmployeeKpoDetails = () => {
             </>
           )}
           {tabValue === 2 && (<KpoComments kpoSummary={kpoSummary} />)}
-          {tabValue === 3 && (<KpoContentPipScore calculatePip={calculatePip} />)}
+          {tabValue === 3 && (
+            <>
+              {
+                EmployeeKpo.kpo.pipInformation ? (
+                  <PipInformation pip={EmployeeKpo.kpo.pipInformation} />
+                ) : (
+                  <KpoContentPipScore calculatePip={calculatePip}/>
+                )
+              }
+            </>
+          )}
           {tabValue === 4 && (<BehaviouralAttribute kpoDetails={EmployeeKpo.kpo} role={userRole(userInfo.role)} />)}
           {tabValue === 5 && (<PersonalDevelopment data={EmployeeKpo.kpo} role={userRole(userInfo.role)} />)}
         </div>

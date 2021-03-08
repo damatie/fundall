@@ -1,5 +1,6 @@
 import EnhancedTable from 'app/shared/table/EnhancedTable';
 import React from 'react';
+import KpoStatus from './KpoStatus';
 
 const EmployeeKpoListTable = ({customHook}) => {
 	const columns = React.useMemo(
@@ -17,14 +18,17 @@ const EmployeeKpoListTable = ({customHook}) => {
 				Header: 'Status',
 				accessor: 'status',
 				// className: 'font-bold',
-				sortable: true
+				sortable: true,
+				Cell:({row: { original } }) => {
+					return (<KpoStatus status={original?.status} />)
+				}
 			},
 			{
 				Header: 'Total Score',
-				accessor: 'personnelOverallRating',
+				accessor: 'totalYearendScore',
 				sortable: true,
-				Cell: ({ row: { original: { personnelOverallRating }} }) => {
-					return <>{personnelOverallRating || 'on-going'}</>
+				Cell: ({ row: { original: { totalYearendScore }} }) => {
+					return <>{totalYearendScore || 'on-going'}</>
 				}
 			},
 			{
