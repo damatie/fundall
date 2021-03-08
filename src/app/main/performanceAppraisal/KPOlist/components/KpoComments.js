@@ -30,6 +30,7 @@ const KpoComments = ({kpoSummary}) => {
             error={lineManager.errors?.strengths}
             message={lineManager.errors?.strengths?.message}
             defaultValue={state.strengths}
+            disabled={!shouldShowButton('lineManager')}
           />
         </div>
 
@@ -43,6 +44,7 @@ const KpoComments = ({kpoSummary}) => {
             refs={lineManager.register}
             error={lineManager.errors?.areaOfImprovements}
             message={lineManager.errors?.areaOfImprovements?.message}
+            disabled={!shouldShowButton('lineManager')}
           />
         </div>
 
@@ -50,6 +52,7 @@ const KpoComments = ({kpoSummary}) => {
         <FormControl component="fieldset"
           error={lineManager.errors?.personnelOverallRating}
           helperText={lineManager.errors?.personnelOverallRating?.message}
+          disabled={!shouldShowButton('lineManager')}
         >
           {/* <FormLabel component="legend">Personnel Overall Rating</FormLabel> */}
           <RadioGroup 
@@ -64,7 +67,6 @@ const KpoComments = ({kpoSummary}) => {
             })
             console.log(value)
           }}
-          error={true}
           >
             <FormControlLabel value="Below Expectation" control={<Radio />} label="Below Expectation" />
             <FormControlLabel value="Meets Expectation" control={<Radio />} label="Meets Expectation" />
@@ -83,6 +85,7 @@ const KpoComments = ({kpoSummary}) => {
             refs={lineManager.register}
             error={lineManager.errors?.lineManagerComment}
             message={lineManager.errors?.lineManagerComment?.message}
+            disabled={!shouldShowButton('lineManager')}
           />
         </div>
         {shouldShowButton('lineManager') && (<SharedButton
@@ -106,6 +109,7 @@ const KpoComments = ({kpoSummary}) => {
             refs={reviewingManager.register}
             error={reviewingManager.errors?.reviewingManagerComment}
             message={reviewingManager.errors?.reviewingManagerComment?.message}
+            disabled={!shouldShowButton('reviewingManager')}
           />
         </div>
         {shouldShowButton('reviewingManager') && (<SharedButton
@@ -131,6 +135,7 @@ const KpoComments = ({kpoSummary}) => {
           refs={employee.register}
           error={employee.errors?.employeeComment}
           message={employee.errors?.employeeComment?.message}
+          disabled={!shouldShowButton('employee')}
         />
       </div>
       {shouldShowButton('employee') && (<SharedButton

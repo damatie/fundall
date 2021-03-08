@@ -29,7 +29,7 @@ const FormComponent = ({ state, update, handleCancel, data, role }) => {
       {update && (
         <>
         {
-          role === 'linemanager' && (
+          role === 'linemanager' && data.status !== 'completed' && (
             <CustomIconButton type='error' icon='delete' className='w-1/4 my-16' onClick={handleDelete(state?.id)}>
               Delete
             </CustomIconButton>
@@ -62,7 +62,7 @@ const FormComponent = ({ state, update, handleCancel, data, role }) => {
         />
       </div>
       {
-        role === 'linemanager' && (
+        role === 'linemanager' && data.status !== 'completed' && (
           <SharedButton
             variant='contained'
             color='primary'
@@ -81,7 +81,7 @@ const PersonalDevelopment = ({ data, role }) => {
   return (
     <Paper variant="outlined" className='w-1/2 flex flex-col mx-auto p-20'>
       {
-        role === 'linemanager' && (
+        role === 'linemanager' && data.status !== 'completed' && (
           <Button variant="contained" color="primary" className='w-1/4 mb-16' onClick={() => setOpen(!open)}>
             {!open ? 'Add' : 'Cancel'}
           </Button>

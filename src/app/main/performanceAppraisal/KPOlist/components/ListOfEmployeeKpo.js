@@ -4,6 +4,7 @@ import Grid from '@material-ui/core/Grid';
 import SelectTextField from 'app/shared/TextInput/SelectTextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import Skeleton from '@material-ui/lab/Skeleton';
+import KpoStatus from './KpoStatus';
 
 const ListOfEmployeeKpo = ({ customHook, isAssigned, value, request }) => {
 	const {
@@ -54,6 +55,15 @@ const ListOfEmployeeKpo = ({ customHook, isAssigned, value, request }) => {
 				sortable: true,
 				Cell: ({ row: { original: { jobTitle } } }) => {
 					return <>{jobTitle.name}</>
+				}
+			},
+			{
+				Header: 'Status',
+				accessor: 'status',
+				// className: 'font-bold',
+				sortable: true,
+				Cell:({row: { original } }) => {
+					return (<KpoStatus status={original?.status} />)
 				}
 			},
 			{
