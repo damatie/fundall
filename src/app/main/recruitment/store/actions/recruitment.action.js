@@ -27,7 +27,6 @@ export const ClOSE_SUCCESS = 'ClOSE SUCCESS'
 
 const basUrl = getBaseUrl;
 const headers = fetchHeaders();
-const auth = useAuth;
 
 export function getAllOpenPositions() {
 	return dispatch => {
@@ -91,7 +90,7 @@ export function createOpening(model) {
 		dispatch({
 			type: LOADING_POSITIONS
 		});
-		fetch(`${basUrl()}/recruitment/new`, { ...headers.reqHeader('POST', model) })
+		fetch(`${basUrl()}/recruitment/request`, { ...headers.reqHeader('POST', model) })
 			.then(res => res.json()).then(async data => {
 				if (data.success) {
 					dispatch({
@@ -179,7 +178,7 @@ export function assignRecruiter(hrId, formData) {
 	}
 }
 
-export function deleteOpening(hrId) {
+export function deleteOpening(recruitmentId) {
 	return dispatch => {
 		dispatch({
 			type: LOADING_POSITIONS
@@ -195,12 +194,12 @@ export function deleteOpening(hrId) {
 			confirmButtonText: 'Yes, delete it!',
 			showLoaderOnConfirm: true,
 			preConfirm: () => [
-				fetch(`${basUrl()}/recruitment/one/${hrId}`, { ...headers.delHeader() })
+				fetch(`${basUrl()}/recruitment/${recruitmentId}`, { ...headers.delHeader() })
 					.then(res => res.json()).then(async data => {
 						if (data.success) {
 							dispatch({
 								type: DELETE_OPENING_SUCCESS,
-								payload: hrId,
+								payload: recruitmentId,
 							})
 							swal.fire(
 								'DELETE!',
@@ -290,6 +289,41 @@ export function closeOpening(id) {
 	}
 
 }
+
+export function hrCreateOpening(id, dispatch) {
+	swal.showLoading();
+
+	// dispatch => {
+	fetch(`${basUrl()}/recruitment/new/${id}`, { ...headers.reqHeader('PATCH') })
+		.then(res => res.json()).then(async data => {
+			if (data.success) {
+				swal.fire(
+					'New Opening',
+					'Postion is now Open to be shared',
+					'success'
+				);
+				window.location.reload();
+			} else {
+				swal.fire(
+					'New Opening',
+					'something went wrong',
+					'error'
+				)
+			}
+		}
+		).catch(e => {
+			console.error(e);
+			swal.fire(
+				'Oops!',
+				'something went wrong',
+				'error'
+			)
+		})
+		.finally(() => {
+			swal.hideLoading();
+		})
+}
+// }
 
 export function updateOpening(payload, positionId) {
 	swal.fire("Processing ...");

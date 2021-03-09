@@ -63,7 +63,7 @@ function NewOpening(props) {
 		getDepartment();
 	});
 
-	const getDepartment = (entityId = props.selectedPosition.entity.id) => {
+	const getDepartment = (entityId = props.selectedPosition?.entityId ?? props.selectedPosition?.entity.id) => {
 		return entity.map(entity => {
 			if (entity.id === entityId) {
 				setDepartment(entity.department);
@@ -129,13 +129,13 @@ function NewOpening(props) {
 		if (!details.state) {
 			getState(details.country)
 		}
-
 	}, [country, state])
 
 	const formInputs = [
 		{ name: 'entityId', label: 'Entity name *', data: entity, validations: "" },
 		{ name: 'departmentId', label: 'Department *', data: department, validations: "" },
-		{ name: 'jobTitle', label: 'Job Role ', validations: '', icon: 'account-hard-hat', type: 'text' },
+		{ name: 'jobTitle', label: 'Job Title ', validations: '', icon: 'account-hard-hat', type: 'text' },
+		{ name: 'jobDescription', label: 'Job Description ', validations: '', icon: 'account-hard-hat', type: 'text' },
 		{ name: 'requiredSkills', label: 'Required Skills', validations: '', icon: 'account-hard-hat', type: 'text' },
 		{ name: 'reasonForEmployment', label: 'Reason for Employment *', data: ['New Employee', 'Replacement', 'Industrial Training', 'National Service'] },
 		{ name: 'employeeStatus', label: 'Employee Status ', validations: '', data: ["Full-Time", "Part-Time"] },
@@ -148,23 +148,17 @@ function NewOpening(props) {
 		{ name: 'employeeGrade', label: 'Employee Grade *', validations: '', data: ["GL1", "GL2", "GL3", "GL4", "GL5"] },
 		{ name: 'urgency', label: 'Urgency *', data: ['Immediately', 'Urgent', 'Not urgent'], value: props.selectedPosition.urgency },
 		{ name: 'country', label: 'Country', validations: '', icon: 'email', data: country, value: props.selectedPosition.country },
-		{ name: 'state', label: 'State', validations: '', icon: 'email', data: state, value: props.selectedPosition.state },
-
-		// { name: 'entityId', label: 'Entity name *', data: entity, value: props.selectedPosition.entity.id },
-		// { name: 'departmentId', label: 'Department *', data: department, value: props.selectedPosition.department.id },
-		// { name: 'jobTitle', label: 'Job title', validations: '', icon: 'account-hard-hat', type: 'text', value: props.selectedPosition.jobTitle },
-		// { name: 'requiredSkills', label: 'Required skills', validations: '', type: 'text', value: props.selectedPosition.requiredSkills },
-		// { name: 'employeeStatus', label: 'Employee status *', data: ['Full time', 'Contract'], value: props.selectedPosition.employeeStatus },
-		// { name: 'dueDate', label: 'Due date', validations: '', type: 'date', value: props.selectedPosition.dueDate },
+		{ name: 'state', label: 'State', validations: '', icon: 'email', data: state, value: props.selectedPosition.state }
 	];
 
 	useEffect(() => {
 		console.log(props.selectedPosition)
-		const { employeeStatus, dueDate, requiredSkills, jobTitle, entity, department, country, state, urgency, reasonForEmployment } = props.selectedPosition;
+		const { employeeStatus, dueDate, requiredSkills, jobTitle, entity, entityId, department, jobDescription, departmentId, country, state, urgency, reasonForEmployment } = props.selectedPosition;
 		setDetails({
-			departmentId: department.id,
-			entityId: entity.id,
+			departmentId: department?.id ?? departmentId,
+			entityId: entity?.id ?? entityId,
 			jobTitle,
+			jobDescription,
 			employeeStatus,
 			duration: props.selectedPosition?.duration ?? "",
 			requiredSkills,
@@ -179,7 +173,7 @@ function NewOpening(props) {
 			reasonForEmployment,
 			state
 		});
-		// getState(country);
+		getState(country);
 	}, [props.selectedPosition,]);
 
 	useEffect(() => {

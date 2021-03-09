@@ -13,16 +13,40 @@ import { Link } from 'react-router-dom';
 import Facebook from 'react-sharingbuttons/dist/buttons/Facebook';
 import Email from 'react-sharingbuttons/dist/buttons/Email';
 import Twitter from 'react-sharingbuttons/dist/buttons/Twitter';
+import * as Actions from "../store/actions"
 // import { Email } from '@material-ui/icons';
 // import Facebook from 'react-sharingbuttons/dist/icons/Facebook';
 // import Facebook from 'react-sharingbuttons/dist/icons/Facebook';
 
-const urls = { fb: "google.com", twitter: "google.com" };
-
 function Details(props) {
 
-	const { jobTitle, status, requiredSkills, createdAt, createdBy, recruiter, jobDescription } = props.position;
+	const dispatch = useDispatch();
+
+	const { jobTitle, status, requiredSkills, createdAt, createdBy, jobDescription, id, mailTo } = props.position;
 	const role = useSelector(({ profile }) => profile.data.role);
+	const [text, setText] = useState('');
+	const [twitText, settWitText] = useState('');
+
+	const hrAccept = () => {
+		Actions.hrCreateOpening(id, dispatch);
+	}
+
+	const loadMessage = (text, type) => {
+		type === "twitter" ?
+			window.open(`https://twitter.com/intent/tweet/?text=${encodeURIComponent(text)}`, "_blank")
+			:
+			type === "facebook" ?
+				window.open(`https://facebook.com/sharer/sharer.php?u=${encodeURIComponent(text)}`, "_blank")
+				:
+				type === "email" ?
+					window.open(`mailto:?subject=${encodeURIComponent("New Recruitment")}&body=${encodeURIComponent(text)}`, "_blank")
+					: null
+	}
+
+	useEffect(() => {
+		setText(`We Are Hiring!!!\n\nJob Title: ${jobTitle}, \nJob Description: ${jobDescription}, \nRequired skills: ${requiredSkills}.\n\nForward CV to: ${"Append mail"}`)
+		settWitText(`We Are Hiring!!!\n\nJob Title: ${jobTitle}, \nRequired skills: ${requiredSkills}.\n\nForward CV to: ${mailTo}`)
+	}, [props.position])
 
 	return (
 		<div className="md:flex w-full">
@@ -62,11 +86,8 @@ function Details(props) {
 									<Typography className="font-bold mb-4 text-15">Job Description</Typography>
 									{jobDescription
 										? (
-											<Typography
-												className={'bg-blue inline text-white text-11 font-700 px-8 py-4 rounded-4'}
-												style={{ cursor: 'pointer' }}
-											>
-												<a className='color-white' href={jobDescription} target="_blank" rel="noopener noreferrer">View Job Description</a>
+											<Typography >
+												{jobDescription}
 											</Typography>
 										)
 										: 'No job description'
@@ -81,6 +102,7 @@ function Details(props) {
 									<Typography className="font-bold mb-4 text-15">Created by</Typography>
 									<Typography>{createdBy}</Typography>
 								</div>
+
 							</CardContent>
 						</Card>
 
@@ -111,14 +133,13 @@ function Details(props) {
 												<Toolbar className="px-8">
 													<Typography variant="subtitle1" color="inherit" className="flex-1 px-12">
 														Contact
-										</Typography>
+													</Typography>
 												</Toolbar>
 											</AppBar>
 
 											<CardContent>
 												<div className="mb-16">
-													<Typography className="font-bold mb-4 text-15">Recruiter</Typography>
-													<Typography>{recruiter ? `${recruiter.lastName} ${recruiter.firstName}` : 'No recruiter assigned'}</Typography>
+													<Typography className="font-bold mb-4 text-15">{mailTo}</Typography>
 												</div>
 											</CardContent>
 										</Card>
@@ -134,18 +155,38 @@ function Details(props) {
 
 											<CardContent>
 												<div className="mb-16 d-flex">
-													<IconButton aria-label="share on facebook" className="mr-12" color={"primary"}>
-														{/* <Facebook /> */}
-														<Facebook url={urls.fb} />
-													</IconButton>
+													{
+														status !== "added" ?
+															<>
+																<IconButton aria-label="share on facebook" className="mr-12" color={"primary"}>
+																	{/* <Facebook /> */}
+																	<Facebook onClick={() => loadMessage(text, "facebook")} />
+																</IconButton>
 
-													<IconButton aria-label="share via email" className="mr-12" color={"primary"}>
-														<Email url={urls.fb} subject={"New Recruitment"} />
-													</IconButton>
+																<IconButton aria-label="share via email" className="mr-12" color={"primary"}>
+																	<Email onClick={() => loadMessage(text, "email")} />
+																</IconButton>
 
-													<IconButton aria-label="share on instagram" className="mr-12" color={"primary"}>
-														<Twitter url={urls.twitter} shareText={"New Recruitment"} />
-													</IconButton>
+																<IconButton aria-label="share on instagram" className="mr-12" color={"primary"}>
+																	<Twitter onClick={() => loadMessage(twitText, "twitter")} />
+																</IconButton>
+															</>
+															:
+															<>
+																<Typography >Please accept request to share</Typography>
+																<Button
+																	className="mt-20"
+																	component={Link}
+																	onClick={hrAccept}
+																	role='button'
+																	variant="contained"
+																	color="primary"
+																>
+																	Accept Recruitment Request
+																</Button>
+															</>
+													}
+
 												</div>
 											</CardContent>
 										</Card>
