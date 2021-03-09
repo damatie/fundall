@@ -22,7 +22,7 @@ export const getEmployeeInfo = (id, update) => {
     } catch (e) {
       dispatch({
         type: EMPLOYEE_DATA,
-        payload: [],
+        payload: {},
       });
     }
   }

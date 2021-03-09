@@ -4,6 +4,7 @@ import CustomIconButton from 'app/shared/button/CustomIconButton';
 import useKpoContentList from '../hooks/useKpoContent';
 import Skeleton from '@material-ui/lab/Skeleton';
 import { useLocation } from 'react-router-dom';
+import KpoContentStatus from './KpoContentStatus';
 
 const KpoContentList = ({customHook}) => {
   const columns = React.useMemo(
@@ -21,6 +22,16 @@ const KpoContentList = ({customHook}) => {
 				Header: 'Description',
 				accessor: 'kpoDescription',
 				sortable: true
+			},
+			{
+				Header: 'Modification Request',
+				// accessor: 'kpoDescription',
+				sortable: true,
+				Cell: ({ row: { original }}) => {
+					return (
+						<KpoContentStatus status={original.updateStatus} />
+					)
+				}
 			},
 			{
 				Header: 'Target',
