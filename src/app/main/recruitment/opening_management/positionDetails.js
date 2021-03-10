@@ -6,10 +6,10 @@ import FusePageSimple from '@fuse/core/FusePageSimple';
 // import FuseUtils from '@fuse/utils';
 import _ from '@lodash';
 import Button from '@material-ui/core/Button';
-import { orange } from '@material-ui/core/colors';
+// import { orange } from '@material-ui/core/colors';
 import Icon from '@material-ui/core/Icon';
 // import InputAdornment from '@material-ui/core/InputAdornment';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+// import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 // import TextField from '@material-ui/core/TextField';
@@ -133,10 +133,10 @@ function PositionDetails({ match }, props) {
 											<Button
 												className="mb-16"
 												component={Link}
-												to={`/recruitment/add_candidate/${positionId}`}
 												role='button'
 												variant="contained"
 												color="secondary"
+												to={`/recruitment/add_candidate/${positionId}`}
 											>
 												Add New Candidate
 											</Button> :

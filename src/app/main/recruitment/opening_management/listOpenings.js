@@ -1,80 +1,45 @@
 import FuseAnimate from '@fuse/core/FuseAnimate';
-import FuseChipSelect from '@fuse/core/FuseChipSelect';
-import FuseLoading from '@fuse/core/FuseLoading';
+// import FuseChipSelect from '@fuse/core/FuseChipSelect';
+// import FuseLoading from '@fuse/core/FuseLoading';
 import FusePageSimple from '@fuse/core/FusePageSimple';
-import { useForm, useDeepCompareEffect } from '@fuse/hooks';
-import FuseUtils from '@fuse/utils';
+// import { useForm, useDeepCompareEffect } from '@fuse/hooks';
+// import FuseUtils from '@fuse/utils';
 import _ from '@lodash';
 import Button from '@material-ui/core/Button';
-import { orange } from '@material-ui/core/colors';
+// import { orange } from '@material-ui/core/colors';
 import Icon from '@material-ui/core/Icon';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+// import InputAdornment from '@material-ui/core/InputAdornment';
+// import { makeStyles } from '@material-ui/core/styles';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
-import TextField from '@material-ui/core/TextField';
+// import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import Input from '@material-ui/core/Input';
 import Paper from '@material-ui/core/Paper';
 import withReducer from 'app/store/withReducer';
-import clsx from 'clsx';
+// import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { ThemeProvider } from '@material-ui/core/styles';
 import * as Actions from '../store/actions';
 import reducer from '../store/reducers';
 import Table from '../RecruitmentTable';
 import { useAuth } from 'app/hooks/useAuth';
 
-const useStyles = makeStyles(theme => ({
-	productImageFeaturedStar: {
-		position: 'absolute',
-		top: 0,
-		right: 0,
-		color: orange[400],
-		opacity: 0
-	},
-	productImageUpload: {
-		transitionProperty: 'box-shadow',
-		transitionDuration: theme.transitions.duration.short,
-		transitionTimingFunction: theme.transitions.easing.easeInOut
-	},
-	productImageItem: {
-		transitionProperty: 'box-shadow',
-		transitionDuration: theme.transitions.duration.short,
-		transitionTimingFunction: theme.transitions.easing.easeInOut,
-		'&:hover': {
-			'& $productImageFeaturedStar': {
-				opacity: 0.8
-			}
-		},
-		'&.featured': {
-			pointerEvents: 'none',
-			boxShadow: theme.shadows[3],
-			'& $productImageFeaturedStar': {
-				opacity: 1
-			},
-			'&:hover $productImageFeaturedStar': {
-				opacity: 1
-			}
-		}
-	}
-}));
-
 const columns = [
-	{
-		id: 'entityName',
-		// align: 'center',
-		disablePadding: false,
-		label: 'Entity Name',
-		sort: true
-	},
 	{
 		id: 'jobTitle',
 		// align: 'center',
 		disablePadding: false,
 		label: 'Job title',
+		sort: true
+	},
+	{
+		id: 'jobDescription',
+		// align: 'center',
+		disablePadding: false,
+		label: 'Job Description',
 		sort: true
 	},
 	{
@@ -117,7 +82,6 @@ const columns = [
 function Recruitment(props) {
 	const dispatch = useDispatch();
 
-	const classes = useStyles(props);
 	const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
 	const rows = useSelector(({ Recruitment }) => Recruitment.recruitment.data);
 
@@ -135,8 +99,8 @@ function Recruitment(props) {
 	}, [dispatch])
 
 	useEffect(() => {
-		setApprovedRows(rows.filter(row => row.recruiter !== null));
-		setPendingRows(rows.filter(row => row.status === 'pending' || row.status === 'open'));
+		setApprovedRows(rows.filter(row => row.status === 'open'));
+		setPendingRows(rows.filter(row => row.status === 'pending' || row.status === 'added'));
 		setClosedRow(rows.filter(row => row.status === 'closed'));
 	}, [rows]);
 
@@ -249,7 +213,8 @@ function Recruitment(props) {
 						/>
 					)}
 					{tabValue === 3 && (
-						<Table
+						<Tabl
+						e
 							columns={columns}
 							rows={closedRow}
 							search={search}

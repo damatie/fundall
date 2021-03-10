@@ -58,7 +58,7 @@ function NewOpening(props) {
 	const formRef = useRef(null);
 
 	useEffect(() => {
-		console.log(details)
+		// console.log(details)
 		dispatch(employeeActions.getAllEmployee());
 	}, [dispatch])
 
@@ -84,7 +84,6 @@ function NewOpening(props) {
 
 	function handleSubmit() {
 		// model.dueDate = dueDate;
-		console.log(details);
 		dispatch(Actions.createOpening(details));
 	}
 
@@ -113,7 +112,8 @@ function NewOpening(props) {
 	const formInputs = [
 		{ name: 'entityId', label: 'Entity name *', data: entity, validations: "" },
 		{ name: 'departmentId', label: 'Department *', data: department, validations: "" },
-		{ name: 'jobTitle', label: 'Job Role ', validations: '', icon: 'account-hard-hat', type: 'text' },
+		{ name: 'jobTitle', label: 'Job Title ', validations: '', icon: 'account-hard-hat', type: 'text' },
+		{ name: 'jobDescription', label: 'Job Description ', validations: '', icon: 'account-hard-hat', type: 'text' },
 		{ name: 'requiredSkills', label: 'Required Skills', validations: '', icon: 'account-hard-hat', type: 'text' },
 		{ name: 'reasonForEmployment', label: 'Reason for Employment *', data: ['New Employee', 'Replacement', 'Industrial Training', 'National Service'] },
 		{ name: 'employeeStatus', label: 'Employee Status ', validations: '', data: ["Full-Time", "Part-Time"] },
