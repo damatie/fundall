@@ -11,9 +11,13 @@ const EmployeeOnboardingConfig = {
 	},
 	routes: [
 		{
+			path: '/employee/complete/registration/',
+			component: React.lazy(() => import('./CompleteRegistration'))
+		},
+		{
 			path: '/employee/onboarding',
 			component: React.lazy(() => import('./employeeOnboarding'))
-		}
+		},
 	]
 };
 

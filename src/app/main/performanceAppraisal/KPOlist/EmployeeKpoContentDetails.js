@@ -73,7 +73,8 @@ const EmployeeKpoContentDetails = () => {
 					classes={{ root: 'w-full h-64' }}
 				>
 					<Tab className="h-64 normal-case" label="KPO Content Details" />
-					<Tab className="h-64 normal-case" label="KPO Targets" />
+					<Tab className="h-64 normal-case" label="KPO Targets" onClick={customHook.KpoContentValue}/>
+          <Tab className="h-64 normal-case" label="Modification History" />
 				</Tabs>
       }
       content={
@@ -84,6 +85,7 @@ const EmployeeKpoContentDetails = () => {
               <KpoContentTarget customHook={customHook} />
             </>
           )}
+          {tabValue === 2 && (<>Modification History</>)}
         </div>
       }
     />

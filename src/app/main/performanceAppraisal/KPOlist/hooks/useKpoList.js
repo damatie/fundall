@@ -5,11 +5,13 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import errorMssg from '../../../../../utils/errorMsg';
 import userRole from 'utils/userRole';
+import { getBusinessUnits } from 'app/main/HR/business_unit/store/actions';
+import { getDepartments } from 'app/main/HR/business_unit/department/store/actions';
 
 const schema = yup.object().shape({
   jobTitleId: yup.string(
     errorMssg({
-      name: 'Job Role',
+      name: 'Job Title',
       type: 'string',
     })
   ).required(
@@ -67,14 +69,20 @@ const useKpoList = ({dispatch, userId, state, push, id, employees, userInfo}) =>
       dispatch(Actions.getOneKpo(id));
     }
     dispatch(Actions.getJobTitle());
+    dispatch(getBusinessUnits());
   }, [userId, id]);
 
   React.useEffect(() => {
     if(id && Object.entries(kpo).length > 0) {
       register({name: 'lineManagerId', value: kpo?.lineManagerId});
       register({name: 'reviewingManagerId', value: kpo?.reviewingManagerId});
+      register({name: 'jobTitleId', value: kpo?.jobTitleId});
     }
   }, [kpo]);
+
+  const handleGetDepartment = (id) => () => {
+    dispatch(getDepartments(id));
+  };
 
   const handleCloseModal = () => {
     dispatch({
@@ -154,6 +162,14 @@ const useKpoList = ({dispatch, userId, state, push, id, employees, userInfo}) =>
     if(userRole(userInfo.role) === 'linemanager' && kpo.status !== 'on-going' && kpo.status !== 'pending' && kpo.status !== 'reviewed1' && kpo.status === 'reviewed2') return true;
   }
 
+  const disableInput = () => {
+    if(userRole(userInfo.role) !== 'linemanager') {
+      return {
+        disabled: true,
+      }
+    }
+  }
+
   return {
     handleCloseModal,
     handleOpenModal,
@@ -177,7 +193,9 @@ const useKpoList = ({dispatch, userId, state, push, id, employees, userInfo}) =>
     approveKpo,
     shouldShowAddButton,
     showActionButton,
-    showApproveButton
+    showApproveButton,
+    handleGetDepartment,
+    disableInput
   };
 };
 

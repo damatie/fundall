@@ -78,10 +78,10 @@ const schema = (type) => {
             type: 'required'
           })
         ),
-        target: yup.number(
+        target: yup.string(
           errorMsg({
             name: 'Target',
-            type: 'number'
+            type: 'string'
           })
         ).required(
           errorMsg({
@@ -116,6 +116,7 @@ const useKpoContentList = ({config, state, dispatch, params, push, kpoCategory, 
   });
 
   const [shouldDisableButton, setShouldDisableButton] = React.useState(false);
+  const [contentValue, setContentValue] = React.useState({});
 
   React.useEffect(() => {
     if(kpoId) {
@@ -157,7 +158,7 @@ const useKpoContentList = ({config, state, dispatch, params, push, kpoCategory, 
         dispatch(Actions.updateKpoContentQuarterly(body));
         return;
       }
-      dispatch(Actions.updateKpoContent(body));
+      dispatch(Actions.updateKpoContent({...body, ...contentValue}));
       return;
     }
     return;
@@ -169,6 +170,11 @@ const useKpoContentList = ({config, state, dispatch, params, push, kpoCategory, 
       kpoId: id
     }));
   };
+
+  const KpoContentValue = () => {
+    setContentValue(getValues());
+    console.log(getValues());
+  }
 
   const shouldShowInput = (name) => {
     const { status, updateStatus } = kpoContent;
@@ -203,9 +209,18 @@ const useKpoContentList = ({config, state, dispatch, params, push, kpoCategory, 
     }
   };
 
+  const disableInput = () => {
+    if(userRole(userInfo.role) !== 'linemanager') {
+      return {
+        disabled: true,
+      }
+    }
+  }
+
 
   return {
     ...state,
+    disableInput,
     open,
     handleOpenModal,
     handleCloseModal,
@@ -223,7 +238,8 @@ const useKpoContentList = ({config, state, dispatch, params, push, kpoCategory, 
     kpoCategory,
     shouldShowInput,
     shouldDisableButton,
-    pipEligibility: userInfo.data.employeeGrade?.pipEligibility
+    pipEligibility: userInfo.data.employeeGrade?.pipEligibility,
+    KpoContentValue
   };
 };
 
