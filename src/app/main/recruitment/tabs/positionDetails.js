@@ -11,12 +11,10 @@ import { Button, Icon, IconButton } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 // import { Email, Instagram, LinkedIn } from '@material-ui/icons';
 import Facebook from 'react-sharingbuttons/dist/buttons/Facebook';
-import Email from 'react-sharingbuttons/dist/buttons/Email';
-import Twitter from 'react-sharingbuttons/dist/buttons/Twitter';
+// import Email from 'react-sharingbuttons/dist/buttons/Email';
+// import Twitter from 'react-sharingbuttons/dist/buttons/Twitter';
 import * as Actions from "../store/actions"
-// import { Email } from '@material-ui/icons';
-// import Facebook from 'react-sharingbuttons/dist/icons/Facebook';
-// import Facebook from 'react-sharingbuttons/dist/icons/Facebook';
+import { Email, Twitter } from '@material-ui/icons';
 
 function Details(props) {
 
@@ -36,15 +34,15 @@ function Details(props) {
 			window.open(`https://twitter.com/intent/tweet/?text=${encodeURIComponent(text)}`, "_blank")
 			:
 			type === "facebook" ?
-				window.open(`https://facebook.com/sharer/sharer.php?u=${encodeURIComponent(text)}`, "_blank")
+				window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}${encodeURIComponent(text)}`, "_blank")
 				:
 				type === "email" ?
-					window.open(`mailto:?subject=${encodeURIComponent("New Recruitment")}&body=${encodeURIComponent(text)}`, "_blank")
+					window.open(`mailto:?subject=${encodeURIComponent("New Recruitment")}&body=${encodeURIComponent(text)}`, "_self")
 					: null
 	}
 
 	useEffect(() => {
-		setText(`We Are Hiring!!!\n\nJob Title: ${jobTitle}, \nJob Description: ${jobDescription}, \nRequired skills: ${requiredSkills}.\n\nForward CV to: ${"Append mail"}`)
+		setText(`We Are Hiring!!!\n\nJob Title: ${jobTitle}, \nJob Description: ${jobDescription}, \nRequired skills: ${requiredSkills}.\n\nForward CV to: ${mailTo}`)
 		settWitText(`We Are Hiring!!!\n\nJob Title: ${jobTitle}, \nRequired skills: ${requiredSkills}.\n\nForward CV to: ${mailTo}`)
 	}, [props.position])
 
@@ -158,17 +156,17 @@ function Details(props) {
 													{
 														status !== "added" ?
 															<>
+																{/* <IconButton onClick={() => loadMessage(text, "facebook")} aria-label="share on facebook" className="mr-12" color={"primary"}> */}
 																<IconButton aria-label="share on facebook" className="mr-12" color={"primary"}>
-																	{/* <Facebook /> */}
-																	<Facebook onClick={() => loadMessage(text, "facebook")} />
+																	<Facebook url={"https://www.springrockgroup.com"} text={text} />
 																</IconButton>
 
-																<IconButton aria-label="share via email" className="mr-12" color={"primary"}>
-																	<Email onClick={() => loadMessage(text, "email")} />
+																<IconButton onClick={() => loadMessage(text, "email")} aria-label="share via email" className="mr-12" color={"primary"}>
+																	<Email />
 																</IconButton>
 
-																<IconButton aria-label="share on instagram" className="mr-12" color={"primary"}>
-																	<Twitter onClick={() => loadMessage(twitText, "twitter")} />
+																<IconButton onClick={() => loadMessage(twitText, "twitter")} aria-label="share on twitter" className="mr-12" color={"primary"}>
+																	<Twitter />
 																</IconButton>
 															</>
 															:
