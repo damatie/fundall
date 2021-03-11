@@ -153,11 +153,13 @@ function EmployeeSrepDashboard(props) {
             <Typography variant="subtitle1" color="initial" className='font-semibold text-center'>Status of SREP Applications</Typography>
           </Grid>
         </Grid>
+        <div className="mt-10">
         <EnhancedTable
           columns={columns}
           data={(filter !== 'all') ? data : rows}
           onRowClick={handleClick}
         />
+        </div>
       </Paper>
     </SimplePage>
   );

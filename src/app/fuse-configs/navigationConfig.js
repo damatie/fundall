@@ -553,6 +553,22 @@ const navigationConfig = [
 		type: 'group',
 		children: [
 			{
+				id: 'HrSREPDashboard',
+				title: 'Dashboard',
+				type: 'item',
+				url: '/srep/admin/dashboard',
+				icon: 'dashboard',
+				auth: authRoles?.admin
+			},
+			{
+				id: 'FinanceSREPDashboard',
+				title: 'Dashboard',
+				type: 'item',
+				url: '/srep/finance/dashboard',
+				icon: 'dashboard',
+				auth: authRoles?.financeManager
+			},
+			{
 				id: 'applySREP',
 				title: 'Apply for Education Program',
 				type: 'item',
