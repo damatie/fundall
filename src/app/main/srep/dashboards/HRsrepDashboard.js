@@ -12,6 +12,7 @@ import Grid from '@material-ui/core/Grid';
 import EnrollmentListTable from './components/EnrollmentListTable';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import { Divider } from '@material-ui/core';
 
     // #region constants
     const lineChartData = {
@@ -97,8 +98,8 @@ import PropTypes from 'prop-types';
     class HRsrepDashboard extends React.Component {
         render() {
             return <SimplePage title='HR SREP DASHBOARD'>
-                <section className="widget flex flex-row w-full">
-                <div className="widget flex w-full sm:w-3/4 p-12">
+                <section className="widget flex flex-row w-full" style={{ height: "320px" }}>
+                <div className="widget flex w-full sm:w-2/3 p-12" >
                     <Paper className="w-full rounded-8 shadow-none border-1">
                         <div className="flex items-center justify-between px-16 h-64 border-b-1">
                             <Grid container spacing={1} alignItems='left'>
@@ -133,38 +134,21 @@ import PropTypes from 'prop-types';
                             </Grid>
                             </Grid>
                         </div>
-                        <div className="flex w-full p-32">
-                            <Line data={lineChartData} />
+                        <div className="flex h-128 w-full p-32">
+                            <Line options={{ legend: { position: "right", labels: {boxWidth: 10,
+        fontSize: 12, padding: 10 } } }} height={220} width={870} data={lineChartData} />
                         </div>
                     </Paper>
 				</div>
-				<div className="widget flex w-full sm:w-1/4 p-12">
+				<div className="widget flex w-full sm:w-1/3 p-12">
                     <Paper className="w-full h-full rounded-8 shadow-none border-1">
-                        <div className="flex items-center justify-between px-16 h-64 border-b-1">
-                            <Grid item lg={2}>
-                            <Typography className="text-16">Status</Typography>
-                            </Grid>
-                            <Grid item lg={4}>
-                            <SelectTextField
-                                value={"January", "February", "March"}
-                                size='small'
-                                label='Duration'
-                            >
-                                {["January", "February", "March"].map(item => (
-                                <MenuItem value={item}>
-                                    {item}
-                                </MenuItem>
-                                ))}
-                            </SelectTextField>
-                            </Grid>
-                            </div>
                         <div className="flex flex-wrap items-center h-full w-full pb-20 pt-20 pl-8 pr-8">
-                                <div className="flex flex-col text-center h-100 w-full mt-10 p-8" style={{ marginTop: "10px"}}>
+                                <div className="flex flex-col text-center h-100 w-full mt-10 p-8 border-b-1" style={{ marginTop: "10px"}}>
                                     <Typography className="text-14 text-center" color="textSecondary">
                                     Number of SREP Pending Applications
                                     </Typography>
-                                    <div className="items-center mt-5 text-center" style={{ marginTop: "5px"}}>
-                                        <Typography className="text-32 text-center">23,000</Typography>
+                                    <div className="items-center mt-5 mb-10 text-center" style={{ marginTop: "5px"}}>
+                                        <Typography className="text-32 text-center" style={{ color: "orange" }}>23,000</Typography>
                                     </div>
                                 </div>
                                 <div className="flex flex-col h-100 w-full text-center mt-10 p-8" style={{ marginTop: "10px"}}>
@@ -172,7 +156,7 @@ import PropTypes from 'prop-types';
                                     Number Of  Approved Applications
                                     </Typography>
                                     <div className="items-center mt-5 text-center" style={{ marginTop: "5px"}}>
-                                        <Typography className="text-32 text-center">23,000</Typography>
+                                        <Typography className="text-32 text-center" style={{ color: "green" }}>23,000</Typography>
                                     </div>
                                 </div>
                                 
