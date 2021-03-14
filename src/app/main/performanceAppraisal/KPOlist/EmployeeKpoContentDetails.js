@@ -74,7 +74,7 @@ const EmployeeKpoContentDetails = () => {
 				>
 					<Tab className="h-64 normal-case" label="KPO Content Details" />
 					<Tab className="h-64 normal-case" label="KPO Targets" onClick={customHook.KpoContentValue}/>
-          <Tab className="h-64 normal-case" label="Modification History" />
+          {/* <Tab className="h-64 normal-case" label="Modification History" /> */}
 				</Tabs>
       }
       content={

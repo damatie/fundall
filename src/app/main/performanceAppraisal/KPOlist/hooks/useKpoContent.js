@@ -173,7 +173,7 @@ const useKpoContentList = ({config, state, dispatch, params, push, kpoCategory, 
 
   const KpoContentValue = () => {
     setContentValue(getValues());
-    console.log(getValues());
+    // console.log(getValues());
   }
 
   const shouldShowInput = (name) => {

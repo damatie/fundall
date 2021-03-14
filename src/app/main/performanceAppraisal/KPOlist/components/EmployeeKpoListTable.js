@@ -2,7 +2,7 @@ import EnhancedTable from 'app/shared/table/EnhancedTable';
 import React from 'react';
 import KpoStatus from './KpoStatus';
 
-const EmployeeKpoListTable = ({customHook}) => {
+const EmployeeKpoListTable = ({customHook, completed}) => {
 	const columns = React.useMemo(
 		() => [
 			{
@@ -71,7 +71,7 @@ const EmployeeKpoListTable = ({customHook}) => {
 	return (
 		<EnhancedTable
 			columns={columns}
-			data={listOfKpo}
+			data={completed ? listOfKpo.filter((kpo) => kpo.status === 'completed') : listOfKpo.filter((kpo) => kpo.status !== 'completed')}
 			onRowClick={(ev, row) => {
 				if (row && row.original.status !== 'rejected' && row.original.status !== 'requested') {
 					push(`/performance_appraisal/kpoList/details/${row.original.id}`)

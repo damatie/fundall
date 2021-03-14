@@ -6,9 +6,9 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Skeleton from '@material-ui/lab/Skeleton';
 import KpoStatus from './KpoStatus';
 
-const ListOfEmployeeKpo = ({ customHook, isAssigned, value, request }) => {
+const ListOfEmployeeKpo = ({ customHook, isAssigned, value, request, type }) => {
 	const {
-		deptKpo,
+		// deptKpo,
 		loading,
 		handleDelete,
 		push,
@@ -17,7 +17,8 @@ const ListOfEmployeeKpo = ({ customHook, isAssigned, value, request }) => {
 		entities,
 		role,
 		kpoRequest,
-		handleOpen
+		handleOpen,
+		getKpos
 	} = customHook;
 	const columns = React.useMemo(
 		() => [
@@ -116,7 +117,7 @@ const ListOfEmployeeKpo = ({ customHook, isAssigned, value, request }) => {
 						<EnhancedTable
 							columns={columns}
 							data={
-								isAssigned ? assignedKpo : request ? kpoRequest : deptKpo
+								isAssigned ? assignedKpo : request ? kpoRequest : getKpos(type)
 							}
 							onRowClick={(ev, row) => {
 								if (row && !request) {
