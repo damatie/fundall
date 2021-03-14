@@ -3,6 +3,7 @@ import ar from './navigation-i18n/ar';
 import en from './navigation-i18n/en';
 import tr from './navigation-i18n/tr';
 import { authRoles } from 'app/auth';
+import formList from 'app/main/onboarding/formList';
 
 i18next.addResourceBundle('en', 'navigation', en);
 i18next.addResourceBundle('tr', 'navigation', tr);
@@ -206,7 +207,7 @@ const navigationConfig = [
 				id: 'onboarding',
 				title: 'Onboarding',
 				type: 'item',
-				url: '/employee/onboarding',
+				url: `/employee/onboarding/${formList[0]}`,
 				icon: 'card_membership',
 				auth: authRoles?.staff,
 			},

@@ -38,7 +38,7 @@ const KpoContentList = ({customHook}) => {
 				accessor: 'target',
 				sortable: true,
 				Cell: ({ row }) => {
-          return <>{`${row.original.target}%`}</>;
+          return <>{`${row.original.target}`}</>;
         },
 			},
 			{

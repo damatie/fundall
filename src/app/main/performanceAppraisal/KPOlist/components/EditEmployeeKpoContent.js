@@ -9,7 +9,7 @@ import Skeleton from '@material-ui/lab/Skeleton';
 
 const EditEmployeeKpoContent = ({ customHook }) => {
   const {
-    register, errors, handleSubmit, onSubmit, control, kpoDetails, kpoCategory, loadingContent, pipEligibility
+    register, errors, handleSubmit, onSubmit, control, kpoDetails, kpoCategory, loadingContent, pipEligibility, disableInput
   } = customHook;
   return (
     <section className='w-1/2 flex flex-col mx-auto p-20'>
@@ -30,6 +30,7 @@ const EditEmployeeKpoContent = ({ customHook }) => {
                       className='my-10'
                       error={errors.kpoCategoryId}
                       message={errors.kpoCategoryId?.message}
+                      {...disableInput()}
                     >
                       {kpoCategory.map(item => {
                         if (item.status.toUpperCase() === 'ACTIVE') {
@@ -53,6 +54,7 @@ const EditEmployeeKpoContent = ({ customHook }) => {
                   message={errors.kpoDescription?.message}
                   refs={register}
                   defaultValue={kpoDetails.kpoDescription}
+                  {...disableInput()}
                 />
                 <Input
                   className='my-16'
@@ -62,7 +64,8 @@ const EditEmployeeKpoContent = ({ customHook }) => {
                   message={errors.target?.message}
                   refs={register}
                   defaultValue={kpoDetails.target}
-                  type='number'
+                  type='text'
+                  {...disableInput()}
                 />
                 {
                   pipEligibility && (
@@ -75,17 +78,18 @@ const EditEmployeeKpoContent = ({ customHook }) => {
                       refs={register}
                       defaultValue={kpoDetails.kpoPipTarget}
                       type='number'
+                      {...disableInput()}
                     />
                   )
                 }
-                <SharedButton
+                {/* <SharedButton
                   variant='contained'
                   color='primary'
                   type='submit'
                   className='flex mx-auto'
                 >
                   Update
-                </SharedButton>
+                </SharedButton> */}
               </form>
             </Paper>
 

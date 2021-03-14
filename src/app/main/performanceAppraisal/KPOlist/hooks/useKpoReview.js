@@ -34,8 +34,18 @@ const useKpoReview = ({dispatch, push, userInfo, kpoList}) => {
     }))
   };
 
+  const getKpos = (type) => {
+    console.log(type);
+    switch(type) {
+      case 'completed':
+        return deptKpo.filter((kpo) => kpo.status === 'completed');
+      default:
+        return deptKpo.filter((kpo) => kpo.status !== 'completed')
+    }
+  }
+
   return {
-    deptKpo,
+    getKpos,
     loading,
     push,
     handleDelete,
