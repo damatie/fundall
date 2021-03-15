@@ -15,89 +15,91 @@ const EnrollmentListTable = ({ data, handleFilter}) => {
 		() => [
 			{
 				Header: 'Employee Name',
-				accessor: 'employeeName',
+				accessor: 'employee',
 				sortable: true,
-				Cell: ({ row: { original: { firstName, lastName }} }) => {
-					return <>{`${firstName} ${lastName}`}</>
+				Cell: ({ row: { original: { employee }} }) => {
+					return <>{`${employee.firstName} ${employee.lastName}`}</>
 				}
 			},
 			{
 				Header: 'Employee Email',
-				accessor: 'email',
+				accessor: 'employee.email',
 				sortable: true
 			},
 			{
 				Header: 'Entity',
-				accessor: 'entity',
+				accessor: 'employee.entityId',
 				sortable: true,
-				Cell: ({ row: { original: { entity }} }) => {
-					return <>{entity.entityName}</>
+				Cell: ({ row: { original: { employee }} }) => {
+                    const result = entities.filter(e => {
+                        return e.id === employee.entityId });
+                    const value = result.length !== 0 ? result[0].entityName : '';
+					return <>{ value }</>
 				}
 			},
             {
 				Header: 'Department',
-				accessor: 'department',
+				accessor: 'employee.departmentId',
 				sortable: true,
-				Cell: ({ row: { original: { department }} }) => {
-					return <>{department.departmentName}</>
+				Cell: ({ row: { original: { employee }} }) => {
+                    const result = departments.filter(e => {
+                        return e.id === employee.departmentId });
+                    console.log('departments: ', departments);
+                    const value = result.length !== 0 ? result[0].departmentName : '';
+					return <>{ value }</>
 				}
 			},
             {
 				Header: 'Capital Funds',
-				accessor: 'capital',
+				accessor: 'capitalFund',
 				sortable: true,
-				Cell: ({ row: { original: { capital }} }) => {
-					return <>{capital.Amount}</>
+				Cell: ({ row: { original: { capitalFund }} }) => {
+					return <>{capitalFund}</>
 				}
 			},
             {
 				Header: 'Beneficiary Name',
 				accessor: 'beneficiaryName',
 				sortable: true,
-				Cell: ({ row: { original: { beneficiary }} }) => {
-					return <>{`${beneficiary.lirstName} ${beneficiary.lastName}`}</>
+				Cell: ({ row: { original: { beneficiaryName }} }) => {
+					return <>{`${beneficiaryName}`}</>
 				}
 			},
             {
 				Header: 'Beneficiary Nationality',
 				accessor: 'beneficiaryNationality',
 				sortable: true,
-				Cell: ({ row: { original: { beneficiary }} }) => {
-					return <>{beneficiary.nationality}</>
+				Cell: ({ row: { original: { beneficiaryNationality }} }) => {
+					return <>{beneficiaryNationality}</>
 				}
 			},
             {
 				Header: 'Beneficiary Gender',
 				accessor: 'beneficiaryGender',
 				sortable: true,
-				Cell: ({ row: { original: { beneficiary }} }) => {
-					return <>{beneficiary.gender}</>
+				Cell: ({ row: { original: { beneficiaryGender }} }) => {
+					return <>{beneficiaryGender}</>
 				}
 			},
 			{
 				Header: 'Relationship',
-				accessor: 'relationship',
+				accessor: 'beneficiaryRelationship',
 				sortable: true,
-				Cell: ({ row: { original: { beneficiary }} }) => {
-					return <>{beneficiary.relationship}</>
+				Cell: ({ row: { original: { beneficiaryRelationship }} }) => {
+					return <>{beneficiaryRelationship}</>
 				}
 			},{
 				Header: 'Beneficiary Email',
 				accessor: 'beneficiaryEmail',
 				sortable: true,
-				Cell: ({ row: { original: { beneficiary }} }) => {
-					return <>{beneficiary.email}</>
+				Cell: ({ row: { original: { beneficiaryEmail }} }) => {
+					return <>{beneficiaryEmail}</>
 				}
 			},
 		],
 	);
 	
-	const {
-		employees,
-		entities,
-		departments,
-        years,
-	} = data;
+	const { enrollmentList, entities, departments, years } = data;
 
     function handleSearch(event) {
         setSearch(event.target.value);
@@ -106,7 +108,7 @@ const EnrollmentListTable = ({ data, handleFilter}) => {
   return (
       <EnhancedTable
             columns={columns}
-            data={employees}
+            data={ enrollmentList }
             toolBar={
               <Grid container spacing={1} alignItems='left'>
                 <Grid container spacing={1} alignItems='left' style={{ marginTop: "10px" }}>

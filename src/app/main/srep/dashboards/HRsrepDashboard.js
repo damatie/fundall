@@ -12,9 +12,11 @@ import Grid from '@material-ui/core/Grid';
 import EnrollmentListTable from './components/EnrollmentListTable';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import { Divider } from '@material-ui/core';
+import * as Actions from '../store/actions';
+import * as UtilActions from '../../../store/actions';
+import { useAuth } from 'app/hooks/useAuth';
+import reducer from '../store/reducers';
 
-    // #region constants
     const lineChartData = {
         labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
         datasets: [
@@ -84,20 +86,32 @@ import { Divider } from '@material-ui/core';
         ]
     };
 
-    // const [currentRange, setCurrentRange] = useState(props.widget.currentRange);
-
-    const employees = [];
-    const entities = ["5C", "CBIT", "m-Consult"];
-    const departments = ["Backend","Frontend", "UI/UX"];
-    const years = ["2018", "2019", "2020"];
+    const userId = useAuth().getId;
+    const userData = useAuth().getUserData;
 	
-	function handleChangeRange(ev) {
-		setCurrentRange(ev.target.value);
-	}
-    
-    class HRsrepDashboard extends React.Component {
-        render() {
-            return <SimplePage title='HR SREP DASHBOARD'>
+    function HRsrepDashboard(props) {
+        const dispatch = useDispatch();
+        const HRsrepDashboard = useSelector(({ HRsrepDashboard }) => HRsrepDashboard.srep.data);
+        const roles = useSelector(({ roles }) => roles.roleList);
+        const departments = useSelector(({ departments }) => departments.deparmentList);
+        const years = ["2018", "2019", "2020"];
+        const entities = useSelector(({ entities }) => entities.entityList);
+        const data = (HRsrepDashboard) ? ((HRsrepDashboard.data) ? HRsrepDashboard.data : []) : [];
+        const enrollmentList = data;
+        console.log('HRsrepDashboard Data: ', data);
+
+        useEffect(() => {
+            dispatch(UtilActions.getRoles());
+            dispatch(UtilActions.getEntities());
+            dispatch(UtilActions.getDepartments());
+            if(userData.role.toUpperCase() === 'EMPLOYEE' || userData.role.toUpperCase() === 'LINE MANAGER'){
+                dispatch(Actions.getSrepByEmployeeID(userId));
+            }else{
+                dispatch(Actions.getSrep(userData.role.toUpperCase()));
+            }
+        }, [dispatch]);
+            
+        return ( <SimplePage title='HR SREP DASHBOARD'>
                 <section className="widget flex flex-row w-full" style={{ height: "320px" }}>
                 <div className="widget flex w-full sm:w-2/3 p-12" >
                     <Paper className="w-full rounded-8 shadow-none border-1">
@@ -148,7 +162,8 @@ import { Divider } from '@material-ui/core';
                                     Number of SREP Pending Applications
                                     </Typography>
                                     <div className="items-center mt-5 mb-10 text-center" style={{ marginTop: "5px"}}>
-                                        <Typography className="text-32 text-center" style={{ color: "orange" }}>23,000</Typography>
+                                        {/* <Typography className="text-32 text-center" style={{ color: "orange" }}>{0}</Typography> */}
+                                        <Typography className="text-32 text-center" style={{ color: "orange" }}>{(data.length > 0) ? data.filter(t => t.status === 'pending').length : 0}</Typography>
                                     </div>
                                 </div>
                                 <div className="flex flex-col h-100 w-full text-center mt-10 p-8" style={{ marginTop: "10px"}}>
@@ -156,7 +171,7 @@ import { Divider } from '@material-ui/core';
                                     Number Of  Approved Applications
                                     </Typography>
                                     <div className="items-center mt-5 text-center" style={{ marginTop: "5px"}}>
-                                        <Typography className="text-32 text-center" style={{ color: "green" }}>23,000</Typography>
+                                        <Typography className="text-32 text-center" style={{ color: "green" }}>{(data.length > 0) ? data.filter(t => t.status === 'approved').length : 0}</Typography>
                                     </div>
                                 </div>
                                 
@@ -166,10 +181,10 @@ import { Divider } from '@material-ui/core';
                 </section>
 
 				<div className="widget flex w-full p-12">
-                    <EnrollmentListTable data={{ employees, entities, departments, years, }} />
+                    <EnrollmentListTable data={{ enrollmentList, entities, departments, years }} />
 				</div>
-            </SimplePage>;
+            </SimplePage>
+            );
         }
-    }
     
-    export default withReducer('personalTraining', null)(HRsrepDashboard);
+    export default withReducer('HRsrepDashboard', reducer)(HRsrepDashboard);
