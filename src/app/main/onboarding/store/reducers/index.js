@@ -6,6 +6,7 @@ import emergencyContactReducer from 'app/main/employeeInformation/store/reducers
 import spouseDependantReducer from 'app/main/employeeInformation/store/reducers/spouseDependant.reducer';
 import nextOfKinReducer from 'app/main/employeeInformation/store/reducers/nextOfKin.reducer';
 import employeeInfoReducer from 'app/main/employeeInformation/store/reducers/employeeInfo.reducer';
+import onboardingForms from './onboardingForms.reducer'
 
 const reducers = combineReducers({
   education: educationReducer,
@@ -15,6 +16,7 @@ const reducers = combineReducers({
   spouseDependant: spouseDependantReducer,
   nextOfKin: nextOfKinReducer,
   employeeInfo: employeeInfoReducer,
+  onboardingForms,
 });
 
 export default reducers;

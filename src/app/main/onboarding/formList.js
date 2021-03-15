@@ -5,7 +5,7 @@ const formList = [
   'Acknowledgement of Substance Abuse Standard for Employees',
   'Information Security Policy',
   'Driving and Seat Belt Policy',
-  'Non-disclosure/Confidentiality Policy',
+  'Non-disclosure & Confidentiality Policy',
   'Employee Handbook Acknowledgement',
   'Id Card Issuance',
   'Sim Card Form',

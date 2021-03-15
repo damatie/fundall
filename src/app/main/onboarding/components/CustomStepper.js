@@ -6,6 +6,7 @@ import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { useHistory } from 'react-router-dom';
+import formList from '../formList';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -42,7 +43,7 @@ export default function CustomStepper({ children }) {
   };
 
   const handleReset = () => {
-    push('/employee/onboarding');
+    push(`/employee/onboarding/${formList[0]}`);
   };
 
   return (
