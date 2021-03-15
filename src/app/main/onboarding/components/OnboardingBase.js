@@ -11,6 +11,7 @@ import { useSelector } from 'react-redux';
 import OnboardingFormList from './OnboardingFormList';
 import formList from '../formList';
 import FormContainer from './FormContainer';
+import { useParams } from 'react-router-dom';
 
 const useStyles = makeStyles({
 	layoutRoot: {}
@@ -22,7 +23,9 @@ const OnboardingBase = () => {
 	const classes = useStyles();
   const pageLayout = useRef(null);
 
-  const [title, setTitle] = useState(formList[0]);
+	const { formName } = useParams();
+
+  const [title, setTitle] = useState(formName);
 
 	return (
 		<FusePageCarded

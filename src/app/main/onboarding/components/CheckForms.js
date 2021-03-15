@@ -92,7 +92,7 @@ const CheckForms = ({
         </div>
         <Button className='mx-auto w-4/12' variant="contained" color="primary" type='submit'>
           Submit
-      </Button>
+        </Button>
       </form>
     </section>
   );
