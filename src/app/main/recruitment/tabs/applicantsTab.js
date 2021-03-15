@@ -1,8 +1,8 @@
-import FormControl from '@material-ui/core/FormControl';
 import Icon from '@material-ui/core/Icon';
 import _ from '@lodash';
-import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
+// import FormControl from '@material-ui/core/FormControl';
+// import MenuItem from '@material-ui/core/MenuItem';
+// import Select from '@material-ui/core/Select';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import Table from '@material-ui/core/Table';
@@ -36,6 +36,7 @@ import { fetchHeaders } from 'app/shared/fetchHeaders';
 import { getBaseUrl } from 'app/shared/getBaseUrl';
 import { handleResponse } from 'app/auth/handleRes';
 import swal from 'sweetalert2';
+import { useAuth } from 'app/hooks/useAuth';
 
 const useStyles = makeStyles((theme) => ({
   table: {
@@ -70,6 +71,9 @@ const TableWidget = (props) => {
   const [selected, setSelected] = useState({});
 
   const { positionId } = useParams();
+
+  const userData = useAuth().getUserData;
+  const isHr = () => userData.role.toUpperCase() === 'HR MANAGER';
 
   const status = useSelector(state => state.PositionDetails.recruitment.onePosition.status);
   const { success } = useSelector(state => state.PositionDetails.candidate);
@@ -140,7 +144,7 @@ const TableWidget = (props) => {
   function CheckStatus(status) {
     switch (status) {
 
-      case "accepted":
+      case "added":
         return (
           <Typography className={'bg-green text-white inline text-11 font-500 px-8 py-4 rounded-4'}>
             {status}
@@ -282,7 +286,7 @@ const TableWidget = (props) => {
               </tr>
             </tbody>
           </table>
-          {selected.status && checkStatus() ? <Grid container className="items-center w-full pt-20" justify="center" alignItems="center">
+          {/* {selected.status && checkStatus() ? <Grid container className="items-center w-full pt-20" justify="center" alignItems="center">
             <Button
               className="bg-red text-white"
               startIcon={<RejectIcon />}
@@ -298,7 +302,7 @@ const TableWidget = (props) => {
             >
               Accept
             </Button>
-          </Grid> : <></>}
+          </Grid> : <></>} */}
         </RecruitmentDialog>
         {/* Update Candidate */}
         <RecruitmentDialog
@@ -431,7 +435,7 @@ const TableWidget = (props) => {
         </Table>
       </div>
 
-      {status?.toLowerCase() !== 'sent to hr' ? <ProgressBtn content='Submit Candidate' onClick={subCandidate} success={progress.success} loading={progress.loading} /> : <></>}
+      {/* {(status?.toLowerCase() !== 'sent to hr' || isHr().toUpperCase() === "HR MANAGER") ? <ProgressBtn content='Submit Candidate' onClick={subCandidate} success={progress.success} loading={progress.loading} /> : <></>} */}
     </Paper>
   );
 }

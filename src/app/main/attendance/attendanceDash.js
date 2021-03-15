@@ -2,18 +2,17 @@ import FusePageSimple from '@fuse/core/FusePageSimple';
 import _ from '@lodash';
 import Button from '@material-ui/core/Button';
 import Icon from '@material-ui/core/Icon';
-import Tabs from '@material-ui/core/Tabs';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import React, { useEffect, useMemo, useState } from 'react';
 import * as Actions from './store/actions';
 import reducer from './store/reducers';
 import AttendanceTable from './shared/attendancetable';
-import { Dialog, DialogActions, DialogContent, DialogTitle, InputAdornment, MenuItem, Select, Tab } from '@material-ui/core';
-import Formsy from 'formsy-react';
+import { Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, FormControlLabel, FormGroup, FormHelperText, FormLabel, InputAdornment, makeStyles, MenuItem, Select, Tab } from '@material-ui/core';
 import withReducer from 'app/store/withReducer';
 import { useDispatch, useSelector } from 'react-redux';
 import Swal from 'sweetalert2';
+import ProgressBtn from 'app/shared/progressBtn';
 
 const columns = [
     {
@@ -36,11 +35,23 @@ const columns = [
     }
 ];
 
+const useStyles = makeStyles((theme) => ({
+    root: {
+        display: 'flex',
+    },
+    formControl: {
+        margin: theme.spacing(3),
+    },
+}));
+
 function AttendanceDashboard(props) {
+
+    const classes = useStyles();
 
     const [selected, setSelected] = useState([]);
     const dispatch = useDispatch();
-    const [payload, setPayload] = useState({})
+    const [payload, setPayload] = useState({});
+
 
     const activities = useSelector(({ activity }) => activity.activities.activities)
     const attendanceHistory = useSelector(({ activity }) => activity.activities.attendanceHistory?.rows ?? [])
@@ -54,22 +65,29 @@ function AttendanceDashboard(props) {
     }, [dispatch]);
 
     useEffect(() => {
-    }, [selected])
+    }, [selected]);
 
     useEffect(() => {
         console.log(activities, attendanceHistory)
     }, [activities, attendanceHistory])
 
     const handleSubmit = () => {
+        if (selected.length < 2) {
+            Swal.fire("Must select 2 activities!");
+            return;
+        };
         setOpen(false);
         dispatch(Actions.markAttendance(payload));
+        
+        setSelected([]);
+        setPayload({});
     }
 
     const handleClose = () => {
         setOpen(false)
     }
 
-    const handleChange = (value) => {
+    const handleChange2 = (value) => {
 
         let exist = selected.includes(value);
 
@@ -94,7 +112,7 @@ function AttendanceDashboard(props) {
             let newArr = selected;
             let oldActivities = payload.activities;
 
-            let index = newArr.findIndex(element => element.name === value);
+            let index = newArr.findIndex(element => element === value);
 
             oldActivities.splice(newArr.indexOf(value), 1);
             newArr.splice(index, 1);
@@ -107,6 +125,10 @@ function AttendanceDashboard(props) {
 
             setDefaultValue("");
         }
+    }
+
+    const handleChange = (event, value) => {
+        handleChange2(value);
     }
 
     return (
@@ -150,36 +172,29 @@ function AttendanceDashboard(props) {
                         TransitionComponent={props.transition && props.transition}
                         fullWidth={true}
                         maxWidth={'sm'}
-                    // onUpdate={value => setUpdateOpen(value)}
                     >
                         <DialogTitle>
-                            <span>Activity for today</span>
+                            <span>Activities for today</span>
                         </DialogTitle>
 
                         <DialogContent>
                             <div className={"p-40"}>
-                                <Formsy
-                                    onSubmit={handleSubmit}
-                                    className="flex flex-col justify-center w-full"
-                                >
-                                    <label>{selected.join(", ")}</label>
-                                    <Select
-                                        id="demo-mutiple-chip"
-                                        className="mb-16 w-full"
-                                        name="status"
-                                        label="Status"
-                                        value={defaultValue}
-                                        onChange={(e) => handleChange(e.target.value)}
-                                        variant="outlined"
-                                        required
-                                    >
-                                        <MenuItem value={""}>Select activities</MenuItem>
-                                        {activities.map(item => (
-                                            <MenuItem value={item.name} key={item.id}>{item.name}:&nbsp;&nbsp;&nbsp;<span className={"smallText"}>({item.type})</span></MenuItem>
-                                        ))}
-                                    </Select>
-
-                                </Formsy>
+                                <FormControl required error={selected.length < 2} component="fieldset" className={classes.formControl}>
+                                    <FormLabel>Select 2 activities for attendance</FormLabel>
+                                    <FormGroup>
+                                        {
+                                            activities.length > 0 ?
+                                                activities.map(item => (
+                                                    <FormControlLabel
+                                                        control={<Checkbox checked={selected.includes(item.name)} onChange={(e) => handleChange(e, item.name)} name="gilad" />}
+                                                        label={`${item.name}: ${item.type}`}
+                                                        key={item.id}
+                                                    />
+                                                )) :
+                                                <Typography variant={"h3"}>Loading</Typography>
+                                        }
+                                    </FormGroup>
+                                </FormControl>
                             </div>
                         </DialogContent>
 
@@ -187,9 +202,7 @@ function AttendanceDashboard(props) {
                             <Button onClick={handleClose} color="primary">
                                 Close
                             </Button>
-                            <Button onClick={handleSubmit} color="primary">
-                                Submit
-                            </Button>
+                            <ProgressBtn content={"Submit"} onClick={handleSubmit} color={"primary"} />
                         </DialogActions>
                     </Dialog>
                 </>
@@ -210,6 +223,6 @@ function AttendanceDashboard(props) {
             innerScroll
         />
     );
-}
+};
 
 export default withReducer('activity', reducer)(AttendanceDashboard);

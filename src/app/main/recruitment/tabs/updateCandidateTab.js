@@ -1,4 +1,4 @@
-import { TextFieldFormsy } from '@fuse/core/formsy';
+import { SelectFormsy, TextFieldFormsy } from '@fuse/core/formsy';
 import Icon from '@material-ui/core/Icon';
 import Typography from '@material-ui/core/Typography';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -10,6 +10,7 @@ import ProgressBtn from 'app/shared/progressBtn';
 import GridSystem from 'app/shared/gridSystem';
 import DropZone from '../../../shared/dropZonePdf';
 import { useParams } from 'react-router';
+import { MenuItem } from '@material-ui/core';
 
 function AssignRecruiter(props) {
 	const dispatch = useDispatch();
@@ -37,39 +38,56 @@ function AssignRecruiter(props) {
 			...model,
 			resume: file[0]
 		},
-		selectedPosition.id, 
-		positionId
+			selectedPosition.id,
+			positionId
 		))
 	}
 
 	const formInputs = [
-		{name: 'candidateName', label: 'Name of Candidate', icon: 'person', value: selectedPosition.candidateName},
-		{name: 'candidateEmail', label: 'Email', icon: 'email', value: selectedPosition.candidateEmail},
-		{name: 'candidatePhoneNumber', label: 'Phone number', icon: 'phone', type: 'number', value: selectedPosition.candidatePhoneNumber},
-  ];
+		{ name: 'candidateName', label: 'Name of Candidate', icon: 'person', value: selectedPosition.candidateName },
+		{ name: 'candidateEmail', label: 'Email', icon: 'email', value: selectedPosition.candidateEmail },
+		{ name: 'candidatePhoneNumber', label: 'Phone number', icon: 'phone', type: 'number', value: selectedPosition.candidatePhoneNumber },
+		{ name: 'status', label: 'Employment status', validations: "", data: ["shortlisted", "accepted", "hired"] },
+	];
 
 	const updateCandidateForm = formInputs.map((input, i) => {
-    return (
-      <TextFieldFormsy
-        className="mb-16"
-        type={input.type}
-        name={input.name}
-        label={input.label}
-				key={i}
-				value={input.value}
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <Icon className="text-20" color="action">
-                {input.icon}
-              </Icon>
-            </InputAdornment>
-          )
-        }}
-        variant="outlined"
-        required
-      />
-    )
+		return (
+			input.data ?
+				<SelectFormsy
+					className="mb-16"
+					name={input.name}
+					label={input.label}
+					variant="outlined"
+					required
+					requiredError='Must not be None'
+				// value={details[input.name]}
+				// onChange={(e) => handleChange(input.name, e.target.value)}
+				>
+					{input.data.map((item, i) => (
+						<MenuItem value={item} key={i}>{item}</MenuItem>
+					))}
+				</SelectFormsy>
+				:
+				<TextFieldFormsy
+					className="mb-16"
+					type={input.type}
+					name={input.name}
+					label={input.label}
+					key={i}
+					value={input.value}
+					InputProps={{
+						endAdornment: (
+							<InputAdornment position="end">
+								<Icon className="text-20" color="action">
+									{input.icon}
+								</Icon>
+							</InputAdornment>
+						)
+					}}
+					variant="outlined"
+					required
+				/>
+		)
 	})
 
 	return (
@@ -82,10 +100,10 @@ function AssignRecruiter(props) {
 				className="flex flex-col justify-center w-full"
 			>
 				<GridSystem>
-					{ updateCandidateForm }
+					{updateCandidateForm}
 				</GridSystem>
-        <Typography variant='body1' className="mt-16 mb-8">Upload resume</Typography>
-        <DropZone setValue={setFile} />
+				<Typography variant='body1' className="mt-16 mb-8">Upload resume</Typography>
+				<DropZone setValue={setFile} />
 				<ProgressBtn success={success} loading={loading} content='Update candidate' disable={!isFormValid} />
 			</Formsy>
 		</div>

@@ -68,6 +68,7 @@ const TableWidget = (props) => {
   const recruiter = useSelector(state => state.Recruitment.recruitment.data)
 
   useEffect(() => {
+    console.log("selected: ", data)
     recruiter.map(data => {
       if (data.id === selected.id) setSelected(data);
     })
@@ -112,7 +113,7 @@ const TableWidget = (props) => {
 
   function CheckStatus(status) {
     switch (status) {
-      case "assigned to recruiter":
+      case "added":
         return (
           <Typography className={'bg-green text-white inline text-11 font-500 px-8 py-4 rounded-4'}>
             {status}
@@ -163,10 +164,10 @@ const TableWidget = (props) => {
     dispatch(Actions.updateOpening(hrId));
   }
 
-  const handleDeleteOpening = (event, hrId) => {
+  const handleDeleteOpening = (event, reqId) => {
     event.stopPropagation();
     setOpen(false);
-    dispatch(Actions.deleteOpening(hrId));
+    dispatch(Actions.deleteOpening(reqId));
   }
 
   const isHr = () => userData.role.toUpperCase() === 'HR MANAGER';
@@ -206,7 +207,7 @@ const TableWidget = (props) => {
         <RecruitmentDialog
           title='Detail of Opening'
           open={open}
-          update='Update Position'
+          update={(!isHr() && selected?.status === "added") ? 'Update Position' : ""}
           onClose={value => setOpen(value)}
           onUpdate={value => setUpdateOpen(value)}
         >
@@ -214,11 +215,11 @@ const TableWidget = (props) => {
             <tbody>
               <tr className="entity">
                 <th>Entity Name</th>
-                <td>{(selected.entity) ? selected.entity.entityName : ''}</td>
+                <td>{(selected?.entity) ? selected?.entity?.entityName : ''}</td>
               </tr>
               <tr className="department">
                 <th>Department</th>
-                <td>{(selected.department) ? selected.department.departmentName : ''}</td>
+                <td>{(selected?.department) ? selected?.department?.departmentName : ''}</td>
               </tr>
               <tr className="jobTitle">
                 <th>Job title</th>
@@ -229,21 +230,20 @@ const TableWidget = (props) => {
                   <th>Job Description</th>
                   <td>
                     <Typography
-                      className={'bg-blue inline text-11 font-500 px-8 py-4 rounded-4'}
-                      style={{ cursor: 'pointer', color: '#fff' }}
                     >
-                      <a className='color-white' href={selected.jobDescription} target="_blank" rel="noopener noreferrer">View Job Description</a>
+                      {selected?.jobDescription}
+                      {/* <a className='color-white' href={selected.jobDescription} target="_blank" rel="noopener noreferrer">View Job Description</a> */}
                     </Typography>
                   </td>
                 </tr>
               }
-              <tr className="assignedRecruiter">
+              {/* <tr className="assignedRecruiter">
                 <th>Recruiter</th>
                 <td>{selected.recruiter
                   ? `${selected.recruiter.lastName} ${selected.recruiter.firstName}`
                   : displayButton()}
                 </td>
-              </tr>
+              </tr> */}
               <tr className="employeeStatus">
                 <th>Employee Status</th>
                 <td>{(selected.employeeStatus) ? selected.employeeStatus : ''}</td>
@@ -276,17 +276,6 @@ const TableWidget = (props) => {
               View full detail
             </Typography>
           </Grid>
-        </RecruitmentDialog>
-
-        {/* Assign Reecruiter Dialog */}
-        <RecruitmentDialog
-          transition={Transition}
-          title='Assign Recruiter'
-          open={openHr}
-          onClose={value => setOpenHr(value)}
-          onAssign={value => setOpenHr(value)}
-        >
-          <AssignRecruiterTab setOpenHr={setOpenHr} selectedPosition={selected} />
         </RecruitmentDialog>
 
         {/* Update Dialog */}
@@ -360,18 +349,18 @@ const TableWidget = (props) => {
                     // selected={n.id === selectedItemId}
                     className="cursor-pointer"
                   >
-                    <TableCell style={{ padding: '0 16px' }}>
-                      {n.entity.entityName}
-                    </TableCell>
                     <TableCell>{n.jobTitle}</TableCell>
-                    <TableCell style={{ padding: '0 16px' }}>{n.employeeStatus}</TableCell>
-                    <TableCell style={{ padding: '0 16px' }}>{n.urgency}</TableCell>
-                    <TableCell>{new Date(n.createdAt).toLocaleDateString()}</TableCell>
                     <TableCell style={{ padding: '0 16px' }}>
-                      {CheckStatus(n.status)}
+                      {n?.jobDescription}
+                    </TableCell>
+                    <TableCell style={{ padding: '0 16px' }}>{n?.employeeStatus}</TableCell>
+                    <TableCell style={{ padding: '0 16px' }}>{n?.urgency}</TableCell>
+                    <TableCell>{new Date(n?.createdAt).toLocaleDateString()}</TableCell>
+                    <TableCell style={{ padding: '0 16px' }}>
+                      {CheckStatus(n?.status)}
                     </TableCell>
                     { isHr() && <TableCell style={{ padding: '0 16px' }}>
-                      <IconButton aria-label="delete" onClick={(event) => handleDeleteOpening(event, n.id)}>
+                      <IconButton aria-label="delete" onClick={(event) => handleDeleteOpening(event, n?.id)}>
                         <DeleteIcon style={{ color: 'red' }} />
                       </IconButton>
                     </TableCell>}

@@ -33,7 +33,7 @@ export const HRAccept = (payload, id) => {
     swal.showLoading();
     return dispatch => {
         fetch(`${getBaseUrl()}/employee_exit/hr/verify/${id}`, {
-            ...header.getRegHeader("PATCH", payload)
+            ...header.reqHeader("PATCH", payload)
         }).then(res => res.json()).then(
             data => {
                 if (data.success) {
@@ -125,7 +125,7 @@ export const lineManagerAccept = (id) => {
 
     return dispatch => {
         fetch(`${getBaseUrl()}/employee_exit/lm/approve/${id}`, {
-            ...header.getRegHeader("PATCH")
+            ...header.reqHeader("PATCH")
         }).then(res => res.json()).then(
             data => {
                 if (data.success) {

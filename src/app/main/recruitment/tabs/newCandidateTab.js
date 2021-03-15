@@ -44,6 +44,7 @@ function AddCandidate(props) {
 		{ name: 'candidateEmail', label: 'Candidate email', validations: 'isEmail', icon: 'email', type: 'text' },
 		{ name: 'candidatePhoneNumber', label: 'Candidate phone Number', validations: { minLength: 11 }, icon: 'phone', type: 'number' },
 		{ name: 'employeeStatus', label: 'Employee status', validations: { minLength: 9 }, icon: 'email', data: ["Full-Time", "Part-Time"] },
+		// { name: 'status', label: 'Employment status', validations: "", data: ["accepted", "hired", "shortlisted", ""] },
 	];
 
 	const recruitmentForm = formInputs.map((input, i) =>
@@ -101,7 +102,7 @@ function AddCandidate(props) {
 				<GridSystem>
 					{recruitmentForm}
 				</GridSystem>
-				
+
 				<Typography variant='body1' className="mt-16 mb-8">Upload resume *</Typography>
 				<DropZone setValue={setFile} />
 				<ProgressBtn success={candidate.success} loading={candidate.loading} content='Add candidate' disable={!isFormValid || file.length === 0} />

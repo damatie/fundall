@@ -1,26 +1,19 @@
 import firebaseService from 'app/services/firebaseService';
-import jwtService from 'app/services/jwtService';
 import * as Actions from 'app/store/actions';
 import * as UserActions from './user.actions';
-import { useAuthentication } from 'app/hooks/useAuthentication';
 import Swal from 'sweetalert2';
-import { fetchHeaders } from 'app/shared/fetchHeaders';
-import { redirectUrl } from '../../redirectUrl';
 import { getBaseUrl } from 'app/shared/getBaseUrl';
 import { handleResponse } from 'app/auth/handleRes';
+
 import { GET_EMPLOYEE_PROFILE, LOADING_EMPLOYEE_PROFILE, getDepartmentEmployees } from 'app/store/actions';
-import { GET_NOTIFICATIONS, LOADING_NOTIFICATIONS } from 'app/main/notifications/store/actions';
 import api from 'app/services/api';
 
 export const LOGIN_ERROR = 'LOGIN_ERROR';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_LOADING = 'LOGIN_LOADING';
 
-
-const header = fetchHeaders();
-
 export function submitLogin(data, x) {
-	// console.log(x)
+
 	return dispatch => {
 		dispatch({
 			type: LOGIN_LOADING
@@ -87,10 +80,11 @@ export function submitLogin(data, x) {
 				payload: error.response?.data.error || error.response?.data.message
 			});
 		});
-	}
+	};
 }
 
 const getProfile = ({ id, token, }) => {
+
 	return dispatch => {
 		dispatch({
 			type: LOADING_EMPLOYEE_PROFILE
@@ -110,10 +104,12 @@ const getProfile = ({ id, token, }) => {
 				}
 			}
 		)
-	}
+	};
+
 }
 
 export function submitLoginWithFireBase({ username, password }) {
+
 	if (!firebaseService.auth) {
 		console.warn("Firebase Service didn't initialize, check your configuration");
 
