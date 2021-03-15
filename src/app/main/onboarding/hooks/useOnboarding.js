@@ -7,8 +7,10 @@ const useOnboarding = ({ params, profile, push }) => {
   const [shouldRedirect, setShouldRedirect] = useState(false);
 
   useEffect(() => {
-    if(!params && !profile.info) push('/employee/complete/registration/');
-  }, []);
+    if(Object.entries(profile).length > 0) {
+      if(!params && Object.entries(profile?.info || {}).length < 0) push('/employee/complete/registration/');
+    }
+  }, [profile]);
 
   // return {
   //   shouldRedirect,

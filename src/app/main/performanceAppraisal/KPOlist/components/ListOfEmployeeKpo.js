@@ -55,7 +55,7 @@ const ListOfEmployeeKpo = ({ customHook, isAssigned, value, request, type }) => 
 				// className: 'font-bold',
 				sortable: true,
 				Cell: ({ row: { original: { jobTitle } } }) => {
-					return <>{jobTitle.name}</>
+					return <>{jobTitle?.name}</>
 				}
 			},
 			{

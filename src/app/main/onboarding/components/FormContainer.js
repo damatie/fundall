@@ -1,6 +1,17 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import formList from '../formList';
+import PayrollDeductions from './PayrollDeductions';
+import EthicsBusinessConduct from './EthicsBusinessConduct';
+import HarassmentFreeWorkplace from './HarassmentFreeWorkplace';
+import SubtanceAbuse from './SubstanceAbuse';
+import InformationSecurityPolicy from './InformationSecurityPolicy';
+import DrivingSeatBeltPolicy from './DrivingSeatBeltPolicy';
+import ConfidentialityPolicy from './ConfidentialityPolicy';
+import HandbookAcknowledgement from './HandbookAcknowledgement';
+import IdCardIssuance from './IdCardIssuance';
+import SimCardAck from './SimCardAck';
+import BusinessCard from './BusinessCard';
 
 const FormContainer = () => {
 
@@ -9,47 +20,47 @@ const FormContainer = () => {
   switch (formName) {
     case formList[0]:
       return (
-        <>Authorization for Payroll Deductions</>
+        <PayrollDeductions />
       )
     case formList[1]:
       return (
-        <>Ethics and Business Conduct Policy Statement</>
+        <EthicsBusinessConduct />
       )
     case formList[2]:
       return (
-        <>Acknowledgement of Harassment-free Workplace policy</>
+        <HarassmentFreeWorkplace />
       )
     case formList[3]:
       return (
-        <>Acknowledgement of Substance Abuse Standard for Employees</>
+        <SubtanceAbuse />
       )
     case formList[4]:
       return (
-        <>Information Security Policy</>
+        <InformationSecurityPolicy />
       )
     case formList[5]:
       return (
-        <>Driving and Seat Belt Policy</>
+        <DrivingSeatBeltPolicy />
       )
     case formList[6]:
       return (
-        <>Non-disclosure/Confidentiality Policy</>
+        <ConfidentialityPolicy />
       )
     case formList[7]:
       return (
-        <>Employee Handbook Acknowledgement</>
+        <HandbookAcknowledgement />
       )
     case formList[8]:
       return (
-        <>Id Card Issuance</>
+        <IdCardIssuance />
       )
     case formList[9]:
       return (
-        <>Sim Card Form</>
+        <SimCardAck />
       )
     case formList[10]:
       return (
-        <>Business Card Request Template</>
+        <BusinessCard />
       )
     case formList[11]:
       return (
