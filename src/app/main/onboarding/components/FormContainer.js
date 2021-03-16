@@ -12,6 +12,12 @@ import HandbookAcknowledgement from './HandbookAcknowledgement';
 import IdCardIssuance from './IdCardIssuance';
 import SimCardAck from './SimCardAck';
 import BusinessCard from './BusinessCard';
+import BankAccountInfo from './BankAccountInfo';
+import ReimbursibleExpenses from './ReimbursibleExpenses';
+import Malarone from './Malarone';
+import ReferenceDetails from './ReferenceDetails';
+import NHFRegistration from './NHFRegistration';
+import MalariaPPA from './MalariaPPA';
 
 const FormContainer = () => {
 
@@ -64,32 +70,31 @@ const FormContainer = () => {
       )
     case formList[11]:
       return (
-        <>Employee Bank Account Information</>
+        <BankAccountInfo />
       )
     case formList[12]:
       return (
-        <>Authorization Form for Direct Deposit of Reimbursable Expenses</>
+        <ReimbursibleExpenses />
       )
     case formList[13]:
       return (
-        <>Reference Details Request Form</>
+        <ReferenceDetails />
       )
     case formList[14]:
       return (
-        <>Malarone/Malanil Acknowledgement Form</>
+        <Malarone />
       )
     case formList[15]:
       return (
-        <>NHF Details Form</>
+        <NHFRegistration />
       )
     case formList[16]:
       return (
-        <>Malaria Program Attestation</>
+        <MalariaPPA />
       )
     default:
       return null;
   }
-  return null;
 };
 
 export default FormContainer;

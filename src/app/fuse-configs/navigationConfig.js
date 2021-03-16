@@ -183,7 +183,7 @@ const navigationConfig = [
 				id: 'employee_onboarding_list',
 				title: 'Employee onboarding list',
 				type: 'item',
-				url: '/hr/employee_onboarding_list',
+				url: '/onboarding/list',
 				icon: 'card_membership',
 				auth: authRoles?.admin,
 			},

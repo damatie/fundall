@@ -22,6 +22,10 @@ const EmployeeOnboardingConfig = {
 			path: '/employee/onboarding/:formName',
 			component: React.lazy(() => import('./OnboardingForms'))
 		},
+		{
+			path: '/onboarding/list',
+			component: React.lazy(() => import('./EmployeeOnboardingForms'))
+		},
 	]
 };
 

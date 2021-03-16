@@ -4,7 +4,7 @@ import Grid from '@material-ui/core/Grid';
 import MenuItem from '@material-ui/core/MenuItem';
 import SelectTextField from 'app/shared/TextInput/SelectTextField';
 
-const EmployeeTable = ({ data, push, handleDelete, handleFilter}) => {
+const EmployeeTable = ({ data, push, handleDelete, handleFilter, onboarding}) => {
   const columns = React.useMemo(
 		() => [
 			{
@@ -60,9 +60,11 @@ const EmployeeTable = ({ data, push, handleDelete, handleFilter}) => {
       columns={columns}
 			data={employees}
 			onRowClick={(ev, row) => {
-				if (row) {
-					push(`/employee_management/${row.original.id}`)
+				if (row && !onboarding) {
+					push(`/employee_management/${row.original.id}`);
+					return;
 				}
+				onboarding(row.original.id);
 			}}
 			checkbox={{
 				showCheckbox: true,
