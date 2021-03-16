@@ -13,7 +13,7 @@ const formList = [
   'Employee Bank Account Information',
   'Authorization Form for Direct Deposit of Reimbursable Expenses',
   'Reference Details Request Form',
-  'Malarone/Malanil Acknowledgement Form',
+  'Malarone & Malanil Acknowledgement Form',
   'NHF Details Form',
   'Malaria Program Attestation'
 ];

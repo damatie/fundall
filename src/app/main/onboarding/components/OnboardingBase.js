@@ -11,7 +11,7 @@ import { useSelector } from 'react-redux';
 import OnboardingFormList from './OnboardingFormList';
 import formList from '../formList';
 import FormContainer from './FormContainer';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles({
 	layoutRoot: {}
@@ -21,11 +21,13 @@ const { useState, useRef } = React;
 
 const OnboardingBase = () => {
 	const classes = useStyles();
-  const pageLayout = useRef(null);
+	const pageLayout = useRef(null);
 
-	const { formName } = useParams();
+	const { formName, id } = useParams();
 
-  const [title, setTitle] = useState(formName);
+	const { push } = useHistory();
+
+	const [title, setTitle] = useState(formName);
 
 	return (
 		<FusePageCarded
@@ -44,14 +46,20 @@ const OnboardingBase = () => {
 							</IconButton>
 						</Hidden>
 						<div className="flex-1">
-              <div className="flex items-center flex-1">
-                <FuseAnimate animation="transition.expandIn" delay={300}>
-                  <Icon className="text-32">check_box</Icon>
-                </FuseAnimate>
-                <FuseAnimate animation="transition.slideLeftIn" delay={300}>
-                  <span className="text-24 mx-16">Onboarding forms</span>
-                </FuseAnimate>
-              </div>
+							<div className="flex items-center flex-1">
+								{!!id && (<FuseAnimate animation="transition.expandIn" delay={300}>
+									<IconButton
+										onClick={ev => push('/onboarding/list')}
+										aria-label="open left sidebar"
+									>
+										<Icon className="text-32">arrow_back</Icon>
+									</IconButton>
+
+								</FuseAnimate>)}
+								<FuseAnimate animation="transition.slideLeftIn" delay={300}>
+									<span className="text-24 mx-16">Onboarding forms</span>
+								</FuseAnimate>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -75,9 +83,9 @@ const OnboardingBase = () => {
 			}
 			leftSidebarContent={
 				<div className="p-24">
-				<h4>Onboarding forms list</h4>
+					<h4>Onboarding forms list</h4>
 					<br />
-        <OnboardingFormList setTitle={setTitle} />
+					<OnboardingFormList setTitle={setTitle} />
 				</div>
 			}
 			ref={pageLayout}

@@ -2,7 +2,7 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import { useSelector, useDispatch } from 'react-redux';
 import makeStyles from '@material-ui/core/styles/makeStyles';
-import { requestBusinessCard, updateBusinessCard } from '../store/actions';
+import { createMalarone, updateMalarone } from '../store/actions';
 import Typography from '@material-ui/core/Typography';
 import * as yup from 'yup';
 import { useForm, Controller } from 'react-hook-form';
@@ -13,11 +13,7 @@ import Input from 'app/shared/TextInput/Input';
 import 'react-phone-input-2/lib/material.css';
 
 const schema = yup.object().shape({
-  firstName: yup.string().required(),
-  lastName: yup.string().required(),
-  phoneNo: yup.string().required(),
-  email: yup.string().required(),
-  position: yup.string().required()
+  quantity: yup.string().required(),
 });
 
 const { useState, useMemo } = React;
@@ -29,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const BusinessCard = () => {
+const Malarone = () => {
 
   const classes = useStyles();
 
@@ -39,33 +35,15 @@ const BusinessCard = () => {
 
   const inputs = useMemo(() => [
     {
-      name: 'firstName',
-      label: 'First Name',
+      name: 'employeeName',
+      label: 'Employee Name',
       type: 'text',
-      defaultValue: `${info.firstName}`,
+      defaultValue: `${info.firstName} ${info.lastName}`,
     },
     {
-      name: 'lastName',
-      label: 'last Name',
-      type: 'text',
-      defaultValue: info.lastName,
-    },
-    {
-      name: 'email',
-      label: 'Email',
-      type: 'email',
-      defaultValue: info.email,
-    },
-    {
-      name: 'phoneNo',
-      label: 'Phone Number',
-      type: 'phoneNumber',
-      defaultValue: info.phoneNumber,
-    },
-    {
-      name: 'position',
-      label: 'Position',
-      type: 'text',
+      name: 'quantity',
+      label: 'Quantity Reveived',
+      type: 'number',
       defaultValue: '',
     },
   ], [info]);
@@ -82,13 +60,13 @@ const BusinessCard = () => {
 
   const onSubmit = (formData) => {
     console.log(formData);
-    dispatch(requestBusinessCard(formData));
+    dispatch(createMalarone(formData));
   };
 
   return (
     <section className={classes.root}>
-      <Typography className='my-16' variant="h5" color="initial"><b>BUSINESS CARD REQUEST TEMPLATE</b></Typography>
-      {/* <Typography className='my-16 w-9/12 mx-auto' variant="body1" color="initial">Please acknowledge the receipt of the following</Typography> */}
+      <Typography className='my-16' variant="h5" color="initial"><b>MALARONR / MALANIL ACKNOWLEDGEMENT FORM.</b></Typography>
+      {/* <Typography className='my-16 w-9/12 mx-auto' variant="body1" color="initial">Employee / Consultant Bank Account Details</Typography> */}
       <section className='flex flex-row justify-center items-center my-16 mx-auto'>
         <form onSubmit={handleSubmit(onSubmit)}>
         {
@@ -153,4 +131,4 @@ const BusinessCard = () => {
   );
 };
 
-export default BusinessCard;
+export default Malarone;
