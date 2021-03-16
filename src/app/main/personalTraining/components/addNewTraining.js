@@ -3,6 +3,11 @@ import { AppBar, Button, Dialog, DialogActions, DialogContent, FormControl, Inpu
 import { DateTimePicker, DatePicker } from '@material-ui/pickers'
 import CurrencyInput from 'app/shared/TextInput/CurrencyInput';
 import React, { useEffect, useState } from 'react'
+import * as Actions from 'app/store/actions';
+import { SelectFormsy } from '@fuse/core/formsy';
+import { useSelector, useDispatch } from 'react-redux';
+import Formsy from 'formsy-react';
+
 
 const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, categories, roles, submit, update, changeDepartment, data }) => {
 
@@ -24,12 +29,14 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
         country: "",
         trainingCategoryId: 0
     });
-
+    const dispatch = useDispatch();
+    const [country, setCountry] = useState([]);
     const [canBeSubmitted, setCanBeSubmitted] = useState(false);
     const [errorEndDate, setErrorEndDate] = useState("Select End Date");
     const [errorStartDate, setErrorStartDate] = useState("Select Start Date");
     const [titleError, setTitleError] = useState("");
     const [descriptionError, setDescriptionError] = useState("");
+    const state = useSelector(({ regions }) => regions.states.map(state => state.name));
 
     const handleChange = (name, value) => {
         if (value) console.log(value);
@@ -61,8 +68,26 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
             return;
         }
 
+        else if (name === "country") {
+            getState(value);
+        }
+
         setFormstate(formstate => ({ ...formstate, [name]: value }));
     }
+
+    const getState = (country) => {
+        dispatch(Actions.getStates(country));
+    }
+
+    useEffect(() => {
+        if (country.length > 0) return;
+        fetch('https://restcountries.eu/rest/v2/all')
+            .then(res => res.json())
+            .then(res => {
+                setCountry(res.map(country => country.name));
+            })
+            .catch(err => console.log(err))
+    }, [country])
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -72,6 +97,9 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
             return
         } else if (formstate.name?.length < 10) {
             setTitleError("Minimum required length is 10");
+            return;
+        } else if (formstate.name?.length > 25) {
+            setTitleError("Maximum required length is 25");
             return;
         }
         else if (formstate.description?.length < 25) {
@@ -96,7 +124,7 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
     }
 
     useEffect(() => {
-        if (formstate?.name?.length > 10) { setTitleError("") }
+        if (formstate?.name?.length > 25) { setTitleError("") }
     }, [formstate?.name]);
 
     useEffect(() => {
@@ -339,6 +367,72 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
                         helperText={!formstate?.endDate ? errorEndDate : ""}
                     />
 
+                    <FormControl className="flex w-full mb-24" variant="outlined">
+                        <InputLabel htmlFor="country-label-placeholder">Country </InputLabel>
+                        <Select
+                            value={formstate?.country}
+                            onChange={(e) => handleChange(e.target.name, e.target.value)}
+                            input={
+                                <OutlinedInput labelWidth={'country'.length * 9} name="country" id="country-label-placeholder" />
+                            }
+                        >
+                            {country.map(item => (
+                                <MenuItem value={item} key={Math.random()}>
+                                    {item}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+
+                    <FormControl className="flex w-full mb-24" variant="outlined">
+                        <InputLabel htmlFor="state-label-placeholder">State </InputLabel>
+                        <Select
+                            value={formstate?.state}
+                            onChange={(e) => handleChange(e.target.name, e.target.value)}
+                            input={
+                                <OutlinedInput labelWidth={'state'.length * 9} name="state" id="state-label-placeholder" />
+                            }
+                        >
+                            {state.map(item => (
+                                <MenuItem value={item} key={Math.random()}>
+                                    {item}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+
+
+                    {/* <SelectFormsy
+                            className="mb-16"
+                            name={"country"}
+                            label={"Country"}
+                            variant="outlined"
+                            required
+                            requiredError='Must not be None'
+                            value={formstate["country"]}
+                            onChange={(e) => handleChange("country", e.target.value)}
+                        >
+                            {country.map((item, i) => (
+                                <MenuItem value={item} key={i}>{item}</MenuItem>
+                            ))}
+                        </SelectFormsy>
+
+                        <SelectFormsy
+                            className="mb-16"
+                            name={"country"}
+                            label={"Country"}
+                            variant="outlined"
+                            required
+                            requiredError='Must not be None'
+                            value={formstate["state"]}
+                            onChange={(e) => handleChange("state", e.target.value)}
+                        >
+                            {state.map((item, i) => (
+                                <MenuItem value={item} key={i}>{item}</MenuItem>
+                            ))}
+                        </SelectFormsy> */}
+
+                    {/* 
                     <TextField
                         id="outlined-secondary"
                         type="text"
@@ -357,7 +451,7 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
                         onChange={(e) => handleChange("state", e.target.value)}
                         label="State"
                         className="w-full mb-24"
-                    />
+                    /> */}
 
                     <CurrencyInput
                         id="outlined-secondary"
