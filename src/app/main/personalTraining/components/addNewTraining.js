@@ -10,7 +10,7 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
         department: "",
         category: "",
         entity: "",
-        jobRole: "",
+        jobTitle: "",
         name: "",
         cost: "",
         description: "",
@@ -111,7 +111,7 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
                     department: data.department,
                     category: data.category,
                     entity: data.entity,
-                    jobRole: data.jobRole,
+                    jobTitle: data.jobTitle,
                     name: data.name,
                     cost: data.cost,
                     description: data.description,
@@ -159,7 +159,7 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
         department: "",
         category: "",
         entity: "",
-        jobRole: "",
+        jobTitle: "",
         name: "",
         cost: "",
         description: "",
@@ -252,12 +252,12 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
                     </FormControl>
 
                     <FormControl className="flex w-full mb-24" variant="outlined">
-                        <InputLabel htmlFor="jobRole-label-placeholder"> Job Role </InputLabel>
+                        <InputLabel htmlFor="jobTitle-label-placeholder"> Job Role </InputLabel>
                         <Select
-                            value={formstate?.jobRole}
+                            value={formstate?.jobTitle}
                             onChange={(e) => handleChange(e.target.name, e.target.value)}
                             input={
-                                <OutlinedInput labelWidth={'jobRole'.length * 9} name="jobRole" id="jobRole-label-placeholder" />
+                                <OutlinedInput labelWidth={'jobTitle'.length * 9} name="jobTitle" id="jobTitle-label-placeholder" />
                             }
                         >
                             {roles?.map(role => (
