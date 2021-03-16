@@ -8,7 +8,7 @@ import { Controller } from 'react-hook-form';
 import Icon from '@material-ui/core/Icon';
 import Typography from '@material-ui/core/Typography';
 
-const KpoContentPipScore = ({ calculatePip }) => {
+const KpoContentPipScore = ({ calculatePip, kpoDetails }) => {
   const { handleSubmit, onSubmit, errors, register, control, pipEligible, role } = calculatePip;
   return (
 
@@ -38,8 +38,24 @@ const KpoContentPipScore = ({ calculatePip }) => {
               }
             />
             <Input
+              // name='amount'
+              label='Total PIP Target'
+              className='my-16'
+              type='number'
+              defaultValue={kpoDetails.totalPipTarget}
+              disabled
+            />
+            <Input
+              // name='amount'
+              label='Total PIP Achieved'
+              className='my-16'
+              type='number'
+              defaultValue={kpoDetails.totalPipAchieved}
+              disabled
+            />
+            <Input
               name='amount'
-              label='%PIP Awarded'
+              label='Compensation Amount'
               className='my-16'
               type='number'
               error={errors.amount}

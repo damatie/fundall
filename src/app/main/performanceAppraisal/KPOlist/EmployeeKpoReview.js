@@ -69,21 +69,25 @@ const EmployeeKpoReview = () => {
 					<Tab className="h-64 normal-case" label="All KPO" />
 					<Tab className="h-64 normal-case" label="KPO Assigned as Reviewing Manager" />
           {userRole(userInfo.role?.name) === 'hrmanager' && <Tab className="h-64 normal-case" label="KPO Creation Request" />}
+          <Tab className="h-64 normal-case" label="Completed KPO" />
 				</Tabs>
       }
       content={
         <div className='p-24'>
           {tabValue === 0 && (
-            <ListOfEmployeeKpo customHook={value} value={userInfo.entityId}/>
+            <ListOfEmployeeKpo customHook={value} value={userInfo.entityId} type='all'/>
           )}
           {tabValue === 1 && (
             <ListOfEmployeeKpo customHook={value} isAssigned/>
           )}
-          {tabValue === 2 && (
+          {(userRole(userInfo.role?.name) === 'hrmanager' ? tabValue === 2 : tabValue === 3) && (
             <>
               <ListOfEmployeeKpo customHook={value} request/>
               <KpoRequestModal customHook={value} />
             </>
+          )}
+          {(userRole(userInfo.role?.name) === 'hrmanager' ? tabValue === 3 : tabValue === 2) && (
+            <ListOfEmployeeKpo customHook={value} value={userInfo.entityId} type='completed'/>
           )}
         </div>
       }

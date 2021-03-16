@@ -163,7 +163,7 @@ const EmployeeKpoDetails = () => {
                 EmployeeKpo.kpo.pipInformation ? (
                   <PipInformation pip={EmployeeKpo.kpo.pipInformation} />
                 ) : (
-                  <KpoContentPipScore calculatePip={calculatePip}/>
+                  <KpoContentPipScore calculatePip={calculatePip} kpoDetails={EmployeeKpo.kpo}/>
                 )
               }
             </>

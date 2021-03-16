@@ -9,11 +9,11 @@ const useStyles = makeStyles(theme => ({
 
 }));
 
-const AutoCompleteInput = ({ data, inputs, label, handleChange, value, setInput, onChange, error, helperText, name, className, }) => {
+const AutoCompleteInput = ({ data, inputs, label, handleChange, value, setInput, onChange, error, helperText, name, className, disabled}) => {
   return (
     <Autocomplete
       freeSolo
-      // disabled={!edit}
+      disabled={disabled}
       defaultValue={!value ? '' : value}
       getOptionLabel={(option) => option.name}
       options={

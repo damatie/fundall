@@ -28,7 +28,7 @@ export const getEmployeeInfo = (id, update) => {
   }
 };
 
-export const createEmployeeInfo = ({id, data}) => {
+export const createEmployeeInfo = ({id, data, handleClick}) => {
   return async (dispatch) => {
     try {
       loading('Creating Your Info...')
@@ -39,6 +39,7 @@ export const createEmployeeInfo = ({id, data}) => {
           text: message,
           icon: 'success'
         });
+        !!handleClick && handleClick();
         return;
       }
       swal.fire({

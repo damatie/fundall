@@ -185,7 +185,7 @@ const schema = yup.object().shape({
   // ),
 });
 
-const useCreateEmployeeInfo = ({dispatch, state}) => {
+const useCreateEmployeeInfo = ({dispatch, state, handleClick}) => {
   const {
     errors,
     register,
@@ -208,7 +208,7 @@ const useCreateEmployeeInfo = ({dispatch, state}) => {
       for (const [key, value] of Object.entries(entries)) {
         formData.append(key, value);
       }
-      dispatch(createEmployeeInfo({ id:state.id, data: formData }));
+      dispatch(createEmployeeInfo({ id:state.id, data: formData, handleClick }));
       return;
     }
     swal.fire({

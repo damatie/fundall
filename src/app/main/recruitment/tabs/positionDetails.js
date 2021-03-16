@@ -34,15 +34,10 @@ function Details(props) {
 	}
 
 	const loadMessage = (text, type) => {
-		type === "twitter" ?
-			window.open(`https://twitter.com/intent/tweet/?text=${encodeURIComponent(text)}`, "_blank")
-			:
-			type === "facebook" ?
-				window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}${encodeURIComponent(text)}`, "_blank")
-				:
-				type === "email" ?
-					window.open(`mailto:?subject=${encodeURIComponent("New Recruitment")}&body=${encodeURIComponent(text)}`, "_self")
-					: null
+		// type === "twitter" ? window.open(`https://twitter.com/intent/tweet/?text=${encodeURIComponent(text)}`, "_blank")
+		// 	: type === "facebook" ? window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(text)}`, "_blank")
+		// 		: type === "email" ? window.open(`mailto:?subject=${encodeURIComponent("New Recruitment")}&body=${encodeURIComponent(text)}`, "_self")
+		// 			: null
 	}
 
 	useEffect(() => {

@@ -7,9 +7,27 @@ import SharedButton from 'app/shared/button/SharedButton';
 import { Controller } from 'react-hook-form';
 import AutoCompleteInput from 'app/shared/TextInput/AutoComplete';
 import Input from 'app/shared/TextInput/Input';
+import { useSelector } from 'react-redux';
 
-const CreateEmployeeKpo = ({customHook}) => {
-  const { getEmployeesByRole, handleCloseModal, open, register, errors, handleSubmit, onSubmit, control, jobTitles } = customHook;
+const { useEffect } = React;
+
+const CreateEmployeeKpo = ({ customHook }) => {
+  const { handleGetDepartment, getEmployeesByRole, handleCloseModal, open, register, errors, handleSubmit, onSubmit, control, jobTitles } = customHook;
+
+  const {
+    entities,
+    departments,
+  } = useSelector(state => state.kpo);
+
+  const {
+    entityId,
+    departmentId
+  } = useSelector(state => state.profile.data);
+
+  useEffect(() => {
+    handleGetDepartment(entityId)()
+  }, []);
+
   return (
     <SharedModal
       title='Create KPO'
@@ -17,34 +35,62 @@ const CreateEmployeeKpo = ({customHook}) => {
       handleClose={handleCloseModal}
     >
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Controller
-          control={control}
-          as={
-            <SelectTextField
-              name='jobTitleId'
-              label='Job Title'
-              className='my-10'
-              error={errors.jobTitleId}
-              message={errors.jobTitleId?.message}
-            >
-              {
-                jobTitles.map(({name, id}) => (
-                  <MenuItem value={id} key={id}>
-                    {name}
-                  </MenuItem>
-                ))
-              }
-            </SelectTextField>
-          }
+        <AutoCompleteInput
+          className='my-16'
           name='jobTitleId'
+          label='Job Title'
+          data={jobTitles}
+          error={errors.jobTitleId}
+          helperText={errors.jobTitleId?.message}
+          onChange={(ev, value) => register({ name: 'jobTitleId', value: value?.id })}
         />
+        <section className='my-20'>
+          <Controller
+            control={control}
+            defaultValue={entityId}
+            as={
+              <SelectTextField
+                name='entityId'
+                label='Entity'
 
-          {/* <Input
-            name='pipTarget'
-            className='my-16'
-            label='PIP Target'
-            multiline
-          /> */}
+              // error={errors.jobTitleId}
+              // message={errors.jobTitleId?.message}
+              >
+                {
+                  entities.data.map(({ entityName, id }) => (
+                    <MenuItem onClick={handleGetDepartment(id)} value={id} key={id}>
+                      {entityName}
+                    </MenuItem>
+                  ))
+                }
+              </SelectTextField>
+            }
+            name='entityId'
+          />
+        </section>
+        <section className='my-20'>
+          <Controller
+            control={control}
+            defaultValue={departmentId}
+            as={
+              <SelectTextField
+                name='departmentId'
+                label='Department'
+              // error={errors.jobTitleId}
+              // message={errors.jobTitleId?.message}
+              >
+                {
+                  departments.data.map(({ departmentName, id }) => (
+                    <MenuItem value={id} key={id}>
+                      {departmentName}
+                    </MenuItem>
+                  ))
+                }
+              </SelectTextField>
+            }
+            name='departmentId'
+          />
+        </section>
 
         <AutoCompleteInput
           className='my-16'
@@ -53,7 +99,7 @@ const CreateEmployeeKpo = ({customHook}) => {
           data={getEmployeesByRole('linemanager')}
           error={errors.lineManagerId}
           helperText={errors.lineManagerId?.message}
-          onChange={(ev, value) => register({name: 'lineManagerId', value: value?.id})}
+          onChange={(ev, value) => register({ name: 'lineManagerId', value: value?.id })}
         />
 
         <AutoCompleteInput
@@ -63,7 +109,7 @@ const CreateEmployeeKpo = ({customHook}) => {
           data={getEmployeesByRole('linemanager')}
           error={errors.reviewingManagerId}
           helperText={errors.reviewingManagerId?.message}
-          onChange={(ev, value) => register({name: 'reviewingManagerId', value: value?.id})}
+          onChange={(ev, value) => register({ name: 'reviewingManagerId', value: value?.id })}
         />
         <SharedButton
           variant='contained'
