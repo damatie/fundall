@@ -392,7 +392,7 @@ const navigationConfig = [
 						type: 'item',
 						icon: 'layers',
 						url: '/line_manager/training/dashboard',
-						auth: authRoles.staff,
+						auth: authRoles.lineManager,
 					},
 					{
 						id: 'finance_manager_dashboard',
@@ -400,7 +400,7 @@ const navigationConfig = [
 						type: 'item',
 						icon: 'layers',
 						url: '/finance_manager/training/dashboard',
-						auth: authRoles.staff,
+						auth: authRoles.financeManager,
 					},
 				]
 			},

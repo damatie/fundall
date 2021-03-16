@@ -16,9 +16,11 @@ import GridSystem from 'app/shared/gridSystem';
 import { TextField } from '@material-ui/core';
 
 function NewOpening(props) {
+
 	const dispatch = useDispatch();
-	const entity = useSelector(({ Recruitment }) => Recruitment.entity.data);
-	// const loading = useSelector(({ Recruitment }) => Recruitment.recruitment.loading);
+	const entity = useSelector(({ NewOpening }) => NewOpening.entity.data);
+	const statuuus = useSelector(state => state)
+
 	const employeeList = useSelector(state => state.employeeList.employeeList)
 
 	const [department, setDepartment] = useState([]);
@@ -47,6 +49,7 @@ function NewOpening(props) {
 
 	useEffect(() => {
 		dispatch(employeeActions.getAllEmployee());
+		dispatch(Actions.getEntities())
 	}, [dispatch])
 
 	useEffect(() => {
@@ -122,8 +125,12 @@ function NewOpening(props) {
 	}
 
 	useEffect(() => {
+		console.log(statuuus)
+	}, [entity, statuuus])
 
-	}, [details])
+	useEffect(() => {
+		Actions.getEntities();
+	}, [details]);
 
 	useEffect(() => {
 		if (!details.state) {
@@ -152,7 +159,6 @@ function NewOpening(props) {
 	];
 
 	useEffect(() => {
-		console.log(props.selectedPosition)
 		const { employeeStatus, dueDate, requiredSkills, jobTitle, entity, entityId, department, jobDescription, departmentId, country, state, urgency, reasonForEmployment } = props.selectedPosition;
 		setDetails({
 			departmentId: department?.id ?? departmentId,
