@@ -372,39 +372,39 @@ const navigationConfig = [
 		translate: 'training',
 		type: 'group',
 		children: [
+			// {
+			// 	id: 'training_Dashboard',
+			// 	title: 'Training Dashboard',
+			// 	type: 'collapse',
+			// 	// url: '/hr/training/management',
+			// 	icon: 'dashboard',
+			// 	children: [
 			{
-				id: 'training_Dashboard',
-				title: 'Training Dashboard',
-				type: 'collapse',
-				// url: '/hr/training/management',
-				icon: 'dashboard',
-				children: [
-					{
-						id: 'staff_dashboard',
-						title: 'Employee Dashboard',
-						type: 'item',
-						icon: 'layers',
-						url: '/employee/training/dashboard',
-						auth: authRoles.staff,
-					},
-					{
-						id: 'line_manager_dashboard',
-						title: 'Line Manager Dashboard',
-						type: 'item',
-						icon: 'layers',
-						url: '/line_manager/training/dashboard',
-						auth: authRoles.staff,
-					},
-					{
-						id: 'finance_manager_dashboard',
-						title: 'Finance Manager Dashboard',
-						type: 'item',
-						icon: 'layers',
-						url: '/finance_manager/training/dashboard',
-						auth: authRoles.staff,
-					},
-				]
+				id: 'staff_dashboard',
+				title: 'Dashboard',
+				type: 'item',
+				icon: 'layers',
+				url: '/employee/training/dashboard',
+				auth: authRoles.staff,
 			},
+			{
+				id: 'line_manager_dashboard',
+				title: 'Department Dashboard',
+				type: 'item',
+				icon: 'layers',
+				url: '/line_manager/training/dashboard',
+				auth: authRoles.lineManager,
+			},
+			{
+				id: 'finance_manager_dashboard',
+				title: 'Company Dashboard',
+				type: 'item',
+				icon: 'layers',
+				url: '/finance_manager/training/dashboard',
+				auth: authRoles.financeManager,
+			},
+			// 	]
+			// },
 
 			{
 				id: 'trainingManagement',

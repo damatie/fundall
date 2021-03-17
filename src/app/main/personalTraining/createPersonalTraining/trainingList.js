@@ -232,6 +232,7 @@ function TrainingList(props) {
     const [rowsPerPage, setRowsPerPage] = useState(9);
     const userData = useAuth().getUserData;
     const profile = useSelector(({ profile }) => profile.data);
+
     // const userId = useAuth().getId;
     // const [filterEmployees, setFilterEmployees] = useState(
     //     employees.filter(f => {
