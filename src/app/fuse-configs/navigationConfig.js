@@ -389,7 +389,7 @@ const navigationConfig = [
 			},
 			{
 				id: 'line_manager_dashboard',
-				title: 'Dashboard',
+				title: 'Department Dashboard',
 				type: 'item',
 				icon: 'layers',
 				url: '/line_manager/training/dashboard',
@@ -397,7 +397,7 @@ const navigationConfig = [
 			},
 			{
 				id: 'finance_manager_dashboard',
-				title: 'Dashboard',
+				title: 'Company Dashboard',
 				type: 'item',
 				icon: 'layers',
 				url: '/finance_manager/training/dashboard',
