@@ -4,15 +4,15 @@ import React, { useEffect } from 'react'
 const ViewTrainings = ({ open, handleClose, data, viewer, approveTraining, rejectTraining, handleEmployeeCancel }) => {
 
     const handleApprove = () => {
-        approveTraining(data.id, viewer === "Line Manager" ? "lm" : "hr");
+        approveTraining(data.id, viewer.toLowerCase() === "line manager" ? "lm" : "hr");
     }
 
     const handleReject = () => {
-        rejectTraining(data.id, viewer === "Line Manager" ? "lm" : "hr");
+        rejectTraining(data.id, viewer.toLowerCase() === "line manager" ? "lm" : "hr");
     }
 
     useEffect(() => {
-        // console.log(data)
+        console.log(data)
     }, [data])
 
     return (
@@ -41,13 +41,13 @@ const ViewTrainings = ({ open, handleClose, data, viewer, approveTraining, rejec
                             ?
                             <>
                                 {
-                                    data.employeeId &&
+                                    data.employeeName &&
                                     <TextField
                                         id="outlined-secondary"
                                         type="text"
-                                        // disabled
+                                        contentEditable={false}
                                         onChange={() => { }}
-                                        value={data?.employeeId}
+                                        value={data?.employeeName}
                                         variant="outlined"
                                         label="Employee"
                                         className="w-full mb-24"
@@ -59,7 +59,7 @@ const ViewTrainings = ({ open, handleClose, data, viewer, approveTraining, rejec
                                     <TextField
                                         id="outlined-secondary"
                                         type="text"
-                                        // disabled
+                                        contentEditable={false}
                                         onChange={() => { }}
                                         defaultValue={data?.email}
                                         variant="outlined"
@@ -78,7 +78,7 @@ const ViewTrainings = ({ open, handleClose, data, viewer, approveTraining, rejec
                             <TextField
                                 id="outlined-secondary"
                                 type="text"
-                                // disabled
+                                contentEditable={false}
                                 onChange={() => { }}
                                 value={data?.employeeGrade}
                                 variant="outlined"
@@ -93,7 +93,7 @@ const ViewTrainings = ({ open, handleClose, data, viewer, approveTraining, rejec
                             <TextField
                                 id="outlined-secondary"
                                 type="text"
-                                // disabled
+                                contentEditable={false}
                                 onChange={() => { }}
                                 value={data?.companySeniority}
                                 variant="outlined"
@@ -108,7 +108,7 @@ const ViewTrainings = ({ open, handleClose, data, viewer, approveTraining, rejec
                             <TextField
                                 id="outlined-secondary"
                                 type="text"
-                                // disabled
+                                contentEditable={false}
                                 onChange={() => { }}
                                 value={data?.industrySenority}
                                 variant="outlined"
@@ -122,7 +122,7 @@ const ViewTrainings = ({ open, handleClose, data, viewer, approveTraining, rejec
                     <TextField
                         id="outlined-secondary"
                         type="text"
-                        // disabled
+                        contentEditable={false}
                         onChange={() => { }}
                         value={data.category}
                         variant="outlined"
@@ -133,7 +133,7 @@ const ViewTrainings = ({ open, handleClose, data, viewer, approveTraining, rejec
                     <TextField
                         id="outlined-secondary"
                         type="text"
-                        // disabled
+                        contentEditable={false}
                         onChange={() => { }}
                         value={data.startDate}
                         variant="outlined"
@@ -144,7 +144,7 @@ const ViewTrainings = ({ open, handleClose, data, viewer, approveTraining, rejec
                     <TextField
                         id="outlined-secondary"
                         type="text"
-                        // disabled
+                        contentEditable={false}
                         onChange={() => { }}
                         value={data.endDate}
                         variant="outlined"
@@ -158,7 +158,7 @@ const ViewTrainings = ({ open, handleClose, data, viewer, approveTraining, rejec
                                 <TextField
                                     id="outlined-secondary"
                                     type="text"
-                                    // disabled
+                                    contentEditable={false}
                                     onChange={() => { }}
                                     value={data?.department}
                                     variant="outlined"
@@ -169,7 +169,7 @@ const ViewTrainings = ({ open, handleClose, data, viewer, approveTraining, rejec
                                 <TextField
                                     id="outlined-secondary"
                                     type="text"
-                                    // disabled
+                                    contentEditable={false}
                                     onChange={() => { }}
                                     value={data?.entity}
                                     variant="outlined"
@@ -181,7 +181,7 @@ const ViewTrainings = ({ open, handleClose, data, viewer, approveTraining, rejec
                                     <TextField
                                         id="outlined-secondary"
                                         type="text"
-                                        // disabled
+                                        contentEditable={false}
                                         onChange={() => { }}
                                         value={data?.industrySenority}
                                         variant="outlined"
@@ -192,7 +192,7 @@ const ViewTrainings = ({ open, handleClose, data, viewer, approveTraining, rejec
                                 <TextField
                                     id="outlined-secondary"
                                     type="text"
-                                    // disbaled
+                                    contentEditable={false}
                                     onChange={() => { }}
                                     value={data?.companySeniority}
                                     variant="outlined"
@@ -210,7 +210,7 @@ const ViewTrainings = ({ open, handleClose, data, viewer, approveTraining, rejec
                             <TextField
                                 id="outlined-secondary"
                                 type="text"
-                                // disabled
+                                contentEditable={false}
                                 onChange={() => { }}
                                 value={data.certification}
                                 variant="outlined"
