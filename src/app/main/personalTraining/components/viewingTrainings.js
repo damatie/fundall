@@ -60,8 +60,8 @@ const ViewTrainings = ({ open, handleClose, data, viewer, approveTraining, rejec
                                         id="outlined-secondary"
                                         type="text"
                                         contentEditable={false}
-                                        onChange={() => { }}
-                                        defaultValue={data?.email}
+                                        // disabled
+                                        value={data?.email}
                                         variant="outlined"
                                         label="Employee Mail"
                                         className="w-full mb-24"
