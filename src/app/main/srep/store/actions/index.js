@@ -1,3 +1,3 @@
 export * from './srep.actions';
-export * from './srepDashboard.actions';
+export * from './HRsrepDashboard.actions';
 export * from './additionalFiles.actions';

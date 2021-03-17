@@ -105,6 +105,8 @@ const EnrollmentListTable = ({ data, handleFilter}) => {
         setSearch(event.target.value);
     }
   
+    onClick = (row) => dispatch(openDialog());
+
   return (
       <EnhancedTable
             columns={columns}
