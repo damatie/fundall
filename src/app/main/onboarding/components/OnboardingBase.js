@@ -12,6 +12,7 @@ import OnboardingFormList from './OnboardingFormList';
 import formList from '../formList';
 import FormContainer from './FormContainer';
 import { useParams, useHistory } from 'react-router-dom';
+import Skeleton from '@material-ui/lab/Skeleton';
 
 const useStyles = makeStyles({
 	layoutRoot: {}
@@ -28,6 +29,13 @@ const OnboardingBase = () => {
 	const { push } = useHistory();
 
 	const [title, setTitle] = useState(formName);
+
+	const { 
+    employeeInfo: { loading },
+		onboardingForms: {
+			checkForms,
+		}
+  } = useSelector(state => state.onboardingForms);
 
 	return (
 		<FusePageCarded
@@ -66,14 +74,26 @@ const OnboardingBase = () => {
 			}
 			contentToolbar={
 				<div className="px-24">
-					<h4>{title}</h4>
+					{
+						loading || checkForms.loading ? (
+							<Skeleton variant="rect" width={100} height={20} animation="wave" className='my-16' />
+						) : (
+							<h4>{title}</h4>
+						)
+					}
 				</div>
 			}
 			content={
-				<div className="p-24">
+				<div className="p-24 h-full">
 					{/* <h4>Content</h4> */}
 					<br />
-					<FormContainer />
+					{
+						loading || checkForms.loading ? (
+							<Skeleton variant="rect" width={'100%'} height={'100%'} animation="wave" className='my-16' />
+						) : (
+							<FormContainer />
+						)
+					}
 				</div>
 			}
 			leftSidebarHeader={
@@ -85,7 +105,7 @@ const OnboardingBase = () => {
 				<div className="p-24">
 					<h4>Onboarding forms list</h4>
 					<br />
-					<OnboardingFormList setTitle={setTitle} />
+					<OnboardingFormList loading={loading || checkForms.loading} setTitle={setTitle} />
 				</div>
 			}
 			ref={pageLayout}

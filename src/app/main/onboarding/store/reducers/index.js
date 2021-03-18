@@ -8,6 +8,7 @@ import nextOfKinReducer from 'app/main/employeeInformation/store/reducers/nextOf
 import employeeInfoReducer from 'app/main/employeeInformation/store/reducers/employeeInfo.reducer';
 import onboardingForms from './onboardingForms.reducer';
 import referenceDetails from './referenceDetails.reducer';
+import uploadForms from './uploadForms.reducer';
 
 const reducers = combineReducers({
   education: educationReducer,
@@ -19,6 +20,7 @@ const reducers = combineReducers({
   employeeInfo: employeeInfoReducer,
   onboardingForms,
   referenceDetails,
+  uploadForms
 });
 
 export default reducers;

@@ -4,7 +4,26 @@ import swal from 'sweetalert2';
 import catchErrorMsg from 'utils/catchErrorMsg';
 import { getOwnOnboardingForms } from '.';
 
-export const requestBusinessCard = (formData) => {
+export const GET_BUSINESS_CARD = 'GET BUSINESS CARD';
+
+export const getBusinessCard = (id) => {
+  return async (dispatch) => {
+    try {
+      const { data: { data } } = await api.get(`/business-card/${id}`);
+      dispatch({
+        type: GET_BUSINESS_CARD,
+        payload: data || {}
+      });
+    } catch (e) {
+      dispatch({
+        type: GET_BUSINESS_CARD,
+        payload: {}
+      });
+    }
+  }
+}
+
+export const requestBusinessCard = ({formData, id}) => {
   return async (dispatch) => {
     try {
       loading('sumbitting form...');
@@ -14,7 +33,7 @@ export const requestBusinessCard = (formData) => {
         icon: 'success',
         timner: 1500,
       });
-      dispatch(getOwnOnboardingForms());
+      dispatch(getBusinessCard(id));
     } catch (e) {
       swal.fire({
         text: catchErrorMsg(e),
@@ -25,7 +44,7 @@ export const requestBusinessCard = (formData) => {
   }
 }
 
-export const updateBusinessCard = (formData) => {
+export const updateBusinessCard = ({formData, id}) => {
   return async (dispatch) => {
     try {
       loading('sumbitting form...');
@@ -35,7 +54,7 @@ export const updateBusinessCard = (formData) => {
         icon: 'success',
         timner: 1500,
       });
-      dispatch(getOwnOnboardingForms());
+      dispatch(getBusinessCard(id));
     } catch (e) {
       swal.fire({
         text: catchErrorMsg(e),

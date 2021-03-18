@@ -2,58 +2,114 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button'
 import SharedDropzone from 'app/shared/sharedDropZone';
-import { createNhfForm, createMalariaPPA } from '../store/actions';
-import { useDispatch } from 'react-redux';
+import {
+  createNhfForm,
+  createMalariaPPA,
+  updateNhfForm,
+  updateMalariaPPA
+} from '../store/actions';
+import { useDispatch, useSelector } from 'react-redux';
+import useUserID from '../hooks/useUserID';
+import { useLocation } from 'react-router-dom';
 
-const { useState } = React;
+const { useState, useMemo, useEffect } = React;
 
-const UploadForms = ({title, data, type}) => {
+const UploadForms = ({ title, data, type }) => {
 
-  const inputs = [
+  const {
+    employeeInfo: {
+      info,
+    },
+    uploadForms: {
+      nhf,
+      malaria
+    },
+  } = useSelector(state => state.onboardingForms);
+
+  const [state, setState] = useState({});
+
+  const [value, setValue] = useState({});
+
+  const inputs = useMemo(() => [
     {
       label: 'Employee Name',
-      value: 'David',
+      value: `${info.firstName} ${info.lastName}`,
     },
     {
       label: 'Email',
-      value: 'david@test.co',
+      value: info.email
     },
     {
       label: 'Entity',
-      value: 'CBIT',
+      value: info.entity.entityName
     },
     {
       label: 'Department',
-      value: 'IT',
+      value: info.department.departmentName
     },
     {
       label: 'Phone Number',
-      value: '090454846484748',
+      value: info.phoneNumber
     },
     {
       label: 'Start Date',
-      value: '01-10-2012',
+      value: info.startDate
     },
     {
       label: 'Status',
-      value: 'Uploaded',
+      value: state?.formUrl
     }
-  ];
+  ], [info, state]);
 
-  const [value, setValue] = useState({});
+  const {
+    id
+  } = useUserID();
+
+  const location = useLocation();
+
+  const [url, setUrl] = useState({});
+
+  useEffect(() => {
+    switch (type) {
+      case 'nhf':
+        setState(nhf.data);
+        break;
+      case 'malaria':
+        setState(malaria.data);
+        break;
+      default:
+        setState({});
+        break;
+    }
+  }, [malaria, nhf]);
+
+  useEffect(() => {
+    setUrl(
+      !!state?.formUrl ? { link: state?.formUrl, name: 'View Document' } : { link: `${window.location.origin}/library/folders/`, name: 'Download Document' }
+    );
+    console.log(state);
+  }, [state])
 
   const dispatch = useDispatch();
 
   const handleSubmit = () => {
     const formData = new FormData();
-    switch(type) {
+    switch (type) {
       case 'nhf':
         formData.append('nhfForm', value[0]);
-        dispatch(createNhfForm(formData));
+        if (Object.entries(nhf.data).length > 0) {
+          dispatch(updateNhfForm({ formData, id }));
+          return;
+        }
+        dispatch(createNhfForm({ formData, id }));
         break;
       case 'malaria':
         formData.append('malariaAttestationForm', value[0]);
-        dispatch(createMalariaPPA(formData));
+        if (Object.entries(malaria.data).length > 0) {
+          dispatch(updateMalariaPPA({ formData, id }));
+          return;
+        }
+        dispatch(createMalariaPPA({ formData, id }));
         break;
       default:
         return null;
@@ -63,25 +119,28 @@ const UploadForms = ({title, data, type}) => {
   return (
     <section className='text-center'>
       <header>
-      <Typography className='my-16' variant="h5" color="initial"><b>{title}</b></Typography>
+        <Typography className='my-16' variant="h5" color="initial"><b>{title}</b></Typography>
       </header>
       {
-        inputs.map(({label, value}, i) => (
-          <Typography variant="subtitle1" color="initial">
-            <b>{label}</b>:&nbsp;{value}
+        inputs.map(({ label, value }, i) => (
+          <Typography variant="subtitle1" color="initial" className='text-left'>
+            <b>{label}</b>:&nbsp;{label !== 'Status' && value}
+            {label === 'Status' && (
+              <a href={url.link} target='_blank' className='cursor-pointer'>{url.name}</a>
+            )}
           </Typography>
         ))
       }
       <section>
-      <Typography variant="body1" color="initial" className='my-16'>
-        {`UPLOAD ${title}`}
-      </Typography>
-      <SharedDropzone setValue={setValue}/>
-      <Button 
-        className='mx-auto w-4/12 my-16' 
-        variant="contained" 
-        color="primary" 
-        onClick={handleSubmit}
+        <Typography variant="body1" color="initial" className='my-16'>
+          {`UPLOAD ${title}`}
+        </Typography>
+        <SharedDropzone setValue={setValue} />
+        <Button
+          className='mx-auto w-4/12 my-16'
+          variant="contained"
+          color="primary"
+          onClick={handleSubmit}
         >
           Submit
         </Button>

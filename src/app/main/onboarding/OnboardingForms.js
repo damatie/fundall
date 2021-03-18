@@ -2,10 +2,11 @@ import React from 'react';
 import OnboardingBase from './components/OnboardingBase';
 import { useSelector, useDispatch } from 'react-redux';
 import useOnboarding from './hooks/useOnboarding';
-import  { useHistory, useParams } from 'react-router-dom';
-import { getOwnOnboardingForms, getEmployeeInfo } from './store/actions';
+import { useHistory, useParams } from 'react-router-dom';
+import { getOwnOnboardingForms, getEmployeeInfo, getCheckForms } from './store/actions';
 import reducers from './store/reducers';
 import withReducer from 'app/store/withReducer';
+import useUserID from './hooks/useUserID';
 
 const { useEffect } = React;
 
@@ -17,16 +18,15 @@ const OnboardingForms = () => {
   const dispatch = useDispatch();
 
   const { push } = useHistory();
-  const { id } = useParams();
+  const { id } = useUserID();
 
   useEffect(() => {
-    if(id) {
-      dispatch(getEmployeeInfo(id));
-    } else {
-      dispatch(getOwnOnboardingForms());
-      dispatch(getEmployeeInfo(auth.id));
+    if (!!id) {
+      dispatch(getEmployeeInfo(id))
+      // dispatch(getOwnOnboardingForms());
+      dispatch(getCheckForms(id));
     }
-  }, []);
+  }, [id]);
 
   useOnboarding({
     params: id,

@@ -4,8 +4,26 @@ import swal from 'sweetalert2';
 import catchErrorMsg from 'utils/catchErrorMsg';
 import { getOwnOnboardingForms } from '.';
 
+export const GET_MALARIA_PPA = 'GET MALARIA PPA';
 
-export const createMalariaPPA = (formData) => {
+export const getMalariaPPA = (id) => {
+  return async (dispatch) => {
+    try {
+      const { data: { data } } = await api.get(`/malariaPPA/${id}`);
+      dispatch({
+        type: GET_MALARIA_PPA,
+        payload: data || {}
+      });
+    } catch(e) {
+      dispatch({
+        type: GET_MALARIA_PPA,
+        payload: {}
+      });
+    }
+  }
+}
+
+export const createMalariaPPA = ({formData, id}) => {
   return async (dispatch) => {
     try {
       loading('sumbitting form...');
@@ -15,7 +33,7 @@ export const createMalariaPPA = (formData) => {
         icon: 'success',
         timner: 1500,
       });
-      dispatch(getOwnOnboardingForms());
+      dispatch(getMalariaPPA(id));
     } catch (e) {
       swal.fire({
         text: catchErrorMsg(e),
@@ -36,7 +54,7 @@ export const updateMalariaPPA = ({formData, id}) => {
         icon: 'success',
         timner: 1500,
       });
-      dispatch(getOwnOnboardingForms());
+      dispatch(getMalariaPPA(id));
     } catch (e) {
       swal.fire({
         text: catchErrorMsg(e),
@@ -46,13 +64,3 @@ export const updateMalariaPPA = ({formData, id}) => {
     }
   }
 }
-
-// export const getNhfForm = (id) => {
-//   return async (dispatch) => {
-//     try {
-//       const { } = await api.get(`/malariaPPA/${id}`);
-//     } catch(e) {
-
-//     }
-//   }
-// }

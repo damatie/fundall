@@ -2,7 +2,17 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import { useSelector, useDispatch } from 'react-redux';
 import makeStyles from '@material-ui/core/styles/makeStyles';
-import { createReimburibleExpenses, updateReimburibleExpenses } from '../store/actions';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControl from '@material-ui/core/FormControl';
+import FormLabel from '@material-ui/core/FormLabel';
+import {
+  createReimbursableExpenses,
+  updateReimbursableExpenses,
+  getBankAccountInfo,
+  getReimbursableExpenses
+} from '../store/actions';
 import Typography from '@material-ui/core/Typography';
 import * as yup from 'yup';
 import { useForm, Controller } from 'react-hook-form';
@@ -10,20 +20,20 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import PhoneInput from 'react-phone-input-2';
 import startsWith from 'lodash.startswith';
 import Input from 'app/shared/TextInput/Input';
+import useUserID from '../hooks/useUserID';
+import Skeleton from '@material-ui/lab/Skeleton';
 import 'react-phone-input-2/lib/material.css';
 
 const schema = yup.object().shape({
   bankName: yup.string().required(),
-  bankBranch: yup.string().required(),
-  accountNumber: yup.string().required(),
+  accountType: yup.string().required(),
+  accountNo: yup.string().required(),
   bankAddress: yup.string().required(),
-  abaRoutingNo: yup.string().required(),
-  swiftCode: yup.string().required(),
-  sortCode: yup.string().required(),
-  iban: yup.string().required()
+  abaSwift: yup.string().required(),
+  sortIban: yup.string().required(),
 });
 
-const { useState, useMemo } = React;
+const { useState, useMemo, useEffect, memo } = React;
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -36,7 +46,16 @@ const ReimbursibleExpenses = () => {
 
   const classes = useStyles();
 
-  const { employeeInfo: { info } } = useSelector(state => state.onboardingForms);
+  const {
+    employeeInfo: { info },
+    onboardingForms: {
+      bankAccountInfo: {
+        loading,
+        data,
+      },
+      reimbursableExpenses
+    },
+  } = useSelector(state => state.onboardingForms);
 
   const dispatch = useDispatch();
 
@@ -57,51 +76,48 @@ const ReimbursibleExpenses = () => {
       name: 'bankName',
       label: 'Bank Name',
       type: 'text',
-      defaultValue: '',
+      defaultValue: reimbursableExpenses.data?.bankName || data?.bankName,
     },
     {
-      name: 'bankBranch',
-      label: 'Bank Branch',
-      type: 'text',
-      defaultValue: '',
-    },
-    {
-      name: 'accountNumber',
+      name: 'accountNo',
       label: 'Account Number',
       type: 'number',
-      defaultValue: '',
+      defaultValue: reimbursableExpenses.data?.accountNo || data?.accountNumber,
+    },
+    {
+      name: 'accountType',
+      label: 'Account Type',
+      type: 'radio',
+      defaultValue: reimbursableExpenses.data?.accountType
     },
     {
       name: 'bankAddress',
       label: 'Bank Address',
       type: 'text',
-      defaultValue: '',
+      defaultValue: reimbursableExpenses.data?.bankAddress || data?.bankAddress,
     },
     {
-      name: 'abaRoutingNo',
-      label: 'ABA ROUTING No',
+      name: 'abaSwift',
+      label: 'ABA SWIFT',
       type: 'text',
-      defaultValue: '',
+      defaultValue: reimbursableExpenses.data?.abaSwift,
     },
     {
-      name: 'swiftCode',
-      label: 'SWIFT CODE',
+      name: 'sortIban',
+      label: 'SORT IBAN',
       type: 'text',
-      defaultValue: '',
+      defaultValue: reimbursableExpenses.data?.sortIban,
     },
-    {
-      name: 'sortCode',
-      label: 'SORT CODE',
-      type: 'phoneNumber',
-      defaultValue: '',
-    },
-    {
-      name: 'iban',
-      label: 'IBAN',
-      type: 'text',
-      defaultValue: '',
-    },
-  ], [info]);
+  ], [info, data, reimbursableExpenses]);
+
+  const { id } = useUserID();
+
+  useEffect(() => {
+    if (!!id) {
+      dispatch(getBankAccountInfo(id));
+      dispatch(getReimbursableExpenses(id));
+    }
+  }, [id]);
 
   const {
     control,
@@ -114,8 +130,11 @@ const ReimbursibleExpenses = () => {
   });
 
   const onSubmit = (formData) => {
-    console.log(formData);
-    dispatch(createReimburibleExpenses(formData));
+    if (Object.entries(reimbursableExpenses.data).length > 0) {
+      dispatch(updateReimbursableExpenses({ formData, id }));
+      return;
+    }
+    dispatch(createReimbursableExpenses({ formData, id }));
   };
 
   return (
@@ -126,65 +145,35 @@ const ReimbursibleExpenses = () => {
       <Typography className='my-16 w-9/12 mx-auto' variant="body1" color="initial">(DEPOSITS ARE MADE TO YOUR ACCOUNT WITHIN TWO BUSINESS DAYS AFTER THE DATE ON THE REIMBURSEMENT ADVICES SENT TO YOU)</Typography>
       <section className='flex flex-row justify-center items-center my-16 mx-auto'>
         <form onSubmit={handleSubmit(onSubmit)}>
-        {
-            inputs.map((input) => {
-              if (input.type === 'phoneNumber') {
-                return (
-                  <div>
-                    <Controller
-                      defaultValue={input.defaultValue}
-                      as={
-                        <PhoneInput
-                          // value={item[input.name]}
-                          value={input.defaultValue}
-                          id={input.name}
-                          country='ng'
-                          // placeholder="Enter phone number"
-                          containerClass='w-full my-16'
-                          inputClass='w-full'
-                          specialLabel={input.label}
-                          enableAreaCodes
-                          enableSearch
-                          inputRef={register}
-                          isValid={(inputNumber, country, onlyCountries) => {
-                            return onlyCountries.some((country) => {
-                              return startsWith(inputNumber, country.dialCode) || startsWith(country.dialCode, inputNumber);
-                            });
-                          }}
-                        />
-                      }
-                      name={input.name}
+          {
+            inputs.map((input) => (
+              <>
+                {
+                  loading || reimbursableExpenses.loading ? (
+                    <Skeleton variant="rect" width={'100%'} height={50} animation="wave" className='my-16' />
+                  ) : (
+                    <ReimbursableExpensesForm
+                      input={input}
                       control={control}
-                      rules={{ required: true }}
+                      errors={errors}
+                      register={register}
                     />
-                    <Typography variant="caption" color="error">{errors[input.name]?.message}</Typography>
-                  </div>
-                )
-
-              }
-              return (
-                <Input
-                  {...input}
-                  // defaultValue={item[input.name]}
-                  error={errors[input.name]}
-                  message={errors[input.name]?.message}
-                  refs={register}
-                  className='my-16'
-                />
-              )
-            })
+                  )
+                }
+              </>
+            ))
           }
           <Typography className='my-16 w-9/12 mx-auto' variant="body1" color="initial">
             <b>
-            Note: A voided check MUST be attached to this from to ensure correct wire transfer and account number information is available to Accounts Payable for processing your request. Forms received without attachment of a voided check will NOT be processed
+              Note: A voided check MUST be attached to this from to ensure correct wire transfer and account number information is available to Accounts Payable for processing your request. Forms received without attachment of a voided check will NOT be processed
             </b>
           </Typography>
           <Typography className='my-16 w-9/12 mx-auto' variant="body1" color="initial">
-          I authorize the Account payable Department of SpringRock to initiate credit entries and to initiate, if necessary, debit entries and adjustments for any credit made in error under this program to my account as designated above and by the attached void check or deposit slip.
+            I authorize the Account payable Department of SpringRock to initiate credit entries and to initiate, if necessary, debit entries and adjustments for any credit made in error under this program to my account as designated above and by the attached void check or deposit slip.
           </Typography>
           <Typography className='my-16 w-9/12 mx-auto' variant="body1" color="initial">
             <b>
-            The authority to make reimbursement to the account identified above may be terminated upon thirty (30) days prior notification from me to the company.
+              The authority to make reimbursement to the account identified above may be terminated upon thirty (30) days prior notification from me to the company.
             </b>
           </Typography>
           <Button
@@ -200,5 +189,79 @@ const ReimbursibleExpenses = () => {
     </section>
   );
 };
+
+const ReimbursableExpensesForm = ({ control, errors, input, register }) => {
+  if (input.type === 'phoneNumber') {
+    return (
+      <div>
+        <Controller
+          defaultValue={input.defaultValue}
+          as={
+            <PhoneInput
+              // value={item[input.name]}
+              value={input.defaultValue}
+              id={input.name}
+              country='ng'
+              // placeholder="Enter phone number"
+              containerClass='w-full my-16'
+              inputClass='w-full'
+              specialLabel={input.label}
+              enableAreaCodes
+              enableSearch
+              inputRef={register}
+              isValid={(inputNumber, country, onlyCountries) => {
+                return onlyCountries.some((country) => {
+                  return startsWith(inputNumber, country.dialCode) || startsWith(country.dialCode, inputNumber);
+                });
+              }}
+            />
+          }
+          name={input.name}
+          control={control}
+          rules={{ required: true }}
+        />
+        <Typography variant="caption" color="error">{errors[input.name]?.message}</Typography>
+      </div>
+    )
+  }
+
+  if (input.type === 'radio') {
+    return (
+      <>
+        <Controller
+          defaultValue={input.defaultValue}
+          as={
+            <FormControl component="fieldset">
+              <FormLabel component="legend">{input.label}</FormLabel>
+              <RadioGroup
+                aria-label="gender"
+                name={input.name}
+                defaultValue={input.defaultValue}
+                className='flex flex-row'
+              >
+                <FormControlLabel value="savings" control={<Radio />} label="Savings" />
+                <FormControlLabel value="current" control={<Radio />} label="Current" />
+              </RadioGroup>
+            </FormControl>
+          }
+          name={input.name}
+          control={control}
+          rules={{ required: true }}
+        />
+        <Typography variant="caption" color="error">{errors[input.name]?.message}</Typography>
+      </>
+    )
+  }
+  return (
+    <Input
+      {...input}
+      // defaultValue={item[input.name]}
+      error={errors[input.name]}
+      message={errors[input.name]?.message}
+      refs={register}
+      className='my-16'
+    />
+  )
+}
 
 export default ReimbursibleExpenses;

@@ -7,8 +7,9 @@ import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button';
 import { useSelector, useDispatch } from 'react-redux';
 import { signOnboardingForm } from '../store/actions';
+import useUserID from '../hooks/useUserID'
 
-const  { useState } = React;
+const  { useState, useEffect } = React;
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -24,11 +25,22 @@ const CheckForms = ({
 }) => {
   const classes = useStyles();
 
-  const { employeeInfo: { info } } = useSelector(state => state.onboardingForms);
+  const { 
+    employeeInfo: { info },
+    onboardingForms: {
+      checkForms: {
+        data
+      },
+    } 
+  } = useSelector(state => state.onboardingForms);
 
   const dispatch = useDispatch();
 
   const [value, setValue] = useState({});
+
+  const { id } = useUserID();
+
+  // useEffect(() => console.log({x: data[name]}), [])
 
   const inputs = [
     {
@@ -50,7 +62,10 @@ const CheckForms = ({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(signOnboardingForm(value));
+    dispatch(signOnboardingForm({
+      formData: value,
+      id
+    }));
   }
 
   return (
@@ -80,7 +95,7 @@ const CheckForms = ({
           <FormControlLabel
             control={
               <Checkbox
-                defaultChecked={checkValue}
+                defaultChecked={data[name]}
                 onChange={handleChange}
                 name={name}
                 color="primary"
