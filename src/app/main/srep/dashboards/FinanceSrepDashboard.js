@@ -23,38 +23,6 @@ import { AppBar, Toolbar } from '@material-ui/core';
 import SharedTable from 'app/shared/sharedTable';
 import { jsPDF } from 'jspdf';
 
-    const useStyles = makeStyles(theme => ({
-        header: {
-            background: `linear-gradient(to right, ${theme.palette.primary.dark} 0%, ${theme.palette.primary.main} 100%)`,
-            color: theme.palette.getContrastText(theme.palette.primary.main)
-        },
-        headerIcon: {
-            position: 'absolute',
-            top: -64,
-            left: 0,
-            opacity: 0.04,
-            fontSize: 512,
-            width: 512,
-            height: 512,
-            pointerEvents: 'none'
-        },
-        pagination: {
-            display: 'flex',
-            justifyContent: 'center',
-            marginBottom: '32px',
-            marginTop: '30px'
-        },
-        previousBtn: {
-            marginBottom: 10,
-            alignSelf: 'left',
-            [theme.breakpoints.down('xs')]: {
-                display: 'none',
-            },
-            color: 'white',
-            fontSize: 20
-        },
-    }));
-
     const columns = [
         {
             id: 'name',
@@ -170,7 +138,8 @@ import { jsPDF } from 'jspdf';
         const [Entityfilter, setEntityFilter] = useState('all');
         const [Yearfilter, setYearFilter] = useState('all');
         const [Departmentfilter, setDepartmentFilter] = useState('all');
-        const [selectedRow, setSelectedRow] = useState({})
+        const [selectedRow, setSelectedRow] = useState({});
+        const [employeesCount, setemployeesCount] = useState("0 Employees");
 
         useEffect(() => {
             dispatch(Actions.getDashboardSrep());
@@ -192,11 +161,11 @@ import { jsPDF } from 'jspdf';
           setEntityfilter('all');
         }
 
-        function formatTodayDate() {
-          var d = new Date,
-              month = '' + (d.getMonth() + 1),
-              day = '' + d.getDate(),
-              year = d.getFullYear();
+        const formatTodayDate = () => {
+            let d = new Date,
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
       
           if (month.length < 2) 
               month = '0' + month;
@@ -204,19 +173,27 @@ import { jsPDF } from 'jspdf';
               day = '0' + day;
       
           return [year, month, day].join('-');
-        }
+        };
+
+        formatTodayDate();
 
         const employeesEnrolled = () => {
           let empList = [];
           let countEmployees = 0;
-          data.forEach(e => {
-            if (!empList.includes(e.employeeEmail)) {
-              countEmployees++;
-              empList.push(employeeEmail);
-            }
-            console.log('empCount: ', countEmployees);
-          });
-          return `${countEmployees} Employees`;  
+          if (enrollmentList && enrollmentList !== undefined && enrollmentList.length > 0) {
+              enrollmentList.forEach(e => {
+                  if (!empList.includes(e.employeeEmail)) {
+                      countEmployees++;
+                      empList.push(employeeEmail);
+                  }
+                  console.log('empCount: ', countEmployees);
+              });
+          }
+          console.log('TotalEmpCount: ', countEmployees);
+          if (countEmployees === 1) {
+              setemployeesCount(`1 Employee`);
+          } else setemployeesCount(`${countEmployees} Employees`);
+          return employeesCount;
         }
 
         const handleYearFilter = (event) => {
@@ -384,17 +361,7 @@ import { jsPDF } from 'jspdf';
                             <Formsy>
                                 <Grid container spacing={1} className="flex flex-row" style={{ marginTop: "10px" }}>
                                     <Grid item style={{ marginTop: "15px" }} >
-                                    Date: 
-                                    </Grid>
-                                    <Grid item lg={9} md={9} sm={9} xs={9}>
-                                    <TextFieldFormsy
-                                        className="w-full h-60"
-                                        type="date"
-                                        name="name"
-                                        // value={formatTodayDate}
-                                        variant="outlined"
-                                        style={{height: "5px"}}
-                                    />
+                                    Date: {new Date().toISOString().substring(0, 10)}
                                     </Grid>
                                 </Grid>
                             </Formsy>
@@ -404,7 +371,7 @@ import { jsPDF } from 'jspdf';
                                     Employees enrolled in SREP 
                                 </Typography>
                                 <Grid style={{ color: "blue" }}>
-                                  {employeesEnrolled} {"10 Employees"}
+                                {((employeesCount || employeesEnrolled) === "0 Employees") ? "0 Employees" : employeesEnrolled}
                                 </Grid>
                             </Grid>
                         </Grid>
@@ -446,7 +413,7 @@ import { jsPDF } from 'jspdf';
                     </Grid>
                 </div>
                 <div id="financepdf" className="widget flex w-full p-18 border-t-1">
-                    <SharedTable data={enrollmentList !== undefined ? enrollmentList : []} rows={columns} handleClick={handleClickOpen} type="default" />
+                    <SharedTable key={"FinanceSrepDashboard"} data={enrollmentList !== undefined ? enrollmentList : []} rows={columns} handleClick={handleClickOpen} type="default" />
                 </div>
             </Paper>
             </SimplePage>

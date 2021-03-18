@@ -511,7 +511,7 @@ const navigationConfig = [
 		// auth: authRoles?.admin,
 		children: [
 			{
-				id: 'dashboard',
+				id: 'hrdashboard',
 				title: 'Dashboard',
 				type: 'item',
 				url: '/hr/performance_appraisal/dashboard',
@@ -519,7 +519,7 @@ const navigationConfig = [
 				auth: authRoles?.admin,
 			},
 			{
-				id: 'dashboard',
+				id: 'lmdashboard',
 				title: 'Dashboard',
 				type: 'item',
 				url: '/line_manager/performance_appraisal/dashboard',

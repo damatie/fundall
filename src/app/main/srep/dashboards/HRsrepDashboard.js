@@ -93,38 +93,6 @@ import SharedTable from 'app/shared/sharedTable';
         ]
     };
 
-    const useStyles = makeStyles(theme => ({
-        header: {
-            background: `linear-gradient(to right, ${theme.palette.primary.dark} 0%, ${theme.palette.primary.main} 100%)`,
-            color: theme.palette.getContrastText(theme.palette.primary.main)
-        },
-        headerIcon: {
-            position: 'absolute',
-            top: -64,
-            left: 0,
-            opacity: 0.04,
-            fontSize: 512,
-            width: 512,
-            height: 512,
-            pointerEvents: 'none'
-        },
-        pagination: {
-            display: 'flex',
-            justifyContent: 'center',
-            marginBottom: '32px',
-            marginTop: '30px'
-        },
-        previousBtn: {
-            marginBottom: 10,
-            alignSelf: 'left',
-            [theme.breakpoints.down('xs')]: {
-                display: 'none',
-            },
-            color: 'white',
-            fontSize: 20
-        },
-    }));
-
     const columns = [
         {
             id: 'name',
@@ -241,7 +209,8 @@ import SharedTable from 'app/shared/sharedTable';
         const [Entityfilter, setEntityFilter] = useState('all');
         const [Yearfilter, setYearFilter] = useState('all');
         const [Departmentfilter, setDepartmentFilter] = useState('all');
-        const [selectedRow, setSelectedRow] = useState({})
+        const [selectedRow, setSelectedRow] = useState({});
+        const [employeesCount, setemployeesCount] = useState("0 Employees");
 
         useEffect(() => {
             dispatch(Actions.getDashboardSrep());
@@ -260,19 +229,38 @@ import SharedTable from 'app/shared/sharedTable';
               // setData(_.filter(enrollmentList, e => e.status.toLowerCase() === Departmentfilter.toLowerCase()));
             }
         }, [Departmentfilter, Yearfilter, Entityfilter]);
+
+        const employeesEnrolled = () => {
+            let empList = [];
+            let countEmployees = 0;
+            if (enrollmentList && enrollmentList !== undefined && enrollmentList.length > 0) {
+                enrollmentList.forEach(e => {
+                    if (!empList.includes(e.employeeEmail)) {
+                        countEmployees++;
+                        empList.push(employeeEmail);
+                    }
+                    console.log('empCount: ', countEmployees);
+                });
+            }
+            console.log('TotalEmpCount: ', countEmployees);
+            if (countEmployees === 1) {
+                setemployeesCount(`1 Employee`);
+            } else setemployeesCount(`${countEmployees} Employees`);
+            return employeesCount;
+        }
         
-        function handleSearch(event) {
+        const handleSearch = (event) => {
           setSearch(event.target.value);
           setDepartmentfilter('all'); 
           setYearfilter('all');
           setEntityfilter('all');
         }
 
-        function formatTodayDate() {
-          var d = new Date,
-              month = '' + (d.getMonth() + 1),
-              day = '' + d.getDate(),
-              year = d.getFullYear();
+        const formatTodayDate = () => {
+            let d = new Date,
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
       
           if (month.length < 2) 
               month = '0' + month;
@@ -280,24 +268,10 @@ import SharedTable from 'app/shared/sharedTable';
               day = '0' + day;
       
           return [year, month, day].join('-');
-        }
+        };
 
-        const employeesEnrolled = () => {
-            let empList = [];
-            let countEmployees = 0;
-            data.forEach(e => {
-              if (!empList.includes(e.employeeEmail)) {
-                countEmployees++;
-                empList.push(employeeEmail);
-              }
-              console.log('empCount: ', countEmployees);
-            });
-            if (countEmployees === 1) {
-                return `1 Employee`;
-            }
-            return `${countEmployees} Employees`;  
-        }
-        
+        formatTodayDate();
+
         const handleFilter = (event) => {
             setFilter(event.target.value);
         }
@@ -511,18 +485,18 @@ import SharedTable from 'app/shared/sharedTable';
                             <Formsy>
                                 <Grid container spacing={1} className="flex flex-row" style={{ marginTop: "10px" }}>
                                     <Grid item style={{ marginTop: "15px" }} >
-                                    Date: 
+                                    Date: {new Date().toISOString().substring(0, 10)}
                                     </Grid>
-                                    <Grid item lg={9} md={9} sm={9} xs={9}>
+                                    {/* <Grid item lg={9} md={9} sm={9} xs={9}>
                                     <TextFieldFormsy
-                                        className="w-full h-60"
+                                        className="w-full"
                                         type="date"
                                         name="name"
-                                        // value={formatTodayDate}
+                                        value={new Date().toISOString().substring(0, 10)}
                                         variant="outlined"
                                         style={{height: "5px"}}
                                     />
-                                    </Grid>
+                                    </Grid> */}
                                 </Grid>
                             </Formsy>
                             </Grid>
@@ -531,7 +505,7 @@ import SharedTable from 'app/shared/sharedTable';
                                     Employees enrolled in SREP 
                                 </Typography>
                                 <Grid style={{ color: "blue" }}>
-                                  {employeesEnrolled} {"1 Employee"}
+                                  {((employeesCount || employeesEnrolled) === "0 Employees") ? "0 Employees" : employeesEnrolled}
                                 </Grid>
                             </Grid>
                         </Grid>
@@ -573,7 +547,7 @@ import SharedTable from 'app/shared/sharedTable';
                     </Grid>
                 </div>
 				<div id="hrpdf" className="widget flex w-full p-18">
-                    <SharedTable data={enrollmentList !== undefined ? enrollmentList : []} rows={columns} handleClick={handleClickOpen} type="default" />
+                    <SharedTable key={"HRsrepDashboard"} data={enrollmentList !== undefined ? enrollmentList : []} rows={columns} handleClick={handleClickOpen} type="default" />
 				</div>
             </Paper>
             </SimplePage>
