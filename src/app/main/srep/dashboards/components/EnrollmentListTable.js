@@ -105,12 +105,12 @@ const EnrollmentListTable = ({ data, handleFilter}) => {
         setSearch(event.target.value);
     }
   
-    onClick = (row) => dispatch(openDialog());
+    // onClick = (row) => dispatch(openDialog());
 
   return (
       <EnhancedTable
             columns={columns}
-            data={ enrollmentList }
+            data={enrollmentList !== undefined ? enrollmentList : []}
             toolBar={
               <Grid container spacing={1} alignItems='left'>
                 <Grid container spacing={1} alignItems='left' style={{ marginTop: "10px" }}>

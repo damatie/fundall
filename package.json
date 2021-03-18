@@ -30,6 +30,7 @@
         "i18next": "19.4.5",
         "isomorphic-fetch": "^3.0.0",
         "jsonwebtoken": "8.5.1",
+        "jspdf": "^2.3.1",
         "jss": "10.1.1",
         "jss-plugin-extend": "10.1.1",
         "jss-rtl": "0.3.0",

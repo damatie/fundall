@@ -511,6 +511,30 @@ const navigationConfig = [
 		// auth: authRoles?.admin,
 		children: [
 			{
+				id: 'dashboard',
+				title: 'PERFORMANCE APPRAISAL DASHBOARD',
+				type: 'item',
+				url: '/hr/performance_appraisal/dashboard',
+				icon: 'dashboard',
+				auth: authRoles?.admin,
+			},
+			{
+				id: 'dashboard',
+				title: 'PERFORMANCE APPRAISAL DASHBOARD',
+				type: 'item',
+				url: '/line_manager/performance_appraisal/dashboard',
+				icon: 'dashboard',
+				auth: authRoles?.lineManager,
+			},
+			{
+				id: 'dashboard',
+				title: 'PERFORMANCE APPRAISAL DASHBOARD',
+				type: 'item',
+				url: '/finance_manager/performance_appraisal/dashboard',
+				icon: 'dashboard',
+				auth: authRoles?.financeManager,
+			},
+			{
 				id: 'kpoCategory',
 				title: 'KPO Category',
 				type: 'item',

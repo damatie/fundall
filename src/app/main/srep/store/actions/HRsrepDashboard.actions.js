@@ -38,27 +38,26 @@ export function getDashboardSrep(role = null) {
 				let count = 0;
 				let items = [];
 				if (data.success && data.data) {
-					console.log({role})
-					if(role && role !== 'HR MANAGER'){
-						items = data.data && data.data.filter(srep => srep.status !== 'pending');
-					}else{
-						items = data.data
-					}
-					srep = data.data && data.data.map(srep => {
+					items = data.data
+					srep =  data.data.map(srep => {
 						count++;
 						return {
 							sn: count,
 							id: srep.id,
-							name: `${srep.employee.firstName} ${srep.employee.lastName}`,
+							name: (srep.employee) ? `${srep?.employee.firstName} ${srep?.employee.lastName}` : '',
 							status: srep.status,
-							entity: srep.entityId,	
-							department: srep.departmentId,
+							entity: (srep.employee) ? srep.employee.entityId : '',	
+							department: (srep.employee) ? srep.employee.departmentId : '',
 							capitalFund: formatCurrency('₦', srep.capitalFund),
 							beneficiaryName: srep.beneficiaryName,
 							beneficiaryRelationship: srep.beneficiaryRelationship.toUpperCase(),
 							beneficiaryNationality: srep.beneficiaryNationality,
 							beneficiaryGender: srep.beneficiaryGender,	
-							beneficiaryEmail: srep.beneficiaryEmail
+							beneficiaryEmail: srep.beneficiaryEmail,
+							beneficiaryPhone: srep.beneficiaryPhone,
+							createdAt: srep.createdAt,
+							employeePhoneNo: srep.phoneNo,
+							employeeEmail: (srep.employee) ? srep.employee.email : null
 						}
 					});
 					console.log({srep});
@@ -92,16 +91,16 @@ export function getDashboardSrepByEmployeeID(id) {
 			type: LOADING_DASHBOARD_EMPLOYEE_SREP
 		});
 		fetch(`${baseUrl()}/srep/employee/${id}`, { ...headers.getRegHeader() })
-			.then(res => res.json()).then(async data => {
+			.then(res => res.json()).then(async employeeData => {
 				let enrollmentList = [];
-				if (data.success && data.data) {
-					enrollmentList = data.data.map(srep => {
+				if (employeeData.success && employeeData.data) {
+					enrollmentList = employeeData.data.map(srep => {
 						return {
 							id: srep.id,
 							name: `${srep.employee.firstName} ${srep.employee.lastName}`,
 							status: srep.status,
-							entity: srep.entityId,	
-							department: srep.departmentId,
+							entity: srep.employee.entityId,	
+							department: srep.employee.departmentId,
 							capitalFund: formatCurrency('₦', srep.capitalFund),
 							beneficiaryName: srep.beneficiaryName,
 							beneficiaryRelationship: srep.beneficiaryRelationship.toUpperCase(),
@@ -113,7 +112,7 @@ export function getDashboardSrepByEmployeeID(id) {
 					dispatch({
 						type: GET_DASHBOARD_EMPLOYEE_SREP_SUCCESS,
 						payload: {
-							data: data.data,
+							data: employeeData.data,
 							enrollmentList: enrollmentList
 						},
 					})
@@ -140,17 +139,17 @@ export function getDashboardSrepByID(id) {
 			type: LOADING_DASHBOARD_SREP_ID
 		});
 		fetch(`${baseUrl()}/srep/${id}`, { ...headers.getRegHeader() })
-		.then(res => res.json()).then(async data => {
-			console.log(data);
+		.then(res => res.json()).then(async IdData => {
+			console.log('IdData: ', IdData);
 			let enrollmentDataById = [];
-				if (data.success && data.data) {
-					enrollmentDataById = data.data.map(srep => {
+				if (IdData.success && IdData.data) {
+					enrollmentDataById =  IdData.data && IdData.data.map(srep => {
 						return {
 							id: srep.id,
 							name: `${srep.employee.firstName} ${srep.employee.lastName}`,
 							status: srep.status,
-							entity: srep.entityId,	
-							department: srep.departmentId,
+							entity: srep.employee.entityId,	
+							department: srep.employee.departmentId,
 							capitalFund: formatCurrency('₦', srep.capitalFund),
 							beneficiaryName: srep.beneficiaryName,
 							beneficiaryRelationship: srep.beneficiaryRelationship.toUpperCase(),
@@ -162,7 +161,7 @@ export function getDashboardSrepByID(id) {
 					dispatch({
 						type: GET_DASHBOARD_SREP_ID_SUCCESS,
 						payload: {
-							data: data.data,
+							data: IdData.data,
 							enrollmentDataById: enrollmentDataById
 						},
 					})
@@ -193,58 +192,56 @@ export function getDashboardSrepByID(id) {
 }
 
 
-export function getDepartments(id) {
-	return dispatch => {
-		fetch(`${basUrl()}/department/all/${id}`, { ...headers.getRegHeader() })
-			.then(res => res.json()).then(data => {
-				data.success ?
-					dispatch({
-						type: GET_DEPARTMENTS_SUCCESS,
-						payload: data.data
-					})
-					:
-					dispatch({
-						type: GET_DEPARTMENTS_ERROR,
-						payload: []
-					})
-			}).catch(err => {
-				console.log(err);
-				dispatch({
-					type: GET_DEPARTMENTS_ERROR,
-					payload: [],
-				})
-			})
-	}
-}
+// export function getDepartments(id) {
+// 	return dispatch => {
+// 		fetch(`${basUrl()}/department/all/${id}`, { ...headers.getRegHeader() })
+// 			.then(res => res.json()).then(departments => {
+// 				departments.success ?
+// 					dispatch({
+// 						type: GET_DEPARTMENTS_SUCCESS,
+// 						payload: departments.data
+// 					})
+// 					:
+// 					dispatch({
+// 						type: GET_DEPARTMENTS_ERROR,
+// 						payload: []
+// 					})
+// 			}).catch(err => {
+// 				console.log(err);
+// 				dispatch({
+// 					type: GET_DEPARTMENTS_ERROR,
+// 					payload: [],
+// 				})
+// 			})
+// 	}
+// }
 
-export function getEntities() {
-	return dispatch => {
-	  dispatch({
-		type: DASHBOARD_ENTITIES_LOADING
-	  })
-	  fetch(`${getBaseUrl()}/entity/all`, {
-		...header.getRegHeader()
-	  }).then(res => res.json()).then(
-		data => {
-		  console.log(data)
-		  if(data.success) {
-			dispatch({
-			  type: GET_DASHBOARD_ENTITIES_SUCCESS,
-			  payload: data.data
-			});
-		  } else {
-			dispatch({
-			  type: GET_DASHBOARD_ENTITIES_ERROR,
-			  payload: []
-			})
-		  }
-		}
-	  ).catch(e => {
-		dispatch({
-		  type: GET_DASHBOARD_ENTITIES_ERROR,
-		  payload: []
-		})
-		console.error(e)
-	  })
-	}
-  }
+// export function getEntities() {
+// 	return dispatch => {
+// 	  dispatch({
+// 		type: DASHBOARD_ENTITIES_LOADING
+// 	  })
+// 	  fetch(`${baseUrl()}/entity/all`, { ...headers.getRegHeader() })
+// 	  	.then(res => res.json()).then(entities => {
+// 				console.log('entity data: ', entities)
+// 				if(entities.success) {
+// 					dispatch({
+// 					type: GET_DASHBOARD_ENTITIES_SUCCESS,
+// 					payload: entities.data
+// 					});
+// 				} else {
+// 					dispatch({
+// 					type: GET_DASHBOARD_ENTITIES_ERROR,
+// 					payload: []
+// 					})
+// 				}
+// 			}
+// 		).catch(e => {
+// 			dispatch({
+// 				type: GET_DASHBOARD_ENTITIES_ERROR,
+// 				payload: []
+// 			})
+// 			console.error(e)
+// 		})
+// 	}
+//   }
