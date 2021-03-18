@@ -345,12 +345,12 @@ import { jsPDF } from 'jspdf';
             <Paper className="mt-24 mb-10 mr-10">
                 <div className="flex flex-wrap w-full p-20">
                     <Grid container spacing={1} >
-                        <Grid container spacing={1} className="flex w-full flex-row" style={{ marginTop: "10px" }}>
+                        <Grid className="flex w-full flex-row" style={{ marginTop: "10px" }}>
                             <Grid item lg={9} md={6} sm={6} xs={6} className="font-semibold text-16">
                             Enrollment List
                             </Grid>
 
-                            <Grid item lg={3} md={6} sm={6} xs={6} className="ml-60" style={{ display: "flex", float: "right", color: "green" }}>
+                            <Grid item lg={3} md={6} sm={6} xs={6} style={{ display: "flex", float: "right", color: "green" }}>
                                 <Grid style={{ marginLeft: "auto" }} onClick = {downloadPdf}>
                                     <Icon>{'cloud_download'}</Icon>
                                 </Grid>
@@ -361,8 +361,21 @@ import { jsPDF } from 'jspdf';
                             <Formsy>
                                 <Grid container spacing={1} className="flex flex-row" style={{ marginTop: "10px" }}>
                                     <Grid item style={{ marginTop: "15px" }} >
-                                    Date: {new Date().toISOString().substring(0, 10)}
+                                    Date: 
+                                    <Typography style={{ color: "blue" }}>
+                                        {new Date().toISOString().substring(0, 10)}
+                                    </Typography>
                                     </Grid>
+                                    {/* <Grid item lg={9} md={9} sm={9} xs={9}>
+                                    <TextFieldFormsy
+                                        className="w-full"
+                                        type="date"
+                                        name="name"
+                                        value={new Date().toISOString().substring(0, 10)}
+                                        variant="outlined"
+                                        style={{height: "5px"}}
+                                    />
+                                    </Grid> */}
                                 </Grid>
                             </Formsy>
                             </Grid>
@@ -371,7 +384,7 @@ import { jsPDF } from 'jspdf';
                                     Employees enrolled in SREP 
                                 </Typography>
                                 <Grid style={{ color: "blue" }}>
-                                {((employeesCount || employeesEnrolled) === "0 Employees") ? "0 Employees" : employeesEnrolled}
+                                  {((employeesCount || employeesEnrolled) === "0 Employees") ? "0 Employees" : employeesEnrolled}
                                 </Grid>
                             </Grid>
                         </Grid>
@@ -412,7 +425,7 @@ import { jsPDF } from 'jspdf';
                         </Grid>
                     </Grid>
                 </div>
-                <div id="financepdf" className="widget flex w-full p-18 border-t-1">
+                <div id="financepdf">
                     <SharedTable key={"FinanceSrepDashboard"} data={enrollmentList !== undefined ? enrollmentList : []} rows={columns} handleClick={handleClickOpen} type="default" />
                 </div>
             </Paper>

@@ -469,12 +469,12 @@ import SharedTable from 'app/shared/sharedTable';
             <Paper className="mt-24 m-12">
             <div className="flex flex-wrap w-full p-20">
                     <Grid container spacing={1} >
-                        <Grid container spacing={1} className="flex w-full flex-row" style={{ marginTop: "10px" }}>
+                        <Grid className="flex w-full flex-row" style={{ marginTop: "10px" }}>
                             <Grid item lg={9} md={6} sm={6} xs={6} className="font-semibold text-16">
                             Enrollment List
                             </Grid>
 
-                            <Grid item lg={3} md={6} sm={6} xs={6} className="ml-60" style={{ display: "flex", float: "right", color: "green" }}>
+                            <Grid item lg={3} md={6} sm={6} xs={6} style={{ display: "flex", float: "right", color: "green" }}>
                                 <Grid style={{ marginLeft: "auto" }} onClick = {downloadPdf}>
                                     <Icon>{'cloud_download'}</Icon>
                                 </Grid>
@@ -485,7 +485,10 @@ import SharedTable from 'app/shared/sharedTable';
                             <Formsy>
                                 <Grid container spacing={1} className="flex flex-row" style={{ marginTop: "10px" }}>
                                     <Grid item style={{ marginTop: "15px" }} >
-                                    Date: {new Date().toISOString().substring(0, 10)}
+                                    Date: 
+                                    <Typography style={{ color: "blue" }}>
+                                        {new Date().toISOString().substring(0, 10)}
+                                    </Typography>
                                     </Grid>
                                     {/* <Grid item lg={9} md={9} sm={9} xs={9}>
                                     <TextFieldFormsy
@@ -546,7 +549,7 @@ import SharedTable from 'app/shared/sharedTable';
                         </Grid>
                     </Grid>
                 </div>
-				<div id="hrpdf" className="widget flex w-full p-18">
+				<div id="hrpdf">
                     <SharedTable key={"HRsrepDashboard"} data={enrollmentList !== undefined ? enrollmentList : []} rows={columns} handleClick={handleClickOpen} type="default" />
 				</div>
             </Paper>
