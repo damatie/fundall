@@ -292,6 +292,9 @@ import SharedTable from 'app/shared/sharedTable';
               }
               console.log('empCount: ', countEmployees);
             });
+            if (countEmployees === 1) {
+                return `1 Employee`;
+            }
             return `${countEmployees} Employees`;  
         }
         
@@ -528,7 +531,7 @@ import SharedTable from 'app/shared/sharedTable';
                                     Employees enrolled in SREP 
                                 </Typography>
                                 <Grid style={{ color: "blue" }}>
-                                  {employeesEnrolled} {"10 Employees"}
+                                  {employeesEnrolled} {"1 Employee"}
                                 </Grid>
                             </Grid>
                         </Grid>
@@ -551,9 +554,9 @@ import SharedTable from 'app/shared/sharedTable';
                                     </Paper>
                                 </div>
                             </Grid>
-                            <Grid item lg={2} md={3} sm={4} xs={4}>
-                                <SelectTextField value={'all'} label="Department" size='small' value={Departmentfilter} onChange={ev => handleDepartmentFilter(ev)}>
-                                    {departments.map(({id, departmentName}) => (<MenuItem key={id} value={departmentName}> {departmentName}</MenuItem>))}
+                            <Grid item lg={2} md={2} sm={4} xs={4}>
+                                <SelectTextField value={'all'} label="Year" size='small' value={Yearfilter} onChange={ev => handleYearFilter(ev)}>
+                                    {years.map((year) => (<MenuItem key={year} value={year}> {year} </MenuItem>))}
                                 </SelectTextField>
                             </Grid>
                             <Grid item lg={3} md={3} sm={4} xs={4}>
@@ -561,9 +564,9 @@ import SharedTable from 'app/shared/sharedTable';
                                     {entities.map(({id, entityName}) => (<MenuItem key={id} value={entityName}> {entityName} </MenuItem>))}
                                 </SelectTextField>
                             </Grid>
-                            <Grid item lg={2} md={2} sm={4} xs={4}>
-                                <SelectTextField value={'all'} label="Year" size='small' value={Yearfilter} onChange={ev => handleYearFilter(ev)}>
-                                    {years.map((year) => (<MenuItem key={year} value={year}> {year} </MenuItem>))}
+                            <Grid item lg={2} md={3} sm={4} xs={4}>
+                                <SelectTextField value={'all'} label="Department" size='small' value={Departmentfilter} onChange={ev => handleDepartmentFilter(ev)}>
+                                    {departments.map(({id, departmentName}) => (<MenuItem key={id} value={departmentName}> {departmentName}</MenuItem>))}
                                 </SelectTextField>
                             </Grid> 
                         </Grid>

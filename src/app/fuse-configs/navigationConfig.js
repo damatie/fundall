@@ -512,7 +512,7 @@ const navigationConfig = [
 		children: [
 			{
 				id: 'dashboard',
-				title: 'PERFORMANCE APPRAISAL DASHBOARD',
+				title: 'Dashboard',
 				type: 'item',
 				url: '/hr/performance_appraisal/dashboard',
 				icon: 'dashboard',
@@ -520,7 +520,7 @@ const navigationConfig = [
 			},
 			{
 				id: 'dashboard',
-				title: 'PERFORMANCE APPRAISAL DASHBOARD',
+				title: 'Dashboard',
 				type: 'item',
 				url: '/line_manager/performance_appraisal/dashboard',
 				icon: 'dashboard',
@@ -528,7 +528,7 @@ const navigationConfig = [
 			},
 			{
 				id: 'dashboard',
-				title: 'PERFORMANCE APPRAISAL DASHBOARD',
+				title: 'Dashboard',
 				type: 'item',
 				url: '/finance_manager/performance_appraisal/dashboard',
 				icon: 'dashboard',
