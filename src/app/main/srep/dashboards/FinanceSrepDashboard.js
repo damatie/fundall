@@ -1,7 +1,6 @@
 import Typography from '@material-ui/core/Typography';
 import withReducer from 'app/store/withReducer';
 import React, { useEffect, useState } from 'react';
-import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
 import { useDispatch, useSelector } from 'react-redux';
 import SimplePage from 'app/shared/SimplePage';
 import Paper from '@material-ui/core/Paper';
@@ -13,7 +12,6 @@ import * as UtilActions from '../../../store/actions';
 import reducer from '../store/reducers';
 import Input from '@material-ui/core/Input';
 import Icon from '@material-ui/core/Icon';
-import { TextFieldFormsy } from '@fuse/core/formsy';
 import Formsy from 'formsy-react';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -347,12 +345,12 @@ import { jsPDF } from 'jspdf';
                     <Grid container spacing={1} >
                         <Grid className="flex w-full flex-row" style={{ marginTop: "10px" }}>
                             <Grid item lg={9} md={6} sm={6} xs={6} className="font-semibold text-16">
-                            Enrollment List
+                              Enrollment List
                             </Grid>
 
                             <Grid item lg={3} md={6} sm={6} xs={6} style={{ display: "flex", float: "right", color: "green" }}>
-                                <Grid style={{ marginLeft: "auto" }} onClick = {downloadPdf}>
-                                    <Icon>{'cloud_download'}</Icon>
+                                <Grid style={{ marginLeft: "auto", cursor: "pointer" }} onClick = {downloadPdf}>
+                                  <Icon>{'cloud_download'}</Icon>
                                 </Grid>
                             </Grid>
                         </Grid>
@@ -361,21 +359,11 @@ import { jsPDF } from 'jspdf';
                             <Formsy>
                                 <Grid container spacing={1} className="flex flex-row" style={{ marginTop: "10px" }}>
                                     <Grid item style={{ marginTop: "15px" }} >
-                                    Date: 
+                                      Date: 
                                     <Typography style={{ color: "blue" }}>
-                                        {new Date().toISOString().substring(0, 10)}
+                                      {new Date().toISOString().substring(0, 10)}
                                     </Typography>
                                     </Grid>
-                                    {/* <Grid item lg={9} md={9} sm={9} xs={9}>
-                                    <TextFieldFormsy
-                                        className="w-full"
-                                        type="date"
-                                        name="name"
-                                        value={new Date().toISOString().substring(0, 10)}
-                                        variant="outlined"
-                                        style={{height: "5px"}}
-                                    />
-                                    </Grid> */}
                                 </Grid>
                             </Formsy>
                             </Grid>
@@ -425,9 +413,7 @@ import { jsPDF } from 'jspdf';
                         </Grid>
                     </Grid>
                 </div>
-                <div id="financepdf">
-                    <SharedTable key={"FinanceSrepDashboard"} data={enrollmentList !== undefined ? enrollmentList : []} rows={columns} handleClick={handleClickOpen} type="default" />
-                </div>
+                <SharedTable key={"FinanceSrepDashboard"} data={enrollmentList !== undefined ? enrollmentList : []} rows={columns} handleClick={handleClickOpen} type="default" />
             </Paper>
             </SimplePage>
             );

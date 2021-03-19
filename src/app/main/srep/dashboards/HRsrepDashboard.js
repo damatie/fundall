@@ -22,7 +22,9 @@ import DialogActions from '@material-ui/core/DialogActions';
 import Button from '@material-ui/core/Button';
 import { AppBar, Toolbar } from '@material-ui/core';
 import SharedTable from 'app/shared/sharedTable';
-// import * as jsPDF from "jspdf";
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
+import EnrollmentListTable from './components/EnrollmentListTable';
 
     const lineChartData = {
         labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
@@ -99,7 +101,7 @@ import SharedTable from 'app/shared/sharedTable';
             field: 'name',
             align: 'left',
             disablePadding: false,
-            label: 'Employee Name',
+            label: 'Name',
             sort: true
         },
         {
@@ -107,7 +109,7 @@ import SharedTable from 'app/shared/sharedTable';
             field: 'employeeEmail',
             align: 'left',
             disablePadding: false,
-            label: 'Employee Email',
+            label: 'Email',
             sort: true
         },
         {
@@ -129,7 +131,7 @@ import SharedTable from 'app/shared/sharedTable';
             field: 'department',
             align: 'left',
             disablePadding: false,
-            label: 'Department',
+            label: 'Dept.',
             sort: true,
             Cell: ({ entity, department }) => {
                 const result2 = entities.filter(e => {
@@ -144,14 +146,14 @@ import SharedTable from 'app/shared/sharedTable';
         {
             align: 'left',
             disablePadding: false,
-            label: 'Capital Funds',
+            label: 'Capital',
             field: 'capitalFund',
             sort: true,
         },
         {
             align: 'left',
             disablePadding: false,
-            label: 'Beneficiary Name',
+            label: 'Beneficiary',
             field: 'beneficiaryName',
             sort: true,
         },
@@ -192,11 +194,11 @@ import SharedTable from 'app/shared/sharedTable';
         const HRsrepDashboard = useSelector(({ HRsrepDashboard }) => HRsrepDashboard.HRsrepDashboard);
         let enrollmentList = [] 
         enrollmentList = (HRsrepDashboard !== undefined) ? ((HRsrepDashboard.data !== undefined) ? HRsrepDashboard.data.srepData : []) : [];
-        let approvedList = [];
-        approvedList = enrollmentList ? enrollmentList.filter(t => t.status === 'approved') : [];
-        let pendingList = [];
-        pendingList = enrollmentList ? enrollmentList.filter(t => t.status === 'pending') : [];
-        console.log('HRsrepDashboard Data: ', enrollmentList);
+        let countEmployees = 0;
+        countEmployees = (HRsrepDashboard !== undefined) ? ((HRsrepDashboard.data !== undefined) ? HRsrepDashboard.data.countEmployees : []) : [];
+        const rejectedList = (HRsrepDashboard !== undefined) ? ((HRsrepDashboard.data !== undefined) ? HRsrepDashboard.data.rejectedList : []) : [];
+        const approvedList = (HRsrepDashboard !== undefined) ? ((HRsrepDashboard.data !== undefined) ? HRsrepDashboard.data.approvedList : []) : [];
+        const pendingList = (HRsrepDashboard !== undefined) ? ((HRsrepDashboard.data !== undefined) ? HRsrepDashboard.data.pendingList : []) : [];
         const [data, setData] = useState(enrollmentList);
         const [open, setOpen] = useState(false);
         const [search, setSearch] = useState('');
@@ -210,7 +212,7 @@ import SharedTable from 'app/shared/sharedTable';
         const [Yearfilter, setYearFilter] = useState('all');
         const [Departmentfilter, setDepartmentFilter] = useState('all');
         const [selectedRow, setSelectedRow] = useState({});
-        const [employeesCount, setemployeesCount] = useState("0 Employees");
+        // const [employeesCount, setemployeesCount] = useState("0 Employees");
 
         useEffect(() => {
             dispatch(Actions.getDashboardSrep());
@@ -218,7 +220,7 @@ import SharedTable from 'app/shared/sharedTable';
         }, [dispatch]);
 
         useEffect(() => {
-            console.log('Listening to Filter Changes', filter);
+            console.log('Listening to Filter Changes: ', filter);
             // setChartData();
         }, [filter]);
 
@@ -229,25 +231,6 @@ import SharedTable from 'app/shared/sharedTable';
               // setData(_.filter(enrollmentList, e => e.status.toLowerCase() === Departmentfilter.toLowerCase()));
             }
         }, [Departmentfilter, Yearfilter, Entityfilter]);
-
-        const employeesEnrolled = () => {
-            let empList = [];
-            let countEmployees = 0;
-            if (enrollmentList && enrollmentList !== undefined && enrollmentList.length > 0) {
-                enrollmentList.forEach(e => {
-                    if (!empList.includes(e.employeeEmail)) {
-                        countEmployees++;
-                        empList.push(employeeEmail);
-                    }
-                    console.log('empCount: ', countEmployees);
-                });
-            }
-            console.log('TotalEmpCount: ', countEmployees);
-            if (countEmployees === 1) {
-                setemployeesCount(`1 Employee`);
-            } else setemployeesCount(`${countEmployees} Employees`);
-            return employeesCount;
-        }
         
         const handleSearch = (event) => {
           setSearch(event.target.value);
@@ -255,22 +238,6 @@ import SharedTable from 'app/shared/sharedTable';
           setYearfilter('all');
           setEntityfilter('all');
         }
-
-        const formatTodayDate = () => {
-            let d = new Date,
-            month = '' + (d.getMonth() + 1),
-            day = '' + d.getDate(),
-            year = d.getFullYear();
-      
-          if (month.length < 2) 
-              month = '0' + month;
-          if (day.length < 2) 
-              day = '0' + day;
-      
-          return [year, month, day].join('-');
-        };
-
-        formatTodayDate();
 
         const handleFilter = (event) => {
             setFilter(event.target.value);
@@ -301,20 +268,18 @@ import SharedTable from 'app/shared/sharedTable';
 
         const downloadPdf = () => {
             console.log('icon Clicked');
-            const doc = new jsPDF();
-            const elementHTML = $('hrpdf').html();
-            const specialElementHandlers = {
-                '#elementH': function (element, renderer) {
-                    return true;
+            const divId = 'hrpdf';
+            const w = document.getElementById(divId).offsetWidth;
+            const h = document.getElementById(divId).offsetHeight;
+            const input = document.getElementById(divId);
+            let doc = new jsPDF({ orientation: 'l', unit: 'pt', format: [w, h] });
+            console.log('pdf should download: ', input);
+            window.html2canvas = html2canvas;
+            doc.html( input, 
+                { callback: (doc) => { 
+                    doc.save('enrollmentList.pdf');
                 }
-            };
-            doc.fromHTML(elementHTML, 15, 15, {
-                'width': 170,
-                'elementHandlers': specialElementHandlers
             });
-            
-            // Save the PDF
-            doc.save('enrollmentList.pdf');
         };
 
         return ( <SimplePage title='HR SREP DASHBOARD'>
@@ -467,91 +432,84 @@ import SharedTable from 'app/shared/sharedTable';
                 </Dialog>
 
             <Paper className="mt-24 m-12">
-            <div className="flex flex-wrap w-full p-20">
-                    <Grid container spacing={1} >
-                        <Grid className="flex w-full flex-row" style={{ marginTop: "10px" }}>
-                            <Grid item lg={9} md={6} sm={6} xs={6} className="font-semibold text-16">
-                            Enrollment List
-                            </Grid>
+            <div>
+                <div className="flex flex-wrap w-full p-20">
+                        <Grid container spacing={1} >
+                            <Grid className="flex w-full flex-row" style={{ marginTop: "10px" }}>
+                                <Grid item lg={9} md={6} sm={6} xs={6} className="font-semibold text-16">
+                                Enrollment List
+                                </Grid>
 
-                            <Grid item lg={3} md={6} sm={6} xs={6} style={{ display: "flex", float: "right", color: "green" }}>
-                                <Grid style={{ marginLeft: "auto" }} onClick = {downloadPdf}>
-                                    <Icon>{'cloud_download'}</Icon>
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                        <Grid container spacing={1} className="flex flex-row mb-20">
-                            <Grid item lg={3} md={6} sm={6} xs={12}>
-                            <Formsy>
-                                <Grid container spacing={1} className="flex flex-row" style={{ marginTop: "10px" }}>
-                                    <Grid item style={{ marginTop: "15px" }} >
-                                    Date: 
-                                    <Typography style={{ color: "blue" }}>
-                                        {new Date().toISOString().substring(0, 10)}
-                                    </Typography>
+                                <Grid item lg={3} md={6} sm={6} xs={6} style={{ display: "flex", float: "right", color: "green" }}>
+                                    <Grid style={{ marginLeft: "auto", cursor: "pointer" }} onClick = {downloadPdf}>
+                                        <Icon>{'cloud_download'}</Icon>
                                     </Grid>
-                                    {/* <Grid item lg={9} md={9} sm={9} xs={9}>
-                                    <TextFieldFormsy
-                                        className="w-full"
-                                        type="date"
-                                        name="name"
-                                        value={new Date().toISOString().substring(0, 10)}
-                                        variant="outlined"
-                                        style={{height: "5px"}}
-                                    />
-                                    </Grid> */}
-                                </Grid>
-                            </Formsy>
-                            </Grid>
-                            <Grid item lg={9} md={6} sm={12} xs={12} className="text-right flex-row" style={{ marginTop: "20px" }}>
-                                <Typography style={{ textAlign: "right" }}>
-                                    Employees enrolled in SREP 
-                                </Typography>
-                                <Grid style={{ color: "blue" }}>
-                                  {((employeesCount || employeesEnrolled) === "0 Employees") ? "0 Employees" : employeesEnrolled}
                                 </Grid>
                             </Grid>
+                            <Grid container spacing={1} className="flex flex-row mb-20">
+                                <Grid item lg={3} md={6} sm={6} xs={12}>
+                                <Formsy>
+                                    <Grid container spacing={1} className="flex flex-row">
+                                        <Grid item style={{ marginTop: "20px" }} >
+                                        Date: 
+                                        <Typography style={{ color: "blue" }}>
+                                            {new Date().toISOString().substring(0, 10)}
+                                        </Typography>
+                                        </Grid>
+                                    </Grid>
+                                </Formsy>
+                                </Grid>
+                                <Grid item lg={9} md={6} sm={12} xs={12} className="text-right flex-row" style={{ marginTop: "20px" }}>
+                                    <Typography style={{ textAlign: "right" }}>
+                                        Employees enrolled in SREP 
+                                    </Typography>
+                                    <Grid style={{ color: "blue" }}>
+                                    {countEmployees ?? 0} Employees
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+                            <Grid container spacing={1} className="mt-6 mb-6" >
+                                <Grid item lg={5} md={5} sm={5} xs={5}>
+                                <div className="flex items-center">
+                                        <Paper className="flex items-center w-full px-8 py-4 rounded-8">
+                                            <Icon color="action">search</Icon>
+                                            <Input
+                                                placeholder="Filter SREP"
+                                                className="flex flex-1 mx-8"
+                                                disableUnderline
+                                                fullWidth
+                                                value={search}
+                                                inputProps={{
+                                                    'aria-label': 'Search'
+                                                }}
+                                                onChange={e => handleSearch(e)}
+                                            />
+                                        </Paper>
+                                    </div>
+                                </Grid>
+                                <Grid item lg={2} md={2} sm={4} xs={4}>
+                                    <SelectTextField value={'all'} label="Year" size='small' value={Yearfilter} onChange={ev => handleYearFilter(ev)}>
+                                        {years.map((year) => (<MenuItem key={year} value={year}> {year} </MenuItem>))}
+                                    </SelectTextField>
+                                </Grid>
+                                <Grid item lg={3} md={3} sm={4} xs={4}>
+                                    <SelectTextField value={'all'} label="Entity" size='small' value={Entityfilter} onChange={ev => handleEntityFilter(ev)} >
+                                        {entities.map(({id, entityName}) => (<MenuItem key={id} value={entityName}> {entityName} </MenuItem>))}
+                                    </SelectTextField>
+                                </Grid>
+                                <Grid item lg={2} md={3} sm={4} xs={4}>
+                                    <SelectTextField value={'all'} label="Department" size='small' value={Departmentfilter} onChange={ev => handleDepartmentFilter(ev)}>
+                                        {departments.map(({id, departmentName}) => (<MenuItem key={id} value={departmentName}> {departmentName}</MenuItem>))}
+                                    </SelectTextField>
+                                </Grid> 
+                            </Grid>
                         </Grid>
-                        <Grid container spacing={1} className="mt-6 mb-6" >
-                            <Grid item lg={5} md={5} sm={5} xs={5}>
-                            <div className="flex items-center">
-                                    <Paper className="flex items-center w-full px-8 py-4 rounded-8">
-                                        <Icon color="action">search</Icon>
-                                        <Input
-                                            placeholder="Filter SREP"
-                                            className="flex flex-1 mx-8"
-                                            disableUnderline
-                                            fullWidth
-                                            value={search}
-                                            inputProps={{
-                                                'aria-label': 'Search'
-                                            }}
-                                            onChange={e => handleSearch(e)}
-                                        />
-                                    </Paper>
-                                </div>
-                            </Grid>
-                            <Grid item lg={2} md={2} sm={4} xs={4}>
-                                <SelectTextField value={'all'} label="Year" size='small' value={Yearfilter} onChange={ev => handleYearFilter(ev)}>
-                                    {years.map((year) => (<MenuItem key={year} value={year}> {year} </MenuItem>))}
-                                </SelectTextField>
-                            </Grid>
-                            <Grid item lg={3} md={3} sm={4} xs={4}>
-                                <SelectTextField value={'all'} label="Entity" size='small' value={Entityfilter} onChange={ev => handleEntityFilter(ev)} >
-                                    {entities.map(({id, entityName}) => (<MenuItem key={id} value={entityName}> {entityName} </MenuItem>))}
-                                </SelectTextField>
-                            </Grid>
-                            <Grid item lg={2} md={3} sm={4} xs={4}>
-                                <SelectTextField value={'all'} label="Department" size='small' value={Departmentfilter} onChange={ev => handleDepartmentFilter(ev)}>
-                                    {departments.map(({id, departmentName}) => (<MenuItem key={id} value={departmentName}> {departmentName}</MenuItem>))}
-                                </SelectTextField>
-                            </Grid> 
-                        </Grid>
-                    </Grid>
-                </div>
-				<div id="hrpdf">
-                    <SharedTable key={"HRsrepDashboard"} data={enrollmentList !== undefined ? enrollmentList : []} rows={columns} handleClick={handleClickOpen} type="default" />
-				</div>
+                    </div>
+                    <div id="hrpdf">
+                        <EnrollmentListTable key={"HRsrepDashboard"} data={enrollmentList !== undefined ? enrollmentList : []} rows={columns} handleClick={handleClickOpen} type="default"/>
+                        {/* <SharedTable key={"HRsrepDashboard"} data={enrollmentList !== undefined ? enrollmentList : []} rows={columns} handleClick={handleClickOpen} type="default" /> */}
+                    </div>
+            </div>
             </Paper>
             </SimplePage>
             );

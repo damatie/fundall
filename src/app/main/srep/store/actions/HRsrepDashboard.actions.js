@@ -24,7 +24,6 @@ export const GET_DASHBOARD_ENTITIES_SUCCESS = 'GET DASHBOARD ENTITIES SUCCESS';
 const baseUrl = getBaseUrl;
 const headers = fetchHeaders();
 // const auth = useAuth; 
-
 export function getDashboardSrep(role = null) {
 	console.log('getDashboardSrep called');
 	return dispatch => {
@@ -36,18 +35,49 @@ export function getDashboardSrep(role = null) {
                 console.log('getDashboardSrep success data up', data);
 				let srep = [];
 				let count = 0;
+				let countEmployees = 0;
+            	let empList = [];
 				let items = [];
+				const monthNames = ["January", "February", "March", "April", "May", "June",
+									"July", "August", "September", "October", "November", "December" ];
+				let pendingList = [];
+				let rejectedList = [];
+				let approvedList = [];
+
 				if (data.success && data.data) {
 					items = data.data
 					srep =  data.data.map(srep => {
 						count++;
+						const monthValue = new Date(srep.createdAt).getMonth() + 1;
+						if ((srep.employee !== null) && !(empList.includes(srep.employee.email))) {
+							countEmployees++;
+							empList.push(srep.employee.email);
+						}
+						if (srep.status.toUpperCase() === "PENDING") {
+							const pendingObj = { id: srep.id, status: "PENDING", year: new Date(srep.createdAt).getFullYear(), month: monthNames[monthValue], date: srep.createdAt, 
+												entity: (srep.employee) ? (srep.employee.entityName ? srep.employee.entityName : '') : '',	
+												department: (srep.employee) ? (srep.employee.departmentName ? srep.employee.departmentName : '') : '', };
+							pendingList.push(pendingObj);
+						}
+						if (srep.status.toUpperCase() === "REJECTED") {
+							const rejectedObj = { id: srep.id, status: "REJECTED", year: new Date(srep.createdAt).getFullYear(), month: monthNames[monthValue], date: srep.createdAt, 
+												entity: (srep.employee) ? (srep.employee.entityName ? srep.employee.entityName : '') : '',	
+												department: (srep.employee) ? (srep.employee.departmentName ? srep.employee.departmentName : '') : '', };
+							rejectedList.push(rejectedObj);							
+						}
+						if (srep.status.toUpperCase() === "APPROVED") {
+							const approvedObj = { id: srep.id, status: "APPROVED", year: new Date(srep.createdAt).getFullYear(), month: monthNames[monthValue], date: srep.createdAt, 
+												entity: (srep.employee) ? (srep.employee.entityName ? srep.employee.entityName : '') : '',	
+												department: (srep.employee) ? (srep.employee.departmentName ? srep.employee.departmentName : '') : '', };
+							approvedList.push(approvedObj);							
+						}
 						return {
 							sn: count,
 							id: srep.id,
 							name: (srep.employee) ? `${srep?.employee.firstName} ${srep?.employee.lastName}` : '',
 							status: srep.status,
-							entity: (srep.employee) ? srep.employee.entityId : '',	
-							department: (srep.employee) ? srep.employee.departmentId : '',
+							entity: (srep.employee) ? (srep.employee.entityName ? srep.employee.entityName : '') : '',	
+							department: (srep.employee) ? (srep.employee.departmentName ? srep.employee.departmentName : '') : '',
 							capitalFund: formatCurrency('₦', srep.capitalFund),
 							beneficiaryName: srep.beneficiaryName,
 							beneficiaryRelationship: srep.beneficiaryRelationship.toUpperCase(),
@@ -60,12 +90,16 @@ export function getDashboardSrep(role = null) {
 							employeeEmail: (srep.employee) ? srep.employee.email : null
 						}
 					});
-					console.log({srep});
+					// console.log({srep});
 					dispatch({
 						type: GET_DASHBOARD_SREP_SUCCESS,
 						payload: {
 							data: items,
-							srepData: srep
+							srepData: srep,
+							countEmployees,
+							pendingList,
+							rejectedList,
+							approvedList
 						},
 					})
 				} else {
