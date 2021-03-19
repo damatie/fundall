@@ -118,7 +118,7 @@ function EnrollmentListTable(props) {
 const TableCells = (props) => {
 	switch (props.type) {
 		case 'default': {
-			return  (<> { props.rows.map((item, index) => (
+			return  (<>{ props.rows.map((item, index) => (
                                 <Fragment key={index}> { item.type === 'date'
                                     ? <TableCell component="th" scope="row" align={item.align} key={item.id}> {props.data[item.field]} </TableCell> : item.id === 'amount' 
                                     ? <TableCell component="th" scope="row" align={item.align} key={item.id}> {formatToNaira(props.data[item.field])} </TableCell> : item.id === 'status' 
@@ -130,7 +130,6 @@ const TableCells = (props) => {
         }
 		default: { break; }
 	};
-	return (<></>);
 };
 
 export default withRouter(EnrollmentListTable);
