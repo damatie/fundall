@@ -1,4 +1,5 @@
 import { getBaseUrl } from 'app/shared/getBaseUrl';
+import { useSelector } from 'react-redux';
 // import { useAuth } from 'app/hooks/useAuth';
 import { fetchHeaders } from 'app/shared/fetchHeaders'
 import {formatCurrency} from 'app/shared/formatCurrency';
@@ -24,8 +25,11 @@ export const GET_DASHBOARD_ENTITIES_SUCCESS = 'GET DASHBOARD ENTITIES SUCCESS';
 const baseUrl = getBaseUrl;
 const headers = fetchHeaders();
 // const auth = useAuth; 
-export function getDashboardSrep(role = null) {
+export function getDashboardSrep() {
+	// const entities = useSelector(({ entities }) => entities.entityList) ?? [];
+	const entities = [];
 	console.log('getDashboardSrep called');
+
 	return dispatch => {
 		dispatch({
 			type: LOADING_DASHBOARD_SREP
@@ -47,6 +51,20 @@ export function getDashboardSrep(role = null) {
 				if (data.success && data.data) {
 					items = data.data
 					srep =  data.data.map(srep => {
+						let entityName = 'null';
+						let departments = [];
+						let departmentName = 'null';
+						entities && entities.filter(e => { 
+							if ((srep.employee !== null) && e.id === srep.employee.entityId) {
+								entityName = e.entityName;
+								departments = e.department;
+							};
+						});
+						departments.filter(e => { 
+							if ((srep.employee !== null) && e.id === srep.employee.departmentId) {
+								departmentName = e.departmentName;
+							};	
+						});
 						count++;
 						const monthValue = new Date(srep.createdAt).getMonth() + 1;
 						if ((srep.employee !== null) && !(empList.includes(srep.employee.email))) {
@@ -74,10 +92,10 @@ export function getDashboardSrep(role = null) {
 						return {
 							sn: count,
 							id: srep.id,
-							name: (srep.employee) ? `${srep?.employee.firstName} ${srep?.employee.lastName}` : '',
+							name: (srep.employee) ? `${srep?.employee.firstName} ${srep?.employee.lastName}` : 'null',
 							status: srep.status,
-							entity: (srep.employee) ? (srep.employee.entityName ? srep.employee.entityName : '') : '',	
-							department: (srep.employee) ? (srep.employee.departmentName ? srep.employee.departmentName : '') : '',
+							entity: entityName,
+							department: departmentName,
 							capitalFund: formatCurrency('₦', srep.capitalFund),
 							beneficiaryName: srep.beneficiaryName,
 							beneficiaryRelationship: srep.beneficiaryRelationship.toUpperCase(),
@@ -86,17 +104,10 @@ export function getDashboardSrep(role = null) {
 							beneficiaryEmail: srep.beneficiaryEmail,
 							beneficiaryPhone: srep.beneficiaryPhone,
 							createdAt: srep.createdAt,
-							employeePhoneNo: srep.phoneNo,
-							employeeEmail: (srep.employee) ? srep.employee.email : null
+							year: new Date(srep.createdAt).getFullYear().toString(),
+							employeePhoneNo: srep.phoneNo ?? 'null',
+							employeeEmail: (srep.employee) ? srep.employee.email : 'null'
 						}
-					});
-					console.log('srep payload: ', {
-						data: items,
-						srepData: srep,
-						countEmployees,
-						pendingList,
-						rejectedList,
-						approvedList
 					});
 					dispatch({
 						type: GET_DASHBOARD_SREP_SUCCESS,

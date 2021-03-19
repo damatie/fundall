@@ -199,18 +199,22 @@ import EnrollmentListTable from './components/EnrollmentListTable';
         const approvedList = (HRsrepDashboard !== undefined) ? ((HRsrepDashboard.data !== undefined) ? HRsrepDashboard.data.approvedList : []) : [];
         const pendingList = (HRsrepDashboard !== undefined) ? ((HRsrepDashboard.data !== undefined) ? HRsrepDashboard.data.pendingList : []) : [];
         const [data, setData] = useState(enrollmentList);
+        // const [switchData, setSwitchData] = useState(false);
+        let switchData = false;
         const [open, setOpen] = useState(false);
         const [search, setSearch] = useState('');
         const thisYear = (new Date).getFullYear();
         console.log('thisYear: ', thisYear);
         const years = ['all', `${thisYear}`,`${thisYear - 1}`, `${thisYear - 2}`, `${thisYear - 3}`, `${thisYear - 4}`];
         const entities = [{entityName: 'all'}, ...((useSelector(({ entities }) => entities.entityList)) ? useSelector(({ entities }) => entities.entityList) : [])];
-        const departments =  [{departmentName: 'all'}, ...((useSelector(({ departments }) => departments.deparmentList)) ? useSelector(({ departments }) => departments.deparmentList) : [])];
+        const departmentList =  [{departmentName: 'all'}, ...((useSelector(({ departments }) => departments.deparmentList)) ? useSelector(({ departments }) => departments.deparmentList) : [])];
+        const departmentList2 =  [{departmentName: 'all'}, ...((useSelector(({ departments }) => departments.deparmentList)) ? useSelector(({ departments }) => departments.deparmentList) : [])];
         const [filter, setFilter] = useState('all');
         const [Entityfilter, setEntityFilter] = useState('all');
         const [Yearfilter, setYearFilter] = useState('all');
         const [Departmentfilter, setDepartmentFilter] = useState('all');
         const [selectedRow, setSelectedRow] = useState({});
+        const [departments, setDepartments] = useState(departmentList);
 
         useEffect(() => {
             dispatch(Actions.getDashboardSrep());
@@ -243,10 +247,30 @@ import EnrollmentListTable from './components/EnrollmentListTable';
 
         const handleYearFilter = (event) => {
             setYearFilter(event.target.value);
+            let value = [];
+            value = enrollmentList.filter(e => {
+                return e.year.toUpperCase() === event.target.value.toUpperCase();
+            })
+            console.log("new Data", value);
+            setData(value);
+            console.log("new setData", data);
+            switchData = true;
+            console.log("new switchData", switchData);
         }
 
         const handleEntityFilter = (event) => {
             setEntityFilter(event.target.value);
+            const value = entities.filter(e => {
+                return e.entityName.toUpperCase() === event.target.value.toUpperCase();
+            })
+            const depts = value[0].department ?? [];
+            let newDepts = [{departmentName: 'all'}];
+            newDepts.push(...depts);
+            setDepartments(newDepts);
+            if (event.target.value === "all") {
+                setDepartmentFilter("all");
+            }
+            
         }
 
         const handleDepartmentFilter = (event) => {
@@ -270,13 +294,97 @@ import EnrollmentListTable from './components/EnrollmentListTable';
             const w = document.getElementById(divId).offsetWidth;
             const h = document.getElementById(divId).offsetHeight;
             const input = document.getElementById(divId);
-            let doc = new jsPDF({ orientation: 'l', unit: 'pt', format: [w, h] });
             console.log('pdf should download: ', input);
-            doc.html( input, 
-                { callback: (doc) => { 
-                    doc.save('enrollmentList.pdf');
-                }
-            });
+            const page = `<HTML>
+                    <Head>
+                    <title>EnrollmentList-${new Date().toISOString().substring(0, 16)}</title>
+                        <Style type='text/css' media='print'> 
+                            .container {  
+                                display: grid;  
+                                grid-template-columns: 1fr 1fr 1fr;  
+                                grid-template-rows: 20px 20px;  
+                            }
+                            .container2 {  
+                                display: grid;  
+                                grid-template-columns: 1fr 1fr 1fr 1fr;  
+                                grid-template-rows: 20px 20px;  
+                            }
+                            th {
+                                white-space: nowrap !important;
+                            }
+                            #printSize {width : 670px} 
+                            #printLink {display : none}
+                            table th,
+                            table td {
+                                padding: 12px 15px;
+                            }
+                            table {
+                                border-collapse: collapse;
+                                margin: 25px 0;
+                                font-size: 0.9em;
+                                font-family: sans-serif;
+                                min-width: 400px;
+                                box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+                            }
+                            table thead tr {
+                                background-color: #666666;
+                                color: #ffffff;
+                                text-align: left;
+                            }
+                            table tr {
+                                text-align: left;
+                                border-collapse: collapse;
+                            }
+                            svg {
+                                display: none !important;
+                            }
+                            .MuiTablePagination-root-321 {
+                                display: none !important;
+                            }
+                        </Style>
+                    </Head>
+                    <Body>
+                        <div style="text-align: center;" class="container">
+                            <span>  </span>
+                        </div>
+                        <div class="container">
+                            <div>ENROLLMENT LIST</div>
+                            <div style="z-index: 10; position: absolute; right: 0;">
+                                Total: ${enrollmentList.length} Application(s) 
+                            </div>
+                        </div>
+                        <div class="container">
+                            <div>Date: ${new Date().toISOString().substring(0, 10)}</div>
+                            <div style="z-index: 10; position: absolute; right: 0;">
+                                Employees enrolled in SREP: ${countEmployees ?? 0} Employee(s) 
+                            </div>
+                        </div>
+                        <div class="container2">
+                            <div>
+                                FILTERS
+                            </div>
+                            <div style="z-index: 10; position: absolute; right: 0;">
+                                <div>
+                                    Year: ${Yearfilter}
+                                </div>
+                                <div>
+                                    Entity: ${Entityfilter}
+                                </div>
+                                <div>
+                                    Department: ${Departmentfilter} 
+                                </div>
+                            </div>
+                        </div>
+                        <div class="container">${document.getElementById(divId).innerHTML}</div>
+                    </Body>
+                </HTML>`
+            var mywindow = window.open('', 'PRINT', 'height=400,width=600');
+            mywindow.document.write(page);
+            mywindow.document.close(); // necessary for IE >= 10
+            mywindow.focus(); // necessary for IE >= 10*/
+            mywindow.print();
+            mywindow.close();
+            return true;
         };
 
         return ( <SimplePage title='HR SREP DASHBOARD'>
@@ -311,7 +419,7 @@ import EnrollmentListTable from './components/EnrollmentListTable';
                                 size='small'
                                 label='Department'
                             >
-                                {departments.map(({id, departmentName}) => (
+                                {departmentList2.map(({id, departmentName}) => (
                                 <MenuItem value={departmentName} key={id}>
                                     {departmentName}
                                 </MenuItem>
@@ -503,7 +611,7 @@ import EnrollmentListTable from './components/EnrollmentListTable';
                         </Grid>
                     </div>
                     <div id="hrpdf">
-                        <EnrollmentListTable key={"HRsrepDashboard"} data={enrollmentList !== undefined ? enrollmentList : []} rows={columns} handleClick={handleClickOpen} type="default"/>
+                        <EnrollmentListTable key={"HRsrepDashboard"} data={ switchData === false ? (enrollmentList !== undefined ? enrollmentList : []) : data } rows={columns} handleClick={handleClickOpen} type="default"/>
                     </div>
             </div>
             </Paper>
