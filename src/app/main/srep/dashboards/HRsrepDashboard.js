@@ -272,14 +272,11 @@ import EnrollmentListTable from './components/EnrollmentListTable';
             const input = document.getElementById(divId);
             let doc = new jsPDF({ orientation: 'l', unit: 'pt', format: [w, h] });
             console.log('pdf should download: ', input);
-            doc.fromHTML( input, 
+            doc.html( input, 
                 { callback: (doc) => { 
                     doc.save('enrollmentList.pdf');
                 }
             });
-            // doc.addHTML(input, () => {
-            //     doc.save('enrollmentList.pdf');
-            // })
         };
 
         return ( <SimplePage title='HR SREP DASHBOARD'>

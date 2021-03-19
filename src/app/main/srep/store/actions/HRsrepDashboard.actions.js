@@ -90,7 +90,14 @@ export function getDashboardSrep(role = null) {
 							employeeEmail: (srep.employee) ? srep.employee.email : null
 						}
 					});
-					// console.log({srep});
+					console.log('srep payload: ', {
+						data: items,
+						srepData: srep,
+						countEmployees,
+						pendingList,
+						rejectedList,
+						approvedList
+					});
 					dispatch({
 						type: GET_DASHBOARD_SREP_SUCCESS,
 						payload: {
