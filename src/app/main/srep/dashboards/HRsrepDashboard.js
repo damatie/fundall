@@ -1,17 +1,17 @@
-import Typography from '@material-ui/core/Typography';
-import withReducer from 'app/store/withReducer';
 import React, { useEffect, useState } from 'react';
+import withReducer from 'app/store/withReducer';
+import SimplePage from 'app/shared/SimplePage';
 import { makeStyles } from '@material-ui/core/styles';
 import { Line } from 'react-chartjs-2';
-import { useDispatch, useSelector } from 'react-redux';
-import SimplePage from 'app/shared/SimplePage';
-import Paper from '@material-ui/core/Paper';
-import MenuItem from '@material-ui/core/MenuItem';
-import SelectTextField from 'app/shared/TextInput/SelectTextField';
 import Grid from '@material-ui/core/Grid';
+import { useDispatch, useSelector } from 'react-redux';
+import Typography from '@material-ui/core/Typography';
+import SelectTextField from 'app/shared/TextInput/SelectTextField';
+import Paper from '@material-ui/core/Paper';
 import * as Actions from '../store/actions';
 import * as UtilActions from '../../../store/actions';
 import reducer from '../store/reducers';
+import MenuItem from '@material-ui/core/MenuItem';
 import Input from '@material-ui/core/Input';
 import Icon from '@material-ui/core/Icon';
 import { TextFieldFormsy } from '@fuse/core/formsy';
@@ -21,9 +21,8 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import Button from '@material-ui/core/Button';
 import { AppBar, Toolbar } from '@material-ui/core';
-import SharedTable from 'app/shared/sharedTable';
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
+import * as jsPDF from 'jspdf';
+// import html2canvas from 'html2canvas';
 import EnrollmentListTable from './components/EnrollmentListTable';
 
     const lineChartData = {
@@ -212,7 +211,6 @@ import EnrollmentListTable from './components/EnrollmentListTable';
         const [Yearfilter, setYearFilter] = useState('all');
         const [Departmentfilter, setDepartmentFilter] = useState('all');
         const [selectedRow, setSelectedRow] = useState({});
-        // const [employeesCount, setemployeesCount] = useState("0 Employees");
 
         useEffect(() => {
             dispatch(Actions.getDashboardSrep());
@@ -274,12 +272,14 @@ import EnrollmentListTable from './components/EnrollmentListTable';
             const input = document.getElementById(divId);
             let doc = new jsPDF({ orientation: 'l', unit: 'pt', format: [w, h] });
             console.log('pdf should download: ', input);
-            window.html2canvas = html2canvas;
-            doc.html( input, 
+            doc.fromHTML( input, 
                 { callback: (doc) => { 
                     doc.save('enrollmentList.pdf');
                 }
             });
+            // doc.addHTML(input, () => {
+            //     doc.save('enrollmentList.pdf');
+            // })
         };
 
         return ( <SimplePage title='HR SREP DASHBOARD'>
@@ -464,7 +464,7 @@ import EnrollmentListTable from './components/EnrollmentListTable';
                                         Employees enrolled in SREP 
                                     </Typography>
                                     <Grid style={{ color: "blue" }}>
-                                    {countEmployees ?? 0} Employees
+                                    {countEmployees ?? 0} Employee(s)
                                     </Grid>
                                 </Grid>
                             </Grid>
@@ -507,7 +507,6 @@ import EnrollmentListTable from './components/EnrollmentListTable';
                     </div>
                     <div id="hrpdf">
                         <EnrollmentListTable key={"HRsrepDashboard"} data={enrollmentList !== undefined ? enrollmentList : []} rows={columns} handleClick={handleClickOpen} type="default"/>
-                        {/* <SharedTable key={"HRsrepDashboard"} data={enrollmentList !== undefined ? enrollmentList : []} rows={columns} handleClick={handleClickOpen} type="default" /> */}
                     </div>
             </div>
             </Paper>
