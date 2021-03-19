@@ -4,7 +4,26 @@ import swal from 'sweetalert2';
 import catchErrorMsg from 'utils/catchErrorMsg';
 import { getOwnOnboardingForms } from '.';
 
-export const createReimburibleExpenses = (formData) => {
+export const GET_REIMBURSABLE_EXPENSES = 'GET REIMBURSABLE EXPENSES';
+
+export const getReimbursableExpenses = (id) => {
+  return async (dispatch) => {
+    try {
+      const { data: { data } } = await api.get(`/reimbursable-expenses/${id}`);
+      dispatch({
+        type: GET_REIMBURSABLE_EXPENSES,
+        payload: data || {}
+      });
+    } catch (e) {
+      dispatch({
+        type: GET_REIMBURSABLE_EXPENSES,
+        payload: {},
+      });
+    }
+  };
+};
+
+export const createReimbursableExpenses = ({formData, id}) => {
   return async (dispatch) => {
     try {
       loading('sumbitting form...');
@@ -14,7 +33,7 @@ export const createReimburibleExpenses = (formData) => {
         icon: 'success',
         timner: 1500,
       });
-      dispatch(getOwnOnboardingForms());
+      dispatch(getReimbursableExpenses(id));
     } catch (e) {
       swal.fire({
         text: catchErrorMsg(e),
@@ -25,7 +44,7 @@ export const createReimburibleExpenses = (formData) => {
   }
 }
 
-export const updateReimburibleExpenses = (formData) => {
+export const updateReimbursableExpenses = ({formData, id}) => {
   return async (dispatch) => {
     try {
       loading('sumbitting form...');
@@ -35,7 +54,7 @@ export const updateReimburibleExpenses = (formData) => {
         icon: 'success',
         timner: 1500,
       });
-      dispatch(getOwnOnboardingForms());
+      dispatch(getReimbursableExpenses(id));
     } catch (e) {
       swal.fire({
         text: catchErrorMsg(e),

@@ -4,7 +4,26 @@ import swal from 'sweetalert2';
 import catchErrorMsg from 'utils/catchErrorMsg';
 import { getOwnOnboardingForms } from '.';
 
-export const createIdCardIssuance = (formData) => {
+export const GET_ID_CARD_ISSUANCE = 'GET ID CARD ISSUANCE';
+
+export const getIdCardIssuance = (id) => {
+  return async (dispatch) => {
+    try {
+      const { data: { data } } = await api.get(`/idcard/${id}`);
+      dispatch({
+        type: GET_ID_CARD_ISSUANCE,
+        payload: data,
+      });
+    } catch(e) {
+      dispatch({
+        type: GET_ID_CARD_ISSUANCE,
+        payload: {}
+      })
+    }
+  }
+}
+
+export const createIdCardIssuance = ({formData, id}) => {
   return async (dispatch) => {
     try {
       loading('sumbitting form...');
@@ -14,7 +33,7 @@ export const createIdCardIssuance = (formData) => {
         icon: 'success',
         timner: 1500,
       });
-      dispatch(getOwnOnboardingForms());
+      dispatch(getIdCardIssuance(id));
     } catch (e) {
       swal.fire({
         text: catchErrorMsg(e),
@@ -25,7 +44,7 @@ export const createIdCardIssuance = (formData) => {
   }
 }
 
-export const updateIdCardIssuance = (formData) => {
+export const updateIdCardIssuance = ({formData, id}) => {
   return async (dispatch) => {
     try {
       loading('sumbitting form...');
@@ -35,7 +54,7 @@ export const updateIdCardIssuance = (formData) => {
         icon: 'success',
         timner: 1500,
       });
-      dispatch(getOwnOnboardingForms());
+      dispatch(getIdCardIssuance(id));
     } catch (e) {
       swal.fire({
         text: catchErrorMsg(e),

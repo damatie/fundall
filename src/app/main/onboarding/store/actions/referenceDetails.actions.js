@@ -13,13 +13,16 @@ export const createReferenceDetails = ({formData, employeeId}) => {
   return async (dispatch) => {
     try {
       loading('sumbitting form...');
-      const { data: { message } } = await api.post('/malarone', formData);
+      const { data: { message } } = await api.post('/reference/', formData);
       swal.fire({
         text: message,
         icon: 'success',
         timner: 1500,
       });
       dispatch(getReferenceDetails(employeeId));
+      dispatch({
+        type: CLOSE_MODAL,
+      });
     } catch (e) {
       swal.fire({
         text: catchErrorMsg(e),
@@ -34,7 +37,7 @@ export const updateReferenceDetails = ({formData, id, employeeId}) => {
   return async (dispatch) => {
     try {
       loading('sumbitting form...');
-      const { data: { message } } = await api.patch(`/malarone/${id}`, formData);
+      const { data: { message } } = await api.patch(`/reference/${id}`, formData);
       swal.fire({
         text: message,
         icon: 'success',

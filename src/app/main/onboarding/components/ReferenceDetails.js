@@ -28,6 +28,9 @@ const { useMemo, useEffect } = React;
 
 const schema = yup.object().shape({
   nameOfReferee: yup.string().required(),
+  phoneNumber: yup.string().required().min(14).max(14),
+  address: yup.string().required(),
+  email: yup.string().email().required(),
 });
 
 const useStyles = makeStyles((theme) => ({
@@ -53,7 +56,7 @@ const CreateReference = () => {
   const { id } = useParams();
 
   const getUserId = () => {
-    if(id) return id;
+    if (id) return id;
     return user.id
   }
 
@@ -95,7 +98,7 @@ const CreateReference = () => {
       }));
       return;
     }
-    dispatch(createReferenceDetails({formData, employeeId: getUserId()}));
+    dispatch(createReferenceDetails({ formData, employeeId: getUserId() }));
   }
 
 
@@ -154,7 +157,7 @@ const CreateReference = () => {
             )
           })
         }
-        <Button variant="contained" color="primary" className='mx-auto w-1/2 my-16'>
+        <Button variant="contained" color="primary" className='mx-auto w-1/2 my-16' type='submit'>
           Submit
         </Button>
       </form>
@@ -190,9 +193,9 @@ const ReferenceDetails = () => {
     ],
   );
 
-  const { 
-    employeeInfo: { info }, 
-    referenceDetails: { loading, data } 
+  const {
+    employeeInfo: { info },
+    referenceDetails: { loading, data }
   } = useSelector(state => state.onboardingForms);
 
   const dispatch = useDispatch();
@@ -202,7 +205,7 @@ const ReferenceDetails = () => {
   const { id } = useParams();
 
   const getUserId = () => {
-    if(id) return id;
+    if (id) return id;
     return user.id
   }
 
@@ -213,25 +216,30 @@ const ReferenceDetails = () => {
   return (
     <section className={classes.root}>
       <Typography className='my-16' variant="h5" color="initial"><b>REFERENCE DETAILS REQUEST FORM</b></Typography>
-      <section className='flex flex-col justify-space-between items-center my-16 mx-auto'>
-        <Typography variant="body1" color="initial">
-          <b>Employee Name:{` ${info.firstName} ${info.lastName}`}</b>
+      <section className='flex flex-row justify-between items-center my-16 mx-auto'>
+        <Typography className='text-left my-16' variant="body1" color="initial">
+          <b>Employee Name:</b>
+          {` ${info.firstName} ${info.lastName}`}
         </Typography>
-        <Button 
-        variant="contained" 
-        color="primary"
-        onClick={() => dispatch({type: OPEN_MODAL})}
-        >
-          Add reference details
-        </Button>
+        {
+          !id && (
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => dispatch({ type: OPEN_MODAL })}
+            >
+              Add reference details
+            </Button>
+          )
+        }
+
       </section>
       <EnhancedTable
         columns={columns}
-        data={[]}
+        data={[...data]}
         onRowClick={(ev, row) => {
           if (row) {
-            console.log(row.original);
-            dispatch({type: GET_DETAILS, payload: row.original})
+            !id && dispatch({ type: GET_DETAILS, payload: row.original })
           }
         }}
         checkbox={{

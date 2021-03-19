@@ -10,13 +10,62 @@ import formList from './formList';
 import PageLayout from 'app/shared/pageLayout/PageLayout';
 import Skeleton from '@material-ui/lab/Skeleton';
 
-const { useEffect } = React;
+const { useEffect, useMemo } = React;
 
 const EmployeeOnboardinForms = () => {
   const dispatch = useDispatch();
   const { open, employees, entities, departments, roles, grades, loading, jobTitles } = useSelector(state => state.employeeMgt);
 
   const { push } = useHistory();
+
+  const columns = useMemo(
+		() => [
+			{
+				Header: 'NAME',
+				accessor: 'name',
+				// className: 'font-bold',
+				sortable: true,
+				Cell: ({ row: { original: { firstName, lastName }} }) => {
+					return <>{`${firstName} ${lastName}`}</>
+				}
+			},
+			{
+				Header: 'EMAIL',
+				accessor: 'email',
+				// className: 'font-bold',
+				sortable: true
+			},
+			{
+				Header: 'DEPARTMENT',
+				accessor: 'department',
+				sortable: true,
+				Cell: ({ row: { original: { department }} }) => {
+					return <>{department.departmentName}</>
+				}
+			},
+			{
+				Header: 'ENTITY',
+				accessor: 'entity',
+				sortable: true,
+				Cell: ({ row: { original: { entity }} }) => {
+					return <>{entity.entityName}</>
+				}
+			},
+			{
+				Header: 'ROLE',
+				accessor: 'role',
+				sortable: true,
+				Cell: ({ row: { original: { role }} }) => {
+					return <>{role.name}</>
+				}
+			},
+      {
+        Header: 'DATE OF ONBOARDING',
+				accessor: 'onBoardDate',
+				sortable: true,
+      }
+		],
+	);
 
   useEffect(() => {
     dispatch(Actions.getEmployees());
@@ -32,6 +81,7 @@ const EmployeeOnboardinForms = () => {
   } = useEmployees({
     dispatch
   });
+
   return (
     <PageLayout
       header={{
@@ -51,8 +101,10 @@ const EmployeeOnboardinForms = () => {
             ) : (
               <>
                 <EmployeeTable
+                  coln={columns}
+                  check
                   data={{
-                    employees,
+                    employees: employees.filter((emp) => emp.onBoarded),
                     entities,
                     roles,
                   }}
