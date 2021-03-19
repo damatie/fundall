@@ -7,6 +7,7 @@ import SharedDropzone from 'app/shared/sharedDropZone';
 import { createIdCardIssuance, updateIdCardIssuance, getIdCardIssuance } from '../store/actions';
 import Typography from '@material-ui/core/Typography';
 import useUserID from '../hooks/useUserID';
+import { useParams } from 'react-router-dom';
 
 const { useState, useEffect, memo } = React;
 
@@ -33,6 +34,8 @@ const IdCardIssuance = () => {
   const [value, setValue] = useState({});
 
   const { id } = useUserID();
+
+  const params = useParams();
 
   useEffect(() => {
     !!id && dispatch(getIdCardIssuance(id))
@@ -76,6 +79,7 @@ const IdCardIssuance = () => {
               key={i}
               className='w-9/12 m-16'
               variant='outlined'
+              disabled={!!params?.id}
             />
           ))
         }
@@ -84,28 +88,34 @@ const IdCardIssuance = () => {
         <Typography variant="subtitle1" className='my-12' color="initial">Passport</Typography>
         {
           !!idCardIssuance?.passport ? (
-            <img
-              src={idCardIssuance.passport}
-              alt="Passport"
-              className='w-3/12 mx-auto object-contain'
-            />
+            <a href={idCardIssuance.passport} download target='_blank'>
+              <img
+                src={idCardIssuance.passport}
+                alt="Passport"
+                className='w-3/12 mx-auto object-contain'
+              />
+            </a>
           ) : (
             <Typography variant="subtitle1" color="initial">No Passport Yet</Typography>
           )
         }
       </section>
-      <section className='m-16'>
-        <Typography variant="subtitle1" className='my-12' color="initial">Upload Passport</Typography>
-        <SharedDropzone setValue={setValue} />
-        <Button
-          className='mx-auto w-4/12 my-16'
-          variant="contained"
-          color="primary"
-          onClick={handleSubmit}
-        >
-          Submit
+      {
+        !(!!params?.id) && (
+          <section className='m-16'>
+            <Typography variant="subtitle1" className='my-12' color="initial">Upload Passport</Typography>
+            <SharedDropzone setValue={setValue} />
+            <Button
+              className='mx-auto w-4/12 my-16'
+              variant="contained"
+              color="primary"
+              onClick={handleSubmit}
+            >
+              Submit
         </Button>
-      </section>
+          </section>
+        )
+      }
     </section>
   );
 };

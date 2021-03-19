@@ -7,9 +7,10 @@ import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button';
 import { useSelector, useDispatch } from 'react-redux';
 import { signOnboardingForm } from '../store/actions';
-import useUserID from '../hooks/useUserID'
+import useUserID from '../hooks/useUserID';
+import { useParams } from 'react-router-dom';
 
-const  { useState, useEffect } = React;
+const { useState, useEffect } = React;
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -25,14 +26,16 @@ const CheckForms = ({
 }) => {
   const classes = useStyles();
 
-  const { 
+  const {
     employeeInfo: { info },
     onboardingForms: {
       checkForms: {
         data
       },
-    } 
+    }
   } = useSelector(state => state.onboardingForms);
+
+  const params = useParams();
 
   const dispatch = useDispatch();
 
@@ -86,6 +89,7 @@ const CheckForms = ({
               key={i}
               className='w-full m-16'
               variant='outlined'
+              disabled={!!params?.id}
             />
           ))
         }
@@ -100,19 +104,24 @@ const CheckForms = ({
                 name={name}
                 color="primary"
                 required
+                disabled={!!params?.id}
               />
             }
             label="Agree"
           />
         </div>
-        <Button 
-        className='mx-auto w-4/12' 
-        variant="contained" 
-        color="primary" 
-        type='submit'
-        >
-          Submit
-        </Button>
+        {
+          !(!!params?.id) && (
+            <Button
+              className='mx-auto w-4/12'
+              variant="contained"
+              color="primary"
+              type='submit'
+            >
+              Submit
+            </Button>
+          )
+        }
       </form>
     </section>
   );

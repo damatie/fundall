@@ -11,6 +11,7 @@ import PhoneInput from 'react-phone-input-2';
 import startsWith from 'lodash.startswith';
 import Input from 'app/shared/TextInput/Input';
 import useUserID from '../hooks/useUserID';
+import { useParams } from 'react-router-dom';
 import Skeleton from '@material-ui/lab/Skeleton';
 import 'react-phone-input-2/lib/material.css';
 
@@ -37,6 +38,8 @@ const useStyles = makeStyles((theme) => ({
 const BankAccountInfo = () => {
 
   const classes = useStyles();
+
+  const params = useParams();
 
   const {
     employeeInfo: { info },
@@ -140,7 +143,7 @@ const BankAccountInfo = () => {
   return (
     <section className={classes.root}>
       <Typography className='my-16' variant="h5" color="initial"><b>EMPLOYEE BANK ACCOUNT INFORMATION</b></Typography>
-      <Typography className='my-16 w-9/12 mx-auto' variant="body1" color="initial">Employee / Consultant Bank Account Details</Typography>
+      <Typography className='my-16' variant="body1" color="initial">Employee / Consultant Bank Account Details</Typography>
       <section className='flex flex-row justify-center items-center my-16 mx-auto'>
         <form onSubmit={handleSubmit(onSubmit)}>
           {
@@ -148,34 +151,39 @@ const BankAccountInfo = () => {
               <>
                 {
                   loading ? (
-                    <Skeleton variant="rect" width={500} height={50} animation="wave" className='my-16' />
+                    <Skeleton variant="rect" width={'100%'} height={50} animation="wave" className='my-16' />
                   ) : (
                     <BankAccountInfoForm
                       input={input}
                       control={control}
                       errors={errors}
                       register={register}
+                      params={params}
                     />
                   )
                 }
               </>
             ))
           }
-          <Button
-            className='mx-auto w-4/12 my-16'
-            variant="contained"
-            color="primary"
-            type='submit'
-          >
-            Submit
-        </Button>
+          {
+            !(!!params?.id) && (
+              <Button
+                className='mx-auto w-4/12 my-16'
+                variant="contained"
+                color="primary"
+                type='submit'
+              >
+                Submit
+              </Button>
+            )
+          }
         </form>
       </section>
     </section>
   );
 };
 
-const BankAccountInfoForm = ({ control, errors, input, register }) => {
+const BankAccountInfoForm = ({ params, control, errors, input, register }) => {
   if (input.type === 'phoneNumber') {
     return (
       <div>
@@ -183,6 +191,7 @@ const BankAccountInfoForm = ({ control, errors, input, register }) => {
           defaultValue={input.defaultValue}
           as={
             <PhoneInput
+            disabled={!!params?.id}
               // value={item[input.name]}
               value={input.defaultValue}
               id={input.name}
@@ -213,6 +222,7 @@ const BankAccountInfoForm = ({ control, errors, input, register }) => {
   return (
     <Input
       {...input}
+      disabled={!!params?.id}
       // defaultValue={item[input.name]}
       error={errors[input.name]}
       message={errors[input.name]?.message}

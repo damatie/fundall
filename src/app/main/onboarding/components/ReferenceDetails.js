@@ -56,7 +56,7 @@ const CreateReference = () => {
   const { id } = useParams();
 
   const getUserId = () => {
-    if(id) return id;
+    if (id) return id;
     return user.id
   }
 
@@ -98,7 +98,7 @@ const CreateReference = () => {
       }));
       return;
     }
-    dispatch(createReferenceDetails({formData, employeeId: getUserId()}));
+    dispatch(createReferenceDetails({ formData, employeeId: getUserId() }));
   }
 
 
@@ -193,9 +193,9 @@ const ReferenceDetails = () => {
     ],
   );
 
-  const { 
-    employeeInfo: { info }, 
-    referenceDetails: { loading, data } 
+  const {
+    employeeInfo: { info },
+    referenceDetails: { loading, data }
   } = useSelector(state => state.onboardingForms);
 
   const dispatch = useDispatch();
@@ -205,7 +205,7 @@ const ReferenceDetails = () => {
   const { id } = useParams();
 
   const getUserId = () => {
-    if(id) return id;
+    if (id) return id;
     return user.id
   }
 
@@ -221,21 +221,25 @@ const ReferenceDetails = () => {
           <b>Employee Name:</b>
           {` ${info.firstName} ${info.lastName}`}
         </Typography>
-        <Button 
-        variant="contained" 
-        color="primary"
-        onClick={() => dispatch({type: OPEN_MODAL})}
-        >
-          Add reference details
-        </Button>
+        {
+          !id && (
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => dispatch({ type: OPEN_MODAL })}
+            >
+              Add reference details
+            </Button>
+          )
+        }
+
       </section>
       <EnhancedTable
         columns={columns}
         data={[...data]}
         onRowClick={(ev, row) => {
           if (row) {
-            console.log(row.original);
-            dispatch({type: GET_DETAILS, payload: row.original})
+            !id && dispatch({ type: GET_DETAILS, payload: row.original })
           }
         }}
         checkbox={{

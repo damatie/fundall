@@ -187,22 +187,22 @@ const navigationConfig = [
 				icon: 'card_membership',
 				auth: authRoles?.admin,
 			},
-			{
-				id: 'create_onboarding_quiz',
-				title: 'Create onboarding quiz',
-				type: 'item',
-				url: '/hr/create_onboarding_quiz',
-				icon: 'playlist_add',
-				auth: authRoles?.admin,
-			},
-			{
-				id: 'onboarding_quiz-results',
-				title: 'Onboarding quiz result',
-				type: 'item',
-				url: '/hr/onboarding_quiz_result',
-				icon: 'list_alt',
-				auth: authRoles?.admin,
-			},
+			// {
+			// 	id: 'create_onboarding_quiz',
+			// 	title: 'Create onboarding quiz',
+			// 	type: 'item',
+			// 	url: '/hr/create_onboarding_quiz',
+			// 	icon: 'playlist_add',
+			// 	auth: authRoles?.admin,
+			// },
+			// {
+			// 	id: 'onboarding_quiz-results',
+			// 	title: 'Onboarding quiz result',
+			// 	type: 'item',
+			// 	url: '/hr/onboarding_quiz_result',
+			// 	icon: 'list_alt',
+			// 	auth: authRoles?.admin,
+			// },
 			{
 				id: 'onboarding',
 				title: 'Onboarding',
@@ -211,14 +211,14 @@ const navigationConfig = [
 				icon: 'card_membership',
 				auth: authRoles?.staff,
 			},
-			{
-				id: 'company_policy_test',
-				title: 'Company policy test',
-				type: 'item',
-				url: '/employee/company_policy_test',
-				icon: 'list_alt',
-				auth: authRoles?.staff,
-			}
+			// {
+			// 	id: 'company_policy_test',
+			// 	title: 'Company policy test',
+			// 	type: 'item',
+			// 	url: '/employee/company_policy_test',
+			// 	icon: 'list_alt',
+			// 	auth: authRoles?.staff,
+			// }
 		]
 
 	},

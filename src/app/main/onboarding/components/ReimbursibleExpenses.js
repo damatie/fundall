@@ -22,7 +22,9 @@ import startsWith from 'lodash.startswith';
 import Input from 'app/shared/TextInput/Input';
 import useUserID from '../hooks/useUserID';
 import Skeleton from '@material-ui/lab/Skeleton';
+import { useParams } from 'react-router-dom';
 import 'react-phone-input-2/lib/material.css';
+
 
 const schema = yup.object().shape({
   bankName: yup.string().required(),
@@ -45,6 +47,8 @@ const useStyles = makeStyles((theme) => ({
 const ReimbursibleExpenses = () => {
 
   const classes = useStyles();
+
+  const params = useParams();
 
   const {
     employeeInfo: { info },
@@ -157,6 +161,7 @@ const ReimbursibleExpenses = () => {
                       control={control}
                       errors={errors}
                       register={register}
+                      params={params}
                     />
                   )
                 }
@@ -176,21 +181,25 @@ const ReimbursibleExpenses = () => {
               The authority to make reimbursement to the account identified above may be terminated upon thirty (30) days prior notification from me to the company.
             </b>
           </Typography>
-          <Button
-            className='mx-auto w-4/12 my-16'
-            variant="contained"
-            color="primary"
-            type='submit'
-          >
-            Submit
-        </Button>
+          {
+            !(!!params?.id) && (
+              <Button
+                className='mx-auto w-4/12 my-16'
+                variant="contained"
+                color="primary"
+                type='submit'
+              >
+                Submit
+              </Button>
+            )
+          }
         </form>
       </section>
     </section>
   );
 };
 
-const ReimbursableExpensesForm = ({ control, errors, input, register }) => {
+const ReimbursableExpensesForm = ({ params, control, errors, input, register }) => {
   if (input.type === 'phoneNumber') {
     return (
       <div>
@@ -200,6 +209,7 @@ const ReimbursableExpensesForm = ({ control, errors, input, register }) => {
             <PhoneInput
               // value={item[input.name]}
               value={input.defaultValue}
+              disabled={!!params?.id}
               id={input.name}
               country='ng'
               // placeholder="Enter phone number"
@@ -239,8 +249,8 @@ const ReimbursableExpensesForm = ({ control, errors, input, register }) => {
                 defaultValue={input.defaultValue}
                 className='flex flex-row'
               >
-                <FormControlLabel value="savings" control={<Radio />} label="Savings" />
-                <FormControlLabel value="current" control={<Radio />} label="Current" />
+                <FormControlLabel value="savings" control={<Radio disabled={!!params?.id}/>} label="Savings" />
+                <FormControlLabel value="current" control={<Radio disabled={!!params?.id}/>} label="Current" />
               </RadioGroup>
             </FormControl>
           }
@@ -259,6 +269,7 @@ const ReimbursableExpensesForm = ({ control, errors, input, register }) => {
       error={errors[input.name]}
       message={errors[input.name]?.message}
       refs={register}
+      disabled={!!params?.id}
       className='my-16'
     />
   )

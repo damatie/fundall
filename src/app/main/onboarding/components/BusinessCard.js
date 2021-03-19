@@ -12,6 +12,7 @@ import startsWith from 'lodash.startswith';
 import Input from 'app/shared/TextInput/Input';
 import useUserID from '../hooks/useUserID';
 import Skeleton from '@material-ui/lab/Skeleton';
+import { useParams } from 'react-router-dom';
 import 'react-phone-input-2/lib/material.css';
 
 const { useState, useEffect, memo, useMemo } = React;
@@ -34,6 +35,8 @@ const useStyles = makeStyles((theme) => ({
 const BusinessCard = () => {
 
   const classes = useStyles();
+
+  const params = useParams();
 
   const {
     employeeInfo: { info },
@@ -122,27 +125,32 @@ const BusinessCard = () => {
                       control={control}
                       errors={errors}
                       register={register}
+                      params={params}
                     />
                   )
                 }
               </>
             ))
           }
-          <Button
-            className='mx-auto w-4/12 my-16'
-            variant="contained"
-            color="primary"
-            type='submit'
-          >
-            Submit
-        </Button>
+          {
+            !(!!params?.id) && (
+              <Button
+                className='mx-auto w-4/12 my-16'
+                variant="contained"
+                color="primary"
+                type='submit'
+              >
+                Submit
+              </Button>
+            )
+          }
         </form>
       </section>
     </section>
   );
 };
 
-const BusinessCardForm = ({ control, errors, input, register }) => {
+const BusinessCardForm = ({params, control, errors, input, register }) => {
   if (input.type === 'phoneNumber') {
     return (
       <div>
@@ -153,6 +161,7 @@ const BusinessCardForm = ({ control, errors, input, register }) => {
               // value={item[input.name]}
               value={input.defaultValue}
               id={input.name}
+              disabled={!!params?.id}
               country='ng'
               // placeholder="Enter phone number"
               containerClass='w-full my-16'
@@ -185,6 +194,7 @@ const BusinessCardForm = ({ control, errors, input, register }) => {
       message={errors[input.name]?.message}
       refs={register}
       className='my-16'
+      disabled={!!params?.id}
     />
   )
 }

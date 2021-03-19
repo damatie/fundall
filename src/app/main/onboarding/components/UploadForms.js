@@ -10,7 +10,7 @@ import {
 } from '../store/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import useUserID from '../hooks/useUserID';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 
 const { useState, useMemo, useEffect } = React;
 
@@ -68,6 +68,8 @@ const UploadForms = ({ title, data, type }) => {
   const location = useLocation();
 
   const [url, setUrl] = useState({});
+
+  const params = useParams();
 
   useEffect(() => {
     switch (type) {
@@ -131,20 +133,24 @@ const UploadForms = ({ title, data, type }) => {
           </Typography>
         ))
       }
-      <section>
-        <Typography variant="body1" color="initial" className='my-16'>
-          {`UPLOAD ${title}`}
-        </Typography>
-        <SharedDropzone setValue={setValue} />
-        <Button
-          className='mx-auto w-4/12 my-16'
-          variant="contained"
-          color="primary"
-          onClick={handleSubmit}
-        >
-          Submit
+      {
+        !(!!params?.id) && (
+          <section>
+            <Typography variant="body1" color="initial" className='my-16'>
+              {`UPLOAD ${title}`}
+            </Typography>
+            <SharedDropzone setValue={setValue} />
+            <Button
+              className='mx-auto w-4/12 my-16'
+              variant="contained"
+              color="primary"
+              onClick={handleSubmit}
+            >
+              Submit
         </Button>
-      </section>
+          </section>
+        )
+      }
     </section>
   );
 };

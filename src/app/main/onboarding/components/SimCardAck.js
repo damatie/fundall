@@ -13,6 +13,7 @@ import Input from 'app/shared/TextInput/Input';
 import Skeleton from '@material-ui/lab/Skeleton';
 import useUserID from '../hooks/useUserID';
 import 'react-phone-input-2/lib/material.css';
+import { useParams } from 'react-router-dom';
 
 const schema = yup.object().shape({
   item: yup.string().required().min(3),
@@ -95,6 +96,8 @@ const SimCardAck = () => {
     }
   ], [data]);
 
+  const params = useParams();
+
   const {
     control,
     register,
@@ -106,11 +109,11 @@ const SimCardAck = () => {
   });
 
   const onSubmit = (formData) => {
-    if(Object.entries(data).length > 0) {
-      dispatch(updateSimCardAck({formData, id}));
+    if (Object.entries(data).length > 0) {
+      dispatch(updateSimCardAck({ formData, id }));
       return;
     }
-    dispatch(createSimCardAck({formData, id}));
+    dispatch(createSimCardAck({ formData, id }));
   };
 
   return (
@@ -124,34 +127,39 @@ const SimCardAck = () => {
               <>
                 {
                   loading ? (
-                    <Skeleton variant="rect" width={500} height={50} animation="wave" className='my-16'/>
+                    <Skeleton variant="rect" width={500} height={50} animation="wave" className='my-16' />
                   ) : (
                     <SimCardAckForm
                       input={input}
                       control={control}
                       errors={errors}
                       register={register}
+                      params={params}
                     />
                   )
                 }
               </>
             ))
           }
-          <Button
-            className='mx-auto w-4/12 my-16'
-            variant="contained"
-            color="primary"
-            type='submit'
-          >
-            Submit
-        </Button>
+          {
+            !(!!params?.id) && (
+              <Button
+                className='mx-auto w-4/12 my-16'
+                variant="contained"
+                color="primary"
+                type='submit'
+              >
+                Submit
+              </Button>
+            )
+          }
         </form>
       </section>
     </section>
   );
 };
 
-const SimCardAckForm = ({ input, control, errors, register }) => {
+const SimCardAckForm = ({ params, input, control, errors, register }) => {
   if (input.type === 'phoneNumber') {
     return (
       <div>
@@ -168,6 +176,7 @@ const SimCardAckForm = ({ input, control, errors, register }) => {
               inputClass='w-full'
               specialLabel={input.label}
               enableAreaCodes
+              disabled={!!params?.id}
               enableSearch
               inputRef={register}
               isValid={(inputNumber, country, onlyCountries) => {
@@ -194,6 +203,7 @@ const SimCardAckForm = ({ input, control, errors, register }) => {
         message={errors[input.name]?.message}
         refs={register}
         className='my-16'
+        disabled={!!params?.id}
       />
     )
   }

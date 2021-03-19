@@ -23,7 +23,7 @@ const OnboardingForms = () => {
   useEffect(() => {
     if (!!id) {
       dispatch(getEmployeeInfo(id))
-      // dispatch(getOwnOnboardingForms());
+      dispatch(getOwnOnboardingForms(id));
       dispatch(getCheckForms(id));
     }
   }, [id]);

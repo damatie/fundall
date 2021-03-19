@@ -12,6 +12,7 @@ import startsWith from 'lodash.startswith';
 import Input from 'app/shared/TextInput/Input';
 import useUserID from '../hooks/useUserID';
 import Skeleton from '@material-ui/lab/Skeleton';
+import { useParams } from 'react-router-dom';
 import 'react-phone-input-2/lib/material.css';
 
 const schema = yup.object().shape({
@@ -42,6 +43,8 @@ const Malarone = () => {
   } = useSelector(state => state.onboardingForms);
 
   const dispatch = useDispatch();
+
+  const params = useParams();
 
   const inputs = useMemo(() => [
     {
@@ -84,7 +87,7 @@ const Malarone = () => {
 
   return (
     <section className={classes.root}>
-      <Typography className='my-16' variant="h5" color="initial"><b>MALARONR / MALANIL ACKNOWLEDGEMENT FORM.</b></Typography>
+      <Typography className='my-16' variant="h5" color="initial"><b>MALARONE / MALANIL ACKNOWLEDGEMENT FORM.</b></Typography>
       {/* <Typography className='my-16 w-9/12 mx-auto' variant="body1" color="initial">Employee / Consultant Bank Account Details</Typography> */}
       <section className='flex flex-row justify-center items-center my-16 mx-auto'>
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -102,20 +105,25 @@ const Malarone = () => {
                       message={errors[input.name]?.message}
                       refs={register}
                       className='my-16'
+                      disabled={!!params?.id}
                     />
                   )
                 }
               </>
             ))
           }
-          <Button
-            className='mx-auto w-4/12 my-16'
-            variant="contained"
-            color="primary"
-            type='submit'
-          >
-            Submit
-        </Button>
+          {
+            !(!!params?.id) && (
+              <Button
+                className='mx-auto w-4/12 my-16'
+                variant="contained"
+                color="primary"
+                type='submit'
+              >
+                Submit
+              </Button>
+            )
+          }
         </form>
       </section>
     </section>

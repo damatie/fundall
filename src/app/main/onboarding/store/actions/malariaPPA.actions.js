@@ -38,7 +38,7 @@ export const createMalariaPPA = ({formData, id}) => {
       swal.fire({
         text: catchErrorMsg(e),
         icon: 'error',
-        timer: 1500, 
+        timer: 1500,
       });
     }
   }
