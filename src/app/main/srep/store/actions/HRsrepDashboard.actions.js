@@ -66,7 +66,7 @@ export function getDashboardSrep() {
 							};	
 						});
 						count++;
-						const monthValue = new Date(srep.createdAt).getMonth() + 1;
+						const monthValue = new Date(srep.createdAt).getMonth();
 						if ((srep.employee !== null) && !(empList.includes(srep.employee.email))) {
 							countEmployees++;
 							empList.push(srep.employee.email);
@@ -107,6 +107,7 @@ export function getDashboardSrep() {
 							beneficiaryPhone: srep.beneficiaryPhone,
 							createdAt: srep.createdAt,
 							year: new Date(srep.createdAt).getFullYear().toString(),
+							month: monthNames[monthValue],
 							employeePhoneNo: srep.phoneNo ?? 'null',
 							employeeEmail: (srep.employee) ? srep.employee.email : 'null'
 						}

@@ -191,12 +191,13 @@ import { updatedEnrollmentList } from './components/setEntityDeptName';
         const [open, setOpen] = useState(false);
         const [search, setSearch] = useState('');
         const thisYear = (new Date).getFullYear();
+        const thisYearString = (new Date).getFullYear().toString();
         const years = ['all', `${thisYear}`,`${thisYear - 1}`, `${thisYear - 2}`, `${thisYear - 3}`, `${thisYear - 4}`];
         const departmentList =  [{id: 'all', departmentName: 'all'}, ...((useSelector(({ departments }) => departments.deparmentList)) ? useSelector(({ departments }) => departments.deparmentList) : [])];
         const departmentList2 =  [{id: 'all', departmentName: 'all'}, ...((useSelector(({ departments }) => departments.deparmentList)) ? useSelector(({ departments }) => departments.deparmentList) : [])];
         const [filter, setFilter] = useState('all');
         const [filterNew, setFilterNew] = useState('all');
-        const [chartYearfilter, setChartYearfilter] = useState('all');
+        const [chartYearfilter, setChartYearfilter] = useState(thisYearString);
         const [Entityfilter, setEntityFilter] = useState('all');
         const [Yearfilter, setYearFilter] = useState('all');
         const [Departmentfilter, setDepartmentFilter] = useState('all');
@@ -205,8 +206,8 @@ import { updatedEnrollmentList } from './components/setEntityDeptName';
         const [departmentsNew, setDepartmentsNew] = useState(departmentList2);
         lineChartData.labels = monthNames;
         lineChartData.datasets[0].data = filterByMonths(approvedList, chartYearfilter); // Approved
-        lineChartData.datasets[1].data = filterByMonths(pendingList, chartYearfilter); // Pending
         lineChartData.datasets[2].data = filterByMonths(rejectedList, chartYearfilter); // Rejected
+        lineChartData.datasets[1].data = filterByMonths(pendingList, chartYearfilter); // Pending
         let globalData = [];
 
         useEffect(() => {
@@ -453,7 +454,7 @@ import { updatedEnrollmentList } from './components/setEntityDeptName';
                             <Typography className="text-16 font-semibold mt-8">SREP Statistics Breakdown</Typography>
                             </Grid>
                             <Grid item lg={2} md={2} sm={4} xs={4}>
-                                <SelectTextField value={'all'} label="Year" size='small' value={chartYearfilter} onChange={ev => handleChartYearFilter(ev)}>
+                                <SelectTextField value={thisYearString} label="Year" size='small' value={chartYearfilter} onChange={ev => handleChartYearFilter(ev)}>
                                     {years.map((year) => (<MenuItem key={year} value={year}> {year} </MenuItem>))}
                                 </SelectTextField>
                             </Grid>

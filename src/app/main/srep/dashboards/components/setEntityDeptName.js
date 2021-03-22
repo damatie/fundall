@@ -32,10 +32,12 @@ export const updatedEnrollmentList = (enrollmentList = [], entities = []) => {
             beneficiaryEmail: srep.beneficiaryEmail,
             beneficiaryPhone: srep.beneficiaryPhone,
             createdAt: srep.createdAt,
-            year: srep.year,
+            year: srep.year.toString(),
+            month: srep.month,
             employeePhoneNo: srep.employeePhoneNo,
             employeeEmail: srep.employeeEmail 
         }
     });
+    console.log("returnEnrollmentList: ", returnEnrollmentList);
     return returnEnrollmentList;
 };
