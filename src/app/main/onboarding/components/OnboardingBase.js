@@ -23,7 +23,7 @@ const useStyles = makeStyles({
 	layoutRoot: {}
 });
 
-const { useState, useRef } = React;
+const { useState, useRef, useEffect } = React;
 
 const OnboardingBase = () => {
 	const classes = useStyles();
@@ -46,6 +46,10 @@ const OnboardingBase = () => {
 			forms,
 		}
 	} = useSelector(state => state.onboardingForms);
+
+	useEffect(() => {
+		console.log({id, forms});
+	})
 
 	return (
 		<FusePageCarded
@@ -82,7 +86,7 @@ const OnboardingBase = () => {
 							</div>
 						</div>
 						{
-							(Object.entries(forms).length < 0 && !id) && (
+							(Object.entries(forms).length <= 0 && !(!!id)) && (
 								<CustomIconButton type='success' icon='check' onClick={() => dispatch(submitForms(employeeId.id))}>
 									Submit Onboarding Forms
 								</CustomIconButton>
