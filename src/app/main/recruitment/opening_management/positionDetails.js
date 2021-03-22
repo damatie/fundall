@@ -28,6 +28,9 @@ import PositionDetailsTab from '../tabs/positionDetails';
 import ApplicantsTab from '../tabs/applicantsTab';
 import { useAuth } from 'app/hooks/useAuth';
 import ProgressBtn from 'app/shared/progressBtn';
+import RecruitmentDialog from '../RecruitmentDialog';
+import { Slide } from '@material-ui/core';
+import UpdatePositionTab from '../tabs/updatePositionTab';
 
 const userData = useAuth().getUserData;
 
@@ -80,6 +83,7 @@ function PositionDetails({ match }, props) {
 	const dispatch = useDispatch();
 	const position = useSelector(({ PositionDetails }) => PositionDetails.recruitment.onePosition);
 	const rows = useSelector(({ PositionDetails }) => PositionDetails.candidate.data);
+	const [update, setUpdate] = useState(false);
 
 	const [tabValue, setTabValue] = useState(0);
 
@@ -88,11 +92,16 @@ function PositionDetails({ match }, props) {
 	useEffect(() => {
 		dispatch(Actions.getAllCandidates(positionId));
 		dispatch(Actions.getOneOpenPosition(positionId));
+		dispatch(Actions.getEntities());
 	}, [])
 
 	function handleChangeTab(event, value) {
 		setTabValue(value);
 	}
+
+	const Transition = React.forwardRef(function Transition(props, ref) {
+		return <Slide direction="right" ref={ref} {...props} />;
+	});
 
 	const isHr = () => userData.role.toUpperCase() === 'HR MANAGER';
 
@@ -124,7 +133,29 @@ function PositionDetails({ match }, props) {
 						</div>
 					</div>
 
+					{/* Update Dialog */}
+					<RecruitmentDialog
+						open={update}
+						transition={Transition}
+						title='Update Opening'
+						onClose={value => setUpdate(false)}
+					>
+						<UpdatePositionTab setUpdateOpen={update} selectedPosition={position} />
+					</RecruitmentDialog>
+
 					<div className="flex items-center max-w-full">
+						<Button
+							className="mb-16 mr-10"
+							// component={Link}
+							role='button'
+							variant="contained"
+							color="primary"
+							onClick={() => setUpdate(true)}
+						// to={`/recruitment/add_candidate/${positionId}`}
+						>
+							Update Details
+						</Button>
+
 						{isHr() &&
 							<div className="flex flex-col min-w-0 mx-8 sm:mc-16">
 								<FuseAnimate animation="transition.slideLeftIn" delay={300}>
@@ -158,8 +189,8 @@ function PositionDetails({ match }, props) {
 					className="w-full border-b-1 px-24"
 				>
 					<Tab className="text-14 font-600 normal-case" label="Details" />
+					<Tab className="text-14 font-600 normal-case" label="List of applicants" />
 
-					{isHr() && <Tab className="text-14 font-600 normal-case" label="List of applicants" />}
 					{/* <Tab className="text-14 font-600 normal-case" label="Accepted applicants" /> */}
 				</Tabs>
 			}
@@ -168,7 +199,7 @@ function PositionDetails({ match }, props) {
 					{tabValue === 0 && (
 						<PositionDetailsTab position={position} />
 					)}
-					{isHr() && tabValue === 1 && (
+					{tabValue === 1 && (
 						<ApplicantsTab position={position} columns={columns} rows={rows} />
 					)}
 				</div>

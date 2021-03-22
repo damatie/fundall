@@ -213,7 +213,8 @@ export function getReviewedTraining() {
 }
 
 export function approveTraining(id) {
-	console.log(id);
+
+	swal.showLoading();
 	return dispatch => {
 		dispatch({
 			type: LOADING_TRAINIING
@@ -271,6 +272,8 @@ export function approveTraining(id) {
 						return dispatch({
 							type: APPROVE_TRAINING_ERROR
 						})
+					}).finally(() => {
+						swal.hideLoading();
 					})
 			]
 		})
@@ -278,6 +281,8 @@ export function approveTraining(id) {
 }
 
 export function rejectTraining(id) {
+
+	swal.showLoading();
 	console.log(id);
 	return dispatch => {
 		dispatch({
@@ -336,6 +341,8 @@ export function rejectTraining(id) {
 						return dispatch({
 							type: REJECT_TRAINING_ERROR
 						})
+					}).finally(() => {
+						swal.hideLoading();
 					})
 			]
 		})

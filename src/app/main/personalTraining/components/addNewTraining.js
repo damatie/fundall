@@ -3,6 +3,11 @@ import { AppBar, Button, Dialog, DialogActions, DialogContent, FormControl, Inpu
 import { DateTimePicker, DatePicker } from '@material-ui/pickers'
 import CurrencyInput from 'app/shared/TextInput/CurrencyInput';
 import React, { useEffect, useState } from 'react'
+import * as Actions from 'app/store/actions';
+import { SelectFormsy } from '@fuse/core/formsy';
+import { useSelector, useDispatch } from 'react-redux';
+import Formsy from 'formsy-react';
+
 
 const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, categories, roles, submit, update, changeDepartment, data }) => {
 
@@ -10,7 +15,7 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
         department: "",
         category: "",
         entity: "",
-        jobRole: "",
+        jobTitle: "",
         name: "",
         cost: "",
         description: "",
@@ -24,13 +29,18 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
         country: "",
         trainingCategoryId: 0
     });
-    const [canBeSubmitted, setCanBeSubmitted] = useState(false)
+    const dispatch = useDispatch();
+    const [country, setCountry] = useState([]);
+    const [canBeSubmitted, setCanBeSubmitted] = useState(false);
     const [errorEndDate, setErrorEndDate] = useState("Select End Date");
     const [errorStartDate, setErrorStartDate] = useState("Select Start Date");
-    const [titleError, setTitleError] = useState("")
-    const [descriptionError, setDescriptionError] = useState("")
+    const [titleError, setTitleError] = useState("");
+    const [descriptionError, setDescriptionError] = useState("");
+    const state = useSelector(({ regions }) => regions.states.map(state => state.name));
 
     const handleChange = (name, value) => {
+        if (value) console.log(value);
+
         if (name === "entity") {
             let id = entities.find(element => element.name = value);
             changeDepartment(id.id);
@@ -58,8 +68,26 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
             return;
         }
 
-        setFormstate({ ...formstate, [name]: value });
+        else if (name === "country") {
+            getState(value);
+        }
+
+        setFormstate(formstate => ({ ...formstate, [name]: value }));
     }
+
+    const getState = (country) => {
+        dispatch(Actions.getStates(country));
+    }
+
+    useEffect(() => {
+        if (country.length > 0) return;
+        fetch('https://restcountries.eu/rest/v2/all')
+            .then(res => res.json())
+            .then(res => {
+                setCountry(res.map(country => country.name));
+            })
+            .catch(err => console.log(err))
+    }, [country])
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -69,6 +97,9 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
             return
         } else if (formstate.name?.length < 10) {
             setTitleError("Minimum required length is 10");
+            return;
+        } else if (formstate.name?.length > 25) {
+            setTitleError("Maximum required length is 25");
             return;
         }
         else if (formstate.description?.length < 25) {
@@ -93,7 +124,7 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
     }
 
     useEffect(() => {
-        if (formstate?.name?.length > 10) { setTitleError("") }
+        if (formstate?.name?.length > 25) { setTitleError("") }
     }, [formstate?.name]);
 
     useEffect(() => {
@@ -108,7 +139,7 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
                     department: data.department,
                     category: data.category,
                     entity: data.entity,
-                    jobRole: data.jobRole,
+                    jobTitle: data.jobTitle,
                     name: data.name,
                     cost: data.cost,
                     description: data.description,
@@ -156,7 +187,7 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
         department: "",
         category: "",
         entity: "",
-        jobRole: "",
+        jobTitle: "",
         name: "",
         cost: "",
         description: "",
@@ -248,22 +279,13 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
                         </Select>
                     </FormControl>
 
-                    {/* <TextField
-                        id="outlined-secondary"
-                        type="text"
-                        variant="outlined"
-                        onChange={(e) => handleChange("department", e.target.value)}
-                        label="Department"
-                        className="w-full mb-24"
-                    /> */}
-
                     <FormControl className="flex w-full mb-24" variant="outlined">
-                        <InputLabel htmlFor="jobRole-label-placeholder"> Job Role </InputLabel>
+                        <InputLabel htmlFor="jobTitle-label-placeholder"> Job Role </InputLabel>
                         <Select
-                            value={formstate?.jobRole}
+                            value={formstate?.jobTitle}
                             onChange={(e) => handleChange(e.target.name, e.target.value)}
                             input={
-                                <OutlinedInput labelWidth={'jobRole'.length * 9} name="jobRole" id="jobRole-label-placeholder" />
+                                <OutlinedInput labelWidth={'jobTitle'.length * 9} name="jobTitle" id="jobTitle-label-placeholder" />
                             }
                         >
                             {roles?.map(role => (
@@ -273,66 +295,6 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
                             ))}
                         </Select>
                     </FormControl>
-
-                    {/* <FormControl className="flex w-full mb-24" variant="outlined">
-                        <InputLabel htmlFor="category-label-placeholder"> Employee Grade </InputLabel>
-                        <Select
-                            value={formstate?.employeeGrade}
-                            onChange={(e) => handleChange(e.target.name, e.target.value)}
-                            input={
-                                <OutlinedInput labelWidth={'employeeGrade'.length * 9} name="employeeGrade" id="employeeGrade-label-placeholder" />
-                            }
-                        >
-                            <MenuItem value="">
-                                <em> All </em>
-                            </MenuItem>
-                            {["SpringRock", "5cee", "CBit"].map(category => (
-                                <MenuItem value={category} key={Math.random()}>
-                                    {category}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl> */}
-
-                    {/* <FormControl className="flex w-full mb-24" variant="outlined">
-                        <InputLabel htmlFor="industrySenority-label-placeholder"> Industrial Seniority </InputLabel>
-                        <Select
-                            value={formstate?.industrySeniority}
-                            onChange={(e) => handleChange(e.target.name, e.target.value)}
-                            input={
-                                <OutlinedInput labelWidth={'industrySenority'.length * 9} name="industrySenority" id="industrySenority-label-placeholder" />
-                            }
-                        >
-                            <MenuItem value="all">
-                                <em> All </em>
-                            </MenuItem>
-                            {["SpringRock", "5cee", "CBit"].map(category => (
-                                <MenuItem value={category} key={Math.random()}>
-                                    {category}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl> */}
-
-                    {/* <FormControl className="flex w-full mb-24" variant="outlined">
-                        <InputLabel htmlFor="companySenority-label-placeholder"> Company Seniority </InputLabel>
-                        <Select
-                            value={formstate?.companySeniority}
-                            onChange={(e) => handleChange(e.target.name, e.target.value)}
-                            input={
-                                <OutlinedInput labelWidth={'companySenority'.length * 9} name="companySenority" id="companySenority-label-placeholder" />
-                            }
-                        >
-                            <MenuItem value="all">
-                                <em> All </em>
-                            </MenuItem>
-                            {["SpringRock", "5cee", "CBit"].map(category => (
-                                <MenuItem value={category} key={Math.random()}>
-                                    {category}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl> */}
 
                     <TextField
                         id="outlined-secondary"
@@ -402,11 +364,75 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
                         format={'MMMM Do, YYYY'}
                         minDate={formstate?.startDate}
                         error={formstate?.endDate ? false : true}
-                        // error={Boolean(errorEndDate)}
-                        // disableFuture
                         helperText={!formstate?.endDate ? errorEndDate : ""}
                     />
 
+                    <FormControl className="flex w-full mb-24" variant="outlined">
+                        <InputLabel htmlFor="country-label-placeholder">Country </InputLabel>
+                        <Select
+                            value={formstate?.country}
+                            onChange={(e) => handleChange(e.target.name, e.target.value)}
+                            input={
+                                <OutlinedInput labelWidth={'country'.length * 9} name="country" id="country-label-placeholder" />
+                            }
+                        >
+                            {country.map(item => (
+                                <MenuItem value={item} key={Math.random()}>
+                                    {item}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+
+                    <FormControl className="flex w-full mb-24" variant="outlined">
+                        <InputLabel htmlFor="state-label-placeholder">State </InputLabel>
+                        <Select
+                            value={formstate?.state}
+                            onChange={(e) => handleChange(e.target.name, e.target.value)}
+                            input={
+                                <OutlinedInput labelWidth={'state'.length * 9} name="state" id="state-label-placeholder" />
+                            }
+                        >
+                            {state.map(item => (
+                                <MenuItem value={item} key={Math.random()}>
+                                    {item}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+
+
+                    {/* <SelectFormsy
+                            className="mb-16"
+                            name={"country"}
+                            label={"Country"}
+                            variant="outlined"
+                            required
+                            requiredError='Must not be None'
+                            value={formstate["country"]}
+                            onChange={(e) => handleChange("country", e.target.value)}
+                        >
+                            {country.map((item, i) => (
+                                <MenuItem value={item} key={i}>{item}</MenuItem>
+                            ))}
+                        </SelectFormsy>
+
+                        <SelectFormsy
+                            className="mb-16"
+                            name={"country"}
+                            label={"Country"}
+                            variant="outlined"
+                            required
+                            requiredError='Must not be None'
+                            value={formstate["state"]}
+                            onChange={(e) => handleChange("state", e.target.value)}
+                        >
+                            {state.map((item, i) => (
+                                <MenuItem value={item} key={i}>{item}</MenuItem>
+                            ))}
+                        </SelectFormsy> */}
+
+                    {/* 
                     <TextField
                         id="outlined-secondary"
                         type="text"
@@ -425,53 +451,14 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
                         onChange={(e) => handleChange("state", e.target.value)}
                         label="State"
                         className="w-full mb-24"
-                    />
-
-                    {/* <FormControl className="flex w-full mb-24" variant="outlined">
-                        <InputLabel htmlFor="country-label-placeholder"> Country </InputLabel>
-                        <Select
-                            value={"Nigeria"}
-                            onChange={(e) => handleChange(e.target.name, e.target.value)}
-                            input={
-                                <OutlinedInput labelWidth={'country'.length * 9} name="country" id="country-label-placeholder" />
-                            }
-                        >
-                            <MenuItem value="all">
-                                <em> All </em>
-                            </MenuItem>
-                            {["Nigeria", "Gambia"].map(category => (
-                                <MenuItem value={category} key={Math.random()}>
-                                    {category}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl> */}
-
-                    {/* <FormControl className="flex w-full mb-24" variant="outlined">
-                        <InputLabel htmlFor="state-label-placeholder"> State </InputLabel>
-                        <Select
-                            value={"Enugu"}
-                            onChange={(e) => handleChange(e.target.name, e.target.value)}
-                            input={
-                                <OutlinedInput labelWidth={'state'.length * 9} name="state" id="state-label-placeholder" />
-                            }
-                        >
-                            <MenuItem value="all">
-                                <em> All </em>
-                            </MenuItem>
-                            {["Enugu"].map(category => (
-                                <MenuItem value={category} key={Math.random()}>
-                                    {category}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl> */}
+                    /> */}
 
                     <CurrencyInput
-
                         id="outlined-secondary"
                         type="number"
                         values={formstate?.cost}
+                        name="cost"
+                        values={formstate.cost}
                         variant="outlined"
                         handleChange={(e) => handleChange("cost", e.target.value)}
                         label="Training Cost"
