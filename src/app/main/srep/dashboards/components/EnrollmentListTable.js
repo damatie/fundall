@@ -10,8 +10,11 @@ import { withRouter } from 'react-router-dom';
 import { useEffect } from 'react';
 import EnrollmentListTableHead from './EnrollmentListTableHead';
 import SharedTableHead from 'app/shared/sharedTableHead';
+import { useDispatch, useSelector } from 'react-redux';
+
 
 function EnrollmentListTable(props) {
+	const entities = useSelector(({ entities }) => entities.entityList) ?? [];
     const [selected, setSelected] = useState([]);
 	const [page, setPage] = useState(0);
 	const [data, setData] = useState(null);
@@ -81,19 +84,13 @@ function EnrollmentListTable(props) {
 							.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
 							.map((n, index) => {
                                 const isSelected = selected.indexOf(n.id) !== -1;
-								return (
-                                    <TableRow
-										className="h-64 cursor-pointer"
+								return (<TableRow className="h-64 cursor-pointer"
 										hover
 										aria-checked={isSelected}
 										tabIndex={-1}
 										key={index * Math.random()}
 										selected={isSelected}
-										onClick={event => props.handleClick(n)}
-									>
-										<TableCells type={props.type} data={n} rows={props.rows} />
-									</TableRow>
-                                );
+										onClick={event => props.handleClick(n)}><TableCells type={props.type} data={n} rows={props.rows}/></TableRow>);
 							})}
 					</TableBody>
 				</Table>
@@ -120,10 +117,11 @@ const TableCells = (props) => {
 		case 'default': {
 			return  (<>{ props.rows.map((item, index) => (
                                 <Fragment key={index}> { item.type === 'date'
-                                    ? <TableCell component="th" scope="row" align={item.align} key={item.id}> {props.data[item.field]} </TableCell> : item.id === 'amount' 
-                                    ? <TableCell component="th" scope="row" align={item.align} key={item.id}> {formatToNaira(props.data[item.field])} </TableCell> : item.id === 'status' 
-                                    ? <TableCell component="th" scope="row" align={item.align} key={item.id}> <LoanStatus status={props.data[item.field]} /> </TableCell>
-                                    : <TableCell component="th" scope="row" align={item.align} key={item.id}> {props.data[item.field]} </TableCell>
+                                    ? <TableCell component="th" scope="row" align={item.align} key={item.id}>{props.data[item.field]}</TableCell> : item.id === 'amount' 
+                                    ? <TableCell component="th" scope="row" align={item.align} key={item.id}>{formatToNaira(props.data[item.field])}</TableCell> : item.id === 'status' 
+                                    ? <TableCell component="th" scope="row" align={item.align} key={item.id}><LoanStatus status={props.data[item.field]}/></TableCell> : item.id === 'name' 
+									? <TableCell className="whitespace-no-wrap" component="th" scope="row" align={item.align} key={item.id}>{props.data[item.field]}</TableCell>  
+                                    : <TableCell component="th" scope="row" align={item.align} key={item.id}>{props.data[item.field]}</TableCell>
                                 }</Fragment> ))
                         }
                     </>);
@@ -131,5 +129,7 @@ const TableCells = (props) => {
 		default: { break; }
 	};
 };
+
+// : item.id === 'entity'? <TableCell className="whitespace-no-wrap" component="th" scope="row" align={item.align} key={item.id}>{props.data[item.newId]}</TableCell>
 
 export default withRouter(EnrollmentListTable);

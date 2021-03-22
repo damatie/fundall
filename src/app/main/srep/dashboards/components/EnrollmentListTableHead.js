@@ -50,7 +50,7 @@ function EnrollmentListTableHead(props) {
 				{props.rows.map((row, index) => {
 					return (
 						<TableCell
-							key={row.id}
+							key={index * Math.random()}
 							align={row.align}
 							padding={row.disablePadding ? 'none' : 'default'}
 							sortDirection={props.order.id === row.id ? props.order.direction : false}
