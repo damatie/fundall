@@ -137,42 +137,16 @@ function FinanceSrepDashboard(props) {
     const [selectedRow, setSelectedRow] = useState({});
     const [departments, setDepartments] = useState(departmentList);
     const [departmentsNew, setDepartmentsNew] = useState(departmentList2);
-    lineChartData.labels = monthNames;
-    lineChartData.datasets[0].data = filterByMonths(approvedList, chartYearfilter, filter, filterNew); // Approved
-    lineChartData.datasets[1].data = filterByMonths(pendingList, chartYearfilter, filter, filterNew); // Pending
-    lineChartData.datasets[2].data = filterByMonths(rejectedList, chartYearfilter, filter, filterNew); // Rejected
-
+    
     useEffect(() => {
         dispatch(Actions.getDashboardSrep());
         dispatch(UtilActions.getEntities());
     }, []);
 
-    const handleFilter = (event) => {
-        setFilter(event.target.value);
-        const value = entities.filter(e => {
-            return e.entityName.toUpperCase() === event.target.value.toUpperCase();
-        })
-        const depts = value[0].department ?? [];
-        let newDepts = [{departmentName: 'all'}];
-        newDepts.push(...depts);
-        setDepartmentsNew(newDepts);
-        if (event.target.value === "all") {
-            setFilterNew("all");
-        };
-    }
-
-    const handleFilterNew = (event) => {
-        setFilterNew(event.target.value);
-    }
-
     const handleSearch = (event) => {
         setSearch(event.target.value);
-        // filterData();
     }
 
-    const handleChartYearFilter = (event) => {
-        setChartYearfilter(event.target.value);
-    }
 
     const handleYearFilter = (event) => {
         setYearFilter(event.target.value);
