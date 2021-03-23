@@ -2,6 +2,7 @@ import withReducer from 'app/store/withReducer';
 import SimplePage from 'app/shared/SimplePage';
 import { makeStyles } from '@material-ui/core/styles';
 import { Line } from 'react-chartjs-2';
+import { Polar } from 'react-chartjs-2';
 import { useDispatch, useSelector } from 'react-redux';
 import CardWidget from 'app/shared/widgets/CardWidget';
 import CardWidgetWithChart from 'app/shared/widgets/CardWidgetWithChart';
@@ -22,8 +23,42 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import Button from '@material-ui/core/Button';
 import { AppBar, Toolbar } from '@material-ui/core';
+import { Doughnut } from 'react-chartjs-2';
 import useHRperformanceAppraisalDashboard from '../hooks/useHRperformanceAppraisalDashboard';
 import AppraisalTable from './components/AppraisalTable';
+
+const polarChartData = {
+	datasets: [
+		{
+			data: [11, 16, 7, 3, 14],
+			backgroundColor: ['#FF6384', '#4BC0C0', '#FFCE56', '#E7E9ED', '#36A2EB'],
+			label: 'My dataset' // for legend
+		}
+	],
+	labels: ['Red', 'Green', 'Yellow', 'Grey', 'Blue']
+};
+
+const doughnutChartData = {
+	labels: ['Red', 'Green', 'Yellow'],
+	datasets: [
+		{
+			data: [300, 50, 100],
+			backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
+			hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
+		}
+	]
+};
+
+const doughnutChartData2 = {
+	labels: ['Red', 'Green', 'Yellow'],
+	datasets: [
+		{
+			data: [300, 50, 100],
+			backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
+			hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
+		}
+	]
+};
 
 const monthNames = ["January", "February", "March", "April", "May", "June",
                     "July", "August", "September", "October", "November", "December" ];
@@ -371,6 +406,10 @@ const HrPerformanceAppraisalDashboard = () => {
   const [entityHoriFilter3, setEntityHoriFilter3] = useState('all');
   const [horiYearfilter4, setHoriYearfilter4] = useState(thisYearString);
   const [entityHoriFilter4, setEntityHoriFilter4] = useState('all');
+  const [search, setSearch] = useState('');
+  const [open, setOpen] = useState(false);
+
+
 
   const handleFilter = (event) => {
     setFilter(event.target.value);
@@ -423,6 +462,10 @@ const HrPerformanceAppraisalDashboard = () => {
     setLineYearfilter(event.target.value);
   } //lineYearfilter
 
+  const ClickOpen = (n) => {
+    setSelectedRow(n);
+    setOpen(true);
+  };
   
   return (
     <SimplePage title='HR PERFORMANCE APPRAISAL DASHBOARD'>
@@ -448,29 +491,22 @@ const HrPerformanceAppraisalDashboard = () => {
                 </div>
             </Paper>
             <Paper className="w-full rounded-8 shadow-none border-1 flex flex-col justify-center items-center mr-10">
-                <div>
-
-                </div>
+            <div className="flex flex-col items-center w-full max-w-md">
+              <h2>Doughnut Example</h2>
+              <Doughnut data={doughnutChartData} />
+            </div>
             </Paper>
             <Paper className="w-full rounded-8 shadow-none border-1 flex flex-col justify-center items-center mr-10">
-                <div className="text-center pt-12">
-                <Typography className="text-16" color="textSecondary">
-                    {"Number of SREP Pending Applications"}
-                </Typography>
-                <Typography className="text-32" style={{ color: "orange" }} >
-                    {0}
-                </Typography>
-                </div>
+            <div className="flex flex-col items-center w-full max-w-md">
+              <h2>Polar Example</h2>
+              <Polar data={polarChartData} />
+            </div>
             </Paper>
             <Paper className="w-full rounded-8 shadow-none border-1 flex flex-col justify-center items-center mr-10">
-                <div className="text-center pt-12">
-                <Typography className="text-16" color="textSecondary">
-                    {"Number of SREP Pending Applications"}
-                </Typography>
-                <Typography className="text-32" style={{ color: "orange" }} >
-                    {0}
-                </Typography>
-                </div>
+              <div className="flex flex-col items-center w-full max-w-md">
+                <h2>Doughnut Example 2</h2>
+                <Doughnut data={doughnutChartData2} />
+              </div>
             </Paper>
           </div>
         </section>
@@ -615,7 +651,7 @@ const HrPerformanceAppraisalDashboard = () => {
 
         <section>
           <div className="flex flex-row w-full justify-between ml-2 mr-13 mb-12 mt-12">
-            <Paper className="w-full rounded-8 shadow-none border-1 flex flex-col">
+            <Paper className="w-full rounded-8 shadow-none border-1 flex flex-col mr-10">
               <div className="flex items-center justify-between px-16 h-64 border-b-1">
                 <Grid container spacing={1} className="flex flex-row w-full justify-between">
                   <Grid item lg={10}>
@@ -630,7 +666,7 @@ const HrPerformanceAppraisalDashboard = () => {
               </div>
               <div className="flex w-full p-32">
                   <Line options={{ legend: { position: "right", labels: {boxWidth: 10,
-                      fontSize: 12, padding: 10 } } }} height={220} width={870} data={lineChartData} />
+                      fontSize: 12, padding: 10 } } }} height={220} width={860} data={lineChartData} />
               </div>
             </Paper>
           </div>
@@ -638,7 +674,57 @@ const HrPerformanceAppraisalDashboard = () => {
         
         <section>
           <div className="flex flex-row w-full justify-between ml-2 mr-13 mb-12 mt-12">
-            <Paper className="w-full rounded-8 shadow-none border-1 flex flex-col justify-center items-center mr-10">
+            <Paper className="w-full sm:w-1/2 rounded-8 shadow-none border-1 flex flex-col mr-10">
+            <div className="w-full p-20">
+                    <Grid container spacing={1}>
+                        <Grid className="flex w-full flex-row" style={{ marginTop: "10px" }}>
+                            <Grid item lg={10} md={12} sm={12} xs={12} className="font-semibold text-16">
+                            Employee List - Completed Peformance Appraisal
+                            </Grid>
+                        </Grid>
+                        
+                        <Grid container spacing={1} className="mt-6 mb-6" >
+                            <Grid item lg={5} md={5} sm={5} xs={5}>
+                                <div className="flex items-center">
+                                    <Paper className="flex items-center w-full px-8 py-4 rounded-8">
+                                        <Icon color="action">search</Icon>
+                                        <Input
+                                            placeholder="Filter Employee List"
+                                            className="flex flex-1 mx-8"
+                                            disableUnderline
+                                            fullWidth
+                                            value={search}
+                                            inputProps={{
+                                                'aria-label': 'Search'
+                                            }}
+                                            onChange={e => handleSearch(e)}
+                                        />
+                                    </Paper>
+                                </div>
+                            </Grid>
+                            {/* <Grid item lg={3} md={3} sm={4} xs={4}>
+                                <SelectTextField value={'all'} label="Entity" size='small' value={Entityfilter} onChange={ev => handleEntityFilter(ev)} >
+                                    {entities.map(({id, entityName}) => (<MenuItem key={id} value={entityName}> {entityName} </MenuItem>))}
+                                </SelectTextField>
+                            </Grid> */}
+                            {/* <Grid item lg={2} md={3} sm={4} xs={4}>
+                                <SelectTextField value={'all'} label="Department" size='small' value={Departmentfilter} onChange={ev => handleDepartmentFilter(ev)}>
+                                    {departments.map(({id, departmentName}) => (<MenuItem key={departmentName} value={departmentName}> {departmentName}</MenuItem>))}
+                                </SelectTextField>
+                            </Grid> */}
+                            {/* <Grid item lg={2} md={2} sm={4} xs={4}>
+                                <SelectTextField value={'all'} label="Year" size='small' value={Yearfilter} onChange={ev => handleYearFilter(ev)}>
+                                    {years.map((year) => (<MenuItem key={year} value={year}> {year} </MenuItem>))}
+                                </SelectTextField>
+                            </Grid>  */}
+                        </Grid>
+                    </Grid>
+                </div>
+                <div>
+                    <AppraisalTable data={[]} rows={columns1} handleClick={ClickOpen} type="default"/>
+                </div>
+            </Paper>
+            <Paper className="w-full sm:w-1/2 rounded-8 shadow-none border-1 flex flex-col mr-10">
             <div className="flex flex-wrap w-full p-20">
                     <Grid container spacing={1} >
                         <Grid className="flex w-full flex-row" style={{ marginTop: "10px" }}>
@@ -666,31 +752,26 @@ const HrPerformanceAppraisalDashboard = () => {
                                     </Paper>
                                 </div>
                             </Grid>
-                            <Grid item lg={3} md={3} sm={4} xs={4}>
+                            {/* <Grid item lg={3} md={3} sm={4} xs={4}>
                                 <SelectTextField value={'all'} label="Entity" size='small' value={Entityfilter} onChange={ev => handleEntityFilter(ev)} >
                                     {entities.map(({id, entityName}) => (<MenuItem key={id} value={entityName}> {entityName} </MenuItem>))}
                                 </SelectTextField>
-                            </Grid>
+                            </Grid> */}
                             {/* <Grid item lg={2} md={3} sm={4} xs={4}>
                                 <SelectTextField value={'all'} label="Department" size='small' value={Departmentfilter} onChange={ev => handleDepartmentFilter(ev)}>
                                     {departments.map(({id, departmentName}) => (<MenuItem key={departmentName} value={departmentName}> {departmentName}</MenuItem>))}
                                 </SelectTextField>
                             </Grid> */}
-                            <Grid item lg={2} md={2} sm={4} xs={4}>
+                            {/* <Grid item lg={2} md={2} sm={4} xs={4}>
                                 <SelectTextField value={'all'} label="Year" size='small' value={Yearfilter} onChange={ev => handleYearFilter(ev)}>
                                     {years.map((year) => (<MenuItem key={year} value={year}> {year} </MenuItem>))}
                                 </SelectTextField>
-                            </Grid> 
+                            </Grid>  */}
                         </Grid>
                     </Grid>
                 </div>
                 <div>
-                    <AppraisalTable data={enrollmentList} rows={columns} handleClick={ClickOpen} type="default"/>
-                </div>
-            </Paper>
-            <Paper className="w-full rounded-8 shadow-none border-1 flex flex-col justify-center items-center mr-10">
-                <div>
-
+                    <AppraisalTable data={[]} rows={columns1} handleClick={ClickOpen} type="default"/>
                 </div>
             </Paper>
           </div>
@@ -698,14 +779,104 @@ const HrPerformanceAppraisalDashboard = () => {
 
         <section>
           <div className="flex flex-row w-full justify-between ml-2 mr-13 mb-12 mt-12">
-            <Paper className="w-full rounded-8 shadow-none border-1 flex flex-col justify-center items-center mr-10">
+          <Paper className="w-full sm:w-1/2 rounded-8 shadow-none border-1 flex flex-col mr-10">
+            <div className="flex flex-wrap w-full p-20">
+                    <Grid container spacing={1} >
+                        <Grid className="flex w-full flex-row" style={{ marginTop: "10px" }}>
+                            <Grid item lg={10} md={12} sm={12} xs={12} className="font-semibold text-16">
+                            Employee List - Completed Peformance Appraisal
+                            </Grid>
+                        </Grid>
+                        
+                        <Grid container spacing={1} className="mt-6 mb-6" >
+                            <Grid item lg={5} md={5} sm={5} xs={5}>
+                                <div className="flex items-center">
+                                    <Paper className="flex items-center w-full px-8 py-4 rounded-8">
+                                        <Icon color="action">search</Icon>
+                                        <Input
+                                            placeholder="Filter Employee List"
+                                            className="flex flex-1 mx-8"
+                                            disableUnderline
+                                            fullWidth
+                                            value={search}
+                                            inputProps={{
+                                                'aria-label': 'Search'
+                                            }}
+                                            onChange={e => handleSearch(e)}
+                                        />
+                                    </Paper>
+                                </div>
+                            </Grid>
+                            {/* <Grid item lg={3} md={3} sm={4} xs={4}>
+                                <SelectTextField value={'all'} label="Entity" size='small' value={Entityfilter} onChange={ev => handleEntityFilter(ev)} >
+                                    {entities.map(({id, entityName}) => (<MenuItem key={id} value={entityName}> {entityName} </MenuItem>))}
+                                </SelectTextField>
+                            </Grid> */}
+                            {/* <Grid item lg={2} md={3} sm={4} xs={4}>
+                                <SelectTextField value={'all'} label="Department" size='small' value={Departmentfilter} onChange={ev => handleDepartmentFilter(ev)}>
+                                    {departments.map(({id, departmentName}) => (<MenuItem key={departmentName} value={departmentName}> {departmentName}</MenuItem>))}
+                                </SelectTextField>
+                            </Grid> */}
+                            {/* <Grid item lg={2} md={2} sm={4} xs={4}>
+                                <SelectTextField value={'all'} label="Year" size='small' value={Yearfilter} onChange={ev => handleYearFilter(ev)}>
+                                    {years.map((year) => (<MenuItem key={year} value={year}> {year} </MenuItem>))}
+                                </SelectTextField>
+                            </Grid>  */}
+                        </Grid>
+                    </Grid>
+                </div>
                 <div>
-                  
+                    <AppraisalTable data={[]} rows={columns1} handleClick={ClickOpen} type="default"/>
                 </div>
             </Paper>
-            <Paper className="w-full rounded-8 shadow-none border-1 flex flex-col justify-center items-center mr-10">
+          <Paper className="w-full sm:w-1/2 rounded-8 shadow-none border-1 flex flex-col mr-10">
+            <div className="flex flex-wrap w-full p-20">
+                    <Grid container spacing={1} >
+                        <Grid className="flex w-full flex-row" style={{ marginTop: "10px" }}>
+                            <Grid item lg={10} md={12} sm={12} xs={12} className="font-semibold text-16">
+                            Employee List - Completed Peformance Appraisal
+                            </Grid>
+                        </Grid>
+                        
+                        <Grid container spacing={1} className="mt-6 mb-6" >
+                            <Grid item lg={5} md={5} sm={5} xs={5}>
+                                <div className="flex items-center">
+                                    <Paper className="flex items-center w-full px-8 py-4 rounded-8">
+                                        <Icon color="action">search</Icon>
+                                        <Input
+                                            placeholder="Filter Employee List"
+                                            className="flex flex-1 mx-8"
+                                            disableUnderline
+                                            fullWidth
+                                            value={search}
+                                            inputProps={{
+                                                'aria-label': 'Search'
+                                            }}
+                                            onChange={e => handleSearch(e)}
+                                        />
+                                    </Paper>
+                                </div>
+                            </Grid>
+                            {/* <Grid item lg={3} md={3} sm={4} xs={4}>
+                                <SelectTextField value={'all'} label="Entity" size='small' value={Entityfilter} onChange={ev => handleEntityFilter(ev)} >
+                                    {entities.map(({id, entityName}) => (<MenuItem key={id} value={entityName}> {entityName} </MenuItem>))}
+                                </SelectTextField>
+                            </Grid> */}
+                            {/* <Grid item lg={2} md={3} sm={4} xs={4}>
+                                <SelectTextField value={'all'} label="Department" size='small' value={Departmentfilter} onChange={ev => handleDepartmentFilter(ev)}>
+                                    {departments.map(({id, departmentName}) => (<MenuItem key={departmentName} value={departmentName}> {departmentName}</MenuItem>))}
+                                </SelectTextField>
+                            </Grid> */}
+                            {/* <Grid item lg={2} md={2} sm={4} xs={4}>
+                                <SelectTextField value={'all'} label="Year" size='small' value={Yearfilter} onChange={ev => handleYearFilter(ev)}>
+                                    {years.map((year) => (<MenuItem key={year} value={year}> {year} </MenuItem>))}
+                                </SelectTextField>
+                            </Grid>  */}
+                        </Grid>
+                    </Grid>
+                </div>
                 <div>
-
+                    <AppraisalTable data={[]} rows={columns1} handleClick={ClickOpen} type="default"/>
                 </div>
             </Paper>
           </div>

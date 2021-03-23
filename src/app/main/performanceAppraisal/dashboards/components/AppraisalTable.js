@@ -55,7 +55,7 @@ function AppraisalTable(props) {
 	return (
 		<div className="w-full flex flex-col">
 			<FuseScrollbars className="flex-grow overflow-x-auto">
-				<Table className="min-w-xl" aria-labelledby="tableTitle">
+				<Table aria-labelledby="tableTitle">
                     <AppraisalTableHead
 						numSelected={selected.length}
 						order={order}
