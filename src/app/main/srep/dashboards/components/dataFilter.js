@@ -47,7 +47,7 @@ export const filterData = (enrollmentList = [], search = '', Yearfilter = 'all',
         }
 
         const searchfilterMethod = (arr, search) => {
-            const results = arr.filter(obj => Object.keys(obj).some(key => obj[key] === search))
+            const results = arr.filter(obj => Object.keys(obj).some(key => obj[key].toString().toUpperCase().includes(search.toUpperCase())))
             return results;
         }
 
