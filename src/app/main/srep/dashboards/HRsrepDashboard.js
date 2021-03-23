@@ -413,7 +413,7 @@ import { filterData } from './components/dataFilter';
                                 label='Department'
                             >
                                 {departmentsNew.map(({id, departmentName}) => (
-                                <MenuItem value={departmentName} key={id}>
+                                <MenuItem value={departmentName} key={Math.random()*100}>
                                     {departmentName}
                                 </MenuItem>
                                 ))}
