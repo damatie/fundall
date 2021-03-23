@@ -73,20 +73,20 @@ export function getDashboardSrep() {
 						}
 						if (srep.status.toUpperCase() === "PENDING") {
 							const pendingObj = { id: srep.id, status: "PENDING", year: new Date(srep.createdAt).getFullYear(), month: monthNames[monthValue], date: srep.createdAt, 
-												entity: (srep.employee) ? (srep.employee.entityName ? srep.employee.entityName : '') : '',	
-												department: (srep.employee) ? (srep.employee.departmentName ? srep.employee.departmentName : '') : '', };
+												entity: (srep.employee) ? (srep.employee.entityName ? srep.employee.entityName : '') : '', entityId: (srep.employee) ? (srep.employee.entityId ? srep.employee.entityId : 'null') : 'null',
+												department: (srep.employee) ? (srep.employee.departmentName ? srep.employee.departmentName : '') : '', departmentId: (srep.employee) ? (srep.employee.departmentId ? srep.employee.departmentId : 'null') : 'null',};
 							pendingList.push(pendingObj);
 						}
 						if (srep.status.toUpperCase() === "REJECTED") {
 							const rejectedObj = { id: srep.id, status: "REJECTED", year: new Date(srep.createdAt).getFullYear(), month: monthNames[monthValue], date: srep.createdAt, 
-												entity: (srep.employee) ? (srep.employee.entityName ? srep.employee.entityName : '') : '',	
-												department: (srep.employee) ? (srep.employee.departmentName ? srep.employee.departmentName : '') : '', };
+												entity: (srep.employee) ? (srep.employee.entityName ? srep.employee.entityName : '') : '', entityId: (srep.employee) ? (srep.employee.entityId ? srep.employee.entityId : 'null') : 'null',
+												department: (srep.employee) ? (srep.employee.departmentName ? srep.employee.departmentName : '') : '', departmentId: (srep.employee) ? (srep.employee.departmentId ? srep.employee.departmentId : 'null') : 'null',};
 							rejectedList.push(rejectedObj);							
 						}
 						if (srep.status.toUpperCase() === "APPROVED") {
 							const approvedObj = { id: srep.id, status: "APPROVED", year: new Date(srep.createdAt).getFullYear(), month: monthNames[monthValue], date: srep.createdAt, 
-												entity: (srep.employee) ? (srep.employee.entityName ? srep.employee.entityName : '') : '',	
-												department: (srep.employee) ? (srep.employee.departmentName ? srep.employee.departmentName : '') : '', };
+												entity: (srep.employee) ? (srep.employee.entityName ? srep.employee.entityName : '') : '',	entityId: (srep.employee) ? (srep.employee.entityId ? srep.employee.entityId : 'null') : 'null',
+												department: (srep.employee) ? (srep.employee.departmentName ? srep.employee.departmentName : '') : '', departmentId: (srep.employee) ? (srep.employee.departmentId ? srep.employee.departmentId : 'null') : 'null',};
 							approvedList.push(approvedObj);							
 						}
 						return {

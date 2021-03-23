@@ -24,6 +24,8 @@ import { AppBar, Toolbar } from '@material-ui/core';
 import EnrollmentListTable from './components/EnrollmentListTable';
 import { filterByMonths } from './components/chartDataFilter';
 import { updatedEnrollmentList } from './components/setEntityDeptName';
+import { filterData } from './components/dataFilter';
+
 
 const columns = [
     {
@@ -113,35 +115,69 @@ function FinanceSrepDashboard(props) {
     let enrollmentList = HRsrepDashboard.data.length !== 0 ? HRsrepDashboard.data.srepData : [];
     enrollmentList = updatedEnrollmentList(enrollmentList, entities);
     const countEmployees = HRsrepDashboard.data.length !== 0 ? HRsrepDashboard.data.countEmployees : 0;
-    const rejectedList = HRsrepDashboard.data.length !== 0 ? HRsrepDashboard.data.rejectedList : [];
-    const approvedList = HRsrepDashboard.data.length !== 0 ? HRsrepDashboard.data.approvedList : [];
-    const pendingList = HRsrepDashboard.data.length !== 0 ? HRsrepDashboard.data.pendingList : [];
+    let rejectedList = HRsrepDashboard.data.length !== 0 ? HRsrepDashboard.data.rejectedList : [];
+    rejectedList = updatedEnrollmentList(rejectedList);
+    let approvedList = HRsrepDashboard.data.length !== 0 ? HRsrepDashboard.data.approvedList : [];
+    approvedList = updatedEnrollmentList(approvedList);
+    let pendingList = HRsrepDashboard.data.length !== 0 ? HRsrepDashboard.data.pendingList : [];
+    pendingList = updatedEnrollmentList(pendingList);
     const [data, setData] = useState([]);
     const [open, setOpen] = useState(false);
     const [search, setSearch] = useState('');
     const thisYear = (new Date).getFullYear();
+    const thisYearString = (new Date).getFullYear().toString();
     const years = ['all', `${thisYear}`,`${thisYear - 1}`, `${thisYear - 2}`, `${thisYear - 3}`, `${thisYear - 4}`];
     const departmentList =  [{id: 'all', departmentName: 'all'}, ...((useSelector(({ departments }) => departments.deparmentList)) ? useSelector(({ departments }) => departments.deparmentList) : [])];
-    const [chartYearfilter, setChartYearfilter] = useState('all');
+    const departmentList2 =  [{id: 'all', departmentName: 'all'}, ...((useSelector(({ departments }) => departments.deparmentList)) ? useSelector(({ departments }) => departments.deparmentList) : [])];
+    const [filter, setFilter] = useState('all');
+    const [filterNew, setFilterNew] = useState('all');
+    const [chartYearfilter, setChartYearfilter] = useState(thisYearString);
     const [Entityfilter, setEntityFilter] = useState('all');
     const [Yearfilter, setYearFilter] = useState('all');
     const [Departmentfilter, setDepartmentFilter] = useState('all');
+    enrollmentList = filterData(enrollmentList, search, Yearfilter, Entityfilter, Departmentfilter);
     const [selectedRow, setSelectedRow] = useState({});
     const [departments, setDepartments] = useState(departmentList);
-    
+    const [departmentsNew, setDepartmentsNew] = useState(departmentList2);
+    lineChartData.labels = monthNames;
+    lineChartData.datasets[0].data = filterByMonths(approvedList, chartYearfilter, filter, filterNew); // Approved
+    lineChartData.datasets[1].data = filterByMonths(pendingList, chartYearfilter, filter, filterNew); // Pending
+    lineChartData.datasets[2].data = filterByMonths(rejectedList, chartYearfilter, filter, filterNew); // Rejected
+
     useEffect(() => {
         dispatch(Actions.getDashboardSrep());
         dispatch(UtilActions.getEntities());
     }, []);
 
+    const handleFilter = (event) => {
+        setFilter(event.target.value);
+        const value = entities.filter(e => {
+            return e.entityName.toUpperCase() === event.target.value.toUpperCase();
+        })
+        const depts = value[0].department ?? [];
+        let newDepts = [{departmentName: 'all'}];
+        newDepts.push(...depts);
+        setDepartmentsNew(newDepts);
+        if (event.target.value === "all") {
+            setFilterNew("all");
+        };
+    }
+
+    const handleFilterNew = (event) => {
+        setFilterNew(event.target.value);
+    }
+
     const handleSearch = (event) => {
         setSearch(event.target.value);
-        filterData();
+        // filterData();
+    }
+
+    const handleChartYearFilter = (event) => {
+        setChartYearfilter(event.target.value);
     }
 
     const handleYearFilter = (event) => {
         setYearFilter(event.target.value);
-        filterData();
     }
 
     const handleEntityFilter = (event) => {
@@ -156,86 +192,17 @@ function FinanceSrepDashboard(props) {
         if (event.target.value === "all") {
             setDepartmentFilter("all");
         };
-        filterData();
     }
 
     const handleDepartmentFilter = (event) => {
         setDepartmentFilter(event.target.value);
-        filterData();
-    }
-
-    const filterData = () => {
-        let searchArr = [];
-        let yearArr = [];
-        let entityArr = [];
-        let departmentArr = [];
-        let dataNew = [];
-        if (search !== '' || Yearfilter !== 'all' || Entityfilter !== 'all' || Departmentfilter !== 'all') {
-            switchData = true;
-            if (search !== '') {
-                searchArr = searchfilterMethod(enrollmentList);
-                dataNew = searchArr;
-            }
-            if (Yearfilter !== 'all') {
-                yearArr = searchArr.length > 0 ? yearfilterMethod(searchArr) : yearfilterMethod(enrollmentList);
-                dataNew = yearArr;
-            }
-            if (Entityfilter !== 'all') {
-                if (Yearfilter === 'all') {
-                    entityArr = searchArr.length > 0 ? entityfilterMethod(searchArr) : entityfilterMethod(enrollmentList);
-                } else {
-                    entityArr = yearArr.length > 0 ? entityfilterMethod(yearArr) : entityfilterMethod(enrollmentList);
-                }
-                dataNew = entityArr;
-                
-                if (Departmentfilter !== 'all') {
-                    if (entityArr.length > 0) {
-                        departmentArr = departmentfilterMethod(entityArr);
-                        dataNew = departmentArr;
-                    }
-                }
-            }
-            setData(dataNew);
-        } else {
-            setData(enrollmentList);
-        }
-        console.log('Our Data status is: ', data);
-    }
-
-    const searchfilterMethod = (arr) => {
-        const results = arr.filter(obj => obj.employeeEmail === search);
-        // Object.keys(obj)
-        // .some(key => obj[key].indexOf(search) !== -1)
-        // console.log('Search Result: ', results)
-        return results;
-    }
-
-    const yearfilterMethod = (arr) => {
-        const newYearArr = arr.filter(e => {
-            return e.year.toUpperCase() === Yearfilter.toUpperCase();
-        })
-        return newYearArr;
-    }
-
-    const entityfilterMethod = (arr) => {
-        const newEntityArr = arr.filter(e => {
-            return e.entity.toUpperCase() === Entityfilter.toUpperCase();
-        })
-        return newEntityArr;
-    }
-
-    const departmentfilterMethod = (arr) => {
-        const newDepartmentArr = arr.filter(e => {
-            return e.department.toUpperCase() === Departmentfilter.toUpperCase();
-        })
-        return newDepartmentArr;
     }
 
     const ClickOpen = (n) => {
         setSelectedRow(n);
         setOpen(true);
     };
-    
+
     const handleClose = () => {
         setOpen(false);
     };
@@ -377,73 +344,26 @@ function FinanceSrepDashboard(props) {
                 <DialogContent>
                     <table className={'w-full text-justify'}>
                         <tbody>
-                            <tr className="name">
-                                <th>Name</th>
-                                <td>{selectedRow?.name}</td>
-                            </tr>
-
-                            <tr className="employeeEmail">
-                                <th>Email</th>
-                                <td>{selectedRow?.employeeEmail}</td>
-                            </tr>
-
-                            <tr className="status">
-                                <th>Status</th>
-                                <td>{selectedRow?.status}</td>
-                            </tr>
-
-                            <tr className="entity">
-                                <th>Entity</th>
-                                <td>{selectedRow?.entity}</td>
-                            </tr>
-
-                            <tr className="department">
-                                <th>Department</th>
-                                <td>{selectedRow?.department}</td>
-                            </tr>
-
-                            <tr className="capitalFund">
-                                <th>Capital Fund</th>
-                                <td>{selectedRow?.capitalFund}</td>
-                            </tr>
-
-                            <tr className="beneficiaryName">
-                                <th>Beneficiary Name</th>
-                                <td>{selectedRow?.beneficiaryName}</td>
-                            </tr>
-
-                            <tr className="beneficiaryRelationship">
-                                <th>Beneficiary Relationship</th>
-                                <td>{selectedRow?.beneficiaryRelationship}</td>
-                            </tr>
-
-                            <tr className="beneficiaryNationality">
-                                <th>Beneficiary Nationality</th>
-                                <td>{selectedRow?.beneficiaryNationality}</td>
-                            </tr>
-
-                            <tr className="beneficiaryNationality">
-                                <th>Beneficiary Nationality</th>
-                                <td>{selectedRow?.beneficiaryNationality}</td>
-                            </tr>
-
-                            <tr className="beneficiaryGender">
-                                <th>Beneficiary Gender</th>
-                                <td>{selectedRow?.beneficiaryGender}</td>
-                            </tr>
-
-                            <tr className="beneficiaryEmail">
-                                <th>Beneficiary Email</th>
-                                <td>{selectedRow?.beneficiaryEmail}</td>
-                            </tr>
+                            <tr className="name"><th>Name</th><td>{selectedRow?.name}</td></tr>
+                            <tr className="employeeEmail"><th>Email</th><td>{selectedRow?.employeeEmail}</td></tr>
+                            <tr className="status"><th>Status</th><td>{selectedRow?.status}</td></tr>
+                            <tr className="entity"><th>Entity</th><td>{selectedRow?.entity}</td></tr>
+                            <tr className="department"><th>Department</th><td>{selectedRow?.department}</td></tr>
+                            <tr className="capitalFund"><th>Capital Fund</th><td>{selectedRow?.capitalFund}</td></tr>
+                            <tr className="beneficiaryName"><th>Beneficiary Name</th><td>{selectedRow?.beneficiaryName}</td></tr>
+                            <tr className="beneficiaryRelationship"><th>Beneficiary Relationship</th><td>{selectedRow?.beneficiaryRelationship}</td></tr>
+                            <tr className="beneficiaryNationality"><th>Beneficiary Nationality</th><td>{selectedRow?.beneficiaryNationality}</td></tr>
+                            <tr className="beneficiaryNationality"><th>Beneficiary Nationality</th><td>{selectedRow?.beneficiaryNationality}</td></tr>
+                            <tr className="beneficiaryGender"><th>Beneficiary Gender</th><td>{selectedRow?.beneficiaryGender}</td></tr>
+                            <tr className="beneficiaryEmail"><th>Beneficiary Email</th><td>{selectedRow?.beneficiaryEmail}</td></tr>
                         </tbody>
                     </table>
-                    </DialogContent>
-                    <DialogActions className="flex justify-between m-20">
-                        <Button onClick={handleClose} color="primary">
-                            Close
-                        </Button>
-                    </DialogActions>
+                </DialogContent>
+                <DialogActions className="flex justify-between m-20">
+                    <Button onClick={handleClose} color="primary">
+                        Close
+                    </Button>
+                </DialogActions>
             </Dialog>
 
         <Paper className="mt-8 m-12">

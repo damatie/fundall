@@ -15,27 +15,11 @@ export const updatedEnrollmentList = (enrollmentList = [], entities = []) => {
             };	
         });
 
-        return { 
-            sn: srep.sn,
-            id: srep.id,
-            name: srep.name,
-            status: srep.status,
-            entityId: srep.entityId,
+        return {
+            ...srep,
             entity: entityName,
-            departmentId: srep.departmentId,
             department: departmentName,
-            capitalFund: srep.capitalFund,
-            beneficiaryName: srep.beneficiaryName,
-            beneficiaryRelationship: srep.beneficiaryRelationship,
-            beneficiaryNationality: srep.beneficiaryNationality,
-            beneficiaryGender: srep.beneficiaryGender,	
-            beneficiaryEmail: srep.beneficiaryEmail,
-            beneficiaryPhone: srep.beneficiaryPhone,
-            createdAt: srep.createdAt,
-            year: srep.year.toString(),
-            month: srep.month,
-            employeePhoneNo: srep.employeePhoneNo,
-            employeeEmail: srep.employeeEmail 
+            year: srep.year.toString(), 
         }
     });
     console.log("returnEnrollmentList: ", returnEnrollmentList);
