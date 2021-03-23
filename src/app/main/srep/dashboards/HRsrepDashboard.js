@@ -471,7 +471,6 @@ import { filterData } from './components/dataFilter';
                             <tr className="beneficiaryName"><th>Beneficiary Name</th><td>{selectedRow?.beneficiaryName}</td></tr>
                             <tr className="beneficiaryRelationship"><th>Beneficiary Relationship</th><td>{selectedRow?.beneficiaryRelationship}</td></tr>
                             <tr className="beneficiaryNationality"><th>Beneficiary Nationality</th><td>{selectedRow?.beneficiaryNationality}</td></tr>
-                            <tr className="beneficiaryNationality"><th>Beneficiary Nationality</th><td>{selectedRow?.beneficiaryNationality}</td></tr>
                             <tr className="beneficiaryGender"><th>Beneficiary Gender</th><td>{selectedRow?.beneficiaryGender}</td></tr>
                             <tr className="beneficiaryEmail"><th>Beneficiary Email</th><td>{selectedRow?.beneficiaryEmail}</td></tr>
                         </tbody>

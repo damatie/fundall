@@ -54,7 +54,7 @@ function EnrollmentListTable(props) {
 
 	return (
 		<div className="w-full flex flex-col">
-			<FuseScrollbars className="flex-grow overflow-x-auto">
+			<FuseScrollbars className="flex-grow">
 				<Table className="min-w-xl" aria-labelledby="tableTitle">
                     <EnrollmentListTableHead
 						numSelected={selected.length}
