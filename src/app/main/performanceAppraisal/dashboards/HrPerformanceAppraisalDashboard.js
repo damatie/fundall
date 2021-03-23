@@ -1,198 +1,715 @@
+import withReducer from 'app/store/withReducer';
 import SimplePage from 'app/shared/SimplePage';
+import { makeStyles } from '@material-ui/core/styles';
+import { Line } from 'react-chartjs-2';
+import { useDispatch, useSelector } from 'react-redux';
 import CardWidget from 'app/shared/widgets/CardWidget';
 import CardWidgetWithChart from 'app/shared/widgets/CardWidgetWithChart';
-import React, { Fragment } from 'react';
+import React, { Component, Fragment, useEffect, useState  } from 'react';
+import { HorizontalBar } from 'react-chartjs-2';
 import Paper from '@material-ui/core/Paper';
 import LineGraphChart from 'app/shared/charts/LineGraphChart';
 import SelectTextField from 'app/shared/TextInput/SelectTextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
+import Input from '@material-ui/core/Input';
+import Icon from '@material-ui/core/Icon';
+import { TextFieldFormsy } from '@fuse/core/formsy';
+import Formsy from 'formsy-react';
+import Dialog from '@material-ui/core/Dialog';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
+import Button from '@material-ui/core/Button';
+import { AppBar, Toolbar } from '@material-ui/core';
 import useHRperformanceAppraisalDashboard from '../hooks/useHRperformanceAppraisalDashboard';
+import AppraisalTable from './components/AppraisalTable';
 
+const monthNames = ["January", "February", "March", "April", "May", "June",
+                    "July", "August", "September", "October", "November", "December" ];
 
-// test data, must be removed
-const data = {
-  labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-  datasets: [
-    {
-      label: 'Completed Performance Appraisal',
-      fill: false,
-      lineTension: 0.1,
-      backgroundColor: '#2196F3',
-      borderColor: '#2196F3',
-      borderCapStyle: 'butt',
-      borderDash: [],
-      borderDashOffset: 0.0,
-      borderJoinStyle: 'miter',
-      pointBorderColor: '#2196F3',
-      pointBackgroundColor: '#fff',
-      pointBorderWidth: 1,
-      pointHoverRadius: 5,
-      pointHoverBackgroundColor: '#2196F3',
-      pointHoverBorderColor: 'rgba(220,220,220,1)',
-      pointHoverBorderWidth: 2,
-      pointRadius: 1,
-      pointHitRadius: 10,
-      data: [65, 59, 80, 81, 56, 55, 40]
-    },
-    {
-      label: 'Uncompleted Performance Appraisal',
-      fill: false,
-      lineTension: 0.1,
-      backgroundColor: 'tomato',
-      borderColor: 'tomato',
-      borderCapStyle: 'butt',
-      borderDash: [],
-      borderDashOffset: 0.0,
-      borderJoinStyle: 'round',
-      pointBorderColor: 'rgba(75,192,192,1)',
-      pointBackgroundColor: '#fff',
-      pointBorderWidth: 1,
-      pointHoverRadius: 5,
-      pointHoverBackgroundColor: 'rgba(75,192,192,1)',
-      pointHoverBorderColor: 'rgba(220,220,220,1)',
-      pointHoverBorderWidth: 2,
-      pointRadius: 1,
-      pointHitRadius: 10,
-      data: [55, 79, 10, 61, 66, 45, 50]
-    }
-  ]
+const lineChartData = {
+    labels: monthNames,
+    datasets: [
+        {
+            label: 'Above Expectation',
+            fill: false,			
+            lineTension: 0.1,
+            backgroundColor: '#2CD9C5',
+            borderColor: '#2CD9C5',
+            borderCapStyle: 'butt',
+            borderDash: [],
+            borderDashOffset: 0.0,
+            borderJoinStyle: 'miter',
+            pointBorderColor: '#2CD9C5',
+            pointBackgroundColor: '#fff',
+            pointBorderWidth: 1,
+            pointHoverRadius: 5,
+            pointHoverBackgroundColor: '#2CD9C5',
+            pointHoverBorderColor: '#2CD9C5',
+            pointHoverBorderWidth: 2,
+            pointRadius: 1,
+            pointHitRadius: 10,
+            data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            label: 'Meets Expectation',
+            fill: false,			
+            lineTension: 0.1,
+            backgroundColor: '#2D99FF',
+            borderColor: '#2D99FF',
+            borderCapStyle: 'butt',
+            borderDash: [],
+            borderDashOffset: 0.0,
+            borderJoinStyle: 'miter',
+            pointBorderColor: '#2D99FF',
+            pointBackgroundColor: '#fff',
+            pointBorderWidth: 1,
+            pointHoverRadius: 5,
+            pointHoverBackgroundColor: '#2D99FF',
+            pointHoverBorderColor: '#2D99FF',
+            pointHoverBorderWidth: 2,
+            pointRadius: 1,
+            pointHitRadius: 10,
+            data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+            label: 'Below Expectation',
+            fill: false,			
+            lineTension: 0.1,
+            backgroundColor: '#FF6C40',
+            borderColor: '#FF6C40',
+            borderCapStyle: 'butt',
+            borderDash: [],
+            borderDashOffset: 0.0,
+            borderJoinStyle: 'miter',
+            pointBorderColor: '#FF6C40',
+            pointBackgroundColor: '#fff',
+            pointBorderWidth: 1,
+            pointHoverRadius: 5,
+            pointHoverBackgroundColor: '#FF6C40',
+            pointHoverBorderColor: '#FF6C40',
+            pointHoverBorderWidth: 2,
+            pointRadius: 1,
+            pointHitRadius: 10,
+            data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        {
+          label: 'Outstanding',
+          fill: false,			
+          lineTension: 0.1,
+          backgroundColor: '#826AF9',
+          borderColor: '#826AF9',
+          borderCapStyle: 'butt',
+          borderDash: [],
+          borderDashOffset: 0.0,
+          borderJoinStyle: 'miter',
+          pointBorderColor: '#826AF9',
+          pointBackgroundColor: '#fff',
+          pointBorderWidth: 1,
+          pointHoverRadius: 5,
+          pointHoverBackgroundColor: '#826AF9',
+          pointHoverBorderColor: '#826AF9',
+          pointHoverBorderWidth: 2,
+          pointRadius: 1,
+          pointHitRadius: 10,
+          data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+      }
+    ]
+};
+
+const columns1 = [
+  {
+      id: 'name',
+      field: 'name',
+      align: 'left',
+      disablePadding: false,
+      label: 'Name',
+      sort: true
+  },
+  {
+      id: 'employeeEmail',
+      field: 'employeeEmail',
+      align: 'left',
+      disablePadding: false,
+      label: 'Email',
+      sort: true
+  },
+  {
+      id: 'entity',
+      field: 'entity',
+      newId: 'entityId',
+      align: 'left',
+      disablePadding: false,
+      label: 'Entity',
+      sort: true,
+  },
+  {
+      id: 'department',
+      field: 'department',
+      newId: 'departmentId',
+      align: 'left',
+      disablePadding: false,
+      label: 'Dept.',
+      sort: true,
+  },
+  {
+      align: 'left',
+      disablePadding: false,
+      label: 'Capital',
+      field: 'capitalFund',
+      sort: true,
+  }
+];
+
+const columns2 = [
+  {
+      id: 'name',
+      field: 'name',
+      align: 'left',
+      disablePadding: false,
+      label: 'Name',
+      sort: true
+  },
+  {
+      id: 'employeeEmail',
+      field: 'employeeEmail',
+      align: 'left',
+      disablePadding: false,
+      label: 'Email',
+      sort: true
+  },
+  {
+      id: 'entity',
+      field: 'entity',
+      newId: 'entityId',
+      align: 'left',
+      disablePadding: false,
+      label: 'Entity',
+      sort: true,
+  },
+  {
+      id: 'department',
+      field: 'department',
+      newId: 'departmentId',
+      align: 'left',
+      disablePadding: false,
+      label: 'Dept.',
+      sort: true,
+  },
+  {
+      align: 'left',
+      disablePadding: false,
+      label: 'Capital',
+      field: 'capitalFund',
+      sort: true,
+  }
+];
+
+const columns3 = [
+  {
+      id: 'name',
+      field: 'name',
+      align: 'left',
+      disablePadding: false,
+      label: 'Name',
+      sort: true
+  },
+  {
+      id: 'employeeEmail',
+      field: 'employeeEmail',
+      align: 'left',
+      disablePadding: false,
+      label: 'Email',
+      sort: true
+  },
+  {
+      id: 'entity',
+      field: 'entity',
+      newId: 'entityId',
+      align: 'left',
+      disablePadding: false,
+      label: 'Entity',
+      sort: true,
+  },
+  {
+      id: 'department',
+      field: 'department',
+      newId: 'departmentId',
+      align: 'left',
+      disablePadding: false,
+      label: 'Dept.',
+      sort: true,
+  },
+  {
+      align: 'left',
+      disablePadding: false,
+      label: 'Capital',
+      field: 'capitalFund',
+      sort: true,
+  }
+];
+
+const columns4 = [
+  {
+      id: 'name',
+      field: 'name',
+      align: 'left',
+      disablePadding: false,
+      label: 'Name',
+      sort: true
+  },
+  {
+      id: 'employeeEmail',
+      field: 'employeeEmail',
+      align: 'left',
+      disablePadding: false,
+      label: 'Email',
+      sort: true
+  },
+  {
+      id: 'entity',
+      field: 'entity',
+      newId: 'entityId',
+      align: 'left',
+      disablePadding: false,
+      label: 'Entity',
+      sort: true,
+  },
+  {
+      id: 'department',
+      field: 'department',
+      newId: 'departmentId',
+      align: 'left',
+      disablePadding: false,
+      label: 'Dept.',
+      sort: true,
+  },
+  {
+      align: 'left',
+      disablePadding: false,
+      label: 'Capital',
+      field: 'capitalFund',
+      sort: true,
+  }
+];
+
+const horizontalChartData1 = {
+	labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+	datasets: [
+		{
+			label: 'My First dataset',
+			backgroundColor: 'rgba(255,99,132,0.2)',
+			borderColor: 'rgba(255,99,132,1)',
+			borderWidth: 1,
+			hoverBackgroundColor: 'rgba(255,99,132,0.4)',
+			hoverBorderColor: 'rgba(255,99,132,1)',
+			data: [65, 59, 80, 81, 56, 55, 40]
+		}
+	]
+};
+
+const horizontalChartData2 = {
+	labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+	datasets: [
+		{
+			label: 'My First dataset',
+			backgroundColor: 'rgba(255,99,132,0.2)',
+			borderColor: 'rgba(255,99,132,1)',
+			borderWidth: 1,
+			hoverBackgroundColor: 'rgba(255,99,132,0.4)',
+			hoverBorderColor: 'rgba(255,99,132,1)',
+			data: [65, 59, 80, 81, 56, 55, 40]
+		}
+	]
+};
+
+const horizontalChartData3 = {
+	labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+	datasets: [
+		{
+			label: 'My First dataset',
+			backgroundColor: 'rgba(255,99,132,0.2)',
+			borderColor: 'rgba(255,99,132,1)',
+			borderWidth: 1,
+			hoverBackgroundColor: 'rgba(255,99,132,0.4)',
+			hoverBorderColor: 'rgba(255,99,132,1)',
+			data: [65, 59, 80, 81, 56, 55, 40]
+		}
+	]
+};
+
+const horizontalChartData4 = {
+	labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+	datasets: [
+		{
+			label: 'My First dataset',
+			backgroundColor: 'rgba(255,99,132,0.2)',
+			borderColor: 'rgba(255,99,132,1)',
+			borderWidth: 1,
+			hoverBackgroundColor: 'rgba(255,99,132,0.4)',
+			hoverBorderColor: 'rgba(255,99,132,1)',
+			data: [65, 59, 80, 81, 56, 55, 40]
+		}
+	]
 };
 
 const HrPerformanceAppraisalDashboard = () => {
   const { lineGraphData } = useHRperformanceAppraisalDashboard();
+  const entities = [{id: 'all', entityName: 'all'}, ...((useSelector(({ entities }) => entities.entityList)) ? useSelector(({ entities }) => entities.entityList) : [])];
+  const thisYear = (new Date).getFullYear();
+  const thisYearString = (new Date).getFullYear().toString();
+  const years = ['all', `${thisYear}`,`${thisYear - 1}`, `${thisYear - 2}`, `${thisYear - 3}`, `${thisYear - 4}`];
+  // const [filter, setFilter] = useState('all');
+  // const [filterNew, setFilterNew] = useState('all');
+  const [lineYearfilter, setLineYearfilter] = useState(thisYearString);
+  const [horiYearfilter1, setHoriYearfilter1] = useState(thisYearString);
+  const [entityHoriFilter1, setEntityHoriFilter1] = useState('all');
+  const [horiYearfilter2, setHoriYearfilter2] = useState(thisYearString);
+  const [entityHoriFilter2, setEntityHoriFilter2] = useState('all');
+  const [horiYearfilter3, setHoriYearfilter3] = useState(thisYearString);
+  const [entityHoriFilter3, setEntityHoriFilter3] = useState('all');
+  const [horiYearfilter4, setHoriYearfilter4] = useState(thisYearString);
+  const [entityHoriFilter4, setEntityHoriFilter4] = useState('all');
+
+  const handleFilter = (event) => {
+    setFilter(event.target.value);
+    const value = entities.filter(e => {
+        return e.entityName.toUpperCase() === event.target.value.toUpperCase();
+    })
+    const depts = value[0].department ?? [];
+    let newDepts = [{departmentName: 'all'}];
+    newDepts.push(...depts);
+    setDepartments(newDepts);
+  }
+
+  const handleFilterNew = (event) => {
+      setFilterNew(event.target.value);
+    }
+    
+  const handleHoriYearFilter1 = (event) => {
+    setHoriYearFilter1(event.target.value);
+  }
+  
+  const handleEntityHoriFilter1 = (event) => {
+    setEntityHoriFilter1(event.target.value);
+  }
+
+  const handleHoriYearFilter2 = (event) => {
+    setHoriYearFilter2(event.target.value);
+  }
+  
+  const handleEntityHoriFilter2 = (event) => {
+    setEntityHoriFilter2(event.target.value);
+  }
+
+  const handleHoriYearFilter3 = (event) => {
+    setHoriYearFilter3(event.target.value);
+  }
+  
+  const handleEntityHoriFilter3 = (event) => {
+    setEntityHoriFilter3(event.target.value);
+  }
+
+  const handleHoriYearFilter4 = (event) => {
+    setHoriYearFilter4(event.target.value);
+  }
+  
+  const handleEntityHoriFilter4 = (event) => {
+    setEntityHoriFilter4(event.target.value);
+  }
+  
+  const handleLineYearfilter = (event) => {
+    setLineYearfilter(event.target.value);
+  } //lineYearfilter
+
+  
   return (
-    <SimplePage title='HR PERFORMANCE APPRAISAL MANAGEMENT DASHBOARD'>
+    <SimplePage title='HR PERFORMANCE APPRAISAL DASHBOARD'>
       <main>
-        <section className='flex flex-row justify-between items-center'>
-          <div className="widget flex w-full sm:w-1/2 md:w-1/3 pr-24">
-            <CardWidget
-              title='Performance appraisals completed'
-              count={20}
-              color='green'
-            />
-          </div>
-          <div className="widget flex w-full sm:w-1/2 md:w-1/3 pr-24">
-            <CardWidget
-              title='Performance appraisals pending'
-              count={10}
-              color='orange'
-            />
-          </div>
-          <div className="widget flex w-full sm:w-1/2 md:w-1/3">
-            <CardWidget
-              title='Average Performance score'
-              count={`${20}%`}
-              color='blue'
-            />
+        <section>
+          <div className="flex flex-row w-full justify-between ml-2 mr-13 mb-12 mt-12">
+            <Paper className="w-full rounded-8 shadow-none border-1 flex flex-col justify-center items-center mr-10">
+                <div className="text-center pt-12">
+                  <Typography className="text-16" color="textSecondary">
+                      {"Total Completed Performance Appraisal"}
+                  </Typography>
+                  <Typography className="text-32">
+                      {0}
+                  </Typography>
+                </div>
+                <div className="text-center pb-12 pt-20">
+                  <Typography className="text-16" color="textSecondary">
+                      {"Total Pending Performance Appraisal"}
+                  </Typography>
+                  <Typography className="text-32">
+                      {0}
+                  </Typography>
+                </div>
+            </Paper>
+            <Paper className="w-full rounded-8 shadow-none border-1 flex flex-col justify-center items-center mr-10">
+                <div>
+
+                </div>
+            </Paper>
+            <Paper className="w-full rounded-8 shadow-none border-1 flex flex-col justify-center items-center mr-10">
+                <div className="text-center pt-12">
+                <Typography className="text-16" color="textSecondary">
+                    {"Number of SREP Pending Applications"}
+                </Typography>
+                <Typography className="text-32" style={{ color: "orange" }} >
+                    {0}
+                </Typography>
+                </div>
+            </Paper>
+            <Paper className="w-full rounded-8 shadow-none border-1 flex flex-col justify-center items-center mr-10">
+                <div className="text-center pt-12">
+                <Typography className="text-16" color="textSecondary">
+                    {"Number of SREP Pending Applications"}
+                </Typography>
+                <Typography className="text-32" style={{ color: "orange" }} >
+                    {0}
+                </Typography>
+                </div>
+            </Paper>
           </div>
         </section>
 
-        <Grid container spacing={2}>
-          <Grid item lg={6}>
-            <Paper className='p-20 mt-24 h-full'>
-
-              <div className="w-full p-12 mb-24 m-10">
-                <Typography variant="subtitle1" color="initial" className="text-center mb-48 font-semibold">Number Of Completed KPO's vs Number UnCompleted KPO's Per Department</Typography>
-                <Grid container spacing={3} alignItems='center'>
-                  <Grid item lg={4}>
-                    <SelectTextField
-                      value={2020}
-                      size='small'
-                      label='Year'
-                    >
-                      {[2019, 2020].map(item => (
-                        <MenuItem value={item}>
-                          {item}
-                        </MenuItem>
-                      ))}
-                    </SelectTextField>
-                  </Grid>
-                  <Grid item lg={4}>
-                    <SelectTextField
-                      value={"SREL"}
-                      size='small'
-                      label='Entity'
-                    >
-                      {["5C", "C-BIT", "SRMC", "SREL"].map(item => (
-                        <MenuItem value={item}>
-                          {item}
-                        </MenuItem>
-                      ))}
-                    </SelectTextField>
-                  </Grid>
-                  <Grid item lg={4} >
-                    <SelectTextField
-                      value={"HRIS"}
-                      size='small'
-                      label='Department'
-                    >
-                      {["HR", "IT", "SALES"].map(item => (
-                        <MenuItem value={item}>
-                          {item}
-                        </MenuItem>
-                      ))}
-                    </SelectTextField>
-                  </Grid>
+        <section>
+          <div className="flex flex-row w-full justify-between ml-2 mr-13 mb-12 mt-12">
+          <Paper className="w-full rounded-8 shadow-none border-1 flex flex-col mr-10">
+            <div className="flex items-center justify-between px-16 h-64 border-b-1">
+            <Grid container spacing={1} className="flex flex-row w-full justify-between">
+                <Grid item lg={8}>
+                <Typography className="text-16 whitespace-no-wrap font-semibold mt-8">KPO's Not Updated Per Departments</Typography>
                 </Grid>
-                <LineGraphChart data={lineGraphData.kpos} height='100%' />
+                <Grid item lg={2} md={2} sm={4} xs={4}>
+                    <SelectTextField value={thisYearString} label="Year" size='small' value={horiYearfilter1} onChange={ev => handleHoriYearFilter1(ev)}>
+                        {years.map((year) => (<MenuItem key={year} value={year}> {year} </MenuItem>))}
+                    </SelectTextField>
+                </Grid>
+                <Grid item lg={2}>
+                <SelectTextField
+                    value={'all'}
+                    size='small'
+                    label='Entity'
+                    value={entityHoriFilter1}
+                    onChange={ev => handleEntityHoriFilter1(ev)}
+                >
+                    {entities.map(({id, entityName}) => (
+                    <MenuItem value={entityName} key={id}>
+                    {entityName}
+                  </MenuItem>
+                    ))}
+                </SelectTextField>
+                </Grid>
+                </Grid>
+              </div>
+              <div className="flex flex-col items-center w-full max-w-md">
+                <HorizontalBar data={horizontalChartData1} />
               </div>
             </Paper>
-          </Grid>
-          <Grid item lg={6}>
-            <Paper className="p-20 mt-24 h-full">
-              <div className="w-full mt-24 m-10">
-                <Typography variant="subtitle1" color="initial" className="text-center mb-20 font-semibold"> Number Of Completed Performance Appraisals VS Number unCompleted Performance Appraisals Per Department</Typography>
-                <Grid container spacing={3} alignItems='center'>
-                  <Grid item lg={4}>
-                    <SelectTextField
-                      value={2020}
-                      size='small'
-                      label='Year'
-                    >
-                      {[2019, 2020].map(item => (
-                        <MenuItem value={item}>
-                          {item}
-                        </MenuItem>
-                      ))}
-                    </SelectTextField>
-                  </Grid>
-                  <Grid item lg={4}>
-                    <SelectTextField
-                      value={"SREL"}
-                      size='small'
-                      label='Entity'
-                    >
-                      {["5C", "SREL", "C-BIT", "SRMC"].map(item => (
-                        <MenuItem value={item}>
-                          {item}
-                        </MenuItem>
-                      ))}
-                    </SelectTextField>
-                  </Grid>
-                  <Grid item lg={4}>
-                    <SelectTextField
-                      value={"HR"}
-                      size='small'
-                      label='Department'
-                    >
-                      {["IT", "SALES", "HR", "MARKETING"].map(item => (
-                        <MenuItem value={item}>
-                          {item}
-                        </MenuItem>
-                      ))}
-                    </SelectTextField>
-                  </Grid>
+            <Paper className="w-full rounded-8 shadow-none border-1 flex flex-col mr-10">
+            <div className="flex items-center justify-between px-16 h-64 border-b-1">
+            <Grid container spacing={1} className="flex flex-row w-full justify-between">
+                <Grid item lg={8}>
+                <Typography className="text-16 whitespace-no-wrap font-semibold mt-8">KPO's Not Updated Per Departments</Typography>
                 </Grid>
-                <LineGraphChart customData={data} height='100%' />
+                <Grid item lg={2} md={2} sm={4} xs={4}>
+                    <SelectTextField value={thisYearString} label="Year" size='small' value={horiYearfilter2} onChange={ev => handleHoriYearFilter2(ev)}>
+                        {years.map((year) => (<MenuItem key={year} value={year}> {year} </MenuItem>))}
+                    </SelectTextField>
+                </Grid>
+                <Grid item lg={2}>
+                <SelectTextField
+                    value={'all'}
+                    size='small'
+                    label='Entity'
+                    value={entityHoriFilter2}
+                    onChange={ev => handleEntityHoriFilter2(ev)}
+                >
+                    {entities.map(({id, entityName}) => (
+                    <MenuItem value={entityName} key={id}>
+                    {entityName}
+                  </MenuItem>
+                    ))}
+                </SelectTextField>
+                </Grid>
+                </Grid>
+              </div>
+              <div className="flex flex-col items-center w-full max-w-md">
+                <HorizontalBar data={horizontalChartData2} />
               </div>
             </Paper>
-          </Grid>
+          </div>
+        </section>
 
+        <section>
+          <div className="flex flex-row w-full justify-between ml-2 mr-13 mb-12 mt-12">
+          <Paper className="w-full rounded-8 shadow-none border-1 flex flex-col mr-10">
+            <div className="flex items-center justify-between px-16 h-64 border-b-1">
+            <Grid container spacing={1} className="flex flex-row w-full justify-between">
+                <Grid item lg={8}>
+                <Typography className="text-16 whitespace-no-wrap font-semibold mt-8">KPO's Not Updated Per Departments</Typography>
+                </Grid>
+                <Grid item lg={2} md={2} sm={4} xs={4}>
+                    <SelectTextField value={thisYearString} label="Year" size='small' value={horiYearfilter3} onChange={ev => handleHoriYearFilter3(ev)}>
+                        {years.map((year) => (<MenuItem key={year} value={year}> {year} </MenuItem>))}
+                    </SelectTextField>
+                </Grid>
+                <Grid item lg={2}>
+                <SelectTextField
+                    value={'all'}
+                    size='small'
+                    label='Entity'
+                    value={entityHoriFilter3}
+                    onChange={ev => handleEntityHoriFilter3(ev)}
+                >
+                    {entities.map(({id, entityName}) => (
+                    <MenuItem value={entityName} key={id}>
+                    {entityName}
+                  </MenuItem>
+                    ))}
+                </SelectTextField>
+                </Grid>
+                </Grid>
+              </div>
+              <div className="flex flex-col items-center w-full max-w-md">
+                <HorizontalBar data={horizontalChartData3} />
+              </div>
+            </Paper>
+            <Paper className="w-full rounded-8 shadow-none border-1 flex flex-col mr-10">
+            <div className="flex items-center justify-between px-16 h-64 border-b-1">
+            <Grid container spacing={1} className="flex flex-row w-full justify-between">
+                <Grid item lg={8}>
+                <Typography className="text-16 whitespace-no-wrap font-semibold mt-8">KPO's Not Updated Per Departments</Typography>
+                </Grid>
+                <Grid item lg={2} md={2} sm={4} xs={4}>
+                    <SelectTextField value={thisYearString} label="Year" size='small' value={horiYearfilter4} onChange={ev => handleHoriYearFilter4(ev)}>
+                        {years.map((year) => (<MenuItem key={year} value={year}> {year} </MenuItem>))}
+                    </SelectTextField>
+                </Grid>
+                <Grid item lg={2}>
+                <SelectTextField
+                    value={'all'}
+                    size='small'
+                    label='Entity'
+                    value={entityHoriFilter4}
+                    onChange={ev => handleEntityHoriFilter4(ev)}
+                >
+                    {entities.map(({id, entityName}) => (
+                    <MenuItem value={entityName} key={id}>
+                    {entityName}
+                  </MenuItem>
+                    ))}
+                </SelectTextField>
+                </Grid>
+                </Grid>
+              </div>
+              <div className="flex flex-col items-center w-full max-w-md">
+                <HorizontalBar data={horizontalChartData4} />
+              </div>
+            </Paper>
+          </div>
+        </section>
 
+        <section>
+          <div className="flex flex-row w-full justify-between ml-2 mr-13 mb-12 mt-12">
+            <Paper className="w-full rounded-8 shadow-none border-1 flex flex-col">
+              <div className="flex items-center justify-between px-16 h-64 border-b-1">
+                <Grid container spacing={1} className="flex flex-row w-full justify-between">
+                  <Grid item lg={10}>
+                    <Typography className="text-16 whitespace-no-wrap font-semibold mt-8">Overall Department Rating Distribution</Typography>
+                  </Grid>
+                  <Grid item lg={2} md={4} sm={4} xs={4}>
+                      <SelectTextField value={thisYearString} label="Year" size='small' value={lineYearfilter} onChange={ev => handlelineYearFilter(ev)}>
+                          {years.map((year) => (<MenuItem key={year} value={year}> {year} </MenuItem>))}
+                      </SelectTextField>
+                  </Grid>
+                </Grid>
+              </div>
+              <div className="flex w-full p-32">
+                  <Line options={{ legend: { position: "right", labels: {boxWidth: 10,
+                      fontSize: 12, padding: 10 } } }} height={220} width={870} data={lineChartData} />
+              </div>
+            </Paper>
+          </div>
+        </section>
+        
+        <section>
+          <div className="flex flex-row w-full justify-between ml-2 mr-13 mb-12 mt-12">
+            <Paper className="w-full rounded-8 shadow-none border-1 flex flex-col justify-center items-center mr-10">
+            <div className="flex flex-wrap w-full p-20">
+                    <Grid container spacing={1} >
+                        <Grid className="flex w-full flex-row" style={{ marginTop: "10px" }}>
+                            <Grid item lg={10} md={12} sm={12} xs={12} className="font-semibold text-16">
+                            Employee List - Completed Peformance Appraisal
+                            </Grid>
+                        </Grid>
+                        
+                        <Grid container spacing={1} className="mt-6 mb-6" >
+                            <Grid item lg={5} md={5} sm={5} xs={5}>
+                                <div className="flex items-center">
+                                    <Paper className="flex items-center w-full px-8 py-4 rounded-8">
+                                        <Icon color="action">search</Icon>
+                                        <Input
+                                            placeholder="Filter Employee List"
+                                            className="flex flex-1 mx-8"
+                                            disableUnderline
+                                            fullWidth
+                                            value={search}
+                                            inputProps={{
+                                                'aria-label': 'Search'
+                                            }}
+                                            onChange={e => handleSearch(e)}
+                                        />
+                                    </Paper>
+                                </div>
+                            </Grid>
+                            <Grid item lg={3} md={3} sm={4} xs={4}>
+                                <SelectTextField value={'all'} label="Entity" size='small' value={Entityfilter} onChange={ev => handleEntityFilter(ev)} >
+                                    {entities.map(({id, entityName}) => (<MenuItem key={id} value={entityName}> {entityName} </MenuItem>))}
+                                </SelectTextField>
+                            </Grid>
+                            {/* <Grid item lg={2} md={3} sm={4} xs={4}>
+                                <SelectTextField value={'all'} label="Department" size='small' value={Departmentfilter} onChange={ev => handleDepartmentFilter(ev)}>
+                                    {departments.map(({id, departmentName}) => (<MenuItem key={departmentName} value={departmentName}> {departmentName}</MenuItem>))}
+                                </SelectTextField>
+                            </Grid> */}
+                            <Grid item lg={2} md={2} sm={4} xs={4}>
+                                <SelectTextField value={'all'} label="Year" size='small' value={Yearfilter} onChange={ev => handleYearFilter(ev)}>
+                                    {years.map((year) => (<MenuItem key={year} value={year}> {year} </MenuItem>))}
+                                </SelectTextField>
+                            </Grid> 
+                        </Grid>
+                    </Grid>
+                </div>
+                <div>
+                    <AppraisalTable data={enrollmentList} rows={columns} handleClick={ClickOpen} type="default"/>
+                </div>
+            </Paper>
+            <Paper className="w-full rounded-8 shadow-none border-1 flex flex-col justify-center items-center mr-10">
+                <div>
 
-        </Grid>
+                </div>
+            </Paper>
+          </div>
+        </section>
+
+        <section>
+          <div className="flex flex-row w-full justify-between ml-2 mr-13 mb-12 mt-12">
+            <Paper className="w-full rounded-8 shadow-none border-1 flex flex-col justify-center items-center mr-10">
+                <div>
+                  
+                </div>
+            </Paper>
+            <Paper className="w-full rounded-8 shadow-none border-1 flex flex-col justify-center items-center mr-10">
+                <div>
+
+                </div>
+            </Paper>
+          </div>
+        </section>
       </main>
     </SimplePage>
   );
