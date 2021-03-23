@@ -490,21 +490,54 @@ const HrPerformanceAppraisalDashboard = () => {
                   </Typography>
                 </div>
             </Paper>
-            <Paper className="w-full rounded-8 shadow-none border-1 flex flex-col justify-center items-center mr-10">
+            <Paper className="w-full rounded-8 shadow-none border-1 flex flex-col mr-10">
+            <div className="flex items-center justify-between px-8 h-64 border-b-1">
+            <Grid container spacing={1} className="flex flex-row w-full justify-between">
+                <Grid item lg={3}>
+                <Typography className="text-16 whitespace-no-wrap font-semibold mt-8"></Typography>
+                </Grid>
+                <Grid item lg={4} md={6} sm={6} xs={6}>
+                    <SelectTextField value={thisYearString} label="Year" size='small' value={horiYearfilter1} onChange={ev => handleHoriYearFilter1(ev)}>
+                        {years.map((year) => (<MenuItem key={year} value={year}> {year} </MenuItem>))}
+                    </SelectTextField>
+                </Grid>
+                </Grid>
+              </div>
             <div className="flex flex-col items-center w-full max-w-md">
-              <h2>Doughnut Example</h2>
               <Doughnut data={doughnutChartData} />
             </div>
             </Paper>
-            <Paper className="w-full rounded-8 shadow-none border-1 flex flex-col justify-center items-center mr-10">
+            <Paper className="w-full rounded-8 shadow-none border-1 flex flex-col mr-10">
+            <div className="flex items-center justify-between px-8 h-64 border-b-1">
+            <Grid container spacing={1} className="flex flex-row w-full justify-between">
+                <Grid item lg={6}>
+                <Typography className="text-10 whitespace-no-wrap font-semibold mt-8">Rating Distribution in Organization</Typography>
+                </Grid>
+                <Grid item lg={4} md={6} sm={6} xs={6}>
+                    <SelectTextField value={thisYearString} label="Year" size='small' value={horiYearfilter1} onChange={ev => handleHoriYearFilter1(ev)}>
+                        {years.map((year) => (<MenuItem key={year} value={year}> {year} </MenuItem>))}
+                    </SelectTextField>
+                </Grid>
+                </Grid>
+              </div>
             <div className="flex flex-col items-center w-full max-w-md">
-              <h2>Polar Example</h2>
               <Polar data={polarChartData} />
             </div>
             </Paper>
-            <Paper className="w-full rounded-8 shadow-none border-1 flex flex-col justify-center items-center mr-10">
+            <Paper className="w-full rounded-8 shadow-none border-1 flex flex-col mr-10">
+            <div className="flex items-center justify-between px-8 h-64 border-b-1">
+            <Grid container spacing={1} className="flex flex-row w-full justify-between">
+                <Grid item lg={3}>
+                <Typography className="text-16 whitespace-no-wrap font-semibold mt-8"></Typography>
+                </Grid>
+                <Grid item lg={4} md={6} sm={6} xs={6}>
+                    <SelectTextField value={thisYearString} label="Year" size='small' value={horiYearfilter1} onChange={ev => handleHoriYearFilter1(ev)}>
+                        {years.map((year) => (<MenuItem key={year} value={year}> {year} </MenuItem>))}
+                    </SelectTextField>
+                </Grid>
+                </Grid>
+              </div>
               <div className="flex flex-col items-center w-full max-w-md">
-                <h2>Doughnut Example 2</h2>
                 <Doughnut data={doughnutChartData2} />
               </div>
             </Paper>
