@@ -10,6 +10,8 @@ const errorMsg = ({ name, number, type }) => {
       return `${name} is required`;
     case 'min':
       return `${name} must not be less than ${number} characters`;
+    case 'max':
+      return `${name} must not be more than ${number} characters`;
     default: {
       return '';
     }

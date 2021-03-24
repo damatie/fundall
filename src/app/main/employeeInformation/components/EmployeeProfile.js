@@ -14,118 +14,18 @@ import PhoneInput from 'react-phone-input-2';
 import startsWith from 'lodash.startswith';
 import Typography from '@material-ui/core/Typography';
 import userPermission from '../logic/userPermission';
+import { getCountries } from '../services';
+
+const { useState, useEffect } = React;
 
 const EmployeeProfile = ({ value, authState }) => {
-  const { countries, states } = useSelector(state => state.regions);
+  // const { countries, states } = useSelector(state => state.regions);
 
-  const inputs = React.useMemo(() =>
-    [
-      {
-        name: 'title',
-        label: 'Title',
-        defaultValue: value.title,
-      },
-      {
-        name: 'firstName',
-        label: 'First Name',
-        defaultValue: value.firstName,
-      },
-      {
-        name: 'middleName',
-        label: 'Middle Name',
-        defaultValue: value.middleName,
-      },
-      {
-        name: 'lastName',
-        label: 'Surname',
-        defaultValue: value.lastName,
-      },
-      {
-        name: 'nickName',
-        label: 'Nick Name',
-        defaultValue: value.nickName
-      },
-      {
-        name: 'email',
-        label: 'Official Email',
-        defaultValue: value.email,
-      },
-      {
-        name: 'phoneNumber',
-        label: 'Mobile Number',
-        defaultValue: value.phoneNumber,
-        type: 'phoneNumber'
-      },
-      {
-        name: 'srgIdNumber',
-        label: 'SRG ID Number',
-        defaultValue: value.srgIdNumber,
-      },
-      {
-        name: 'gender',
-        label: 'Gender',
-        defaultValue: value.gender,
-        type: 'select',
-        data: [
-          {
-            id: 'male',
-            name: 'male'
-          },
-          {
-            id: 'female',
-            name: 'female'
-          },
-          {
-            id: 'others',
-            name: 'others'
-          }
-        ]
-      },
-      {
-        name: 'maritalStatus',
-        label: 'Marital Status',
-        defaultValue: value.maritalStatus,
-        type: 'select',
-        data: [
+  const [countries, setCountries ] = useState([]);
 
-          {
-            id: 'single',
-            name: 'single',
-          },
-          {
-            id: 'married',
-            name: 'married',
-          },
-          {
-            id: 'divorced',
-            name: 'divorced',
-          },
-          {
-            id: 'complicated',
-            name: 'complicated',
-          }
-        ]
-      },
-      {
-        name: 'country',
-        label: 'Country',
-        defaultValue: value.country,
-        data: countries,
-        type: 'select'
-      },
-      {
-        name: 'cityOfResidence',
-        label: 'City of Residence',
-        defaultValue: value.cityOfResidence,
-        data: states,
-        type: 'select'
-      },
-      {
-        name: 'residentialAddress',
-        label: 'Residential Address',
-        defaultValue: value.residentialAddress,
-      }
-    ], [value, states, countries]);
+  useEffect(() => {
+    getCountries().then((data) => setCountries(data));
+  }, []);
 
   const dispatch = useDispatch();
 
@@ -135,10 +35,10 @@ const EmployeeProfile = ({ value, authState }) => {
     profileId: value.employeeId,
   });
 
-  React.useEffect(() => {
-    dispatch(Actions.getCountries());
-    // dispatch(Actions.getEmployeeProfile(state.id));
-  }, []);
+  // React.useEffect(() => {
+  //   dispatch(Actions.getCountries());
+  //   // dispatch(Actions.getEmployeeProfile(state.id));
+  // }, []);
 
   const {
     errors,
@@ -148,12 +48,124 @@ const EmployeeProfile = ({ value, authState }) => {
     handleShouldUpdate,
     onSubmit,
     control,
-    handleMenuItemClick
+    handleMenuItemClick,
+    states
   } = useEmployeeProfile({
     defaultValue: value,
     state: authState,
-    dispatch
-  })
+    dispatch,
+    country: value
+  });
+
+  const inputs = React.useMemo(() =>
+  [
+    {
+      name: 'title',
+      label: 'Title',
+      defaultValue: value.title,
+    },
+    {
+      name: 'firstName',
+      label: 'First Name',
+      defaultValue: value.firstName,
+    },
+    {
+      name: 'middleName',
+      label: 'Middle Name',
+      defaultValue: value.middleName,
+    },
+    {
+      name: 'lastName',
+      label: 'Surname',
+      defaultValue: value.lastName,
+    },
+    {
+      name: 'nickName',
+      label: 'Nick Name',
+      defaultValue: value.nickName
+    },
+    {
+      name: 'email',
+      label: 'Official Email',
+      defaultValue: value.email,
+    },
+    {
+      name: 'phoneNumber',
+      label: 'Mobile Number',
+      defaultValue: value.phoneNumber,
+      type: 'phoneNumber'
+    },
+    {
+      name: 'srgIdNumber',
+      label: 'SRG ID Number',
+      defaultValue: value.srgIdNumber,
+    },
+    {
+      name: 'gender',
+      label: 'Gender',
+      defaultValue: value.gender,
+      type: 'select',
+      data: [
+        {
+          id: 'male',
+          name: 'male'
+        },
+        {
+          id: 'female',
+          name: 'female'
+        },
+        {
+          id: 'others',
+          name: 'others'
+        }
+      ]
+    },
+    {
+      name: 'maritalStatus',
+      label: 'Marital Status',
+      defaultValue: value.maritalStatus,
+      type: 'select',
+      data: [
+
+        {
+          id: 'single',
+          name: 'single',
+        },
+        {
+          id: 'married',
+          name: 'married',
+        },
+        {
+          id: 'divorced',
+          name: 'divorced',
+        },
+        {
+          id: 'complicated',
+          name: 'complicated',
+        }
+      ]
+    },
+    {
+      name: 'country',
+      label: 'Country',
+      defaultValue: value.country,
+      data: countries,
+      type: 'select',
+      fieldName: 'id'
+    },
+    {
+      name: 'cityOfResidence',
+      label: 'City of Residence',
+      defaultValue: value.cityOfResidence,
+      data: states,
+      type: 'select',
+    },
+    {
+      name: 'residentialAddress',
+      label: 'Residential Address',
+      defaultValue: value.residentialAddress,
+    }
+  ], [value, states, countries]);
 
   return (
     <BasicCard
@@ -192,7 +204,7 @@ const EmployeeProfile = ({ value, authState }) => {
                       {input.data.map(({ id, name }) => (
                         <MenuItem
                           key={id}
-                          value={name}
+                          value={input?.fieldName ? id : name}
                           onClick={handleMenuItemClick({ value: id, name: input.name })}
                         >
                           {name}

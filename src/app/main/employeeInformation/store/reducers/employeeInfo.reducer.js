@@ -31,7 +31,9 @@ const employeeInfoReducer = (state = initialState, actions) => {
         info: {
           ...actions.payload,
           info: null,
-          ...actions.payload.info
+          ...actions.payload.info,
+          country: actions.payload.country,
+          residentialAddress: actions.payload.residentialAddress
         }
       }
     case 'clear_info':

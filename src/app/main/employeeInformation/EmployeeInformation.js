@@ -18,6 +18,8 @@ import { getAllJobTitle } from 'app/main/jobTitle/store/actions';
 import { getAllRoles } from 'app/main/permission/store/actions';
 import ProfilePicture from './components/ProfilePicture';
 import Signature from './components/Signature';
+import { Link } from 'react-router-dom';
+import Icon from '@material-ui/core/Icon';
 
 const EmployeeInformation = () => {
   const [tabValue, setTabValue] = React.useState(0);
@@ -48,10 +50,29 @@ const EmployeeInformation = () => {
     <>
       <PageLayout
         header={{}}
-        button={{}}
+        button={{
+          icon: '',
+          title: 'Employee Management',
+          handleSearch: ({ target: { value } }) => handleSearch(value),
+        }}
+        noSearch={true}
         headerClass='h-192'
         customHeader={
-          <section className='h-full w-full p-4'>
+          <section className='h-full w-full p-4 relative'>
+            {
+              !!params?.id && (
+                <section className='flex flex-row justify-start items-end absolute bottom-0 p-20'>
+                  <Icon
+                    className="text-20 text-black bg-white rounded-20 mr-16"
+                    component={Link}
+                    to={'/employee_management'}
+                    role="button"
+                  >
+                    arrow_back
+							    </Icon>
+                </section>
+              )
+            }
             <section className='flex flex-row items-center justify-center p-4'>
               <ProfilePicture />
             </section>

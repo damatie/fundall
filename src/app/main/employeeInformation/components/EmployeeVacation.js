@@ -95,6 +95,28 @@ const EmployeeVacation = ({ handleOpen }) => {
 
 const EmployeeVacationDetails = ({ item, index, setShouldUpdate, shouldUpdate, canDelete }) => {
 
+
+  const {
+    employeeInfo: {
+      info: { employeeId }
+    }
+  } = useSelector(state => state.employeeInformation);
+
+  const dispatch = useDispatch();
+
+  const {
+    getDate,
+    onSubmit,
+    errors,
+    register,
+    handleSubmit,
+    handleDelete,
+    control
+  } = useTravelAndVacation({
+    dispatch,
+    employeeId
+  });
+  
   const inputs = React.useMemo(() => [
     {
       name: 'activity',
@@ -107,38 +129,20 @@ const EmployeeVacationDetails = ({ item, index, setShouldUpdate, shouldUpdate, c
       label: 'Start Date',
       type: 'date',
       data: [],
+      maxDate: new Date(),
     },
     {
       name: 'endDate',
       label: 'End Date',
       type: 'date',
       data: [],
+      minDate: getDate
     },
     {
       name: 'location',
       label: 'Location',
     }
-  ], []);
-
-  const {
-    employeeInfo: {
-      info: { employeeId }
-    }
-  } = useSelector(state => state.employeeInformation);
-
-  const dispatch = useDispatch();
-
-  const {
-    onSubmit,
-    errors,
-    register,
-    handleSubmit,
-    handleDelete,
-    control
-  } = useTravelAndVacation({
-    dispatch,
-    employeeId
-  })
+  ], [getDate]);
 
   const close = () => {
     setShouldUpdate(false)
@@ -171,7 +175,8 @@ const EmployeeVacationDetails = ({ item, index, setShouldUpdate, shouldUpdate, c
                         label={input.label}
                         className="w-full"
                         value={item[input.name]}
-                        // maxDate={dob}
+                        maxDate={input.maxDate}
+                        minDate={input.minDate}
                         format={'MMMM Do, YYYY'}
                         error={errors[input.name]}
                         helperText={errors[input.name]?.message}
@@ -211,31 +216,6 @@ const EmployeeVacationDetails = ({ item, index, setShouldUpdate, shouldUpdate, c
 export const AddEmployeeVacation = () => {
   const dispatch = useDispatch();
 
-  const inputs = React.useMemo(() => [
-    {
-      name: 'activity',
-      label: 'Activity',
-    },
-    {
-      name: 'startDate',
-      label: 'Start Date',
-      type: 'date',
-      data: [],
-    },
-    {
-      name: 'endDate',
-      label: 'End Date',
-      type: 'date',
-      data: [],
-    },
-    {
-      name: 'location',
-      label: 'Location',
-      // type: 'select',
-      // data: [],
-    }
-  ], []);
-
   const {
     employeeInfo: {
       info: { employeeId }
@@ -247,11 +227,40 @@ export const AddEmployeeVacation = () => {
     errors,
     register,
     handleSubmit,
-    control
+    control,
+    getDate
   } = useTravelAndVacation({
     dispatch,
     employeeId
   })
+
+  const inputs = React.useMemo(() => [
+    {
+      name: 'activity',
+      label: 'Activity',
+    },
+    {
+      name: 'startDate',
+      label: 'Start Date',
+      type: 'date',
+      data: [],
+      maxDate: new Date(),
+    },
+    {
+      name: 'endDate',
+      label: 'End Date',
+      type: 'date',
+      data: [],
+      minDate: getDate,
+    },
+    {
+      name: 'location',
+      label: 'Location',
+      // type: 'select',
+      // data: [],
+    }
+  ], [getDate]);
+
 
   return (
     <form onSubmit={handleSubmit(onSubmit())}>
@@ -270,6 +279,8 @@ export const AddEmployeeVacation = () => {
                   className="w-full my-20"
                   // value={input.defaultValue}
                   // maxDate={dob}
+                  maxDate={input?.maxDate}
+                  minDate={input?.minDate}
                   format={'MMMM Do, YYYY'}
                   error={errors[input.name]}
                   helperText={errors[input.name]?.message}

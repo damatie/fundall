@@ -24,6 +24,20 @@ const schema = yup.object().shape({
       type: 'string',
       name: 'Private Mobile Number'
     })
+  ).min(
+    14,
+    errorMsg({
+      type: 'min',
+      name: 'Private Mobile Number',
+      number: 14
+    })
+  ).max(
+    14,
+    errorMsg({
+      type: 'max',
+      name: 'Private Mobile Number',
+      number: 14
+    })
   ).required(
     errorMsg({
       type: 'required',
@@ -198,6 +212,13 @@ const useCreateEmployeeInfo = ({dispatch, state, handleClick}) => {
 
   const [signature, setSignature] = React.useState([]);
 
+  const handleClose = () => {
+    swal.fire({
+      text: 'You have to complete your registration',
+      icon: 'info',
+    });
+  };
+
   const onSubmit = async (data) => {
     if(signature.length !== 0) {
       const formData = new FormData();
@@ -208,19 +229,12 @@ const useCreateEmployeeInfo = ({dispatch, state, handleClick}) => {
       for (const [key, value] of Object.entries(entries)) {
         formData.append(key, value);
       }
-      dispatch(createEmployeeInfo({ id:state.id, data: formData, handleClick }));
+      dispatch(createEmployeeInfo({ id:state.id, data: formData, handleClick: handleClick || handleClose }));
       return;
     }
     swal.fire({
       text: 'Please enter your password',
       icon: 'warn',
-    });
-  };
-
-  const handleClose = () => {
-    swal.fire({
-      text: 'You have to complete your registration',
-      icon: 'info',
     });
   };
 
