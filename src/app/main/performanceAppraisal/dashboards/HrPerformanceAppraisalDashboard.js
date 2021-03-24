@@ -331,31 +331,24 @@ const columns4 = [
 
 const horizontalChartData1 = {
 	labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-    xAxes: [{ stacked: true }],
-    yAxes: [{
-        stacked: true,
-        ticks: {
-        beginAtZero: true,
-        },
-    }],
 	datasets: [
 		{
-			label: 'First dataset',
-			backgroundColor: '#26C0C7',
-			borderColor: '#26C0C7',
-			borderWidth: 1,
-			hoverBackgroundColor: '#26C0C7',
-			hoverBorderColor: '#26C0C7',
-			data: [65, 59, 80, 81, 56, 55, 40]
-		},
-        {
-			label: 'Second dataset',
+			label: 'Number of KPO’s Not Updated',
 			backgroundColor: '#FF0000',
 			borderColor: '#FF0000',
 			borderWidth: 1,
 			hoverBackgroundColor: '#FF0000',
 			hoverBorderColor: '#FF0000',
 			data: [5, 19, 14, 31, 26, 15, 10]
+		},
+        {
+			label: 'Number of Employees',
+			backgroundColor: '#26C0C7',
+			borderColor: '#26C0C7',
+			borderWidth: 1,
+			hoverBackgroundColor: '#26C0C7',
+			hoverBorderColor: '#26C0C7',
+			data: [65, 59, 80, 81, 56, 55, 40]
 		}
 	]
 };
@@ -364,14 +357,23 @@ const horizontalChartData2 = {
 	labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
 	datasets: [
 		{
-			label: 'My First dataset',
-			backgroundColor: 'rgba(255,99,132,0.2)',
-			borderColor: 'rgba(255,99,132,1)',
+			label: 'Number of KPO’s Updated',
+			backgroundColor: '#5151D3',
+			borderColor: '#5151D3',
 			borderWidth: 1,
-			hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-			hoverBorderColor: 'rgba(255,99,132,1)',
+			hoverBackgroundColor: '#5151D3',
+			hoverBorderColor: '#5151D3',
+			data: [5, 19, 14, 31, 26, 15, 10]
+		},
+        {
+			label: 'Number of Employees',
+			backgroundColor: '#26C0C7',
+			borderColor: '#26C0C7',
+			borderWidth: 1,
+			hoverBackgroundColor: '#26C0C7',
+			hoverBorderColor: '#26C0C7',
 			data: [65, 59, 80, 81, 56, 55, 40]
-		}
+		} 
 	]
 };
 
@@ -379,12 +381,21 @@ const horizontalChartData3 = {
 	labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
 	datasets: [
 		{
-			label: 'My First dataset',
-			backgroundColor: 'rgba(255,99,132,0.2)',
-			borderColor: 'rgba(255,99,132,1)',
+			label: 'Completed Performance Appraisals',
+			backgroundColor: '#FF0000',
+			borderColor: '#FF0000',
 			borderWidth: 1,
-			hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-			hoverBorderColor: 'rgba(255,99,132,1)',
+			hoverBackgroundColor: '#FF0000',
+			hoverBorderColor: '#FF0000',
+			data: [5, 19, 14, 31, 26, 15, 10]
+		},
+        {
+			label: 'Number of Employees',
+			backgroundColor: '#26C0C7',
+			borderColor: '#26C0C7',
+			borderWidth: 1,
+			hoverBackgroundColor: '#26C0C7',
+			hoverBorderColor: '#26C0C7',
 			data: [65, 59, 80, 81, 56, 55, 40]
 		}
 	]
@@ -394,14 +405,23 @@ const horizontalChartData4 = {
 	labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
 	datasets: [
 		{
-			label: 'My First dataset',
-			backgroundColor: 'rgba(255,99,132,0.2)',
-			borderColor: 'rgba(255,99,132,1)',
+			label: 'Pending Performance Appraisals',
+			backgroundColor: '#5151D3',
+			borderColor: '#5151D3',
 			borderWidth: 1,
-			hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-			hoverBorderColor: 'rgba(255,99,132,1)',
+			hoverBackgroundColor: '#5151D3',
+			hoverBorderColor: '#5151D3',
+			data: [5, 19, 14, 31, 26, 15, 10]
+		},
+        {
+			label: 'Number of Employees',
+			backgroundColor: '#26C0C7',
+			borderColor: '#26C0C7',
+			borderWidth: 1,
+			hoverBackgroundColor: '#26C0C7',
+			hoverBorderColor: '#26C0C7',
 			data: [65, 59, 80, 81, 56, 55, 40]
-		}
+		}   
 	]
 };
 
@@ -410,9 +430,25 @@ const HrPerformanceAppraisalDashboard = () => {
     const entities = [{id: 'all', entityName: 'all'}, ...((useSelector(({ entities }) => entities.entityList)) ? useSelector(({ entities }) => entities.entityList) : [])];
     const thisYear = (new Date).getFullYear();
     const thisYearString = (new Date).getFullYear().toString();
+    const Departments =  [{id: 'all', departmentName: 'all'}, ...((useSelector(({ departments }) => departments.deparmentList)) ? useSelector(({ departments }) => departments.deparmentList) : [])];
+    const [departments1, setDepartments1] = useState(Departments);
+    const [departments2, setDepartments2] = useState(Departments);
+    const [departments3, setDepartments3] = useState(Departments);
+    const [departments4, setDepartments4] = useState(Departments);
     const years = ['all', `${thisYear}`,`${thisYear - 1}`, `${thisYear - 2}`, `${thisYear - 3}`, `${thisYear - 4}`];
-    // const [filter, setFilter] = useState('all');
-    // const [filterNew, setFilterNew] = useState('all');
+    const [Entityfilter1, setEntityfilter1] = useState('all');
+    const [Entityfilter2, setEntityfilter2] = useState('all');
+    const [Entityfilter3, setEntityfilter3] = useState('all');
+    const [Entityfilter4, setEntityfilter4] = useState('all');
+    const [Departmentfilter1, setDepartmentfilter1] = useState('all');
+    const [Departmentfilter2, setDepartmentfilter2] = useState('all');
+    const [Departmentfilter3, setDepartmentfilter3] = useState('all');
+    const [Departmentfilter4, setDepartmentfilter4] = useState('all');
+    const [Yearfilter1, setYearfilter1] = useState('all');
+    const [Yearfilter2, setYearfilter2] = useState('all');
+    const [Yearfilter3, setYearfilter3] = useState('all');
+    const [Yearfilter4, setYearfilter4] = useState('all');
+
     const [lineYearfilter, setLineYearfilter] = useState(thisYearString);
     const [horiYearfilter1, setHoriYearfilter1] = useState(thisYearString);
     const [entityHoriFilter1, setEntityHoriFilter1] = useState('all');
@@ -435,22 +471,7 @@ const HrPerformanceAppraisalDashboard = () => {
     useEffect(() => {
         dispatch(UtilActions.getEntities());
     }, []);
-
-    const handleFilter = (event) => {
-        setFilter(event.target.value);
-        const value = entities.filter(e => {
-            return e.entityName.toUpperCase() === event.target.value.toUpperCase();
-        })
-        const depts = value[0].department ?? [];
-        let newDepts = [{departmentName: 'all'}];
-        newDepts.push(...depts);
-        setDepartments(newDepts);
-    }
-
-    const handleFilterNew = (event) => {
-        setFilterNew(event.target.value);
-        }
-        
+    
     const handleHoriYearFilter1 = (event) => {
         setHoriYearFilter1(event.target.value);
     }
@@ -485,6 +506,83 @@ const HrPerformanceAppraisalDashboard = () => {
     
     const handleLineYearfilter = (event) => {
         setLineYearfilter(event.target.value);
+    }
+
+    const handleEntityFilter1 = (event) => {
+        setEntityfilter1(event.target.value);
+        const value = entities.filter(e => {
+            return e.entityName.toUpperCase() === event.target.value.toUpperCase();
+        })
+        const depts = value[0].department ?? [];
+        let newDepts = [{departmentName: 'all'}];
+        newDepts.push(...depts);
+        setDepartments1(newDepts);
+    }
+
+    const handleEntityFilter2 = (event) => {
+        setEntityfilter2(event.target.value);
+        const value = entities.filter(e => {
+            return e.entityName.toUpperCase() === event.target.value.toUpperCase();
+        })
+        const depts = value[0].department ?? [];
+        let newDepts = [{departmentName: 'all'}];
+        newDepts.push(...depts);
+        setDepartments2(newDepts);
+    }
+
+    const handleEntityFilter3 = (event) => {
+        setEntityfilter3(event.target.value);
+        const value = entities.filter(e => {
+            return e.entityName.toUpperCase() === event.target.value.toUpperCase();
+        })
+        const depts = value[0].department ?? [];
+        let newDepts = [{departmentName: 'all'}];
+        newDepts.push(...depts);
+        setDepartments3(newDepts);
+    }
+
+    const handleEntityFilter4 = (event) => {
+        setEntityfilter4(event.target.value);
+        const value = entities.filter(e => {
+            return e.entityName.toUpperCase() === event.target.value.toUpperCase();
+        })
+        const depts = value[0].department ?? [];
+        let newDepts = [{departmentName: 'all'}];
+        newDepts.push(...depts);
+        setDepartments4(newDepts);
+    }
+
+
+    const handleDepartmentFilter1 = (event) => {
+        setDepartmentfilter1(event.target.value);
+    }
+
+    const handleDepartmentFilter2 = (event) => {
+        setDepartmentfilter2(event.target.value);
+    }
+
+    const handleDepartmentFilter3 = (event) => {
+        setDepartmentfilter3(event.target.value);
+    }
+
+    const handleDepartmentFilter4 = (event) => {
+        setDepartmentfilter4(event.target.value);
+    }
+
+    const handleYearFilter1 = (event) => {
+        setYearfilter1(event.target.value);
+    }
+
+    const handleYearFilter2 = (event) => {
+        setYearfilter2(event.target.value);
+    }
+
+    const handleYearFilter3 = (event) => {
+        setYearfilter3(event.target.value);
+    }
+
+    const handleYearFilter4 = (event) => {
+        setYearfilter4(event.target.value);
     }
 
     const handleSearch = (event) => {
@@ -606,7 +704,7 @@ const HrPerformanceAppraisalDashboard = () => {
                 <div className="flex items-center justify-between px-16 h-64 border-b-1">
                 <Grid container spacing={1} className="flex flex-row w-full justify-between">
                     <Grid item lg={8}>
-                    <Typography className="text-16 whitespace-no-wrap font-semibold mt-8">Number of KPO’s Not Updated Per Departments</Typography>
+                    <Typography className="text-16 whitespace-no-wrap font-semibold mt-8">Number of KPO’s Not Updated Per Dept.</Typography>
                     </Grid>
                     <Grid item lg={2} md={2} sm={4} xs={4}>
                         <SelectTextField value={thisYearString} label="Year" size='small' value={horiYearfilter1} onChange={ev => handleHoriYearFilter1(ev)}>
@@ -630,15 +728,16 @@ const HrPerformanceAppraisalDashboard = () => {
                     </Grid>
                     </Grid>
                 </div>
-                <div className="flex flex-col items-center w-full max-w-md">
-                    <HorizontalBar data={horizontalChartData1} />
+                <div className="flex flex-col p-10 items-center w-full max-w-md">
+                    <HorizontalBar options={{ scales: { xAxes: [{ stacked: false }], yAxes: [{ stacked: true }]}, 
+                                              legend: { labels: {boxWidth: 10, fontSize: 12, padding: 10 } } }} data={horizontalChartData1} />
                 </div>
                 </Paper>
                 <Paper className="w-full rounded-8 shadow-none border-1 flex flex-col mr-10">
                 <div className="flex items-center justify-between px-16 h-64 border-b-1">
                 <Grid container spacing={1} className="flex flex-row w-full justify-between">
                     <Grid item lg={8}>
-                    <Typography className="text-16 whitespace-no-wrap font-semibold mt-8">Number of KPO’s  Updated Per Departments</Typography>
+                    <Typography className="text-16 whitespace-no-wrap font-semibold mt-8">Number of KPO’s  Updated Per Dept.</Typography>
                     </Grid>
                     <Grid item lg={2} md={2} sm={4} xs={4}>
                         <SelectTextField value={thisYearString} label="Year" size='small' value={horiYearfilter2} onChange={ev => handleHoriYearFilter2(ev)}>
@@ -662,8 +761,9 @@ const HrPerformanceAppraisalDashboard = () => {
                     </Grid>
                     </Grid>
                 </div>
-                <div className="flex flex-col items-center w-full max-w-md">
-                    <HorizontalBar data={horizontalChartData2} />
+                <div className="flex flex-col p-10 items-center w-full max-w-md">
+                    <HorizontalBar options={{ scales: { xAxes: [{ stacked: false }], yAxes: [{ stacked: true }]}, 
+                                              legend: { labels: {boxWidth: 10, fontSize: 12, padding: 10 } } }} data={horizontalChartData2} />
                 </div>
                 </Paper>
             </div>
@@ -675,7 +775,7 @@ const HrPerformanceAppraisalDashboard = () => {
                 <div className="flex items-center justify-between px-16 h-64 border-b-1">
                 <Grid container spacing={1} className="flex flex-row w-full justify-between">
                     <Grid item lg={8}>
-                    <Typography className="text-16 whitespace-no-wrap font-semibold mt-8">No. of Pending Performance Appraisals Per Dept</Typography>
+                    <Typography className="text-16 whitespace-no-wrap font-semibold mt-8">Pending Performance Appraisals Per Dept.</Typography>
                     </Grid>
                     <Grid item lg={2} md={2} sm={4} xs={4}>
                         <SelectTextField value={thisYearString} label="Year" size='small' value={horiYearfilter3} onChange={ev => handleHoriYearFilter3(ev)}>
@@ -699,15 +799,16 @@ const HrPerformanceAppraisalDashboard = () => {
                     </Grid>
                     </Grid>
                 </div>
-                <div className="flex flex-col items-center w-full max-w-md">
-                    <HorizontalBar data={horizontalChartData3} />
+                <div className="flex flex-col p-10 items-center w-full max-w-md">
+                    <HorizontalBar options={{ scales: { xAxes: [{ stacked: false }], yAxes: [{ stacked: true }]}, 
+                                              legend: { labels: {boxWidth: 10, fontSize: 12, padding: 10 } } }} data={horizontalChartData3} />
                 </div>
                 </Paper>
                 <Paper className="w-full rounded-8 shadow-none border-1 flex flex-col mr-10">
                 <div className="flex items-center justify-between px-16 h-64 border-b-1">
                 <Grid container spacing={1} className="flex flex-row w-full justify-between">
                     <Grid item lg={8}>
-                    <Typography className="text-16 whitespace-no-wrap font-semibold mt-8">No. of Completed Performance Appraisals Per Dept</Typography>
+                    <Typography className="text-16 whitespace-no-wrap font-semibold mt-8">Completed Performance Appraisals Per Dept.</Typography>
                     </Grid>
                     <Grid item lg={2} md={2} sm={4} xs={4}>
                         <SelectTextField value={thisYearString} label="Year" size='small' value={horiYearfilter4} onChange={ev => handleHoriYearFilter4(ev)}>
@@ -731,8 +832,9 @@ const HrPerformanceAppraisalDashboard = () => {
                     </Grid>
                     </Grid>
                 </div>
-                <div className="flex flex-col items-center w-full max-w-md">
-                    <HorizontalBar data={horizontalChartData4} />
+                <div className="flex flex-col p-10 items-center w-full max-w-md">
+                    <HorizontalBar options={{ scales: { xAxes: [{ stacked: false }], yAxes: [{ stacked: true }]}, 
+                                              legend: { labels: {boxWidth: 10, fontSize: 12, padding: 10 } } }} data={horizontalChartData4} />
                 </div>
                 </Paper>
             </div>
@@ -791,21 +893,21 @@ const HrPerformanceAppraisalDashboard = () => {
                                         </Paper>
                                     </div>
                                 </Grid>
-                                {/* <Grid item lg={3} md={3} sm={4} xs={4}>
-                                    <SelectTextField value={'all'} label="Entity" size='small' value={Entityfilter} onChange={ev => handleEntityFilter(ev)} >
+                                <Grid item lg={3} md={3} sm={4} xs={4}>
+                                    <SelectTextField value={'all'} label="Entity" size='small' value={Entityfilter1} onChange={ev => handleEntityFilter1(ev)} >
                                         {entities.map(({id, entityName}) => (<MenuItem key={id} value={entityName}> {entityName} </MenuItem>))}
                                     </SelectTextField>
-                                </Grid> */}
-                                {/* <Grid item lg={2} md={3} sm={4} xs={4}>
-                                    <SelectTextField value={'all'} label="Department" size='small' value={Departmentfilter} onChange={ev => handleDepartmentFilter(ev)}>
-                                        {departments.map(({id, departmentName}) => (<MenuItem key={departmentName} value={departmentName}> {departmentName}</MenuItem>))}
+                                </Grid>
+                                <Grid item lg={2} md={3} sm={4} xs={4}>
+                                    <SelectTextField value={'all'} label="Department" size='small' value={Departmentfilter1} onChange={ev => handleDepartmentFilter1(ev)}>
+                                        {departments1.map(({id, departmentName}) => (<MenuItem key={departmentName} value={departmentName}> {departmentName}</MenuItem>))}
                                     </SelectTextField>
-                                </Grid> */}
-                                {/* <Grid item lg={2} md={2} sm={4} xs={4}>
-                                    <SelectTextField value={'all'} label="Year" size='small' value={Yearfilter} onChange={ev => handleYearFilter(ev)}>
+                                </Grid>
+                                <Grid item lg={2} md={2} sm={4} xs={4}>
+                                    <SelectTextField value={'all'} label="Year" size='small' value={Yearfilter1} onChange={ev => handleYearFilter1(ev)}>
                                         {years.map((year) => (<MenuItem key={year} value={year}> {year} </MenuItem>))}
                                     </SelectTextField>
-                                </Grid>  */}
+                                </Grid> 
                             </Grid>
                         </Grid>
                     </div>
@@ -841,21 +943,21 @@ const HrPerformanceAppraisalDashboard = () => {
                                         </Paper>
                                     </div>
                                 </Grid>
-                                {/* <Grid item lg={3} md={3} sm={4} xs={4}>
-                                    <SelectTextField value={'all'} label="Entity" size='small' value={Entityfilter} onChange={ev => handleEntityFilter(ev)} >
+                                <Grid item lg={3} md={3} sm={4} xs={4}>
+                                    <SelectTextField value={'all'} label="Entity" size='small' value={Entityfilter2} onChange={ev => handleEntityFilter2(ev)} >
                                         {entities.map(({id, entityName}) => (<MenuItem key={id} value={entityName}> {entityName} </MenuItem>))}
                                     </SelectTextField>
-                                </Grid> */}
-                                {/* <Grid item lg={2} md={3} sm={4} xs={4}>
-                                    <SelectTextField value={'all'} label="Department" size='small' value={Departmentfilter} onChange={ev => handleDepartmentFilter(ev)}>
-                                        {departments.map(({id, departmentName}) => (<MenuItem key={departmentName} value={departmentName}> {departmentName}</MenuItem>))}
+                                </Grid>
+                                <Grid item lg={2} md={3} sm={4} xs={4}>
+                                    <SelectTextField value={'all'} label="Department" size='small' value={Departmentfilter2} onChange={ev => handleDepartmentFilter2(ev)}>
+                                        {departments2.map(({id, departmentName}) => (<MenuItem key={departmentName} value={departmentName}> {departmentName}</MenuItem>))}
                                     </SelectTextField>
-                                </Grid> */}
-                                {/* <Grid item lg={2} md={2} sm={4} xs={4}>
-                                    <SelectTextField value={'all'} label="Year" size='small' value={Yearfilter} onChange={ev => handleYearFilter(ev)}>
+                                </Grid>
+                                <Grid item lg={2} md={2} sm={4} xs={4}>
+                                    <SelectTextField value={'all'} label="Year" size='small' value={Yearfilter2} onChange={ev => handleYearFilter2(ev)}>
                                         {years.map((year) => (<MenuItem key={year} value={year}> {year} </MenuItem>))}
                                     </SelectTextField>
-                                </Grid>  */}
+                                </Grid> 
                             </Grid>
                         </Grid>
                     </div>
@@ -896,21 +998,21 @@ const HrPerformanceAppraisalDashboard = () => {
                                         </Paper>
                                     </div>
                                 </Grid>
-                                {/* <Grid item lg={3} md={3} sm={4} xs={4}>
-                                    <SelectTextField value={'all'} label="Entity" size='small' value={Entityfilter} onChange={ev => handleEntityFilter(ev)} >
+                                <Grid item lg={3} md={3} sm={4} xs={4}>
+                                    <SelectTextField value={'all'} label="Entity" size='small' value={Entityfilter3} onChange={ev => handleEntityFilter3(ev)} >
                                         {entities.map(({id, entityName}) => (<MenuItem key={id} value={entityName}> {entityName} </MenuItem>))}
                                     </SelectTextField>
-                                </Grid> */}
-                                {/* <Grid item lg={2} md={3} sm={4} xs={4}>
-                                    <SelectTextField value={'all'} label="Department" size='small' value={Departmentfilter} onChange={ev => handleDepartmentFilter(ev)}>
-                                        {departments.map(({id, departmentName}) => (<MenuItem key={departmentName} value={departmentName}> {departmentName}</MenuItem>))}
+                                </Grid>
+                                <Grid item lg={2} md={3} sm={4} xs={4}>
+                                    <SelectTextField value={'all'} label="Department" size='small' value={Departmentfilter3} onChange={ev => handleDepartmentFilter3(ev)}>
+                                        {departments3.map(({id, departmentName}) => (<MenuItem key={departmentName} value={departmentName}> {departmentName}</MenuItem>))}
                                     </SelectTextField>
-                                </Grid> */}
-                                {/* <Grid item lg={2} md={2} sm={4} xs={4}>
-                                    <SelectTextField value={'all'} label="Year" size='small' value={Yearfilter} onChange={ev => handleYearFilter(ev)}>
+                                </Grid>
+                                <Grid item lg={2} md={2} sm={4} xs={4}>
+                                    <SelectTextField value={'all'} label="Year" size='small' value={Yearfilter3} onChange={ev => handleYearFilter3(ev)}>
                                         {years.map((year) => (<MenuItem key={year} value={year}> {year} </MenuItem>))}
                                     </SelectTextField>
-                                </Grid>  */}
+                                </Grid>
                             </Grid>
                         </Grid>
                     </div>
@@ -923,7 +1025,7 @@ const HrPerformanceAppraisalDashboard = () => {
                         <Grid container spacing={1} >
                             <Grid className="flex w-full flex-row" style={{ marginTop: "10px" }}>
                                 <Grid item lg={10} md={12} sm={12} xs={12} className="font-semibold text-16">
-                                Employee List - Completed Peformance Appraisal
+                                Employee List - Pending Peformance Appraisal
                                 </Grid>
                             </Grid>
                             
@@ -946,21 +1048,21 @@ const HrPerformanceAppraisalDashboard = () => {
                                         </Paper>
                                     </div>
                                 </Grid>
-                                {/* <Grid item lg={3} md={3} sm={4} xs={4}>
-                                    <SelectTextField value={'all'} label="Entity" size='small' value={Entityfilter} onChange={ev => handleEntityFilter(ev)} >
+                                <Grid item lg={3} md={3} sm={4} xs={4}>
+                                    <SelectTextField value={'all'} label="Entity" size='small' value={Entityfilter4} onChange={ev => handleEntityFilter4(ev)} >
                                         {entities.map(({id, entityName}) => (<MenuItem key={id} value={entityName}> {entityName} </MenuItem>))}
                                     </SelectTextField>
-                                </Grid> */}
-                                {/* <Grid item lg={2} md={3} sm={4} xs={4}>
-                                    <SelectTextField value={'all'} label="Department" size='small' value={Departmentfilter} onChange={ev => handleDepartmentFilter(ev)}>
-                                        {departments.map(({id, departmentName}) => (<MenuItem key={departmentName} value={departmentName}> {departmentName}</MenuItem>))}
+                                </Grid>
+                                <Grid item lg={2} md={3} sm={4} xs={4}>
+                                    <SelectTextField value={'all'} label="Department" size='small' value={Departmentfilter4} onChange={ev => handleDepartmentFilter4(ev)}>
+                                        {departments4.map(({id, departmentName}) => (<MenuItem key={departmentName} value={departmentName}> {departmentName}</MenuItem>))}
                                     </SelectTextField>
-                                </Grid> */}
-                                {/* <Grid item lg={2} md={2} sm={4} xs={4}>
-                                    <SelectTextField value={'all'} label="Year" size='small' value={Yearfilter} onChange={ev => handleYearFilter(ev)}>
+                                </Grid>
+                                <Grid item lg={2} md={2} sm={4} xs={4}>
+                                    <SelectTextField value={'all'} label="Year" size='small' value={Yearfilter4} onChange={ev => handleYearFilter4(ev)}>
                                         {years.map((year) => (<MenuItem key={year} value={year}> {year} </MenuItem>))}
                                     </SelectTextField>
-                                </Grid>  */}
+                                </Grid>
                             </Grid>
                         </Grid>
                     </div>
