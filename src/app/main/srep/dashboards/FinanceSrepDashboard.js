@@ -26,7 +26,6 @@ import { filterByMonths } from './components/chartDataFilter';
 import { updatedEnrollmentList } from './components/setEntityDeptName';
 import { filterData } from './components/dataFilter';
 
-
 const columns = [
     {
         id: 'name',
@@ -107,7 +106,6 @@ const columns = [
 ];
 
 
-
 function FinanceSrepDashboard(props) {
     const dispatch = useDispatch();
     const HRsrepDashboard = useSelector(({ HRsrepDashboard }) => HRsrepDashboard.HRsrepDashboard);
@@ -116,11 +114,11 @@ function FinanceSrepDashboard(props) {
     enrollmentList = updatedEnrollmentList(enrollmentList, entities);
     const countEmployees = HRsrepDashboard.data.length !== 0 ? HRsrepDashboard.data.countEmployees : 0;
     let rejectedList = HRsrepDashboard.data.length !== 0 ? HRsrepDashboard.data.rejectedList : [];
-    rejectedList = updatedEnrollmentList(rejectedList);
+    rejectedList = updatedEnrollmentList(rejectedList, entities);
     let approvedList = HRsrepDashboard.data.length !== 0 ? HRsrepDashboard.data.approvedList : [];
-    approvedList = updatedEnrollmentList(approvedList);
+    approvedList = updatedEnrollmentList(approvedList, entities);
     let pendingList = HRsrepDashboard.data.length !== 0 ? HRsrepDashboard.data.pendingList : [];
-    pendingList = updatedEnrollmentList(pendingList);
+    pendingList = updatedEnrollmentList(pendingList, entities);
     const [data, setData] = useState([]);
     const [open, setOpen] = useState(false);
     const [search, setSearch] = useState('');
@@ -139,42 +137,16 @@ function FinanceSrepDashboard(props) {
     const [selectedRow, setSelectedRow] = useState({});
     const [departments, setDepartments] = useState(departmentList);
     const [departmentsNew, setDepartmentsNew] = useState(departmentList2);
-    lineChartData.labels = monthNames;
-    lineChartData.datasets[0].data = filterByMonths(approvedList, chartYearfilter, filter, filterNew); // Approved
-    lineChartData.datasets[1].data = filterByMonths(pendingList, chartYearfilter, filter, filterNew); // Pending
-    lineChartData.datasets[2].data = filterByMonths(rejectedList, chartYearfilter, filter, filterNew); // Rejected
-
+    
     useEffect(() => {
         dispatch(Actions.getDashboardSrep());
         dispatch(UtilActions.getEntities());
     }, []);
 
-    const handleFilter = (event) => {
-        setFilter(event.target.value);
-        const value = entities.filter(e => {
-            return e.entityName.toUpperCase() === event.target.value.toUpperCase();
-        })
-        const depts = value[0].department ?? [];
-        let newDepts = [{departmentName: 'all'}];
-        newDepts.push(...depts);
-        setDepartmentsNew(newDepts);
-        if (event.target.value === "all") {
-            setFilterNew("all");
-        };
-    }
-
-    const handleFilterNew = (event) => {
-        setFilterNew(event.target.value);
-    }
-
     const handleSearch = (event) => {
         setSearch(event.target.value);
-        // filterData();
     }
 
-    const handleChartYearFilter = (event) => {
-        setChartYearfilter(event.target.value);
-    }
 
     const handleYearFilter = (event) => {
         setYearFilter(event.target.value);
@@ -305,7 +277,7 @@ function FinanceSrepDashboard(props) {
         return true;
     };
 
-    return (<SimplePage id='FINANCESREPDASHBOARD' title='FINANCE SREP DASHBOARD'>
+    return ( <SimplePage id='FINANCESREPDASHBOARD' title='FINANCE SREP DASHBOARD'>
             <section>
                 <div className="flex flex-row w-full justify-between m-12 pr-16">
                 <Paper className="w-full rounded-8 shadow-none border-1 flex flex-col justify-center items-center mr-10">
@@ -332,7 +304,6 @@ function FinanceSrepDashboard(props) {
                 </Paper>
                 </div>
             </section>
-
             <Dialog open={open} onClose={handleClose} fullWidth={true} maxWidth={'sm'} aria-labelledby="form-dialog-title">
                 <AppBar position="static">
                     <Toolbar className="flex w-full">
@@ -342,29 +313,28 @@ function FinanceSrepDashboard(props) {
                     </Toolbar>
                 </AppBar>
                 <DialogContent>
-                    <table className={'w-full text-justify'}>
-                        <tbody>
-                            <tr className="name"><th>Name</th><td>{selectedRow?.name}</td></tr>
-                            <tr className="employeeEmail"><th>Email</th><td>{selectedRow?.employeeEmail}</td></tr>
-                            <tr className="status"><th>Status</th><td>{selectedRow?.status}</td></tr>
-                            <tr className="entity"><th>Entity</th><td>{selectedRow?.entity}</td></tr>
-                            <tr className="department"><th>Department</th><td>{selectedRow?.department}</td></tr>
-                            <tr className="capitalFund"><th>Capital Fund</th><td>{selectedRow?.capitalFund}</td></tr>
-                            <tr className="beneficiaryName"><th>Beneficiary Name</th><td>{selectedRow?.beneficiaryName}</td></tr>
-                            <tr className="beneficiaryRelationship"><th>Beneficiary Relationship</th><td>{selectedRow?.beneficiaryRelationship}</td></tr>
-                            <tr className="beneficiaryNationality"><th>Beneficiary Nationality</th><td>{selectedRow?.beneficiaryNationality}</td></tr>
-                            <tr className="beneficiaryNationality"><th>Beneficiary Nationality</th><td>{selectedRow?.beneficiaryNationality}</td></tr>
-                            <tr className="beneficiaryGender"><th>Beneficiary Gender</th><td>{selectedRow?.beneficiaryGender}</td></tr>
-                            <tr className="beneficiaryEmail"><th>Beneficiary Email</th><td>{selectedRow?.beneficiaryEmail}</td></tr>
-                        </tbody>
-                    </table>
-                </DialogContent>
-                <DialogActions className="flex justify-between m-20">
-                    <Button onClick={handleClose} color="primary">
-                        Close
-                    </Button>
-                </DialogActions>
-            </Dialog>
+                <table className={'w-full text-justify'}>
+                    <tbody>
+                        <tr className="name"><th>Name</th><td>{selectedRow?.name}</td></tr>
+                        <tr className="employeeEmail"><th>Email</th><td>{selectedRow?.employeeEmail}</td></tr>
+                        <tr className="status"><th>Status</th><td>{selectedRow?.status}</td></tr>
+                        <tr className="entity"><th>Entity</th><td>{selectedRow?.entity}</td></tr>
+                        <tr className="department"><th>Department</th><td>{selectedRow?.department}</td></tr>
+                        <tr className="capitalFund"><th>Capital Fund</th><td>{selectedRow?.capitalFund}</td></tr>
+                        <tr className="beneficiaryName"><th>Beneficiary Name</th><td>{selectedRow?.beneficiaryName}</td></tr>
+                        <tr className="beneficiaryRelationship"><th>Beneficiary Relationship</th><td>{selectedRow?.beneficiaryRelationship}</td></tr>
+                        <tr className="beneficiaryNationality"><th>Beneficiary Nationality</th><td>{selectedRow?.beneficiaryNationality}</td></tr>
+                        <tr className="beneficiaryGender"><th>Beneficiary Gender</th><td>{selectedRow?.beneficiaryGender}</td></tr>
+                        <tr className="beneficiaryEmail"><th>Beneficiary Email</th><td>{selectedRow?.beneficiaryEmail}</td></tr>
+                    </tbody>
+                </table>
+            </DialogContent>
+            <DialogActions className="flex justify-between m-20">
+                <Button onClick={handleClose} color="primary">
+                    Close
+                </Button>
+            </DialogActions>
+        </Dialog>
 
         <Paper className="mt-8 m-12">
             <div className="flex flex-wrap w-full p-20">
@@ -446,5 +416,5 @@ function FinanceSrepDashboard(props) {
         </SimplePage>
         );
     }
-
+    
 export default withReducer('HRsrepDashboard', reducer)(FinanceSrepDashboard)

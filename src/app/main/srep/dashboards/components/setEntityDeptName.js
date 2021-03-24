@@ -3,15 +3,16 @@ export const updatedEnrollmentList = (enrollmentList = [], entities = []) => {
         let entityName = 'null';
         let departments = [];
         let departmentName = 'null';
-        entities && entities.filter(e => { 
+        console.log('entities for relative department: ', entities);
+        entities && entities.filter(e => {
             if (e.id === srep.entityId) {
-                entityName = e.entityName;
-                departments = e.department;
+                entityName = e.entityName ? e.entityName : srep.entity;
+                departments = e.department ? e.department : [];
             };
         });
         departments.filter(e => { 
             if (e.id === srep.departmentId) {
-                departmentName = e.departmentName;
+                departmentName = e.departmentName ? e.departmentName : srep.department;
             };	
         });
 
