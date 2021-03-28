@@ -60,7 +60,7 @@ export const getReferenceDetails = (id) => {
       const { data: { data } } = await api.get(`/reference/${id}`);
       dispatch({
         type: GET_REFERENCE_DETAILS,
-        payload: data || [],
+        payload: [],
       });
     } catch (e) {
       dispatch({

@@ -29,6 +29,7 @@
         "history": "4.10.1",
         "i18next": "19.4.5",
         "isomorphic-fetch": "^3.0.0",
+        "js-file-download": "^0.4.12",
         "jsonwebtoken": "8.5.1",
         "jss": "10.1.1",
         "jss-plugin-extend": "10.1.1",

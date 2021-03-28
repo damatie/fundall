@@ -8,6 +8,7 @@ import { createIdCardIssuance, updateIdCardIssuance, getIdCardIssuance } from '.
 import Typography from '@material-ui/core/Typography';
 import useUserID from '../hooks/useUserID';
 import { useParams } from 'react-router-dom';
+import downloadLink from 'utils/downloadLink';
 
 const { useState, useEffect, memo } = React;
 
@@ -54,10 +55,20 @@ const IdCardIssuance = () => {
     }
   ];
 
+  const [fileName, setFileName] = useState('');
+
+  useEffect(() => {
+    setFileName(`passport(${info.firstName}-${info.lastName}).jpg`)
+  }, [info]);
+
+  const handleDownload = () => {
+    downloadLink(idCardIssuance?.passport, fileName);
+  }
+
   const handleSubmit = () => {
     const formData = new FormData();
     formData.append('passport', value[0]);
-    if (!!idCardIssuance) {
+    if (Object.entries(idCardIssuance).length > 0) {
       dispatch(
         updateIdCardIssuance({ formData, id })
       );
@@ -88,13 +99,13 @@ const IdCardIssuance = () => {
         <Typography variant="subtitle1" className='my-12' color="initial">Passport</Typography>
         {
           !!idCardIssuance?.passport ? (
-            <a href={idCardIssuance.passport} download target='_blank'>
+            <div onClick={handleDownload} className='cursor-pointer'>
               <img
                 src={idCardIssuance.passport}
                 alt="Passport"
                 className='w-3/12 mx-auto object-contain'
               />
-            </a>
+            </div>
           ) : (
             <Typography variant="subtitle1" color="initial">No Passport Yet</Typography>
           )

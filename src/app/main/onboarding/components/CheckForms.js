@@ -10,6 +10,7 @@ import { signOnboardingForm } from '../store/actions';
 import useUserID from '../hooks/useUserID';
 import { useParams } from 'react-router-dom';
 
+
 const { useState, useEffect } = React;
 
 const useStyles = makeStyles((theme) => ({
@@ -95,6 +96,7 @@ const CheckForms = ({
         }
       </section>
       <form onSubmit={handleSubmit}>
+        <Typography className='my-16' variant="subtitle1" color="initial">By clicking the checkbox,you have signed and agreed to the details on the form</Typography>
         <div className='w-full m-16'>
           <FormControlLabel
             control={

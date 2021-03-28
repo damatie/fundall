@@ -11,6 +11,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import useUserID from '../hooks/useUserID';
 import { useLocation, useParams } from 'react-router-dom';
+import downloadLink from 'utils/downloadLink';
 
 const { useState, useMemo, useEffect } = React;
 
@@ -69,6 +70,12 @@ const UploadForms = ({ title, data, type }) => {
 
   const [url, setUrl] = useState({});
 
+  const [fileName, setFileName] = useState('');
+
+  useEffect(() => {
+    setFileName(`${title}(${info.firstName}-${info.lastName}).jpg`)
+  }, [info]);
+
   const params = useParams();
 
   useEffect(() => {
@@ -87,10 +94,14 @@ const UploadForms = ({ title, data, type }) => {
 
   useEffect(() => {
     setUrl(
-      !!state?.formUrl ? { link: state?.formUrl, name: 'View Document' } : { link: `${window.location.origin}/library/folders/`, name: 'Download Document' }
+      !!state?.formUrl ? { link: '#', name: 'View Document' } : { link: `${window.location.origin}/library/folders/`, name: 'Download Document' }
     );
     console.log(state);
   }, [state])
+
+  const handleDownload = () => {
+    downloadLink(state?.formUrl, fileName);
+  }
 
   const dispatch = useDispatch();
 
@@ -128,7 +139,22 @@ const UploadForms = ({ title, data, type }) => {
           <Typography variant="subtitle1" color="initial" className='text-left'>
             <b>{label}</b>:&nbsp;{label !== 'Status' && value}
             {label === 'Status' && (
-              <a href={url.link} target='_blank' className='cursor-pointer'>{url.name}</a>
+              <>
+                {
+                  url.link === '#' ? (
+                    <Button
+                      className='mx-auto my-16'
+                      variant="contained"
+                      color="primary"
+                      onClick={handleDownload}
+                    >
+                      {url.name}
+                    </Button>
+                  ) : (
+                    <a href={url.link} target='_blank' className='cursor-pointer'>{url.name}</a>
+                  )
+                }
+              </>
             )}
           </Typography>
         ))

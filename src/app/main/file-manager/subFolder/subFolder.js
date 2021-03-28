@@ -79,7 +79,7 @@ function SubFolder(props) {
 	const roles = useSelector(({ roles }) => roles.roleList);
 	const [open, setOpen] = React.useState(false);
 	const roleId = userProfile.roleId;
-	const roleName = userProfile.role.name;
+	const roleName = userProfile.role?.name;
 
 	useEffect(() => {
         if(!mainFolder){

@@ -60,6 +60,20 @@ const schema = yup.object().shape({
       type: 'string',
       name: 'Official Mobile No'
     })
+  ).min(
+    14,
+    errorMsg({
+      type: 'min',
+      name: 'Official Mobile No',
+      number: 14
+    })
+  ).max(
+    14,
+    errorMsg({
+      type: 'max',
+      name: 'Official Mobile No',
+      number: 14
+    })
   ).required(
     errorMsg({
       type: 'required',
@@ -219,6 +233,10 @@ const useCreateEmployeeInfo = ({dispatch, state, handleClick}) => {
     });
   };
 
+  const handleReload = () => {
+    location.reload();
+  }
+
   const onSubmit = async (data) => {
     if(signature.length !== 0) {
       const formData = new FormData();
@@ -229,7 +247,7 @@ const useCreateEmployeeInfo = ({dispatch, state, handleClick}) => {
       for (const [key, value] of Object.entries(entries)) {
         formData.append(key, value);
       }
-      dispatch(createEmployeeInfo({ id:state.id, data: formData, handleClick: handleClick || handleClose }));
+      dispatch(createEmployeeInfo({ id:state.id, data: formData, handleClick: handleClick || handleReload }));
       return;
     }
     swal.fire({

@@ -1,16 +1,18 @@
 import React from 'react';
+import formList from '../formList';
 
 const { useState, useEffect } = React;
 
-const useOnboarding = ({ params, profile, push }) => {
+const useOnboarding = ({ params, profile, push, redirect }) => {
 
   const [shouldRedirect, setShouldRedirect] = useState(false);
+  const profileCompleted = Object.entries(profile || {}).length > 0 && !params && Object.entries(profile?.info || {}).length <= 0;
 
   useEffect(() => {
-    if(Object.entries(profile).length > 0) {
-      if(!params && Object.entries(profile?.info || {}).length <= 0) push('/employee/complete/registration/');
+    if(profileCompleted) {
+      push('/employee/complete/registration/');
     }
-  }, [profile]);
+  }, [profile, redirect]);
 
   // return {
   //   shouldRedirect,

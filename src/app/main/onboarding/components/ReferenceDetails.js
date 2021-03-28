@@ -236,7 +236,7 @@ const ReferenceDetails = () => {
       </section>
       <EnhancedTable
         columns={columns}
-        data={[...data]}
+        data={data}
         onRowClick={(ev, row) => {
           if (row) {
             !id && dispatch({ type: GET_DETAILS, payload: row.original })

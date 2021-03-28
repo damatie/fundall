@@ -135,6 +135,9 @@ export const addEmployee = (data) => {
           icon: 'success'
         });
         dispatch(getEmployees());
+        dispatch({
+          type: CLOSE_ADD_NEW_EMPLOYEE_MODAL,
+        });
         return;
       }
       swal.fire({
@@ -183,7 +186,7 @@ export const deleteEmployee = (id) => {
       }).then( async (result) => {
         if (result.isConfirmed) {
           loading('Deleting Employee...');
-          const { data: { message } } = await api.delete(`/auth/employee/`, {
+          const { data: { message } } = await api.delete(``, {
             data: {
               id
             }

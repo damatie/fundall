@@ -21,6 +21,7 @@ import { getCountries } from 'app/store/actions';
 import { useParams } from 'react-router';
 import userPermission from '../logic/userPermission';
 import { NoData } from 'app/shared/NoData';
+import relationship from 'utils/relationship';
 
 const EmployeeNextOfKin = ({ handleOpen }) => {
   const [shouldUpdate, setShouldUpdate] = React.useState(false);
@@ -170,24 +171,7 @@ const EmployeeNextOfKinDetails = ({ item, index, setShouldUpdate, shouldUpdate, 
       name: 'relationship',
       label: 'Relationship',
       type: 'select',
-      data: [
-        {
-          name: 'wife',
-          id: 'wife',
-        },
-        {
-          name: 'children',
-          id: 'children',
-        },
-        {
-          name: 'brother',
-          id: 'brother',
-        },
-        {
-          name: 'sister',
-          id: 'sister'
-        }
-      ],
+      data: relationship,
     },
   ], [countries]);
 
@@ -406,24 +390,7 @@ export const AddEmployeeNextOfKin = () => {
       name: 'relationship',
       label: 'Relationship',
       type: 'select',
-      data: [
-        {
-          name: 'wife',
-          id: 'wife',
-        },
-        {
-          name: 'children',
-          id: 'children',
-        },
-        {
-          name: 'brother',
-          id: 'brother',
-        },
-        {
-          name: 'sister',
-          id: 'sister'
-        }
-      ],
+      data: relationship,
     },
   ], [countries]);
 
