@@ -59,17 +59,29 @@ The actual source files of a software project are usually stored inside the
         │   │   ├── components                   # Feature components
         │   │   ├── hooks                        # Feture custom hook
         │   │   ├── store                        # Feature redux state
-        │   │   ├── feature-name-config.js       # Feature config file that utilize react fuse routes and themeing
+        │  │    ├── feature-name-config.js       # Feature config file that utilize react fuse routes and themeing
         └── ...
         
- ### `Current bugs`
- ##### EMPLOYEE PROFILE MANAGEMENT:
+ ### `Current Bug Report`
+ ##### EMPLOYEE PROFILE MANAGEMENT FEATURE:
  1. The delete function deletes all users
  2. Error attached to fields in employee profile while editing are not supposed to be visible. After clicking on edit, click on submit before actually editing.
  3. HR can only edit Employee Profile
  4. Picture upload not functional
-##### EMPLOYEE ONBOARDING:
+##### EMPLOYEE ONBOARDING FEATURE:
 1. Employee can not update passport in ID card issusance form passport
 2. Employee can not add reference details in reference details request form
+##### RECRUITMENT FEATURE:
+1. When you view full detail of position on Line Manager's board, Entity Name and Department fields are empty
+2. Clicking on closed openings from the Openings tab, leads to a blank page
+3. When you view full detail of position on HR's board, Contact, Entity name and department name fields are empty.
+4. Status Tags of positions could be better. Positions that have not been accepted by HR could be Pending and already accepted positions could be Shared or Approved.
+5. What happens to positions that HR does not accept to share? Do they just remain in the DB?
+6. Is the adding New Candidate sub-feature still in play? because candidates added by HR do not appear in display.
+7. Sharing to email does not function.
+8. Sharing to Twitter works but the message content does not currently have a contact info.
+9. Description box has not been adjusted
+10. Start Date and end date field names overlaps with field placeholder
+11. National service should not have start and end date
     
 
