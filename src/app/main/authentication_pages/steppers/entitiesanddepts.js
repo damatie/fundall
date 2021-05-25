@@ -65,7 +65,7 @@ const schema = yup.object().shape({
         .required(errorMsg({ name: 'Industry', type: 'required' })),
     noOfEmployees: yup.number()
         .min(1)
-        .required(errorMsg({ name: 'Number Of Employees', type: 'required' })),
+        .required({ name: 'Number Of Employees', type: 'required' }),
     contactNumber: yup.number()
         .min(10)
         .required({ name: 'Company Contact Number', type: 'required' }),
@@ -74,39 +74,6 @@ const schema = yup.object().shape({
         .email(),
   });
 
-  const EmployeesRange = [
-    {
-      id: 0,
-      name: '1-50',
-      min: 1,
-      max: 50 
-    },
-    {
-      id: 1,
-      name: '51-100',
-      min: 51,
-      max: 100 
-    },
-    {
-      id: 2,
-      name: '101-150',
-      min: 101,
-      max: 150 
-    },
-    {
-      id: 3,
-      name: '151-200',
-      min: 151,
-      max: 200 
-    },
-    {
-      id: 4,
-      name: 'Above 200',
-      min: 201,
-      max: 1000000 
-      // max: undefined 
-    },
-  ]
 
 const organisationList = [
     {number: 0, name: 'Banking and Finance'},
@@ -131,7 +98,7 @@ const organisationList = [
     {number: 19, name: 'Others'}
 ];
 
-const Register = () => {
+const EntitiesAndDepartments = () => {
   const {
     errors,
     register,
@@ -147,7 +114,6 @@ const Register = () => {
   const [contactNumber, setContactNumber] = React.useState(234);
   const [phoneNumber, setPhoneNumber] = React.useState(234);
   const [industry, setIndustry] = React.useState('');
-  const [noOfEmployees, setNoOfEmployees] = React.useState(0);
   const classes = useStyles();
 
   const handleChange = (event) => {
@@ -155,27 +121,24 @@ const Register = () => {
   };
 
   const handleContactChange = (event) => {
-    setContactNumber(event);
-  };
+      setContactNumber(event);
+    };
     
   const handlePhoneChange = (event) => {
-    setPhoneNumber(event);
+      setPhoneNumber(event);
   };
 
   const handleIndustryChange = (event) => {
+      console.log('Industry: ', event.target.value)
     setIndustry(event.target.value);
   };
 
-  const handleEmployeeRangeChange = (event) => {
-    setNoOfEmployees(event.target.value);
-  };
 
 
-  const onSubmit = async (ev) => {
-    ev.preventDefault();
+  const onSubmit = async () => {
     try {
-      // console.log('getValues: ', getValues());
-      const form = { ...getValues(), contactNumber, phoneNumber, industry, noOfEmployees }
+      console.log('getValues: ', getValues());
+      const form = { ...getValues(), contactNumber, phoneNumber, industry }
       console.log('form: ', JSON.stringify(form));
       loading('Creating Account...');
       const { data: { message  } } = await api.post('/companies', form);
@@ -197,7 +160,7 @@ const Register = () => {
   return (
     <Card className={classes.root}>
         <Typography variant="h6" color="initial" justify='center' align='center' className='my-20'><strong>Create Account</strong></Typography>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        {/* <form onSubmit={handleSubmit(onSubmit)}> */}
         {/* <form onSubmit={onSubmit}> */}
         <Typography variant="body1" color="initial" className='my-10'><strong>My Login Information</strong></Typography>
         <Grid container spacing={3} justify='space-between' align='center' style={{ marginBottom: '3rem'}}>
@@ -207,7 +170,6 @@ const Register = () => {
                 name='firstName'
                 error={errors.firstName}
                 message={errors.firstName?.message}
-                helperText={errors.firstName?.message}
                 refs={register}
             />
             </Grid>
@@ -217,7 +179,6 @@ const Register = () => {
                 name='middleName'
                 error={errors.middleName}
                 message={errors.middleName?.message}
-                helperText={errors.middleName?.message}
                 refs={register}
             />
             </Grid>
@@ -227,7 +188,6 @@ const Register = () => {
                 name='lastName'
                 error={errors.lastName}
                 message={errors.lastName?.message}
-                helperText={errors.lastName?.message}
                 refs={register}
             />
             </Grid>
@@ -237,7 +197,6 @@ const Register = () => {
                 name='userName'
                 error={errors.userName}
                 message={errors.userName?.message}
-                helperText={errors.userName?.message}
                 refs={register}
             />
             </Grid>
@@ -247,7 +206,6 @@ const Register = () => {
                 name='email'
                 error={errors.email}
                 message={errors.email?.message}
-                helperText={errors.email?.message}
                 refs={register}
             />
             </Grid>
@@ -260,7 +218,6 @@ const Register = () => {
                 refs={register}
                 type='number'
                 message={errors.phoneNumber?.message}
-                helperText={errors.phoneNumber?.message}
                 country={'ng'}
             />
             </Grid>
@@ -271,7 +228,6 @@ const Register = () => {
                 type='password'
                 error={errors.password}
                 message={errors.password?.message}
-                helperText={errors.password?.message}
                 refs={register}
             />
             </Grid>
@@ -282,7 +238,6 @@ const Register = () => {
                 type='password'
                 error={errors.confirmPassword}
                 message={errors.confirmPassword?.message}
-                helperText={errors.confirmPassword?.message}
                 refs={register}
             />
             </Grid>
@@ -308,7 +263,6 @@ const Register = () => {
                 name='companyName'
                 error={errors.companyName}
                 message={errors.companyName?.message}
-                helperText={errors.companyName?.message}
                 refs={register}
                 />
             </Grid>
@@ -321,9 +275,6 @@ const Register = () => {
                 labelId="demo-simple-select-outlined-label"
                 id="demo-simple-select-outlined"
                 value={industry}
-                message={errors.industry?.message}
-                helperText={errors.industry?.message}
-                refs={register}
                 onChange={handleIndustryChange}
                 label="Industry"
               >
@@ -335,38 +286,14 @@ const Register = () => {
               </Select>
             </FormControl>
             </Grid>
-            {/* <Grid item lg={4} md={6} sm={12} xs={12}>
+            <Grid item lg={4} md={6} sm={12} xs={12}>
                 <Input
                 label='Number of Employees'
                 name='noOfEmployees'
                 error={errors.noOfEmployees}
                 message={errors.noOfEmployees?.message}
-                helperText={errors.noOfEmployees?.message}
                 refs={register}
                 />
-            </Grid> */}
-            <Grid item lg={4} md={6} sm={12} xs={12}>
-            <FormControl variant="outlined" style={{ width: '100%' }} className={classes.formControl}>
-              <InputLabel id="demo-simple-select-outlined-label">Number of Employees</InputLabel>
-              <Select
-                justify='left'
-                align='left'
-                labelId="demo-simple-select-outlined-label"
-                id="demo-simple-select-outlined"
-                value={industry}
-                message={errors.noOfEmployees?.message}
-                helperText={errors.noOfEmployees?.message}
-                refs={register}
-                onChange={handleEmployeeRangeChange}
-                label="Number of Employees"
-              >
-                {EmployeesRange.map(item => (
-                <MenuItem key={item.id} value={item.max}>
-                  {item.name}
-                </MenuItem>
-              ))}
-              </Select>
-            </FormControl>
             </Grid>
             <Grid item lg={4} md={6} sm={12} xs={12}>
                 <PhoneNumberInput
@@ -377,7 +304,6 @@ const Register = () => {
                   refs={register}
                   type='number'
                   message={errors.contactNumber?.message}
-                  helperText={errors.contactNumber?.message}
                   country={'ng'}
                 />
             </Grid>
@@ -387,7 +313,6 @@ const Register = () => {
                 name='contactEmail'
                 error={errors.contactEmail}
                 message={errors.contactEmail?.message}
-                helperText={errors.contactEmail?.message}
                 refs={register}
                 />
             </Grid>
@@ -396,16 +321,16 @@ const Register = () => {
             </Grid>
 
             <Grid container spacing={3} justify='center' align='center'>
-                <Button variant="contained" type='submit' color="primary" style={{ marginLeft: '10px', marginRight: '10px' }}>
+                <Button variant="contained" onClick={onSubmit} color="primary" style={{ marginLeft: '10px', marginRight: '10px' }}>
                     Submit 
                 </Button>
-                {/* onClick={onSubmit} <Button variant="contained" color="secondary" style={{ marginLeft: '10px', marginRight: '10px' }}>
+                {/* <Button variant="contained" color="secondary" style={{ marginLeft: '10px', marginRight: '10px' }}>
                     Cancel
                 </Button> */}
             </Grid>
-        </form>
+        {/* </form> */}
     </Card>
   );
 };
 
-export default Register;
+export default EntitiesAndDepartments;
