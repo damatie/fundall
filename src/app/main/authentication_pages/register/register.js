@@ -322,7 +322,7 @@ const Register = () => {
                 id="demo-simple-select-outlined"
                 value={industry}
                 message={errors.industry?.message}
-                helperText={errors.industry?.message}
+                // helperText={errors.industry?.message}
                 refs={register}
                 onChange={handleIndustryChange}
                 label="Industry"
@@ -353,9 +353,9 @@ const Register = () => {
                 align='left'
                 labelId="demo-simple-select-outlined-label"
                 id="demo-simple-select-outlined"
-                value={industry}
+                value={noOfEmployees}
                 message={errors.noOfEmployees?.message}
-                helperText={errors.noOfEmployees?.message}
+                // helperText={errors.noOfEmployees?.message}
                 refs={register}
                 onChange={handleEmployeeRangeChange}
                 label="Number of Employees"
