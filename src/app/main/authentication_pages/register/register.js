@@ -45,10 +45,14 @@ const useStyles = makeStyles(theme => ({
 const schema = yup.object().shape({
     firstName: yup.string(errorMsg({ name: 'First Name', type: 'string' }))
         .required(errorMsg({ name: 'First Name', type: 'required' }))
-        .min(3, errorMsg({ name: 'First', type: 'min', number: 3 })),
+        .min(3, errorMsg({ name: 'First', type: 'min', number: 3 }))
+        .max(60, errorMsg({ name: 'First', type: 'max', number: 60 }))
+        .matches(/^[aA-zZ\s]+$/, "Only alphabets are allowed for this field "),
     lastName: yup.string(errorMsg({ name: 'Last Name', type: 'string' }))
         .required(errorMsg({ name: 'Last Name', type: 'required' }))
-        .min(3, errorMsg({ name: 'Last Name', type: 'min', number: 3 })),
+        .min(3, errorMsg({ name: 'Last Name', type: 'min', number: 3 }))
+        .max(60, errorMsg({ name: 'Last Name', type: 'max', number: 60 }))
+        .matches(/^[aA-zZ\s]+$/, "Only alphabets are allowed for this field "),
     middleName: yup.string(errorMsg({ name: 'Middle Name', type: 'string' }))
         .required(errorMsg({ name: 'Middle Name', type: 'required' }))
         .min(3, errorMsg({ name: 'Middle Name', type: 'min', number: 3 })),
@@ -58,7 +62,10 @@ const schema = yup.object().shape({
     email: yup.string()
         .required(errorMsg({ name: 'Email Address', type: 'required' }))
         .email(),
-    password: yup.string().required(errorMsg({ name: 'Password', type: 'required' })).min(4).matches(/^[a-z0-9]+$/i, 'must contain at least one number'),
+    password: yup.string()
+      .matches("^(?=.*[A-Za-z])(?=.*d)(?=.*[@$!%*#?&])[A-Za-zd@$!%*#?&]{6,}$",
+        "Must Contain 6 Characters, One Uppercase, One Lowercase, One Number and one special case Character")
+      .required(errorMsg({ name: 'Password', type: 'required' })).min(4).matches(/^[a-z0-9]+$/i, 'must contain at least one number'),
     confirmPassword: yup.string().oneOf([yup.ref('password'), null], 'Passwords must match').required(errorMsg({ name: 'Confirm Password', type: 'required' })),
     companyName: yup.string(errorMsg({ name: 'Company name', type: 'string' }))
         .required(errorMsg({ name: 'Company name', type: 'required' })),
