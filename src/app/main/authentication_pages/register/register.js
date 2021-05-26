@@ -177,6 +177,7 @@ export default function Register() {
         // console.log('form: ', form);
         loading('Creating Account...');
         const { data: { message  } } = await api.post('/companies', form);
+        console.log('data: ', data)
         swal.fire({
           text: message,
           icon: 'success'
@@ -185,7 +186,7 @@ export default function Register() {
         window.location.assign('/auth/login');
       } catch (e) {
         swal.fire({
-          text: catchErrorMsg(e),
+          text: e?.message || 'Something went wrong',
           icon: 'error'
         })
       }
