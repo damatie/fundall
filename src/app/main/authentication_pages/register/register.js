@@ -55,11 +55,14 @@ const schema = yup.object().shape({
         .matches(/^[aA-zZ\s]+$/, "Only alphabets are allowed for this field "),
     middleName: yup.string(errorMsg({ name: 'Middle Name', type: 'string' }))
         .required(errorMsg({ name: 'Middle Name', type: 'required' }))
-        .min(3, errorMsg({ name: 'Middle Name', type: 'min', number: 3 })),
+        .min(3, errorMsg({ name: 'Middle Name', type: 'min', number: 3 }))
+        .max(60, errorMsg({ name: 'Middle Name', type: 'max', number: 60 }))
+        .matches(/^[aA-zZ\s]+$/, "Only alphabets are allowed for this field "),
     userName: yup.string(errorMsg({ name: 'User Name', type: 'string' }))
         .required(errorMsg({ name: 'User Name', type: 'required' }))
-        .min(3, errorMsg({ name: 'User Name', type: 'min', number: 3 })),
+        .min(3, errorMsg({ name: 'User Name', type: 'min', number: 3 })).matches(/^[ A-Za-z_@./#&+-]*$/, "Only alphabets and Special Case Characters are allowed for this field " ),
     email: yup.string()
+        .matches(/^[A-Za-z\d@$!%*#?&]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]{2,})*$/, "Enter a valid Email Address")
         .required(errorMsg({ name: 'Email Address', type: 'required' }))
         .email(),
     password: yup.string()
@@ -72,6 +75,7 @@ const schema = yup.object().shape({
         .required(errorMsg({ name: 'Company name', type: 'required' })),
     contactEmail: yup.string()
         .required(errorMsg({ name: 'Company Contact Email', type: 'required' }))
+        .matches(/^[A-Za-z\d@$!%*#?&]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]{2,})*$/, "Enter a valid Email Address")
         .email(),
   });
 
@@ -163,8 +167,8 @@ export default function Register() {
   };
 
   const handleEmployeeRangeChange = (event) => {
-    setMinNoOfEmployees(event.target.value);
-    setMaxNoOfEmployees(event.target.value);
+    setMinNoOfEmployees(event.target.value.min);
+    setMaxNoOfEmployees(event.target.value.max);
   };
 
   const onSubmit = async (data) => {
