@@ -1,3 +1,5 @@
+// createEmployeeAccount
+
 import React from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -21,12 +23,6 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
-
-
-// const schema = yup.object().shape({
-//   firstName: yup.string().required(),
-//   age: yup.number().positive().integer().required(),
-// });
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -135,7 +131,7 @@ const organisationList = [
     {number: 19, name: 'Others'}
 ];
 
-export default function Register() {
+export default function createEmployeeAccount() {
   const { register, handleSubmit, formState:{ errors } } = useForm({
     resolver: yupResolver(schema)
   });
@@ -175,14 +171,13 @@ export default function Register() {
         const form = { ...data, contactNumber, phoneNumber, industry, minNoOfEmployees, maxNoOfEmployees }
         // console.log('form: ', form);
         loading('Creating Account...');
-        const { data: { message  } } = await api.post('/companies', form);
+        const { data: { message  } } = await api.post('/auth/employee/add-employee', form);
         // console.log('data: ', data)
         swal.fire({
           text: message,
           icon: 'success'
         });
         localStorage.clear();
-        window.location.assign('/auth/login');
       } catch (e) {
         swal.fire({
           text: e?.message || 'Something went wrong',
