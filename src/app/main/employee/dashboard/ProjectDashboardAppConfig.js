@@ -11,10 +11,6 @@ const ProjectDashboardAppConfig = {
 	routes: [
 		{
 			path: '/employee/dashboard',
-			component: React.lazy(() => import('./createEmployeeAccount'))
-		},
-		{
-			path: '/employee/create',
 			component: React.lazy(() => import('./ProjectDashboardApp'))
 		}
 	]

@@ -15,14 +15,24 @@ import errorMsg from 'utils/errorMsg';
 import api from 'app/services/api';
 import loading from 'utils/loading';
 import { makeStyles } from '@material-ui/core/styles';
-import catchErrorMsg from 'utils/catchErrorMsg';
-import { useDispatch } from 'react-redux';
+// import catchErrorMsg from 'utils/catchErrorMsg';
+import { useHistory } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
+import reducer from '../store/reducers';
+// import NewEmployeeTab from './tabs/newEmployeeTab';
+import entityReducer from 'app/main/HR/business_unit/store/reducers';
+import departmentReducer from 'app/main/HR/business_unit/department/store/reducers';
+import rolesReducer from 'app/main/HR/roles/store/reducers';
+import * as entityActions from 'app/main/HR/business_unit/store/actions';
+import * as departmentActions from 'app/main/HR/business_unit/department/store/actions';
+import * as rolesActions from 'app/main/HR/roles/store/actions';
+
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -131,12 +141,16 @@ const organisationList = [
     {number: 19, name: 'Others'}
 ];
 
-export default function createEmployeeAccount() {
+function createEmployeeAccount() {
   const { register, handleSubmit, formState:{ errors } } = useForm({
     resolver: yupResolver(schema)
   });
 
   const dispatch = useDispatch();
+	const employee = useSelector(({ employees }) => employees.employee);
+	const entity = useSelector(({ entity }) => entity.businessUnits);
+	const department = useSelector(({ department }) => department.departments);
+	const roles = useSelector(({ roles }) => roles);
   const [checked, setChecked] = React.useState(true);
   const [contactNumber, setContactNumber] = React.useState(234);
   const [phoneNumber, setPhoneNumber] = React.useState(234);
@@ -144,6 +158,19 @@ export default function createEmployeeAccount() {
   const [minNoOfEmployees, setMinNoOfEmployees] = React.useState(1);
   const [maxNoOfEmployees, setMaxNoOfEmployees] = React.useState(50);
   const classes = useStyles();
+
+  useEffect(() => {
+		dispatch(entityActions.getBusinessUnits());
+		dispatch(rolesActions.getRoles());
+	}, []);
+
+  const getDepartments = id => {
+		dispatch(departmentActions.getDepartments(id));
+	}
+
+  const handleEnitityChange = e => {
+    getDepartments(e.target.value);
+  };
 
   const handleChange = (event) => {
     setChecked(event.target.checked);
@@ -169,10 +196,8 @@ export default function createEmployeeAccount() {
   const onSubmit = async (data) => {
       try {
         const form = { ...data, contactNumber, phoneNumber, industry, minNoOfEmployees, maxNoOfEmployees }
-        // console.log('form: ', form);
         loading('Creating Account...');
         const { data: { message  } } = await api.post('/auth/employee/add-employee', form);
-        // console.log('data: ', data)
         swal.fire({
           text: message,
           icon: 'success'
@@ -382,3 +407,8 @@ export default function createEmployeeAccount() {
     </Card>
   );
 }
+
+withReducer('roles', rolesReducer)(createEmployeeAccount);
+withReducer('entity', entityReducer)(createEmployeeAccount);
+withReducer('department', departmentReducer)(createEmployeeAccount);
+export default withReducer('employees', reducer)(createEmployeeAccount);
