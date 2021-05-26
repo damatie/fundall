@@ -177,7 +177,7 @@ export default function Register() {
         // console.log('form: ', form);
         loading('Creating Account...');
         const { data: { message  } } = await api.post('/companies', form);
-        console.log('data: ', data)
+        // console.log('data: ', data)
         swal.fire({
           text: message,
           icon: 'success'
