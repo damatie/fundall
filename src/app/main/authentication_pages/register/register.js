@@ -63,8 +63,9 @@ const schema = yup.object().shape({
         .required(errorMsg({ name: 'Email Address', type: 'required' }))
         .email(),
     password: yup.string()
-      .matches("^(?=.*[A-Za-z])(?=.*d)(?=.*[@$!%*#?&])[A-Za-zd@$!%*#?&]{6,}$",
-        "Must Contain 6 Characters, One Uppercase, One Lowercase, One Number and one special case Character")
+    .matches(
+      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{6,}$/,
+      "Must Contain 6 Characters, One Uppercase, One Lowercase, One Number and one special case Character")
       .required(errorMsg({ name: 'Password', type: 'required' })).min(4).matches(/^[a-z0-9]+$/i, 'must contain at least one number'),
     confirmPassword: yup.string().oneOf([yup.ref('password'), null], 'Passwords must match').required(errorMsg({ name: 'Confirm Password', type: 'required' })),
     companyName: yup.string(errorMsg({ name: 'Company name', type: 'string' }))
