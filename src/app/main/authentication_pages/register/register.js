@@ -181,7 +181,7 @@ export default function Register() {
 
   return (
     <Card className={classes.root}>
-
+      <Typography variant="h6" color="initial" justify='center' align='center' className='my-20'><strong>Create Account</strong></Typography>
       <form onSubmit={handleSubmit(onSubmit)}>
           <Typography variant="body1" color="initial" className='my-10'><strong>My Login Information</strong></Typography>
           <Grid container spacing={3} justify='space-between' align='center' style={{ marginBottom: '3rem'}}>
@@ -306,7 +306,7 @@ export default function Register() {
                   id="demo-simple-select-outlined"
                   defaultValue={industry}
                   message={errors.industry?.message}
-                  refs={register}
+                  // refs={register}
                   onChange={handleIndustryChange}
                   label="Industry"
                 >
@@ -328,7 +328,7 @@ export default function Register() {
                   id="demo-simple-select-outlined"
                   defaultValue={EmployeesRange[0]}
                   message={errors.minNoOfEmployees?.message}
-                  refs={register}
+                  // refs={register}
                   onChange={handleEmployeeRangeChange}
                   label="Number of Employees"
                 >
