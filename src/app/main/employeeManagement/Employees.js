@@ -29,7 +29,7 @@ const Employees = () => {
     handleSubmit,
     onSubmit,
     handleCloseModal,
-    handleOpenModal,
+    // handleOpenModal,
     handleDelete,
     handleSearch,
     handleFilter,
@@ -37,6 +37,10 @@ const Employees = () => {
   } = useEmployees({
     dispatch
   });
+
+  const createEmployee = () => {
+    window.location.assign('/hr/employee_management/new');
+  }
 
   return (
     <PageLayout
@@ -48,7 +52,7 @@ const Employees = () => {
       button={{
         showButton: true,
         btnTitle: 'Add New Employee',
-        onClick: handleOpenModal,
+        onClick: createEmployee,
         btnComponent: false,
       }}
       content={
@@ -68,7 +72,7 @@ const Employees = () => {
                     handleDelete={handleDelete}
                     handleFilter={handleFilter}
                   />
-                  <AddNewEmployee
+                  {/* <AddNewEmployee
                     open={open}
                     handleClose={handleCloseModal}
                     data={{
@@ -86,7 +90,7 @@ const Employees = () => {
                       control,
                       errors,
                     }}
-                  />
+                  /> */}
                 </>
               )
           }

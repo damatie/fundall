@@ -27,7 +27,7 @@ const EmployeeTable = ({ data, push, handleDelete, handleFilter}) => {
 				accessor: 'department',
 				sortable: true,
 				Cell: ({ row: { original: { department }} }) => {
-					return <>{department.departmentName}</>
+					return <>{department?.departmentName}</>
 				}
 			},
 			{
@@ -35,7 +35,7 @@ const EmployeeTable = ({ data, push, handleDelete, handleFilter}) => {
 				accessor: 'entity',
 				sortable: true,
 				Cell: ({ row: { original: { entity }} }) => {
-					return <>{entity.entityName}</>
+					return <>{entity?.entityName}</>
 				}
 			},
 			{
