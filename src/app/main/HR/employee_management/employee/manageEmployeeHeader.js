@@ -52,7 +52,7 @@ function ManageEmployeeHeader(props) {
 			<FuseAnimate animation="transition.slideRightIn" delay={300}>
 				<Button
 					component={Link}
-					to="/hr/employee_management/new"
+					to="/hr/create-employee"
 					className="whitespace-no-wrap normal-case"
 					variant="contained"
 					color="secondary"

@@ -10,7 +10,6 @@ import Grid from '@material-ui/core/Grid';
 import swal from 'sweetalert2';
 import errorMsg from 'utils/errorMsg';
 import api from 'app/services/api';
-import loading from 'utils/loading';
 import { makeStyles } from '@material-ui/core/styles';
 import { useDispatch, useSelector } from 'react-redux';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -19,9 +18,18 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
-import withReducer from 'app/store/withReducer';
+// import reducer from './store/reducers/employees.reducer';
+// import withReducer from 'app/store/withReducer';
 import { DatePicker } from "@material-ui/pickers";
 import *  as Actions from 'app/main/employeeManagement/store/actions';
+import withReducer from "app/store/withReducer";
+// import entityReducer from 'app/main/HR/business_unit/store/reducers';
+// import departmentReducer from 'app/main/HR/business_unit/department/store/reducers';
+// import rolesReducer from 'app/main/HR/roles/store/reducers';
+// import employeesReducer from 'app/main/employeeManagement/store/reducers';
+import * as entityActions from 'app/main/HR/business_unit/store/actions';
+import * as rolesActions from 'app/main/HR/roles/store/actions';
+import employeesReducer from "./store/reducers/employees.reducer";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -71,10 +79,12 @@ function AddNewEmployee() {
 
   const dispatch = useDispatch();
 
-  const { entities, roles, grades, jobTitles } = useSelector(state => state.employeeMgt);
-  const { push } = useHistory();
+  const { entities, grades, roles, jobTitles } = useSelector(state => state.employeeMgt);
 
-
+  console.log('entities: ', entities);
+  console.log('grades: ', grades);
+  console.log('roles: ', roles);
+  console.log('jobTitles: ', jobTitles);
   const employmentStatusList = [];
   const modeOfEmploymentList = [];
   const employeeGradeLevels = [];
@@ -97,6 +107,8 @@ function AddNewEmployee() {
     dispatch(Actions.getRoles());
     dispatch(Actions.getGrades());
     dispatch(Actions.getJobTitle());
+    // dispatch(entityActions.getBusinessUnits());
+		// dispatch(rolesActions.getRoles());
   }, []);
   
   const handleCheckedChange = (event) => {
@@ -104,7 +116,6 @@ function AddNewEmployee() {
   };
   
   const handleEntityChange = (event) => {
-    // getDepartments(e.target.value.id);
     setEntityId(event.target.value.id);
     setDepartments(event.target.value.department)
   };
@@ -152,7 +163,7 @@ function AddNewEmployee() {
         text: message,
         icon: 'success'
       });
-      localStorage.clear();
+      window.location.assign('/employee_management');
     } catch (e) {
       swal.fire({
         text: e?.message || 'Something went wrong',
@@ -323,7 +334,7 @@ function AddNewEmployee() {
                 >
                   {grades.map(item => (
                   <MenuItem key={item.id} value={item}>
-                    {item.name}
+                    {item.gradeName}
                   </MenuItem>))}
                 </Select>
               </FormControl>
@@ -413,8 +424,5 @@ function AddNewEmployee() {
   );
 }
 
-// withReducer('roles', rolesReducer)(AddNewEmployee);
-// withReducer('entity', entityReducer)(AddNewEmployee);
-// withReducer('department', departmentReducer)(AddNewEmployee);
+withReducer('employeeMgt', employeesReducer)(AddNewEmployee);
 export default AddNewEmployee;
-// export default withReducer('employees', reducer)(AddNewEmployee);
