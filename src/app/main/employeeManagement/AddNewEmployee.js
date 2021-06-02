@@ -50,7 +50,7 @@ const schema = yup.object().shape({
       .max(60, errorMsg({ name: 'Last Name', type: 'max', number: 60 }))
       .matches(/^[aA-zZ\s]+$/, "Only alphabets are allowed for this field "),
   middleName: yup.string(errorMsg({ name: 'Middle Name', type: 'string' }))
-      .required(errorMsg({ name: 'Middle Name', type: 'required' }))
+      // .required(errorMsg({ name: 'Middle Name', type: 'required' }))
       .min(3, errorMsg({ name: 'Middle Name', type: 'min', number: 3 }))
       .max(60, errorMsg({ name: 'Middle Name', type: 'max', number: 60 }))
       .matches(/^[aA-zZ\s]+$/, "Only alphabets are allowed for this field "),
@@ -65,7 +65,6 @@ const schema = yup.object().shape({
       .email(),
   entityId: yup.number()
       .required(errorMsg({ name: 'Entity', type: 'required' })),
-  // entityId: yup.object().shape({ name: yup.string().required(errorMsg({ name: 'Entity', type: 'required' })), }),
   departmentId: yup.number()
       .required(errorMsg({ name: 'Department', type: 'required' })),
   roleId: yup.number()
@@ -96,9 +95,9 @@ function AddNewEmployee() {
 
   const dispatch = useDispatch();
 
-  const { entities, roles, jobTitles } = useSelector(state => state.employeeMgt);
-  const employmentStatusList = [];
-  const modeOfEmploymentList = [];
+  const { entities, roles, jobTitles, accountSettings } = useSelector(state => state.employeeMgt);
+  const employmentStatusList = accountSettings?.employmentStatus || [];
+  const modeOfEmploymentList = accountSettings?.modeOfEmployment || [];
   const [startDate, setStartDate] = React.useState(new Date());
   const [checked, setChecked] = React.useState(true);
   const [entityId, setEntityId] = React.useState(null);
@@ -131,6 +130,7 @@ function AddNewEmployee() {
     dispatch(Actions.getRoles());
     dispatch(Actions.getGrades());
     dispatch(Actions.getJobTitle());
+    dispatch(Actions.getAccountSettings());
   }, []);
 
   React.useEffect(() => {
@@ -338,7 +338,6 @@ function AddNewEmployee() {
                   name='entityId'
                   error={errors.entityId}
                   message={errors.entityId?.message}
-                  helperText={errors.entityId?.message}
                   onChange={handleEntityChange}
                   label="Entity"
                 >
@@ -361,10 +360,8 @@ function AddNewEmployee() {
                   name='departmentId'
                   error={errors.departmentId}
                   message={errors.departmentId?.message}
-                  helperText={errors.departmentId?.message}
                   disabled={selectDept}
                   variant={selectDept ? 'filled' : 'outlined'}
-                  // defaultValue={departments[0]}
                   onChange={handleDepartmentChange}
                   label="Department"
                 >
@@ -387,7 +384,6 @@ function AddNewEmployee() {
                   name='role'
                   error={errors.roleId}
                   message={errors.roleId?.message}
-                  // defaultValue={roles[0]}
                   onChange={handleRoleChange}
                   label="Role"
                 >
@@ -410,7 +406,6 @@ function AddNewEmployee() {
                   name='jobTitleId'
                   error={errors.jobTitleId}
                   message={errors.jobTitleId?.message}
-                  // defaultValue={jobTitles[0]}
                   onChange={handleJobTitleChange}
                   label="Job Title"
                 >
@@ -433,7 +428,6 @@ function AddNewEmployee() {
                   name='employeeGradeId'
                   error={errors.employeeGradeId}
                   message={errors.employeeGradeId?.message}
-                  // defaultValue={grades[0]}
                   disabled={selectGrades}
                   variant={selectGrades ? 'filled' : 'outlined'}
                   onChange={handleEmployeeGradeChange}
@@ -460,7 +454,6 @@ function AddNewEmployee() {
                   message={errors.employeeGradeLevelId?.message}
                   disabled={selectGradeLevels}
                   variant={selectGradeLevels ? 'filled' : 'outlined'}
-                  // defaultValue={employeeGradeLevels[0]}
                   onChange={handleEmployeeGradeLevelChange}
                   label="Employee Grade Level"
                 >
@@ -488,7 +481,6 @@ function AddNewEmployee() {
                     register({ name: 'startDate', type: 'custom' }, { required: true });
                     setValue("startDate", JSON.stringify(newValue));
                   }}
-                  refs={register}
                   format="MM/DD/yyyy"
                   helperText={errors.startDate?.message}
                 />
@@ -505,7 +497,6 @@ function AddNewEmployee() {
                   name='employmentStatus'
                   error={errors.employmentStatus}
                   message={errors.employmentStatus?.message}
-                  // defaultValue={employmentStatusList[0]}
                   onChange={handleEmploymentStatusChange}
                   label="Employment Status"
                 >
@@ -528,7 +519,6 @@ function AddNewEmployee() {
                   name='modeOfEmployment'
                   error={errors.modeOfEmployment}
                   message={errors.modeOfEmployment?.message}
-                  // defaultValue={modeOfEmploymentList[0]}
                   onChange={handleModeOfEmploymentChange}
                   label="Mode Of Employment"
                 >

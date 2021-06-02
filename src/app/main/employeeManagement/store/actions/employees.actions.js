@@ -11,6 +11,7 @@ export const GET_DEPARTMENTS = 'GET DEPARTMENTS';
 export const GET_ROLES = 'GET ROLES';
 export const EMPLOYEE_GRADES = 'EMPLOYEE GRADES';
 export const GET_JOBTITLE = 'JOB TITLE';
+export const ACCOUNT_SETTINGS = 'ACCOUNT SETTINGS'
 
 export const getJobTitle = () => {
   return async (dispatch) => {
@@ -120,6 +121,27 @@ export const getGrades = () => {
       dispatch({
         type: EMPLOYEE_GRADES,
         payload: []
+      })
+    }
+  };
+};
+
+
+export const getAccountSettings = () => {
+  return async (dispatch) => {
+    try {
+      const userData = localStorage.getItem('user_profile');
+      const { data: { data, success } } = await api.get(`/account_settings/${userData.companyId}`);
+      if(success) {
+        dispatch({
+          type: ACCOUNT_SETTINGS,
+          payload: data || {}
+        })
+      }
+    } catch (e) {
+      dispatch({
+        type: ACCOUNT_SETTINGS,
+        payload: {}
       })
     }
   };

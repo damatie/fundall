@@ -9,6 +9,7 @@ const initialState = {
   grades: [],
   loading: true,
   jobTitles: [],
+  accountSettings: {}
 }
 
 const employeesReducer = (state = initialState, actions) => {
@@ -53,6 +54,11 @@ const employeesReducer = (state = initialState, actions) => {
       return {
         ...state,
         grades: actions.payload
+      }
+    case Actions.ACCOUNT_SETTINGS:
+      return {
+        ...state,
+        accountSettings: actions.payload
       }
     default:
       return state;
