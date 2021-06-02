@@ -8,6 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import AccountSettings from './accountsettings';
 import OrganizationInformation from './orginfo';
 import EntitiesAndDepartments from './entitiesanddepts';
+import StepFour from './step4';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -38,6 +39,11 @@ function getSteps() {
         id: 3,
         title: 'Entities & Departments', 
         details: 'Configure entities and departments in your organization'
+      },
+      {
+        id: 4,
+        title: 'Add Employee Demo', 
+        details: 'Configure entities and departments in your organization'
       }
     ];
 }
@@ -50,6 +56,8 @@ function getStepContent(stepIndex) {
       return <><OrganizationInformation/></>;
     case 2:
       return <><EntitiesAndDepartments/></>;
+    case 3:
+      return <><StepFour/></>
     default:
       return <></>;
   }
@@ -77,7 +85,10 @@ export default function StepperMain() {
       <Stepper activeStep={activeStep} alternativeLabel>
         {steps.map((label) => (
           <Step key={label.id}>
-            <StepLabel>{label.title}</StepLabel>
+            <StepLabel>
+              <span>{label.title}</span>
+              <span><Typography variant="body1" color="initial" className='my-5'>{label.details}</Typography></span>
+            </StepLabel>
           </Step>
         ))}
       </Stepper>

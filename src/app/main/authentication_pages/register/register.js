@@ -137,6 +137,7 @@ const organisationList = [
 
 export default function Register() {
   const { register, handleSubmit, formState:{ errors } } = useForm({
+    mode: "onBlur",
     resolver: yupResolver(schema)
   });
 
@@ -199,6 +200,7 @@ export default function Register() {
           <Grid container spacing={3} justify='space-between' align='center' style={{ marginBottom: '3rem'}}>
               <Grid item lg={4} md={6} sm={12} xs={12}>
               <Input
+                  required
                   label='First Name'
                   name='firstName'
                   error={errors.firstName}
@@ -209,6 +211,7 @@ export default function Register() {
               </Grid>
               <Grid item lg={4} md={6} sm={12} xs={12}>
               <Input
+                  required
                   label='Middle Name'
                   name='middleName'
                   error={errors.middleName}
@@ -219,6 +222,7 @@ export default function Register() {
               </Grid>
               <Grid item lg={4} md={6} sm={12} xs={12}>
               <Input
+                  required
                   label='Last Name'
                   name='lastName'
                   error={errors.lastName}
@@ -229,6 +233,7 @@ export default function Register() {
               </Grid>
               <Grid item lg={4} md={6} sm={12} xs={12}>
               <Input
+                  required
                   label='User Name'
                   name='userName'
                   error={errors.userName}
@@ -239,6 +244,7 @@ export default function Register() {
               </Grid>
               <Grid item lg={4} md={6} sm={12} xs={12}>
               <Input
+                  required
                   label='Email Address'
                   name='email'
                   error={errors.email}
@@ -262,6 +268,7 @@ export default function Register() {
               </Grid>
               <Grid item lg={4} md={6} sm={12} xs={12}>
               <Input
+                  required
                   label='Password'
                   name='password'
                   type='password'
@@ -273,6 +280,7 @@ export default function Register() {
               </Grid>
               <Grid item lg={4} md={6} sm={12} xs={12}>
               <Input
+                  required
                   label='Confirm Password'
                   name='confirmPassword'
                   type='password'
@@ -300,6 +308,7 @@ export default function Register() {
               <Grid container spacing={3} justify='space-between' align='center' style={{ marginBottom: '3rem'}}>
               <Grid item lg={4} md={6} sm={12} xs={12}>
                   <Input
+                  required
                   label='Company Name'
                   name='companyName'
                   error={errors.companyName}
@@ -312,12 +321,14 @@ export default function Register() {
               <FormControl variant="outlined" style={{ width: '100%' }} className={classes.formControl}>
                 <InputLabel id="demo-simple-select-outlined-label">Industry</InputLabel>
                 <Select
+                  required
                   justify='left'
                   align='left'
                   labelId="demo-simple-select-outlined-label"
                   id="demo-simple-select-outlined"
                   defaultValue={industry}
                   message={errors.industry?.message}
+                  helperText={errors.industry?.message}
                   // refs={register}
                   onChange={handleIndustryChange}
                   label="Industry"
@@ -334,12 +345,14 @@ export default function Register() {
               <FormControl variant="outlined" style={{ width: '100%' }} className={classes.formControl}>
                 <InputLabel id="demo-simple-select-outlined-label">Number of Employees</InputLabel>
                 <Select
+                  required
                   justify='left'
                   align='left'
                   labelId="demo-simple-select-outlined-label"
                   id="demo-simple-select-outlined"
                   defaultValue={EmployeesRange[0]}
                   message={errors.minNoOfEmployees?.message}
+                  helperText={errors.minNoOfEmployees?.message}
                   // refs={register}
                   onChange={handleEmployeeRangeChange}
                   label="Number of Employees"
@@ -367,6 +380,7 @@ export default function Register() {
               </Grid>
               <Grid item lg={4} md={6} sm={12} xs={12}>
                   <Input
+                  required
                   label='Company Contact Email'
                   name='contactEmail'
                   error={errors.contactEmail}

@@ -22,7 +22,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import { DatePicker } from "@material-ui/pickers";
 import *  as Actions from 'app/main/employeeManagement/store/actions';
 import withReducer from "app/store/withReducer";
-import employeesReducer from "./store/reducers/employees.reducer";
+import employeesReducer from "app/main/employeeManagement/store/reducers/employees.reducer";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -63,23 +63,23 @@ const schema = yup.object().shape({
       .matches(/^[A-Za-z\d@$!%*#?&]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]{2,})*$/, "Enter a valid Email Address")
       .required(errorMsg({ name: 'Email Address', type: 'required' }))
       .email(),
-  entityId: yup.number()
-      .required(errorMsg({ name: 'Entity', type: 'required' })),
+//   entityId: yup.number()
+//       .required(errorMsg({ name: 'Entity', type: 'required' })),
   // entityId: yup.object().shape({ name: yup.string().required(errorMsg({ name: 'Entity', type: 'required' })), }),
-  departmentId: yup.number()
-      .required(errorMsg({ name: 'Department', type: 'required' })),
-  roleId: yup.number()
-      .required(errorMsg({ name: 'Role', type: 'required' })),
-  jobTitleId: yup.number()
-      .required(errorMsg({ name: 'Job Title', type: 'required' })),
-  employeeGradeId: yup.number()
-      .required(errorMsg({ name: 'Employee Grade', type: 'required' })),
-  employeeGradeLevelId: yup.number()
-      .required(errorMsg({ name: 'Employee Grade Level', type: 'required' })),
+//   departmentId: yup.number()
+//       .required(errorMsg({ name: 'Department', type: 'required' })),
+//   roleId: yup.number()
+//       .required(errorMsg({ name: 'Role', type: 'required' })),
+//   jobTitleId: yup.number()
+//       .required(errorMsg({ name: 'Job Title', type: 'required' })),
+//   employeeGradeId: yup.number()
+//       .required(errorMsg({ name: 'Employee Grade', type: 'required' })),
+//   employeeGradeLevelId: yup.number()
+//       .required(errorMsg({ name: 'Employee Grade Level', type: 'required' })),
   employmentStatus: yup.string()
       .required(errorMsg({ name: 'Employment Status', type: 'required' })),
-  modeOfEmployment: yup.string()
-      .required(errorMsg({ name: 'Mode Of Employment', type: 'required' })),
+//   modeOfEmployment: yup.string()
+//       .required(errorMsg({ name: 'Mode Of Employment', type: 'required' })),
   // modeOfEmployment: yup.object()
   //     .shape({})
   //     .nullable()
@@ -88,7 +88,7 @@ const schema = yup.object().shape({
       .required(errorMsg({ name: 'Employee Start Date', type: 'required' })),
 });
 
-function AddNewEmployee() {
+function StepFour() {
   
   const { register, handleSubmit, formState:{ errors }, setValue, getValues } = useForm({
     mode: "onBlur",
@@ -100,9 +100,9 @@ function AddNewEmployee() {
 
   const dispatch = useDispatch();
 
-  const { entities, roles, jobTitles } = useSelector(state => state.employeeMgt);
-  const employmentStatusList = [];
-  const modeOfEmploymentList = [];
+//   const { entities, roles, jobTitles } = useSelector(state => state.employeeMgt);
+//   const employmentStatusList = [];
+//   const modeOfEmploymentList = [];
   const [startDate, setStartDate] = React.useState(null);
   const [checked, setChecked] = React.useState(true);
   const [entityId, setEntityId] = React.useState(null);
@@ -164,7 +164,7 @@ function AddNewEmployee() {
   };
   
   const handleEmploymentStatusChange = (event) => {
-    register({ name: 'employmentStatus', type: 'custom' }, { required: true });
+    register({ name: 'employmentStatus', type: 'string' }, { required: true });
     setValue("employmentStatus", event.target.value);
     setEmploymentStatus(event.target.value);
   };
@@ -201,15 +201,15 @@ function AddNewEmployee() {
 
   const onSubmit = async (data) => {
     try {
-      const form = { ...data, srgIdNumber: employeeId, entityId, departmentId, roleId, employmentStatus, modeOfEmployment, jobTitleId, employeeGradeId, employeeGradeLevelId };
+      const form = { ...data, srgIdNumber: employeeId, employmentStatus };
       console.log('Form: ', form)
       loading('Creating Employee Account...');
-      const { data: { message  } } = await api.post('/auth/employee/add-employee', form);
-      swal.fire({
-        text: message,
-        icon: 'success'
-      });
-      window.location.assign('/employee_management');
+    //   const { data: { message  } } = await api.post('/auth/employee/add-employee', form);
+    //   swal.fire({
+    //     text: message,
+    //     icon: 'success'
+    //   });
+    //   window.location.assign('/employee_management');
     } catch (e) {
       swal.fire({
         text: e?.message || 'Something went wrong',
@@ -295,7 +295,7 @@ function AddNewEmployee() {
 
           <Typography variant="body1" color="initial" className='my-10'><strong>Company Information</strong></Typography>
           <Grid container spacing={3} justify='space-between' align='center' style={{ marginBottom: '3rem'}}>
-            <Grid item lg={4} md={6} sm={12} xs={12}>
+            {/* <Grid item lg={4} md={6} sm={12} xs={12}>
               <FormControl variant="outlined" style={{ width: '100%', margin: '8px 0px' }} className={classes.formControl}>
                 <InputLabel id="demo-simple-select-outlined-label">Entity</InputLabel>
                 <Select
@@ -439,7 +439,7 @@ function AddNewEmployee() {
                 </Select>
                 <FormHelperText style={{ color: 'red'}}>{errors.employeeGradeLevelId?.message}</FormHelperText>
               </FormControl>
-            </Grid>
+            </Grid> */}
             <Grid item lg={4} md={6} sm={12} xs={12}>
               <FormControl variant="outlined" style={{ width: '100%', margin: '8px 0px' }} className={classes.formControl}>
                 <DatePicker
@@ -476,15 +476,21 @@ function AddNewEmployee() {
                   onChange={handleEmploymentStatusChange}
                   label="Employment Status"
                 >
-                  {employmentStatusList.map(item => (
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  <MenuItem value={"Ten"}>Ten</MenuItem>
+                  <MenuItem value={"Twenty"}>Twenty</MenuItem>
+                  <MenuItem value={"Thirty"}>Thirty</MenuItem>
+                  {/* {employmentStatusList.map(item => (
                   <MenuItem key={item.id} value={item.name}>
                     {item.name}
-                  </MenuItem>))}
+                  </MenuItem>))} */}
                 </Select>
                 <FormHelperText style={{ color: 'red'}}>{errors.employmentStatus?.message}</FormHelperText>
               </FormControl>
             </Grid>
-            <Grid item lg={4} md={6} sm={12} xs={12}>
+            {/* <Grid item lg={4} md={6} sm={12} xs={12}>
               <FormControl variant="outlined" style={{ width: '100%', margin: '8px 0px' }} className={classes.formControl}>
                 <InputLabel id="demo-simple-select-outlined-label">Mode Of Employment</InputLabel>
                 <Select
@@ -506,7 +512,7 @@ function AddNewEmployee() {
                 </Select>
                 <FormHelperText style={{ color: 'red'}}>{errors.modeOfEmployment?.message}</FormHelperText>
               </FormControl>
-            </Grid>
+            </Grid> */}
           </Grid>
           <Grid container spacing={3} justify='center' align='center'>
             <Button variant="contained" type='submit' color="primary">
@@ -518,5 +524,5 @@ function AddNewEmployee() {
   );
 }
 
-withReducer('employeeMgt', employeesReducer)(AddNewEmployee);
-export default AddNewEmployee;
+withReducer('employeeMgt', employeesReducer)(StepFour);
+export default StepFour;

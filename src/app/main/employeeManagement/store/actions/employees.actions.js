@@ -32,7 +32,8 @@ export const getJobTitle = () => {
 export const getEmployees = () => {
   return async (dispatch) => {
     try {
-      const { data: { data, success } } = await api.get('/auth/employee/data/all');
+      const { data: { data, success } } = await api.get('/auth/employee/');
+      // const { data: { data, success } } = await api.get('/auth/employee/data/all');
       if(success) {
         dispatch({
           type: GET_EMPLOYEES,
