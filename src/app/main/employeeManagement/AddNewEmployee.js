@@ -50,7 +50,7 @@ const schema = yup.object().shape({
       .max(60, errorMsg({ name: 'Last Name', type: 'max', number: 60 }))
       .matches(/^[aA-zZ\s]+$/, "Only alphabets are allowed for this field "),
   middleName: yup.string(errorMsg({ name: 'Middle Name', type: 'string' }))
-      // .required(errorMsg({ name: 'Middle Name', type: 'required' }))
+      .required(errorMsg({ name: 'Middle Name', type: 'required' }))
       .min(3, errorMsg({ name: 'Middle Name', type: 'min', number: 3 }))
       .max(60, errorMsg({ name: 'Middle Name', type: 'max', number: 60 }))
       .matches(/^[aA-zZ\s]+$/, "Only alphabets are allowed for this field "),
@@ -80,19 +80,15 @@ const schema = yup.object().shape({
       .required(errorMsg({ name: 'Employment Status', type: 'required' })),
   modeOfEmployment: yup.string()
       .required(errorMsg({ name: 'Mode Of Employment', type: 'required' })),
-  // modeOfEmployment: yup.object()
-  //     .shape({})
-  //     .nullable()
-  //     .required(errorMsg({ name: 'Mode Of Employment', type: 'required' })),
-  startDate: yup.date()
+  startDate: yup.string()
       .required(errorMsg({ name: 'Employee Start Date', type: 'required' })),
 });
 
 function AddNewEmployee() {
   
-  const { register, handleSubmit, formState:{ errors }, setValue, getValues } = useForm({
-    mode: "onBlur",
-    // mode: "all",
+  const { register, handleSubmit, formState:{ errors }, setValue } = useForm({
+    // mode: "onBlur",
+    mode: "all",
     reValidateMode: 'onChange',
     resolver: yupResolver(schema)
   });
@@ -103,11 +99,10 @@ function AddNewEmployee() {
   const { entities, roles, jobTitles } = useSelector(state => state.employeeMgt);
   const employmentStatusList = [];
   const modeOfEmploymentList = [];
-  const [startDate, setStartDate] = React.useState(null);
+  const [startDate, setStartDate] = React.useState(new Date());
   const [checked, setChecked] = React.useState(true);
   const [entityId, setEntityId] = React.useState(null);
-  // const [entity, setEntity] = React.useState(entities[0] || {});
-  // const [entity, setEntity] = React.useState({});
+  const [entityErr, setEntityErr] = React.useState("");
   const [selectDept, setSelectDept] = React.useState(true);
   const [selectGrades, setSelectGrades] = React.useState(true);
   const [selectGradeLevels, setSelectGradeLevels] = React.useState(true);
@@ -115,13 +110,20 @@ function AddNewEmployee() {
   const [departments, setDepartments] = React.useState([]);
   const [employeeGradeLevels, setEmployeeGradeLevels] = React.useState([]);
   const [departmentId, setDepartmentId] = React.useState(null);
+  const [departmentErr, setDepartmentErr] = React.useState("");
   const [roleId, setRoleId] = React.useState(null);
+  const [roleErr, setRoleErr] = React.useState(null);
   const [employmentStatus, setEmploymentStatus] = React.useState('');
+  const [employmentStatusErr, setEmploymentStatusErr] = React.useState('');
   const [modeOfEmployment, setModeOfEmployment] = React.useState('');
+  const [modeOfEmploymentErr, setModeOfEmploymentErr] = React.useState('');
   const [jobTitleId, setJobTitleId] = React.useState('');
+  const [jobTitleErr, setJobTitleErr] = React.useState('');
   const [employeeId, setEmployeeId] = React.useState('');
   const [employeeGradeId, setEmployeeGradeId] = React.useState('');
+  const [employeeGradeErr, setEmployeeGradeErr] = React.useState('');
   const [employeeGradeLevelId, setEmployeeGradeLevelId] = React.useState('');
+  const [employeeGradeLevelErr, setEmployeeGradeLevelErr] = React.useState('');
   const classes = useStyles();
 
   React.useEffect(() => {
@@ -130,6 +132,22 @@ function AddNewEmployee() {
     dispatch(Actions.getGrades());
     dispatch(Actions.getJobTitle());
   }, []);
+
+  React.useEffect(() => {
+    register({ name: 'startDate', type: 'custom' }, { required: true });
+    setValue("startDate", JSON.stringify(startDate));
+  }, [startDate]);
+
+  React.useEffect(() => {
+    setEntityErr(errors.entityId?.message);
+    setDepartmentErr(errors.departmentId?.message);
+    setRoleErr(errors.roleId?.message);
+    setEmploymentStatusErr(errors.employmentStatus?.message);
+    setModeOfEmploymentErr(errors.modeOfEmployment?.message);
+    setJobTitleErr(errors.jobTitleId?.message);
+    setEmployeeGradeErr(errors.employeeGradeId?.message);
+    setEmployeeGradeLevelErr(errors.employeeGradeLevelId?.message);    
+  }, [errors]);
   
   const handleCheckedChange = (event) => {
     setChecked(event.target.checked);
@@ -137,17 +155,17 @@ function AddNewEmployee() {
   
   const handleEntityChange = async (event) => {
     setEntityId(event.target.value.id);
-    // register(
-    //   { name: "entityId", type: "number" },
-    // );
     register({ name: 'entityId', type: 'custom' }, { required: true });
     setValue("entityId", event.target.value.id);
+    setEntityErr(errors.entityId?.message);
     setDepartments(event.target.value.department);
     setSelectDept(false);
     const { data: { success, data  } } = await api.get(`/entity/one/${event.target.value.id}`);
     if (success && data) {
-      setGrades(data.employeeGrades);
-      setSelectGrades(false);
+      if(data.employeeGrades.length > 0) {
+        setGrades(data.employeeGrades);
+        setSelectGrades(false);
+      }
     }
   };
 
@@ -155,30 +173,35 @@ function AddNewEmployee() {
     register({ name: 'departmentId', type: 'custom' }, { required: true });
     setValue("departmentId", event.target.value.id);
     setDepartmentId(event.target.value.id);
+    setDepartmentErr(errors.departmentId?.message);
   };
 
     const handleRoleChange = (event) => {
     register({ name: 'roleId', type: 'custom' }, { required: true });
     setValue("roleId", event.target.value.id);
     setRoleId(event.target.value.id);
+    setRoleErr(errors.roleId?.message);
   };
   
   const handleEmploymentStatusChange = (event) => {
     register({ name: 'employmentStatus', type: 'custom' }, { required: true });
     setValue("employmentStatus", event.target.value);
     setEmploymentStatus(event.target.value);
+    setEmploymentStatusErr(errors.employmentStatus?.message);
   };
   
   const handleModeOfEmploymentChange = (event) => {
     register({ name: 'modeOfEmployment', type: 'custom' }, { required: true });
     setValue("modeOfEmployment", event.target.value);
     setModeOfEmployment(event.target.value);
+    setModeOfEmploymentErr(errors.modeOfEmployment?.message);
   };
   
   const handleJobTitleChange = (event) => {
     register({ name: 'jobTitleId', type: 'custom' }, { required: true });
     setValue("jobTitleId", event.target.value.id);
     setJobTitleId(event.target.value.id);
+    setJobTitleErr(errors.jobTitleId?.message);
   };
   
   const handleEmployeeChange = (event) => {
@@ -188,21 +211,29 @@ function AddNewEmployee() {
   const handleEmployeeGradeChange = (event) => {
     register({ name: 'employeeGradeId', type: 'custom' }, { required: true });
     setValue("employeeGradeId", event.target.value.id);
-    setEmployeeGradeLevels(event.target.value.employeeGradeLevels);
-    setSelectGradeLevels(false);
+    if(event.target.value.employeeGradeLevels > 0) { 
+      setEmployeeGradeLevels(event.target.value.employeeGradeLevels);
+      setSelectGradeLevels(false);
+    } else {
+      register({ name: 'employeeGradeLevelId', type: 'custom' }, { required: true });
+      setValue("employeeGradeLevelId", 0);
+      setEmployeeGradeLevelErr(errors.employeeGradeLevelId?.message);
+    }
     setEmployeeGradeId(event.target.value.id);
+    setEmployeeGradeErr(errors.employeeGradeId?.message);
   };
   
   const handleEmployeeGradeLevelChange = (event) => {
     register({ name: 'employeeGradeLevelId', type: 'custom' }, { required: true });
     setValue("employeeGradeLevelId", event.target.value.id);
     setEmployeeGradeLevelId(event.target.value.id);
+    setEmployeeGradeLevelErr(errors.employeeGradeLevelId?.message);
   };
 
   const onSubmit = async (data) => {
     try {
       const form = { ...data, srgIdNumber: employeeId, entityId, departmentId, roleId, employmentStatus, modeOfEmployment, jobTitleId, employeeGradeId, employeeGradeLevelId };
-      console.log('Form: ', form)
+      // console.log('Form: ', form)
       loading('Creating Employee Account...');
       const { data: { message  } } = await api.post('/auth/employee/add-employee', form);
       swal.fire({
@@ -237,6 +268,7 @@ function AddNewEmployee() {
             </Grid>
             <Grid item lg={4} md={6} sm={12} xs={12}>
               <Input
+                required
                 label='Middle Name'
                 name='middleName'
                 error={errors.middleName?.message}
@@ -315,7 +347,7 @@ function AddNewEmployee() {
                     {item.entityName}
                   </MenuItem>))}
                 </Select>
-                <FormHelperText style={{ color: 'red'}}>{errors.entityId?.message}</FormHelperText>
+                <FormHelperText style={{ color: 'red'}}>{entityErr}</FormHelperText>
               </FormControl>
             </Grid>
             <Grid item lg={4} md={6} sm={12} xs={12}>
@@ -341,7 +373,7 @@ function AddNewEmployee() {
                     {item.departmentName}
                   </MenuItem>))}
                 </Select>
-                <FormHelperText style={{ color: 'red'}}>{errors.departmentId?.message}</FormHelperText>
+                <FormHelperText style={{ color: 'red'}}>{departmentErr}</FormHelperText>
               </FormControl>
             </Grid>
             <Grid item lg={4} md={6} sm={12} xs={12}>
@@ -364,7 +396,7 @@ function AddNewEmployee() {
                     {item.name}
                   </MenuItem>))}
                 </Select>
-                <FormHelperText style={{ color: 'red'}}>{errors.roleId?.message}</FormHelperText>
+                <FormHelperText style={{ color: 'red'}}>{roleErr}</FormHelperText>
               </FormControl>
             </Grid>
             <Grid item lg={4} md={6} sm={12} xs={12}>
@@ -387,7 +419,7 @@ function AddNewEmployee() {
                     {item.name}
                   </MenuItem>))}
                 </Select>
-                <FormHelperText style={{ color: 'red'}}>{errors.jobTitleId?.message}</FormHelperText>
+                <FormHelperText style={{ color: 'red'}}>{jobTitleErr}</FormHelperText>
               </FormControl>
             </Grid>
             <Grid item lg={4} md={6} sm={12} xs={12}>
@@ -412,7 +444,7 @@ function AddNewEmployee() {
                     {item.gradeName}
                   </MenuItem>))}
                 </Select>
-                <FormHelperText style={{ color: 'red'}}>{errors.employeeGradeId?.message}</FormHelperText>
+                <FormHelperText style={{ color: 'red'}}>{employeeGradeErr}</FormHelperText>
               </FormControl>
             </Grid>
             <Grid item lg={4} md={6} sm={12} xs={12}>
@@ -437,7 +469,7 @@ function AddNewEmployee() {
                     {item.level}
                   </MenuItem>))}
                 </Select>
-                <FormHelperText style={{ color: 'red'}}>{errors.employeeGradeLevelId?.message}</FormHelperText>
+                <FormHelperText style={{ color: 'red'}}>{employeeGradeLevelErr}</FormHelperText>
               </FormControl>
             </Grid>
             <Grid item lg={4} md={6} sm={12} xs={12}>
@@ -454,6 +486,7 @@ function AddNewEmployee() {
                     console.log('errors: ', errors);
                     setStartDate(newValue);
                     register({ name: 'startDate', type: 'custom' }, { required: true });
+                    setValue("startDate", JSON.stringify(newValue));
                   }}
                   refs={register}
                   format="MM/DD/yyyy"
@@ -481,7 +514,7 @@ function AddNewEmployee() {
                     {item.name}
                   </MenuItem>))}
                 </Select>
-                <FormHelperText style={{ color: 'red'}}>{errors.employmentStatus?.message}</FormHelperText>
+                <FormHelperText style={{ color: 'red'}}>{employmentStatusErr}</FormHelperText>
               </FormControl>
             </Grid>
             <Grid item lg={4} md={6} sm={12} xs={12}>
@@ -504,7 +537,7 @@ function AddNewEmployee() {
                     {item.name}
                   </MenuItem>))}
                 </Select>
-                <FormHelperText style={{ color: 'red'}}>{errors.modeOfEmployment?.message}</FormHelperText>
+                <FormHelperText style={{ color: 'red'}}>{modeOfEmploymentErr}</FormHelperText>
               </FormControl>
             </Grid>
           </Grid>

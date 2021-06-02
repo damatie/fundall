@@ -86,8 +86,8 @@ export default function StepperMain() {
         {steps.map((label) => (
           <Step key={label.id}>
             <StepLabel>
-              <span>{label.title}</span>
-              <span><Typography variant="body1" color="initial" className='my-5'>{label.details}</Typography></span>
+              <span><strong>{label.title}</strong></span>
+              <span><Typography variant="body2" color="initial" className='my-5'>{label.details}</Typography></span>
             </StepLabel>
           </Step>
         ))}

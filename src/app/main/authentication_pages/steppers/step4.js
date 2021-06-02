@@ -103,7 +103,7 @@ function StepFour() {
 //   const { entities, roles, jobTitles } = useSelector(state => state.employeeMgt);
 //   const employmentStatusList = [];
 //   const modeOfEmploymentList = [];
-  const [startDate, setStartDate] = React.useState(null);
+  const [startDate, setStartDate] = React.useState(new Date());
   const [checked, setChecked] = React.useState(true);
   const [entityId, setEntityId] = React.useState(null);
   // const [entity, setEntity] = React.useState(entities[0] || {});
@@ -130,6 +130,11 @@ function StepFour() {
     dispatch(Actions.getGrades());
     dispatch(Actions.getJobTitle());
   }, []);
+
+  React.useEffect(() => {
+    register({ name: 'startDate', type: 'custom' }, { required: true });
+    setValue("startDate", JSON.stringify(startDate));
+  }, [startDate]);
   
   const handleCheckedChange = (event) => {
     setChecked(event.target.checked);
@@ -454,8 +459,8 @@ function StepFour() {
                     console.log('errors: ', errors);
                     setStartDate(newValue);
                     register({ name: 'startDate', type: 'custom' }, { required: true });
+                    setValue("startDate", JSON.stringify(newValue));
                   }}
-                  refs={register}
                   format="MM/DD/yyyy"
                   helperText={errors.startDate?.message}
                 />
