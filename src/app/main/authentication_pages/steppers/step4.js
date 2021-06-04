@@ -88,7 +88,7 @@ const schema = yup.object().shape({
       .required(errorMsg({ name: 'Employee Start Date', type: 'required' })),
 });
 
-function StepFour() {
+function StepFour({handleNext}) {
   
   const { register, handleSubmit, formState:{ errors }, setValue, getValues } = useForm({
     mode: "onBlur",

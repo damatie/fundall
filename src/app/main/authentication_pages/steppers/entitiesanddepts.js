@@ -124,7 +124,7 @@ const organisationList = [
     {number: 19, name: 'Others'}
 ];
 
-export default function EntitiesAndDepartments() {
+export default function EntitiesAndDepartments({handleNext}) {
   const { register, handleSubmit, formState:{ errors } } = useForm({
     resolver: yupResolver(schema)
   });

@@ -48,16 +48,16 @@ function getSteps() {
     ];
 }
 
-function getStepContent(stepIndex) {
+function getStepContent(stepIndex, handleNext) {
   switch (stepIndex) {
     case 0:
-      return <><AccountSettings/></>;
+      return <><AccountSettings handleNext={handleNext}/></>;
     case 1:
-      return <><OrganizationInformation/></>;
+      return <><OrganizationInformation handleNext={handleNext}/></>;
     case 2:
-      return <><EntitiesAndDepartments/></>;
+      return <><EntitiesAndDepartments handleNext={handleNext}/></>;
     case 3:
-      return <><StepFour/></>
+      return <><StepFour handleNext={handleNext}/></>
     default:
       return <></>;
   }
@@ -102,7 +102,7 @@ export default function StepperMain() {
         ) : (
           <div>
             <div style={{ background: '#fff', height: '100%', overflowY: 'scroll'}}>
-            <Typography className={classes.instructions}>{getStepContent(activeStep)}</Typography>
+            <Typography className={classes.instructions}>{getStepContent(activeStep, handleNext)}</Typography>
 
             </div>
             <div>
