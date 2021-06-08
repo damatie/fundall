@@ -18,20 +18,18 @@ export function submitLogin(data, x) {
 		dispatch({
 			type: LOGIN_LOADING
 		});
-		api.post(`/auth/${x || "employee"}/login`, data).then((response) => {
+		 
+		// api.post(`/auth/${x || "employee"}/login`, data).then((response) => {
+		api.post(`/auth/employee/login`, data).then((response) => {
 
 			const { success, message, token, data } = response.data;
 
 			if (success) {
-				// Swal.fire({
-				// 	title: 'Login Successful',
-				// 	text: message,
-				// 	icon: 'success',
-				// 	timer: 3000,
-				// });
-				swal.fire({
+				Swal.fire({
+					title: 'Login Successful',
 					text: message,
-					icon: 'success'
+					icon: 'success',
+					timer: 3000,
 				});
 				api.defaults.headers.Authorization = `JWT ${token}`;
 				localStorage.setItem('jwt_access_token', JSON.stringify(token));
