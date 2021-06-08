@@ -105,7 +105,7 @@ export default function StepperMain() {
             <Typography className={classes.instructions}>{getStepContent(activeStep, handleNext)}</Typography>
 
             </div>
-            <div>
+            {/* <div>
               <Button
                 disabled={activeStep === 0}
                 onClick={handleBack}
@@ -116,7 +116,7 @@ export default function StepperMain() {
               <Button variant="contained" color="primary" onClick={handleNext}>
                 {activeStep === steps.length - 1 ? 'FINISH' : 'NEXT'}
               </Button>
-            </div>
+            </div> */}
           </div>
         )}
       </div>
