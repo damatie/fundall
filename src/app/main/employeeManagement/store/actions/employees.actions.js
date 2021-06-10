@@ -78,6 +78,8 @@ export const getRoles = () => {
           type: GET_ROLES,
           payload: data || []
         })
+
+        console.log('Roles Data: ', data);
       }
     } catch (e) {
       dispatch({
@@ -131,12 +133,13 @@ export const getAccountSettings = () => {
   return async (dispatch) => {
     try {
       const userData = localStorage.getItem('user_profile');
-      const { data: { data, success } } = await api.get(`/account_settings/${userData.companyId}`);
+      const { data: { data, success } } = await api.get(`/account_settings`);
       if(success) {
         dispatch({
           type: ACCOUNT_SETTINGS,
           payload: data || {}
         })
+        console.log("Account Settings Data: ", data)
       }
     } catch (e) {
       dispatch({

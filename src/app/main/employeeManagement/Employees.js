@@ -39,7 +39,8 @@ const Employees = () => {
   });
 
   const createEmployee = () => {
-    window.location.assign('/hr/create-employee');
+    // window.location.assign('/hr/create-employee');
+    window.location.href = "/hr/create-employee";
   }
 
   return (

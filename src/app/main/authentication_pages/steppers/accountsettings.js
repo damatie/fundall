@@ -293,7 +293,7 @@ export default function AccountSettings({handleNext}) {
   };
 
   return (
-    <Card className={classes.root}>
+    <div className={classes.root}>
       <form onSubmit={handleSubmit(onSubmit)}>
           <Typography variant="body1" color="initial" className='my-10'><strong>Account Settings</strong></Typography>
           <Grid container spacing={3} justify='space-between' align='center' style={{ marginBottom: '3rem'}}>
@@ -516,6 +516,6 @@ export default function AccountSettings({handleNext}) {
               </Button>
           </Grid>
       </form>
-    </Card>
+    </div>
   );
 }

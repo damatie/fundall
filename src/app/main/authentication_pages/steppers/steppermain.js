@@ -12,7 +12,9 @@ import StepFour from './step4';
 
 const useStyles = makeStyles((theme) => ({
   root: {
+    padding: '5rem',
     width: '100%',
+    background: '#fff',
   },
   backButton: {
     marginRight: theme.spacing(1),
@@ -37,13 +39,13 @@ function getSteps() {
       }, 
       {
         id: 3,
-        title: 'Entities & Departments', 
-        details: 'Configure entities and departments in your organization'
+        title: 'Entities', 
+        details: 'Configure entities in your organization'
       },
       {
         id: 4,
-        title: 'Add Employee Demo', 
-        details: 'Configure entities and departments in your organization'
+        title: 'Departments', 
+        details: 'Configure departments in your organization'
       }
     ];
 }
@@ -65,7 +67,7 @@ function getStepContent(stepIndex, handleNext) {
 
 export default function StepperMain() {
   const classes = useStyles();
-  const [activeStep, setActiveStep] = React.useState(0);
+  const [activeStep, setActiveStep] = React.useState(1);
   const steps = getSteps();
 
   const handleNext = () => {

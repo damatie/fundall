@@ -23,6 +23,7 @@ import { DatePicker } from "@material-ui/pickers";
 import *  as Actions from 'app/main/employeeManagement/store/actions';
 import withReducer from "app/store/withReducer";
 import employeesReducer from "./store/reducers/employees.reducer";
+import { indexOf } from "lodash";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -96,6 +97,7 @@ function AddNewEmployee() {
   const dispatch = useDispatch();
 
   const { entities, roles, jobTitles, accountSettings } = useSelector(state => state.employeeMgt);
+  // console.log('roles: ', roles);
   const employmentStatusList = accountSettings?.employmentStatus || [];
   const modeOfEmploymentList = accountSettings?.modeOfEmployment || [];
   const [startDate, setStartDate] = React.useState(new Date());
@@ -119,9 +121,9 @@ function AddNewEmployee() {
   const [jobTitleId, setJobTitleId] = React.useState('');
   const [jobTitleErr, setJobTitleErr] = React.useState('');
   const [employeeId, setEmployeeId] = React.useState('');
-  const [employeeGradeId, setEmployeeGradeId] = React.useState('');
+  const [employeeGradeId, setEmployeeGradeId] = React.useState(undefined);
   const [employeeGradeErr, setEmployeeGradeErr] = React.useState('');
-  const [employeeGradeLevelId, setEmployeeGradeLevelId] = React.useState('');
+  const [employeeGradeLevelId, setEmployeeGradeLevelId] = React.useState(undefined);
   const [employeeGradeLevelErr, setEmployeeGradeLevelErr] = React.useState('');
   const classes = useStyles();
 
@@ -163,6 +165,7 @@ function AddNewEmployee() {
     const { data: { success, data  } } = await api.get(`/entity/one/${event.target.value.id}`);
     if (success && data) {
       if(data.employeeGrades.length > 0) {
+        console.log('Grades: ', data.employeeGrades);
         setGrades(data.employeeGrades);
         setSelectGrades(false);
       }
@@ -210,8 +213,10 @@ function AddNewEmployee() {
   
   const handleEmployeeGradeChange = (event) => {
     register({ name: 'employeeGradeId', type: 'custom' }, { required: true });
-    setValue("employeeGradeId", event.target.value.id);
-    if(event.target.value.employeeGradeLevels > 0) { 
+    setEmployeeGradeId(event.target.value.id);
+    setValue("employeeGradeId", employeeGradeId);
+    console.log('Grade Levels: ', event.target.value.employeeGradeLevels);
+    if(event.target.value.employeeGradeLevels.length > 0) { 
       setEmployeeGradeLevels(event.target.value.employeeGradeLevels);
       setSelectGradeLevels(false);
     } else {
@@ -219,14 +224,13 @@ function AddNewEmployee() {
       setValue("employeeGradeLevelId", 0);
       setEmployeeGradeLevelErr(errors.employeeGradeLevelId?.message);
     }
-    setEmployeeGradeId(event.target.value.id);
     setEmployeeGradeErr(errors.employeeGradeId?.message);
   };
   
   const handleEmployeeGradeLevelChange = (event) => {
     register({ name: 'employeeGradeLevelId', type: 'custom' }, { required: true });
-    setValue("employeeGradeLevelId", event.target.value.id);
     setEmployeeGradeLevelId(event.target.value.id);
+    setValue("employeeGradeLevelId", employeeGradeLevelId);
     setEmployeeGradeLevelErr(errors.employeeGradeLevelId?.message);
   };
 
@@ -501,8 +505,8 @@ function AddNewEmployee() {
                   label="Employment Status"
                 >
                   {employmentStatusList.map(item => (
-                  <MenuItem key={item.id} value={item.name}>
-                    {item.name}
+                  <MenuItem key={item} value={item}>
+                    {item}
                   </MenuItem>))}
                 </Select>
                 <FormHelperText style={{ color: 'red'}}>{employmentStatusErr}</FormHelperText>
@@ -523,8 +527,8 @@ function AddNewEmployee() {
                   label="Mode Of Employment"
                 >
                   {modeOfEmploymentList.map(item => (
-                  <MenuItem key={item.id} value={item.name}>
-                    {item.name}
+                  <MenuItem key={item} value={item}>
+                    {item}
                   </MenuItem>))}
                 </Select>
                 <FormHelperText style={{ color: 'red'}}>{modeOfEmploymentErr}</FormHelperText>
