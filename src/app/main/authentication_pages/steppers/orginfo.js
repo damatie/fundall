@@ -23,11 +23,6 @@ import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 
 
-// const schema = yup.object().shape({
-//   firstName: yup.string().required(),
-//   age: yup.number().positive().integer().required(),
-// });
-
 const useStyles = makeStyles(theme => ({
     root: {
       width: '100%',
