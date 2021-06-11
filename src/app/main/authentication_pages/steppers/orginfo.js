@@ -50,32 +50,35 @@ const schema = yup.object().shape({
         .required(errorMsg({ name: 'Company Start Date', type: 'required' })),
     noOfBranches: yup.string()
         .required(errorMsg({ name: 'Number Of Branches', type: 'required' })),
-    currencies: yup.string()
-        .required(errorMsg({ name: 'Currencies', type: 'required' })),
-    employmentStatus: yup.array()
-        .min(1, 'Must have at least one Employment Status')
-        .required(errorMsg({ name: 'Employment Status', type: 'required' })),
-    trainingCategories: yup.array()
-        .min(1, 'Must have at least one Training Categories')
-        .required(errorMsg({ name: 'Training Categories', type: 'required' })),
-    modeOfEmployment: yup.array()
-        .min(1, 'Must have at least one Mode Of Employment')
-        .required(errorMsg({ name: 'Mode Of Employment', type: 'required' })),
-    leaveTypes: yup.array()
-        .min(1, 'Must have at least one Leave Status')
-        .required(errorMsg({ name: 'Leave Status', type: 'required' })),
-    jobTitle: yup.array()
-        .min(1, 'Must have at least one Job Title')
-        .required(errorMsg({ name: 'Job Title', type: 'required' })),
-    employeeGrade: yup.array()
-        .min(1, 'Must have at least one Employee Grade')
-        .required(errorMsg({ name: 'Employee Grade', type: 'required' })),
-    role: yup.array()
-        .min(1, 'Must have at least one Role')
-        .required(errorMsg({ name: 'Role', type: 'required' })),
-    compensationSettings: yup.array()
-        .min(1, 'Must have at least one Compensation Data')
-        .required(errorMsg({ name: 'Compensation Data', type: 'required' })),
+    companyEmail: yup.string()
+        .matches(/^[A-Za-z\d@$!%*#?&]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]{2,})*$/, "Enter a valid Email Address")
+        .required(errorMsg({ name: 'Email Address', type: 'required' }))
+        .email(),
+    country: yup.string()
+        .required(errorMsg({ name: 'Country', type: 'required' })),
+    state: yup.string()
+        .required(errorMsg({ name: 'State', type: 'required' })),
+    city: yup.string()
+        .required(errorMsg({ name: 'City', type: 'required' })),
+    companyVision: yup.string(errorMsg({ name: 'Company Vision', type: 'string' }))
+        // .min(3, errorMsg({ name: 'Company Vision', type: 'min', number: 3 }))
+        // .max(60, errorMsg({ name: 'Company Vision', type: 'max', number: 60 }))
+        ,
+    companyMission: yup.string(errorMsg({ name: 'Company Mission', type: 'string' }))
+        // .min(3, errorMsg({ name: 'Company Mision', type: 'min', number: 3 }))
+        // .max(60, errorMsg({ name: 'Company Mision', type: 'max', number: 60 }))
+        ,
+    companyWebsite: yup.string(errorMsg({ name: 'Company Website', type: 'string' }))
+        // .min(3, errorMsg({ name: 'Company Website', type: 'min', number: 3 }))
+        // .max(60, errorMsg({ name: 'Company Website', type: 'max', number: 60 }))
+        ,
+    hqAddress: yup.string(errorMsg({ name: 'HQ Address', type: 'string' }))
+        // .min(3, errorMsg({ name: 'Middle Name', type: 'min', number: 3 }))
+        // .max(60, errorMsg({ name: 'Middle Name', type: 'max', number: 60 }))
+        ,
+    branchAddresses: yup.array()
+        .min(1, 'Must have at least one Branch Addresses')
+        .required(errorMsg({ name: 'Branch Addresses', type: 'required' })),
 });
 
 
@@ -89,41 +92,29 @@ export default function OrganizationInformation({handleNext}) {
   const dispatch = useDispatch();
   const companyTypes = timeZone();
   const noOfBranchesList = dateFormatList();
-  const currencies = currencyList();
+  const country = currencyList();
+  const stateList = currencyList();
+  const cityList = currencyList();
+  const [phoneNumber1, setPhoneNumber1] = React.useState(234);
+  const [phoneNumber2, setPhoneNumber2] = React.useState(234);
   const [companyStartDate, setCompanyStartDate] = React.useState(new Date());
-  const [employmentStatus, setEmploymentStatus] = React.useState([]);
-  const [employmentStatusErr, setEmploymentStatusErr] = React.useState("");
-  const [modeOfEmployment, setModeOfEmployment] = React.useState([]);
-  const [modeOfEmploymentErr, setModeOfEmploymentErr] = React.useState("");
-  const [leaveTypes, setLeaveTypes] = React.useState([]);
-  const [leaveTypesErr, setLeaveTypesErr] = React.useState("");
-  const [trainingCategories, setTrainingCategories] = React.useState([]);
-  const [trainingCategoriesErr, setTrainingCategoriesErr] = React.useState("");
-  const [compensationSettings, setCompensationSettings] = React.useState([]);
-  const [compensationSettingsErr, setCompensationSettingsErr] = React.useState("");
-  const [role, setRole] = React.useState([]);
-  const [roleErr, setRoleErr] = React.useState("");
-  const [jobTitle, setJobTitle] = React.useState([]);
-  const [jobTitleErr, setJobTitleErr] = React.useState("");
-  const [employeeGrade, setEmployeeGrade] = React.useState([]);
-  const [employeeGradeErr, setEmployeeGradeErr] = React.useState("");
+  const [branchAddresses, setBranchAddresses] = React.useState([]);
+  const [branchAddressesErr, setBranchAddressesErr] = React.useState("");
   const [companyTypeErr, setCompanyTypeErr] = React.useState("");
   const [noOfBranchesErr, setNoOfBranchesErr] = React.useState("");
-  const [currenciesErr, setCurrenciesErr] = React.useState("");
+  const [countryErr, setCountryErr] = React.useState("");
+  const [stateErr, setStateErr] = React.useState("");
+  const [cityErr, setCityErr] = React.useState("");
   const classes = useStyles();
 
 
   React.useEffect(() => {
     setCompanyTypeErr(errors.companyType?.message);
     setNoOfBranchesErr(errors.noOfBranches?.message);
-    setCurrenciesErr(errors.currencies?.message);
-    setEmploymentStatusErr(errors.employmentStatus?.message);
-    setModeOfEmploymentErr(errors.modeOfEmployment?.message);
-    setLeaveTypesErr(errors.leaveTypes?.message);
-    setTrainingCategoriesErr(errors.trainingCategories?.message);
-    setCompensationSettingsErr(errors.compensationSettings?.message);
-    setJobTitleErr(errors.jobTitle?.message);
-    setEmployeeGradeErr(errors.employeeGrade?.message);
+    setCountryErr(errors.country?.message);
+    setStateErr(errors.state?.message);
+    setCityErr(errors.city?.message);
+    setBranchAddressesErr(errors.branchAddresses?.message);
   }, [errors]);
 
   React.useEffect(() => {
@@ -147,147 +138,54 @@ export default function OrganizationInformation({handleNext}) {
     setNoOfBranchesErr(errors.noOfBranches?.message);
   };
 
-  const handleCurrenciesChange = (event) => {
-    register({ name: 'currencies', type: 'custom' }, { required: true });
-    setValue("currencies", event.target.value);
-    setCurrenciesErr(errors.currencies?.message);
+  const handlePhone1Change = (event) => {
+    setPhoneNumber1(event);
+  };
+    
+  const handlePhone2Change = (event) => {
+    setPhoneNumber2(event);
   };
 
-  const handleAddEmploymentStatus = (chip) => {
-    register({ name: 'employmentStatus', type: 'custom' }, { required: true });
-    employmentStatus.push(chip)
-    setValue("employmentStatus", employmentStatus);
-    setEmploymentStatusErr(errors.employmentStatus?.message);
+  const handleCountryChange = (event) => {
+    register({ name: 'country', type: 'custom' }, { required: true });
+    setValue("country", event.target.value);
+    setCountryErr(errors.country?.message);
   };
 
-  const handleDeleteEmploymentStatus = (chip, index) => {
-    register({ name: 'employmentStatus', type: 'custom' }, { required: true });
-    let employmentStatusData = employmentStatus;
-    employmentStatusData.splice(index, 1);
-    console.log("EmploymentStatus: ", employmentStatusData);
-    setEmploymentStatus(employmentStatusData);
-    setValue("employmentStatus", employmentStatusData);
-    setEmploymentStatusErr(errors.employmentStatus?.message);
+  const handleStateChange = (event) => {
+    register({ name: 'state', type: 'custom' }, { required: true });
+    setValue("state", event.target.value);
+    setStateErr(errors.state?.message);
   };
-
-  const handleAddModeOfEmployment = (chip) => {
-    register({ name: 'modeOfEmployment', type: 'custom' }, { required: true });
-    modeOfEmployment.push(chip)
-    setValue("modeOfEmployment", modeOfEmployment);
-    setModeOfEmploymentErr(errors.modeOfEmployment?.message);
+  
+  const handleCityChange = (event) => {
+    register({ name: 'city', type: 'custom' }, { required: true });
+    setValue("city", event.target.value);
+    setCityErr(errors.city?.message);
   };
-
-  const handleDeleteModeOfEmployment = (chip, index) => {
-    register({ name: 'modeOfEmployment', type: 'custom' }, { required: true });
-    let modeOfEmploymentData = modeOfEmployment;
-    modeOfEmploymentData.splice(index, 1);
-    setModeOfEmployment(modeOfEmploymentData);
-    setValue("modeOfEmployment", modeOfEmploymentData);
-    setModeOfEmploymentErr(errors.modeOfEmployment?.message);
-  };
-
-  const handleAddLeaveTypes = (chip) => {
-    register({ name: 'leaveTypes', type: 'custom' }, { required: true });
-    leaveTypes.push(chip)
-    setValue("leaveTypes", leaveTypes);
-    setLeaveTypesErr(errors.leaveTypes?.message);
-  };
-
-  const handleDeleteLeaveTypes = (chip, index) => {
-    register({ name: 'leaveTypes', type: 'custom' }, { required: true });
-    let leaveTypesData = leaveTypes;
-    leaveTypesData.splice(index, 1);
-    setLeaveTypes(leaveTypesData);
-    setValue("leaveTypes", leaveTypesData);
-    setLeaveTypesErr(errors.leaveTypes?.message);
-  };
-
-  const handleAddTrainingCategories = (chip) => {
-    register({ name: 'trainingCategories', type: 'custom' }, { required: true });
-    trainingCategories.push(chip)
-    setValue("trainingCategories", trainingCategories);
-    setTrainingCategoriesErr(errors.trainingCategories?.message);
-  };
-
-  const handleDeleteTrainingCategories = (chip, index) => {
-    register({ name: 'trainingCategories', type: 'custom' }, { required: true });
-    let trainingCategoriesData = trainingCategories;
-    trainingCategoriesData.splice(index, 1);
-    setTrainingCategories(trainingCategoriesData);
-    setValue("trainingCategories", trainingCategoriesData);
-    setTrainingCategoriesErr(errors.trainingCategories?.message);
-  };
-
-  const handleAddCompensationSettings = (chip) => {
-    register({ name: 'compensationSettings', type: 'custom' }, { required: true });
-    compensationSettings.push(chip)
-    setValue("compensationSettings", compensationSettings);
-    setCompensationSettingsErr(errors.compensationSettings?.message);
-  };
-
-  const handleDeleteCompensationSettings = (chip, index) => {
-    register({ name: 'compensationSettings', type: 'custom' }, { required: true });
-    let compensationSettingsData = compensationSettings;
-    compensationSettingsData.splice(index, 1);
-    setCompensationSettings(compensationSettingsData);
-    setValue("compensationSettings", compensationSettingsData);
-    setCompensationSettingsErr(errors.compensationSettings?.message);
-  };
-
-  const handleAddRole = (chip) => {
-    register({ name: 'role', type: 'custom' }, { required: true });
-    role.push(chip)
-    setValue("role", role);
-    setRoleErr(errors.role?.message);
-  };
-
-  const handleDeleteRole = (chip, index) => {
-    register({ name: 'role', type: 'custom' }, { required: true });
-    let roleData = role;
-    roleData.splice(index, 1);
-    setRole(roleData);
-    setValue("role", roleData);
-    setRoleErr(errors.role?.message);
-  };
-
-  const handleAddJobTitle = (chip) => {
-    register({ name: 'jobTitle', type: 'custom' }, { required: true });
-    jobTitle.push(chip)
-    setValue("jobTitle", jobTitle);
-    setJobTitleErr(errors.jobTitle?.message);
-  };
-
-  const handleDeleteJobTitle = (chip, index) => {
-    register({ name: 'jobTitle', type: 'custom' }, { required: true });
-    let jobTitleData = jobTitle;
-    jobTitleData.splice(index, 1);
-    setJobTitle(jobTitleData);
-    setValue("jobTitle", jobTitleData);
-    setJobTitleErr(errors.jobTitle?.message);
-  };
-
-  const handleAddEmployeeGrade = (chip) => {
-    register({ name: 'employeeGrade', type: 'custom' }, { required: true });
-    employeeGrade.push(chip)
-    setValue("employeeGrade", employeeGrade);
-    setEmployeeGradeErr(errors.employeeGrade?.message);
+  
+  const handleAddBranchAddresses = (chip) => {
+    register({ name: 'branchAddresses', type: 'custom' }, { required: true });
+    branchAddresses.push(chip)
+    setValue("branchAddresses", branchAddresses);
+    setBranchAddressesErr(errors.branchAddresses?.message);
     console.log('data: ', JSON.stringify({...getValues()}));
   };
 
-  const handleDeleteEmployeeGrade = (chip, index) => {
-    register({ name: 'employeeGrade', type: 'custom' }, { required: true });
-    let employeeGradeData = employeeGrade;
-    employeeGradeData.splice(index, 1);
-    setEmployeeGrade(employeeGradeData);
-    setValue("employeeGrade", employeeGradeData);
-    setEmployeeGradeErr(errors.employeeGrade?.message);
+  const handleDeleteBranchAddresses = (chip, index) => {
+    register({ name: 'branchAddresses', type: 'custom' }, { required: true });
+    let branchAddressesData = branchAddresses;
+    branchAddressesData.splice(index, 1);
+    setBranchAddresses(branchAddressesData);
+    setValue("branchAddresses", branchAddressesData);
+    setBranchAddressesErr(errors.branchAddresses?.message);
   };
 
   const onSubmit = async (data) => {
       try {
         const form = { ...data }
         loading('processing...');
-        const { data: { message  } } = await api.post('/account_settings', form);
+        const { data: { message  } } = await api.post('/organization_info', form);
         swal.fire({
           text: message,
           icon: 'success'
@@ -372,170 +270,180 @@ export default function OrganizationInformation({handleNext}) {
               </FormControl>
             </Grid>
             <Grid item lg={4} md={6} sm={12} xs={12}>
+              <PhoneNumberInput
+                placeholder='Primary Phone Number'
+                name='phoneNumber1'
+                onChange={handlePhone1Change}
+                error={errors.phoneNumber1}
+                refs={register}
+                type='number'
+                message={errors.phoneNumber1?.message}
+                helperText={errors.phoneNumber1?.message}
+                country={'ng'}
+              />
+            </Grid>
+            <Grid item lg={4} md={6} sm={12} xs={12}>
+              <PhoneNumberInput
+                placeholder='Secondary Phone Number'
+                name='phoneNumber2'
+                onChange={handlePhone2Change}
+                error={errors.phoneNumber2}
+                refs={register}
+                type='number'
+                message={errors.phoneNumber2?.message}
+                helperText={errors.phoneNumber2?.message}
+                country={'ng'}
+              />
+            </Grid>
+            <Grid item lg={4} md={6} sm={12} xs={12}>
+              <Input
+                  required
+                  label='Company Email'
+                  name='companyEmail'
+                  error={errors.companyEmail}
+                  message={errors.companyEmail?.message}
+                  helperText={errors.companyEmail?.message}
+                  refs={register}
+              />
+            </Grid>
+            <Grid item lg={4} md={6} sm={12} xs={12}>
               <FormControl variant="outlined" style={{ width: '100%', margin: '8px 0px' }} className={classes.formControl}>
-                <InputLabel id="demo-simple-select-outlined-label">Currencies</InputLabel>
+                <InputLabel id="demo-simple-select-outlined-label">Country</InputLabel>
                 <Select
                   justify='left'
                   align='left'
                   labelId="demo-simple-select-outlined-label"
                   id="demo-simple-select-outlined"
-                  name='currencies'
-                  error={errors.currencies}
-                  message={errors.currencies?.message}
-                  onChange={handleCurrenciesChange}
-                  label="Currencies"
+                  name='country'
+                  error={errors.country}
+                  message={errors.country?.message}
+                  onChange={handleCountryChange}
+                  label="Country"
                 >
-                  {currencies.map(item => (
+                  {country.map(item => (
                   <MenuItem key={item.id} value={item.cc}>
                     {item.label}
                   </MenuItem>))}
                 </Select>
-                <FormHelperText style={{ color: 'red'}}>{currenciesErr}</FormHelperText>
+                <FormHelperText style={{ color: 'red'}}>{countryErr}</FormHelperText>
               </FormControl>
             </Grid>
             <Grid item lg={4} md={6} sm={12} xs={12}>
-              <ChipInput
-                label='Employment Status (Separate with Comma / Enter)'
-                name='employmentStatus'
-                variant= 'outlined'
-                newChipKeyCodes={[188]}
-                style={{ width: '100%'}}
-                error={errors.employmentStatus}
-                message={errors.employmentStatus?.message}
-                helperText={errors.employmentStatus?.message}
-                // refs={register}
-                allowDuplicates={false}
-                value={employmentStatus}
-                onAdd={(chip) => handleAddEmploymentStatus(chip)}
-                onDelete={(chip, index) => handleDeleteEmploymentStatus(chip, index)}
-              />
-              <FormHelperText style={{ color: 'red'}}>{employmentStatusErr}</FormHelperText>
+              <FormControl variant="outlined" style={{ width: '100%', margin: '8px 0px' }} className={classes.formControl}>
+                <InputLabel id="demo-simple-select-outlined-label">State</InputLabel>
+                <Select
+                  justify='left'
+                  align='left'
+                  labelId="demo-simple-select-outlined-label"
+                  id="demo-simple-select-outlined"
+                  name='state'
+                  error={errors.state}
+                  message={errors.state?.message}
+                  onChange={handleStateChange}
+                  label="State"
+                >
+                  {stateList.map(item => (
+                  <MenuItem key={item.id} value={item.cc}>
+                    {item.label}
+                  </MenuItem>))}
+                </Select>
+                <FormHelperText style={{ color: 'red'}}>{stateErr}</FormHelperText>
+              </FormControl>
             </Grid>
             <Grid item lg={4} md={6} sm={12} xs={12}>
-              <ChipInput
-                label='Mode Of Employment (Separate with Comma / Enter)'
-                name='modeOfEmployment'
-                variant= 'outlined'
-                newChipKeyCodes={[188]}
-                style={{ width: '100%'}}
-                error={errors.modeOfEmployment}
-                message={errors.modeOfEmployment?.message}
-                helperText={errors.modeOfEmployment?.message}
-                // refs={register}
-                allowDuplicates={false}
-                value={modeOfEmployment}
-                onAdd={(chip) => handleAddModeOfEmployment(chip)}
-                onDelete={(chip, index) => handleDeleteModeOfEmployment(chip, index)}
-              />
-              <FormHelperText style={{ color: 'red'}}>{modeOfEmploymentErr}</FormHelperText>
+              <FormControl variant="outlined" style={{ width: '100%', margin: '8px 0px' }} className={classes.formControl}>
+                <InputLabel id="demo-simple-select-outlined-label">City</InputLabel>
+                <Select
+                  justify='left'
+                  align='left'
+                  labelId="demo-simple-select-outlined-label"
+                  id="demo-simple-select-outlined"
+                  name='city'
+                  error={errors.city}
+                  message={errors.city?.message}
+                  onChange={handleCityChange}
+                  label="City"
+                >
+                  {cityList.map(item => (
+                  <MenuItem key={item.id} value={item.cc}>
+                    {item.label}
+                  </MenuItem>))}
+                </Select>
+                <FormHelperText style={{ color: 'red'}}>{cityErr}</FormHelperText>
+              </FormControl>
             </Grid>
-            <Grid item lg={4} md={6} sm={12} xs={12}>
-              <ChipInput
-                label='Leave Status (Separate with Comma / Enter)'
-                name='leaveTypes'
-                variant= 'outlined'
-                newChipKeyCodes={[188]}
-                style={{ width: '100%'}}
-                error={errors.leaveTypes}
-                message={errors.leaveTypes?.message}
-                helperText={errors.leaveTypes?.message}
-                // refs={register}
-                allowDuplicates={false}
-                value={leaveTypes}
-                onAdd={(chip) => handleAddLeaveTypes(chip)}
-                onDelete={(chip, index) => handleDeleteLeaveTypes(chip, index)}
+            <Grid item lg={5} md={12} sm={12} xs={12}>
+              <Input
+                  required
+                  label='Company Vision'
+                  name='companyVision'
+                  type='text'
+                  multiline
+                  rows="4"
+                  error={errors.companyVision}
+                  message={errors.companyVision?.message}
+                  helperText={errors.companyVision?.message}
+                  refs={register}
               />
-              <FormHelperText style={{ color: 'red'}}>{leaveTypesErr}</FormHelperText>
             </Grid>
-            <Grid item lg={4} md={6} sm={12} xs={12}>
-              <ChipInput
-                label='Training Categories (Separate with Comma / Enter)'
-                name='trainingCategories'
-                variant= 'outlined'
-                newChipKeyCodes={[188]}
-                style={{ width: '100%'}}
-                error={errors.trainingCategories}
-                message={errors.trainingCategories?.message}
-                helperText={errors.trainingCategories?.message}
-                // refs={register}
-                allowDuplicates={false}
-                value={trainingCategories}
-                onAdd={(chip) => handleAddTrainingCategories(chip)}
-                onDelete={(chip, index) => handleDeleteTrainingCategories(chip, index)}
+            <Grid item lg={4} md={12} sm={12} xs={12}>
+              <Input
+                  required
+                  label='Company Mission'
+                  name='companyMission'
+                  type='text'
+                  multiline
+                  rows="4"
+                  error={errors.companyMission}
+                  message={errors.companyMission?.message}
+                  helperText={errors.companyMission?.message}
+                  refs={register}
               />
-              <FormHelperText style={{ color: 'red'}}>{trainingCategoriesErr}</FormHelperText>
             </Grid>
-            <Grid item lg={4} md={6} sm={12} xs={12}>
-              <ChipInput
-                label='Role (Separate with Comma / Enter)'
-                name='role'
-                variant= 'outlined'
-                newChipKeyCodes={[188]}
-                style={{ width: '100%'}}
-                error={errors.role}
-                message={errors.role?.message}
-                helperText={errors.role?.message}
-                // refs={register}
-                allowDuplicates={false}
-                value={role}
-                onAdd={(chip) => handleAddRole(chip)}
-                onDelete={(chip, index) => handleDeleteRole(chip, index)}
+            <Grid item lg={3} md={6} sm={12} xs={12}>
+              <Input
+                  required
+                  label='Company Website'
+                  name='companyWebsite'
+                  error={errors.companyWebsite}
+                  message={errors.companyWebsite?.message}
+                  helperText={errors.companyWebsite?.message}
+                  refs={register}
               />
-              <FormHelperText style={{ color: 'red'}}>{roleErr}</FormHelperText>
             </Grid>
-            <Grid item lg={4} md={6} sm={12} xs={12}>
-              <ChipInput
-                label='Compensation Data (Separate with Comma / Enter)'
-                name='compensationSettings'
-                variant= 'outlined'
-                newChipKeyCodes={[188]}
-                style={{ width: '100%'}}
-                error={errors.compensationSettings}
-                message={errors.compensationSettings?.message}
-                helperText={errors.compensationSettings?.message}
-                // refs={register}
-                allowDuplicates={false}
-                value={compensationSettings}
-                onAdd={(chip) => handleAddCompensationSettings(chip)}
-                onDelete={(chip, index) => handleDeleteCompensationSettings(chip, index)}
+            <Grid item lg={6} md={12} sm={12} xs={12}>
+              <Input
+                  required
+                  label='HQ Address'
+                  name='hqAddress'
+                  type='text'
+                  multiline
+                  rows="4"
+                  error={errors.hqAddress}
+                  message={errors.hqAddress?.message}
+                  helperText={errors.hqAddress?.message}
+                  refs={register}
               />
-              <FormHelperText style={{ color: 'red'}}>{compensationSettingsErr}</FormHelperText>
             </Grid>
-            <Grid item lg={4} md={6} sm={12} xs={12}>
+            <Grid item lg={6} md={12} sm={12} xs={12}>
               <ChipInput
-                label='Job Title (Separate with Comma / Enter)'
-                name='jobTitle'
+                label='Branch Addresses (Separate with Comma / Enter)'
+                name='branchAddresses'
                 variant= 'outlined'
                 newChipKeyCodes={[188]}
                 style={{ width: '100%'}}
-                error={errors.jobTitle}
-                message={errors.jobTitle?.message}
-                helperText={errors.jobTitle?.message}
-                // refs={register}
+                error={errors.branchAddresses}
+                message={errors.branchAddresses?.message}
+                helperText={errors.branchAddresses?.message}
+                // type='text'
+                // multiline
+                // rows="6"
                 allowDuplicates={false}
-                value={jobTitle}
-                onAdd={(chip) => handleAddJobTitle(chip)}
-                onDelete={(chip, index) => handleDeleteJobTitle(chip, index)}
+                value={branchAddresses}
+                onAdd={(chip) => handleAddBranchAddresses(chip)}
+                onDelete={(chip, index) => handleDeleteBranchAddresses(chip, index)}
               />
-              <FormHelperText style={{ color: 'red'}}>{jobTitleErr}</FormHelperText>
-            </Grid>
-            <Grid item lg={4} md={6} sm={12} xs={12}>
-              <ChipInput
-                label='Employee Grade (Separate with Comma / Enter)'
-                name='employeeGrade'
-                variant= 'outlined'
-                newChipKeyCodes={[188]}
-                style={{ width: '100%'}}
-                error={errors.employeeGrade}
-                message={errors.employeeGrade?.message}
-                helperText={errors.employeeGrade?.message}
-                // refs={register}
-                allowDuplicates={false}
-                value={employeeGrade}
-                onAdd={(chip) => handleAddEmployeeGrade(chip)}
-                onDelete={(chip, index) => handleDeleteEmployeeGrade(chip, index)}
-              />
-              <FormHelperText style={{ color: 'red'}}>{employeeGradeErr}</FormHelperText>
+              <FormHelperText style={{ color: 'red'}}>{branchAddressesErr}</FormHelperText>
             </Grid>
             <Grid item lg={4} md={6} sm={12} xs={12}>
             </Grid>  

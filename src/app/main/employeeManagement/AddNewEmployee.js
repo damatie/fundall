@@ -214,8 +214,7 @@ function AddNewEmployee() {
   const handleEmployeeGradeChange = (event) => {
     register({ name: 'employeeGradeId', type: 'custom' }, { required: true });
     setEmployeeGradeId(event.target.value.id);
-    setValue("employeeGradeId", employeeGradeId);
-    console.log('Grade Levels: ', event.target.value.employeeGradeLevels);
+    setValue("employeeGradeId", event.target.value.id);
     if(event.target.value.employeeGradeLevels.length > 0) { 
       setEmployeeGradeLevels(event.target.value.employeeGradeLevels);
       setSelectGradeLevels(false);
@@ -230,14 +229,13 @@ function AddNewEmployee() {
   const handleEmployeeGradeLevelChange = (event) => {
     register({ name: 'employeeGradeLevelId', type: 'custom' }, { required: true });
     setEmployeeGradeLevelId(event.target.value.id);
-    setValue("employeeGradeLevelId", employeeGradeLevelId);
+    setValue("employeeGradeLevelId", event.target.value.id);
     setEmployeeGradeLevelErr(errors.employeeGradeLevelId?.message);
   };
 
   const onSubmit = async (data) => {
     try {
       const form = { ...data, srgIdNumber: employeeId, entityId, departmentId, roleId, employmentStatus, modeOfEmployment, jobTitleId, employeeGradeId, employeeGradeLevelId };
-      // console.log('Form: ', form)
       loading('Creating Employee Account...');
       const { data: { message  } } = await api.post('/auth/employee/add-employee', form);
       swal.fire({

@@ -254,7 +254,7 @@ export default function Register() {
               />
               </Grid>
               <Grid item lg={4} md={6} sm={12} xs={12}>
-              <PhoneNumberInput
+                <PhoneNumberInput
                   placeholder='Contact Number'
                   name='phoneNumber'
                   onChange={handlePhoneChange}
@@ -264,7 +264,7 @@ export default function Register() {
                   message={errors.phoneNumber?.message}
                   helperText={errors.phoneNumber?.message}
                   country={'ng'}
-              />
+                />
               </Grid>
               <Grid item lg={4} md={6} sm={12} xs={12}>
               <Input
