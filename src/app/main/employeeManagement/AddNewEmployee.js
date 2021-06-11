@@ -238,8 +238,10 @@ function AddNewEmployee() {
     try {
       const form = { ...data, srgIdNumber: employeeId, entityId, departmentId, roleId, employmentStatus, modeOfEmployment, jobTitleId, employeeGradeId, employeeGradeLevelId };
       form.employeeId = undefined;
+      form.employeeStatus = form.employmentStatus;
+      form.employmentStatus = undefined;
       const dateValue = form.startDate.split(`\"`);
-      form.startDate = dateValue[1];
+      form.startDate = dateValue[1].substring(0, 11);;
       loading('Creating Employee Account...');
       const { data: { message  } } = await api.post('/auth/employee/add-employee', form);
       swal.fire({
