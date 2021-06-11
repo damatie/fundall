@@ -24,6 +24,7 @@ import *  as Actions from 'app/main/employeeManagement/store/actions';
 import withReducer from "app/store/withReducer";
 import employeesReducer from "./store/reducers/employees.reducer";
 import { indexOf } from "lodash";
+import loading from "utils/loading";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -236,6 +237,9 @@ function AddNewEmployee() {
   const onSubmit = async (data) => {
     try {
       const form = { ...data, srgIdNumber: employeeId, entityId, departmentId, roleId, employmentStatus, modeOfEmployment, jobTitleId, employeeGradeId, employeeGradeLevelId };
+      form.employeeId = undefined;
+      const dateValue = form.startDate.split(`\"`);
+      form.startDate = dateValue[1];
       loading('Creating Employee Account...');
       const { data: { message  } } = await api.post('/auth/employee/add-employee', form);
       swal.fire({
