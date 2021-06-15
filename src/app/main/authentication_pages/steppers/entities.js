@@ -9,13 +9,13 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Card from '@material-ui/core/Card';
+// import Card from '@material-ui/core/Card';
 import swal from 'sweetalert2';
 import errorMsg from 'utils/errorMsg';
 import api from 'app/services/api';
 import loading from 'utils/loading';
 import { makeStyles } from '@material-ui/core/styles';
-import catchErrorMsg from 'utils/catchErrorMsg';
+// import catchErrorMsg from 'utils/catchErrorMsg';
 import Checkbox from '@material-ui/core/Checkbox';
 import { useDispatch } from 'react-redux';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -27,7 +27,8 @@ import timeZone from "app/shared/timezoneList";
 import currencyList from "app/shared/currencies";
 import dateFormatList from "app/shared/dateformat";
 import { FormHelperText } from "@material-ui/core";
-
+import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined';
+import EntityModal from "./components/entityModal";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -81,8 +82,7 @@ const schema = yup.object().shape({
         .required(errorMsg({ name: 'Branch Addresses', type: 'required' })),
 });
 
-
-export default function OrganizationInformation({handleNext}) {
+export default function Entities({handleNext}) {
   const { register, handleSubmit, formState:{ errors }, setValue, getValues } = useForm({
     mode: "all",
     reValidateMode: 'onChange',
@@ -95,6 +95,10 @@ export default function OrganizationInformation({handleNext}) {
   const country = currencyList();
   const stateList = currencyList();
   const cityList = currencyList();
+  const [openEntityModal, setOpenEntityModal] = React.useState(false);
+  const [humanResource, setHumanResource] = React.useState(true);
+  const [finance, setFinance] = React.useState(true);
+  const [informationTechnology, setInformationTechnology] = React.useState(false);
   const [phoneNumber1, setPhoneNumber1] = React.useState(234);
   const [phoneNumber2, setPhoneNumber2] = React.useState(234);
   const [companyStartDate, setCompanyStartDate] = React.useState(new Date());
@@ -125,6 +129,16 @@ export default function OrganizationInformation({handleNext}) {
   React.useEffect(() => {
     console.log('data: ', {...getValues()});
   }, [getValues])
+
+  const handleHumanResourceChange = (event) => {
+    setHumanResource(event.target.checked);
+  };
+  const handleFinanceChange = (event) => {
+    setFinance(event.target.checked);
+  };
+  const handleInformationTechnologyChange = (event) => {
+    setInformationTechnology(event.target.checked);
+  };
 
   const handleCompanyTypeChange = (event) => {
     register({ name: 'companyType', type: 'custom' }, { required: true });
@@ -181,6 +195,12 @@ export default function OrganizationInformation({handleNext}) {
     setBranchAddressesErr(errors.branchAddresses?.message);
   };
 
+  const HandleAddEntity = () => {
+    setOpenEntityModal(true);
+  }
+
+
+
   const onSubmit = async (data) => {
       try {
         const form = { ...data }
@@ -202,8 +222,41 @@ export default function OrganizationInformation({handleNext}) {
   return (
     <div className={classes.root}>
       <form onSubmit={handleSubmit(onSubmit)}>
-          <Typography variant="body1" color="initial" className='my-10'><strong>Organization Information</strong></Typography>
+          <Typography variant="h5" color="initial" className='my-10'><strong>Entities</strong></Typography>
+          <Typography variant="body1" color="initial" className='my-10'><strong>Please select departments that will be general for all entities</strong></Typography>
           <Grid container spacing={3} justify='space-between' align='center' style={{ marginBottom: '3rem'}}>
+            <Grid item lg={12} md={12} sm={12} xs={12} align='left' style={{ marginBottom: '-15px' }}>
+              <FormControlLabel control={<Checkbox
+                checked={humanResource}
+                onChange={handleHumanResourceChange}
+                name="humanResource"
+                color="primary"
+              />}
+              label="Human Resource" />
+            </Grid>
+            <Grid item lg={12} md={12} sm={12} xs={12} align='left' style={{ marginBottom: '-15px', marginTop: '-15px'  }}>
+              <FormControlLabel control={<Checkbox
+                checked={finance}
+                onChange={handleFinanceChange}
+                name="finance"
+                color="primary"
+              />}
+              label="Finance" />
+            </Grid>
+            <Grid item lg={12} md={12} sm={12} xs={12} align='left' style={{ marginTop: '-15px' }}>
+              <FormControlLabel control={<Checkbox
+                checked={informationTechnology}
+                onChange={handleInformationTechnologyChange}
+                name="informationTechnology"
+                color="primary"
+              />}
+              label="Information Technology" />
+            </Grid>
+            <Grid item lg={12} md={12} sm={12} xs={12} align='left' className='my-10'>
+              <Button onClick={HandleAddEntity} variant="contained" color="secondary">
+                <span style={{ marginRight: '5px' }}><AddBoxOutlinedIcon/></span> Add Entity
+              </Button>
+            </Grid>
             <Grid item lg={4} md={6} sm={12} xs={12}>
               <FormControl variant="outlined" style={{ width: '100%', margin: '8px 0px' }} className={classes.formControl}>
                 <InputLabel id="demo-simple-select-outlined-label">Company Type</InputLabel>
@@ -379,7 +432,7 @@ export default function OrganizationInformation({handleNext}) {
                   name='companyVision'
                   type='text'
                   multiline
-                  rows="6"
+                  rows="4"
                   error={errors.companyVision}
                   message={errors.companyVision?.message}
                   helperText={errors.companyVision?.message}
@@ -393,7 +446,7 @@ export default function OrganizationInformation({handleNext}) {
                   name='companyMission'
                   type='text'
                   multiline
-                  rows="6"
+                  rows="4"
                   error={errors.companyMission}
                   message={errors.companyMission?.message}
                   helperText={errors.companyMission?.message}
@@ -418,7 +471,7 @@ export default function OrganizationInformation({handleNext}) {
                   name='hqAddress'
                   type='text'
                   multiline
-                  rows="6"
+                  rows="4"
                   error={errors.hqAddress}
                   message={errors.hqAddress?.message}
                   helperText={errors.hqAddress?.message}
@@ -435,6 +488,9 @@ export default function OrganizationInformation({handleNext}) {
                 error={errors.branchAddresses}
                 message={errors.branchAddresses?.message}
                 helperText={errors.branchAddresses?.message}
+                // type='text'
+                // multiline
+                // rows="6"
                 allowDuplicates={false}
                 value={branchAddresses}
                 onAdd={(chip) => handleAddBranchAddresses(chip)}
@@ -451,6 +507,7 @@ export default function OrganizationInformation({handleNext}) {
               </Button>
           </Grid>
       </form>
+      <EntityModal open={openEntityModal} setOpen={setOpenEntityModal} data={{}}/>
     </div>
   );
 }

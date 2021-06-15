@@ -82,7 +82,7 @@ const schema = yup.object().shape({
 });
 
 
-export default function OrganizationInformation({handleNext}) {
+export default function Departments({handleNext}) {
   const { register, handleSubmit, formState:{ errors }, setValue, getValues } = useForm({
     mode: "all",
     reValidateMode: 'onChange',
@@ -379,7 +379,7 @@ export default function OrganizationInformation({handleNext}) {
                   name='companyVision'
                   type='text'
                   multiline
-                  rows="6"
+                  rows="4"
                   error={errors.companyVision}
                   message={errors.companyVision?.message}
                   helperText={errors.companyVision?.message}
@@ -393,7 +393,7 @@ export default function OrganizationInformation({handleNext}) {
                   name='companyMission'
                   type='text'
                   multiline
-                  rows="6"
+                  rows="4"
                   error={errors.companyMission}
                   message={errors.companyMission?.message}
                   helperText={errors.companyMission?.message}
@@ -418,7 +418,7 @@ export default function OrganizationInformation({handleNext}) {
                   name='hqAddress'
                   type='text'
                   multiline
-                  rows="6"
+                  rows="4"
                   error={errors.hqAddress}
                   message={errors.hqAddress?.message}
                   helperText={errors.hqAddress?.message}
@@ -435,6 +435,9 @@ export default function OrganizationInformation({handleNext}) {
                 error={errors.branchAddresses}
                 message={errors.branchAddresses?.message}
                 helperText={errors.branchAddresses?.message}
+                // type='text'
+                // multiline
+                // rows="6"
                 allowDuplicates={false}
                 value={branchAddresses}
                 onAdd={(chip) => handleAddBranchAddresses(chip)}

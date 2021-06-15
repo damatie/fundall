@@ -7,8 +7,9 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import AccountSettings from './accountsettings';
 import OrganizationInformation from './orginfo';
-import EntitiesAndDepartments from './entitiesanddepts';
-import StepFour from './step4';
+import Entities from './entities';
+import Departments from './departments';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -57,9 +58,9 @@ function getStepContent(stepIndex, handleNext) {
     case 1:
       return <><OrganizationInformation handleNext={handleNext}/></>;
     case 2:
-      return <><EntitiesAndDepartments handleNext={handleNext}/></>;
+      return <><Entities handleNext={handleNext}/></>;
     case 3:
-      return <><StepFour handleNext={handleNext}/></>
+      return <><Departments handleNext={handleNext}/></>
     default:
       return <></>;
   }
@@ -67,7 +68,7 @@ function getStepContent(stepIndex, handleNext) {
 
 export default function StepperMain() {
   const classes = useStyles();
-  const [activeStep, setActiveStep] = React.useState(1);
+  const [activeStep, setActiveStep] = React.useState(2);
   const steps = getSteps();
 
   const handleNext = () => {

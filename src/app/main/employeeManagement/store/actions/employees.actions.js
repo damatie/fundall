@@ -79,7 +79,7 @@ export const getRoles = () => {
           payload: data || []
         })
 
-        console.log('Roles Data: ', data);
+        // console.log('Roles Data: ', data);
       }
     } catch (e) {
       dispatch({
@@ -139,7 +139,7 @@ export const getAccountSettings = () => {
           type: ACCOUNT_SETTINGS,
           payload: data || {}
         })
-        console.log("Account Settings Data: ", data)
+        // console.log("Account Settings Data: ", data)
       }
     } catch (e) {
       dispatch({
