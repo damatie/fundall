@@ -66,7 +66,7 @@ function FuseNavVerticalItem(props) {
 			button
 			component={NavLinkAdapter}
 			to={item.url}
-			activeClassName="active"
+			activeclassname="active"
 			className={clsx(classes.item, 'list-item')}
 			onClick={ev => mdDown && dispatch(Actions.navbarCloseMobile())}
 			exact={item.exact}

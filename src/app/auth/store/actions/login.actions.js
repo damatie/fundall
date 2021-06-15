@@ -5,7 +5,7 @@ import Swal from 'sweetalert2';
 import { getBaseUrl } from 'app/shared/getBaseUrl';
 import { handleResponse } from 'app/auth/handleRes';
 
-import { GET_EMPLOYEE_PROFILE, LOADING_EMPLOYEE_PROFILE, getDepartmentEmployees } from 'app/store/actions';
+import { GET_EMPLOYEE_PROFILE, LOADING_EMPLOYEE_PROFILE, GET_USER_MENU, LOADING_USER_MENU, GET_NAVIGATION, SET_NAVIGATION, getDepartmentEmployees } from 'app/store/actions';
 import api from 'app/services/api';
 
 export const LOGIN_ERROR = 'LOGIN_ERROR';
@@ -19,44 +19,47 @@ export function submitLogin(data, x) {
 			type: LOGIN_LOADING
 		});
 		api.post(`/auth/${x || "employee"}/login`, data).then((response) => {
-
+			console.log(response.data)
 			const { success, message, token, data } = response.data;
 
 			if (success) {
-				Swal.fire({
-					title: 'Login Successful',
-					text: message,
-					icon: 'success',
-					timer: 3000,
-				});
-				api.defaults.headers.Authorization = `JWT ${token}`;
-				localStorage.setItem('jwt_access_token', JSON.stringify(token));
 
-				const userState = {
-					role: data?.role.name.toUpperCase() ?? x.toUpperCase(),
-					redirectUrl: '/employee/dashboard',
-					id: data?.id,
-					data: {
-						displayName: `${data?.firstName ?? response.firstName} ${data?.lastName ?? response.lastName}`,
-						photoURL: data?.profilePicture,
-						email: data?.email ?? response.email,
-						shortcuts: ['loan_request', 'request_leave', 'blog_list', 'todo'],
-						department: data?.department,
-						details: data?.info,
-						employeeGrade: data?.employeeGrade
-					}
-				};
-				localStorage.setItem('user_data', JSON.stringify(userState));
-				dispatch(getProfile({ id: data?.id, token }));
-				dispatch(UserActions.setUserData(userState));
-				// dispatch(getNotification(token));
-				dispatch(getDepartmentEmployees(data.department?.id));
+				dispatch(getUserMenu({ id: data?.id, token }));
+				setTimeout(() => {
+					Swal.fire({
+						title: 'Login Successful',
+						text: message,
+						icon: 'success',
+						timer: 3000,
+					});
+					api.defaults.headers.Authorization = `JWT ${token}`;
+					localStorage.setItem('jwt_access_token', JSON.stringify(token));
+					const userState = {
+						role: data?.role.name.toUpperCase() ?? x.toUpperCase(),
+						redirectUrl: '/employee/dashboard',
+						id: data?.id,
+						data: {
+							displayName: `${data?.firstName ?? response.firstName} ${data?.lastName ?? response.lastName}`,
+							photoURL: data?.profilePicture,
+							email: data?.email ?? response.email,
+							shortcuts: ['loan_request', 'request_leave', 'blog_list', 'todo'],
+							department: data?.department,
+							details: data?.info,
+							employeeGrade: data?.employeeGrade
+						}
+					};
+					localStorage.setItem('user_data', JSON.stringify(userState));
+					dispatch(getProfile({ id: data?.id, token }));
+					dispatch(UserActions.setUserData(userState));
+					// dispatch(getNotification(token));
+					dispatch(getDepartmentEmployees(data.department?.id));
 
-				return dispatch({
-					type: LOGIN_SUCCESS
-				});
+					return dispatch({
+						type: LOGIN_SUCCESS
+					});
+				}, 2000);
 			} else {
-
+				console.log("inside else")
 				Swal.fire({
 					title: 'Login',
 					text: message,
@@ -69,6 +72,7 @@ export function submitLogin(data, x) {
 				});
 			}
 		}).catch(error => {
+			console.log(error)
 			Swal.fire({
 				title: 'Login',
 				text: error.response?.data.error || error.response?.data.message,
@@ -100,6 +104,31 @@ const getProfile = ({ id, token, }) => {
 					dispatch({
 						type: GET_EMPLOYEE_PROFILE,
 						payload: data.data || {}
+					});
+				}
+			}
+		)
+	};
+
+}
+
+export const getUserMenu = ({ id, token, }) => {
+
+	return dispatch => {
+		dispatch({
+			type: GET_NAVIGATION
+		});
+		fetch(`${getBaseUrl()}/menu`, {
+			headers: {
+				authorization: `JWT ${token}`
+			}
+		}).then(res => handleResponse(res)).then(
+			data => {
+				if (data.data) {
+					localStorage.setItem('user_menu', JSON.stringify(data.data.menu || []));
+					dispatch({
+						type: SET_NAVIGATION,
+						navigation: data.data.menu || []
 					});
 				}
 			}

@@ -1,27 +1,30 @@
 import * as Actions from '../actions';
 const initialState = {
   loading: true,
+  loadingRoles: true,
   loadingPermission: true,
-  permissions: {},
   roles: [],
+  data: [],
   submitting: false,
   id: '',
 }
 
 const permissionReducer = (state = initialState, actions) => {
   switch(actions.type) {
-    case Actions.GET_ALL_PERMISSION_FOR_A_ROLE:
-      return {
-        ...state,
-        loadingPermission: false,
-        permissions: actions.payload,
-      };
     case Actions.GET_ALL_ROLES:
       return {
         ...state,
         loading: false,
+        loadingRoles: false,
         roles: actions.payload,
         id: actions.id
+      };
+    case Actions.GET_ALL_MENUS:
+      return {
+        ...state,
+        loading: false,
+        loadingPermission: false,
+        data: actions.payload
       };
     case Actions.SUBMITTING_ROLE_PERMISSIONS:
       return {
@@ -32,13 +35,6 @@ const permissionReducer = (state = initialState, actions) => {
       return {
         ...state,
         submitting: false
-      }
-    case Actions.ROLE_ID:
-      return {
-        ...state,
-        id: actions.payload,
-        permissions: {},
-        loadingPermission: true,
       }
     default:
       return {
