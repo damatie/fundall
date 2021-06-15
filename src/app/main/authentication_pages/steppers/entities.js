@@ -29,6 +29,8 @@ import dateFormatList from "app/shared/dateformat";
 import { FormHelperText } from "@material-ui/core";
 import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined';
 import EntityModal from "./components/entityModal";
+import EmployeeGradeModal from "./components/employeeGrade";
+import EmployeeGradeLevelModal from "./components/employeeGradeLevel";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -96,6 +98,8 @@ export default function Entities({handleNext}) {
   const stateList = currencyList();
   const cityList = currencyList();
   const [openEntityModal, setOpenEntityModal] = React.useState(false);
+  const [openEmployeeGradeModal, setOpenEmployeeGradeModal] = React.useState(false);
+  const [openEmployeeGradeLevelModal, setOpenEmployeeGradeLevelModal] = React.useState(false);
   const [humanResource, setHumanResource] = React.useState(true);
   const [finance, setFinance] = React.useState(true);
   const [informationTechnology, setInformationTechnology] = React.useState(false);
@@ -199,6 +203,14 @@ export default function Entities({handleNext}) {
     setOpenEntityModal(true);
   }
 
+  const handleAddEmployeeGrade = () => {
+    setOpenEmployeeGradeModal(true);
+  }
+
+  const HandleAddEmployeeGradeLevel = () => {
+    setOpenEmployeeGradeLevelModal(true);
+  }
+
 
 
   const onSubmit = async (data) => {
@@ -255,6 +267,21 @@ export default function Entities({handleNext}) {
             <Grid item lg={12} md={12} sm={12} xs={12} align='left' className='my-10'>
               <Button onClick={HandleAddEntity} variant="contained" color="secondary">
                 <span style={{ marginRight: '5px' }}><AddBoxOutlinedIcon/></span> Add Entity
+              </Button>
+            </Grid>
+
+            
+            <Grid item lg={12} md={12} sm={12} xs={12} align='left' className='my-10'>
+              <Typography variant="h5" color="initial" className='my-10'><strong>Employee Grade</strong></Typography>
+              <Button onClick={handleAddEmployeeGrade} variant="contained" color="secondary">
+                <span style={{ marginRight: '5px' }}><AddBoxOutlinedIcon/></span> Add Employee Grade
+              </Button>
+            </Grid>
+
+            <Grid item lg={12} md={12} sm={12} xs={12} align='left' className='my-10'>
+              <Typography variant="h5" color="initial" className='my-10'><strong>Employee Grade Level</strong></Typography>
+              <Button onClick={handleAddEmployeeGradeLevel} variant="contained" color="secondary">
+                <span style={{ marginRight: '5px' }}><AddBoxOutlinedIcon/></span> Add Employee Grade Level
               </Button>
             </Grid>
             <Grid item lg={4} md={6} sm={12} xs={12}>
@@ -508,6 +535,8 @@ export default function Entities({handleNext}) {
           </Grid>
       </form>
       <EntityModal open={openEntityModal} setOpen={setOpenEntityModal} data={{}}/>
+      <EmployeeGradeModal open={openEmployeeGradeModal} setOpen={setOpenEmployeeGradeModal} data={{}}/>
+      <EmployeeGradeLevelModal open={openEmployeeGradeLevelModal} setOpen={setOpenEmployeeGradeLevelModal} data={{}}/>
     </div>
   );
 }
