@@ -117,7 +117,7 @@ export default function EmployeeGradeLevelModal ({open, setOpen, edit, data}) {
 
   return (
     <Modal
-      title={edit ? 'Edit Entity' : 'Add Entity'}
+      title={edit ? 'Edit Employee Grade Level' : 'Add Employee Grade Level'}
       handleClose={() => setOpen(false)}
       open={open}
     >

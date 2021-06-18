@@ -27,11 +27,12 @@ import ChipInput from "material-ui-chip-input";
 import timeZone from "app/shared/timezoneList";
 import currencyList from "app/shared/currencies";
 import dateFormatList from "app/shared/dateformat";
+import *  as Actions from 'app/main/employeeManagement/store/actions';
 import { FormHelperText } from "@material-ui/core";
 import Modal from './modal';
 
 const schema = yup.object().shape({
-    entity: yup.string(errorMsg({ name: 'Entity', type: 'string' }))
+    entityName: yup.string(errorMsg({ name: 'Entity', type: 'string' }))
         .min(3, errorMsg({ name: 'Entity', type: 'min', number: 3 }))
         .max(60, errorMsg({ name: 'Entity', type: 'max', number: 60 }))
         .required(errorMsg({ name: 'Entity', type: 'required' })),
@@ -42,7 +43,7 @@ const schema = yup.object().shape({
     description: yup.string(errorMsg({ name: 'Description', type: 'string' }))
     // .min(3, errorMsg({ name: 'Description', type: 'min', number: 3 }))
         .max(1000, errorMsg({ name: 'Description', type: 'max', number: 1000 })),
-    entityAddresses: yup.array()
+    address: yup.array()
         .min(1, 'Must have at least one Entity Addresses')
         .required(errorMsg({ name: 'Entity Addresses', type: 'required' })),
 });
@@ -56,58 +57,83 @@ export default function EntityModal ({open, setOpen, edit, data}) {
     });
 
     const dispatch = useDispatch();
-    const [entityAddresses, setEntityAddresses] = React.useState([]);
+    // const entityAdd = data?.address !== '' ? JSON.parse(data?.address) : [];
+    const [newAdded, setNewAdded] = React.useState(false);
+    const [updated, setUpdated] = React.useState(false);
+    const [entityAddresses, setEntityAddresses] = React.useState(data?.address || []);
     const [entityAddressesErr, setEntityAddressesErr] = React.useState("");
 
     React.useEffect(() => {
-        setEntityAddressesErr(errors.entityAddresses?.message);
+        dispatch(Actions.getEntities());
+      }, [newAdded, updated]);
+
+    React.useEffect(() => {
+        setEntityAddressesErr(errors.address?.message);
       }, [errors]);
 
       const handleAddEntityAddresses = (chip) => {
-        register({ name: 'entityAddresses', type: 'custom' }, { required: true });
+        register({ name: 'address', type: 'custom' }, { required: true });
         entityAddresses.push(chip)
-        setValue("entityAddresses", entityAddresses);
-        setEntityAddressesErr(errors.entityAddresses?.message);
+        setValue("address", entityAddresses);
+        setEntityAddressesErr(errors.address?.message);
         console.log('data: ', JSON.stringify({...getValues()}));
       };
     
       const handleDeleteEntityAddresses = (chip, index) => {
-        register({ name: 'entityAddresses', type: 'custom' }, { required: true });
+        register({ name: 'address', type: 'custom' }, { required: true });
         let entityAddressesData = entityAddresses;
         entityAddressesData.splice(index, 1);
         setEntityAddresses(entityAddressesData);
-        setValue("entityAddresses", entityAddressesData);
-        setEntityAddressesErr(errors.entityAddresses?.message);
+        setValue("address", entityAddressesData);
+        setEntityAddressesErr(errors.address?.message);
       };
 
     const onSubmit = async (value) => {
-        if (edit === false) {
+        const form = { ...value};
+        console.log('form: ', form);
+        if (edit) {
             try {
-                loading('Adding Entity...');
-                const { data: { message  } } = await api.post('/auth/employee/change_password', value);
-                swal.fire({
-                    text: message,
-                    icon: 'success'
-                });
-                setOpen(false);
+                loading('Updating Entity...');
+                const { data: { message, success  } } = await api.patch(`/entity/${data.id}`, form);
+                if (success) {
+                    swal.fire({
+                        text: message,
+                        icon: 'success'
+                    });
+                    setOpen(false);
+                    setUpdated(true);
+                } else {
+                    swal.fire({
+                        text: 'Something went wrong...',
+                        icon: 'error'
+                    })
+                }
             } catch (e) {
                 swal.fire({
-                    text: catchErrorMsg(e),
+                    text: 'Something went wrong...',
                     icon: 'error'
                 })
             }
         } else {
             try {
-                loading('Updating Entity...');
-                const { data: { message  } } = await api.patch('/auth/employee/change_password', value);
-                swal.fire({
-                    text: message,
-                    icon: 'success'
-                });
-                setOpen(false);
+                loading('Adding Entity...');
+                const { data: { message, success  } } = await api.post('/entity', form);
+                if (success) {
+                    swal.fire({
+                        text: message,
+                        icon: 'success'
+                    });
+                    setOpen(false);
+                    setNewAdded(true);
+                } else {
+                    swal.fire({
+                        text: 'Something went wrong...',
+                        icon: 'error'
+                    })
+                }
             } catch (e) {
                 swal.fire({
-                    text: catchErrorMsg(e),
+                    text: 'Something went wrong...',
                     icon: 'error'
                 })
             }
@@ -127,13 +153,14 @@ export default function EntityModal ({open, setOpen, edit, data}) {
                 <Input
                     required
                     label='Entity'
-                    name='entity'
+                    name='entityName'
                     // type='text'
                     // multiline
                     // rows="4"
-                    error={errors.entity}
-                    message={errors.entity?.message}
-                    helperText={errors.entity?.message}
+                    defaultValue={data.entityName}
+                    error={errors.entityName}
+                    message={errors.entityName?.message}
+                    helperText={errors.entityName?.message}
                     refs={register}
                 />
             </Grid>
@@ -145,6 +172,7 @@ export default function EntityModal ({open, setOpen, edit, data}) {
                     // type='text'
                     // multiline
                     // rows="4"
+                    defaultValue={data.employeeCode}
                     error={errors.employeeCode}
                     message={errors.employeeCode?.message}
                     helperText={errors.employeeCode?.message}
@@ -153,12 +181,12 @@ export default function EntityModal ({open, setOpen, edit, data}) {
             </Grid>
             <Grid item lg={12} md={12} sm={12} xs={12}>
                 <Input
-                    // required
                     label='Description'
-                    name='Description'
+                    name='description'
                     type='text'
                     multiline
                     rows="4"
+                    defaultValue={data.description}
                     error={errors.description}
                     message={errors.description?.message}
                     helperText={errors.description?.message}
@@ -167,14 +195,14 @@ export default function EntityModal ({open, setOpen, edit, data}) {
             </Grid>
             <Grid item lg={12} md={12} sm={12} xs={12}>
                 <ChipInput
-                    label='Entity Addresses (Separate with Comma / Enter)'
-                    name='entityAddresses'
+                    label='Entity Addresses (Separate with Enter)'
+                    name='address'
                     variant= 'outlined'
-                    newChipKeyCodes={[188]}
+                    // newChipKeyCodes={[188]}
                     style={{ width: '100%'}}
-                    error={errors.entityAddresses}
-                    message={errors.entityAddresses?.message}
-                    helperText={errors.entityAddresses?.message}
+                    error={errors.address}
+                    message={errors.address?.message}
+                    helperText={errors.address?.message}
                     // type='text'
                     // multiline
                     // rows="6"
@@ -183,7 +211,6 @@ export default function EntityModal ({open, setOpen, edit, data}) {
                     onAdd={(chip) => handleAddEntityAddresses(chip)}
                     onDelete={(chip, index) => handleDeleteEntityAddresses(chip, index)}
                 />
-                <FormHelperText style={{ color: 'red'}}>{entityAddressesErr}</FormHelperText>
             </Grid>
         </Grid>
         <Grid container spacing={3} justify='center' align='center' className='my-10'>

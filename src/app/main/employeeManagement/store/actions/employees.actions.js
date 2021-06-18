@@ -53,7 +53,7 @@ export const getEmployees = () => {
 export const getEntities = () => {
   return async (dispatch) => {
     try {
-      const { data: { data, success } } = await api.get('/entity/all');
+      const { data: { data, success } } = await api.get('/entity');
       if(success) {
         dispatch({
           type: GET_ENITIES,
