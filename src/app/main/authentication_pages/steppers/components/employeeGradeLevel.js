@@ -115,7 +115,7 @@ export default function EmployeeGradeLevelModal ({open, setOpen, edit, data}) {
     };
 
 
-  return (
+  return ( 
     <Modal
       title={edit ? 'Edit Employee Grade Level' : 'Add Employee Grade Level'}
       handleClose={() => setOpen(false)}

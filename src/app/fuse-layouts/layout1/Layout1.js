@@ -92,6 +92,20 @@ const isUserLoggedin = (user) => {
 	return true;
 }
 
+const changePasswordCondition = (profileStateData) => {
+	if (isUserLoggedin(profileStateData) && !(profileStateData?.isActivated)) {
+		// route to change password
+		window.location.assign('/auth/changepassword');
+	}
+}
+
+// const completeRegCondition = (profileStateData) => {
+// 	if (isUserLoggedin(profileStateData) && (profileStateData?.company.regSteps !== 4)  {
+// 		// route to change password
+//      window.location.assign('/auth/complete-registration');
+// 	}
+// }
+
 function Layout1(props) {
 	const config = useSelector(({ fuse }) => fuse.settings.current.layout.config);
 	const profileState = useSelector(({ profile }) => profile);
@@ -110,6 +124,7 @@ function Layout1(props) {
 		if(profileState.data?.department) {
 			dispatch(Actions.getDepartmentEmployees(profileState.data.department.id))
 		}
+		changePasswordCondition(profileState.data);
 	}, [profileState.data]);
 
 	const appContext = useContext(AppContext);
@@ -173,7 +188,7 @@ function Layout1(props) {
 					{config.rightSidePanel.display && <RightSideLayout1 />}
 
 					<FuseMessage />
-					<ChangePasswordModal open={isUserLoggedin(profileState.data) ? profileState.data?.isActivated ? false : true : false}/>
+					{/* <ChangePasswordModal open={isUserLoggedin(profileState.data) ? profileState.data?.isActivated ? false : true : false}/> */}
 				</div>
 			);
 		}
@@ -226,7 +241,7 @@ function Layout1(props) {
 					{config.rightSidePanel.display && <RightSideLayout1 />}
 
 					<FuseMessage />
-					<ChangePasswordModal open={isUserLoggedin(profileState.data) ? profileState.data?.isActivated ? false : true : false}/>
+					{/* <ChangePasswordModal open={isUserLoggedin(profileState.data) ? profileState.data?.isActivated ? false : true : false}/> */}
 				</div>
 			);
 		}

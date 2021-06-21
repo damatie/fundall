@@ -42,6 +42,10 @@ const AuthenticationConfig = {
 			component: React.lazy(() => import('./login/login'))
 		},
 		{
+			path: '/auth/changepassword',
+			component: React.lazy(() => import('./changePassword/changePassword'))
+		},
+		{
 			path: '/auth/complete-registration',
 			component: React.lazy(() => import('./steppers/steppermain'))
 		}
