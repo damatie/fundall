@@ -44,7 +44,7 @@ function ChangePassword({current}) {
 		  const form = { ...data }
 		  console.log('change Password form: ', form);
 		  loading('Updating Password...');
-		  const { data: { message, success  } } = await api.post('/auth/employee/change_password', form);
+		  const { data: { message, success  } } = await api.patch('/auth/employee/change_password', form);
 		  if(success) {
 			  if (current) {
 				localStorage.clear();
