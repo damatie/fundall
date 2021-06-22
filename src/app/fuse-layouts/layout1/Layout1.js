@@ -109,13 +109,15 @@ const completeRegCondition = () => {
 			// route to complete registration
 			if (data?.company?.regStep < 4) {
 				console.log('should Redirect to Complete Registration ')
-				return <Redirect to='/auth/complete-registration' />
+				window.location.assign('/auth/complete-registration');
+				// return <Redirect to='/auth/complete-registration' />
 			}
 		} else {
 			// route to complete registration
 			if (data?.company?.regStep < 3) {
 				console.log('should Redirect to Complete Registration 3 steps')
-				return <Redirect to='/auth/complete-registration' />
+				window.location.assign('/auth/complete-registration');
+				// return <Redirect to='/auth/complete-registration' />
 			}
 		}
 	}
