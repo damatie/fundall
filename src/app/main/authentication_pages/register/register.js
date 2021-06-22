@@ -175,6 +175,7 @@ export default function Register() {
       try {
         const form = { ...data, contactNumber, phoneNumber, industry, minNoOfEmployees, maxNoOfEmployees }
         // console.log('form: ', form);
+        form.hasEntities = true;
         loading('Creating Account...');
         const { data: { message  } } = await api.post('/companies', form);
         // console.log('data: ', data)
