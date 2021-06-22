@@ -126,8 +126,13 @@ function Layout1(props) {
 		if(profileState.data?.department) {
 			dispatch(Actions.getDepartmentEmployees(profileState.data.department.id))
 		}
-		changePasswordCondition(profileState.data);
 	}, [profileState.data]);
+	
+	useEffect(() => {
+		changePasswordCondition(profileState.data);
+	}, []);
+
+
 
 	const appContext = useContext(AppContext);
 	const classes = useStyles(props);
