@@ -46,6 +46,10 @@ function ChangePassword({current}) {
 		  loading('Updating Password...');
 		  const { data: { message, success  } } = await api.patch('/auth/employee/change_password', form);
 		  if(success) {
+			  swal.fire({
+				text: message,
+				icon: 'success'
+			  });
 			  if (current) {
 				localStorage.clear();
 				return (
