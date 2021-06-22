@@ -8,6 +8,7 @@ import SettingsPanel from 'app/fuse-layouts/shared-components/SettingsPanel';
 import clsx from 'clsx';
 import React, { useContext, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { Redirect } from 'react-router';
 import { renderRoutes } from 'react-router-config';
 import FooterLayout1 from './components/FooterLayout1';
 import LeftSideLayout1 from './components/LeftSideLayout1';
@@ -93,9 +94,10 @@ const isUserLoggedin = (user) => {
 }
 
 const changePasswordCondition = (profileStateData) => {
-	if (isUserLoggedin(profileStateData) && !(profileStateData?.isActivated)) {
+	if (isUserLoggedin(profileStateData) && (profileStateData?.isActivated !== true)) {
 		// route to change password
-		window.location.assign('/auth/changepassword');
+		return <Redirect to='/auth/changepassword' />
+		// window.location.assign('/auth/changepassword');
 	}
 }
 
