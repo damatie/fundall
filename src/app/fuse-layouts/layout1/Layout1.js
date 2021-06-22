@@ -97,16 +97,23 @@ const changePasswordCondition = (profileStateData) => {
 	if (isUserLoggedin(profileStateData) && (profileStateData?.isActivated !== true)) {
 		// route to change password
 		return <Redirect to='/auth/changepassword' />
-		// window.location.assign('/auth/changepassword');
 	}
 }
 
-// const completeRegCondition = (profileStateData) => {
-// 	if (isUserLoggedin(profileStateData) && (profileStateData?.company.regSteps !== 4)  {
-// 		// route to change password
-//      window.location.assign('/auth/complete-registration');
-// 	}
-// }
+const completeRegCondition = (profileStateData) => {
+	console.log('profileStateData: ', profileStateData);
+	if (isUserLoggedin(profileStateData) && (profileStateData?.company.hasEntities))  {
+		// route to complete registration
+		if (profileStateData?.company?.regSteps < 4) {
+			return <Redirect to='/auth/complete-registration' />
+		}
+	} else {
+		// route to complete registration
+		if (profileStateData?.company?.regSteps < 3) {
+			return <Redirect to='/auth/complete-registration' />
+		}
+	}
+}
 
 function Layout1(props) {
 	const config = useSelector(({ fuse }) => fuse.settings.current.layout.config);
@@ -130,6 +137,7 @@ function Layout1(props) {
 	
 	useEffect(() => {
 		changePasswordCondition(profileState.data);
+		completeRegCondition(profileState.data);
 	}, []);
 
 
