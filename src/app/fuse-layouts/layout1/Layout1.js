@@ -100,17 +100,23 @@ const changePasswordCondition = (profileStateData) => {
 	}
 }
 
-const completeRegCondition = (profileStateData) => {
-	console.log('profileStateData: ', profileStateData);
-	if (isUserLoggedin(profileStateData) && (profileStateData?.company.hasEntities))  {
-		// route to complete registration
-		if (profileStateData?.company?.regSteps < 4) {
-			return <Redirect to='/auth/complete-registration' />
-		}
-	} else {
-		// route to complete registration
-		if (profileStateData?.company?.regSteps < 3) {
-			return <Redirect to='/auth/complete-registration' />
+const completeRegCondition = () => {
+	const dataResponse = localStorage.getItem('login_data');
+	const data = JSON.parse(dataResponse);
+	console.log('User Login Data: ', data);
+	if (data?.role?.name === "hr admin") {
+		if (data?.company?.hasEntities === true)  {
+			// route to complete registration
+			if (data?.company?.regStep < 4) {
+				console.log('should Redirect to Complete Registration ')
+				return <Redirect to='/auth/complete-registration' />
+			}
+		} else {
+			// route to complete registration
+			if (data?.company?.regStep < 3) {
+				console.log('should Redirect to Complete Registration 3 steps')
+				return <Redirect to='/auth/complete-registration' />
+			}
 		}
 	}
 }
@@ -137,7 +143,7 @@ function Layout1(props) {
 	
 	useEffect(() => {
 		changePasswordCondition(profileState.data);
-		completeRegCondition(profileState.data);
+		completeRegCondition();
 	}, []);
 
 

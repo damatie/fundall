@@ -449,6 +449,9 @@ export default function OrganizationInformation({handleNext}) {
               <Button variant="contained" type='submit' color="primary">
                   Submit 
               </Button>
+              <Button variant="contained" color="primary" onClick={handleNext}>
+                temp NEXT
+              </Button>
           </Grid>
       </form>
     </div>

@@ -9,6 +9,7 @@ import AccountSettings from './accountsettings';
 import OrganizationInformation from './orginfo';
 import Entities from './entities';
 import Departments from './departments';
+import reducer from 'app/store/reducers';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -26,8 +27,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function getSteps() {
-  return [
+function getSteps(hasEntities) {
+  if (hasEntities) {
+    return [
       { 
         id: 1,
         title: 'Account Settings', 
@@ -48,28 +50,75 @@ function getSteps() {
         title: 'Departments', 
         details: 'Configure departments in your organization'
       }
-    ];
-}
-
-function getStepContent(stepIndex, handleNext) {
-  switch (stepIndex) {
-    case 0:
-      return <><AccountSettings handleNext={handleNext}/></>;
-    case 1:
-      return <><OrganizationInformation handleNext={handleNext}/></>;
-    case 2:
-      return <><Entities handleNext={handleNext}/></>;
-    case 3:
-      return <><Departments handleNext={handleNext}/></>
-    default:
-      return <></>;
+    ];  
+  } else {
+    return [
+        { 
+          id: 1,
+          title: 'Account Settings', 
+          details: 'Configure standards used in your organization'
+        }, 
+        {
+          id: 2,
+          title: 'Organization Information', 
+          details: 'Organization information to get the system up and running'
+        }, 
+        {
+          id: 3,
+          title: 'Departments', 
+          details: 'Configure departments in your organization'
+        }
+      ];
   }
 }
 
-export default function StepperMain() {
+function getStepContent(stepIndex, handleNext, hasEntities) {
+  if (hasEntities) {
+    switch (stepIndex) {
+      case 0:
+        return <><AccountSettings handleNext={handleNext}/></>;
+      case 1:
+        return <><OrganizationInformation handleNext={handleNext}/></>;
+      case 2:
+        return <><Entities handleNext={handleNext}/></>;
+      case 3:
+        return <><Departments handleNext={handleNext}/></>
+      default:
+        return <></>;
+    }
+  } else {
+    switch (stepIndex) {
+      case 0:
+        return <><AccountSettings handleNext={handleNext}/></>;
+      case 1:
+        return <><OrganizationInformation handleNext={handleNext}/></>;
+      case 2:
+        return <><Entities handleNext={handleNext}/></>;
+      case 3:
+        return <><Departments handleNext={handleNext}/></>
+      default:
+        return <></>;
+    }
+  }
+}
+
+function StepperMain() {
   const classes = useStyles();
+  const profileState = useSelector(({ profile }) => profile);
+  const [hasEntities, setHasEntities] = React.useState(true);
   const [activeStep, setActiveStep] = React.useState(0);
-  const steps = getSteps();
+  const steps = getSteps(true);
+  const steps2 = getSteps(false);
+
+  React.useEffect(() => {
+    const dataResponse = localStorage.getItem('login_data');
+  	const data = JSON.parse(dataResponse);
+	  console.log('Stepper User Login Data: ', data);
+		if (data?.company?.hasEntities === false) {
+      setHasEntities(false);
+    }
+    setActiveStep(data?.company?.regStep || 0)
+	}, []);
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -86,7 +135,14 @@ export default function StepperMain() {
   return (
     <div className={classes.root}>
       <Stepper activeStep={activeStep} alternativeLabel>
-        {steps.map((label) => (
+        {hasEntities ? steps.map((label) => (
+          <Step key={label.id}>
+            <StepLabel>
+              <span><strong>{label.title}</strong></span>
+              <span><Typography variant="body2" color="initial" className='my-5'>{label.details}</Typography></span>
+            </StepLabel>
+          </Step>
+        )) : steps2.map((label) => (
           <Step key={label.id}>
             <StepLabel>
               <span><strong>{label.title}</strong></span>
@@ -126,3 +182,6 @@ export default function StepperMain() {
     </div>
   );
 }
+
+withReducer('profile', reducer)(StepperMain);
+export default StepperMain;

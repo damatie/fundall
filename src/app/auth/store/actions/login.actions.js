@@ -33,6 +33,7 @@ export function submitLogin(data, x) {
 				});
 				api.defaults.headers.Authorization = `JWT ${token}`;
 				localStorage.setItem('jwt_access_token', JSON.stringify(token));
+				localStorage.setItem('login_data', JSON.stringify(data));
 
 				const userState = {
 					role: data?.role.name.toUpperCase() ?? x.toUpperCase(),
