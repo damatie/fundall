@@ -16,6 +16,21 @@ import { Auth } from './auth';
 import routes from './fuse-configs/routesConfig';
 import store from './store';
 import api from 'app/services/api';
+import Pusher from "pusher-js";
+
+import PusherProvider from "./PusherProvider";
+
+// Enable pusher logging - don't include this in production
+Pusher.logToConsole = true;
+
+// Set up pusher instance with main channel subscription
+// Be able to subscribe to the same channel in another component
+// with separate callback but utilizing the existing connection
+const pusher = new Pusher("b658eb1398cb885b506c", {
+  cluster: "eu",
+  encrypted: true,
+  forceTLS: true
+});
 
 const jss = create({
 	...jssPreset(),
@@ -38,21 +53,23 @@ const App = () => {
 				routes
 			}}
 		>
-			<StylesProvider jss={jss} generateClassName={generateClassName}>
-				<Provider store={store}>
-					<MuiPickersUtilsProvider utils={MomentUtils}>
-						<Auth>
-							<Router history={history}>
-								<FuseAuthorization>
-									<FuseTheme>
-										<FuseLayout />
-									</FuseTheme>
-								</FuseAuthorization>
-							</Router>
-						</Auth>
-					</MuiPickersUtilsProvider>
-				</Provider>
-			</StylesProvider>
+			{/* <PusherProvider pusher={pusher}> */}
+				<StylesProvider jss={jss} generateClassName={generateClassName}>
+					<Provider store={store}>
+						<MuiPickersUtilsProvider utils={MomentUtils}>
+							<Auth>
+								<Router history={history}>
+									<FuseAuthorization>
+										<FuseTheme>
+												<FuseLayout />
+										</FuseTheme>
+									</FuseAuthorization>
+								</Router>
+							</Auth>
+						</MuiPickersUtilsProvider>
+					</Provider>
+				</StylesProvider>
+    		{/* </PusherProvider> */}
 		</AppContext.Provider>
 	);
 };

@@ -127,7 +127,12 @@ function FuseNavVerticalCollapse(props) {
 
 			{item.children && (
 				<Collapse in={open} className="collapse-children">
-					{item.children.map(_item => (
+					{item.children.map(i => {
+						return {
+							...i,
+							id: "SUBMENU"+i.id
+						}
+					}).map(_item => (
 						<FuseNavItem
 							key={_item.id}
 							type={`vertical-${_item.type}`}
