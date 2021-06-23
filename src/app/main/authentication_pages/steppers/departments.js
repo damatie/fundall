@@ -192,7 +192,8 @@ export default function Departments({handleNext}) {
           icon: 'success'
         });
         setStepper([], 4)
-        handleNext();
+        return <Redirect to='/employee/dashboard' />;
+        // handleNext();
       } catch (e) {
         swal.fire({
           text: e?.message || 'Something went wrong',
@@ -452,7 +453,7 @@ export default function Departments({handleNext}) {
           </Grid>
           <Grid container spacing={3} justify='center' align='center' className='my-10'>
               <Button variant="contained" type='submit' color="primary">
-                  Submit 
+                Submit 
               </Button>
               <Button variant="contained" color="secondary" className='mx-5' style={{ marginLeft: '10px', marginRight: '10px' }} onClick={handleNext}>
                 temp NEXT
