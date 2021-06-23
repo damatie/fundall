@@ -516,6 +516,9 @@ export default function AccountSettings({handleNext}) {
               <Button variant="contained" type='submit' color="primary">
                   Submit 
               </Button>
+              <Button variant="contained" color="secondary" className='mx-5' style={{ marginLeft: '10px', marginRight: '10px' }} onClick={handleNext}>
+                temp NEXT
+              </Button>
           </Grid>
       </form>
     </div>

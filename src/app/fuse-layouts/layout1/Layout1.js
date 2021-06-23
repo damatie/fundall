@@ -19,7 +19,7 @@ import * as Actions from 'app/store/actions';
 import { useAuth } from 'app/hooks/useAuth';
 import withReducer from 'app/store/withReducer';
 import reducer from 'app/store/reducers';
-import ChangePasswordModal from '../shared-components/ChangePasswordModal';
+// import ChangePasswordModal from '../shared-components/ChangePasswordModal';
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -109,6 +109,7 @@ const completeRegCondition = () => {
 			// route to complete registration
 			if (data?.company?.regStep < 4) {
 				console.log('should Redirect to Complete Registration ');
+				// window.location.href('/auth/complete-registration');
 				return <Redirect to='/auth/complete-registration' />
 			}
 		} else {
@@ -143,7 +144,7 @@ function Layout1(props) {
 	
 	useEffect(() => {
 		changePasswordCondition(profileState.data);
-		completeRegCondition();
+		// completeRegCondition();
 	}, []);
 
 

@@ -4,7 +4,6 @@ import * as UserActions from './user.actions';
 import Swal from 'sweetalert2';
 import { getBaseUrl } from 'app/shared/getBaseUrl';
 import { handleResponse } from 'app/auth/handleRes';
-
 import { GET_EMPLOYEE_PROFILE, LOADING_EMPLOYEE_PROFILE, getDepartmentEmployees } from 'app/store/actions';
 import api from 'app/services/api';
 
@@ -13,31 +12,70 @@ export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_LOADING = 'LOGIN_LOADING';
 
 export function submitLogin(data, x) {
-
 	return dispatch => {
 		dispatch({
 			type: LOGIN_LOADING
 		});
-		 
 		// api.post(`/auth/${x || "employee"}/login`, data).then((response) => {
 		api.post(`/auth/employee/login`, data).then((response) => {
-
 			const { success, message, token, data } = response.data;
-
 			if (success) {
-				Swal.fire({
-					title: 'Login Successful',
-					text: message,
-					icon: 'success',
-					timer: 3000,
-				});
 				api.defaults.headers.Authorization = `JWT ${token}`;
 				localStorage.setItem('jwt_access_token', JSON.stringify(token));
 				localStorage.setItem('login_data', JSON.stringify(data));
+				let redirectUrl = '/employee/dashboard';
+				if (data?.role?.name === "hr admin") {
+					if (data?.company?.hasEntities === true)  {
+						// route to complete registration
+						if (data?.company?.regStep < 4) {
+							console.log('should Redirect to Complete Registration ');
+							redirectUrl ='/auth/complete-registration';
+							Swal.fire({
+								title: 'Login Successful',
+								text: 'Kindly Complete Company Registration',
+								icon: 'success',
+								timer: 3000,
+							});
+						} else {
+							Swal.fire({
+								title: 'Login Successful',
+								text: message,
+								icon: 'success',
+								timer: 3000,
+							});
+						}
+					} else {
+						// route to complete registration
+						if (data?.company?.regStep < 3) {
+							console.log('should Redirect to Complete Registration 3 steps');
+							redirectUrl ='/auth/complete-registration';
+							Swal.fire({
+								title: 'Login Successful',
+								text: 'Kindly Complete Company Registration',
+								icon: 'success',
+								timer: 3000,
+							});
+						} else {
+							Swal.fire({
+								title: 'Login Successful',
+								text: message,
+								icon: 'success',
+								timer: 3000,
+							});	
+						}
+					}
+				} else {
+					Swal.fire({
+						title: 'Login Successful',
+						text: message,
+						icon: 'success',
+						timer: 3000,
+					});							
+				}
 
 				const userState = {
 					role: data?.role.name.toUpperCase() ?? x.toUpperCase(),
-					redirectUrl: '/employee/dashboard',
+					redirectUrl,
 					id: data?.id,
 					data: {
 						displayName: `${data?.firstName ?? response.firstName} ${data?.lastName ?? response.lastName}`,

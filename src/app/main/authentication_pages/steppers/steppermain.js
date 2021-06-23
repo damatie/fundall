@@ -71,30 +71,28 @@ function getSteps(hasEntities) {
   }
 }
 
-function getStepContent(stepIndex, handleNext, hasEntities) {
+function getStepContent(stepIndex, handleNext, handleBack, hasEntities) {
   if (hasEntities) {
     switch (stepIndex) {
       case 0:
-        return <><AccountSettings handleNext={handleNext}/></>;
+        return <><AccountSettings handleNext={handleNext} handleBack={handleBack}/></>;
       case 1:
-        return <><OrganizationInformation handleNext={handleNext}/></>;
+        return <><OrganizationInformation handleNext={handleNext} handleBack={handleBack}/></>;
       case 2:
-        return <><Entities handleNext={handleNext}/></>;
+        return <><Entities handleNext={handleNext} handleBack={handleBack}/></>;
       case 3:
-        return <><Departments handleNext={handleNext}/></>
+        return <><Departments handleNext={handleNext} handleBack={handleBack}/></>
       default:
         return <></>;
     }
   } else {
     switch (stepIndex) {
       case 0:
-        return <><AccountSettings handleNext={handleNext}/></>;
+        return <><AccountSettings handleNext={handleNext} handleBack={handleBack}/></>;
       case 1:
-        return <><OrganizationInformation handleNext={handleNext}/></>;
+        return <><OrganizationInformation handleNext={handleNext} handleBack={handleBack}/></>;
       case 2:
-        return <><Entities handleNext={handleNext}/></>;
-      case 3:
-        return <><Departments handleNext={handleNext}/></>
+        return <><Departments handleNext={handleNext} handleBack={handleBack}/></>
       default:
         return <></>;
     }
@@ -159,8 +157,7 @@ function StepperMain() {
         ) : (
           <div>
             <div style={{ background: '#fff', height: '100%', overflowY: 'scroll'}}>
-            <Typography className={classes.instructions}>{getStepContent(activeStep, handleNext)}</Typography>
-
+              <Typography className={classes.instructions}>{getStepContent(activeStep, handleNext, handleBack, hasEntities)}</Typography>
             </div>
             {/* <div>
               <Button
