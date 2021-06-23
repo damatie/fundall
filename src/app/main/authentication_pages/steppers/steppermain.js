@@ -101,18 +101,15 @@ function getStepContent(stepIndex, handleNext, handleBack, hasEntities) {
 
 function StepperMain() {
   const classes = useStyles();
-  const [hasEntities, setHasEntities] = React.useState(true);
+  const dataResponse = localStorage.getItem('login_data');
+	const data = JSON.parse(dataResponse);
   const [activeStep, setActiveStep] = React.useState(0);
-  const steps = getSteps(true);
-  const steps2 = getSteps(false);
-
+  const steps = data?.company?.hasEntities === true ?  getSteps(true) : getSteps(false);
+  
   React.useEffect(() => {
     const dataResponse = localStorage.getItem('login_data');
   	const data = JSON.parse(dataResponse);
 	  console.log('Stepper User Login Data: ', data);
-		if (data?.company?.hasEntities === false) {
-      setHasEntities(false);
-    }
     setActiveStep(data?.company?.regStep || 0)
 	}, []);
 
@@ -131,14 +128,7 @@ function StepperMain() {
   return (
     <div className={classes.root}>
       <Stepper activeStep={activeStep} alternativeLabel>
-        {hasEntities ? steps.map((label) => (
-          <Step key={label.id}>
-            <StepLabel>
-              <span><strong>{label.title}</strong></span>
-              <span><Typography variant="body2" color="initial" className='my-5'>{label.details}</Typography></span>
-            </StepLabel>
-          </Step>
-        )) : steps2.map((label) => (
+        {steps.map((label) => (
           <Step key={label.id}>
             <StepLabel>
               <span><strong>{label.title}</strong></span>
@@ -157,7 +147,7 @@ function StepperMain() {
         ) : (
           <div>
             <div style={{ background: '#fff', height: '100%', overflowY: 'scroll'}}>
-              <Typography className={classes.instructions}>{getStepContent(activeStep, handleNext, handleBack, hasEntities)}</Typography>
+              <Typography className={classes.instructions}>{getStepContent(activeStep, handleNext, handleBack, data?.company?.hasEntities)}</Typography>
             </div>
             {/* <div>
               <Button
