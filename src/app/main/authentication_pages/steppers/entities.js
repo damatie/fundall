@@ -35,6 +35,7 @@ import EmployeeGradeLevelModal from "./components/employeeGradeLevel";
 import *  as Actions from 'app/main/employeeManagement/store/actions';
 import withReducer from "app/store/withReducer";
 import employeesReducer from "app/main/employeeManagement/store/reducers/employees.reducer";
+import { setStepper } from './components/setStepper';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -148,6 +149,7 @@ function Entities({handleNext}) {
           text: message,
           icon: 'success'
         });
+        setStepper([], 3);
         handleNext();
       } catch (e) {
         swal.fire({

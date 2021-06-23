@@ -9,7 +9,6 @@ import AccountSettings from './accountsettings';
 import OrganizationInformation from './orginfo';
 import Entities from './entities';
 import Departments from './departments';
-import reducer from 'app/store/reducers';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -104,7 +103,6 @@ function getStepContent(stepIndex, handleNext, hasEntities) {
 
 function StepperMain() {
   const classes = useStyles();
-  const profileState = useSelector(({ profile }) => profile);
   const [hasEntities, setHasEntities] = React.useState(true);
   const [activeStep, setActiveStep] = React.useState(0);
   const steps = getSteps(true);
@@ -183,5 +181,4 @@ function StepperMain() {
   );
 }
 
-withReducer('profile', reducer)(StepperMain);
 export default StepperMain;

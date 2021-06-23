@@ -26,6 +26,7 @@ import timeZone from "app/shared/timezoneList";
 import currencyList from "app/shared/currencies";
 import dateFormatList from "app/shared/dateformat";
 import { FormHelperText } from "@material-ui/core";
+import { setStepper } from './components/setStepper';
 
 
 const useStyles = makeStyles(theme => ({
@@ -283,6 +284,7 @@ export default function AccountSettings({handleNext}) {
           text: message,
           icon: 'success'
         });
+        setStepper([], 1)
         handleNext();
       } catch (e) {
         swal.fire({
