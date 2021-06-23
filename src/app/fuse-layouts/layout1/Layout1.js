@@ -9,6 +9,7 @@ import clsx from 'clsx';
 import React, { useContext, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Redirect } from 'react-router';
+// import { Link, useHistory, Redirect } from 'react-router-dom';
 import { renderRoutes } from 'react-router-config';
 import FooterLayout1 from './components/FooterLayout1';
 import LeftSideLayout1 from './components/LeftSideLayout1';
@@ -96,7 +97,7 @@ const isUserLoggedin = (user) => {
 const changePasswordCondition = (profileStateData) => {
 	if (isUserLoggedin(profileStateData) && (profileStateData?.isActivated !== true)) {
 		// route to change password
-		return <Redirect to='/auth/changepassword' />
+		return <Redirect to='/auth/changepassword' />;
 	}
 }
 

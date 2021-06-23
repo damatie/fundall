@@ -1,4 +1,5 @@
 import React from 'react';
+import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
@@ -9,12 +10,16 @@ import AccountSettings from './accountsettings';
 import OrganizationInformation from './orginfo';
 import Entities from './entities';
 import Departments from './departments';
+// import { Link, useHistory, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router';
 
 
 const useStyles = makeStyles((theme) => ({
   root: {
     padding: '5rem',
     width: '100%',
+    height: '100%',
+    overflowY: 'scroll',
     background: '#fff',
   },
   backButton: {
@@ -106,6 +111,11 @@ function StepperMain() {
   const [activeStep, setActiveStep] = React.useState(0);
   const steps = data?.company?.hasEntities === true ?  getSteps(true) : getSteps(false);
   
+  const exitRegistration = () => {
+    window.location.assign('/employee/dashboard');
+    // return <Redirect to='/employee/dashboard' />; 
+  }
+
   React.useEffect(() => {
     const dataResponse = localStorage.getItem('login_data');
   	const data = JSON.parse(dataResponse);
@@ -143,7 +153,14 @@ function StepperMain() {
         //     <Typography className={classes.instructions}>All steps completed</Typography>
         //     <Button onClick={handleReset}>Reset</Button>
         //   </div>
-        <><Button onClick={handleReset}>Reset</Button></>
+        <>
+        <Grid container spacing={3} justify='space-between' align='center' style={{ marginBottom: '3rem', marginTop: '3rem'}}>
+          <Button onClick={handleReset}>Reset</Button>
+          <Button variant="contained" color="secondary" className='mx-5' style={{ marginLeft: '10px', marginRight: '10px' }} onClick={exitRegistration}>
+            EXIT REGISTRATION
+          </Button>
+        </Grid>
+      </>
         ) : (
           <div>
             <div style={{ background: '#fff', height: '100%', overflowY: 'scroll'}}>
