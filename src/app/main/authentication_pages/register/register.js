@@ -150,8 +150,6 @@ export default function Register() {
   const [checked, setChecked] = React.useState(true);
   // const [hasEntities, setHasEntities] = React.useState(undefined);
   const [hasEntity, setHasEntity] = React.useState(undefined);
-  const [hasEntityTrue, setHasEntityTrue] = React.useState(false);
-  const [hasEntityFalse, setHasEntityFalse] = React.useState(false);
   let hasEntities = undefined;
   // const [isTrue, setIsTrue] = React.useState(undefined);
   let isTrue = undefined;
@@ -195,8 +193,12 @@ export default function Register() {
   };
 
   const setToTrue = () => {
-    hasEntities = hasEntities === undefined || hasEntities === false ? true : undefined;
-    setHasEntityTrue(hasEntityTrue === true ? false : true);
+    if (hasEntities === true) {
+      hasEntities = undefined;
+    } else {
+      hasEntities = true;
+    }
+    setHasEntity(hasEntities);
     console.log('set to True is Clicked: hasEntities=', hasEntities);
     register({ name: 'hasEntities', type: 'boolean' }, { required: true });
     setValue("hasEntities", hasEntities);
@@ -204,8 +206,12 @@ export default function Register() {
   };
 
   const setToFalse = () => {
-    hasEntities = hasEntities === undefined || hasEntities === true ? false : undefined;
-    setHasEntityFalse(hasEntityFalse === true ? false : true);
+    if (hasEntities === false) {
+      hasEntities = undefined;
+    } else {
+      hasEntities = false;
+    }
+    setHasEntity(hasEntities);
     console.log('set to False is Clicked: hasEntities=', hasEntities);
     register({ name: 'hasEntities', type: 'boolean' }, { required: true });
     setValue("hasEntities", hasEntities);
@@ -439,16 +445,16 @@ export default function Register() {
                 >
                   <span justify='space-between' align='center' direction='row' className='flex-row'>
                     <span variant="body2" color="initial" className='mx-20'><strong>My Company has Entities</strong></span>
-                    {hasEntityTrue === false && <Button variant="contained" onClick={setToTrue()} className='mx-20'>
+                    {(hasEntity === undefined || hasEntity === false) && <Button variant="contained" onClick={setToTrue} className='mx-20'>
                       YES 
                     </Button>}
-                    {hasEntityTrue === true && <Button variant="contained" onClick={setToTrue()} color="secondary" className='mx-20'>
+                    {hasEntity === true && <Button variant="contained" onClick={setToTrue} color="secondary" className='mx-20'>
                       YES 
                     </Button>} 
-                    {hasEntityFalse === false && <Button variant="contained" onClick={setToFalse()} className='mx-20'>
+                    {(hasEntity === undefined || hasEntity === true) && <Button variant="contained" onClick={setToFalse} className='mx-20'>
                       NO 
                     </Button>}
-                    {hasEntityFalse === true && <Button variant="contained" onClick={setToFalse()} color="secondary" className='mx-20'>
+                    {hasEntity === false && <Button variant="contained" onClick={setToFalse} color="secondary" className='mx-20'>
                       NO 
                     </Button>}  
                   </span>
