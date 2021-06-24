@@ -74,8 +74,8 @@ const schema = yup.object().shape({
     confirmPassword: yup.string().oneOf([yup.ref('password'), null], 'Passwords must match').required(errorMsg({ name: 'Confirm Password', type: 'required' })),
     companyName: yup.string(errorMsg({ name: 'Company name', type: 'string' }))
         .required(errorMsg({ name: 'Company name', type: 'required' })),
-    hasEntities: yup.bool(errorMsg({ name: 'Company Has Entities', type: 'boolean' }))
-        .required(errorMsg({ name: 'Has Entities', type: 'required' })),
+    hasEntities: yup.bool(errorMsg({ name: 'Company Has Entities?', type: 'boolean' }))
+        .required(errorMsg({ name: 'Company Has Entities?', type: 'required' })),
     contactEmail: yup.string()
         .required(errorMsg({ name: 'Company Contact Email', type: 'required' }))
         .matches(/^[A-Za-z\d@$!%*#?&]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]{2,})*$/, "Enter a valid Email Address")
@@ -148,9 +148,15 @@ export default function Register() {
 
   const dispatch = useDispatch();
   const [checked, setChecked] = React.useState(true);
-  const [hasEntities, setHasEntities] = React.useState(undefined);
-  const [isTrue, setIsTrue] = React.useState(undefined);
-  const [isFalse, setIsFalse] = React.useState(undefined);
+  // const [hasEntities, setHasEntities] = React.useState(undefined);
+  const [hasEntity, setHasEntity] = React.useState(undefined);
+  const [hasEntityTrue, setHasEntityTrue] = React.useState(false);
+  const [hasEntityFalse, setHasEntityFalse] = React.useState(false);
+  let hasEntities = undefined;
+  // const [isTrue, setIsTrue] = React.useState(undefined);
+  let isTrue = undefined;
+  // const [isFalse, setIsFalse] = React.useState(undefined);
+  let isFalse = undefined;
   const [hasEntitiesErr, setHasEntitiesErr] = React.useState("");
   const [contactNumber, setContactNumber] = React.useState(234);
   const [phoneNumber, setPhoneNumber] = React.useState(234);
@@ -162,6 +168,10 @@ export default function Register() {
   React.useEffect(() => {
     setHasEntitiesErr(errors.hasEntities?.message);
   }, [errors]);
+  
+  // React.useEffect(() => {
+  //   console.log('something has changed')
+  // }, [isTrue, isFalse]);
 
   const handleChange = (event) => {
     setChecked(event.target.checked);
@@ -185,18 +195,18 @@ export default function Register() {
   };
 
   const setToTrue = () => {
-    setIsTrue(isTrue === true ? undefined : true);
-    setHasEntities(isTrue);
-    isTrue === true ? setIsFalse(undefined) : '';
+    hasEntities = hasEntities === undefined || hasEntities === false ? true : undefined;
+    setHasEntityTrue(hasEntityTrue === true ? false : true);
+    console.log('set to True is Clicked: hasEntities=', hasEntities);
     register({ name: 'hasEntities', type: 'boolean' }, { required: true });
     setValue("hasEntities", hasEntities);
     setHasEntitiesErr(errors.hasEntities?.message);
   };
 
   const setToFalse = () => {
-    setIsFalse(isFalse === false ? undefined : false);
-    setHasEntities(isFalse);
-    isFalse === false ? setIsTrue(undefined) : '';
+    hasEntities = hasEntities === undefined || hasEntities === true ? false : undefined;
+    setHasEntityFalse(hasEntityFalse === true ? false : true);
+    console.log('set to False is Clicked: hasEntities=', hasEntities);
     register({ name: 'hasEntities', type: 'boolean' }, { required: true });
     setValue("hasEntities", hasEntities);
     setHasEntitiesErr(errors.hasEntities?.message);
@@ -206,10 +216,8 @@ export default function Register() {
       try {
         const form = { ...data, contactNumber, phoneNumber, industry, minNoOfEmployees, maxNoOfEmployees }
         console.log('Create Account form: ', form);
-        // form.hasEntities = true;
         loading('Creating Account...');
         const { data: { message  } } = await api.post('/companies', form);
-        // console.log('data: ', data)
         swal.fire({
           text: message,
           icon: 'success'
@@ -431,16 +439,18 @@ export default function Register() {
                 >
                   <span justify='space-between' align='center' direction='row' className='flex-row'>
                     <span variant="body2" color="initial" className='mx-20'><strong>My Company has Entities</strong></span>
-                    {isTrue === undefined ? <Button variant="contained" onClick={setToTrue} className='mx-20'>
-                      YES 
-                    </Button> : <Button variant="contained" onClick={setToTrue} color="secondary" className='mx-20'>
+                    {hasEntityTrue === false && <Button variant="contained" onClick={setToTrue()} className='mx-20'>
                       YES 
                     </Button>}
-                    {isFalse === undefined ? <Button variant="contained" onClick={setToFalse} className='mx-20'>
-                      NO 
-                    </Button> : <Button variant="contained" onClick={setToFalse} color="secondary" className='mx-20'>
-                      NO 
+                    {hasEntityTrue === true && <Button variant="contained" onClick={setToTrue()} color="secondary" className='mx-20'>
+                      YES 
                     </Button>} 
+                    {hasEntityFalse === false && <Button variant="contained" onClick={setToFalse()} className='mx-20'>
+                      NO 
+                    </Button>}
+                    {hasEntityFalse === true && <Button variant="contained" onClick={setToFalse()} color="secondary" className='mx-20'>
+                      NO 
+                    </Button>}  
                   </span>
                 </Box>
                 <FormHelperText style={{ color: 'red', textAlign: 'center'}}>{hasEntitiesErr}</FormHelperText>
