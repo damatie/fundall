@@ -19,9 +19,10 @@ import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
+import FormHelperText from "@material-ui/core/FormHelperText";
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
-
+import Box from '@material-ui/core/Box';
 
 // const schema = yup.object().shape({
 //   firstName: yup.string().required(),
@@ -73,6 +74,8 @@ const schema = yup.object().shape({
     confirmPassword: yup.string().oneOf([yup.ref('password'), null], 'Passwords must match').required(errorMsg({ name: 'Confirm Password', type: 'required' })),
     companyName: yup.string(errorMsg({ name: 'Company name', type: 'string' }))
         .required(errorMsg({ name: 'Company name', type: 'required' })),
+    hasEntities: yup.bool(errorMsg({ name: 'Has Entities', type: 'boolean' }))
+        .required(errorMsg({ name: 'Has Entities', type: 'required' })),
     contactEmail: yup.string()
         .required(errorMsg({ name: 'Company Contact Email', type: 'required' }))
         .matches(/^[A-Za-z\d@$!%*#?&]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]{2,})*$/, "Enter a valid Email Address")
@@ -136,19 +139,29 @@ const organisationList = [
 ];
 
 export default function Register() {
-  const { register, handleSubmit, formState:{ errors } } = useForm({
-    mode: "onBlur",
+  const { register, handleSubmit, formState:{ errors }, setValue } = useForm({
+    // mode: "onBlur",
+    mode: "all",
+    reValidateMode: 'onChange',
     resolver: yupResolver(schema)
   });
 
   const dispatch = useDispatch();
   const [checked, setChecked] = React.useState(true);
+  const [hasEntities, setHasEntities] = React.useState(null);
+  const [isTrue, setIsTrue] = React.useState(null);
+  const [isFalse, setIsFalse] = React.useState(null);
+  const [hasEntitiesErr, setHasEntitiesErr] = React.useState("");
   const [contactNumber, setContactNumber] = React.useState(234);
   const [phoneNumber, setPhoneNumber] = React.useState(234);
   const [industry, setIndustry] = React.useState('Banking and Finance');
   const [minNoOfEmployees, setMinNoOfEmployees] = React.useState(1);
   const [maxNoOfEmployees, setMaxNoOfEmployees] = React.useState(50);
   const classes = useStyles();
+
+  React.useEffect(() => {
+    setHasEntitiesErr(errors.hasEntities?.message);
+  }, [errors]);
 
   const handleChange = (event) => {
     setChecked(event.target.checked);
@@ -171,11 +184,29 @@ export default function Register() {
     setMaxNoOfEmployees(event.target.value.max);
   };
 
+  const setToTrue = () => {
+    setIsTrue(isTrue === true ? null : true);
+    setHasEntities(isTrue);
+    isTrue === true ? setIsFalse(null) : '';
+    register({ name: 'hasEntities', type: 'boolean' }, { required: true });
+    setValue("hasEntities", hasEntities);
+    setHasEntitiesErr(errors.hasEntities?.message);
+  };
+
+  const setToFalse = () => {
+    setIsFalse(isFalse === false ? null : false);
+    setHasEntities(isFalse);
+    isFalse === false ? setIsTrue(null) : '';
+    register({ name: 'hasEntities', type: 'boolean' }, { required: true });
+    setValue("hasEntities", hasEntities);
+    setHasEntitiesErr(errors.hasEntities?.message);
+  };
+
   const onSubmit = async (data) => {
       try {
         const form = { ...data, contactNumber, phoneNumber, industry, minNoOfEmployees, maxNoOfEmployees }
-        // console.log('form: ', form);
-        form.hasEntities = true;
+        console.log('Create Account form: ', form);
+        // form.hasEntities = true;
         loading('Creating Account...');
         const { data: { message  } } = await api.post('/companies', form);
         // console.log('data: ', data)
@@ -319,28 +350,28 @@ export default function Register() {
                   />
               </Grid>
               <Grid item lg={4} md={6} sm={12} xs={12}>
-              <FormControl variant="outlined" style={{ width: '100%' }} className={classes.formControl}>
-                <InputLabel id="demo-simple-select-outlined-label">Industry</InputLabel>
-                <Select
-                  required
-                  justify='left'
-                  align='left'
-                  labelId="demo-simple-select-outlined-label"
-                  id="demo-simple-select-outlined"
-                  defaultValue={industry}
-                  message={errors.industry?.message}
-                  helperText={errors.industry?.message}
-                  // refs={register}
-                  onChange={handleIndustryChange}
-                  label="Industry"
-                >
-                  {organisationList.map(item => (
-                  <MenuItem key={item.number} value={item.name}>
-                    {item.name}
-                  </MenuItem>
-                ))}
-                </Select>
-              </FormControl>
+                <FormControl variant="outlined" style={{ width: '100%' }} className={classes.formControl}>
+                  <InputLabel id="demo-simple-select-outlined-label">Industry</InputLabel>
+                  <Select
+                    required
+                    justify='left'
+                    align='left'
+                    labelId="demo-simple-select-outlined-label"
+                    id="demo-simple-select-outlined"
+                    defaultValue={industry}
+                    message={errors.industry?.message}
+                    helperText={errors.industry?.message}
+                    // refs={register}
+                    onChange={handleIndustryChange}
+                    label="Industry"
+                  >
+                    {organisationList.map(item => (
+                    <MenuItem key={item.number} value={item.name}>
+                      {item.name}
+                    </MenuItem>
+                  ))}
+                  </Select>
+                </FormControl>
               </Grid>
               <Grid item lg={4} md={6} sm={12} xs={12}>
               <FormControl variant="outlined" style={{ width: '100%' }} className={classes.formControl}>
@@ -392,12 +423,34 @@ export default function Register() {
               </Grid>
               <Grid item lg={4} md={6} sm={12} xs={12}>
               </Grid>
+              <Grid item lg={12} md={12} sm={12} xs={12} justify='space-between' align='center' direction='row' className="my-20" style={{ backgroundColor: "#fff" }}>
+                <Box
+                  boxShadow={3}
+                  bgcolor="background.paper"
+                  p={2}
+                >
+                  <span justify='space-between' align='center' direction='row' className='flex-row'>
+                    <span variant="body2" color="initial" className='mx-20'><strong>My Company has Entities</strong></span>
+                    {isTrue === null ? <Button variant="contained" onClick={setToTrue} className='mx-20'>
+                      YES 
+                    </Button> : <Button variant="contained" onClick={setToTrue} color="secondary" className='mx-20'>
+                      YES 
+                    </Button>}
+                    {isFalse === null ? <Button variant="contained" onClick={setToFalse} className='mx-20'>
+                      NO 
+                    </Button> : <Button variant="contained" onClick={setToFalse} color="secondary" className='mx-20'>
+                      NO 
+                    </Button>} 
+                  </span>
+                </Box>
+                <FormHelperText style={{ color: 'red', textAlign: 'center'}}>{hasEntitiesErr}</FormHelperText>
+              </Grid>
           </Grid>
           <Grid container spacing={3} justify='center' align='center'>
                 <Button variant="contained" type='submit' color="primary">
                     Submit 
                 </Button>
-            </Grid>
+          </Grid>
       </form>
     </Card>
   );

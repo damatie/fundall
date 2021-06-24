@@ -29,6 +29,7 @@ import currencyList from "app/shared/currencies";
 import dateFormatList from "app/shared/dateformat";
 import { FormHelperText } from "@material-ui/core";
 import Modal from './modal';
+import *  as Actions from 'app/main/employeeManagement/store/actions';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -47,16 +48,16 @@ const useStyles = makeStyles(theme => ({
 const schema = yup.object().shape({
     entityId: yup.number(errorMsg({ name: 'Entity', type: 'string' }))
         .required(errorMsg({ name: 'Entity', type: 'required' })),
-    employeeGrade: yup.string(errorMsg({ name: 'Employee Grade', type: 'string' }))
+    gradeName: yup.string(errorMsg({ name: 'Employee Grade', type: 'string' }))
         .min(2, errorMsg({ name: 'Employee Grade', type: 'min', number: 3 }))
         .max(60, errorMsg({ name: 'Employee Grade', type: 'max', number: 60 }))
         .required(errorMsg({ name: 'Employee Grade', type: 'required' })),
-    description: yup.string(errorMsg({ name: 'Description', type: 'string' }))
+    gradeDescription: yup.string(errorMsg({ name: 'Description', type: 'string' }))
         // .min(3, errorMsg({ name: 'Description', type: 'min', number: 3 }))
         .max(1000, errorMsg({ name: 'Description', type: 'max', number: 1000 })),
 });
 
-export default function EmployeeGradeModal ({open, setOpen, edit, entities, employeeGrades, data}) {
+export default function EmployeeGradeModal ({open, employeeGrades, entities, setOpen, data, edit}) {
     
     const { register, handleSubmit, formState:{ errors }, setValue, getValues } = useForm({
         mode: "all",
@@ -65,39 +66,52 @@ export default function EmployeeGradeModal ({open, setOpen, edit, entities, empl
     });
 
     const dispatch = useDispatch();
-    const [entityId, setEntityId] = React.useState(null);
+    const [newAdded, setNewAdded] = React.useState(false);
+    const [updated, setUpdated] = React.useState(false);
+    const [entityId, setEntityId] = React.useState(0);
     const [entityErr, setEntityErr] = React.useState("");
-    const [employeeGrade, setEmployeeGrade] = React.useState(null);
+    const [entityName, setEntityName] = React.useState("");
+    const [employeeGrade, setEmployeeGrade] = React.useState("");
+    const [pipEligibility, setPipEligibility] = React.useState(true);
     const [employeeGradeErr, setEmployeeGradeErr] = React.useState("");
     const classes = useStyles();
 
     React.useEffect(() => {
         setEntityErr(errors.entityId?.message);
-        setEmployeeGradeErr(errors.employeeGrade?.message);
+        setEmployeeGradeErr(errors.gradeName?.message);
       }, [errors]);
+
+      const handlePipEligibilityChange = (event) => {
+        setPipEligibility(event.target.checked);
+      };
+
+      React.useEffect(() => {
+        dispatch(Actions.getGrades());
+      }, [newAdded, updated]);
 
       const handleEntityChange = async (event) => {
         setEntityId(event.target.value.id);
         register({ name: 'entityId', type: 'custom' }, { required: true });
         setValue("entityId", event.target.value.id);
+        setEntityName(event.target.value.entityName);
         setEntityErr(errors.entityId?.message);
       };
 
       const handleEmployeeGradeChange = async (event) => {
         setEmployeeGrade(event.target.value);
-        register({ name: 'employeeGrade', type: 'custom' }, { required: true });
-        setValue("employeeGrade", event.target.value);
-        setEntityErr(errors.employeeGrade?.message);
+        register({ name: 'gradeName', type: 'custom' }, { required: true });
+        setValue("gradeName", event.target.value);
+        setEntityErr(errors.gradeName?.message);
       };
 
 
     const onSubmit = async (value) => {
-        const form = { ...value};
-        console.log('form: ', form);
+        const form = { ...value, entityName, pipEligibility };
+        console.log('Employee Grade form: ', form);
         if (edit) {
             try {
                 loading('Updating Employee Grade...');
-                const { data: { message, success  } } = await api.patch(`/entity/${data.id}`, form);
+                const { data: { message, success  } } = await api.patch(`employee-grade/`, form);
                 if (success) {
                     swal.fire({
                         text: message,
@@ -120,7 +134,7 @@ export default function EmployeeGradeModal ({open, setOpen, edit, entities, empl
         } else {
             try {
                 loading('Adding Employee Grade...');
-                const { data: { message, success  } } = await api.post('/entity', form);
+                const { data: { message, success  } } = await api.post('/employee-grade', form);
                 if (success) {
                     swal.fire({
                         text: message,
@@ -182,9 +196,9 @@ export default function EmployeeGradeModal ({open, setOpen, edit, entities, empl
                     align='left'
                     labelId="demo-simple-select-outlined-label"
                     id="demo-simple-select-outlined"
-                    name='employeeGrade'
-                    error={errors.employeeGrade}
-                    message={errors.employeeGrade?.message}
+                    name='gradeName'
+                    error={errors.gradeName}
+                    message={errors.gradeName?.message}
                     onChange={handleEmployeeGradeChange}
                     label="Employee Grade"
                     >
@@ -199,15 +213,24 @@ export default function EmployeeGradeModal ({open, setOpen, edit, entities, empl
             <Grid item lg={12} md={12} sm={12} xs={12}>
                 <Input
                     label='Description'
-                    name='description'
+                    name='gradeDescription'
                     type='text'
                     multiline
                     rows="4"
-                    error={errors.description}
-                    message={errors.description?.message}
-                    helperText={errors.description?.message}
+                    error={errors.gradeDescription}
+                    message={errors.gradeDescription?.message}
+                    helperText={errors.gradeDescription?.message}
                     refs={register}
                 />
+            </Grid>
+            <Grid item lg={12} md={12} sm={12} xs={12} align='left' style={{ marginBottom: '-15px', marginTop: '-15px'  }}>
+              <FormControlLabel control={<Checkbox
+                checked={pipEligibility}
+                onChange={handlePipEligibilityChange}
+                name="pipEligibility"
+                color="primary"
+              />}
+              label="PIP Eligibile" />
             </Grid>
         </Grid>
         <Grid container spacing={3} justify='center' align='center' className='my-10'>

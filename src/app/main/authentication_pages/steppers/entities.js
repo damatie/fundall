@@ -30,6 +30,7 @@ import { FormHelperText } from "@material-ui/core";
 import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined';
 import EntityModal from "./components/entityModal";
 import EntityCard from "./components/entityCard";
+import EmployeeGradeCard from "./components/employeeGradeCard";
 import EmployeeGradeModal from "./components/employeeGrade";
 import EmployeeGradeLevelModal from "./components/employeeGradeLevel";
 import *  as Actions from 'app/main/employeeManagement/store/actions';
@@ -97,9 +98,14 @@ function Entities({handleNext}) {
   });
 
   const { entities, grades, accountSettings } = useSelector(state => state.employeeMgt);
-  console.log('entities: ', entities)
+  console.log('entities: ', entities);
+  console.log('grades: ', grades);
 
   const dispatch = useDispatch();
+// setEntityList setGradeList setAccountSettingsData
+  const [entityList, setEntityList] = React.useState([]);
+  const [gradeList, setGradeList] = React.useState([]);
+  const [accountSettingsData, setAccountSettingsData] = React.useState({});
   const [openEntityModal, setOpenEntityModal] = React.useState(false);
   const [openEmployeeGradeModal, setOpenEmployeeGradeModal] = React.useState(false);
   const [openEmployeeGradeLevelModal, setOpenEmployeeGradeLevelModal] = React.useState(false);
@@ -110,7 +116,16 @@ function Entities({handleNext}) {
 
   React.useEffect(() => {
     dispatch(Actions.getEntities());
+    dispatch(Actions.getAccountSettings());
+    dispatch(Actions.getGrades());
+    console.log('accountSettings: ', accountSettings);
   }, []);
+
+  React.useEffect(() => {
+    setEntityList(entities);
+    setGradeList(grades);
+    setAccountSettingsData(accountSettings);
+  }, [grades, entities, accountSettings])
 
   React.useEffect(() => {
     console.log('data: ', {...getValues()});
@@ -199,7 +214,7 @@ function Entities({handleNext}) {
             </Grid>
             
             <Grid item lg={12} md={12} sm={12} xs={12} align='left' className='my-10'>
-               {entities.map(item => (
+               {entityList.map(item => (
                  <EntityCard name={item.entityName} description={item.description} entities={entities} data={item}/>))}
             </Grid>
 
@@ -212,8 +227,8 @@ function Entities({handleNext}) {
             </Grid>
             
             <Grid item lg={12} md={12} sm={12} xs={12} align='left' className='my-10'>
-               {grades.map(item => (
-                 <EmployeeGradeCard name={item?.name} description={item?.description} grades={grades} data={item}/>))}
+               {gradeList.map(item => (
+                 <EmployeeGradeCard name={item?.gradeName} entityName={item?.entityName} entities={entityList} description={item?.gradeDescription} employeeGrades={grades} data={item}/>))}
             </Grid>
 
             <Grid item lg={12} md={12} sm={12} xs={12} align='left' className='my-10'>
@@ -233,7 +248,7 @@ function Entities({handleNext}) {
           </Grid>
       </form>
       <EntityModal open={openEntityModal} setOpen={setOpenEntityModal} edit={false} data={{}}/>
-      <EmployeeGradeModal open={openEmployeeGradeModal} employeeGrades={accountSettings?.employeeGrade || []} entities={entities} setOpen={setOpenEmployeeGradeModal} data={{}}/>
+      <EmployeeGradeModal open={openEmployeeGradeModal} employeeGrades={accountSettingsData?.employeeGrade || []} entities={entityList} setOpen={setOpenEmployeeGradeModal} data={{}} edit={false}/>
       <EmployeeGradeLevelModal open={openEmployeeGradeLevelModal} setOpen={setOpenEmployeeGradeLevelModal} data={{}}/>
     </div>
   );
