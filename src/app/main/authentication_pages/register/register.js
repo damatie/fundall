@@ -193,11 +193,17 @@ export default function Register() {
   };
 
   const setToTrue = () => {
-    if (hasEntities === true) {
-      hasEntities = undefined;
-    } else {
-      hasEntities = true;
+    let hasEntT = hasEntities 
+    if (hasEntities === false) {
+      hasEntT = true;
     }
+    if (hasEntities === undefined) {
+      hasEntT = true;
+    }
+    if (hasEntities === true) {
+      hasEntT = undefined;
+    }
+    hasEntities = hasEntT;
     setHasEntity(hasEntities);
     console.log('set to True is Clicked: hasEntities=', hasEntities);
     register({ name: 'hasEntities', type: 'boolean' }, { required: true });
@@ -206,11 +212,17 @@ export default function Register() {
   };
 
   const setToFalse = () => {
+    let hasEnt = hasEntities 
     if (hasEntities === false) {
-      hasEntities = undefined;
-    } else {
-      hasEntities = false;
+      hasEnt = undefined;
     }
+    if (hasEntities === undefined) {
+      hasEnt = false;
+    }
+    if (hasEntities === true) {
+      hasEnt = false;
+    }
+    hasEntities = hasEnt;
     setHasEntity(hasEntities);
     console.log('set to False is Clicked: hasEntities=', hasEntities);
     register({ name: 'hasEntities', type: 'boolean' }, { required: true });
