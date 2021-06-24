@@ -74,7 +74,7 @@ const schema = yup.object().shape({
     confirmPassword: yup.string().oneOf([yup.ref('password'), null], 'Passwords must match').required(errorMsg({ name: 'Confirm Password', type: 'required' })),
     companyName: yup.string(errorMsg({ name: 'Company name', type: 'string' }))
         .required(errorMsg({ name: 'Company name', type: 'required' })),
-    hasEntities: yup.bool(errorMsg({ name: 'Has Entities', type: 'boolean' }))
+    hasEntities: yup.bool(errorMsg({ name: 'Company Has Entities', type: 'boolean' }))
         .required(errorMsg({ name: 'Has Entities', type: 'required' })),
     contactEmail: yup.string()
         .required(errorMsg({ name: 'Company Contact Email', type: 'required' }))
@@ -140,17 +140,17 @@ const organisationList = [
 
 export default function Register() {
   const { register, handleSubmit, formState:{ errors }, setValue } = useForm({
-    // mode: "onBlur",
-    mode: "all",
+    mode: "onBlur",
+    // mode: "all",
     reValidateMode: 'onChange',
     resolver: yupResolver(schema)
   });
 
   const dispatch = useDispatch();
   const [checked, setChecked] = React.useState(true);
-  const [hasEntities, setHasEntities] = React.useState(null);
-  const [isTrue, setIsTrue] = React.useState(null);
-  const [isFalse, setIsFalse] = React.useState(null);
+  const [hasEntities, setHasEntities] = React.useState(undefined);
+  const [isTrue, setIsTrue] = React.useState(undefined);
+  const [isFalse, setIsFalse] = React.useState(undefined);
   const [hasEntitiesErr, setHasEntitiesErr] = React.useState("");
   const [contactNumber, setContactNumber] = React.useState(234);
   const [phoneNumber, setPhoneNumber] = React.useState(234);
@@ -185,18 +185,18 @@ export default function Register() {
   };
 
   const setToTrue = () => {
-    setIsTrue(isTrue === true ? null : true);
+    setIsTrue(isTrue === true ? undefined : true);
     setHasEntities(isTrue);
-    isTrue === true ? setIsFalse(null) : '';
+    isTrue === true ? setIsFalse(undefined) : '';
     register({ name: 'hasEntities', type: 'boolean' }, { required: true });
     setValue("hasEntities", hasEntities);
     setHasEntitiesErr(errors.hasEntities?.message);
   };
 
   const setToFalse = () => {
-    setIsFalse(isFalse === false ? null : false);
+    setIsFalse(isFalse === false ? undefined : false);
     setHasEntities(isFalse);
-    isFalse === false ? setIsTrue(null) : '';
+    isFalse === false ? setIsTrue(undefined) : '';
     register({ name: 'hasEntities', type: 'boolean' }, { required: true });
     setValue("hasEntities", hasEntities);
     setHasEntitiesErr(errors.hasEntities?.message);
@@ -431,12 +431,12 @@ export default function Register() {
                 >
                   <span justify='space-between' align='center' direction='row' className='flex-row'>
                     <span variant="body2" color="initial" className='mx-20'><strong>My Company has Entities</strong></span>
-                    {isTrue === null ? <Button variant="contained" onClick={setToTrue} className='mx-20'>
+                    {isTrue === undefined ? <Button variant="contained" onClick={setToTrue} className='mx-20'>
                       YES 
                     </Button> : <Button variant="contained" onClick={setToTrue} color="secondary" className='mx-20'>
                       YES 
                     </Button>}
-                    {isFalse === null ? <Button variant="contained" onClick={setToFalse} className='mx-20'>
+                    {isFalse === undefined ? <Button variant="contained" onClick={setToFalse} className='mx-20'>
                       NO 
                     </Button> : <Button variant="contained" onClick={setToFalse} color="secondary" className='mx-20'>
                       NO 
