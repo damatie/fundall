@@ -118,6 +118,7 @@ function Entities({handleNext}) {
     dispatch(Actions.getEntities());
     dispatch(Actions.getAccountSettings());
     dispatch(Actions.getGrades());
+    dispatch(Actions.getGradeLevels());
     console.log('accountSettings: ', accountSettings);
   }, []);
 
@@ -249,7 +250,7 @@ function Entities({handleNext}) {
       </form>
       <EntityModal open={openEntityModal} setOpen={setOpenEntityModal} edit={false} data={{}}/>
       <EmployeeGradeModal open={openEmployeeGradeModal} employeeGrades={accountSettingsData?.employeeGrade || []} entities={entityList} setOpen={setOpenEmployeeGradeModal} data={{}} edit={false}/>
-      <EmployeeGradeLevelModal open={openEmployeeGradeLevelModal} setOpen={setOpenEmployeeGradeLevelModal} data={{}}/>
+      <EmployeeGradeLevelModal open={openEmployeeGradeLevelModal}  compensationList={accountSettingsData?.compensationData || []}  employeeGrades={accountSettingsData?.employeeGrade || []} entities={entityList} setOpen={setOpenEmployeeGradeLevelModal} data={{}} edit={false}/>
     </div>
   );
 }
