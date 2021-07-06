@@ -28,6 +28,7 @@ import currencyList from "app/shared/currencies";
 import dateFormatList from "app/shared/dateformat";
 import { FormHelperText } from "@material-ui/core";
 import { setStepper } from './components/setStepper';
+import SharedDropzone from './../../../shared/sharedDropZone';
 
 
 const useStyles = makeStyles(theme => ({
@@ -106,6 +107,7 @@ export default function OrganizationInformation({handleNext}) {
   const [countryErr, setCountryErr] = React.useState("");
   const [stateErr, setStateErr] = React.useState("");
   const [cityErr, setCityErr] = React.useState("");
+  const [companyLogo, setCompanyLogo] = React.useState({});
   const classes = useStyles();
 
 
@@ -445,6 +447,12 @@ export default function OrganizationInformation({handleNext}) {
               <FormHelperText style={{ color: 'red'}}>{branchAddressesErr}</FormHelperText>
             </Grid>
             <Grid item lg={4} md={6} sm={12} xs={12}>
+            </Grid>  
+            <Grid item lg={12} md={12} sm={12} xs={12} alignItems="center">
+              <div>
+                <span style={{ marginBottom: '0.5rem', display: 'inline-block' }} ><strong>Company Logo</strong></span>
+                <SharedDropzone placeholder={"Upload Company Logo"} setValue={setCompanyLogo} />
+              </div>
             </Grid>  
           </Grid>
           <Grid container spacing={3} justify='center' align='center' className='my-10'>

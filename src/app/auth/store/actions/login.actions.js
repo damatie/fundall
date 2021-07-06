@@ -24,7 +24,7 @@ export function submitLogin(data, x) {
 				localStorage.setItem('jwt_access_token', JSON.stringify(token));
 				localStorage.setItem('login_data', JSON.stringify(data));
 				let redirectUrl = '/employee/dashboard';
-				if (data?.role?.name === ("hr admin" || "HR Admin")) {
+				if (data?.role?.name.toLowerCase().trim() === "hr admin") {
 					if (data?.company?.hasEntities === true)  {
 						// route to complete registration
 						if (data?.company?.regStep < 4) {

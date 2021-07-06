@@ -105,7 +105,7 @@ const completeRegCondition = () => {
 	const dataResponse = localStorage.getItem('login_data');
 	const data = JSON.parse(dataResponse);
 	console.log('User Login Data: ', data);
-	if (data?.role?.name === "hr admin") {
+	if (data?.role?.name.toLowerCase().trim() === "hr admin") {
 		if (data?.company?.hasEntities === true)  {
 			// route to complete registration
 			if (data?.company?.regStep < 4) {
