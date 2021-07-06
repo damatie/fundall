@@ -17,7 +17,7 @@ import loading from 'utils/loading';
 import { makeStyles } from '@material-ui/core/styles';
 import catchErrorMsg from 'utils/catchErrorMsg';
 import Checkbox from '@material-ui/core/Checkbox';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
@@ -29,7 +29,9 @@ import dateFormatList from "app/shared/dateformat";
 import { FormHelperText } from "@material-ui/core";
 import { setStepper } from './components/setStepper';
 import SharedDropzone from './../../../shared/sharedDropZone';
-
+import *  as RegionActions from 'app/store/actions/regions.actions'
+import withReducer from "app/store/withReducer";
+import regionsReducer from "app/store/reducers";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -84,19 +86,22 @@ const schema = yup.object().shape({
 });
 
 
-export default function OrganizationInformation({handleNext}) {
+function OrganizationInformation({handleNext}) {
   const { register, handleSubmit, formState:{ errors }, setValue, getValues } = useForm({
     mode: "all",
     reValidateMode: 'onChange',
     resolver: yupResolver(schema)
   });
 
+  const { countries, states, cities } = useSelector(state => state.regions);
+
   const dispatch = useDispatch();
   const companyTypes = timeZone();
   const noOfBranchesList = dateFormatList();
-  const country = currencyList();
-  const stateList = currencyList();
-  const cityList = currencyList();
+  const [stateList, setStateList] = React.useState([]);
+  const [cityList, setCityList] = React.useState([]);
+  const [country, setCountry] = React.useState([]);
+  const [countryValue, setCountryValue] = React.useState([]);
   const [phoneNumber1, setPhoneNumber1] = React.useState(234);
   const [phoneNumber2, setPhoneNumber2] = React.useState(234);
   const [companyStartDate, setCompanyStartDate] = React.useState(new Date());
@@ -110,6 +115,27 @@ export default function OrganizationInformation({handleNext}) {
   const [companyLogo, setCompanyLogo] = React.useState({});
   const classes = useStyles();
 
+
+  React.useState(() => {
+    dispatch(RegionActions.getCountries());
+    console.log('countries: ', countries)
+  }, [])
+
+  React.useState(() => {
+    dispatch(RegionActions.getStates(countryValue));
+  }, [countryValue])
+
+  React.useState(() => {
+    setCountry(countries);
+  }, [countries])
+
+  React.useState(() => {
+    setStateList(states);
+  }, [states])
+
+  React.useState(() => {
+    setCityList(cities);
+  }, [cities])
 
   React.useEffect(() => {
     setCompanyTypeErr(errors.companyType?.message);
@@ -152,6 +178,7 @@ export default function OrganizationInformation({handleNext}) {
   const handleCountryChange = (event) => {
     register({ name: 'country', type: 'custom' }, { required: true });
     setValue("country", event.target.value);
+    setCountryValue(event.target.value);
     setCountryErr(errors.country?.message);
   };
 
@@ -325,8 +352,8 @@ export default function OrganizationInformation({handleNext}) {
                   label="Country"
                 >
                   {country.map(item => (
-                  <MenuItem key={item.id} value={item.cc}>
-                    {item.label}
+                  <MenuItem key={item.id} value={item.name}>
+                    {item.name}
                   </MenuItem>))}
                 </Select>
                 <FormHelperText style={{ color: 'red'}}>{countryErr}</FormHelperText>
@@ -347,8 +374,8 @@ export default function OrganizationInformation({handleNext}) {
                   label="State"
                 >
                   {stateList.map(item => (
-                  <MenuItem key={item.id} value={item.cc}>
-                    {item.label}
+                  <MenuItem key={item.id} value={item.name}>
+                    {item.name}
                   </MenuItem>))}
                 </Select>
                 <FormHelperText style={{ color: 'red'}}>{stateErr}</FormHelperText>
@@ -451,7 +478,7 @@ export default function OrganizationInformation({handleNext}) {
             <Grid item lg={12} md={12} sm={12} xs={12} alignItems="center">
               <div>
                 <span style={{ marginBottom: '0.5rem', display: 'inline-block' }} ><strong>Company Logo</strong></span>
-                <SharedDropzone placeholder={"Upload Company Logo"} setValue={setCompanyLogo} />
+                <SharedDropzone allowedTypes={'image/*'} placeholder={"Upload Company Logo"} setValue={setCompanyLogo} />
               </div>
             </Grid>  
           </Grid>
@@ -467,3 +494,6 @@ export default function OrganizationInformation({handleNext}) {
     </div>
   );
 }
+
+withReducer('regions', regionsReducer)(OrganizationInformation);
+export default OrganizationInformation;
