@@ -5,11 +5,8 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined';
 import EditIcon from '@material-ui/icons/Edit';
-import EntityModal from "./entityModal";
-import EmployeeGradeLevelModal from "./employeeGradeLevel";
+import DepartmentModal from "./departmentModal";
 import { makeStyles } from '@material-ui/core/styles';
-import Input from 'app/shared/TextInput/Input';
-
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -26,14 +23,14 @@ const useStyles = makeStyles(theme => ({
 }))
 
 
-export default function EmployeeGradeLevelCard({name, description, data}) {
+export default function DepartmentCard({name, description, data}) {
 
     const dispatch = useDispatch();
-    const [openEmployeeGradeLevelModal, setOpenEmployeeGradeLevelModal] = React.useState(false);
+    const [openDepartmentModal, setOpenDepartmentModal] = React.useState(false);
     const classes = useStyles();
     
-    const HandleAddEntity = () => {
-        setOpenEmployeeGradeLevelModal(true);
+    const HandleAddDepartment = () => {
+        setOpenDepartmentModal(true);
     }
 
     return (
@@ -50,12 +47,12 @@ export default function EmployeeGradeLevelCard({name, description, data}) {
                     </Grid>
                 </Grid>
                 <Grid item lg={3} md={3} sm={3} xs={3} align='left' className='my-10'>
-                    <Button onClick={HandleAddEntity} variant="contained" color="secondary">
+                    <Button onClick={HandleAddDepartment} variant="contained" color="secondary">
                     <span style={{ marginRight: '5px' }}><EditIcon/></span> Edit
                     </Button>
                 </Grid>
             </Grid>
-            <EmployeeGradeLevelModal open={openEmployeeGradeLevelModal} edit={true} setOpen={setOpenEmployeeGradeLevelModal} data={data}/>
+            <DepartmentModal open={openDepartmentModal} data={data} entities={entities} setOpen={setOpenDepartmentModal} edit={true}/>
         </div>
     )
 }

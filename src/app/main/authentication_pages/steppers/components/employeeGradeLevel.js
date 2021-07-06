@@ -29,13 +29,14 @@ import currencyList from "app/shared/currencies";
 import dateFormatList from "app/shared/dateformat";
 import { FormHelperText } from "@material-ui/core";
 import Modal from './modal';
+import CompensationItem from './compensationItem';
 import *  as Actions from 'app/main/employeeManagement/store/actions';
 
 const useStyles = makeStyles(theme => ({
     root: {
       width: '100%',
       height: '100%',
-      overflowY: 'scroll',
+    //   overflowY: 'scroll',
       flexDirection: 'column',
       margin: '0rem auto',
       padding: '5rem',
@@ -65,18 +66,20 @@ export default function EmployeeGradeLevelModal ({open, employeeGrades, entities
     });
 
     const dispatch = useDispatch();
+    const [compensationObj, setCompensationObj] = React.useState({});
     const [newAdded, setNewAdded] = React.useState(false);
     const [updated, setUpdated] = React.useState(false);
     const [gradeId, setGradeId] = React.useState(0);
     const [gradeErr, setGradeErr] = React.useState("");
     const [level, setLevel] = React.useState(0);
     const [employeeGrade, setEmployeeGrade] = React.useState("");
+    const [compensationData, setCompensationData] = React.useState(['Housing', 'Transportation', 'Basic Salary']);
     const [pipEligibility, setPipEligibility] = React.useState(true);
     const [employeeGradeErr, setEmployeeGradeErr] = React.useState("");
     const classes = useStyles();
 
     React.useEffect(() => {
-        setEntityErr(errors.entityId?.message);
+        setGradeErr(errors.gradeId?.message);
         setEmployeeGradeErr(errors.gradeName?.message);
       }, [errors]);
 
@@ -89,12 +92,12 @@ export default function EmployeeGradeLevelModal ({open, employeeGrades, entities
       };
 
 
-      const handleEntityChange = async (event) => {
-        setEntityId(event.target.value.id);
-        register({ name: 'entityId', type: 'custom' }, { required: true });
-        setValue("entityId", event.target.value.id);
+      const handleGradeChange = async (event) => {
+        setGradeId(event.target.value.id);
+        register({ name: 'gradeId', type: 'custom' }, { required: true });
+        setValue("gradeId", event.target.value.id);
         setEntityName(event.target.value.entityName);
-        setEntityErr(errors.entityId?.message);
+        setGradeErr(errors.gradeId?.message);
       };
 
       const handleEmployeeGradeChange = async (event) => {
@@ -168,26 +171,27 @@ export default function EmployeeGradeLevelModal ({open, employeeGrades, entities
         <Grid container spacing={3} justify='space-between' align='center' style={{ marginBottom: '2rem', marginTop: '2rem', overflowY: 'scroll'}}>
             <Grid item lg={12} md={12} sm={12} xs={12}>
                 <FormControl variant="outlined" style={{ width: '100%', margin: '8px 0px' }} className={classes.formControl}>
-                    <InputLabel id="demo-simple-select-outlined-label">Entity</InputLabel>
+                    <InputLabel id="demo-simple-select-outlined-label">Employee Grade</InputLabel>
                     <Select
                     justify='left'
                     align='left'
                     labelId="demo-simple-select-outlined-label"
                     id="demo-simple-select-outlined"
-                    name='entityId'
-                    error={errors.entityId}
-                    message={errors.entityId?.message}
-                    onChange={handleEntityChange}
-                    label="Entity"
+                    name='gradeId'
+                    error={errors.gradeId}
+                    message={errors.gradeId?.message}
+                    onChange={handleGradeChange}
+                    label="Employee Grade"
                     >
-                    {entities.map(item => (
+                    {employeeGrades.map(item => (
                     <MenuItem key={item.id} value={item}>
                         {item.entityName}
                     </MenuItem>))}
                     </Select>
-                    <FormHelperText style={{ color: 'red'}}>{entityErr}</FormHelperText>
+                    <FormHelperText style={{ color: 'red'}}>{gradeErr}</FormHelperText>
                 </FormControl>
             </Grid>
+
             <Grid item lg={12} md={12} sm={12} xs={12}>
                 <FormControl variant="outlined" style={{ width: '100%', margin: '8px 0px' }} className={classes.formControl}>
                     <InputLabel id="demo-simple-select-outlined-label">Employee Grade</InputLabel>
@@ -223,15 +227,36 @@ export default function EmployeeGradeLevelModal ({open, employeeGrades, entities
                     refs={register}
                 />
             </Grid>
-            <Grid item lg={12} md={12} sm={12} xs={12} align='left' style={{ marginBottom: '-15px', marginTop: '-15px'  }}>
-              <FormControlLabel control={<Checkbox
-                checked={pipEligibility}
-                onChange={handlePipEligibilityChange}
-                name="pipEligibility"
-                color="primary"
-              />}
-              label="PIP Eligibile" />
+
+            <Typography variant="body1" style={{ marginTop: '15px', marginLeft: '15px' }} color="initial"><strong>Compensations</strong></Typography>
+            <Grid item lg={12} md={12} sm={12} xs={12} align='left' style={{ borderRadius: '5px', border: 'solid 1px black', margin: '15px', height: '30vh', overflowY: "scroll"  }}>
+              {compensationData.map(item => (
+                 <CompensationItem name={item} compensationObj={compensationObj} />))}
             </Grid>
+
+            <Grid item lg={12} md={12} sm={12} xs={12}>
+                <FormControl variant="outlined" style={{ width: '100%', margin: '8px 0px' }} className={classes.formControl}>
+                    <InputLabel id="demo-simple-select-outlined-label">Employee Grade</InputLabel>
+                    <Select
+                    justify='left'
+                    align='left'
+                    labelId="demo-simple-select-outlined-label"
+                    id="demo-simple-select-outlined"
+                    name='gradeId'
+                    error={errors.gradeId}
+                    message={errors.gradeId?.message}
+                    onChange={handleGradeChange}
+                    label="Employee Grade"
+                    >
+                    {employeeGrades.map(item => (
+                    <MenuItem key={item.id} value={item}>
+                        {item.entityName}
+                    </MenuItem>))}
+                    </Select>
+                    <FormHelperText style={{ color: 'red'}}>{gradeErr}</FormHelperText>
+                </FormControl>
+            </Grid>
+
         </Grid>
         <Grid container spacing={3} justify='center' align='center' className='my-10'>
             <Button variant="contained" type='submit' color="primary" className='mx-20'>
