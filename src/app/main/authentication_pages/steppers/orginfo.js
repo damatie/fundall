@@ -106,7 +106,7 @@ function OrganizationInformation({handleNext}) {
 
   React.useState(() => {
     dispatch(RegionActions.getCountries());
-    console.log('countries: ', countries)
+    // console.log('countries: ', countries)
   }, [])
 
   React.useState(() => {
@@ -140,7 +140,7 @@ function OrganizationInformation({handleNext}) {
   }, [companyStartDate]);
 
   React.useEffect(() => {
-    console.log('data: ', {...getValues()});
+    // console.log('data: ', {...getValues()});
   }, [getValues])
 
   const handleCompanyTypeChange = (event) => {
@@ -187,7 +187,7 @@ function OrganizationInformation({handleNext}) {
     branchAddresses.push(chip)
     setValue("branchAddress", branchAddresses);
     setBranchAddressesErr(errors.branchAddress?.message);
-    console.log('data: ', JSON.stringify({...getValues()}));
+    // console.log('data: ', JSON.stringify({...getValues()}));
   };
 
   const handleDeleteBranchAddresses = (chip, index) => {
@@ -206,7 +206,7 @@ function OrganizationInformation({handleNext}) {
         for (i = 0; i < Object.keys(form).length; i++) {
           formData.append(`${Object.keys(form)[i]}`, form[Object.keys(form)[i]]);
         }
-        console.log('FormData: ', formData);
+        // console.log('FormData: ', formData);
         loading('processing...');
         const { data: { message  } } = await api.post('/organization_info', formData);
         swal.fire({
@@ -261,7 +261,7 @@ function OrganizationInformation({handleNext}) {
                   className="w-full"
                   value={companyStartDate}
                   onChange={(newValue) => {
-                    console.log('errors: ', errors);
+                    // console.log('errors: ', errors);
                     setCompanyStartDate(newValue);
                     register({ name: 'startDate', type: 'custom' }, { required: true });
                     setValue("startDate", JSON.stringify(newValue));

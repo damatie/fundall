@@ -399,7 +399,7 @@ function Recruitment(props) {
 							<EnhancedTable
 								columns={columns}
 								data={tableData}
-								selectAll={(value) => console.log(value)}
+								selectAll={(value) => // console.log(value)}
 							/>
 						</Paper>
 					</FuseAnimateGroup>

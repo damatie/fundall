@@ -212,7 +212,7 @@ function FinanceManagerDashboard(props) {
 							<EnhancedTable
 								columns={columns}
 								data={data}
-								selectAll={(value) => console.log(value)}
+								selectAll={(value) => // console.log(value)}
 							/>
 
 						</Paper>

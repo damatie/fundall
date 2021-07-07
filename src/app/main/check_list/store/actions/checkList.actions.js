@@ -25,7 +25,7 @@ export function getAllCheckLists() {
 		});
 		fetch(`${basUrl()}/checklist/`, { ...headers.getRegHeader() })
 			.then(res => res.json()).then(async data => {
-				// console.log(data);
+				// // console.log(data);
 				data.success ?
 					(data.checkLists || data.data) ?
 						dispatch({
@@ -53,7 +53,7 @@ export function getAllCheckLists() {
 }
 
 export function createCheckList(model) {
-	// console.log(model);
+	// // console.log(model);
 	swal.fire("Processing ...");
 	swal.showLoading();
 	return dispatch => {
@@ -127,7 +127,7 @@ export function updateCheckList(model, id) {
 				return fetch(`${basUrl()}/checklist/${id}`, { ...headers.reqHeader('PATCH', model) }
 				).then(res => res.json()).then(async data => {
 					// let data = response.data;
-					// console.log(data);
+					// // console.log(data);
 					if (data.success) {
 						swal.fire({
 							title: 'Update Check List',
@@ -172,7 +172,7 @@ export function updateCheckList(model, id) {
 }
 
 export function deleteCheckList(id) {
-	console.log(id);
+	// console.log(id);
 	swal.fire("Processing ...");
 	swal.showLoading();
 	return dispatch => {

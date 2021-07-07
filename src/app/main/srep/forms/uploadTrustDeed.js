@@ -45,7 +45,7 @@ function UploadTrustDeed(props){
     const downloadFile = (fieldName, fileUrl) => {
         let url = '';
         if(!fileUrl){
-            console.log(fileUrls);
+            // console.log(fileUrls);
             url = fileUrls.find(file => {return file.fieldName === fieldName});
             url = url.url;
         }else{
@@ -71,7 +71,7 @@ function UploadTrustDeed(props){
 
     useEffect(()=> {
         if(trustDeed.length > 0){
-            console.log("trustDeed File Loaded");
+            // console.log("trustDeed File Loaded");
             let payload = new FormData();
             payload.append("id", (trustDeedId) ? trustDeedId : 0);
             payload.append("srepId", srepId);
@@ -89,7 +89,7 @@ function UploadTrustDeed(props){
 
     useEffect(()=> {
         if(trustAccDetail.length > 0){
-            console.log("trustAccDetail File Loaded");
+            // console.log("trustAccDetail File Loaded");
             let payload = new FormData();
             payload.append("id", (trustAccDetailId) ? trustAccDetailId : 0);
             payload.append("srepId", srepId);

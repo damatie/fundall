@@ -99,8 +99,8 @@ function Entities({handleNext}) {
   });
 
   const { entities, grades, gradeLevels, accountSettings, compensationData } = useSelector(state => state.employeeMgt);
-  console.log('entities: ', entities);
-  console.log('grades: ', grades);
+  // console.log('entities: ', entities);
+  // console.log('grades: ', grades);
 
   const dispatch = useDispatch();
 // setEntityList setGradeList setAccountSettingsData
@@ -122,7 +122,7 @@ function Entities({handleNext}) {
     dispatch(Actions.getCompensations());
     dispatch(Actions.getGrades());
     dispatch(Actions.getGradeLevels());
-    console.log('accountSettings: ', accountSettings);
+    // console.log('accountSettings: ', accountSettings);
   }, []);
 
   React.useEffect(() => {
@@ -133,7 +133,7 @@ function Entities({handleNext}) {
   }, [grades, entities, gradeLevels, accountSettings])
 
   React.useEffect(() => {
-    console.log('data: ', {...getValues()});
+    // console.log('data: ', {...getValues()});
   }, [getValues])
 
   const handleHumanResourceChange = (event) => {

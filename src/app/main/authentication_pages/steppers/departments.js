@@ -62,8 +62,8 @@ function Departments({handleNext}) {
   });
 
   const { entities, departments, accountSettings } = useSelector(state => state.employeeMgt);
-  console.log('entities: ', entities);
-  console.log('grades: ', departments);
+  // console.log('entities: ', entities);
+  // console.log('grades: ', departments);
 
   const dispatch = useDispatch();
   const [entityList, setEntityList] = React.useState([]);
@@ -77,7 +77,7 @@ function Departments({handleNext}) {
     dispatch(Actions.getAccountSettings());
     dispatch(Actions.getDept());
     dispatch(Actions.getGradeLevels());
-    console.log('accountSettings: ', accountSettings);
+    // console.log('accountSettings: ', accountSettings);
   }, []);
 
   React.useEffect(() => {
@@ -87,7 +87,7 @@ function Departments({handleNext}) {
   }, [departments, entities, accountSettings])
 
   React.useEffect(() => {
-    console.log('data: ', {...getValues()});
+    // console.log('data: ', {...getValues()});
   }, [getValues])
 
   

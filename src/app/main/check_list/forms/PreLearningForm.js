@@ -44,7 +44,7 @@ const PreLearningForm = (props) => {
 	  };
 
 	function handleSubmit(model) {
-		console.log(model);
+		// console.log(model);
 		let data = [];
 		questions.forEach(q => {
 			data.push({
@@ -60,7 +60,7 @@ const PreLearningForm = (props) => {
 			checklistId: checkListID,
 			data: data
 		}
-		console.log(payload);
+		// console.log(payload);
 		dispatch(Actions.createAnswer(payload));
 	}
 

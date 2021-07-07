@@ -3,7 +3,7 @@ export const updatedEnrollmentList = (enrollmentList = [], entities = []) => {
         let entityName = 'null';
         let departments = [];
         let departmentName = 'null';
-        console.log('entities for relative department: ', entities);
+        // console.log('entities for relative department: ', entities);
         entities && entities.filter(e => {
             if (e.id === srep.entityId) {
                 entityName = e.entityName ? e.entityName : srep.entity;
@@ -23,6 +23,6 @@ export const updatedEnrollmentList = (enrollmentList = [], entities = []) => {
             year: srep.year.toString(), 
         }
     });
-    console.log("returnEnrollmentList: ", returnEnrollmentList);
+    // console.log("returnEnrollmentList: ", returnEnrollmentList);
     return returnEnrollmentList;
 };

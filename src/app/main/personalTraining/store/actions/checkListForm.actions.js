@@ -26,7 +26,7 @@ export function getAllQuestions(id = 1) {
 		});
 		fetch(`${basUrl()}/question/checklist/${id}`, {...headers.getRegHeader()})
 		.then(res => res.json()).then(async data => {
-			console.log(data.data);
+			// console.log(data.data);
 			data.success ? 
 				(data.data) ?
 					dispatch({
@@ -54,7 +54,7 @@ export function getAllQuestions(id = 1) {
 }
 
 // export function createTraining(model) {
-// 	// console.log(model);
+// 	// // console.log(model);
 // 	swal.fire("Processing ...");
 // 	swal.showLoading();
 // 	return dispatch => {
@@ -108,8 +108,8 @@ export function getAllQuestions(id = 1) {
 // }
 
 // export function updateTraining(model, id) {
-// 	console.log(id);
-// 	console.log(model);
+// 	// console.log(id);
+// 	// console.log(model);
 // 	swal.fire("Processing ...");
 // 	swal.showLoading();
 // 	return dispatch => {
@@ -164,7 +164,7 @@ export function getAllQuestions(id = 1) {
 // }
 
 // export function deleteTrainingRequest(id) {
-// 	console.log(id);
+// 	// console.log(id);
 // 	return dispatch => {
 
 // 		dispatch({

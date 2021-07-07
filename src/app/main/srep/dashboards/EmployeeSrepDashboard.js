@@ -65,7 +65,7 @@ function EmployeeSrepDashboard(props) {
   const [data, setData] = useState(rows);
   const [filter, setFilter] = useState('all');
 
-  console.log({data})
+  // console.log({data})
 
   const columns = React.useMemo(
     () => [
@@ -116,7 +116,7 @@ function EmployeeSrepDashboard(props) {
 	}, [filter]);
 
   const handleClick = (event, value) => {
-    console.log(value);
+    // console.log(value);
     // props.history.push(`/srep/details/${value.original.id}`);
     props.history.push({
         pathname: `/srep/details/${value.original.id}`, 

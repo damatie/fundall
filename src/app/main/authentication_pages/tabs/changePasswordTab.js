@@ -42,7 +42,7 @@ function ChangePassword({current}) {
 	const onSubmit = async (data) => {
 		try {
 		  const form = { ...data }
-		  console.log('change Password form: ', form);
+		  // console.log('change Password form: ', form);
 		  loading('Updating Password...');
 		  const { data: { message, success  } } = await api.patch('/auth/employee/change_password', form);
 		  if(success) {

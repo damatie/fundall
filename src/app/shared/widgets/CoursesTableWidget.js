@@ -100,7 +100,7 @@ const CoursesTableWidget = (props) => {
     }
 
     const handleDelete = () => {
-        console.log(selected.id)
+        // console.log(selected.id)
         props.deleteCourse(selected.id)
     };
 

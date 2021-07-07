@@ -118,10 +118,10 @@ function AddTrustDeed(props) {
     //     urls.push(beneficiaryIdentityUrl);
     //     urls.push(beneficiaryPhotoUrl);
 
-    //     console.log(urls.length);
+    //     // console.log(urls.length);
     //     urls.forEach(function(url){
     //         var filename = url.replaceAll('/','').split('SREP_VALIDATION_DOC')[1];
-    //         console.log(filename);
+    //         // console.log(filename);
     //         // loading a file and add it in a zip file
     //         JSZipUtils.getBinaryContent(url, function (err, data) {
     //            if(err) {

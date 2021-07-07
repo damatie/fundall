@@ -6,7 +6,7 @@ export const useConvertToArray = () => {
     switch(num) {
       case '1': {
         number = [1];
-        console.log(number)
+        // console.log(number)
       }
       case '2': {
         number = [1, 2];

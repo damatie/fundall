@@ -112,10 +112,10 @@ const GradeAndPromotion = () => {
               }}
               checkbox={{
                 showCheckbox: true,
-                onClick: (value) => console.log(value),
+                onClick: (value) => // console.log(value),
                 accessor: 'id',
               }}
-              selectAll={(value) => console.log(value)}
+              selectAll={(value) => // console.log(value)}
               handleDelete={() => null}
               toolBar={
                 <Grid container spacing={1}>

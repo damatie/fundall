@@ -98,7 +98,7 @@ function AddNewEmployee() {
   const dispatch = useDispatch();
 
   const { entities, roles, jobTitles, accountSettings } = useSelector(state => state.employeeMgt);
-  // console.log('roles: ', roles);
+  // // console.log('roles: ', roles);
   const employmentStatusList = accountSettings?.employmentStatus || [];
   const modeOfEmploymentList = accountSettings?.modeOfEmployment || [];
   const [startDate, setStartDate] = React.useState(new Date());
@@ -166,7 +166,7 @@ function AddNewEmployee() {
     const { data: { success, data  } } = await api.get(`/entity/one/${event.target.value.id}`);
     if (success && data) {
       if(data.employeeGrades.length > 0) {
-        console.log('Grades: ', data.employeeGrades);
+        // console.log('Grades: ', data.employeeGrades);
         setGrades(data.employeeGrades);
         setSelectGrades(false);
       }
@@ -242,7 +242,7 @@ function AddNewEmployee() {
       form.employmentStatus = undefined;
       const dateValue = form.startDate.split(`\"`);
       form.startDate = dateValue[1].substring(0, 10);
-      console.log('Form: ', JSON.stringify(form));
+      // console.log('Form: ', JSON.stringify(form));
       loading('Creating Employee Account...');
       const { data: { message  } } = await api.post('/auth/employee/add-employee', form);
       swal.fire({
@@ -485,7 +485,7 @@ function AddNewEmployee() {
                   className="w-full"
                   value={startDate}
                   onChange={(newValue) => {
-                    console.log('errors: ', errors);
+                    // console.log('errors: ', errors);
                     setStartDate(newValue);
                     register({ name: 'startDate', type: 'custom' }, { required: true });
                     setValue("startDate", JSON.stringify(newValue));

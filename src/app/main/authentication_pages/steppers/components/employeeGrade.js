@@ -107,7 +107,7 @@ export default function EmployeeGradeModal ({open, employeeGrades, entities, set
 
     const onSubmit = async (value) => {
         const form = { ...value, entityName, pipEligibility };
-        console.log('Employee Grade form: ', form);
+        // console.log('Employee Grade form: ', form);
         if (edit) {
             try {
                 loading('Updating Employee Grade...');

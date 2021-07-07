@@ -241,7 +241,7 @@ export const useLoanStatement = (status) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log(status);
+    // console.log(status);
     if (status === 'open') {
       setStatement(true);
     } else {

@@ -17,15 +17,15 @@ export const DELETE_POST_ERROR = 'DELETE POST ERROR';
 const basUrl = getBaseUrl;
 const headers = fetchHeaders();
 export function getPosts(limit = 10, offset = 0) {
-	console.log("Limit: " + limit);
-	console.log("Offset: " + offset);
+	// console.log("Limit: " + limit);
+	// console.log("Offset: " + offset);
 	return dispatch => {
 		dispatch({
 			type: LOADING_POSTS
 		});
 		fetch(`${basUrl()}/posts/all/paginate?limit=${limit}&offset=${offset}`, { ...headers.getRegHeader() })
 			.then(res => res.json()).then(async data => {
-				console.log(data);
+				// console.log(data);
 				data.message === 'Success' ?
 					(data.data) ?
 						dispatch({
@@ -57,14 +57,14 @@ export function getPosts(limit = 10, offset = 0) {
 }
 
 export function getPostById(id) {
-	console.log(id);
+	// console.log(id);
 	return dispatch => {
 		dispatch({
 			type: LOADING_POSTS
 		});
 		fetch(`${basUrl()}/posts/${id}`, { ...headers.getRegHeader() })
 			.then(res => res.json()).then(async data => {
-				console.log(data);
+				// console.log(data);
 				data.message === 'Success' ?
 					(data.data) ?
 						dispatch({
@@ -99,11 +99,11 @@ export function createPost(payload) {
 			type: LOADING_POSTS
 		})
 		for (var pair of payload.entries()) {
-			console.log(pair[0] + ', ' + pair[1]);
+			// console.log(pair[0] + ', ' + pair[1]);
 		}
 		fetch(`${basUrl()}/posts/`, { ...headers.fdHeader('POST', payload) }
 		).then(res => res.json()).then(async data => {
-			console.log(data);
+			// console.log(data);
 			if (data.success || data.message === 'Created!') {
 				Promise.all([
 					dispatch({
@@ -154,11 +154,11 @@ export function updatePost(payload, id) {
 			type: LOADING_POSTS
 		})
 		for (var pair of payload.entries()) {
-			console.log(pair[0] + ', ' + pair[1]);
+			// console.log(pair[0] + ', ' + pair[1]);
 		}
 		fetch(`${basUrl()}/posts/${id}`, { ...headers.fdHeader('PUT', payload) }
 		).then(res => res.json()).then(async data => {
-			console.log(data);
+			// console.log(data);
 			if (data.success || data.message === 'Updated!') {
 				Promise.all([
 					dispatch({
@@ -209,7 +209,7 @@ export function likeAndUnlike(postId, employeeId) {
 		})
 		fetch(`${basUrl()}/posts/post/like/${postId}`, { ...headers.reqHeader('PATCH', '') }
 		).then(res => res.json()).then(async data => {
-			console.log(data)
+			// console.log(data)
 			if (data.success) {
 				dispatch({
 					type: LIKE_OR_UNLIKE_POST_SUCCESS,
@@ -230,7 +230,7 @@ export function likeAndUnlike(postId, employeeId) {
 }
 
 export function deletePost(id) {
-	console.log(id);
+	// console.log(id);
 	return dispatch => {
 
 		dispatch({

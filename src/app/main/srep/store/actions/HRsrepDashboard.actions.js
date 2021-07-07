@@ -28,7 +28,7 @@ const headers = fetchHeaders();
 export function getDashboardSrep() {
 	// const entities = useSelector(({ entities }) => entities.entityList) ?? [];
 	const entities = [];
-	console.log('getDashboardSrep called');
+	// console.log('getDashboardSrep called');
 
 	return dispatch => {
 		dispatch({
@@ -36,7 +36,7 @@ export function getDashboardSrep() {
 		});
 		fetch(`${baseUrl()}/srep`, { ...headers.getRegHeader() })
 			.then(res => res.json()).then(async data => {
-                console.log('getDashboardSrep success data up', data);
+                // console.log('getDashboardSrep success data up', data);
 				let srep = [];
 				let count = 0;
 				let countEmployees = 0;
@@ -188,14 +188,14 @@ export function getDashboardSrepByEmployeeID(id) {
 }
 
 export function getDashboardSrepByID(id) {
-	console.log('getDashboardSrepByID: ', id);
+	// console.log('getDashboardSrepByID: ', id);
 	return dispatch => {
 		dispatch({
 			type: LOADING_DASHBOARD_SREP_ID
 		});
 		fetch(`${baseUrl()}/srep/${id}`, { ...headers.getRegHeader() })
 		.then(res => res.json()).then(async IdData => {
-			console.log('IdData: ', IdData);
+			// console.log('IdData: ', IdData);
 			let enrollmentDataById = [];
 				if (IdData.success && IdData.data) {
 					enrollmentDataById =  IdData.data && IdData.data.map(srep => {
@@ -278,7 +278,7 @@ export function getDashboardSrepByID(id) {
 // 	  })
 // 	  fetch(`${baseUrl()}/entity/all`, { ...headers.getRegHeader() })
 // 	  	.then(res => res.json()).then(entities => {
-// 				console.log('entity data: ', entities)
+// 				// console.log('entity data: ', entities)
 // 				if(entities.success) {
 // 					dispatch({
 // 					type: GET_DASHBOARD_ENTITIES_SUCCESS,

@@ -22,7 +22,7 @@ export function getApprovedTraining(offset = 0, limit = 20) {
 		});
 		fetch(`${basUrl()}/training/?offset=${offset}&limit=${limit}&status=approved`, { ...headers.getRegHeader() })
 			.then(res => res.json()).then(async data => {
-				// console.log(data);
+				// // console.log(data);
 				data.success ?
 					(data.data) ?
 						dispatch({
@@ -61,7 +61,7 @@ export function getRejectedTraining(offset = 0, limit = 20) {
 		});
 		fetch(`${basUrl()}/training/?offset=${offset}&limit=${limit}&status=rejected`, { ...headers.getRegHeader() })
 			.then(res => res.json()).then(async data => {
-				// console.log(data);
+				// // console.log(data);
 				data.success ?
 					(data.data) ?
 						dispatch({
@@ -100,7 +100,7 @@ export function getPendingTraining(offset = 0, limit = 20) {
 		});
 		fetch(`${basUrl()}/training/?offset=${offset}&limit=${limit}&status=pending`, { ...headers.getRegHeader() })
 			.then(res => res.json()).then(async data => {
-				// console.log(data);
+				// // console.log(data);
 				data.success ?
 					(data.data) ?
 						dispatch({
@@ -139,7 +139,7 @@ export function getReviewedTraining(offset = 0, limit = 20) {
 		});
 		fetch(`${basUrl()}/training/?offset=${offset}&limit=${limit}&status=reviewed`, { ...headers.getRegHeader() })
 			.then(res => res.json()).then(async data => {
-				// console.log(data);
+				// // console.log(data);
 				data.success ?
 					(data.data) ?
 						dispatch({
@@ -172,7 +172,7 @@ export function getReviewedTraining(offset = 0, limit = 20) {
 }
 
 export function approveTraining(id) {
-	console.log(id);
+	// console.log(id);
 	return dispatch => {
 		dispatch({
 			type: LOADING_TRAINIING
@@ -190,7 +190,7 @@ export function approveTraining(id) {
 			preConfirm: () => [
 				fetch(`${basUrl()}/training/hr/approve/${id}`, { ...headers.reqHeader('PATCH', '') })
 					.then(res => res.json()).then(async data => {
-						// console.log(data);
+						// // console.log(data);
 						if (data.success) {
 							swal.fire(
 								'Approved!',
@@ -235,7 +235,7 @@ export function approveTraining(id) {
 }
 
 export function rejectTraining(id) {
-	// console.log(id);
+	// // console.log(id);
 	return dispatch => {
 		dispatch({
 			type: LOADING_TRAINIING

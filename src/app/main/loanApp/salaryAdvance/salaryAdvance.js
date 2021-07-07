@@ -88,7 +88,7 @@ function SalaryAdvance(props) {
 	}, [id, dispatch]);
 
 	useEffect(() => {
-		console.log(salaryAdvance, details, state);
+		// console.log(salaryAdvance, details, state);
 	}, [details, salaryAdvance, state])
 
 	return (

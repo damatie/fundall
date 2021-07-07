@@ -46,7 +46,7 @@ export function getMainFolder(){
 
         api.get('library/folder')
         .then(({data: { success, message, data }}) => {
-            console.log(data);
+            // console.log(data);
             (success) ?
                 (data) ?
                     dispatch({
@@ -84,7 +84,7 @@ export function getSubFolder(id = 0){
 
         api.get(`library/folder/${id}/sub`)
         .then(({data: { success, message, data }}) => {
-            console.log(data);
+            // console.log(data);
             (success) ?
                 (data) ?
                     dispatch({
@@ -125,7 +125,7 @@ export function createSubFolder(id, payload){
         })
         api.post(`library/folder/${id}/sub`, payload)
         .then(({data: { success, message, data }}) => {
-            console.log(data);
+            // console.log(data);
             if(success){
                 (data) ?
                     dispatch({
@@ -188,7 +188,7 @@ export function updateSubFolder(mainId, folderId, payload){
         })
         api.patch(`library/folder/${mainId}/sub/${folderId}`, payload)
         .then(({data: { success, message, data }}) => {
-            console.log(data);
+            // console.log(data);
             if(success){
                 (data) ?
                     dispatch({
@@ -257,7 +257,7 @@ export function deleteSubFolder(mainId, folderId, name) {
 				swal.showLoading();
 				api.delete(`library/folder/${mainId}/sub/${folderId}`)
                 .then(({data: { success, message, data }}) => {
-                    console.log(data);
+                    // console.log(data);
                     if(success){
                         (data) ?
                             dispatch({
@@ -332,7 +332,7 @@ export function grantSubFolderAccess(mainId, folderId, folderName, roleId, type)
 				swal.showLoading();
 				api.patch(`library/folder/${mainId}/sub/${folderId}/access/${type.toLowerCase()}`, {roleId})
                 .then(({data: { success, message, data }}) => {
-                    console.log(data);
+                    // console.log(data);
                     if(success){
                         (data) ?
                             dispatch({
@@ -396,7 +396,7 @@ export function getSubFolderFiles(id = 0){
 
         api.get(`library/folder/sub/${id}/file`)
         .then(({data: { success, message, data }}) => {
-            console.log(data);
+            // console.log(data);
             (success) ?
                 (data) ?
                     dispatch({
@@ -443,7 +443,7 @@ export function uploadDocument(mainId, folderId, formData){
             },
             onUploadProgress: progressEvent => {
                 const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-                console.log({percentCompleted});
+                // console.log({percentCompleted});
                 dispatch({
                     type: UPLOAD_FILE_PROGRESS,
                     progress: parseInt(percentCompleted),
@@ -454,7 +454,7 @@ export function uploadDocument(mainId, folderId, formData){
             }
         })
         .then(({data: { success, message, data }}) => {
-            console.log(data);
+            // console.log(data);
             if(success){
                 (data) ?
                     dispatch({
@@ -520,7 +520,7 @@ export function updateDocument(mainId, folderId, fileId, formData){
             },
             onUploadProgress: progressEvent => {
                 const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-                console.log({percentCompleted});
+                // console.log({percentCompleted});
                 dispatch({
                     type: UPLOAD_FILE_PROGRESS,
                     progress: parseInt(percentCompleted),
@@ -603,7 +603,7 @@ export function deleteDocument(mainId, folderId, fileId, name) {
 				swal.showLoading();
 				api.delete(`library/folder/${mainId}/sub/${folderId}/file/${fileId}`)
                 .then(({data: { success, message, data }}) => {
-                    console.log(data);
+                    // console.log(data);
                     if(success){
                         (data) ?
                             dispatch({

@@ -68,7 +68,7 @@ function AttendanceDashboard(props) {
     }, [selected]);
 
     useEffect(() => {
-        console.log(activities, attendanceHistory)
+        // console.log(activities, attendanceHistory)
     }, [activities, attendanceHistory])
 
     const handleSubmit = () => {

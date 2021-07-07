@@ -72,7 +72,7 @@ function MainBlog() {
 	const [search, setSearch] = useState('');
 	const [data, setData] = useState(posts);
 	const [rowsPerPage, setRowsPerPage] = useState(10);
-	console.log(data);
+	// console.log(data);
 	const blogPost = data.length > 0
 		? data.map(blog => {
 			return blog.post;
@@ -114,7 +114,7 @@ function MainBlog() {
 	}
 
 	const handleChangePage = (event, value) => {
-		console.log(value);
+		// console.log(value);
 		let newPage = value - 1;
 		dispatch(Actions.getPosts(rowsPerPage, newPage * rowsPerPage));
 		// scroll.scrollToTop();

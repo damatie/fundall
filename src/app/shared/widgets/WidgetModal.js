@@ -26,7 +26,7 @@ const WidgetModal = (props)  => {
 
   const handleClose = () => {
     setIsOpen(false);
-    console.log(isOpen);
+    // console.log(isOpen);
   };
 
 

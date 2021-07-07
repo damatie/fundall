@@ -25,7 +25,7 @@ export function getAllQuestions(id = 0) {
 		});
 		fetch(`${basUrl()}/question/checklist/${id}`, {...headers.getRegHeader()})
 		.then(res => res.json()).then(async data => {
-			console.log(data.data);
+			// console.log(data.data);
 			data.success ? 
 				(data.data) ?
 					dispatch({
@@ -53,7 +53,7 @@ export function getAllQuestions(id = 0) {
 }
 
 export function createQuestion(model) {
-	// console.log(model);
+	// // console.log(model);
 	swal.fire("Processing ...");
 	swal.showLoading();
 	return dispatch => {
@@ -127,7 +127,7 @@ export function updateQuestion(model, id) {
           return fetch(`${basUrl()}/question/${id}`, {...headers.reqHeader('PATCH', model)} )
           .then(res => res.json()).then(async data => {
 				// let data = response.data;
-			    console.log(data);
+			    // console.log(data);
 				if(data.success) {
 				  swal.fire({
 					title: 'Update Question',
@@ -172,7 +172,7 @@ export function updateQuestion(model, id) {
 }
 
 export function deleteQuestion(id, checkListId) {
-	console.log(id);
+	// console.log(id);
 	swal.fire("Processing ...");
 	swal.showLoading();
 	return dispatch => {

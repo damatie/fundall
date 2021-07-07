@@ -35,7 +35,7 @@ function NewLeaveTypeTab(props) {
 		// 	});
 		// 	disableButton();
 		// }
-		console.log(leaveType);
+		// console.log(leaveType);
 	}, []);
 
 	function disableButton() {

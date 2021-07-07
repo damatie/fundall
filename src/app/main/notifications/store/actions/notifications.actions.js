@@ -23,7 +23,7 @@ export const getNotifications = () => {
             payload: desSort(data.data)
           });
         } else {
-          console.log(data.message)
+          // console.log(data.message)
           if (data.message === "Invalid Token" && window.location.pathname !== "/auth/login") {
             localStorage.clear();
             window.location.href = "/auth/login";

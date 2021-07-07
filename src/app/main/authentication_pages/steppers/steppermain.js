@@ -119,7 +119,7 @@ function StepperMain() {
   React.useEffect(() => {
     const dataResponse = localStorage.getItem('login_data');
   	const data = JSON.parse(dataResponse);
-	  console.log('Stepper User Login Data: ', data);
+	  // console.log('Stepper User Login Data: ', data);
     setActiveStep(data?.company?.regStep || 0)
 	}, []);
 

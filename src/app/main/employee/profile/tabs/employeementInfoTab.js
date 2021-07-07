@@ -67,7 +67,7 @@ function EmployeementInfoTab() {
   }, [dispatch]);
 
   useEffect(() => {
-    console.log(data.stateOfOrigin)
+    // console.log(data.stateOfOrigin)
     // if(data.stateOfOrigin) {
       regionActions.getStates(data.nationality)
       regionActions.getCitites(data.stateOfOrigin, data.nationality)
@@ -141,7 +141,7 @@ function EmployeementInfoTab() {
 
   function handleSubmit(model)
   {
-    console.log({
+    // console.log({
       ...model,
       signature: file[0]
     });

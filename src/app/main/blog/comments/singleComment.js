@@ -126,7 +126,7 @@ function BlogComment(props) {
 	};
 
 	const updateCommentReply = () => {
-		console.log(props);
+		// console.log(props);
 		const model = {
 			id: props.postId,
 			replyId: props.comment.id,

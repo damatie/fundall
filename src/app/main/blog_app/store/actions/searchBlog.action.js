@@ -17,13 +17,13 @@ export function submitSearch(term) {
 		}).then(res => res.json()).then(
 			post => {
 				if(post.success === true) {
-          console.log(post)
+          // console.log(post)
 					return dispatch({
             type: SEARCH_POST_SUCCESS,
             payload: post.data
 					});
 				} else {
-					console.log(post);
+					// console.log(post);
 					return dispatch({
 						type: SEARCH_POST_ERROR,
 						payload: ''

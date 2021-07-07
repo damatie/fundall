@@ -27,7 +27,7 @@ export function getAllPendingAnswers() {
 		});
 		fetch(`${basUrl()}/answers`, {...headers.getRegHeader()})
 		.then(res => res.json()).then(async data => {
-			console.log(data.data);
+			// console.log(data.data);
 			data.success ? 
 				(data.data) ?
 					dispatch({
@@ -61,7 +61,7 @@ export function getAllApprovedAnswers(id = 0) {
 		});
 		fetch(`${basUrl()}/answers/all/${id}`, {...headers.getRegHeader()})
 		.then(res => res.json()).then(async data => {
-			console.log(data.data);
+			// console.log(data.data);
 			data.success ? 
 				(data.data) ?
 					dispatch({
@@ -89,7 +89,7 @@ export function getAllApprovedAnswers(id = 0) {
 }
 
 export function createAnswer(model) {
-	// console.log(model);
+	// // console.log(model);
 	swal.fire("Processing ...");
 	swal.showLoading();
 	return dispatch => {
@@ -159,7 +159,7 @@ export function updateAnswer(model, id) {
           return fetch(`${basUrl()}/question/${id}`, {...headers.reqHeader('PATCH', model)} )
           .then(res => res.json()).then(async data => {
 				// let data = response.data;
-			    console.log(data);
+			    // console.log(data);
 				if(data.success) {
 				  swal.fire({
 					title: 'Update Answer',
@@ -204,7 +204,7 @@ export function updateAnswer(model, id) {
 }
 
 export function deleteAnswer(id) {
-	console.log(id);
+	// console.log(id);
 	swal.fire("Processing ...");
 	swal.showLoading();
 	return dispatch => {
@@ -266,7 +266,7 @@ export function deleteAnswer(id) {
 }
 
 export function approveAnswer(id) {
-	console.log(id);
+	// console.log(id);
 	swal.fire("Processing ...");
 	swal.showLoading();
 	return dispatch => {

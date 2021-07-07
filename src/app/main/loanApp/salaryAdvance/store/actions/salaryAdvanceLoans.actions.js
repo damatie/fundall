@@ -78,7 +78,7 @@ export const getPendingSA = () => {
         let response = data.data;
         response.splice(0, 1);
 
-        // console.log(data, response)
+        // // console.log(data, response)
         if (data.success) {
           dispatch({
             type: GET_PENDING_SA,
@@ -101,7 +101,7 @@ export const getReviewedSA = () => {
       data => {
         let response = data.data;
         response.splice(0, 1);
-        // console.log(data)
+        // // console.log(data)
         if (data.success) {
           dispatch({
             type: GET_REVIEWED_SA,
@@ -123,7 +123,7 @@ export const getReviewed2SA = () => {
     }).then(res => handleResponse(res)).then(
       data => {
         let newData = data.data.filter(d => { return d.salaryAdvance});
-        console.log(formateDatas(newData))
+        // console.log(formateDatas(newData))
         if (data.success) {
           dispatch({
             type: GET_REVIEWED2_SA,
@@ -145,7 +145,7 @@ export const getApprovedSA = () => {
     }).then(res => handleResponse(res)).then(
       data => {
         let newData = data.data.filter(d => { return d.salaryAdvance});
-        console.log(formateDatas(newData))
+        // console.log(formateDatas(newData))
         if (data.success) {
           dispatch({
             type: GET_APPROVED_SA,
@@ -166,7 +166,7 @@ export const getOpenSA = () => {
       ...headers.getRegHeader(),
     }).then(res => handleResponse(res)).then(
       data => {
-        console.log(data.data)
+        // console.log(data.data)
         if (data.success) {
           dispatch({
             type: GET_OPEN_SA,
@@ -187,7 +187,7 @@ export const getClosedSA = () => {
       ...headers.getRegHeader(),
     }).then(res => handleResponse(res)).then(
       data => {
-        console.log(data.data)
+        // console.log(data.data)
         if (data.success) {
           dispatch({
             type: GET_CLOSED_SA,
@@ -208,7 +208,7 @@ export const getDisbursedSA = () => {
       ...headers.getRegHeader(),
     }).then(res => handleResponse(res)).then(
       data => {
-        console.log(data)
+        // console.log(data)
         if (data.success) {
           let newData = data.data.filter(d => { return d.salaryAdvance});
           dispatch({

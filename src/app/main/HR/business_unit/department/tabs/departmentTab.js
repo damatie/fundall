@@ -21,7 +21,7 @@ function DepartmentTab(props) {
 	const { departmentId } = useParams();
 
 	useEffect(() => {
-		console.log(department);
+		// console.log(department);
 	}, [department]);
 
 	function disableButton() {

@@ -100,7 +100,7 @@ const CreateEmployeeInfo = () => {
   React.useEffect(() => {
     dispatch(Actions.getCountries());
     // dispatch(Actions.getEmployeeProfile(state.id));
-    console.log(params);
+    // console.log(params);
   }, []);
 
   const {

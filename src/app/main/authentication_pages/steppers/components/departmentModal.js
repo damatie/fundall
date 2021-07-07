@@ -115,7 +115,7 @@ export default function DepartmentModal ({open, entities, setOpen, data, edit}) 
         const departmentHeadId = 0;
         const form = { ...value, departmentHeadId };
 
-        console.log('Department form: ', form);
+        // console.log('Department form: ', form);
         if (edit) {
             try {
                 loading('Updating Department...');
@@ -231,7 +231,7 @@ export default function DepartmentModal ({open, entities, setOpen, data, edit}) 
                   className="w-full"
                   value={startedOn}
                   onChange={(newValue) => {
-                    console.log('errors: ', errors);
+                    // console.log('errors: ', errors);
                     setStartDate(newValue);
                     register({ name: 'startedOn', type: 'custom' }, { required: true });
                     setValue("startedOn", JSON.stringify(newValue));

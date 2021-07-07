@@ -14,7 +14,7 @@ export function getEntities() {
           Authorization: `JWT ${useAuth().getToken}`
         }
       });
-    //   console.log('Entities request: ', request);
+    //   // console.log('Entities request: ', request);
       request.then(res => {
         dispatch({
           type: GET_ENTITIES,

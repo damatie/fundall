@@ -76,7 +76,7 @@ export default function EntityModal ({open, setOpen, edit, data}) {
         entityAddresses.push(chip)
         setValue("address", entityAddresses);
         setEntityAddressesErr(errors.address?.message);
-        console.log('data: ', JSON.stringify({...getValues()}));
+        // console.log('data: ', JSON.stringify({...getValues()}));
       };
     
       const handleDeleteEntityAddresses = (chip, index) => {
@@ -90,7 +90,7 @@ export default function EntityModal ({open, setOpen, edit, data}) {
 
     const onSubmit = async (value) => {
         const form = { ...value};
-        console.log('form: ', form);
+        // console.log('form: ', form);
         if (edit) {
             try {
                 loading('Updating Entity...');

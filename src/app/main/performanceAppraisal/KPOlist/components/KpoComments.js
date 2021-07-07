@@ -65,7 +65,7 @@ const KpoComments = ({kpoSummary}) => {
               name,
               value
             })
-            console.log(value)
+            // console.log(value)
           }}
           >
             <FormControlLabel value="Below Expectation" control={<Radio />} label="Below Expectation" />

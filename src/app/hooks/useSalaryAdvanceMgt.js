@@ -64,7 +64,7 @@ const useSalaryAdvanceMgt = ({ loan, userRole, id }) => {
   let history = useHistory();
 
   useEffect(() => {
-    console.log(loan)
+    // console.log(loan)
     setShowBtn(handleBtnVisibility(
       {
         role: userRole,
@@ -90,7 +90,7 @@ const useSalaryAdvanceMgt = ({ loan, userRole, id }) => {
   }, [loan, userRole]);
 
   const handleApprove = () => {
-    console.log(loan.salaryAdvanceData.status);
+    // console.log(loan.salaryAdvanceData.status);
     if (loan.salaryAdvanceData.status.toLowerCase() === 'approved') {
       dispatch(Actions.approveSalaryAvance({
         id,
@@ -110,7 +110,7 @@ const useSalaryAdvanceMgt = ({ loan, userRole, id }) => {
     payload.amount = data.amount;
     payload.repaymentDate = data.repaymentDate;
 
-    console.log(rejectUrl)
+    // console.log(rejectUrl)
 
     dispatch(Actions.rejectSalaryAdvance({
       id,

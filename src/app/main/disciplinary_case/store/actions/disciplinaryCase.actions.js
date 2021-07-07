@@ -26,7 +26,7 @@ export function getDisciplinaryCase() {
 		fetch(`${basUrl()}/disciplinary/`, { ...headers.getRegHeader() })
 			.then(res => res.json())
 			.then(async data => {
-				console.log(data.data);
+				// console.log(data.data);
 				data.success
 					? data.data
 						? dispatch({
@@ -65,7 +65,7 @@ export function createDisciplinaryCase(model) {
 		fetch(`${basUrl()}/disciplinary/`, { ...headers.reqHeader('post', model) })
 			.then(res => res.json())
 			.then(async data => {
-				console.log(data);
+				// console.log(data);
 				if (data.success) {
 					swal.fire({
 						title: 'Create Disciplinary Case',
@@ -108,8 +108,8 @@ export function createDisciplinaryCase(model) {
 }
 
 export function updateDisciplinaryCase(model, id) {
-	console.log(id);
-	console.log(model);
+	// console.log(id);
+	// console.log(model);
 	swal.fire({
             title: 'Processing ...',
             allowOutsideClick: false
@@ -170,7 +170,7 @@ export function deleteDisciplinaryCase(id) {
             allowOutsideClick: false
         });
 	swal.showLoading();
-	// console.log(id);
+	// // console.log(id);
 	return dispatch => {
 		dispatch({
 			type: LOADING_DISCIPLINARY_CASE
@@ -223,7 +223,7 @@ export function closeDisciplinaryCase(id) {
             allowOutsideClick: false
         });
 	swal.showLoading();
-	// console.log(id);
+	// // console.log(id);
 	return dispatch => {
 		dispatch({
 			type: LOADING_DISCIPLINARY_CASE

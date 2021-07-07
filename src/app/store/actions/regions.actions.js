@@ -83,7 +83,7 @@ export const getCitites = (state, name) => {
         }
       }).then(res => handleResponse(res)).then(
         data => {
-          console.log(data);
+          // console.log(data);
           dispatch({
             type: GET_CITIES,
             payload: formatData(data, 'city_name')

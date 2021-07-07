@@ -76,10 +76,10 @@ function OtherFiles(props) {
 		urls = srepOtherFiles.map(file => {
 			return file.url;
 		});
-		console.log(urls.length);
+		// console.log(urls.length);
 		urls.forEach(function (url) {
 			var filename = url.replaceAll('/', '').split('SREP_OTHER_DOC')[1];
-			console.log(filename);
+			// console.log(filename);
 			// loading a file and add it in a zip file
 			JSZipUtils.getBinaryContent(url, function (err, data) {
 				if (err) {

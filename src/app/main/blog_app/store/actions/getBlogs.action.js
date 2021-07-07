@@ -21,13 +21,13 @@ export function getBlogPost(auto) {
 		}).then(res => res.json()).then(
 			post => {
 				if(post.message === 'Success') {
-					console.log(post)
+					// console.log(post)
 					return dispatch({
 						type: GETBLOGS_SUCCESS,
 						payload: post.data
 					});
 				} else {
-					console.log(post)
+					// console.log(post)
 					return dispatch({
 						type: GETBLOGS_ERROR,
 						payload: ''
@@ -51,14 +51,14 @@ export function getBlogByLimit(limit = 10, offest = 0){
 		fetch(`${getBaseUrl()}/posts/all/paginate?limit=${limit}&offset=${offest}`, { ...header.getRegHeader()
 		}).then(res => res.json()).then(
 			post => {
-					console.log(post);
+					// console.log(post);
 				if(post.message === 'Success') {
 					return dispatch({
 						type: GETBLOGS_SUCCESS,
 						payload: post.data
 					});
 				} else {
-					console.log(post)
+					// console.log(post)
 					return dispatch({
 						type: GETBLOGS_ERROR,
 						payload: ''

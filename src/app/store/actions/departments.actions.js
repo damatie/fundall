@@ -22,7 +22,7 @@ export const getDepartments = (id) => {
       ...header.getRegHeader()
     }).then(res => res.json()).then(
       data => {
-        console.log(data)
+        // console.log(data)
         if(data.success) {
           dispatch({
             type: GET_DEPARTMENTS_SUCCESS,

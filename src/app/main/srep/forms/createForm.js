@@ -65,10 +65,10 @@ function CreateForm(props) {
 	}
 
 	function handleSubmit(model) {
-		console.log(model);
-		// console.log(phoneNo);
-		// console.log(telNo);
-		// console.log(amount);
+		// console.log(model);
+		// // console.log(phoneNo);
+		// // console.log(telNo);
+		// // console.log(amount);
 		let payload = new FormData();
 		payload.append("employeeId", userId);
 		payload.append("hrManagerId", userId);

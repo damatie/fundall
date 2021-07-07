@@ -21,12 +21,12 @@ export function submitBlogComment(id, type) {
 		}).then(res => res.json()).then(
 			comment => {
 				if(comment.success === true) {
-					console.log(comment)
+					// console.log(comment)
 					return dispatch({
 						type: GET_REPLY_TO_COMMENT_SUCCESS
 					});
 				} else {
-					console.log(comment);
+					// console.log(comment);
 					return dispatch({
 						type: GET_REPLY_TO_COMMENT_ERROR,
 						payload: ''

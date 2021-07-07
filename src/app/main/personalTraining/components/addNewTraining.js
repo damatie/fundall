@@ -81,7 +81,7 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
         payload.industrySeniority = Number(payload.industrySeniority);
         payload.companySeniority = Number(payload.companySeniority);
 
-        // console.log(payload);
+        // // console.log(payload);
         if (data) {
             update(payload, data.id)
         } else {
@@ -102,7 +102,7 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
 
     useEffect(() => {
         if (data) {
-            // console.log(data, departments.length > 0)
+            // // console.log(data, departments.length > 0)
             if (departments.length > 0) {
                 setFormstate({
                     department: data.department,
@@ -136,7 +136,7 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
         if (formstate.entity) {
             setFormstate(formstate);
         }
-        // console.log(formstate, departments);
+        // // console.log(formstate, departments);
     }, [departments, data]);
 
     useEffect(() => {
@@ -145,7 +145,7 @@ const AddNewTrainingDialogue = ({ open, handleClose, entities, departments, cate
 
     useEffect(() => {
         if (Object.values(formstate).includes("")) {
-            // console.log(formstate);
+            // // console.log(formstate);
             setCanBeSubmitted(false)
         } else {
             setCanBeSubmitted(true)

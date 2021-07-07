@@ -176,7 +176,7 @@ function CalendarApp(props) {
 	}, [dispatch]);
 
 	function moveEvent({ event, start, end }) {
-		console.log({
+		// console.log({
 			...event,
 				start,
 				end

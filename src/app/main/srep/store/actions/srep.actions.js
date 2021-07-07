@@ -29,13 +29,13 @@ export function getSrep(role = null) {
 		});
 		fetch(`${baseUrl()}/srep`, { ...headers.getRegHeader() })
 			.then(res => res.json()).then(async data => {
-                console.log(data);
+                // console.log(data);
 				let srep = [];
 				let count = 0;
 				let items = [];
 				if (data.success && data.data) {
-					console.log(data.data);
-					console.log({role})
+					// console.log(data.data);
+					// console.log({role})
 					if(role && role !== 'HR MANAGER'){
 						items = data.data && data.data.filter(srep => srep.status !== 'pending');
 					}else{
@@ -52,7 +52,7 @@ export function getSrep(role = null) {
 							status: srep.status
 						}
 					});
-					console.log({srep});
+					// console.log({srep});
 					dispatch({
 						type: GET_SREP_SUCCESS,
 						payload: {
@@ -83,11 +83,11 @@ export function getSrepByEmployeeID(id) {
 		});
 		fetch(`${baseUrl()}/srep/employee/${id}`, { ...headers.getRegHeader() })
 			.then(res => res.json()).then(async data => {
-                console.log(data);
+                // console.log(data);
 				let srep = [];
 				let count = 0;
 				if (data.success && data.data) {
-					console.log(data.data);
+					// console.log(data.data);
 					srep = data.data && data.data.map(srep => {
 						count++;
 						return {
@@ -99,7 +99,7 @@ export function getSrepByEmployeeID(id) {
 							status: srep.status
 						}
 					});
-					console.log({srep});
+					// console.log({srep});
 					dispatch({
 						type: GET_SREP_SUCCESS,
 						payload: {
@@ -130,7 +130,7 @@ export function getSrepByID(id = 0) {
 		});
 		fetch(`${baseUrl()}/srep/${id}`, { ...headers.getRegHeader() })
 		.then(res => res.json()).then(async data => {
-			console.log(data);
+			// console.log(data);
 			if (data.success && data.data) {
 				return dispatch({
 					type: GET_SREP_SUCCESS,
@@ -174,7 +174,7 @@ export function addSrep(payload){
 		});
 		fetch(`${baseUrl()}/srep`, { ...headers.fdHeader('post', payload) })
 		.then(res => res.json()).then(async data => {
-				console.log(data)
+				// console.log(data)
 				if (data.success) {
 					swal.fire({
 						title: 'SpringRock Education Plan Application',
@@ -216,7 +216,7 @@ export function addSrep(payload){
 }
 
 export function approveSrep(id) {
-	console.log(id);
+	// console.log(id);
 	return dispatch => {
 		swal.fire({
 			title: 'Are you sure?',
@@ -278,7 +278,7 @@ export function approveSrep(id) {
 }
 
 export function rejectSrep(id) {
-	console.log(id);
+	// console.log(id);
 	return dispatch => {
 		swal.fire({
             title: 'Processing ...',
@@ -340,7 +340,7 @@ export function rejectSrep(id) {
 }
 
 export function deleteSrep(id, role, userId) {
-	console.log(id);
+	// console.log(id);
 	return dispatch => {
 		swal.fire({
 			title: 'Are you sure?',
@@ -413,7 +413,7 @@ export function sendToFinance(id){
 		swal.showLoading();
 		fetch(`${baseUrl()}/srep/sendToFinance/${id}`, { ...headers.reqHeader('PATCH', '') })
 		.then(res => res.json()).then(async data => {
-			console.log(data)
+			// console.log(data)
 			if (data.success) {
 				swal.fire({
 					title: 'SpringRock Education Plan Application',

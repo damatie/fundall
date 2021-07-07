@@ -29,11 +29,11 @@ function DisciplinaryCase() {
     }
 
     function handleEdit(event, model){
-        console.log(model)
+        // console.log(model)
         // dispatch(Actions.updateDisciplinaryCase(model, model.id));
     }
 
-    console.log(rows);
+    // console.log(rows);
 
     const columns = [
         {

@@ -51,7 +51,7 @@ const EmployeeKpoReview = () => {
       header={{
         icon: '',
         title: 'KPO List',
-        handleSearch: ({target: { value }}) => console.log(value),
+        handleSearch: ({target: { value }}) => // console.log(value),
       }}
       button={{
         showButton: false,

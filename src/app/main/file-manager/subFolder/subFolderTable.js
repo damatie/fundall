@@ -135,8 +135,8 @@ const SubFolderTable = (props) =>{
     }
 
     const handleDelete = (id, name) => {
-        // console.log(id)
-        // console.log(name)
+        // // console.log(id)
+        // // console.log(name)
         dispatch(Actions.deleteSubFolder(props.mainFolder.id, id, name));
         handleClose();
     }
@@ -150,7 +150,7 @@ const SubFolderTable = (props) =>{
     }
 
     const grantAccess = (roleId, type) => {
-        console.log(type)
+        // console.log(type)
         dispatch(Actions.grantSubFolderAccess(selected.folderId, selected.id, selected.name, roleId, type));
         handleClose();
     }

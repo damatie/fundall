@@ -168,7 +168,7 @@ export default function Register() {
   }, [errors]);
   
   // React.useEffect(() => {
-  //   console.log('something has changed')
+  //   // console.log('something has changed')
   // }, [isTrue, isFalse]);
 
   const handleChange = (event) => {
@@ -205,7 +205,7 @@ export default function Register() {
     }
     hasEntities = hasEntT;
     setHasEntity(hasEntities);
-    console.log('set to True is Clicked: hasEntities=', hasEntities);
+    // console.log('set to True is Clicked: hasEntities=', hasEntities);
     register({ name: 'hasEntities', type: 'boolean' }, { required: true });
     setValue("hasEntities", hasEntities);
     setHasEntitiesErr(errors.hasEntities?.message);
@@ -224,7 +224,7 @@ export default function Register() {
     }
     hasEntities = hasEnt;
     setHasEntity(hasEntities);
-    console.log('set to False is Clicked: hasEntities=', hasEntities);
+    // console.log('set to False is Clicked: hasEntities=', hasEntities);
     register({ name: 'hasEntities', type: 'boolean' }, { required: true });
     setValue("hasEntities", hasEntities);
     setHasEntitiesErr(errors.hasEntities?.message);
@@ -233,7 +233,7 @@ export default function Register() {
   const onSubmit = async (data) => {
       try {
         const form = { ...data, contactNumber, phoneNumber, industry, minNoOfEmployees, maxNoOfEmployees }
-        console.log('Create Account form: ', form);
+        // console.log('Create Account form: ', form);
         loading('Creating Account...');
         const { data: { message  } } = await api.post('/companies', form);
         swal.fire({

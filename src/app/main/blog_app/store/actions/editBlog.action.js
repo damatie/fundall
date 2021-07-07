@@ -15,7 +15,7 @@ export function editBlogPost(data, id) {
 			type: EDITBLOG_LOADING
 		})
 		for (var pair of data.entries()) {
-			console.log(pair[0]+ ', ' + pair[1]); 
+			// console.log(pair[0]+ ', ' + pair[1]); 
 		}
 		fetch(`${getBaseUrl()}/posts/${id}`, {
 			...header.fdHeader(
@@ -25,7 +25,7 @@ export function editBlogPost(data, id) {
 		}).then(res => res.json()).then(
 			post => {
 				if(post.message === 'Updated!') {
-					console.log(post)
+					// console.log(post)
 					Swal.fire({
 						title: 'Blog updated successfully',
 						text: post.message,
@@ -36,7 +36,7 @@ export function editBlogPost(data, id) {
 						type: EDITBLOG_SUCCESS
 					});
 				} else {
-					console.log(post);
+					// console.log(post);
 					Swal.fire({
 						title: 'EDITBLOG',
 						text: post.message,

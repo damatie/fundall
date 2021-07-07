@@ -70,7 +70,7 @@ const userData = useAuth().getUserData;
 function MainFolder(props) {
 	const dispatch = useDispatch();
     const mainFolder = useSelector(({mainFolder}) => mainFolder.folders.mainFolders);
-    console.log(mainFolder)
+    // console.log(mainFolder)
 	// const roles = useSelector(({ roles }) => roles.roleList);
 	// const departments = useSelector(({ departments }) => departments.deparmentList);
 	// const entities = useSelector(({ entities }) => entities.entityList);
@@ -85,7 +85,7 @@ function MainFolder(props) {
             header={{
                 icon: 'folder',
                 title: 'Document Library',
-                handleSearch: ({target: { value }}) => console.log(value),
+                handleSearch: ({target: { value }}) => // console.log(value),
             }}
             button={{
                 showButton: false

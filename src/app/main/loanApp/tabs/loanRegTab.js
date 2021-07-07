@@ -144,7 +144,7 @@ function LoanReqTab(props) {
 
 	function handleCheck(event, id) {
 		const selectedIndex = selected.indexOf(id);;
-		// console.log(selectedIndex)
+		// // console.log(selectedIndex)
 		let newSelected = [];
 
 		if (selectedIndex === -1) {

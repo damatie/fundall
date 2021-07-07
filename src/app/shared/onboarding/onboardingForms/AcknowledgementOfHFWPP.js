@@ -23,7 +23,7 @@ const AcknowledgementOfHFWPP = ({setIndex}) => {
   const auth = useAuth;
 
   useEffect(() => {
-    console.log(auth().getId)
+    // console.log(auth().getId)
     const request = axios.get(`https://hris-cbit.herokuapp.com/api/v1/onboarding/${auth().getId}`, {
       headers: {
         Authorization: `JWT ${auth().getToken}`

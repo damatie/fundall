@@ -45,7 +45,7 @@ function JWTRegisterTab(props) {
 	}
 
 	function handleSubmit(model) {
-		console.log(model);
+		// console.log(model);
 		dispatch(authActions.submitRegister(model));
 	}
 

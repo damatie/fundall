@@ -116,14 +116,14 @@ function EventDialog(props) {
 			startDate: moment(start).format("DD-MM-YYYY"),
 			endDate: moment(end).format("DD-MM-YYYY")
 		}
-		// console.log(payload);
-		// console.log(id);
+		// // console.log(payload);
+		// // console.log(id);
 		dispatch(Actions.updateTraining(payload, id));
 		closeComposeDialog();
 	}
 
 	function handleRemove() {
-		// console.log(id);
+		// // console.log(id);
 		dispatch(Actions.deleteTrainingRequest(id))
 		closeComposeDialog();
 	}

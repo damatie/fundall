@@ -53,7 +53,7 @@ export default function AddQuestionModal(props) {
 
 	const handleSubmit = model => {
 		model.checkListId = props.id;
-		console.log(model);
+		// console.log(model);
 		dispatch(Actions.createQuestion(model));
 		handleClose();
 	};

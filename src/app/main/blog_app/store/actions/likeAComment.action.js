@@ -21,7 +21,7 @@ export function likeAComment(id, userId, postId) {
 			)
 		}).then(res => res.json()).then(
 			comment => {
-				console.log(comment)
+				// console.log(comment)
 				if(comment.success === true) {
 					// return dispatch({
 					// 	type: LIKE_A_COMMENT_SUCCESS,
@@ -30,7 +30,7 @@ export function likeAComment(id, userId, postId) {
 					dispatch(autoGetAllCommentsForAPost(postId))
 					dispatch(autoGetOneBlogPost(postId))
 				} else {
-					console.log(comment);
+					// console.log(comment);
 					return dispatch({
 						type: LIKE_A_COMMENT_ERROR,
 						payload: ''

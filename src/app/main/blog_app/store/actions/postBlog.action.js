@@ -25,7 +25,7 @@ export function submitBlogPost(formdata, history) {
 			type: BlogPost_LOADING
 		})
 		for (var pair of formdata.entries()) {
-      console.log(pair[0]+ ', ' + pair[1]); 
+      // console.log(pair[0]+ ', ' + pair[1]); 
     }
 		fetch(`${getBaseUrl()}/posts/`, {
 			...header.fdHeader(
@@ -44,7 +44,7 @@ export function submitBlogPost(formdata, history) {
 						type: BlogPost_SUCCESS
 					});
 				} else {
-					console.log(post);
+					// console.log(post);
 					Toast.fire({
             icon: 'success',
             title: 'Failed to post blog'

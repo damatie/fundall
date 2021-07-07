@@ -266,7 +266,7 @@ function TrainingList(props) {
     }, [dispatch])
 
     useEffect(() => {
-        // console.log(trainings);
+        // // console.log(trainings);
     }, [department, trainings])
 
     // useEffect(() => {
@@ -298,7 +298,7 @@ function TrainingList(props) {
     function handleFilter(event) {
         if (event.target.name === "entity") {
             let id = entities.find(element => element.name = event.target.value);
-            // console.log(id.id)
+            // // console.log(id.id)
             changeDepartment(id.id);
         }
         // console.log(event)

@@ -282,7 +282,7 @@ import { filterData } from './components/dataFilter';
             // const w = document.getElementById(divId).offsetWidth;
             // const h = document.getElementById(divId).offsetHeight;
             const input = document.getElementById(divId);
-            console.log('pdf should download: ', input);
+            // console.log('pdf should download: ', input);
             const page = `<HTML>
                     <Head>
                     <title>EnrollmentList-${new Date().toISOString().substring(0, 16)}</title>

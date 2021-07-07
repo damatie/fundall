@@ -54,7 +54,7 @@ function CompanyDashboard(props) {
     const rows = useSelector(({ exit }) => exit.Exit.companyList?.rows ?? []);
 
     useEffect(() => {
-        console.log(rows)
+        // console.log(rows)
     }, [rows])
 
     useEffect(() => {

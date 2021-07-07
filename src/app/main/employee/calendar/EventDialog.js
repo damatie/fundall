@@ -125,7 +125,7 @@ function EventDialog(props) {
 
 	function handleSubmit(event) {
 		event.preventDefault();
-		// console.log({
+		// // console.log({
 		// 	...form,
 		// 	days: days
 		// })

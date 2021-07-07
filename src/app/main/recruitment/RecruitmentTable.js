@@ -68,7 +68,7 @@ const TableWidget = (props) => {
   const recruiter = useSelector(state => state.Recruitment.recruitment.data)
 
   useEffect(() => {
-    console.log("selected: ", data)
+    // console.log("selected: ", data)
     recruiter.map(data => {
       if (data.id === selected.id) setSelected(data);
     })
@@ -102,7 +102,7 @@ const TableWidget = (props) => {
   }
 
   function handleItemClick(event, item) {
-    console.log(item);
+    // console.log(item);
     setSelected(item);
     setOpen(true);
   }

@@ -28,7 +28,7 @@ export function submitLogin(data, x) {
 					if (data?.company?.hasEntities === true)  {
 						// route to complete registration
 						if (data?.company?.regStep < 4) {
-							console.log('should Redirect to Complete Registration ');
+							// console.log('should Redirect to Complete Registration ');
 							redirectUrl ='/auth/complete-registration';
 							Swal.fire({
 								title: 'Login Successful',
@@ -47,7 +47,7 @@ export function submitLogin(data, x) {
 					} else {
 						// route to complete registration
 						if (data?.company?.regStep < 3) {
-							console.log('should Redirect to Complete Registration 3 steps');
+							// console.log('should Redirect to Complete Registration 3 steps');
 							redirectUrl ='/auth/complete-registration';
 							Swal.fire({
 								title: 'Login Successful',

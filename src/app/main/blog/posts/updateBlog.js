@@ -75,7 +75,7 @@
 // 	const [category, setCategory] = useState('');
 // 	const [categoryId, setCategoryId] = useState(null);
 
-// 	// console.log(props);
+// 	// // console.log(props);
 // 	useEffect(() => {
 // 		dispatch(Actions.getCategories());
 //     dispatch(Actions.getPostById(postId));
@@ -92,7 +92,7 @@
 // 	}, [post])
 
 
-//   console.log(post);
+//   // console.log(post);
 // 	// useEffect(() => {
 // 	// 	setImages(images)
 // 	// }, [images])
@@ -133,8 +133,8 @@
 // 	const handleSubmit = () => {
 //     let formData = new FormData();
 //     if (!names) setImages(srcToFile(imageName, 'new file', 'image/jpg'));
-//     console.log('I have uploaded');
-// 		console.log(images);
+//     // console.log('I have uploaded');
+// 		// console.log(images);
 // 		formData.append('title', title);
 // 		formData.append('body', body);
 // 		formData.append('categoryId', categoryId);

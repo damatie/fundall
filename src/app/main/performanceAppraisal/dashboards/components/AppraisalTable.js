@@ -40,7 +40,7 @@ function AppraisalTable(props) {
 
 	useEffect(() => {
 		setData(props.data);
-		// console.log(props.data)
+		// // console.log(props.data)
 	}, [props.data])
 
 

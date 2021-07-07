@@ -48,6 +48,8 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const schema = yup.object().shape({
+    entityId: yup.number(errorMsg({ name: 'Entity', type: 'string' }))
+        .required(errorMsg({ name: 'Entity', type: 'required' })),
     gradeId: yup.number(errorMsg({ name: 'Employee Grade', type: 'number' }))
         .required(errorMsg({ name: 'Employee Grade', type: 'required' })),
     level: yup.string(errorMsg({ name: 'Level', type: 'string' }))
@@ -58,7 +60,7 @@ const schema = yup.object().shape({
     pipCompensations: yup.array(),
 });
 
-export default function EmployeeGradeLevelModal ({open, employeeGrades, entities, setOpen, data, edit, compensationList}) {
+export default function EmployeeGradeLevelModal ({open, entities, setOpen, data, edit, compensationList}) {
     
     const { register, handleSubmit, formState:{ errors }, setValue, getValues } = useForm({
         mode: "all",
@@ -68,16 +70,14 @@ export default function EmployeeGradeLevelModal ({open, employeeGrades, entities
 
     const dispatch = useDispatch();
     const [compensationObj, setCompensationObj] = React.useState({});
+    const [selectGrades, setSelectGrades] = React.useState(true);
     const [newAdded, setNewAdded] = React.useState(false);
     const [updated, setUpdated] = React.useState(false);
-    const [gradeId, setGradeId] = React.useState(0);
     const [gradeErr, setGradeErr] = React.useState("");
-    const [level, setLevel] = React.useState("");
-    const [employeeGrade, setEmployeeGrade] = React.useState("");
-    const [compensationData, setCompensationData] = React.useState(['Housing', 'Transportation', 'Basic Salary']);
+    const [gradeList, setGradeList] = React.useState([]);
     const [pipCompensations, setPipCompensations] = React.useState([]);
-    const [employeeGradeErr, setEmployeeGradeErr] = React.useState("");
     const [pipCompensationsErr, setPipCompensationsErr] = React.useState("");
+    const [entityErr, setEntityErr] = React.useState("");
     const classes = useStyles();
 
     React.useEffect(() => {
@@ -89,13 +89,21 @@ export default function EmployeeGradeLevelModal ({open, employeeGrades, entities
         dispatch(Actions.getGradeLevels());
       }, [newAdded, updated]);
 
-      const handlePipEligibilityChange = (event) => {
-        setPipEligibility(event.target.checked);
+      const handleEntityChange = async (event) => {
+        const { data: { success, data  } } = await api.get(`/entity/one/${event.target.value.id}`);
+        if (success && data) {
+            if(data.employeeGrades.length > 0) {
+                console.log('Grades: ', data.employeeGrades);
+                setGradeList(data.employeeGrades);
+                setSelectGrades(false);
+            }
+        }
+        register({ name: 'entityId', type: 'custom' }, { required: true });
+        setValue("entityId", event.target.value.id);
+        setEntityErr(errors.entityId?.message);
       };
 
-
       const handleGradeChange = async (event) => {
-        setGradeId(event.target.value.id);
         register({ name: 'gradeId', type: 'custom' }, { required: true });
         setValue("gradeId", event.target.value.id);
         setGradeErr(errors.gradeId?.message);
@@ -117,7 +125,7 @@ export default function EmployeeGradeLevelModal ({open, employeeGrades, entities
 
     const onSubmit = async (value) => {
         const form = { ...value };
-        console.log('Employee Grade Level form: ', form);
+        // console.log('Employee Grade Level form: ', form);
         if (edit) {
             try {
                 loading('Updating Employee Grade Level...');
@@ -178,6 +186,26 @@ export default function EmployeeGradeLevelModal ({open, employeeGrades, entities
         <Grid container spacing={3} justify='space-between' align='center' style={{ marginBottom: '2rem', marginTop: '2rem', overflowY: 'scroll'}}>
             <Grid item lg={12} md={12} sm={12} xs={12}>
                 <FormControl variant="outlined" style={{ width: '100%', margin: '8px 0px' }} className={classes.formControl}>
+                    <InputLabel id="demo-simple-select-outlined-label">Entity</InputLabel>
+                    <Select
+                    justify='left'
+                    align='left'
+                    labelId="demo-simple-select-outlined-label"
+                    id="demo-simple-select-outlined"
+                    name='entityId'
+                    onChange={handleEntityChange}
+                    label="Entity"
+                    >
+                    {entities.map(item => (
+                    <MenuItem key={item.id} value={item}>
+                        {item.entityName}
+                    </MenuItem>))}
+                    </Select>
+                    <FormHelperText style={{ color: 'red'}}>{entityErr}</FormHelperText>
+                </FormControl>
+            </Grid>
+            <Grid item lg={12} md={12} sm={12} xs={12}>
+                <FormControl variant="outlined" style={{ width: '100%', margin: '8px 0px' }} className={classes.formControl}>
                     <InputLabel id="demo-simple-select-outlined-label">Employee Grade</InputLabel>
                     <Select
                     justify='left'
@@ -185,12 +213,14 @@ export default function EmployeeGradeLevelModal ({open, employeeGrades, entities
                     labelId="demo-simple-select-outlined-label"
                     id="demo-simple-select-outlined"
                     name='gradeId'
+                    disabled={selectGrades}
+                    variant={selectGrades ? 'filled' : 'outlined'}
                     error={errors.gradeId}
                     message={errors.gradeId?.message}
                     onChange={handleGradeChange}
                     label="Employee Grade"
                     >
-                    {employeeGrades.map(item => (
+                    {gradeList.map(item => (
                     <MenuItem key={item.id} value={item.id}>
                         {item.gradeName}
                     </MenuItem>))}

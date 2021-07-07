@@ -20,7 +20,7 @@ export function saveLeaveOptions(data) {
       }
     });
 		request.then(response => {
-      // console.log(response)
+      // // console.log(response)
       // if(response.data.success /*&& response.data.message === ' created successfully'*/) {
         swal.fire({
           title: 'New leave type',

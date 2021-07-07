@@ -203,8 +203,8 @@ function PersonalTraining(props) {
         // setData(() => {
         //     return newData;
         // });
-        // console.log(newData)
-        // console.log(trainings)
+        // // console.log(newData)
+        // // console.log(trainings)
     }, [department, trainings]);
 
     // useEffect(() => {
@@ -298,7 +298,7 @@ function PersonalTraining(props) {
     }
 
     function handleCancelTraining(id) {
-        console.log(id, "I am an employee");
+        // console.log(id, "I am an employee");
         dispatch(Actions.cancelTrainingRequest(id));
     }
 

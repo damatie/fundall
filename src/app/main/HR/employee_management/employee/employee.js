@@ -80,10 +80,10 @@ function Employee() {
   const entities = useSelector(({ entity }) => entity.entities.data);
   //   const employee = useSelector(({ employees }) => employees.employee);
   const jobTitle = useSelector(({ jobTitles }) => jobTitles);
-  console.log('jobTitle: ', jobTitle)
+  // console.log('jobTitle: ', jobTitle)
   const jobTitles = [];
   const role = useSelector(({ roles }) => roles);
-  console.log('role: ', role)
+  // console.log('role: ', role)
   const roles = [];
   const employmentStatusList = [];
   const modeOfEmploymentList = [];
@@ -106,7 +106,7 @@ function Employee() {
   React.useEffect(() => {
     dispatch(entityActions.getEntities());
     dispatch(rolesActions.getRoles());
-    console.log('entities: ', entities)
+    // console.log('entities: ', entities)
   }, []);
   
   const handleCheckedChange = (event) => {
@@ -155,7 +155,7 @@ function Employee() {
   const onSubmit = async (data) => {
     try {
       const form = { ...data, srgIdNumber: employeeId, entityId, departmentId, roleId, employmentStatus, modeOfEmployment, jobTitleId, employeeGradeId, employeeGradeLevelId };
-      console.log('Form: ', form)
+      // console.log('Form: ', form)
       loading('Creating Employee Account...');
       const { data: { message  } } = await api.post('/auth/employee/add-employee', form);
       swal.fire({

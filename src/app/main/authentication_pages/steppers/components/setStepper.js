@@ -8,7 +8,7 @@ export const setStepper = async (genericDept=[], regStep=0) => {
         form.regStep = regStep;
         const { data: { message, success  } } = await api.post('/department/generic', form);
         if (success) {
-            console.log('Steps Updated successfully');
+            // console.log('Steps Updated successfully');
         } 
     } catch(e) {
         console.error(e);

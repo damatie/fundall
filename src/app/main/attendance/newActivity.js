@@ -53,7 +53,7 @@ const NewActivity = () => {
                 name, description, code, type
             }));
         }
-        console.log(data)
+        // console.log(data)
     }, [data])
 
     useEffect(() => {

@@ -49,7 +49,7 @@ function EmployeeLeaveDetails(props) {
 	}
 
 	useEffect(() => {
-		console.log(props.config.user)
+		// console.log(props.config.user)
 		dispatch(Actions.getLeaveReqDetails(id))
 	}, [dispatch])
 

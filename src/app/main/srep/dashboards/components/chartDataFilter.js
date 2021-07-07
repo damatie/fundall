@@ -5,10 +5,10 @@ export const filterByMonths = (list = [], chartYearfilter, filter, filterNew) =>
     for (let index = 0; index < monthNames.length; index++) {
         const element = monthNames[index];
         const filteredList = list.filter(e => {
-            console.log('filter: ', filter);
-            console.log('filterNew: ', filterNew);
-            console.log('e.entity: ', e.entity);
-            console.log('e.department: ', e.department);
+            // console.log('filter: ', filter);
+            // console.log('filterNew: ', filterNew);
+            // console.log('e.entity: ', e.entity);
+            // console.log('e.department: ', e.department);
             if (chartYearfilter !== 'all' ) {
                 if (filter !== 'all') {
                     if (filterNew !== 'all') {

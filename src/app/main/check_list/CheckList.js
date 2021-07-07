@@ -29,11 +29,11 @@ function CheckList(props) {
     }
 
     function handleEdit(event, model) {
-        // console.log(model)
+        // // console.log(model)
         dispatch(Actions.updateCheckList(model, model.id));
     }
 
-    // console.log(rows);
+    // // console.log(rows);
 
     const columns = [
         {

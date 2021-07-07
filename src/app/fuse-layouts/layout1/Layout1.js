@@ -104,19 +104,19 @@ const changePasswordCondition = (profileStateData) => {
 const completeRegCondition = () => {
 	const dataResponse = localStorage.getItem('login_data');
 	const data = JSON.parse(dataResponse);
-	console.log('User Login Data: ', data);
+	// console.log('User Login Data: ', data);
 	if (data?.role?.name.toLowerCase().trim() === "hr admin") {
 		if (data?.company?.hasEntities === true)  {
 			// route to complete registration
 			if (data?.company?.regStep < 4) {
-				console.log('should Redirect to Complete Registration ');
+				// console.log('should Redirect to Complete Registration ');
 				// window.location.href('/auth/complete-registration');
 				return <Redirect to='/auth/complete-registration' />
 			}
 		} else {
 			// route to complete registration
 			if (data?.company?.regStep < 3) {
-				console.log('should Redirect to Complete Registration 3 steps');
+				// console.log('should Redirect to Complete Registration 3 steps');
 				return <Redirect to='/auth/complete-registration' />
 			}
 		}

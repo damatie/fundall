@@ -29,7 +29,7 @@ export function submitRegister(data) {
 		})
 		.then(res => res.json())
 		.then(data => {
-			console.log(data);
+			// console.log(data);
 			if(data.success && data.message !== "Accout already exist") {
 				swal.fire({
 					title: 'Sign up',

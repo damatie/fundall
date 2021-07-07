@@ -124,7 +124,7 @@ export default function AccountSettings({handleNext}) {
   }, [errors]);
 
   React.useEffect(() => {
-    console.log('data: ', {...getValues()});
+    // console.log('data: ', {...getValues()});
   }, [getValues])
 
   const handleTimeZoneChange = (event) => {
@@ -156,7 +156,7 @@ export default function AccountSettings({handleNext}) {
     register({ name: 'employmentStatus', type: 'custom' }, { required: true });
     let employmentStatusData = employmentStatus;
     employmentStatusData.splice(index, 1);
-    console.log("EmploymentStatus: ", employmentStatusData);
+    // console.log("EmploymentStatus: ", employmentStatusData);
     setEmploymentStatus(employmentStatusData);
     setValue("employmentStatus", employmentStatusData);
     setEmploymentStatusErr(errors.employmentStatus?.message);
@@ -263,7 +263,7 @@ export default function AccountSettings({handleNext}) {
     employeeGrade.push(chip)
     setValue("employeeGrade", employeeGrade);
     setEmployeeGradeErr(errors.employeeGrade?.message);
-    console.log('data: ', JSON.stringify({...getValues()}));
+    // console.log('data: ', JSON.stringify({...getValues()}));
   };
 
   const handleDeleteEmployeeGrade = (chip, index) => {

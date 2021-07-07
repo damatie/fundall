@@ -92,7 +92,7 @@ function SubFolder(props) {
         })
     }, [dispatch, mainFolder]);
 
-	console.log(mainFolders)
+	// console.log(mainFolders)
     const handleOpenModal = () => {
         setOpen(true);
     }
@@ -122,7 +122,7 @@ function SubFolder(props) {
 				header={{
 					icon: (mainFolder.id === 1 || (mainFolder && mainFolder.name.toUpperCase().includes('PUBLIC'))) ? 'folder_shared' : 'folder',
                     title: `Document Library / ${(mainFolder) ? mainFolder.name : pathName}`,
-                    handleSearch: ({target: { value }}) => console.log(value),
+                    handleSearch: ({target: { value }}) => // console.log(value),
                     showLink: true,
                     url: '/library/folders',
 					isState: true

@@ -58,7 +58,7 @@ function NewOpening(props) {
 	const formRef = useRef(null);
 
 	useEffect(() => {
-		// console.log(details)
+		// // console.log(details)
 		dispatch(employeeActions.getAllEmployee());
 	}, [dispatch])
 
@@ -104,7 +104,7 @@ function NewOpening(props) {
 		if (name === "entityId") {
 			getDepartment(value);
 		} else if (name === "country") {
-			console.log(value)
+			// console.log(value)
 			getState(value)
 		}
 	}

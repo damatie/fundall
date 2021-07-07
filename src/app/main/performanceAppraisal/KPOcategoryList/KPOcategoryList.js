@@ -14,7 +14,7 @@ const KPOcategoryList = () => {
       header={{
         icon: '',
         title: 'KPO Category list',
-        handleSearch: ({target: { value }}) => console.log(value),
+        handleSearch: ({target: { value }}) => // console.log(value),
       }}
       button={{
         showButton: true,

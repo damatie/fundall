@@ -141,7 +141,7 @@ const useKPOcategoryList = () => {
         dispatch(addKpoCategory(model))
         break;
       case 'update':
-        console.log(model, type);
+        // console.log(model, type);
         dispatch(updateKpoCategory({
           id: category?.id,
           payload: model

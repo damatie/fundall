@@ -15,7 +15,7 @@ export function showEmployeeDialog(value) {
     //   value.lastIndexOf("@") + 1, 
     //   value.lastIndexOf(" ")
     // );
-    // console.log(name);
+    // // console.log(name);
     // if(name.length > 0) {
     //   return dispatch({
     //     type: FILTER_EMPLOYEE,
@@ -32,13 +32,13 @@ export function showEmployeeDialog(value) {
       }).then(res => res.json()).then(
         post => {
           if(post.success === true) {
-            console.log(post)
+            // console.log(post)
             return dispatch({
               type: SHOW_EMPLOYEE_DIALOG_SUCCESS,
               payload: post.data
             });
           } else {
-            console.log(post);
+            // console.log(post);
             return dispatch({
               type: SHOW_EMPLOYEE_DIALOG_ERROR,
               payload: ''

@@ -28,7 +28,7 @@ export default function ActionMenu(props) {
 
 	const [anchorEl, setAnchorEl] = useState(null);
 	const open = Boolean(anchorEl);
-	// console.log(props)
+	// // console.log(props)
 	const handleClick = event => {
 		setAnchorEl(event.currentTarget);
 	};

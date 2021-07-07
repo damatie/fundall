@@ -24,7 +24,7 @@ export function getApprovedTraining() {
 		});
 		fetch(`${basUrl()}/training/all/dept/approved`, { ...headers.getRegHeader() })
 			.then(res => res.json()).then(async data => {
-				console.log(data.data);
+				// console.log(data.data);
 				data.success ?
 					(data.data) ?
 						dispatch({
@@ -63,7 +63,7 @@ export function getRejectedTraining() {
 		});
 		fetch(`${basUrl()}/training/all/dept/rejected`, { ...headers.getRegHeader() })
 			.then(res => res.json()).then(async data => {
-				console.log(data.data);
+				// console.log(data.data);
 				data.success ?
 					(data.data) ?
 						dispatch({
@@ -102,7 +102,7 @@ export function getPendingTraining() {
 		});
 		fetch(`${basUrl()}/training/all/dept/pending`, { ...headers.getRegHeader() })
 			.then(res => res.json()).then(async data => {
-				console.log(data.data);
+				// console.log(data.data);
 				data.success ?
 					(data.data) ?
 						dispatch({
@@ -141,7 +141,7 @@ export function getCompletedTraining() {
 		});
 		fetch(`${basUrl()}/training/all/dept/completed`, { ...headers.getRegHeader() })
 			.then(res => res.json()).then(async data => {
-				console.log(data.data);
+				// console.log(data.data);
 				data.success ?
 					(data.data) ?
 						dispatch({
@@ -180,7 +180,7 @@ export function getReviewedTraining() {
 		});
 		fetch(`${basUrl()}/training/all/dept/reviewed`, { ...headers.getRegHeader() })
 			.then(res => res.json()).then(async data => {
-				console.log(data.data);
+				// console.log(data.data);
 				data.success ?
 					(data.data) ?
 						dispatch({
@@ -213,7 +213,7 @@ export function getReviewedTraining() {
 }
 
 export function approveTraining(id) {
-	console.log(id);
+	// console.log(id);
 	return dispatch => {
 		dispatch({
 			type: LOADING_TRAINIING
@@ -231,7 +231,7 @@ export function approveTraining(id) {
 			preConfirm: () => [
 				fetch(`${basUrl()}/training/hod/approve/${id}`, { ...headers.reqHeader('PATCH', '') })
 					.then(res => res.json()).then(async data => {
-						console.log(data);
+						// console.log(data);
 						if (data.success) {
 							swal.fire(
 								'Approved!',
@@ -278,7 +278,7 @@ export function approveTraining(id) {
 }
 
 export function rejectTraining(id) {
-	console.log(id);
+	// console.log(id);
 	return dispatch => {
 		dispatch({
 			type: LOADING_TRAINIING
@@ -296,7 +296,7 @@ export function rejectTraining(id) {
 			preConfirm: () => [
 				fetch(`${basUrl()}/training/hod/reject/${id}`, { ...headers.reqHeader('PATCH', '') })
 					.then(res => res.json()).then(async data => {
-						console.log(data);
+						// console.log(data);
 						if (data.success) {
 							swal.fire(
 								'Rejected!',
