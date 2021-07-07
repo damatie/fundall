@@ -31,6 +31,7 @@ import { FormHelperText } from "@material-ui/core";
 import Modal from './modal';
 import CompensationItem from './compensationItem';
 import *  as Actions from 'app/main/employeeManagement/store/actions';
+import { CompensationColumnsConfig } from 'app/main/compensationColumns/CompensationColumnsConfig';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -49,7 +50,7 @@ const useStyles = makeStyles(theme => ({
 const schema = yup.object().shape({
     gradeId: yup.number(errorMsg({ name: 'Employee Grade', type: 'number' }))
         .required(errorMsg({ name: 'Employee Grade', type: 'required' })),
-    level: yup.number(errorMsg({ name: 'Level', type: 'number' }))
+    level: yup.string(errorMsg({ name: 'Level', type: 'string' }))
         .required(errorMsg({ name: 'Level', type: 'required' })),
     description: yup.string(errorMsg({ name: 'Description', type: 'string' }))
         .max(1000, errorMsg({ name: 'Description', type: 'max', number: 1000 })),
@@ -71,16 +72,17 @@ export default function EmployeeGradeLevelModal ({open, employeeGrades, entities
     const [updated, setUpdated] = React.useState(false);
     const [gradeId, setGradeId] = React.useState(0);
     const [gradeErr, setGradeErr] = React.useState("");
-    const [level, setLevel] = React.useState(0);
+    const [level, setLevel] = React.useState("");
     const [employeeGrade, setEmployeeGrade] = React.useState("");
     const [compensationData, setCompensationData] = React.useState(['Housing', 'Transportation', 'Basic Salary']);
-    const [pipEligibility, setPipEligibility] = React.useState(true);
+    const [pipCompensations, setPipCompensations] = React.useState([]);
     const [employeeGradeErr, setEmployeeGradeErr] = React.useState("");
+    const [pipCompensationsErr, setPipCompensationsErr] = React.useState("");
     const classes = useStyles();
 
     React.useEffect(() => {
         setGradeErr(errors.gradeId?.message);
-        setEmployeeGradeErr(errors.gradeName?.message);
+        setPipCompensationsErr(errors.pipCompensations?.message);
       }, [errors]);
 
       React.useEffect(() => {
@@ -96,21 +98,26 @@ export default function EmployeeGradeLevelModal ({open, employeeGrades, entities
         setGradeId(event.target.value.id);
         register({ name: 'gradeId', type: 'custom' }, { required: true });
         setValue("gradeId", event.target.value.id);
-        setEntityName(event.target.value.entityName);
         setGradeErr(errors.gradeId?.message);
       };
 
-      const handleEmployeeGradeChange = async (event) => {
-        setEmployeeGrade(event.target.value);
-        register({ name: 'gradeName', type: 'custom' }, { required: true });
-        setValue("gradeName", event.target.value);
-        setEntityErr(errors.gradeName?.message);
+      const handlePipCompensationsChange = async (event) => {
+        const { options } = event.target;
+        const value = [];
+        for (let i = 0, l = options.length; i < l; i += 1) {
+          if (options[i].selected) {
+            value.push(options[i].value);
+          }
+        }
+        setPipCompensations(value);
+        register({ name: 'pipCompensations', type: 'custom' }, { required: true });
+        setValue("pipCompensations", value);
+        setPipCompensationsErr(errors.pipCompensations?.message);
       };
 
-
     const onSubmit = async (value) => {
-        const form = { ...value, entityName, pipEligibility };
-        console.log('Employee Grade form: ', form);
+        const form = { ...value };
+        console.log('Employee Grade Level form: ', form);
         if (edit) {
             try {
                 loading('Updating Employee Grade Level...');
@@ -163,7 +170,7 @@ export default function EmployeeGradeLevelModal ({open, employeeGrades, entities
 
   return (
     <Modal
-      title={edit ? 'Edit Employee Grade' : 'Add Employee Grade'}
+      title={edit ? 'Edit Employee Grade Level' : 'Add Employee Grade Level'}
       handleClose={() => setOpen(false)}
       open={open}
     >
@@ -184,8 +191,8 @@ export default function EmployeeGradeLevelModal ({open, employeeGrades, entities
                     label="Employee Grade"
                     >
                     {employeeGrades.map(item => (
-                    <MenuItem key={item.id} value={item}>
-                        {item.entityName}
+                    <MenuItem key={item.id} value={item.id}>
+                        {item.gradeName}
                     </MenuItem>))}
                     </Select>
                     <FormHelperText style={{ color: 'red'}}>{gradeErr}</FormHelperText>
@@ -193,67 +200,59 @@ export default function EmployeeGradeLevelModal ({open, employeeGrades, entities
             </Grid>
 
             <Grid item lg={12} md={12} sm={12} xs={12}>
-                <FormControl variant="outlined" style={{ width: '100%', margin: '8px 0px' }} className={classes.formControl}>
-                    <InputLabel id="demo-simple-select-outlined-label">Employee Grade</InputLabel>
-                    <Select
-                    justify='left'
-                    align='left'
-                    labelId="demo-simple-select-outlined-label"
-                    id="demo-simple-select-outlined"
-                    name='gradeName'
-                    error={errors.gradeName}
-                    message={errors.gradeName?.message}
-                    onChange={handleEmployeeGradeChange}
-                    label="Employee Grade"
-                    >
-                    {employeeGrades.map(item => (
-                    <MenuItem key={item} value={item}>
-                        {item}
-                    </MenuItem>))}
-                    </Select>
-                    <FormHelperText style={{ color: 'red'}}>{employeeGradeErr}</FormHelperText>
-                </FormControl>
+                <Input
+                    label='Level Name'
+                    name='level'
+                    type='text'
+                    error={errors.level}
+                    message={errors.level?.message}
+                    helperText={errors.level?.message}
+                    refs={register}
+                />
             </Grid>
             <Grid item lg={12} md={12} sm={12} xs={12}>
                 <Input
                     label='Description'
-                    name='gradeDescription'
+                    name='description'
                     type='text'
                     multiline
                     rows="4"
-                    error={errors.gradeDescription}
-                    message={errors.gradeDescription?.message}
-                    helperText={errors.gradeDescription?.message}
+                    error={errors.description}
+                    message={errors.description?.message}
+                    helperText={errors.description?.message}
                     refs={register}
                 />
             </Grid>
 
             <Typography variant="body1" style={{ marginTop: '15px', marginLeft: '15px' }} color="initial"><strong>Compensations</strong></Typography>
             <Grid item lg={12} md={12} sm={12} xs={12} align='left' style={{ borderRadius: '5px', border: 'solid 1px black', margin: '15px', height: '30vh', overflowY: "scroll"  }}>
-              {compensationData.map(item => (
-                 <CompensationItem name={item} compensationObj={compensationObj} />))}
+              {compensationList.map(item => (
+                 <CompensationItem name={item?.columnName} compensationObj={compensationObj} />))}
             </Grid>
 
             <Grid item lg={12} md={12} sm={12} xs={12}>
                 <FormControl variant="outlined" style={{ width: '100%', margin: '8px 0px' }} className={classes.formControl}>
-                    <InputLabel id="demo-simple-select-outlined-label">Employee Grade</InputLabel>
+                    <InputLabel shrink htmlFor="select-multiple-native" id="demo-simple-select-outlined-label">Pip Compensations</InputLabel>
                     <Select
-                    justify='left'
-                    align='left'
-                    labelId="demo-simple-select-outlined-label"
-                    id="demo-simple-select-outlined"
-                    name='gradeId'
-                    error={errors.gradeId}
-                    message={errors.gradeId?.message}
-                    onChange={handleGradeChange}
-                    label="Employee Grade"
+                        justify='left'
+                        align='left'
+                        labelId="demo-simple-select-outlined-label"
+                        id="demo-simple-select-outlined"
+                        multiple
+                        native
+                        value={pipCompensations}
+                        onChange={handlePipCompensationsChange}
+                        inputProps={{ id: 'select-multiple-native', }}
+                        name='pipCompensations'
+                        error={errors.pipCompensations}
+                        message={errors.pipCompensations?.message}
                     >
-                    {employeeGrades.map(item => (
-                    <MenuItem key={item.id} value={item}>
-                        {item.entityName}
-                    </MenuItem>))}
+                        {compensationList.map((item) => (
+                            <option key={item.id} value={item.columnName}>
+                                {item.columnName}
+                            </option>))}
                     </Select>
-                    <FormHelperText style={{ color: 'red'}}>{gradeErr}</FormHelperText>
+                    <FormHelperText style={{ color: 'red'}}>{pipCompensationsErr}</FormHelperText>
                 </FormControl>
             </Grid>
 

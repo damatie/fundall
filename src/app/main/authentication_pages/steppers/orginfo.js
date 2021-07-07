@@ -48,13 +48,13 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const schema = yup.object().shape({
-    companyType: yup.string()
+    type: yup.string()
         .required(errorMsg({ name: 'Company Type', type: 'required' })),
-    companyStartDate: yup.string()
+    startDate: yup.string()
         .required(errorMsg({ name: 'Company Start Date', type: 'required' })),
-    noOfBranches: yup.string()
+    noOfBranch: yup.string()
         .required(errorMsg({ name: 'Number Of Branches', type: 'required' })),
-    companyEmail: yup.string()
+    email: yup.string()
         .matches(/^[A-Za-z\d@$!%*#?&]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]{2,})*$/, "Enter a valid Email Address")
         .required(errorMsg({ name: 'Email Address', type: 'required' }))
         .email(),
@@ -64,24 +64,12 @@ const schema = yup.object().shape({
         .required(errorMsg({ name: 'State', type: 'required' })),
     city: yup.string()
         .required(errorMsg({ name: 'City', type: 'required' })),
-    companyVision: yup.string(errorMsg({ name: 'Company Vision', type: 'string' }))
-        // .min(3, errorMsg({ name: 'Company Vision', type: 'min', number: 3 }))
-        // .max(60, errorMsg({ name: 'Company Vision', type: 'max', number: 60 }))
-        ,
-    companyMission: yup.string(errorMsg({ name: 'Company Mission', type: 'string' }))
-        // .min(3, errorMsg({ name: 'Company Mision', type: 'min', number: 3 }))
-        // .max(60, errorMsg({ name: 'Company Mision', type: 'max', number: 60 }))
-        ,
-    companyWebsite: yup.string(errorMsg({ name: 'Company Website', type: 'string' }))
-        // .min(3, errorMsg({ name: 'Company Website', type: 'min', number: 3 }))
-        // .max(60, errorMsg({ name: 'Company Website', type: 'max', number: 60 }))
-        ,
-    hqAddress: yup.string(errorMsg({ name: 'HQ Address', type: 'string' }))
-        // .min(3, errorMsg({ name: 'Middle Name', type: 'min', number: 3 }))
-        // .max(60, errorMsg({ name: 'Middle Name', type: 'max', number: 60 }))
-        ,
-    branchAddresses: yup.array()
-        .min(1, 'Must have at least one Branch Addresses')
+    vision: yup.string(errorMsg({ name: 'Company Vision', type: 'string' })),
+    mission: yup.string(errorMsg({ name: 'Company Mission', type: 'string' })),
+    website: yup.string(errorMsg({ name: 'Company Website', type: 'string' })),
+    address: yup.string(errorMsg({ name: 'HQ Address', type: 'string' })),
+    branchAddress: yup.array()
+        .min(1, 'Must have at least one Branch Address')
         .required(errorMsg({ name: 'Branch Addresses', type: 'required' })),
 });
 
@@ -102,8 +90,8 @@ function OrganizationInformation({handleNext}) {
   const [cityList, setCityList] = React.useState([]);
   const [country, setCountry] = React.useState([]);
   const [countryValue, setCountryValue] = React.useState([]);
-  const [phoneNumber1, setPhoneNumber1] = React.useState(234);
-  const [phoneNumber2, setPhoneNumber2] = React.useState(234);
+  const [primaryPhoneNo, setPrimaryPhoneNo] = React.useState(234);
+  const [secondaryPhoneNo, setSecondaryPhoneNo] = React.useState(234);
   const [companyStartDate, setCompanyStartDate] = React.useState(new Date());
   const [branchAddresses, setBranchAddresses] = React.useState([]);
   const [branchAddressesErr, setBranchAddressesErr] = React.useState("");
@@ -112,7 +100,7 @@ function OrganizationInformation({handleNext}) {
   const [countryErr, setCountryErr] = React.useState("");
   const [stateErr, setStateErr] = React.useState("");
   const [cityErr, setCityErr] = React.useState("");
-  const [companyLogo, setCompanyLogo] = React.useState({});
+  const [logo, setLogo] = React.useState({});
   const classes = useStyles();
 
 
@@ -138,17 +126,17 @@ function OrganizationInformation({handleNext}) {
   }, [cities])
 
   React.useEffect(() => {
-    setCompanyTypeErr(errors.companyType?.message);
-    setNoOfBranchesErr(errors.noOfBranches?.message);
+    setCompanyTypeErr(errors.type?.message);
+    setNoOfBranchesErr(errors.noOfBranch?.message);
     setCountryErr(errors.country?.message);
     setStateErr(errors.state?.message);
     setCityErr(errors.city?.message);
-    setBranchAddressesErr(errors.branchAddresses?.message);
+    setBranchAddressesErr(errors.branchAddress?.message);
   }, [errors]);
 
   React.useEffect(() => {
-    register({ name: 'companyStartDate', type: 'custom' }, { required: true });
-    setValue("companyStartDate", JSON.stringify(companyStartDate));
+    register({ name: 'startDate', type: 'custom' }, { required: true });
+    setValue("startDate", JSON.stringify(companyStartDate));
   }, [companyStartDate]);
 
   React.useEffect(() => {
@@ -156,23 +144,23 @@ function OrganizationInformation({handleNext}) {
   }, [getValues])
 
   const handleCompanyTypeChange = (event) => {
-    register({ name: 'companyType', type: 'custom' }, { required: true });
-    setValue("companyType", event.target.value);
-    setCompanyTypeErr(errors.companyType?.message);
+    register({ name: 'type', type: 'custom' }, { required: true });
+    setValue("type", event.target.value);
+    setCompanyTypeErr(errors.type?.message);
   };
 
   const handleNoOfBranchesChange = (event) => {
-    register({ name: 'noOfBranches', type: 'custom' }, { required: true });
-    setValue("noOfBranches", event.target.value);
-    setNoOfBranchesErr(errors.noOfBranches?.message);
+    register({ name: 'noOfBranch', type: 'custom' }, { required: true });
+    setValue("noOfBranch", event.target.value);
+    setNoOfBranchesErr(errors.noOfBranch?.message);
   };
 
   const handlePhone1Change = (event) => {
-    setPhoneNumber1(event);
+    setPrimaryPhoneNo(event);
   };
     
   const handlePhone2Change = (event) => {
-    setPhoneNumber2(event);
+    setSecondaryPhoneNo(event);
   };
 
   const handleCountryChange = (event) => {
@@ -195,27 +183,32 @@ function OrganizationInformation({handleNext}) {
   };
   
   const handleAddBranchAddresses = (chip) => {
-    register({ name: 'branchAddresses', type: 'custom' }, { required: true });
+    register({ name: 'branchAddress', type: 'custom' }, { required: true });
     branchAddresses.push(chip)
-    setValue("branchAddresses", branchAddresses);
-    setBranchAddressesErr(errors.branchAddresses?.message);
+    setValue("branchAddress", branchAddresses);
+    setBranchAddressesErr(errors.branchAddress?.message);
     console.log('data: ', JSON.stringify({...getValues()}));
   };
 
   const handleDeleteBranchAddresses = (chip, index) => {
-    register({ name: 'branchAddresses', type: 'custom' }, { required: true });
+    register({ name: 'branchAddress', type: 'custom' }, { required: true });
     let branchAddressesData = branchAddresses;
     branchAddressesData.splice(index, 1);
     setBranchAddresses(branchAddressesData);
-    setValue("branchAddresses", branchAddressesData);
-    setBranchAddressesErr(errors.branchAddresses?.message);
+    setValue("branchAddress", branchAddressesData);
+    setBranchAddressesErr(errors.branchAddress?.message);
   };
 
   const onSubmit = async (data) => {
       try {
         const form = { ...data }
+        let formData = new FormData();
+        for (i = 0; i < Object.keys(form).length; i++) {
+          formData.append(`${Object.keys(form)[i]}`, form[Object.keys(form)[i]]);
+        }
+        console.log('FormData: ', formData);
         loading('processing...');
-        const { data: { message  } } = await api.post('/organization_info', form);
+        const { data: { message  } } = await api.post('/organization_info', formData);
         swal.fire({
           text: message,
           icon: 'success'
@@ -244,8 +237,8 @@ function OrganizationInformation({handleNext}) {
                   labelId="demo-simple-select-outlined-label"
                   id="demo-simple-select-outlined"
                   name='companyType'
-                  error={errors.companyType}
-                  message={errors.companyType?.message}
+                  error={errors.type}
+                  message={errors.type?.message}
                   onChange={handleCompanyTypeChange}
                   label="Company Type"
                 >
@@ -261,20 +254,20 @@ function OrganizationInformation({handleNext}) {
               <FormControl variant="outlined" style={{ width: '100%', margin: '8px 0px' }} className={classes.formControl}>
                 <DatePicker
                   inputVariant="outlined"
-                  name='companyStartDate'
-                  error={errors.companyStartDate}
-                  message={errors.companyStartDate?.message}
+                  name='startDate'
+                  error={errors.startDate}
+                  message={errors.startDate?.message}
                   label='Company Start Date'
                   className="w-full"
                   value={companyStartDate}
                   onChange={(newValue) => {
                     console.log('errors: ', errors);
                     setCompanyStartDate(newValue);
-                    register({ name: 'companyStartDate', type: 'custom' }, { required: true });
-                    setValue("companyStartDate", JSON.stringify(newValue));
+                    register({ name: 'startDate', type: 'custom' }, { required: true });
+                    setValue("startDate", JSON.stringify(newValue));
                   }}
                   format="MM/DD/yyyy"
-                  helperText={errors.companyStartDate?.message}
+                  helperText={errors.startDate?.message}
                 />
               </FormControl>
             </Grid>
@@ -286,9 +279,9 @@ function OrganizationInformation({handleNext}) {
                   align='left'
                   labelId="demo-simple-select-outlined-label"
                   id="demo-simple-select-outlined"
-                  name='noOfBranches'
-                  error={errors.noOfBranches}
-                  message={errors.noOfBranches?.message}
+                  name='noOfBranch'
+                  error={errors.noOfBranch}
+                  message={errors.noOfBranch?.message}
                   onChange={handleNoOfBranchesChange}
                   label="Number Of Branches"
                 >
@@ -303,26 +296,26 @@ function OrganizationInformation({handleNext}) {
             <Grid item lg={4} md={6} sm={12} xs={12}>
               <PhoneNumberInput
                 placeholder='Primary Phone Number'
-                name='phoneNumber1'
+                name='primaryPhoneNo'
                 onChange={handlePhone1Change}
-                error={errors.phoneNumber1}
+                error={errors.primaryPhoneNo}
                 refs={register}
                 type='number'
-                message={errors.phoneNumber1?.message}
-                helperText={errors.phoneNumber1?.message}
+                message={errors.primaryPhoneNo?.message}
+                helperText={errors.primaryPhoneNo?.message}
                 country={'ng'}
               />
             </Grid>
             <Grid item lg={4} md={6} sm={12} xs={12}>
               <PhoneNumberInput
                 placeholder='Secondary Phone Number'
-                name='phoneNumber2'
+                name='secondaryPhoneNo'
                 onChange={handlePhone2Change}
-                error={errors.phoneNumber2}
+                error={errors.secondaryPhoneNo}
                 refs={register}
                 type='number'
-                message={errors.phoneNumber2?.message}
-                helperText={errors.phoneNumber2?.message}
+                message={errors.secondaryPhoneNo?.message}
+                helperText={errors.secondaryPhoneNo?.message}
                 country={'ng'}
               />
             </Grid>
@@ -330,10 +323,10 @@ function OrganizationInformation({handleNext}) {
               <Input
                   required
                   label='Company Email'
-                  name='companyEmail'
-                  error={errors.companyEmail}
-                  message={errors.companyEmail?.message}
-                  helperText={errors.companyEmail?.message}
+                  name='email'
+                  error={errors.email}
+                  message={errors.email?.message}
+                  helperText={errors.email?.message}
                   refs={register}
               />
             </Grid>
@@ -396,8 +389,8 @@ function OrganizationInformation({handleNext}) {
                   label="City"
                 >
                   {cityList.map(item => (
-                  <MenuItem key={item.id} value={item.cc}>
-                    {item.label}
+                  <MenuItem key={item.id} value={item.name}>
+                    {item.name}
                   </MenuItem>))}
                 </Select>
                 <FormHelperText style={{ color: 'red'}}>{cityErr}</FormHelperText>
@@ -407,13 +400,13 @@ function OrganizationInformation({handleNext}) {
               <Input
                   required
                   label='Company Vision'
-                  name='companyVision'
+                  name='vision'
                   type='text'
                   multiline
                   rows="6"
-                  error={errors.companyVision}
-                  message={errors.companyVision?.message}
-                  helperText={errors.companyVision?.message}
+                  error={errors.vision}
+                  message={errors.vision?.message}
+                  helperText={errors.vision?.message}
                   refs={register}
               />
             </Grid>
@@ -421,13 +414,13 @@ function OrganizationInformation({handleNext}) {
               <Input
                   required
                   label='Company Mission'
-                  name='companyMission'
+                  name='mission'
                   type='text'
                   multiline
                   rows="6"
-                  error={errors.companyMission}
-                  message={errors.companyMission?.message}
-                  helperText={errors.companyMission?.message}
+                  error={errors.mission}
+                  message={errors.mission?.message}
+                  helperText={errors.mission?.message}
                   refs={register}
               />
             </Grid>
@@ -435,10 +428,10 @@ function OrganizationInformation({handleNext}) {
               <Input
                   required
                   label='Company Website'
-                  name='companyWebsite'
-                  error={errors.companyWebsite}
-                  message={errors.companyWebsite?.message}
-                  helperText={errors.companyWebsite?.message}
+                  name='website'
+                  error={errors.website}
+                  message={errors.website?.message}
+                  helperText={errors.website?.message}
                   refs={register}
               />
             </Grid>
@@ -446,13 +439,13 @@ function OrganizationInformation({handleNext}) {
               <Input
                   required
                   label='HQ Address'
-                  name='hqAddress'
+                  name='address'
                   type='text'
                   multiline
                   rows="6"
-                  error={errors.hqAddress}
-                  message={errors.hqAddress?.message}
-                  helperText={errors.hqAddress?.message}
+                  error={errors.address}
+                  message={errors.address?.message}
+                  helperText={errors.address?.message}
                   refs={register}
               />
             </Grid>
@@ -463,9 +456,9 @@ function OrganizationInformation({handleNext}) {
                 variant= 'outlined'
                 newChipKeyCodes={[188]}
                 style={{ width: '100%'}}
-                error={errors.branchAddresses}
-                message={errors.branchAddresses?.message}
-                helperText={errors.branchAddresses?.message}
+                error={errors.branchAddress}
+                message={errors.branchAddress?.message}
+                helperText={errors.branchAddress?.message}
                 allowDuplicates={false}
                 value={branchAddresses}
                 onAdd={(chip) => handleAddBranchAddresses(chip)}
@@ -477,8 +470,8 @@ function OrganizationInformation({handleNext}) {
             </Grid>  
             <Grid item lg={12} md={12} sm={12} xs={12} alignItems="center">
               <div>
-                <span style={{ marginBottom: '0.5rem', display: 'inline-block' }} ><strong>Company Logo</strong></span>
-                <SharedDropzone allowedTypes={'image/*'} placeholder={"Upload Company Logo"} setValue={setCompanyLogo} />
+                {/* <span style={{ marginBottom: '0.5rem', display: 'inline-block' }} ><strong>Company Logo</strong></span> */}
+                <SharedDropzone allowedTypes={'image/*'} placeholder={"Upload Company Logo"} setValue={setLogo} />
               </div>
             </Grid>  
           </Grid>

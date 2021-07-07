@@ -14,45 +14,45 @@ import Grid from '@material-ui/core/Grid';
 import ClearOutlinedIcon from '@material-ui/icons/ClearOutlined';
 
 const useStyles = makeStyles({
-	table: {
-		'& th': {
-			padding: '16px 0'
-		}
-	}
+  table: {
+    '& th': {
+      padding: '16px 0'
+    }
+  }
 });
-const Modal = (props)  => {
+const Modal = (props) => {
 
   const { open, handleClose, title, children } = props;
 
   return (
     <React.Fragment>
       <div>
-      <Dialog open={open} onClose={handleClose} fullWidth={true} maxWidth={'sm'} aria-labelledby="form-dialog-title">
-        <AppBar position="static">
-          <Toolbar className="flex w-full">
-          <Grid container spacing={3} justify='space-between' style={{ marginBottom: '2rem', marginTop: '2rem', overflowY: 'scroll'}}>
-            <Grid item align='left'>
-                <Typography variant="h4" color="inherit">
-                {title}
-                </Typography>
-            </Grid>
-            <Grid item align='right'>
-                <Button  onClick={handleClose}>
-                <span style={{ color: '#fff' }}><ClearOutlinedIcon/></span>
-                </Button>
-            </Grid>
-          </Grid>
-          </Toolbar>
-			  </AppBar>
-        <DialogContent>
-          { children }
-        </DialogContent>
-        {/* <DialogActions>
+        <Dialog open={open} onClose={handleClose} fullWidth={true} maxWidth={'sm'} aria-labelledby="form-dialog-title">
+          <AppBar position="static">
+            <Toolbar className="flex w-full">
+              <Grid container spacing={3} justify='space-between' style={{ marginBottom: '2rem', marginTop: '2rem' }}>
+                <Grid item align='left'>
+                  <Typography variant="h4" color="inherit">
+                    {title}
+                  </Typography>
+                </Grid>
+                <Grid item align='right'>
+                  <Button onClick={handleClose}>
+                    <span style={{ color: '#fff' }}><ClearOutlinedIcon /></span>
+                  </Button>
+                </Grid>
+              </Grid>
+            </Toolbar>
+          </AppBar>
+          <DialogContent>
+            {children}
+          </DialogContent>
+          {/* <DialogActions>
           <Button onClick={handleClose} color="primary">
             Close
           </Button>
         </DialogActions> */}
-      </Dialog>
+        </Dialog>
       </div>
     </React.Fragment>
   );

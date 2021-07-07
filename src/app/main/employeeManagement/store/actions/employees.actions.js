@@ -13,6 +13,7 @@ export const EMPLOYEE_GRADES = 'EMPLOYEE GRADES';
 export const EMPLOYEE_GRADE_LEVELS = 'EMPLOYEE GRADE LEVELS';
 export const GET_JOBTITLE = 'JOB TITLE';
 export const ACCOUNT_SETTINGS = 'ACCOUNT SETTINGS'
+export const COMPENSATIONS = 'COMPENSATIONS'
 
 export const getJobTitle = () => {
   return async (dispatch) => {
@@ -154,18 +155,40 @@ export const getAccountSettings = () => {
   return async (dispatch) => {
     try {
       // const userData = localStorage.getItem('user_profile');
+      console.log("Account Settings Called")
       const { data: { data, success } } = await api.get(`/account_settings`);
       if(success) {
         dispatch({
           type: ACCOUNT_SETTINGS,
           payload: data || {}
         })
-        // console.log("Account Settings Data: ", data)
+        console.log("Account Settings Data: ", data)
       }
     } catch (e) {
       dispatch({
         type: ACCOUNT_SETTINGS,
         payload: {}
+      })
+    }
+  };
+};
+export const getCompensations = () => {
+  return async (dispatch) => {
+    try {
+      // const userData = localStorage.getItem('user_profile');
+      console.log("Compensations Called")
+      const { data: { data, success } } = await api.get(`/compensation`);
+      if(success) {
+        dispatch({
+          type: COMPENSATIONS,
+          payload: data || []
+        })
+        console.log("Compensations Data: ", data)
+      }
+    } catch (e) {
+      dispatch({
+        type: COMPENSATIONS,
+        payload: []
       })
     }
   };

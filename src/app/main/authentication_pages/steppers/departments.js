@@ -50,8 +50,8 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const schema = yup.object().shape({
-    regSteps: yup.number()
-        .required(errorMsg({ name: 'regSteps', type: 'required' })),
+    regStep: yup.number()
+        .required(errorMsg({ name: 'regStep', type: 'required' })),
 });
 
 function Departments({handleNext}) {

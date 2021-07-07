@@ -37,6 +37,7 @@ import *  as Actions from 'app/main/employeeManagement/store/actions';
 import withReducer from "app/store/withReducer";
 import employeesReducer from "app/main/employeeManagement/store/reducers/employees.reducer";
 import { setStepper } from './components/setStepper';
+import EmployeeGradeLevelCard from './components/employeeGradeLevelCard';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -97,7 +98,7 @@ function Entities({handleNext}) {
     resolver: yupResolver(schema)
   });
 
-  const { entities, grades, accountSettings } = useSelector(state => state.employeeMgt);
+  const { entities, grades, gradeLevels, accountSettings, compensationData } = useSelector(state => state.employeeMgt);
   console.log('entities: ', entities);
   console.log('grades: ', grades);
 
@@ -105,6 +106,7 @@ function Entities({handleNext}) {
 // setEntityList setGradeList setAccountSettingsData
   const [entityList, setEntityList] = React.useState([]);
   const [gradeList, setGradeList] = React.useState([]);
+  const [gradeLevelList, setGradeLevelList] = React.useState([]);
   const [accountSettingsData, setAccountSettingsData] = React.useState({});
   const [openEntityModal, setOpenEntityModal] = React.useState(false);
   const [openEmployeeGradeModal, setOpenEmployeeGradeModal] = React.useState(false);
@@ -117,6 +119,7 @@ function Entities({handleNext}) {
   React.useEffect(() => {
     dispatch(Actions.getEntities());
     dispatch(Actions.getAccountSettings());
+    dispatch(Actions.getCompensations());
     dispatch(Actions.getGrades());
     dispatch(Actions.getGradeLevels());
     console.log('accountSettings: ', accountSettings);
@@ -125,8 +128,9 @@ function Entities({handleNext}) {
   React.useEffect(() => {
     setEntityList(entities);
     setGradeList(grades);
+    setGradeLevelList(gradeLevels);
     setAccountSettingsData(accountSettings);
-  }, [grades, entities, accountSettings])
+  }, [grades, entities, gradeLevels, accountSettings])
 
   React.useEffect(() => {
     console.log('data: ', {...getValues()});
@@ -237,6 +241,11 @@ function Entities({handleNext}) {
               <Button onClick={handleAddEmployeeGradeLevel} variant="contained" color="secondary">
                 <span style={{ marginRight: '5px' }}><AddBoxOutlinedIcon/></span> Add Employee Grade Level
               </Button>
+            </Grid>
+
+            <Grid item lg={12} md={12} sm={12} xs={12} align='left' className='my-10'>
+               {gradeLevelList.map(item => (
+                 <EmployeeGradeLevelCard name={item?.gradeName} entityName={item?.entityName} entities={entityList} description={item?.gradeDescription} employeeGrades={grades} data={item}/>))}
             </Grid>  
           </Grid>
           <Grid container spacing={3} justify='center' align='center' className='my-10'>
@@ -250,7 +259,7 @@ function Entities({handleNext}) {
       </form>
       <EntityModal open={openEntityModal} setOpen={setOpenEntityModal} edit={false} data={{}}/>
       <EmployeeGradeModal open={openEmployeeGradeModal} employeeGrades={accountSettingsData?.employeeGrade || []} entities={entityList} setOpen={setOpenEmployeeGradeModal} data={{}} edit={false}/>
-      <EmployeeGradeLevelModal open={openEmployeeGradeLevelModal}  compensationList={accountSettingsData?.compensationData || []}  employeeGrades={accountSettingsData?.employeeGrade || []} entities={entityList} setOpen={setOpenEmployeeGradeLevelModal} data={{}} edit={false}/>
+      <EmployeeGradeLevelModal open={openEmployeeGradeLevelModal}  compensationList={compensationData || []}  employeeGrades={grades || []} entities={entityList} setOpen={setOpenEmployeeGradeLevelModal} data={{}} edit={false}/>
     </div>
   );
 }
