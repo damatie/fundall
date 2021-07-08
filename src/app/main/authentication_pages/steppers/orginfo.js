@@ -25,7 +25,8 @@ import InputLabel from '@material-ui/core/InputLabel';
 import ChipInput from "material-ui-chip-input";
 import timeZone from "app/shared/timezoneList";
 import currencyList from "app/shared/currencies";
-import dateFormatList from "app/shared/dateformat";
+import companyTypes from "app/shared/companyTypes";
+import noOfBranchesList from "app/shared/noOfBranchesList";
 import { FormHelperText } from "@material-ui/core";
 import { setStepper } from './components/setStepper';
 import SharedDropzone from './../../../shared/sharedDropZone';
@@ -52,7 +53,7 @@ const schema = yup.object().shape({
         .required(errorMsg({ name: 'Company Type', type: 'required' })),
     startDate: yup.string()
         .required(errorMsg({ name: 'Company Start Date', type: 'required' })),
-    noOfBranch: yup.string()
+    noOfBranch: yup.number(errorMsg({ name: 'Number Of Branches', type: 'string' }))
         .required(errorMsg({ name: 'Number Of Branches', type: 'required' })),
     email: yup.string()
         .matches(/^[A-Za-z\d@$!%*#?&]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]{2,})*$/, "Enter a valid Email Address")
@@ -84,8 +85,8 @@ function OrganizationInformation({handleNext}) {
   const { countries, states, cities } = useSelector(state => state.regions);
 
   const dispatch = useDispatch();
-  const companyTypes = timeZone();
-  const noOfBranchesList = dateFormatList();
+  const companyTypes = companyTypes();
+  const noOfBranchesList = noOfBranchesList();
   const [stateList, setStateList] = React.useState([]);
   const [cityList, setCityList] = React.useState([]);
   const [country, setCountry] = React.useState([]);

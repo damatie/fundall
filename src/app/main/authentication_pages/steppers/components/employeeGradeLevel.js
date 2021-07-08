@@ -26,6 +26,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import ChipInput from "material-ui-chip-input";
 import timeZone from "app/shared/timezoneList";
 import currencyList from "app/shared/currencies";
+import companyTypes from "app/shared/companyTypes";
 import dateFormatList from "app/shared/dateformat";
 import { FormHelperText } from "@material-ui/core";
 import Modal from './modal';
