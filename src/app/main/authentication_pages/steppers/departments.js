@@ -85,15 +85,25 @@ function Departments({handleNext}) {
   React.useEffect(() => {
     dispatch(Actions.getEntities());
     dispatch(Actions.getAccountSettings());
-    dispatch(Actions.getDept());
+    dispatch(Actions.getCompensations());
+    dispatch(Actions.getGrades());
     dispatch(Actions.getGradeLevels());
+    const dataResponse = localStorage.getItem('login_data');
+	  const data = JSON.parse(dataResponse);
+    if (data?.company?.hasEntities === true) {
+      setHasEntities(true);
+    } else {
+      setHasEntities(false);
+    }
   }, []);
 
   React.useEffect(() => {
     setEntityList(entities);
-    setDepartmentList(departments);
+    setGradeList(grades);
+    setGradeLevelList(gradeLevels);
     setAccountSettingsData(accountSettings);
-  }, [departments, entities, accountSettings])
+    setDepartmentList(departments);
+  }, [grades, departments, entities, gradeLevels, accountSettings])
 
   const handleHumanResourceChange = (event) => {
     setHumanResource(event.target.checked);
@@ -131,13 +141,20 @@ function Departments({handleNext}) {
     setOpenDepartmentModal(true);
   }
 
+  const handleAddEmployeeGrade = () => {
+    setOpenEmployeeGradeModal(true);
+  }
+
+  const handleAddEmployeeGradeLevel = () => {
+    setOpenEmployeeGradeLevelModal(true);
+  }
 
   const onSubmit = async (data) => {
       try {
         loading('processing...');
         await setStepper([], 4);
         swal.fire({
-          text: message,
+          text: 'Step Completed',
           icon: 'success'
         });
         window.location.assign('/employee/dashboard');
@@ -153,8 +170,8 @@ function Departments({handleNext}) {
     <div className={classes.root}>
       <form onSubmit={handleSubmit(onSubmit)}>
           <Typography variant="h5" color="initial" className='my-10'><strong>Departments</strong></Typography>
-          {hasEntities && <Grid container spacing={3} justify='space-between' align='center' style={{ marginBottom: '3rem'}}>
-          <Typography variant="body1" color="initial" className='my-10'><strong>Please select departments that will be general for all entities</strong></Typography>
+          {!hasEntities && <Grid container spacing={3} justify='space-between' align='center' style={{ marginBottom: '3rem'}}>
+          <Typography variant="body1" color="initial" className='my-10' style={{ marginLeft: '15px' }}><strong>Please select departments that will be general for all entities</strong></Typography>
             <Grid item lg={12} md={12} sm={12} xs={12} align='left' style={{ marginBottom: '-15px' }}>
               <FormControlLabel control={<Checkbox
                 checked={humanResource}
@@ -191,12 +208,12 @@ function Departments({handleNext}) {
             </Grid>
             
             <Grid item lg={12} md={12} sm={12} xs={12} align='left' className='my-10'>
-               {departmentList.map(item => (
+               {departments && departments.map(item => (
                  <DepartmentCard name={item.departmentName} description={item.description} entities={entities} data={item}/>))}
             </Grid>
   
           </Grid>
-          {hasEntities && <Grid container spacing={3} justify='center' align='center' className='my-10'>
+          {!hasEntities && <Grid container spacing={3} justify='center' align='center' className='my-10'>
             <Grid item lg={12} md={12} sm={12} xs={12} align='left' className='my-10'>
                 <Typography variant="h5" color="initial" className='my-10'><strong>Employee Grade</strong></Typography>
                 <Button onClick={handleAddEmployeeGrade} variant="contained" color="secondary">
@@ -205,7 +222,7 @@ function Departments({handleNext}) {
               </Grid>
               
               <Grid item lg={12} md={12} sm={12} xs={12} align='left' className='my-10'>
-                {gradeList.map(item => (
+                {grades && grades.map(item => (
                   <EmployeeGradeCard name={item?.gradeName} entityName={item?.entityName} entities={entityList} description={item?.gradeDescription} employeeGrades={grades} data={item}/>))}
               </Grid>
 
@@ -217,7 +234,7 @@ function Departments({handleNext}) {
               </Grid>
 
               <Grid item lg={12} md={12} sm={12} xs={12} align='left' className='my-10'>
-                {gradeLevelList.map(item => (
+                {gradeLevels && gradeLevels.map(item => (
                   <EmployeeGradeLevelCard name={item?.level} description={item?.description} compensationData={compensationData || []} entityList={entities} gradeLevelList={gradeLevelList} data={item}/>))}
               </Grid>  
             </Grid>}

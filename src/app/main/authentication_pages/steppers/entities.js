@@ -54,41 +54,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const schema = yup.object().shape({
-    companyType: yup.string()
-        .required(errorMsg({ name: 'Company Type', type: 'required' })),
-    companyStartDate: yup.string()
-        .required(errorMsg({ name: 'Company Start Date', type: 'required' })),
-    noOfBranches: yup.string()
-        .required(errorMsg({ name: 'Number Of Branches', type: 'required' })),
-    companyEmail: yup.string()
-        .matches(/^[A-Za-z\d@$!%*#?&]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]{2,})*$/, "Enter a valid Email Address")
-        .required(errorMsg({ name: 'Email Address', type: 'required' }))
-        .email(),
-    country: yup.string()
-        .required(errorMsg({ name: 'Country', type: 'required' })),
-    state: yup.string()
-        .required(errorMsg({ name: 'State', type: 'required' })),
-    city: yup.string()
-        .required(errorMsg({ name: 'City', type: 'required' })),
-    companyVision: yup.string(errorMsg({ name: 'Company Vision', type: 'string' }))
-        // .min(3, errorMsg({ name: 'Company Vision', type: 'min', number: 3 }))
-        // .max(60, errorMsg({ name: 'Company Vision', type: 'max', number: 60 }))
-        ,
-    companyMission: yup.string(errorMsg({ name: 'Company Mission', type: 'string' }))
-        // .min(3, errorMsg({ name: 'Company Mision', type: 'min', number: 3 }))
-        // .max(60, errorMsg({ name: 'Company Mision', type: 'max', number: 60 }))
-        ,
-    companyWebsite: yup.string(errorMsg({ name: 'Company Website', type: 'string' }))
-        // .min(3, errorMsg({ name: 'Company Website', type: 'min', number: 3 }))
-        // .max(60, errorMsg({ name: 'Company Website', type: 'max', number: 60 }))
-        ,
-    hqAddress: yup.string(errorMsg({ name: 'HQ Address', type: 'string' }))
-        // .min(3, errorMsg({ name: 'Middle Name', type: 'min', number: 3 }))
-        // .max(60, errorMsg({ name: 'Middle Name', type: 'max', number: 60 }))
-        ,
     branchAddresses: yup.array()
-        .min(1, 'Must have at least one Branch Addresses')
-        .required(errorMsg({ name: 'Branch Addresses', type: 'required' })),
 });
 
 function Entities({handleNext}) {
@@ -184,7 +150,7 @@ function Entities({handleNext}) {
         // const { data: { message  } } = await api.post('/organization_info', form);
         await setStepper(genericDept, 3);
         swal.fire({
-          text: message,
+          text: 'Step Completed',
           icon: 'success'
         });
         handleNext();

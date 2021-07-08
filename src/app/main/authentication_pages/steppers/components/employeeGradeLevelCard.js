@@ -26,7 +26,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 
-export default function EmployeeGradeLevelCard({name, description, gradeLevelList, entityList, compensationData, data}) {
+export default function EmployeeGradeLevelCard({name, description, entityList, compensationData, data}) {
 
     const dispatch = useDispatch();
     const [openEmployeeGradeLevelModal, setOpenEmployeeGradeLevelModal] = React.useState(false);

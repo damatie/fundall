@@ -99,7 +99,6 @@ export default function DepartmentModal ({open, entities, setOpen, data, edit}) 
         setEntityId(event.target.value.id);
         register({ name: 'entityId', type: 'custom' }, { required: true });
         setValue("entityId", event.target.value.id);
-        setEntityName(event.target.value.entityName);
         setEntityErr(errors.entityId?.message);
       };
 
