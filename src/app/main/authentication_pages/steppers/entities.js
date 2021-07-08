@@ -130,11 +130,8 @@ function Entities({handleNext}) {
     setGradeList(grades);
     setGradeLevelList(gradeLevels);
     setAccountSettingsData(accountSettings);
+    console.log('gradeLevels: ', gradeLevels)
   }, [grades, entities, gradeLevels, accountSettings])
-
-  React.useEffect(() => {
-    // console.log('data: ', {...getValues()});
-  }, [getValues])
 
   const handleHumanResourceChange = (event) => {
     setHumanResource(event.target.checked);
@@ -245,7 +242,7 @@ function Entities({handleNext}) {
 
             <Grid item lg={12} md={12} sm={12} xs={12} align='left' className='my-10'>
                {gradeLevelList.map(item => (
-                 <EmployeeGradeLevelCard name={item?.gradeName} entityName={item?.entityName} entities={entityList} description={item?.gradeDescription} employeeGrades={grades} data={item}/>))}
+                 <EmployeeGradeLevelCard name={item?.level} description={item?.description} compensationData={compensationData || []} entityList={entities} gradeLevelList={gradeLevelList} data={item}/>))}
             </Grid>  
           </Grid>
           <Grid container spacing={3} justify='center' align='center' className='my-10'>

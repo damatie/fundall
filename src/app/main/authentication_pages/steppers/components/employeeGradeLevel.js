@@ -52,7 +52,7 @@ const schema = yup.object().shape({
         .required(errorMsg({ name: 'Entity', type: 'required' })),
     gradeId: yup.number(errorMsg({ name: 'Employee Grade', type: 'number' }))
         .required(errorMsg({ name: 'Employee Grade', type: 'required' })),
-    level: yup.string(errorMsg({ name: 'Level', type: 'string' }))
+    level: yup.number(errorMsg({ name: 'Level', type: 'number' }))
         .required(errorMsg({ name: 'Level', type: 'required' })),
     description: yup.string(errorMsg({ name: 'Description', type: 'string' }))
         .max(1000, errorMsg({ name: 'Description', type: 'max', number: 1000 })),
@@ -88,12 +88,19 @@ export default function EmployeeGradeLevelModal ({open, entities, setOpen, data,
       React.useEffect(() => {
         console.log('entities: ', entities)
       }, [entities]);
+      
+      React.useEffect(() => {
+        register({ name: 'compensations', type: 'custom' }, { required: true });
+        setValue("compensations", compensationObj);
+        console.log('compensationObj Updates: ', compensationObj)
+      }, [compensationObj]);
 
       React.useEffect(() => {
         dispatch(Actions.getGradeLevels());
       }, [newAdded, updated]);
 
       const handleEntityChange = async (event) => {
+        setSelectGrades(true);
         const { data: { success, data  } } = await api.get(`/entity/${event.target.value.id}`);
         if (success && data) {
             console.log('Grades: ', data.employeeGrades);
@@ -109,7 +116,7 @@ export default function EmployeeGradeLevelModal ({open, entities, setOpen, data,
 
       const handleGradeChange = async (event) => {
         register({ name: 'gradeId', type: 'custom' }, { required: true });
-        setValue("gradeId", event.target.value.id);
+        setValue("gradeId", event.target.value);
         setGradeErr(errors.gradeId?.message);
       };
 
@@ -125,10 +132,13 @@ export default function EmployeeGradeLevelModal ({open, entities, setOpen, data,
         register({ name: 'pipCompensations', type: 'custom' }, { required: true });
         setValue("pipCompensations", value);
         setPipCompensationsErr(errors.pipCompensations?.message);
+        console.log('form VA: ', getValues());
       };
 
     const onSubmit = async (value) => {
         const form = { ...value };
+        form.level = Number(form.level);
+        form.pipCompensations = undefined;
         // console.log('Employee Grade Level form: ', form);
         if (edit) {
             try {
@@ -235,9 +245,9 @@ export default function EmployeeGradeLevelModal ({open, entities, setOpen, data,
 
             <Grid item lg={12} md={12} sm={12} xs={12}>
                 <Input
-                    label='Level Name'
+                    label='Level'
                     name='level'
-                    type='text'
+                    type='number'
                     error={errors.level}
                     message={errors.level?.message}
                     helperText={errors.level?.message}
@@ -261,7 +271,7 @@ export default function EmployeeGradeLevelModal ({open, entities, setOpen, data,
             <Typography variant="body1" style={{ marginTop: '15px', marginLeft: '15px' }} color="initial"><strong>Compensations</strong></Typography>
             <Grid item lg={12} md={12} sm={12} xs={12} align='left' style={{ borderRadius: '5px', border: 'solid 1px black', margin: '15px', height: '30vh', overflowY: "scroll"  }}>
               {compensationList.map(item => (
-                 <CompensationItem name={item?.columnName} compensationObj={compensationObj} />))}
+                 <CompensationItem name={item?.columnName} compensationObj={compensationObj} setCompensationObj={setCompensationObj} />))}
             </Grid>
 
             <Grid item lg={12} md={12} sm={12} xs={12}>

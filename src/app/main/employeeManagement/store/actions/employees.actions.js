@@ -138,7 +138,7 @@ export const getGradeLevels = () => {
       if(success) {
         dispatch({
           type: EMPLOYEE_GRADE_LEVELS,
-          payload: data.rows || []
+          payload: data || []
         })
       }
     } catch (e) {

@@ -22,9 +22,15 @@ const useStyles = makeStyles(theme => ({
 }))
 
 
-export default function CompensationItem({name, compensationObj}) {
+export default function CompensationItem({name, compensationObj, setCompensationObj}) {
     const dispatch = useDispatch();
     const classes = useStyles();
+
+    // handleCompensationObjChange
+    const handleCompensationObjChange = async (event) => {
+        compensationObj[name] = Number(event.target.value);
+        setCompensationObj(compensationObj);
+      };
 
     return (
         <div>
@@ -37,6 +43,7 @@ export default function CompensationItem({name, compensationObj}) {
                         name={name}
                         type='number'
                         value={compensationObj[name] ?? undefined}
+                        onChange={handleCompensationObjChange}
                     />
                 </Grid>
             </Grid>
