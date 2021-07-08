@@ -28,7 +28,7 @@ export const getLeaveSummary = () => {
       ...headers.getRegHeader(),
     }).then(res => handleResponse(res)).then(
       data => {
-        // // console.log(data)
+        // console.log(data)
         if(data.success) {
           dispatch({
             type: GET_LEAVE_SUMMARY,

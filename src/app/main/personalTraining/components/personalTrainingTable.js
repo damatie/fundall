@@ -25,7 +25,7 @@ function PersonalTrainingTable(props) {
 
     React.useEffect(() => {
         setData(props.data);
-        // // console.log(props.data);
+        // console.log(props.data);
     }, [props.data])
 
     function handleRequestSort(event, property) {

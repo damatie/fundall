@@ -112,7 +112,7 @@ function NewOpening(props) {
 	}
 
 	const handleChange = (name, value) => {
-		// console.log(name, value, "new a")
+		console.log(name, value, "new a")
 		setDetails(state => ({ ...state, [name]: value }));
 		if (name === "entityId") {
 			getDepartment(value);
@@ -152,7 +152,7 @@ function NewOpening(props) {
 	];
 
 	useEffect(() => {
-		// console.log(props.selectedPosition)
+		console.log(props.selectedPosition)
 		const { employeeStatus, dueDate, requiredSkills, jobTitle, entity, entityId, department, jobDescription, departmentId, country, state, urgency, reasonForEmployment } = props.selectedPosition;
 		setDetails({
 			departmentId: department?.id ?? departmentId,

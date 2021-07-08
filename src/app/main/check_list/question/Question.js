@@ -36,7 +36,7 @@ function Question(props) {
         let payload = {};
         payload.question = model.question;
         payload.checkListId = checkListID;
-        // console.log(payload);
+        console.log(payload);
         dispatch(Actions.updateQuestion(payload, model.id));
     }
 

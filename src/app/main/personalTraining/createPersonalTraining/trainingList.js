@@ -209,7 +209,7 @@ function TrainingList(props) {
     const [tabValue, setTabValue] = React.useState(0);
 
     function handleChangeTab(event, value) {
-        // console.log(event, value)
+        console.log(event, value)
         setTabValue(value);
     }
 
@@ -266,7 +266,7 @@ function TrainingList(props) {
     }, [dispatch])
 
     useEffect(() => {
-        // // console.log(trainings);
+        // console.log(trainings);
     }, [department, trainings])
 
     // useEffect(() => {
@@ -298,10 +298,10 @@ function TrainingList(props) {
     function handleFilter(event) {
         if (event.target.name === "entity") {
             let id = entities.find(element => element.name = event.target.value);
-            // // console.log(id.id)
+            // console.log(id.id)
             changeDepartment(id.id);
         }
-        // console.log(event)
+        console.log(event)
         setFilter({ ...filter, [event.target.name]: event.target.value });
     }
 

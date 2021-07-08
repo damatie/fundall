@@ -63,7 +63,7 @@ export function getOneOpenPosition(positionId) {
 		});
 		fetch(`${basUrl()}/recruitment/one/${positionId}`, { ...headers.getRegHeader() })
 			.then(res => res.json()).then(async data => {
-				// console.log(data);
+				console.log(data);
 				if (data.success) {
 					dispatch({
 						type: GET_ONE_OPEN_POSITIONS_SUCCESS,
@@ -334,7 +334,7 @@ export function updateOpening(payload, positionId) {
 		})
 		fetch(`${basUrl()}/recruitment/update/${positionId}`, { ...headers.reqHeader('PATCH', payload) }
 		).then(res => res.json()).then(async data => {
-			// console.log(data);
+			console.log(data);
 			if (data.success || data.message === 'OpenPosition update successful') {
 				dispatch({
 					type: UPDATE_OPENING_SUCCESS,

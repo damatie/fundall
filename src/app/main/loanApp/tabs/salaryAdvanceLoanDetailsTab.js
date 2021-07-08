@@ -38,7 +38,7 @@ function SALoanDetailsTab({ setValue }) {
 	});
 
 	useEffect(() => {
-		// console.log(salaryAdvanceDetails);
+		console.log(salaryAdvanceDetails);
 	}, [salaryAdvanceDetails])
 
 	return (

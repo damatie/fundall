@@ -32,14 +32,14 @@ function AnswerList(props) {
     }
 
     function handleEdit(event, model){
-        // console.log(model)
+        console.log(model)
         // dispatch(Actions.updateCheckList(model, model.id));
     }
 	function handleFilter(event) {
 		setFilter(event.target.value);
 	}
 
-    // console.log(rows);
+    console.log(rows);
 
     const columns = [
         {

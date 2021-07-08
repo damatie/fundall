@@ -96,7 +96,7 @@ function ManageLoan(props) {
 	}, [dispatch]);
 
 	useEffect(() => {
-		// console.log(loans);
+		console.log(loans);
 	})
 
 	// useEffect(() => window.location.reload(false), [])

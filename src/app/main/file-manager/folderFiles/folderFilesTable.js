@@ -123,7 +123,7 @@ const FolderFilesTable = (props) =>{
     }
 
     function handleItemClick(event, item){
-		// console.log(item)
+		console.log(item)
 		setSelected(item);
 		setDetails(true);
     }

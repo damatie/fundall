@@ -41,7 +41,7 @@ function DepartmentDashboard(props) {
     const rows = useSelector(({ exit }) => exit.Exit.departmentList?.rows ?? []);
 
     useEffect(() => {
-        // console.log(rows)
+        console.log(rows)
     }, [rows])
 
     useEffect(() => {

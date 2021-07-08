@@ -8,7 +8,7 @@ export function getWidgets() {
 
 	return dispatch => {
 		// request.then(response => {
-		// 	// console.log(response)
+		// 	console.log(response)
 		dispatch({
 			type: GET_WIDGETS,
 			payload: projectDashboardAppDB.widgets

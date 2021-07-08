@@ -156,7 +156,7 @@ export function getCourseCategories() {
 }
 
 export function createCourse(model){
-	// // console.log(model);
+	// console.log(model);
 	swal.fire("Processing ...");
 	swal.showLoading();
 	return dispatch => {
@@ -209,7 +209,7 @@ export function createCourse(model){
 }
 
 export function updateCourse(model, id){
-	// console.log(model);
+	console.log(model);
 	swal.fire("Processing ...");
 	swal.showLoading();
 	return dispatch => {
@@ -262,7 +262,7 @@ export function updateCourse(model, id){
 }
 
 export function approveCourse(id) {
-	// console.log(id);
+	console.log(id);
 	return dispatch => {
 		dispatch({
 			type: LOADING_COURSES
@@ -324,7 +324,7 @@ export function approveCourse(id) {
 }
 
 export function rejectCourse(id) {
-	// console.log(id);
+	console.log(id);
 	let done = false;
 	return dispatch => {
 
@@ -389,7 +389,7 @@ export function rejectCourse(id) {
 }
 
 export function deleteCourse(id) {
-	// console.log(id);
+	console.log(id);
 	return dispatch => {
 
 		dispatch({

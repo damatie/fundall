@@ -71,7 +71,7 @@ function NewExitRequest(props) {
     function handleSubmit(model) {
 
         let objectKeys = Object.keys(model);
-        // console.log(model, details)
+        console.log(model, details)
 
         let payload = {
             answers: generateAnswer(objectKeys, model)

@@ -105,7 +105,7 @@ function LoanReqTable(props) {
 	useEffect(() => {
 		if (Object.entries(loanHistory).length > 0) {
 			setData(loanHistory.pendingLoanHistory.concat(loanHistory.reviewedLoanHistory).concat(loanHistory.rejectedLoanHistory).concat(loanHistory.correctedLoanHistory).concat(loanHistory.disbursedLoanHistory).concat(loanHistory.approvedLoanHistory).concat(loanHistory.closedLoanHistory))
-			// console.log(loanHistory, data);
+			console.log(loanHistory, data);
 		}
 	}, [loanHistory])
 

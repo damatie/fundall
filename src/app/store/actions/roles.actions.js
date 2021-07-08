@@ -16,7 +16,7 @@ export const getRoles = () => {
       ...header.getRegHeader()
     }).then(res => res.json()).then(
       data => {
-        // // console.log(data)
+        // console.log(data)
         let items = []
         if(data.success) {
           items = data.data.filter((obj, index, self) => self.map(itm => itm.name.toLowerCase())

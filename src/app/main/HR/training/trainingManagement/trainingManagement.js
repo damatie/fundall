@@ -91,7 +91,7 @@ function TrainingManagement(props) {
 	});
 
 	useEffect(() => {
-		// // console.log(totalCourses, state);
+		// console.log(totalCourses, state);
 	}, [addNew, data])
 
 	const submitNewTraining = (value) => {

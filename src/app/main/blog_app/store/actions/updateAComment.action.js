@@ -21,13 +21,13 @@ export function updateAComment({id, content}) {
 		}).then(res => res.json()).then(
 			comment => {
 				if(comment.success === true) {
-					// console.log(comment)
+					console.log(comment)
 					return dispatch({
 						type: UPDATE_A_COMMENT_SUCCESS,
 						payload: {id, content}
 					});
 				} else {
-					// console.log(comment);
+					console.log(comment);
 					return dispatch({
 						type: UPDATE_A_COMMENT_ERROR,
 						payload: ''

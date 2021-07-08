@@ -31,7 +31,7 @@ function MailConfirmPage({ match }) {
 
 	const confirmMail = () => {
 		auth('hr_confirmation', { token: match.params.id }).then(data => {
-			// // console.log(data);
+			// console.log(data);
 			if (data.success && data.message !== "Email Already Verified") {
 				swal.fire({
 					title: 'Email confirmation',

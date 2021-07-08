@@ -115,8 +115,8 @@ function FolderFiles(props) {
     }
 
     const getAccess = () => {
-		// console.log(roleId);
-		// console.log(mainFolder.access);
+		console.log(roleId);
+		console.log(mainFolder.access);
 		if(mainFolder.id === 2){
 			return mainFolder.access.includes(roleId.toString());
 		}

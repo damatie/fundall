@@ -7,7 +7,7 @@ const useKpoReview = ({dispatch, push, userInfo, kpoList}) => {
   const { departmentId, role, id } = userInfo;
 
   const handleDelete = id => {
-    // console.log(id);
+    console.log(id);
   }
 
   const handleFilter = ({ target: { value }}) => {

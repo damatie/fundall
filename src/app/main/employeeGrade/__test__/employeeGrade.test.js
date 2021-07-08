@@ -39,7 +39,7 @@ describe("Employee Grade", () => {
         fireEvent.click(getByTestId("button"));
       });
 
-      // console.log(customHook.result.current.getValues)
+      console.log(customHook.result.current.getValues)
 
       expect(Object.entries(customHook.result.current.errors).length).toBe(0);
     })

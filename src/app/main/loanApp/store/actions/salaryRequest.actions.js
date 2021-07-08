@@ -42,7 +42,7 @@ export const applySalaryAdvance = (model, file, history) => {
           })
           history.push('/loan/request/salaryadvance_request/list');
         } else {
-          // console.log(data)
+          console.log(data)
           Swal.fire({
             title: 'Salary advance request',
             text: data.message,
@@ -114,7 +114,7 @@ export const updateSalaryAdvanceByRole = (id, model, file, role, history) => {
   payload.append("amount", model.amount);
   payload.append("repaymentDate", model.repaymentDate);
   payload.append("loanForm", file);
-  // console.log(role)
+  console.log(role)
 
   return dispatch => {
     dispatch({

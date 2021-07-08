@@ -140,7 +140,7 @@ export default function EditDisciplinaryCaseModal(props) {
 	};
 
 	const handleDateChange = date => {
-		// console.log(date);
+		console.log(date);
 		setStart(date);
 		form.date = moment(date).format('DD MMMM YYYY');
 		setForm(form);
@@ -148,17 +148,17 @@ export default function EditDisciplinaryCaseModal(props) {
 
 	const handleFormValueChange = (el, value) => {
 		console.log(el);
-		// console.log(value);
+		console.log(value);
 		if (value) {
 			form[el] = value;
 			setForm(form);
-			// console.log(form);
+			console.log(form);
 		}
 	};
 
 	const handleSubmit = id => {
-		// console.log(form);
-		// console.log(id);
+		console.log(form);
+		console.log(id);
 		dispatch(Actions.updateDisciplinaryCase(form, id));
 		props.handleClose();
 	};

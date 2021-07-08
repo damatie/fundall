@@ -76,7 +76,7 @@ function RequestSalaryAdvTab(props) {
 	}, [showDetails, profile, props.state]);
 
 	useEffect(() => {
-		// // console.log(details, salaryAdvance);
+		// console.log(details, salaryAdvance);
 	}, [salaryAdvance, details])
 
 	useEffect(() => {
@@ -94,7 +94,7 @@ function RequestSalaryAdvTab(props) {
 				disableButton();
 			}
 		}
-		// // console.log(amount, repaymentDate, fileInput, details?.salaryAdvanceData?.amount);
+		// console.log(amount, repaymentDate, fileInput, details?.salaryAdvanceData?.amount);
 		// if (details?.salaryAdvanceData?.amount) {
 
 		// } else {
@@ -132,7 +132,7 @@ function RequestSalaryAdvTab(props) {
 	function handleSubmit(model) {
 		model.amount = Number(amount);
 		model.repaymentDate = repaymentDate.format("YYYY-MM-DD");
-		// // console.log(model)
+		// console.log(model)
 		if (id && !location.state) {
 			dispatch(Actions.updateSalaryAdvance(id, model, fileInput[0], history));
 		}

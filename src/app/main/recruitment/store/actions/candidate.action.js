@@ -28,7 +28,7 @@ export function addCandidate(model, positionId) {
 		});
 		fetch(`${baseUrl()}/recruitment/candidate/new`, { ...headers.formDHeader('POST', model) })
 			.then(res => res.json()).then(async data => {
-				// console.log(data);
+				console.log(data);
 				if (data.success) {
 					dispatch({
 						type: ADD_CANDIDATE_SUCCESS,
@@ -119,7 +119,7 @@ export function getAllCandidates(positionId) {
 		});
 		fetch(`${baseUrl()}/recruitment/candidate/all/${positionId}`, { ...headers.getRegHeader() })
 			.then(res => res.json()).then(async data => {
-				// console.log(data);
+				console.log(data);
 				if (data.success && data.data) {
 					dispatch({
 						type: GET_ALL_CANDIDATE_SUCCESS,

@@ -97,7 +97,7 @@ function Srep(props) {
 	const entities = useSelector(({ entities }) => entities.entityList);
 	const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
 	const data = (srep) ? (srep.data) ? srep.data : [] : [];
-	// console.log({data});
+	console.log({data});
 
 	const classes = useStyles(props);
 	useEffect(() => {

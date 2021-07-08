@@ -53,7 +53,7 @@ export const deleteEmployee = id => {
           data => {
             if(data.success) {
               done = true;
-              // console.log(data);
+              console.log(data);
               swal.fire(
                 'Deleted!',
                 'Your file has been deleted.',

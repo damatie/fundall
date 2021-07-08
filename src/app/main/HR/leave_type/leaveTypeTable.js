@@ -33,7 +33,7 @@ function LeaveTypeTable(props) {
 	useEffect(() => {
 		dispatch(Actions.getLeaveTypes());
 		
-		// console.log(leaveTypes);
+		console.log(leaveTypes);
 		
 	}, [dispatch]);
 

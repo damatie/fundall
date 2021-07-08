@@ -52,11 +52,11 @@ export function getAllTrainings() {
 		});
 		fetch(`${basUrl()}/training/all/employee/request`, { ...headers.getRegHeader() })
 			.then(res => res.json()).then(async data => {
-				// // console.log(data.data);
+				// console.log(data.data);
 				if (data.success && data.data) {
 					//Filter the result to get all trainings
 					trainings = data.data.map(d => { return d.training; })
-					// // console.log(trainings);
+					// console.log(trainings);
 					if (trainings) {
 						//Format the Trainings to match the events for the Calendar
 						events = trainings.map(t => {
@@ -71,7 +71,7 @@ export function getAllTrainings() {
 							}
 						})
 					}
-					// console.log(events);
+					console.log(events);
 					dispatch({
 						type: GET_TRAININGS,
 						payload: data.data,
@@ -87,7 +87,7 @@ export function getAllTrainings() {
 					})
 				}
 			}).catch(err => {
-				// console.log(err);
+				console.log(err);
 				dispatch({
 					type: GET_TRAININGS,
 					payload: [],
@@ -107,7 +107,7 @@ export function createTraining(model, history) {
 		})
 		fetch(`${basUrl()}/training/courses`, { ...headers.reqHeader('POST', model) }
 		).then(res => res.json()).then(async data => {
-			// // console.log(data)
+			// console.log(data)
 			// let data = response.data;
 			if (data.success) {
 				Promise.all([
@@ -157,8 +157,8 @@ export function createTraining(model, history) {
 }
 
 export function updateTraining(model, id) {
-	// // console.log(id);
-	// // console.log(model);
+	// console.log(id);
+	// console.log(model);
 	swal.fire("Processing ...");
 	swal.showLoading();
 	return dispatch => {
@@ -219,7 +219,7 @@ export function updateTraining(model, id) {
 }
 
 export function deleteTrainingRequest(id) {
-	// // console.log(id);
+	// console.log(id);
 	return dispatch => {
 
 		dispatch({
@@ -280,7 +280,7 @@ export function deleteTrainingRequest(id) {
 }
 
 export function cancelTrainingRequest(id) {
-	// // console.log(id);
+	// console.log(id);
 	return dispatch => {
 
 		dispatch({
@@ -299,7 +299,7 @@ export function cancelTrainingRequest(id) {
 			preConfirm: () => [
 				fetch(`${basUrl()}/training/employee/cancel/${id}`, { ...headers.reqHeader(), method: "PATCH" })
 					.then(res => res.json()).then(async data => {
-						// // console.log(data)
+						// console.log(data)
 						if (data.success) {
 							swal.fire(
 								'DELETE!',
@@ -397,7 +397,7 @@ export function getTraining() {
 
 export function requestTraining(id, history) {
 	swal.fire("Processing ...");
-	// // console.log(id)
+	// console.log(id)
 	swal.showLoading();
 	return dispatch => {
 		dispatch({
@@ -405,7 +405,7 @@ export function requestTraining(id, history) {
 		})
 		fetch(`${basUrl()}/training`, { ...headers.reqHeader('POST', { trainingCourseId: id }) }
 		).then(res => res.json()).then(async data => {
-			// // console.log(data);
+			// console.log(data);
 			if (data.success) {
 				swal.fire({
 					title: 'Training Request',
@@ -448,7 +448,7 @@ export function getPendingTrainingPersonal(offset = 0, limit = 20) {
 				payload: response
 			})
 		}).catch((err) => {
-			// console.log(err.response);
+			console.log(err.response);
 			return [];
 		});
 
@@ -469,7 +469,7 @@ export function getPendingTrainingHR(offset = 0, limit = 20) {
 				payload: res.data.data
 			})
 		}).catch((err) => {
-			// console.log(err.response);
+			console.log(err.response);
 			return [];
 		});
 
@@ -494,7 +494,7 @@ export function getReviewedTrainingPersonal(offset = 0, limit = 20) {
 				payload: response
 			})
 		}).catch((err) => {
-			// console.log(err.response);
+			console.log(err.response);
 			return [];
 		});
 
@@ -515,7 +515,7 @@ export function getReviewedTrainingHR(offset = 0, limit = 20) {
 				payload: res.data.data
 			})
 		}).catch((err) => {
-			// console.log(err.response);
+			console.log(err.response);
 			return [];
 		});
 
@@ -538,7 +538,7 @@ export function getCompletedTrainingPersonal(offset = 0, limit = 20) {
 				payload: response
 			})
 		}).catch((err) => {
-			// console.log(err.response);
+			console.log(err.response);
 			return [];
 		});
 	}
@@ -557,7 +557,7 @@ export function getCompletedTrainingHR(offset = 0, limit = 20) {
 				payload: res.data.data
 			})
 		}).catch((err) => {
-			// console.log(err.response);
+			console.log(err.response);
 			return [];
 		});
 	}
@@ -578,7 +578,7 @@ export function getApprovedTrainingPersonal(offset = 0, limit = 20) {
 				payload: response
 			})
 		}).catch((err) => {
-			// console.log(err.response);
+			console.log(err.response);
 			return []
 		});
 	}
@@ -597,7 +597,7 @@ export function getApprovedTrainingHR(offset = 0, limit = 20) {
 				payload: res.data.data
 			})
 		}).catch((err) => {
-			// console.log(err.response);
+			console.log(err.response);
 			return []
 		});
 	}
@@ -620,7 +620,7 @@ export function getRejectedTrainingPersonal(offset = 0, limit = 20) {
 				payload: response
 			})
 		}).catch((err) => {
-			// console.log(err.response);
+			console.log(err.response);
 			return [];
 		});
 	}
@@ -639,7 +639,7 @@ export function getRejectedTrainingHR(offset = 0, limit = 20) {
 				payload: res.data.data
 			})
 		}).catch((err) => {
-			// console.log(err.response);
+			console.log(err.response);
 			return [];
 		});
 	}
@@ -663,7 +663,7 @@ export function getCategories() {
 						payload: []
 					})
 			}).catch(err => {
-				// console.log(err);
+				console.log(err);
 				swal.fire(
 					'Oops!',
 					'something went wrong',
@@ -677,7 +677,7 @@ export function getEntities() {
 	return dispatch => {
 		fetch(`${basUrl()}/entity/all`, { ...headers.getRegHeader() })
 			.then(res => res.json()).then(data => {
-				// // console.log(data.data);
+				// console.log(data.data);
 				data.success ?
 					dispatch({
 						type: GET_ENTITIES,
@@ -689,7 +689,7 @@ export function getEntities() {
 						payload: []
 					})
 			}).catch(err => {
-				// console.log(err);
+				console.log(err);
 			})
 	}
 }
@@ -698,7 +698,7 @@ export function getDepartments(id) {
 	return dispatch => {
 		fetch(`${basUrl()}/department/all/${id}`, { ...headers.getRegHeader() })
 			.then(res => res.json()).then(data => {
-				// // console.log(data.data);
+				// console.log(data.data);
 				data.success ?
 					dispatch({
 						type: GET_DEPARTMENTS,
@@ -710,7 +710,7 @@ export function getDepartments(id) {
 						payload: []
 					})
 			}).catch(err => {
-				// console.log(err);
+				console.log(err);
 			})
 	}
 }
@@ -719,7 +719,7 @@ export function getRoles() {
 	return dispatch => {
 		fetch(`${basUrl()}/roles`, { ...headers.getRegHeader() })
 			.then(res => res.json()).then(async data => {
-				// // console.log(data.data);
+				// console.log(data.data);
 				data.success ?
 					dispatch({
 						type: GET_ROLES,
@@ -731,7 +731,7 @@ export function getRoles() {
 						payload: []
 					})
 			}).catch(err => {
-				// console.log(err);
+				console.log(err);
 			})
 	}
 }

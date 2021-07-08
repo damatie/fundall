@@ -29,7 +29,7 @@ export function getPostComments(id) {
 		});
 		fetch(`${basUrl()}/comment/all/${id}`, {...headers.getRegHeader()})
 		.then(res => res.json()).then(async data => {
-			// console.log(data);
+			console.log(data);
 			(data.success || data.message === 'Success') ? 
 				(data.data) ?
 					dispatch({
@@ -63,7 +63,7 @@ export function getCommentsById(id){
 		});
 		fetch(`${basUrl()}/comment/one/${id}`, {...headers.getRegHeader()})
 		.then(res => res.json()).then(async data => {
-			// console.log(data);
+			console.log(data);
 			data.message === 'Success' ? 
 				(data.data) ?
 					dispatch({
@@ -100,7 +100,7 @@ export function createComment(payload){
 		fetch(`${basUrl()}/comment/new`, { ...headers.reqHeader('POST', payload) }
 		).then(res => res.json()).then(async data => {
 			// let data = response.data;
-			// console.log(data);
+			console.log(data);
 			if (data.success) {
 				Promise.all([
 					dispatch({
@@ -180,7 +180,7 @@ export function likeAComment(id, userId, postId){
 }
 
 export function deleteComment(id, postId) {
-	// console.log(id);
+	console.log(id);
 	return dispatch => {
 
 		dispatch({
@@ -242,8 +242,8 @@ export function deleteComment(id, postId) {
 }
 
 export function deleteCommentReply(replyId, commentId, postId) {
-	// console.log(replyId);
-	// console.log(commentId);
+	console.log(replyId);
+	console.log(commentId);
 	return dispatch => {
 
 		dispatch({
@@ -313,7 +313,7 @@ export function updateAComment({id, content, postId}) {
 		.then(res => res.json()).then(
 			comment => {
 				if(comment.success === true) {
-					// console.log(comment)
+					console.log(comment)
 					// return dispatch({
 					// 	type: UPDATE_COMMENT_SUCCESS,
 					// 	payload: {id, content}
@@ -327,7 +327,7 @@ export function updateAComment({id, content, postId}) {
 						dispatch(getPostById(postId));
 					})
 				} else {
-					// console.log(comment);
+					console.log(comment);
 					return dispatch({
 						type: UPDATE_COMMENT_ERROR,
 						payload: ''
@@ -351,7 +351,7 @@ export function updateAComment({id, content, postId}) {
 }
 
 export function updateACommentReply(model) {
-	// console.log(model);
+	console.log(model);
 	return dispatch => {
 		dispatch({
 			type: LOADING_COMMENTS
@@ -360,7 +360,7 @@ export function updateACommentReply(model) {
 		.then(res => res.json()).then(
 			comment => {
 				if(comment.success === true) {
-					// console.log(comment)
+					console.log(comment)
 					// return dispatch({
 					// 	type: UPDATE_COMMENT_REPLY_SUCCESS,
 					// 	payload: {replyId, content, commentId}
@@ -374,7 +374,7 @@ export function updateACommentReply(model) {
 						dispatch(getPostById(model.id));
 					})
 				} else {
-					// console.log(comment);
+					console.log(comment);
 					return dispatch({
 						type: UPDATE_COMMENT_REPLY_ERROR
 					});

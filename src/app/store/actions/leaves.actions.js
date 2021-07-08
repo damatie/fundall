@@ -22,7 +22,7 @@ export const getPendingLeaveReq = () => {
       }
     }).then(res => res.json()).then(
       async data => {
-        // console.log(data);
+        console.log(data);
         dispatch({
           type: GET_PENDING_LEAVE_REQUEST,
           payload: data.data

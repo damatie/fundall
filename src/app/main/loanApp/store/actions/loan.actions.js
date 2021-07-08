@@ -177,7 +177,7 @@ export const applyLoan = (body, history) => {
       )
     }).then(res => res.json()).then(
       data => {
-        // console.log(data)
+        console.log(data)
         if (data.success) {
           swal.fire({
             title: 'Loan application',
@@ -271,14 +271,14 @@ export const updateLoan = (id, body, history, user) => {
 };
 
 export const cancelLoan = (id, history) => {
-  // console.log(id, " to be deleted")
+  console.log(id, " to be deleted")
   return dispatch => {
     swal.showLoading();
     fetch(`${getBaseUrl()}/loan/employee/cancel/${id}`, {
       ...header.reqHeader("PATCH", {}),
     }).then(res => res.json()).then(
       data => {
-        // console.log(data)
+        console.log(data)
         if (data.success) {
           swal.fire({
             title: 'Loan',
@@ -312,14 +312,14 @@ export const cancelLoan = (id, history) => {
 }
 
 export const closeLoan = (id, history) => {
-  // console.log(id, " to be deleted")
+  console.log(id, " to be deleted")
   return dispatch => {
     swal.showLoading();
     fetch(`${getBaseUrl()}/loan/close/${id}`, {
       ...header.reqHeader("PATCH", {}),
     }).then(res => res.json()).then(
       data => {
-        // console.log(data)
+        console.log(data)
         if (data.success) {
           swal.fire({
             title: 'Loan',

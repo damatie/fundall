@@ -52,7 +52,7 @@ export default function AddCourseModal(props) {
         model.department = userData.department.departmentName;
         model.hrManager = 4;
         model.duration = `${model.duration} days`
-        // console.log(model);
+        console.log(model);
         dispatch(Actions.createCourse(model));
         setOpen(false);
     }

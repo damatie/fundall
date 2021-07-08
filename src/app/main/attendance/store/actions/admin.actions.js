@@ -15,7 +15,7 @@ export const fetchActivities = () => {
         }).then(res => res.json()).then(
             data => {
                 if (data.success) {
-                    // console.log(data);
+                    console.log(data);
                     dispatch({
                         type: GET_ACTIVITIES, payload: data.data
                     });
@@ -36,7 +36,7 @@ export const fetchOwnAttendance = (offset = 0, limit = 20) => {
         }).then(res => res.json()).then(
             data => {
                 if (data.success) {
-                    // console.log(data);
+                    console.log(data);
                     dispatch({
                         type: GET_ATTENDANCE, payload: data.data
                     });
@@ -114,13 +114,13 @@ export const deleteActivity = (id) => {
 }
 
 export function updateActivity(id, model, history) {
-    // console.log(model);
+    console.log(model);
 
     swal.showLoading();
     fetch(`${getBaseUrl()}/attendance/activities/${id}`, { ...header.reqHeader('PATCH', model) })
         .then(res => res.json()).then(
             data => {
-                // console.log(data)
+                console.log(data)
                 if (data.success) {
                     swal.fire({
                         title: data.message,
@@ -147,12 +147,12 @@ export function updateActivity(id, model, history) {
 }
 
 export function createActivity(model, history) {
-    // console.log(model);
+    console.log(model);
     swal.showLoading();
     fetch(`${getBaseUrl()}/attendance/activities`, { ...header.reqHeader('POST', model) })
         .then(res => res.json()).then(
             data => {
-                // console.log(data)
+                console.log(data)
                 if (data.success) {
                     swal.fire({
                         title: data.message,
@@ -181,12 +181,12 @@ export function createActivity(model, history) {
 export function markAttendance(model) {
     
     return dispatch => {
-        // console.log(model);
+        console.log(model);
         swal.showLoading();
         fetch(`${getBaseUrl()}/attendance`, { ...header.reqHeader('POST', model) })
             .then(res => res.json()).then(
                 data => {
-                    // console.log(data)
+                    console.log(data)
                     if (data.success) {
                         swal.fire({
                             title: data.message,

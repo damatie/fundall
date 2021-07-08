@@ -14,7 +14,7 @@ export const fetchDepartmentExit = (offset = 0, limit = 10) => {
         }).then(res => res.json()).then(
             data => {
                 if (data.success) {
-                    // console.log(data.data);
+                    console.log(data.data);
                     dispatch({
                         type: GET_DEPARTMENT_EXIT_LIST, payload: data.data
                     });
@@ -37,7 +37,7 @@ export const HRAccept = (payload, id) => {
         }).then(res => res.json()).then(
             data => {
                 if (data.success) {
-                    // console.log(data.data);
+                    console.log(data.data);
                     swal.fire({
                         title: data.message,
                         timer: 3000,
@@ -88,7 +88,7 @@ export const lineManagerReject = (id) => {
                 return fetch(`${getBaseUrl()}/employee_exit/lm/reject/${id}`, { ...header.reqHeader('PATCH', payload) }
                 ).then(res => res.json()).then(async data => {
 
-                    // console.log(data);
+                    console.log(data);
                     if (data.success) {
                         dispatch(fetchDepartmentExit());
                         swal.fire({
@@ -129,7 +129,7 @@ export const lineManagerAccept = (id) => {
         }).then(res => res.json()).then(
             data => {
                 if (data.success) {
-                    // console.log(data.data);
+                    console.log(data.data);
                     swal.fire({
                         title: data.message,
                         timer: 3000,
@@ -158,7 +158,7 @@ export const fetchCompanyExit = (offset = 0, limit = 10) => {
         }).then(res => res.json()).then(
             data => {
                 if (data.success) {
-                    // console.log(data.data);
+                    console.log(data.data);
                     dispatch({
                         type: GET_COMPANY_EXIT_LIST, payload: data.data
                     });

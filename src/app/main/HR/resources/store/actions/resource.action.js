@@ -23,7 +23,7 @@ export const createResourse = data => {
       },
       body: JSON.stringify(data)
     }).then(res => res.json()).then(data => {
-      // console.log(data)
+      console.log(data)
       if(data.success) {
         swal.fire({
           title: 'Create Resourse',
@@ -68,7 +68,7 @@ export const updateResourse = (data, id) => {
       },
       body: JSON.stringify(data)
     }).then(res => res.json()).then(data => {
-      // console.log(data)
+      console.log(data)
       if(data.success) {
         swal.fire({
           title: 'Update Resourse',

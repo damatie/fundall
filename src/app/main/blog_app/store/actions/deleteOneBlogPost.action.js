@@ -38,7 +38,7 @@ export function deleteOneBlogPost(id) {
                 payload: id
               });
             } else {
-              // console.log(post);
+              console.log(post);
               return dispatch({
                 type: DELETE_ONE_BLOGPOST_ERROR,
                 payload: ''

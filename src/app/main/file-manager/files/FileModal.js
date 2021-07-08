@@ -49,8 +49,8 @@ export default function FileModal() {
   }
 
   function handleSubmit(model) {
-    // console.log(model);
-    // console.log(file[0]);
+    console.log(model);
+    console.log(file[0]);
     dispatch(Actions.createDocument(model, file[0]));
     handleClose();
   }

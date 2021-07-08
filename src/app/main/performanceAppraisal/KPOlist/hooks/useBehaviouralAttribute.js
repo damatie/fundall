@@ -9,7 +9,7 @@ const useBehaviouralAttribute = (state, dispatch, kpoDetails) => {
   }, [state])
 
   const handleChange = ({data, headerId}) => (e, value) => {
-    // // console.log({data, headerId});
+    // console.log({data, headerId});
     let headerIndex = null;
     let contentIndex = null;
     const currentContent = [];

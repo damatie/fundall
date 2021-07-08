@@ -93,7 +93,7 @@ export default function EmployeeGradeLevelModal ({open, entities, setOpen, data,
         const { data: { success, data  } } = await api.get(`/entity/one/${event.target.value.id}`);
         if (success && data) {
             if(data.employeeGrades.length > 0) {
-                console.log('Grades: ', data.employeeGrades);
+                // console.log('Grades: ', data.employeeGrades);
                 setGradeList(data.employeeGrades);
                 setSelectGrades(false);
             }

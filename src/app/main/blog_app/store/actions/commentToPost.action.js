@@ -31,7 +31,7 @@ export function submitBlogComment(data) {
 						payload: comment.data
 					});
 				} else {
-					// // console.log(comment);
+					// console.log(comment);
 					Swal.fire({
 						title: 'COMMENT TO POST',
 						text: comment.message,

@@ -62,7 +62,7 @@ function RequestLoanTab(props) {
 	const { state } = useLocation();
 
 	useEffect(() => {
-		// // console.log(state)
+		// console.log(state)
 	}, [id])
 
 	useEffect(() => {
@@ -115,7 +115,7 @@ function RequestLoanTab(props) {
 	}, [profile])
 
 	useEffect(() => {
-		// console.log(state)
+		console.log(state)
 		if (id) {
 			setOtherDetails({
 				amountRequested: state.amountRequested,
@@ -161,7 +161,7 @@ function RequestLoanTab(props) {
 	}
 
 	function handleSubmit(model) {
-		// console.log({ ...model, ...otherDetails });
+		console.log({ ...model, ...otherDetails });
 		if (id) {
 			if (userCheck === "hr") {
 				dispatch(Actions.approveLoan({

@@ -22,7 +22,7 @@ export function getCategories() {
 		});
 		fetch(`${basUrl()}/training/category`, { ...headers.getRegHeader() })
 			.then(res => res.json()).then(async data => {
-				// // console.log(data.data);
+				// console.log(data.data);
 				data.success ?
 					dispatch({
 						type: GET_CATEGORIES,
@@ -34,7 +34,7 @@ export function getCategories() {
 						payload: []
 					})
 			}).catch(err => {
-				// console.log(err);
+				console.log(err);
 				swal.fire(
 					'Oops!',
 					'something went wrong',
@@ -48,7 +48,7 @@ export function getEntities() {
 	return dispatch => {
 		fetch(`${basUrl()}/entity/all`, { ...headers.getRegHeader() })
 			.then(res => res.json()).then(data => {
-				// // // console.log(data.data);
+				// // console.log(data.data);
 				data.success ?
 					dispatch({
 						type: GET_ENTITIES,
@@ -60,7 +60,7 @@ export function getEntities() {
 						payload: []
 					})
 			}).catch(err => {
-				// // console.log(err);
+				// console.log(err);
 			})
 	}
 }
@@ -69,7 +69,7 @@ export function getDepartments(id) {
 	return dispatch => {
 		fetch(`${basUrl()}/department/all/${id}`, { ...headers.getRegHeader() })
 			.then(res => res.json()).then(data => {
-				// // // console.log(data.data);
+				// // console.log(data.data);
 				data.success ?
 					dispatch({
 						type: GET_DEPARTMENTS,
@@ -81,7 +81,7 @@ export function getDepartments(id) {
 						payload: []
 					})
 			}).catch(err => {
-				// // console.log(err);
+				// console.log(err);
 			})
 	}
 }
@@ -90,7 +90,7 @@ export function getRoles() {
 	return dispatch => {
 		fetch(`${basUrl()}/roles`, { ...headers.getRegHeader() })
 			.then(res => res.json()).then(async data => {
-				// // // console.log(data.data);
+				// // console.log(data.data);
 				data.success ?
 					dispatch({
 						type: GET_ROLES,
@@ -102,7 +102,7 @@ export function getRoles() {
 						payload: []
 					})
 			}).catch(err => {
-				// // console.log(err);
+				// console.log(err);
 			})
 	}
 }
@@ -152,7 +152,7 @@ export function addCategory(payload) {
 	}
 }
 export function updateCategory(payload, id) {
-	// // console.log(payload)
+	// console.log(payload)
 	return dispatch => {
 		dispatch({
 			type: LOADING_CATEGORIES
@@ -198,7 +198,7 @@ export function updateCategory(payload, id) {
 }
 
 export function deleteCategory(id) {
-	// // console.log(id);
+	// console.log(id);
 	return dispatch => {
 		dispatch({
 			type: LOADING_CATEGORIES
@@ -238,7 +238,7 @@ export function deleteCategory(id) {
 						}
 					}
 					).catch(e => {
-						// console.log(e);
+						console.log(e);
 						swal.fire(
 							'Oops!',
 							'something went wrong',

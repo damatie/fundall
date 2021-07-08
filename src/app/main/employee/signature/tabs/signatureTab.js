@@ -43,7 +43,7 @@ const SignatureTab = () => {
         })
         .catch(function (response) {
             //handle error
-            // console.log(response);
+            console.log(response);
         });
     }
     

@@ -152,7 +152,7 @@ function ManageSALoanForDirectSubordinates(props) {
     }, [dispatch]);
 
     useEffect(() => {
-        // console.log(salaryAdvance)
+        console.log(salaryAdvance)
     }, [salaryAdvance])
 
     const handleClick = e => {

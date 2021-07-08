@@ -24,7 +24,7 @@ const headers = fetchHeaders();
 	  })
 	  fetch(`${basUrl()}/document_category/add_category`, {...headers.reqHeader('post', model)}
       ).then(res => res.json()).then( async data => {
-        //   // console.log(data);
+        //   console.log(data);
 		if(data.success) {
 		  dispatch({
 			type: CREATE_CATEGORY_SUCCESS,
@@ -84,11 +84,11 @@ const headers = fetchHeaders();
         preConfirm: () => {
 		model.categoryName = document.getElementById('swal_cat_name').value;
 		model.description = document.getElementById('swal_cat_desc').value;
-		// console.log(model);
+		console.log(model);
         return fetch(`${basUrl()}/document_category/${id}`, {...headers.reqHeader('PATCH', model)}
             ).then(res => res.json()).then(async data => {
               // let data = response.data;
-            //   // console.log(data);
+            //   console.log(data);
               if(data.success) {
                 dispatch({
                   type: UPDATE_CATEGORY_SUCCESS,
@@ -136,7 +136,7 @@ export function getCategories() {
 		  })
         fetch(`${basUrl()}/document_category`, {...headers.getRegHeader()})
 		.then(res => res.json()).then(async data => {
-			// console.log(data.data);
+			console.log(data.data);
 			data.success ? 
 				(data.data) ?
 					dispatch({
@@ -170,7 +170,7 @@ export function getFileById(id) {
 		  })
         fetch(`${basUrl()}/document_category/${id}`, {...headers.getRegHeader()})
 		.then(res => res.json()).then(async data => {
-			// // console.log(data.data);
+			// console.log(data.data);
 			data.success ? 
 				(data.data) ?
 					dispatch({
@@ -199,7 +199,7 @@ export function getFileById(id) {
 
 
 export function deleteCategory(id){
-	// // console.log(id);
+	// console.log(id);
 	return dispatch => {
 		dispatch({
 			type: LOADING_CATEGORIES

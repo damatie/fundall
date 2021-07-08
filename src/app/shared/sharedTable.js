@@ -39,7 +39,7 @@ function SharedTable(props) {
 
 	useEffect(() => {
 		setData(props.data);
-		// // console.log(props.data)
+		// console.log(props.data)
 	}, [props.data])
 
 	function handleSelectAllClick(event) {

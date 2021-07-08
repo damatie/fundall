@@ -22,10 +22,10 @@ const headers = fetchHeaders();
 	  dispatch({
 		type: LOADING_CATEGORIES
 	  })
-	  // console.log(model)
+	  console.log(model)
 	  fetch(`${basUrl()}/post/category/`, {...headers.reqHeader('post', model)}
       ).then(res => res.json()).then( async data => {
-        //   // console.log(data);
+        //   console.log(data);
 		if(data.success) {
 		  Promise.all([
 			dispatch({
@@ -87,7 +87,7 @@ const headers = fetchHeaders();
         return fetch(`${basUrl()}/post/category/${id}`, {...headers.reqHeader('PATCH', model)}
             ).then(res => res.json()).then(async data => {
               // let data = response.data;
-              // console.log(data);
+              console.log(data);
               if(data.success) {
 				Promise.all([
 					dispatch({
@@ -138,7 +138,7 @@ export function getCategories() {
 		  })
         fetch(`${basUrl()}/post/category/`, {...headers.getRegHeader()})
 		.then(res => res.json()).then(async data => {
-			// console.log(data.data);
+			console.log(data.data);
 			data.success ? 
 				(data.data) ?
 					dispatch({
@@ -172,7 +172,7 @@ export function getCategoryById(id) {
 		  })
         fetch(`${basUrl()}/post/category/${id}`, {...headers.getRegHeader()})
 		.then(res => res.json()).then(async data => {
-			// // console.log(data.data);
+			// console.log(data.data);
 			data.success ? 
 				(data.data) ?
 					dispatch({
@@ -201,7 +201,7 @@ export function getCategoryById(id) {
 
 
 export function deleteCategory(id){
-	// // console.log(id);
+	// console.log(id);
 	return dispatch => {
 		dispatch({
 			type: LOADING_CATEGORIES

@@ -18,13 +18,13 @@ export function deleteCommentReply({replyId, commentId}) {
 		}).then(res => res.json()).then(
 			comment => {
 				if(comment.success === true) {
-					// console.log('reply: ', comment)
+					console.log('reply: ', comment)
 					return dispatch({
 						type: DELETE_COMMENT_REPLY_SUCCESS,
 						payload: {replyId, commentId}
 					});
 				} else {
-					// console.log(comment);
+					console.log(comment);
 					return dispatch({
 						type: DELETE_COMMENT_REPLY_ERROR,
 						payload: ''

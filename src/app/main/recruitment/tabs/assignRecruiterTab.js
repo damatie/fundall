@@ -38,14 +38,14 @@ function AssignRecruiter(props) {
 	useEffect(() => {
 		fetch(`${baseUrl()}/appraisal/jobTitle/all`, { ...headers.getRegHeader() })
 			.then(res => res.json()).then(async data => {
-				// // console.log(data);
+				// console.log(data);
 				if (data.success) {
 					setJobTitleList(data.data.map(jobTitle => jobTitle))
 				} else {
-					// // console.log(data)
+					// console.log(data)
 				}
 			}).catch(err => {
-				// console.log(err);
+				console.log(err);
 			})
 	}, [baseUrl, headers]);
 

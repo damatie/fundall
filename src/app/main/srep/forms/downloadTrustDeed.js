@@ -29,7 +29,7 @@ function UploadTrustDeed(props){
     const downloadFile = (fieldName, fileUrl) => {
         let url = '';
         if(!fileUrl){
-            // console.log(fileUrls);
+            console.log(fileUrls);
             url = fileUrls.find(file => {return file.fieldName === fieldName});
             url = url.url;
         }else{

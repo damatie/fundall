@@ -112,7 +112,7 @@ export const getDisbursedLoan = () => {
           let response = data.data;
           response.splice(response.length - 1, 1);
 
-          // console.log(response)
+          console.log(response)
           dispatch({
             type: GET_DISBURSED_LOAN,
             payload: response || []
@@ -137,7 +137,7 @@ export const getReturnedLoan = () => {
         if (data.success) {
           let response = data.data;
           response.splice(response.length - 1, 1);
-          // console.log(response);
+          console.log(response);
 
           dispatch({
             type: GET_RETURNED_LOAN,
@@ -384,7 +384,7 @@ export const getEmployeeLoanApproved = (offset = 0, limit = 10) => {
       }
     }).then(res => res.json()).then(
       data => {
-        // console.log({ data })
+        console.log({ data })
         if (data.success) {
           if (data.message === 'No record found') {
             dispatch({

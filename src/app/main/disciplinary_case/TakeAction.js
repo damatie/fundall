@@ -47,7 +47,7 @@ export default function TakeAction(props) {
 	});
 
 	// useEffect(() => {
-	//     // console.log(selected.id);
+	//     console.log(selected.id);
 	//     dispatch(Actions.getDisciplinaryAction(selected.id));
 	// }, [dispatch]);
 
@@ -75,22 +75,22 @@ export default function TakeAction(props) {
 
 	const handleFormValueChange = (el, value) => {
 		console.log(el);
-		// console.log(value);
+		console.log(value);
 		if (value) {
 			form[el] = value;
 			setForm(form);
-			// console.log(form);
+			console.log(form);
 		}
 	};
 
 	const handleSubmit = () => {
-		// console.log(form);
+		console.log(form);
 		dispatch(Actions.createDisciplinaryAction(form));
 		props.handleClose();
     };
     
 	const handleEdit = (id) => {
-		// console.log(form);
+		console.log(form);
 		dispatch(Actions.updateDisciplinaryAction(form, id));
 		props.handleClose();
 	};

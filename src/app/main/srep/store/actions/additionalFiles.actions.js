@@ -33,7 +33,7 @@ export function addEndorsed(payload, srepId){
 		// swal.showLoading();
 		fetch(`${baseUrl()}/srep/otherfiles`, { ...headers.fdHeader('post', payload) })
 		.then(res => res.json()).then(async data => {
-			// console.log(data)
+			console.log(data)
 			if (data.success) {
 				Promise.all([
 					dispatch({
@@ -75,7 +75,7 @@ export function addEmailIndemnity(payload, srepId){
 		// swal.showLoading();
 		fetch(`${baseUrl()}/srep/otherfiles`, { ...headers.fdHeader('post', payload) })
 		.then(res => res.json()).then(async data => {
-			// console.log(data)
+			console.log(data)
 			if (data.success) {
 				Promise.all([
 					dispatch({
@@ -117,7 +117,7 @@ export function addBoardResolution(payload, srepId){
 		// swal.showLoading();
 		fetch(`${baseUrl()}/srep/otherfiles`, { ...headers.fdHeader('post', payload) })
 		.then(res => res.json()).then(async data => {
-			// console.log(data)
+			console.log(data)
 			if (data.success) {
 				Promise.all([
 					dispatch({
@@ -160,7 +160,7 @@ export function addTrustDeed(payload, srepId){
 		dispatch({type: ADD_TRUST_DEED_FILES_LOADING});
 		fetch(`${baseUrl()}/srep/otherfiles`, { ...headers.fdHeader('post', payload) })
 		.then(res => res.json()).then(async data => {
-			// console.log(data)
+			console.log(data)
 			if (data.success) {
 				Promise.all([
 					dispatch({
@@ -203,7 +203,7 @@ export function addTrustAccDetails(payload, srepId){
 		dispatch({type: ADD_TRUST_ACC_DETAILS_FILES_LOADING})
 		fetch(`${baseUrl()}/srep/otherfiles`, { ...headers.fdHeader('post', payload) })
 		.then(res => res.json()).then(async data => {
-			// console.log(data)
+			console.log(data)
 			if (data.success) {
 				Promise.all([
 					dispatch({

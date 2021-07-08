@@ -15,7 +15,7 @@ export const getOnboardings = () => {
       }
     });
     request.then(res => {
-      // console.log(res)
+      console.log(res)
       return dispatch({
         type: GET_ONBOARDINGS,
         payload: res.data.data

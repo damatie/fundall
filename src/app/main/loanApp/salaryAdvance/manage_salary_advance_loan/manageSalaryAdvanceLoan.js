@@ -147,7 +147,7 @@ function ManageSALoan(props) {
 	}, [dispatch]);
 
 	useEffect(() => {
-		// // console.log(pendingSA)
+		// console.log(pendingSA)
 	})
 
 	const handleClick = e => {

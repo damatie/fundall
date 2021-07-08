@@ -73,7 +73,7 @@ function SalaryAdvanceTable() {
 	useEffect(() => {
 		if (salaryAdvanceLog) {
 			setData(salaryAdvanceLog?.log);
-			// console.log(salaryAdvanceLog)
+			console.log(salaryAdvanceLog)
 		}
 	}, [salaryAdvanceLog]);
 

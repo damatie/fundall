@@ -88,7 +88,7 @@ export default function AddDisciplinaryCaseModal() {
 		model.accusedId = accused;
 		model.accuserId = accuser;
 		model.date = moment(start).format('DD MMMM YYYY');
-		// console.log(model);
+		console.log(model);
 		dispatch(Actions.createDisciplinaryCase(model));
 		handleClose();
 	};
@@ -101,21 +101,21 @@ export default function AddDisciplinaryCaseModal() {
 	};
 
 	const handleAccusedChange = name => {
-		// console.log(name);
+		console.log(name);
 		let hodDetails = filterEmployees.find(em => {
 			return em.firstName.toLowerCase() + ' ' + em.lastName.toLowerCase() === name.toLowerCase();
 		});
 		setAccused(hodDetails.id);
-		// console.log(hodDetails);
+		console.log(hodDetails);
 	};
 
 	const handleAccuserChange = name => {
-		// console.log(name);
+		console.log(name);
 		let hodDetails = filterEmployees.find(em => {
 			return em.firstName.toLowerCase() + ' ' + em.lastName.toLowerCase() === name.toLowerCase();
 		});
 		setAccuser(hodDetails.id);
-		// console.log(hodDetails);
+		console.log(hodDetails);
 	};
 
 	return (

@@ -152,7 +152,7 @@ function PersonalTrainingCourses(props) {
 	// }
 
 	const handleChangePage = (event, value) => {
-		// console.log(value);
+		console.log(value);
 		let newPage = value - 1;
 		dispatch(Actions.getAllCourses(rowsPerPage, newPage * rowsPerPage));
 		setPage(value);
@@ -172,7 +172,7 @@ function PersonalTrainingCourses(props) {
 		setOpen(false);
 		return;
 		// }
-		// // console.log(duration);
+		// console.log(duration);
 		// //let Trim the duration value to remove white space
 		// let durations = duration.trim();
 		// //let Split the duration to get first part of the array as the number and convert it to interger
@@ -190,7 +190,7 @@ function PersonalTrainingCourses(props) {
 		// 	startDate: start.format('DD-MM-YYYY'),
 		// 	endDate: end.add(number, months).format('DD-MM-YYYY')
 		// };
-		// // console.log(payload);
+		// console.log(payload);
 		// dispatch(Actions.createTraining(payload));
 		// setOpen(false);
 	}

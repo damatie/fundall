@@ -56,7 +56,7 @@ const EmployeeKpoContentDetails = () => {
       header={{
         icon: '',
         title: 'KPO Content Details',
-        handleSearch: ({target: { value }}) => // console.log(value),
+        handleSearch: ({target: { value }}) => console.log(value),
       }}
       button={{
         showButton: true,

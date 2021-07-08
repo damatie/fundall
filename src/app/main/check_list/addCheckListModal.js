@@ -52,7 +52,7 @@ export default function AddCheckListModal() {
 	};
 
 	const handleSubmit = model => {
-		// console.log(model);
+		console.log(model);
 		dispatch(Actions.createCheckList(model));
 		handleClose();
 	};

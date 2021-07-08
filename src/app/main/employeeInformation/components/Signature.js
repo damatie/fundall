@@ -43,7 +43,7 @@ const Signature = ({ value }) => {
   }
 
   const handldeChange = (value) => {
-    // console.log(value);
+    console.log(value);
     setSignature({ value: value[0], error: false });
   };
 
