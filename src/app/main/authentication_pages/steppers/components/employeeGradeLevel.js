@@ -84,16 +84,20 @@ export default function EmployeeGradeLevelModal ({open, entities, setOpen, data,
         setGradeErr(errors.gradeId?.message);
         setPipCompensationsErr(errors.pipCompensations?.message);
       }, [errors]);
+    
+      React.useEffect(() => {
+        console.log('entities: ', entities)
+      }, [entities]);
 
       React.useEffect(() => {
         dispatch(Actions.getGradeLevels());
       }, [newAdded, updated]);
 
       const handleEntityChange = async (event) => {
-        const { data: { success, data  } } = await api.get(`/entity/one/${event.target.value.id}`);
+        const { data: { success, data  } } = await api.get(`/entity/${event.target.value.id}`);
         if (success && data) {
+            console.log('Grades: ', data.employeeGrades);
             if(data.employeeGrades.length > 0) {
-                // console.log('Grades: ', data.employeeGrades);
                 setGradeList(data.employeeGrades);
                 setSelectGrades(false);
             }

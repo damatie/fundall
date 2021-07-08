@@ -163,7 +163,7 @@ function AddNewEmployee() {
     setEntityErr(errors.entityId?.message);
     setDepartments(event.target.value.department);
     setSelectDept(false);
-    const { data: { success, data  } } = await api.get(`/entity/one/${event.target.value.id}`);
+    const { data: { success, data  } } = await api.get(`/entity/${event.target.value.id}`);
     if (success && data) {
       if(data.employeeGrades.length > 0) {
         // console.log('Grades: ', data.employeeGrades);
