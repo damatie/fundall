@@ -42,6 +42,7 @@ export const getCountries = () => {
         }
       }).then(res => handleResponse(res)).then(
         data => {
+          console.log('Country Data: ', data);
           dispatch({
             type: GET_COUNTRIES,
             payload: formatData(data, 'country_name'),

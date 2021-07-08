@@ -23,16 +23,10 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
-import ChipInput from "material-ui-chip-input";
-import timeZone from "app/shared/timezoneList";
-import currencyList from "app/shared/currencies";
-import companyTypes from "app/shared/companyTypes";
-import dateFormatList from "app/shared/dateformat";
 import { FormHelperText } from "@material-ui/core";
 import Modal from './modal';
 import CompensationItem from './compensationItem';
 import *  as Actions from 'app/main/employeeManagement/store/actions';
-import { CompensationColumnsConfig } from 'app/main/compensationColumns/CompensationColumnsConfig';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -85,18 +79,14 @@ export default function EmployeeGradeLevelModal ({open, entities, setOpen, data,
         setGradeErr(errors.gradeId?.message);
         setPipCompensationsErr(errors.pipCompensations?.message);
       }, [errors]);
-    
-      React.useEffect(() => {
-        console.log('entities: ', entities)
-      }, [entities]);
       
-      React.useEffect(() => {
+    React.useEffect(() => {
         register({ name: 'compensations', type: 'custom' }, { required: true });
         setValue("compensations", compensationObj);
         console.log('compensationObj Updates: ', compensationObj)
       }, [compensationObj]);
 
-      React.useEffect(() => {
+    React.useEffect(() => {
         dispatch(Actions.getGradeLevels());
       }, [newAdded, updated]);
 

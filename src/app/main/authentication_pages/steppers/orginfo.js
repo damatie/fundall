@@ -85,8 +85,8 @@ function OrganizationInformation({handleNext}) {
   const { countries, states, cities } = useSelector(state => state.regions);
 
   const dispatch = useDispatch();
-  const companyTypes = companyTypes();
-  const noOfBranchesList = noOfBranchesList();
+  const companyTypeList = companyTypes();
+  // const noOfBranches = noOfBranchesList();
   const [stateList, setStateList] = React.useState([]);
   const [cityList, setCityList] = React.useState([]);
   const [country, setCountry] = React.useState([]);
@@ -107,7 +107,6 @@ function OrganizationInformation({handleNext}) {
 
   React.useState(() => {
     dispatch(RegionActions.getCountries());
-    // console.log('countries: ', countries)
   }, [])
 
   React.useState(() => {
@@ -243,9 +242,9 @@ function OrganizationInformation({handleNext}) {
                   onChange={handleCompanyTypeChange}
                   label="Company Type"
                 >
-                  {companyTypes.map(item => (
-                  <MenuItem key={item.id} value={item.value}>
-                    {item.label}
+                  {companyTypeList.map(item => (
+                  <MenuItem key={item.number} value={item.name}>
+                    {item.name}
                   </MenuItem>))}
                 </Select>
                 <FormHelperText style={{ color: 'red'}}>{companyTypeErr}</FormHelperText>
@@ -273,7 +272,17 @@ function OrganizationInformation({handleNext}) {
               </FormControl>
             </Grid>
             <Grid item lg={4} md={6} sm={12} xs={12}>
-              <FormControl variant="outlined" style={{ width: '100%', margin: '8px 0px' }} className={classes.formControl}>
+              <Input
+                  required
+                  label='Number Of Branches'
+                  name='noOfBranch'
+                  type="number"
+                  error={errors.noOfBranch}
+                  message={errors.noOfBranch?.message}
+                  helperText={errors.noOfBranch?.message}
+                  refs={register}
+              />  
+              {/* <FormControl variant="outlined" style={{ width: '100%', margin: '8px 0px' }} className={classes.formControl}>
                 <InputLabel id="demo-simple-select-outlined-label">Number Of Branches</InputLabel>
                 <Select
                   justify='left'
@@ -292,7 +301,7 @@ function OrganizationInformation({handleNext}) {
                   </MenuItem>))}
                 </Select>
                 <FormHelperText style={{ color: 'red'}}>{noOfBranchesErr}</FormHelperText>
-              </FormControl>
+              </FormControl> */}
             </Grid>
             <Grid item lg={4} md={6} sm={12} xs={12}>
               <PhoneNumberInput
