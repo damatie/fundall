@@ -33,6 +33,7 @@ import SharedDropzone from './../../../shared/sharedDropZone';
 import *  as RegionActions from 'app/store/actions/regions.actions'
 import withReducer from "app/store/withReducer";
 import regionsReducer from "app/store/reducers";
+// import { getCitites } from './../../../store/actions/regions.actions';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -107,23 +108,24 @@ function OrganizationInformation({handleNext}) {
 
   React.useState(() => {
     dispatch(RegionActions.getCountries());
+    // console.log('countries: ', countries)
   }, [])
 
-  React.useState(() => {
-    dispatch(RegionActions.getStates(countryValue));
-  }, [countryValue])
+  // React.useState(() => {
+  //   dispatch(RegionActions.getStates(countryValue));
+  // }, [countryValue])
 
-  React.useState(() => {
-    setCountry(countries);
-  }, [countries])
+  // React.useState(() => {
+  //   setCountry(countries);
+  // }, [countries])
 
-  React.useState(() => {
-    setStateList(states);
-  }, [states])
+  // React.useState(() => {
+  //   setStateList(states);
+  // }, [states])
 
-  React.useState(() => {
-    setCityList(cities);
-  }, [cities])
+  // React.useState(() => {
+  //   setCityList(cities);
+  // }, [cities])
 
   React.useEffect(() => {
     setCompanyTypeErr(errors.type?.message);
@@ -139,20 +141,10 @@ function OrganizationInformation({handleNext}) {
     setValue("startDate", JSON.stringify(companyStartDate));
   }, [companyStartDate]);
 
-  React.useEffect(() => {
-    // console.log('data: ', {...getValues()});
-  }, [getValues])
-
   const handleCompanyTypeChange = (event) => {
     register({ name: 'type', type: 'custom' }, { required: true });
     setValue("type", event.target.value);
     setCompanyTypeErr(errors.type?.message);
-  };
-
-  const handleNoOfBranchesChange = (event) => {
-    register({ name: 'noOfBranch', type: 'custom' }, { required: true });
-    setValue("noOfBranch", event.target.value);
-    setNoOfBranchesErr(errors.noOfBranch?.message);
   };
 
   const handlePhone1Change = (event) => {
@@ -166,6 +158,7 @@ function OrganizationInformation({handleNext}) {
   const handleCountryChange = (event) => {
     register({ name: 'country', type: 'custom' }, { required: true });
     setValue("country", event.target.value);
+    dispatch(RegionActions.getStates(event.target.value));
     setCountryValue(event.target.value);
     setCountryErr(errors.country?.message);
   };
@@ -173,6 +166,7 @@ function OrganizationInformation({handleNext}) {
   const handleStateChange = (event) => {
     register({ name: 'state', type: 'custom' }, { required: true });
     setValue("state", event.target.value);
+    dispatch(RegionActions.getCitites(event.target.value));
     setStateErr(errors.state?.message);
   };
   
@@ -187,7 +181,6 @@ function OrganizationInformation({handleNext}) {
     branchAddresses.push(chip)
     setValue("branchAddress", branchAddresses);
     setBranchAddressesErr(errors.branchAddress?.message);
-    // console.log('data: ', JSON.stringify({...getValues()}));
   };
 
   const handleDeleteBranchAddresses = (chip, index) => {
@@ -200,22 +193,25 @@ function OrganizationInformation({handleNext}) {
   };
 
   const onSubmit = async (data) => {
+      const form = { ...data }
+      let formData = new FormData();
+      for (let i = 0; i < Object.keys(form).length; i++) {
+        formData.append(`${Object.keys(form)[i]}`, form[Object.keys(form)[i]]);
+      }
+      // formdata.append("logo", fileInput.files[0], "183071008_1154499071735066_2584124674723614646_n.jpg");
+      console.log('Form Values: ', form);
+      console.log('FormData: ', formData);
       try {
-        const form = { ...data }
-        let formData = new FormData();
-        for (i = 0; i < Object.keys(form).length; i++) {
-          formData.append(`${Object.keys(form)[i]}`, form[Object.keys(form)[i]]);
-        }
-        // console.log('FormData: ', formData);
         loading('processing...');
         const { data: { message  } } = await api.post('/organization_info', formData);
+        await setStepper([], 2);
         swal.fire({
           text: message,
           icon: 'success'
         });
-        setStepper([], 2);
         handleNext();
       } catch (e) {
+        console.log('Error Message: ', e?.message)
         swal.fire({
           text: e?.message || 'Something went wrong',
           icon: 'error'
@@ -236,7 +232,7 @@ function OrganizationInformation({handleNext}) {
                   align='left'
                   labelId="demo-simple-select-outlined-label"
                   id="demo-simple-select-outlined"
-                  name='companyType'
+                  name='type'
                   error={errors.type}
                   message={errors.type?.message}
                   onChange={handleCompanyTypeChange}
@@ -261,7 +257,6 @@ function OrganizationInformation({handleNext}) {
                   className="w-full"
                   value={companyStartDate}
                   onChange={(newValue) => {
-                    // console.log('errors: ', errors);
                     setCompanyStartDate(newValue);
                     register({ name: 'startDate', type: 'custom' }, { required: true });
                     setValue("startDate", JSON.stringify(newValue));
@@ -354,9 +349,9 @@ function OrganizationInformation({handleNext}) {
                   onChange={handleCountryChange}
                   label="Country"
                 >
-                  {country.map(item => (
-                  <MenuItem key={item.id} value={item.name}>
-                    {item.name}
+                  {countries && countries.map(item => (
+                  <MenuItem key={item.id} value={item?.name}>
+                    {item?.name}
                   </MenuItem>))}
                 </Select>
                 <FormHelperText style={{ color: 'red'}}>{countryErr}</FormHelperText>
@@ -376,7 +371,7 @@ function OrganizationInformation({handleNext}) {
                   onChange={handleStateChange}
                   label="State"
                 >
-                  {stateList.map(item => (
+                  {states && states.map(item => (
                   <MenuItem key={item.id} value={item.name}>
                     {item.name}
                   </MenuItem>))}
@@ -398,7 +393,7 @@ function OrganizationInformation({handleNext}) {
                   onChange={handleCityChange}
                   label="City"
                 >
-                  {cityList.map(item => (
+                  {cities && cities.map(item => (
                   <MenuItem key={item.id} value={item.name}>
                     {item.name}
                   </MenuItem>))}

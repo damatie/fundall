@@ -30,10 +30,14 @@ import { FormHelperText } from "@material-ui/core";
 import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined';
 import DepartmentCard from "./components/departmentCard";
 import DepartmentModal from "./components/departmentModal";
+import EmployeeGradeCard from "./components/employeeGradeCard";
+import EmployeeGradeModal from "./components/employeeGrade";
+import EmployeeGradeLevelModal from "./components/employeeGradeLevel";
+import { setStepper } from './components/setStepper';
+import EmployeeGradeLevelCard from './components/employeeGradeLevelCard';
 import *  as Actions from 'app/main/employeeManagement/store/actions';
 import withReducer from "app/store/withReducer";
 import employeesReducer from "app/main/employeeManagement/store/reducers/employees.reducer";
-import { setStepper } from './components/setStepper';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -51,7 +55,6 @@ const useStyles = makeStyles(theme => ({
 
 const schema = yup.object().shape({
     regStep: yup.number()
-        .required(errorMsg({ name: 'regStep', type: 'required' })),
 });
 
 function Departments({handleNext}) {
@@ -61,15 +64,22 @@ function Departments({handleNext}) {
     resolver: yupResolver(schema)
   });
 
-  const { entities, departments, accountSettings } = useSelector(state => state.employeeMgt);
-  // console.log('entities: ', entities);
-  // console.log('grades: ', departments);
-
+  const { entities, departments, grades, gradeLevels, accountSettings, compensationData } = useSelector(state => state.employeeMgt);
+  
   const dispatch = useDispatch();
   const [entityList, setEntityList] = React.useState([]);
   const [departmentList, setDepartmentList] = React.useState([]);
   const [accountSettingsData, setAccountSettingsData] = React.useState({});
   const [openDepartmentModal, setOpenDepartmentModal] = React.useState(false);
+  const [hasEntities, setHasEntities] = React.useState(true);
+  const [gradeList, setGradeList] = React.useState([]);
+  const [gradeLevelList, setGradeLevelList] = React.useState([]);
+  const [openEmployeeGradeModal, setOpenEmployeeGradeModal] = React.useState(false);
+  const [openEmployeeGradeLevelModal, setOpenEmployeeGradeLevelModal] = React.useState(false);
+  const [humanResource, setHumanResource] = React.useState(true);
+  const [finance, setFinance] = React.useState(true);
+  const [informationTechnology, setInformationTechnology] = React.useState(false);
+  let genericDept = [];
   const classes = useStyles();
 
   React.useEffect(() => {
@@ -77,7 +87,6 @@ function Departments({handleNext}) {
     dispatch(Actions.getAccountSettings());
     dispatch(Actions.getDept());
     dispatch(Actions.getGradeLevels());
-    // console.log('accountSettings: ', accountSettings);
   }, []);
 
   React.useEffect(() => {
@@ -86,11 +95,38 @@ function Departments({handleNext}) {
     setAccountSettingsData(accountSettings);
   }, [departments, entities, accountSettings])
 
-  React.useEffect(() => {
-    // console.log('data: ', {...getValues()});
-  }, [getValues])
+  const handleHumanResourceChange = (event) => {
+    setHumanResource(event.target.checked);
+    let data = {};
+    data.name = "Human Resource";
+    if (humanResource === true) {
+      !genericDept.includes(data) ? genericDept.push(data) : '';
+    } else {
+      genericDept.filter(e => e !== data);
+    }
+  };
+  const handleFinanceChange = (event) => {
+    setFinance(event.target.checked);
+    let data = {};
+    data.name = "Finance";
+    if (finance === true) {
+      !genericDept.includes(data) ? genericDept.push(data) : '';
+    } else {
+      genericDept.filter(e => e !== data);
+    }
+  };
+  const handleInformationTechnologyChange = (event) => {
+    setInformationTechnology(event.target.checked);
+    let data = {};
+    data.name = "Information Technology";
+    if (finance === true) {
+      !genericDept.includes(data) ? genericDept.push(data) : '';
+    } else {
+      genericDept.filter(e => e !== data);
+    }
+  };
 
-  
+
   const HandleAddDepartment = () => {
     setOpenDepartmentModal(true);
   }
@@ -98,15 +134,13 @@ function Departments({handleNext}) {
 
   const onSubmit = async (data) => {
       try {
-        const form = { ...data }
         loading('processing...');
-        const { data: { message  } } = await api.post('/organization_info', form);
+        await setStepper([], 4);
         swal.fire({
           text: message,
           icon: 'success'
         });
-        setStepper([], 3);
-        handleNext();
+        window.location.assign('/employee/dashboard');
       } catch (e) {
         swal.fire({
           text: e?.message || 'Something went wrong',
@@ -119,6 +153,36 @@ function Departments({handleNext}) {
     <div className={classes.root}>
       <form onSubmit={handleSubmit(onSubmit)}>
           <Typography variant="h5" color="initial" className='my-10'><strong>Departments</strong></Typography>
+          {hasEntities && <Grid container spacing={3} justify='space-between' align='center' style={{ marginBottom: '3rem'}}>
+          <Typography variant="body1" color="initial" className='my-10'><strong>Please select departments that will be general for all entities</strong></Typography>
+            <Grid item lg={12} md={12} sm={12} xs={12} align='left' style={{ marginBottom: '-15px' }}>
+              <FormControlLabel control={<Checkbox
+                checked={humanResource}
+                onChange={handleHumanResourceChange}
+                name="humanResource"
+                color="primary"
+              />}
+              label="Human Resource" />
+            </Grid>
+            <Grid item lg={12} md={12} sm={12} xs={12} align='left' style={{ marginBottom: '-15px', marginTop: '-15px'  }}>
+              <FormControlLabel control={<Checkbox
+                checked={finance}
+                onChange={handleFinanceChange}
+                name="finance"
+                color="primary"
+              />}
+              label="Finance" />
+            </Grid>
+            <Grid item lg={12} md={12} sm={12} xs={12} align='left' style={{ marginTop: '-15px' }}>
+              <FormControlLabel control={<Checkbox
+                checked={informationTechnology}
+                onChange={handleInformationTechnologyChange}
+                name="informationTechnology"
+                color="primary"
+              />}
+              label="Information Technology" />
+            </Grid>
+          </Grid>}          
           <Grid container spacing={3} justify='space-between' align='center' style={{ marginBottom: '3rem'}}>
             <Grid item lg={12} md={12} sm={12} xs={12} align='left' className='mt-10'>
               <Button onClick={HandleAddDepartment} variant="contained" color="secondary">
@@ -132,7 +196,32 @@ function Departments({handleNext}) {
             </Grid>
   
           </Grid>
-          <Grid container spacing={3} justify='center' align='center' className='my-10'>
+          {hasEntities && <Grid container spacing={3} justify='center' align='center' className='my-10'>
+            <Grid item lg={12} md={12} sm={12} xs={12} align='left' className='my-10'>
+                <Typography variant="h5" color="initial" className='my-10'><strong>Employee Grade</strong></Typography>
+                <Button onClick={handleAddEmployeeGrade} variant="contained" color="secondary">
+                  <span style={{ marginRight: '5px' }}><AddBoxOutlinedIcon/></span> Add Employee Grade
+                </Button>
+              </Grid>
+              
+              <Grid item lg={12} md={12} sm={12} xs={12} align='left' className='my-10'>
+                {gradeList.map(item => (
+                  <EmployeeGradeCard name={item?.gradeName} entityName={item?.entityName} entities={entityList} description={item?.gradeDescription} employeeGrades={grades} data={item}/>))}
+              </Grid>
+
+              <Grid item lg={12} md={12} sm={12} xs={12} align='left' className='my-10'>
+                <Typography variant="h5" color="initial" className='my-10'><strong>Employee Grade Level</strong></Typography>
+                <Button onClick={handleAddEmployeeGradeLevel} variant="contained" color="secondary">
+                  <span style={{ marginRight: '5px' }}><AddBoxOutlinedIcon/></span> Add Employee Grade Level
+                </Button>
+              </Grid>
+
+              <Grid item lg={12} md={12} sm={12} xs={12} align='left' className='my-10'>
+                {gradeLevelList.map(item => (
+                  <EmployeeGradeLevelCard name={item?.level} description={item?.description} compensationData={compensationData || []} entityList={entities} gradeLevelList={gradeLevelList} data={item}/>))}
+              </Grid>  
+            </Grid>}
+            <Grid container spacing={3} justify='center' align='center' className='my-10'>
               <Button variant="contained" type='submit' color="primary">
                 Submit 
               </Button>
@@ -142,6 +231,8 @@ function Departments({handleNext}) {
           </Grid>
       </form>
       <DepartmentModal open={openDepartmentModal} entities={entityList} setOpen={setOpenDepartmentModal} data={{}} edit={false}/>
+      <EmployeeGradeModal open={openEmployeeGradeModal} employeeGrades={accountSettingsData?.employeeGrade || []} entities={entityList} setOpen={setOpenEmployeeGradeModal} data={{}} edit={false}/>
+      <EmployeeGradeLevelModal open={openEmployeeGradeLevelModal}  compensationList={compensationData || []}  employeeGrades={grades || []} entities={entityList} setOpen={setOpenEmployeeGradeLevelModal} data={{}} edit={false}/>
     </div>
   );
 }

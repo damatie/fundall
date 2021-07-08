@@ -33,11 +33,11 @@ import EntityCard from "./components/entityCard";
 import EmployeeGradeCard from "./components/employeeGradeCard";
 import EmployeeGradeModal from "./components/employeeGrade";
 import EmployeeGradeLevelModal from "./components/employeeGradeLevel";
+import { setStepper } from './components/setStepper';
+import EmployeeGradeLevelCard from './components/employeeGradeLevelCard';
 import *  as Actions from 'app/main/employeeManagement/store/actions';
 import withReducer from "app/store/withReducer";
 import employeesReducer from "app/main/employeeManagement/store/reducers/employees.reducer";
-import { setStepper } from './components/setStepper';
-import EmployeeGradeLevelCard from './components/employeeGradeLevelCard';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -103,7 +103,7 @@ function Entities({handleNext}) {
   // console.log('grades: ', grades);
 
   const dispatch = useDispatch();
-// setEntityList setGradeList setAccountSettingsData
+  // setEntityList setGradeList setAccountSettingsData
   const [entityList, setEntityList] = React.useState([]);
   const [gradeList, setGradeList] = React.useState([]);
   const [gradeLevelList, setGradeLevelList] = React.useState([]);
@@ -114,6 +114,7 @@ function Entities({handleNext}) {
   const [humanResource, setHumanResource] = React.useState(true);
   const [finance, setFinance] = React.useState(true);
   const [informationTechnology, setInformationTechnology] = React.useState(false);
+  let genericDept = [];
   const classes = useStyles();
 
   React.useEffect(() => {
@@ -130,17 +131,37 @@ function Entities({handleNext}) {
     setGradeList(grades);
     setGradeLevelList(gradeLevels);
     setAccountSettingsData(accountSettings);
-    console.log('gradeLevels: ', gradeLevels)
   }, [grades, entities, gradeLevels, accountSettings])
 
   const handleHumanResourceChange = (event) => {
     setHumanResource(event.target.checked);
+    let data = {};
+    data.name = "Human Resource";
+    if (humanResource === true) {
+      !genericDept.includes(data) ? genericDept.push(data) : '';
+    } else {
+      genericDept.filter(e => e !== data);
+    }
   };
   const handleFinanceChange = (event) => {
     setFinance(event.target.checked);
+    let data = {};
+    data.name = "Finance";
+    if (finance === true) {
+      !genericDept.includes(data) ? genericDept.push(data) : '';
+    } else {
+      genericDept.filter(e => e !== data);
+    }
   };
   const handleInformationTechnologyChange = (event) => {
     setInformationTechnology(event.target.checked);
+    let data = {};
+    data.name = "Information Technology";
+    if (finance === true) {
+      !genericDept.includes(data) ? genericDept.push(data) : '';
+    } else {
+      genericDept.filter(e => e !== data);
+    }
   };
   
   const HandleAddEntity = () => {
@@ -156,17 +177,16 @@ function Entities({handleNext}) {
   }
 
 
-
   const onSubmit = async (data) => {
       try {
         const form = { ...data }
         loading('processing...');
-        const { data: { message  } } = await api.post('/organization_info', form);
+        // const { data: { message  } } = await api.post('/organization_info', form);
+        await setStepper(genericDept, 3);
         swal.fire({
           text: message,
           icon: 'success'
         });
-        setStepper([], 3);
         handleNext();
       } catch (e) {
         swal.fire({
