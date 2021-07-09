@@ -80,6 +80,8 @@ export default function DepartmentModal ({open, entities, setOpen, data, edit}) 
     const [entityId, setEntityId] = React.useState(0);
     const [entityErr, setEntityErr] = React.useState("");
     const [department, setDepartment] = React.useState("");
+    const [address, setAddress] = React.useState([]);
+    const [addressErr, setAddressErr] = React.useState("");
     const classes = useStyles();
 
     React.useEffect(() => {
@@ -89,6 +91,7 @@ export default function DepartmentModal ({open, entities, setOpen, data, edit}) 
 
     React.useEffect(() => {
         setEntityErr(errors.entityId?.message);
+        setAddressErr(errors.address?.message);
       }, [errors]);
 
       React.useEffect(() => {
@@ -102,6 +105,22 @@ export default function DepartmentModal ({open, entities, setOpen, data, edit}) 
         setEntityErr(errors.entityId?.message);
       };
 
+      const handleAddAddress = (chip) => {
+        register({ name: 'address', type: 'custom' }, { required: true });
+        address.push(chip)
+        setValue("address", address);
+        setAddressErr(errors.address?.message);
+      };
+    
+      const handleDeleteAddress = (chip, index) => {
+        register({ name: 'address', type: 'custom' }, { required: true });
+        let addressData = address;
+        addressData.splice(index, 1);
+        setAddress(addressData);
+        setValue("address", addressData);
+        setAddressErr(errors.address?.message);
+      };
+
       const handleDepartmentChange = async (event) => {
         setDepartment(event.target.value);
         register({ name: 'departmentName', type: 'custom' }, { required: true });
@@ -109,11 +128,12 @@ export default function DepartmentModal ({open, entities, setOpen, data, edit}) 
         setEntityErr(errors.departmentName?.message);
       };
 
-
+    //   "departmentCode": "CBIT454TRY",
+    //   "address": ["Lagos, Nigeria"],
     const onSubmit = async (value) => {
         const departmentHeadId = 0;
         const form = { ...value, departmentHeadId };
-
+        form.startedOn = form.startedOn.substring(1, 11)
         // console.log('Department form: ', form);
         if (edit) {
             try {
@@ -208,6 +228,16 @@ export default function DepartmentModal ({open, entities, setOpen, data, edit}) 
             </Grid>
             <Grid item lg={12} md={12} sm={12} xs={12}>
                 <Input
+                    name='departmentCode'
+                    type='text'
+                    error={errors.departmentCode}
+                    message={errors.departmentCode?.message}
+                    label="Department Code"
+                    refs={register}
+                />
+            </Grid>
+            <Grid item lg={12} md={12} sm={12} xs={12}>
+                <Input
                     label='Description'
                     name='description'
                     type='text'
@@ -231,7 +261,7 @@ export default function DepartmentModal ({open, entities, setOpen, data, edit}) 
                   value={startedOn}
                   onChange={(newValue) => {
                     // console.log('errors: ', errors);
-                    setStartDate(newValue);
+                    setStartedOn(newValue);
                     register({ name: 'startedOn', type: 'custom' }, { required: true });
                     setValue("startedOn", JSON.stringify(newValue));
                   }}
@@ -239,6 +269,23 @@ export default function DepartmentModal ({open, entities, setOpen, data, edit}) 
                   helperText={errors.startedOn?.message}
                 />
               </FormControl>
+            </Grid>
+            <Grid item lg={6} md={12} sm={12} xs={12}>
+              <ChipInput
+                label='Addresses'
+                name='address'
+                variant= 'outlined'
+                // newChipKeyCodes={[188]}
+                style={{ width: '100%'}}
+                error={errors.branchAddress}
+                message={errors.branchAddress?.message}
+                helperText={errors.branchAddress?.message}
+                allowDuplicates={false}
+                value={address}
+                onAdd={(chip) => handleAddAddress(chip)}
+                onDelete={(chip, index) => handleDeleteAddress(chip, index)}
+              />
+              <FormHelperText style={{ color: 'red'}}>{addressErr}</FormHelperText>
             </Grid>
         </Grid>
         <Grid container spacing={3} justify='center' align='center' className='my-10'>
