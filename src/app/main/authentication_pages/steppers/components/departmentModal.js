@@ -283,7 +283,7 @@ export default function DepartmentModal ({open, entities, setOpen, data, edit}) 
                 variant= 'outlined'
                 // newChipKeyCodes={[188]}
                 style={{ width: '100%'}}
-                defaultValue={data?.branchAddress}
+                defaultValue={data?.address}
                 error={errors.branchAddress}
                 message={errors.branchAddress?.message}
                 helperText={errors.branchAddress?.message}
