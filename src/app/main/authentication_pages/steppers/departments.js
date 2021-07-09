@@ -64,11 +64,11 @@ function Departments({handleNext}) {
     resolver: yupResolver(schema)
   });
 
-  const { entities, departments, grades, gradeLevels, accountSettings, compensationData } = useSelector(state => state.employeeMgt);
+  const { entities, departmentList, grades, gradeLevels, accountSettings, compensationData } = useSelector(state => state.employeeMgt);
   
   const dispatch = useDispatch();
   const [entityList, setEntityList] = React.useState([]);
-  const [departmentList, setDepartmentList] = React.useState([]);
+  // const [departmentList, setDepartmentList] = React.useState([]);
   const [accountSettingsData, setAccountSettingsData] = React.useState({});
   const [openDepartmentModal, setOpenDepartmentModal] = React.useState(false);
   const [hasEntities, setHasEntities] = React.useState(true);
@@ -88,6 +88,7 @@ function Departments({handleNext}) {
     dispatch(Actions.getCompensations());
     dispatch(Actions.getGrades());
     dispatch(Actions.getGradeLevels());
+    dispatch(Actions.getDepartments());
     const dataResponse = localStorage.getItem('login_data');
 	  const data = JSON.parse(dataResponse);
     if (data?.company?.hasEntities === true) {
@@ -102,8 +103,8 @@ function Departments({handleNext}) {
     setGradeList(grades);
     setGradeLevelList(gradeLevels);
     setAccountSettingsData(accountSettings);
-    setDepartmentList(departments);
-  }, [grades, departments, entities, gradeLevels, accountSettings])
+    // setDepartmentList(departmentList);
+  }, [grades, departmentList, entities, gradeLevels, accountSettings])
 
   const handleHumanResourceChange = (event) => {
     setHumanResource(event.target.checked);
@@ -208,7 +209,7 @@ function Departments({handleNext}) {
             </Grid>
             
             <Grid item lg={12} md={12} sm={12} xs={12} align='left' className='my-10'>
-               {departments && departments.map(item => (
+               {departmentList && departmentList.map(item => (
                  <DepartmentCard name={item.departmentName} description={item.description} entities={entities} data={item}/>))}
             </Grid>
   

@@ -5,6 +5,7 @@ const initialState = {
   employees: [],
   entities: [],
   departments: [],
+  departmentList: [],
   roles: [],
   grades: [],
   gradeLevels: [],
@@ -46,6 +47,11 @@ const employeesReducer = (state = initialState, actions) => {
       return {
         ...state,
         departments: actions.payload
+      }
+    case Actions.GET_ALL_DEPARTMENTS:
+      return {
+        ...state,
+        departmentList: actions.payload
       }
     case Actions.GET_ROLES:
       return {

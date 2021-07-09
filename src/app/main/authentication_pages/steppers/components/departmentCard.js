@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 
-export default function DepartmentCard({name, description, data}) {
+export default function DepartmentCard({name, description, data, entities}) {
 
     const dispatch = useDispatch();
     const [openDepartmentModal, setOpenDepartmentModal] = React.useState(false);

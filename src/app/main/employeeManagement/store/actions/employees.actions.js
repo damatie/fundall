@@ -8,6 +8,7 @@ export const CLOSE_ADD_NEW_EMPLOYEE_MODAL = 'CLOSE ADD NEW EMPLOYEE MODAL';
 export const GET_EMPLOYEES = 'GET EMPLOYEES';
 export const GET_ENITIES = 'GET ENTITIES';
 export const GET_DEPARTMENTS = 'GET DEPARTMENTS';
+export const GET_ALL_DEPARTMENTS = 'GET ALL DEPARTMENTS';
 export const GET_ROLES = 'GET ROLES';
 export const EMPLOYEE_GRADES = 'EMPLOYEE GRADES';
 export const EMPLOYEE_GRADE_LEVELS = 'EMPLOYEE GRADE LEVELS';
@@ -86,6 +87,26 @@ export const getRoles = () => {
     } catch (e) {
       dispatch({
         type: GET_ROLES,
+        payload: []
+      })
+    }
+  };
+};
+
+export const getDepartments = () => {
+  return async (dispatch) => {
+    try {
+      const { data: { data, success } } = await api.get(`/department/`);
+      console.log('Department data: ', data);
+      if(success) {
+        dispatch({
+          type: GET_ALL_DEPARTMENTS,
+          payload: data || []
+        })
+      }
+    } catch (e) {
+      dispatch({
+        type: GET_ALL_DEPARTMENTS,
         payload: []
       })
     }
