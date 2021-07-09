@@ -95,7 +95,7 @@ export default function DepartmentModal ({open, entities, setOpen, data, edit}) 
       }, [errors]);
 
       React.useEffect(() => {
-        dispatch(Actions.getDept());
+        dispatch(Actions.getDepartments());
       }, [newAdded, updated]);
 
       const handleEntityChange = async (event) => {
@@ -128,13 +128,10 @@ export default function DepartmentModal ({open, entities, setOpen, data, edit}) 
         setEntityErr(errors.departmentName?.message);
       };
 
-    //   "departmentCode": "CBIT454TRY",
-    //   "address": ["Lagos, Nigeria"],
     const onSubmit = async (value) => {
         const departmentHeadId = 0;
         const form = { ...value, departmentHeadId };
         form.startedOn = form.startedOn.substring(1, 11)
-        // console.log('Department form: ', form);
         if (edit) {
             try {
                 loading('Updating Department...');
@@ -260,7 +257,6 @@ export default function DepartmentModal ({open, entities, setOpen, data, edit}) 
                   className="w-full"
                   value={startedOn}
                   onChange={(newValue) => {
-                    // console.log('errors: ', errors);
                     setStartedOn(newValue);
                     register({ name: 'startedOn', type: 'custom' }, { required: true });
                     setValue("startedOn", JSON.stringify(newValue));
