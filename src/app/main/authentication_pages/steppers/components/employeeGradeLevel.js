@@ -64,7 +64,7 @@ export default function EmployeeGradeLevelModal ({open, entities, setOpen, data,
     });
 
     const dispatch = useDispatch();
-    const [compensationObj, setCompensationObj] = React.useState({});
+    const [compensationObj, setCompensationObj] = React.useState(data.compensations || {});
     const [selectGrades, setSelectGrades] = React.useState(true);
     const [newAdded, setNewAdded] = React.useState(false);
     const [updated, setUpdated] = React.useState(false);
@@ -133,6 +133,7 @@ export default function EmployeeGradeLevelModal ({open, entities, setOpen, data,
         // console.log('Employee Grade Level form: ', form);
         if (edit) {
             try {
+                form.id = data?.id;
                 loading('Updating Employee Grade Level...');
                 const { data: { message, success  } } = await api.patch(`employee-grade-level/`, form);
                 if (success) {
@@ -198,6 +199,7 @@ export default function EmployeeGradeLevelModal ({open, entities, setOpen, data,
                     labelId="demo-simple-select-outlined-label"
                     id="demo-simple-select-outlined"
                     name='entityId'
+                    defaultValue={data?.entityId}
                     onChange={handleEntityChange}
                     label="Entity"
                     >
@@ -220,6 +222,7 @@ export default function EmployeeGradeLevelModal ({open, entities, setOpen, data,
                     name='gradeId'
                     disabled={selectGrades}
                     variant={selectGrades ? 'filled' : 'outlined'}
+                    defaultValue={data?.gradeId}
                     error={errors.gradeId}
                     message={errors.gradeId?.message}
                     onChange={handleGradeChange}
@@ -239,6 +242,7 @@ export default function EmployeeGradeLevelModal ({open, entities, setOpen, data,
                     label='Level'
                     name='level'
                     type='number'
+                    defaultValue={data?.level}
                     error={errors.level}
                     message={errors.level?.message}
                     helperText={errors.level?.message}
@@ -252,6 +256,7 @@ export default function EmployeeGradeLevelModal ({open, entities, setOpen, data,
                     type='text'
                     multiline
                     rows="4"
+                    defaultValue={data?.description}
                     error={errors.description}
                     message={errors.description?.message}
                     helperText={errors.description?.message}
@@ -275,6 +280,7 @@ export default function EmployeeGradeLevelModal ({open, entities, setOpen, data,
                         id="demo-simple-select-outlined"
                         multiple
                         native
+                        defaultValue={data?.pipCompensations}
                         value={pipCompensations}
                         onChange={handlePipCompensationsChange}
                         inputProps={{ id: 'select-multiple-native', }}

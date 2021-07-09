@@ -85,6 +85,10 @@ export default function DepartmentModal ({open, entities, setOpen, data, edit}) 
     const classes = useStyles();
 
     React.useEffect(() => {
+        console.log('Data: ', data);
+      }, []);
+
+      React.useEffect(() => {
         register({ name: 'startedOn', type: 'custom' }, { required: true });
         setValue("startedOn", JSON.stringify(startedOn));
       }, [startedOn]);
@@ -99,9 +103,9 @@ export default function DepartmentModal ({open, entities, setOpen, data, edit}) 
       }, [newAdded, updated]);
 
       const handleEntityChange = async (event) => {
-        setEntityId(event.target.value.id);
+        setEntityId(event.target.value);
         register({ name: 'entityId', type: 'custom' }, { required: true });
-        setValue("entityId", event.target.value.id);
+        setValue("entityId", event.target.value);
         setEntityErr(errors.entityId?.message);
       };
 
@@ -134,6 +138,7 @@ export default function DepartmentModal ({open, entities, setOpen, data, edit}) 
         form.startedOn = form.startedOn.substring(1, 11)
         if (edit) {
             try {
+                form.id = data?.id;
                 loading('Updating Department...');
                 const { data: { message, success  } } = await api.patch(`department/`, form);
                 if (success) {
@@ -199,13 +204,14 @@ export default function DepartmentModal ({open, entities, setOpen, data, edit}) 
                         labelId="demo-simple-select-outlined-label"
                         id="demo-simple-select-outlined"
                         name='entityId'
+                        defaultValue={data?.entityId}
                         error={errors.entityId}
                         message={errors.entityId?.message}
                         onChange={handleEntityChange}
                         label="Entity"
                     >
                     {entities.map(item => (
-                    <MenuItem key={item.id} value={item}>
+                    <MenuItem key={item.id} value={item.id}>
                         {item.entityName}
                     </MenuItem>))}
                     </Select>
@@ -216,6 +222,7 @@ export default function DepartmentModal ({open, entities, setOpen, data, edit}) 
                 <Input
                     name='departmentName'
                     type='text'
+                    defaultValue={data?.departmentName}
                     error={errors.departmentName}
                     message={errors.departmentName?.message}
                     onChange={handleDepartmentChange}
@@ -227,6 +234,7 @@ export default function DepartmentModal ({open, entities, setOpen, data, edit}) 
                 <Input
                     name='departmentCode'
                     type='text'
+                    defaultValue={data?.departmentCode}
                     error={errors.departmentCode}
                     message={errors.departmentCode?.message}
                     label="Department Code"
@@ -240,6 +248,7 @@ export default function DepartmentModal ({open, entities, setOpen, data, edit}) 
                     type='text'
                     multiline
                     rows="4"
+                    defaultValue={data?.description}
                     error={errors.description}
                     message={errors.description?.message}
                     helperText={errors.description?.message}
@@ -251,6 +260,7 @@ export default function DepartmentModal ({open, entities, setOpen, data, edit}) 
                 <DatePicker
                   inputVariant="outlined"
                   name='startedOn'
+                  defaultValue={data.startedOn && new Date(data?.startedOn)}
                   error={errors.startedOn}
                   message={errors.startedOn?.message}
                   label='Start Date'
@@ -273,6 +283,7 @@ export default function DepartmentModal ({open, entities, setOpen, data, edit}) 
                 variant= 'outlined'
                 // newChipKeyCodes={[188]}
                 style={{ width: '100%'}}
+                defaultValue={data?.branchAddress}
                 error={errors.branchAddress}
                 message={errors.branchAddress?.message}
                 helperText={errors.branchAddress?.message}

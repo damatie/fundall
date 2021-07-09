@@ -93,6 +93,7 @@ export default function EntityModal ({open, setOpen, edit, data}) {
         // console.log('form: ', form);
         if (edit) {
             try {
+                form.id = data?.id;
                 loading('Updating Entity...');
                 const { data: { message, success  } } = await api.patch(`/entity/${data.id}`, form);
                 if (success) {

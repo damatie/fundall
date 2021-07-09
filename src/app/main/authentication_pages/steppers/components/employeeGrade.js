@@ -110,6 +110,7 @@ export default function EmployeeGradeModal ({open, employeeGrades, entities, set
         // console.log('Employee Grade form: ', form);
         if (edit) {
             try {
+                form.id = data?.id;
                 loading('Updating Employee Grade...');
                 const { data: { message, success  } } = await api.patch(`employee-grade/`, form);
                 if (success) {
@@ -175,6 +176,7 @@ export default function EmployeeGradeModal ({open, employeeGrades, entities, set
                     labelId="demo-simple-select-outlined-label"
                     id="demo-simple-select-outlined"
                     name='entityId'
+                    defaultValue={data.entityId}
                     error={errors.entityId}
                     message={errors.entityId?.message}
                     onChange={handleEntityChange}
@@ -197,6 +199,7 @@ export default function EmployeeGradeModal ({open, employeeGrades, entities, set
                     labelId="demo-simple-select-outlined-label"
                     id="demo-simple-select-outlined"
                     name='gradeName'
+                    defaultValue={data.gradeName}
                     error={errors.gradeName}
                     message={errors.gradeName?.message}
                     onChange={handleEmployeeGradeChange}
@@ -217,13 +220,14 @@ export default function EmployeeGradeModal ({open, employeeGrades, entities, set
                     type='text'
                     multiline
                     rows="4"
+                    defaultValue={data.gradeDescription}
                     error={errors.gradeDescription}
                     message={errors.gradeDescription?.message}
                     helperText={errors.gradeDescription?.message}
                     refs={register}
                 />
             </Grid>
-            <Grid item lg={12} md={12} sm={12} xs={12} align='left' style={{ marginBottom: '-15px', marginTop: '-15px'  }}>
+            {!edit && <Grid item lg={12} md={12} sm={12} xs={12} align='left' style={{ marginBottom: '-15px', marginTop: '-15px'  }}>
               <FormControlLabel control={<Checkbox
                 checked={pipEligibility}
                 onChange={handlePipEligibilityChange}
@@ -231,7 +235,7 @@ export default function EmployeeGradeModal ({open, employeeGrades, entities, set
                 color="primary"
               />}
               label="PIP Eligibile" />
-            </Grid>
+            </Grid>}
         </Grid>
         <Grid container spacing={3} justify='center' align='center' className='my-10'>
             <Button variant="contained" type='submit' color="primary" className='mx-20'>
