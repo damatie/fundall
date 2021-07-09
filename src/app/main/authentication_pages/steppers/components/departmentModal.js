@@ -80,7 +80,7 @@ export default function DepartmentModal ({open, entities, setOpen, data, edit}) 
     const [entityId, setEntityId] = React.useState(0);
     const [entityErr, setEntityErr] = React.useState("");
     const [department, setDepartment] = React.useState("");
-    const [address, setAddress] = React.useState([]);
+    const [address, setAddress] = React.useState(data?.address || []);
     const [addressErr, setAddressErr] = React.useState("");
     const classes = useStyles();
 
@@ -283,7 +283,7 @@ export default function DepartmentModal ({open, entities, setOpen, data, edit}) 
                 variant= 'outlined'
                 // newChipKeyCodes={[188]}
                 style={{ width: '100%'}}
-                defaultValue={data?.address}
+                // defaultValue={data?.address}
                 error={errors.branchAddress}
                 message={errors.branchAddress?.message}
                 helperText={errors.branchAddress?.message}
