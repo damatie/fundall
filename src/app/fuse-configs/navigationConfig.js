@@ -9,10 +9,10 @@ i18next.addResourceBundle('en', 'navigation', en);
 i18next.addResourceBundle('tr', 'navigation', tr);
 i18next.addResourceBundle('ar', 'navigation', ar);
 
-const navigationConfig = JSON.parse(localStorage.getItem('user_menu'));
-console.log({navigationConfig})
+// const navigationConfig = JSON.parse(localStorage.getItem('user_menu'));
+// console.log({navigationConfig})
 
-// const navigationConfig = [
+const navigationConfig = [
 // 	// Dashboard navigations
 // 	{
 // 		id: 'applications',
@@ -487,118 +487,139 @@ console.log({navigationConfig})
 // 		]
 // 	},
 
-// 	// Disciplinary Case navigations
-// 	{
-// 		id: 'disciplinaryCase',
-// 		title: 'Disciplinary Case',
-// 		translate: 'disciplinary case',
-// 		type: 'group',
-// 		auth: authRoles?.admin,
-// 		children: [
-// 			{
-// 				id: 'disciplinaryCaseManagement',
-// 				title: 'Disciplinary Case Management',
-// 				type: 'item',
-// 				url: '/hr/disciplinary/case',
-// 				icon: 'announcement',
-// 				auth: authRoles?.admin,
-// 			},
-// 		]
-// 	},
+	// PERFORMANCE APPRAISAL NAVIGATION
+	{
+		id: 'performanceAppraisal',
+		title: 'Performance appraisal',
+		translate: 'performance appraisal',
+		type: 'group',
+		// auth: authRoles?.admin,
+		children: [
+			{
+				id: 'hrdashboard',
+				title: 'Dashboard',
+				type: 'item',
+				url: '/hr/performance_appraisal/dashboard',
+				icon: 'dashboard',
+				auth: authRoles?.admin,
+			},
+			{
+				id: 'lmdashboard',
+				title: 'Dashboard',
+				type: 'item',
+				url: '/line_manager/performance_appraisal/dashboard',
+				icon: 'dashboard',
+				auth: authRoles?.lineManager,
+			},
+			{
+				id: 'dashboard',
+				title: 'Dashboard',
+				type: 'item',
+				url: '/finance_manager/performance_appraisal/dashboard',
+				icon: 'dashboard',
+				auth: authRoles?.financeManager,
+			},
+			{
+				id: 'kpoCategory',
+				title: 'KPO Category',
+				type: 'item',
+				url: '/hr/performance_appraisal/kpoCategory',
+				icon: 'assignment',
+				auth: authRoles?.admin,
+			},
+			{
+				id: 'kpoReview',
+				title: 'KPO Review',
+				type: 'item',
+				url: '/performance_appraisal/kpo/review',
+				icon: 'assignment',
+				auth: authRoles?.manager,
+			},
+			{
+				id: 'kpoList',
+				title: 'KPO',
+				type: 'item',
+				url: '/performance_appraisal/kpoList',
+				icon: 'assignment',
+				auth: authRoles?.staff,
+			},
+			{
+				id: 'behaviouralAttribute',
+				title: 'Behavioural Attribute',
+				type: 'item',
+				url: '/behaviouralAttribute/all',
+				icon: 'assignment',
+				auth: authRoles?.admin,
+			},
+		]
+	},
 
-// 	// PERFORMANCE APPRAISAL NAVIGATION
-// 	{
-// 		id: 'performanceAppraisal',
-// 		title: 'Performance appraisal',
-// 		translate: 'performance appraisal',
-// 		type: 'group',
-// 		// auth: authRoles?.admin,
-// 		children: [
-// 			{
-// 				id: 'kpoCategory',
-// 				title: 'KPO Category',
-// 				type: 'item',
-// 				url: '/hr/performance_appraisal/kpoCategory',
-// 				icon: 'assignment',
-// 				auth: authRoles?.admin,
-// 			},
-// 			{
-// 				id: 'kpoReview',
-// 				title: 'KPO Review',
-// 				type: 'item',
-// 				url: '/performance_appraisal/kpo/review',
-// 				icon: 'assignment',
-// 				auth: authRoles?.manager,
-// 			},
-// 			{
-// 				id: 'kpoList',
-// 				title: 'KPO',
-// 				type: 'item',
-// 				url: '/performance_appraisal/kpoList',
-// 				icon: 'assignment',
-// 				auth: authRoles?.staff,
-// 			},
-// 			{
-// 				id: 'behaviouralAttribute',
-// 				title: 'Behavioural Attribute',
-// 				type: 'item',
-// 				url: '/behaviouralAttribute/all',
-// 				icon: 'assignment',
-// 				auth: authRoles?.admin,
-// 			},
-// 		]
-// 	},
-
-// 	// SREP navigations
-// 	{
-// 		id: 'srep',
-// 		title: 'SpringRock Education Program',
-// 		translate: 'SpringRock Education Program',
-// 		type: 'group',
-// 		children: [
-// 			{
-// 				id: 'applySREP',
-// 				title: 'Apply for Education Program',
-// 				type: 'item',
-// 				url: '/srep/apply',
-// 				icon: 'note_add',
-// 				auth: authRoles?.staff
-// 			},
-// 			{
-// 				id: 'listSREP',
-// 				title: 'My Application',
-// 				type: 'item',
-// 				url: '/srep/myapplications',
-// 				icon: 'list_alt',
-// 				auth: authRoles?.staff
-// 			},
-// 			{
-// 				id: 'listSREPs',
-// 				title: 'All Application',
-// 				type: 'item',
-// 				url: '/srep/all',
-// 				icon: 'list_alt',
-// 				auth: authRoles?.manager
-// 			},
-// 		]
-// 	},
-// 	// Settings navigations
-// 	{
-// 		id: 'settings',
-// 		title: 'Settings',
-// 		translate: 'Settings',
-// 		type: 'group',
-// 		auth: authRoles?.staff,
-// 		children: [
-// 			{
-// 				id: 'profile',
-// 				title: 'Profile',
-// 				type: 'item',
-// 				url: '/employee/profile',
-// 				icon: 'settings_applications',
-// 			}
-// 		]
-// 	},
-// ];
+	// SREP navigations
+	{
+		id: 'srep',
+		title: 'SpringRock Education Program',
+		translate: 'SpringRock Education Program',
+		type: 'group',
+		children: [
+			{
+				id: 'HrSREPDashboard',
+				title: 'Dashboard',
+				type: 'item',
+				url: '/srep/admin/dashboard',
+				icon: 'dashboard',
+				auth: authRoles?.admin
+			},
+			{
+				id: 'FinanceSREPDashboard',
+				title: 'Dashboard',
+				type: 'item',
+				url: '/srep/finance/dashboard',
+				icon: 'dashboard',
+				auth: authRoles?.financeManager
+			},
+			{
+				id: 'applySREP',
+				title: 'Apply for Education Program',
+				type: 'item',
+				url: '/srep/apply',
+				icon: 'note_add',
+				auth: authRoles?.staff
+			},
+			{
+				id: 'listSREP',
+				title: 'My Application',
+				type: 'item',
+				url: '/srep/myapplications',
+				icon: 'list_alt',
+				auth: authRoles?.staff
+			},
+			{
+				id: 'listSREPs',
+				title: 'All Application',
+				type: 'item',
+				url: '/srep/all',
+				icon: 'list_alt',
+				auth: authRoles?.manager
+			},
+		]
+	},
+	// Settings navigations
+	{
+		id: 'settings',
+		title: 'Settings',
+		translate: 'Settings',
+		type: 'group',
+		auth: authRoles?.staff,
+		children: [
+			{
+				id: 'profile',
+				title: 'Profile',
+				type: 'item',
+				url: '/employee/profile',
+				icon: 'settings_applications',
+			}
+		]
+	},
+];
 
 export default navigationConfig;
