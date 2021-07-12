@@ -1,8 +1,8 @@
 import FormControl from '@material-ui/core/FormControl';
 import Icon from '@material-ui/core/Icon';
-import _ from '@lodash';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
+import _ from '@lodash';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -14,7 +14,7 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import Input from '@material-ui/core/Input';
 import Slide from '@material-ui/core/Slide';
 import React, { useState, useEffect } from 'react';
@@ -50,13 +50,14 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 const TableWidget = (props) => {
+
   const dispatch = useDispatch();
+  const history = useHistory();
   const classes = useStyles();
   const [data, setData] = useState(props.rows);
   const [open, setOpen] = useState(false);
   const [updateOpen, setUpdateOpen] = useState(false);
   const [openHr, setOpenHr] = useState(false);
-  const [filter, setFilter] = useState('');
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [order, setOrder] = useState({
@@ -94,21 +95,6 @@ const TableWidget = (props) => {
 
   function handleChangeRowsPerPage(event) {
     setRowsPerPage(event.target.value);
-  }
-
-  function handleFilter(event) {
-    console.log(event.target.value);
-    setFilter(event.target.value);
-  }
-
-  function handleItemClick(event, item) {
-    console.log(item);
-    setSelected(item);
-    setOpen(true);
-  }
-
-  function handleAssignRecruiter(hrId) {
-    dispatch(Actions.assignRecruiter(hrId))
   }
 
   function CheckStatus(status) {
@@ -172,22 +158,6 @@ const TableWidget = (props) => {
 
   const isHr = () => userData.role.toUpperCase() === 'HR MANAGER';
 
-  const displayButton = () => {
-    return (
-      <Grid container className="items-center w-full">
-        <Typography variant='body2' component='span'>Not assigned</Typography>
-        { isHr() && <Typography
-          onClick={() => setOpenHr(true)}
-          className={'bg-green text-white inline text-11 font-500 px-8 py-4 ml-32 rounded-4'}
-          style={{ cursor: 'pointer' }}
-        >
-          Assign a recruiter
-        </Typography>
-        }
-      </Grid>
-    )
-  }
-
   useEffect(() => {
     if (props.search.length >= 2) {
       setData(_.filter(props.rows, row => row.entity.entityName.toLowerCase().includes(props.search.toLowerCase())
@@ -204,7 +174,7 @@ const TableWidget = (props) => {
     <Paper className="w-full rounded-8 shadow-none border-1">
       <React.Fragment>
         {/* Details Dialog */}
-        <RecruitmentDialog
+        {/* <RecruitmentDialog
           title='Detail of Opening'
           open={open}
           update={(!isHr() && selected?.status === "added") ? 'Update Position' : ""}
@@ -228,22 +198,9 @@ const TableWidget = (props) => {
               {selected.jobDescription &&
                 <tr className="jobDescription">
                   <th>Job Description</th>
-                  <td>
-                    <Typography
-                    >
-                      {selected?.jobDescription}
-                      {/* <a className='color-white' href={selected.jobDescription} target="_blank" rel="noopener noreferrer">View Job Description</a> */}
-                    </Typography>
-                  </td>
+                  <td> <Typography > {selected?.jobDescription}  </Typography> </td>
                 </tr>
               }
-              {/* <tr className="assignedRecruiter">
-                <th>Recruiter</th>
-                <td>{selected.recruiter
-                  ? `${selected.recruiter.lastName} ${selected.recruiter.firstName}`
-                  : displayButton()}
-                </td>
-              </tr> */}
               <tr className="employeeStatus">
                 <th>Employee Status</th>
                 <td>{(selected.employeeStatus) ? selected.employeeStatus : ''}</td>
@@ -266,27 +223,30 @@ const TableWidget = (props) => {
               </tr>
             </tbody>
           </table>
-          <Grid container className="items-center w-full pt-20" justify="center" alignItems="center">
-            <Typography
-              component={Link}
-              to={`/recruitment/position_details/${selected.id}`}
-              className={'inline text-13 font-500 px-8 py-4 rounded-4'}
-              style={{ cursor: 'pointer', background: '#192d3e', color: '#fff' }}
-            >
-              View full detail
+          {
+            ((isHr() && selected?.status !== "open") || !isHr()) &&
+            <Grid container className="items-center w-full pt-20" justify="center" alignItems="center">
+              <Typography
+                component={Link}
+                to={`/recruitment/position_details/${selected.id}`}
+                className={'inline text-13 font-500 px-8 py-4 rounded-4'}
+                style={{ cursor: 'pointer', background: '#192d3e', color: '#fff' }}
+              >
+                View full detail
             </Typography>
-          </Grid>
-        </RecruitmentDialog>
+            </Grid>}
+        </RecruitmentDialog> */}
 
         {/* Update Dialog */}
-        <RecruitmentDialog
+        {/* <RecruitmentDialog
           open={updateOpen}
           transition={Transition}
           title='Update Opening'
           onClose={value => setUpdateOpen(value)}
         >
           <UpdatePositionTab setUpdateOpen={setUpdateOpen} selectedPosition={selected} />
-        </RecruitmentDialog>
+        </RecruitmentDialog> */}
+
       </React.Fragment>
 
       <div className="table-responsive">
@@ -297,6 +257,7 @@ const TableWidget = (props) => {
                 if (!isHr() && column.label.toLowerCase() === 'actions') return;
                 return (
                   <TableCell
+                  className={column.id === ""}
                     key={column.id}
                     align={column.align}
                     padding={column.disablePadding ? 'none' : 'default'}
@@ -345,8 +306,7 @@ const TableWidget = (props) => {
                   <TableRow
                     key={i}
                     hover
-                    onClick={event => { handleItemClick(event, n); setOpen(true) }}
-                    // selected={n.id === selectedItemId}
+                    onClick={() => history.push(`/recruitment/position_details/${n.id}`)}
                     className="cursor-pointer"
                   >
                     <TableCell>{n.jobTitle}</TableCell>

@@ -55,7 +55,7 @@ const CreateKpoContent = ({customHook}) => {
           error={errors.target}
           message={errors.target?.message}
           refs={register}
-          type='number'
+          type='text'
         />
         {pipEligibility && (
           <Input

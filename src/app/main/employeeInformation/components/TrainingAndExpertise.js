@@ -105,6 +105,7 @@ const TrainingAndExpertiseDetails = ({ item, index, setShouldUpdate, shouldUpdat
       label: 'Date Acquired',
       type: 'date',
       data: [],
+      maxDate: new Date(),
     },
   ], []);
 
@@ -158,7 +159,7 @@ const TrainingAndExpertiseDetails = ({ item, index, setShouldUpdate, shouldUpdat
                         label={input.label}
                         className="w-full my-20"
                         value={item[input.name]}
-                        // maxDate={dob}
+                        maxDate={input.maxDate}
                         format={'MMMM Do, YYYY'}
                         error={errors[input.name]}
                         helperText={errors[input.name]?.message}
@@ -209,6 +210,7 @@ export const AddTrainingAndExpertise = () => {
       label: 'Date Acquired',
       type: 'date',
       data: [],
+      maxDate: new Date(),
     },
   ], []);
 
@@ -247,7 +249,7 @@ export const AddTrainingAndExpertise = () => {
                   label={input.label}
                   className="w-full my-20"
                   // value={input.defaultValue}
-                  // maxDate={dob}
+                  maxDate={input.maxDate}
                   format={'MMMM Do, YYYY'}
                   error={errors[input.name]}
                   helperText={errors[input.name]?.message}

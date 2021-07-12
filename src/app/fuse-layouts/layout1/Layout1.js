@@ -20,7 +20,8 @@ import * as Actions from 'app/store/actions';
 import { useAuth } from 'app/hooks/useAuth';
 import withReducer from 'app/store/withReducer';
 import reducer from 'app/store/reducers';
-// import ChangePasswordModal from '../shared-components/ChangePasswordModal';
+import ChangePasswordModal from '../shared-components/ChangePasswordModal';
+import Permission from '../shared-components/Permissions';
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -211,6 +212,7 @@ function Layout1(props) {
 					{config.rightSidePanel.display && <RightSideLayout1 />}
 
 					<FuseMessage />
+					<Permission userProfile={profileState.data} id={id} token={token}/>
 					{/* <ChangePasswordModal open={isUserLoggedin(profileState.data) ? profileState.data?.isActivated ? false : true : false}/> */}
 				</div>
 			);
@@ -264,6 +266,7 @@ function Layout1(props) {
 					{config.rightSidePanel.display && <RightSideLayout1 />}
 
 					<FuseMessage />
+					<Permission userProfile={profileState.data} id={id} token={token}/>
 					{/* <ChangePasswordModal open={isUserLoggedin(profileState.data) ? profileState.data?.isActivated ? false : true : false}/> */}
 				</div>
 			);

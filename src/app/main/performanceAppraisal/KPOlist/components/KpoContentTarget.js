@@ -18,19 +18,19 @@ const KpoContentTarget = ({customHook}) => {
   const inputs = [
     {
       name: 'Q1',
-      type: 'number'
+      type: 'text'
     },
     {
       name: 'Q2',
-      type: 'number'
+      type: 'text'
     },
     {
       name: 'Q3',
-      type: 'number'
+      type: 'text'
     },
     {
       name: 'Q4',
-      type: 'number'
+      type: 'text'
     },
     {
       name: 'kpoYearendScore',

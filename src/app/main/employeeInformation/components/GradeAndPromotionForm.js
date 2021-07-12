@@ -44,7 +44,8 @@ const GradeAndPromotionForm = ({
       label: 'Date of Promotion',
       type: 'date',
       defaultValue: single?.dateOfPromotion,
-      className: 'my-20'
+      className: 'my-20',
+      maxDate: new Date(),
     }
   ], [employeeGrade, jobTitle, single]);
 
@@ -64,7 +65,7 @@ const GradeAndPromotionForm = ({
                   label={input.label}
                   className="w-full my-20"
                   value={input.defaultValue}
-                  // maxDate={dob}
+                  maxDate={input.maxDate}
                   format={'MMMM Do, YYYY'}
                   error={errors[input.name]}
                   helperText={errors[input.name]?.message}

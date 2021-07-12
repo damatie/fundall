@@ -6,6 +6,7 @@ import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import Skeleton from '@material-ui/lab/Skeleton';
+import {capitalizeWords} from '../../../shared/capitalizeWords';
 
 function a11yProps(index) {
   return {
@@ -27,25 +28,27 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function VerticalTabs({roles, handleChange, children, handleClick, index, loading }) {
+export default function VerticalTabs({roles, handleChange, children, handleClick, value, loading }) {
   const classes = useStyles();
   return (
     <div className={classes.root}>
       <Tabs
         orientation="vertical"
         variant="scrollable"
-        value={index}
+        value={value}
         onChange={handleClick}
         aria-label="Vertical tabs example"
         className={classes.tabs}
       >
         {
           loading ? (
-            <Skeleton variant="rect" width='100%' height={400} animation="wave"/>
+            <Skeleton variant="rect" width={'100%'} height={400} animation="wave"/>
           ) :
-          roles.map((role, index) => (
-            <Tab label={role.name} key={role.id} {...a11yProps(index)} onClick={handleChange(role)}/>
-          ))
+          roles.map((role, index) => {
+            return (
+            <Tab label={capitalizeWords(role.name)} key={role.id} {...a11yProps(index)} onClick={handleChange(role)}/>
+            );
+          })
         }
       </Tabs>
       <section className='p-12 w-full'>

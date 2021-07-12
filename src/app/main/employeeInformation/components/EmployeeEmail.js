@@ -14,9 +14,38 @@ import { DatePicker } from '@material-ui/pickers';
 import SelectTextField from 'app/shared/TextInput/SelectTextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import userPermission from '../logic/userPermission';
+import { getCountries } from '../services';
+
+const { useState, useEffect } = React;
 
 const EmployeeEmail = ({ value, authState }) => {
-  const { countries, states, cities } = useSelector(state => state.regions);
+  // const { countries, states, cities } = useSelector(state => state.regions);
+
+  const [countries, setCountries] = useState([]);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    getCountries().then(data => setCountries(data));
+  }, []);
+
+  const {
+    errors,
+    register,
+    handleSubmit,
+    shouldUpdate,
+    handleShouldUpdate,
+    onSubmit,
+    control,
+    handleMenuItemClick,
+    states,
+    cities
+  } = useEmployeeEmail({
+    defaultValue: value,
+    state: authState,
+    dispatch
+  })
+
   
   const inputs = React.useMemo(() => [
     {
@@ -30,6 +59,7 @@ const EmployeeEmail = ({ value, authState }) => {
       label: 'Employee DOB',
       defaultValue: value.DOB,
       type: 'date',
+      maxDate: new Date()
     },
     {
       name: 'officialNo',
@@ -78,7 +108,8 @@ const EmployeeEmail = ({ value, authState }) => {
       label: 'Employee County',
       defaultValue: value.nationality,
       type: 'select',
-      data: countries
+      data: countries,
+      fieldName: 'id'
     },
     {
       name: 'stateOfOrigin',
@@ -120,28 +151,12 @@ const EmployeeEmail = ({ value, authState }) => {
     },
   ], [value, countries, states, cities]);
 
-  const dispatch = useDispatch();
 
   const { canEdit } = userPermission({
     role: authState.role,
     userId: authState.id,
     profileId: value.employeeId,
   });
-
-  const {
-    errors,
-    register,
-    handleSubmit,
-    shouldUpdate,
-    handleShouldUpdate,
-    onSubmit,
-    control,
-    handleMenuItemClick
-  } = useEmployeeEmail({
-    defaultValue: value,
-    state: authState,
-    dispatch
-  })
 
   return (
     <BasicCard
@@ -209,7 +224,7 @@ const EmployeeEmail = ({ value, authState }) => {
                         value={input.defaultValue}
                         label={input.label}
                         className="w-full"
-                        // maxDate={dob}
+                        maxDate={input.maxDate}
                         format={'MMMM Do, YYYY'}
                         error={errors[input.name]}
                         helperText={errors[input.name]?.message}
@@ -240,7 +255,7 @@ const EmployeeEmail = ({ value, authState }) => {
                         {input.data.map(({ id, name }) => (
                           <MenuItem
                             key={id}
-                            value={name}
+                            value={input?.fieldName ? id : name}
                             onClick={handleMenuItemClick({ value: id, name: input.name })}
                           >
                             {name}

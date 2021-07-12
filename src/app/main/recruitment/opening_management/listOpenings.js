@@ -213,8 +213,7 @@ function Recruitment(props) {
 						/>
 					)}
 					{tabValue === 3 && (
-						<Tabl
-						e
+						<Table
 							columns={columns}
 							rows={closedRow}
 							search={search}

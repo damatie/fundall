@@ -5,6 +5,9 @@ import errorMsg from 'utils/errorMsg';
 import React from 'react';
 import * as Actions from 'app/store/actions';
 import swal from 'sweetalert2';
+import { getStates } from '../services';
+
+const { useState, useEffect } = React;
 
 const schema = yup.object().shape({
   title: yup.string(
@@ -100,6 +103,20 @@ const schema = yup.object().shape({
       name: 'Phone Number',
       type: 'string',
     })
+  ).min(
+    14,
+    errorMsg({
+      name: 'Phone Number',
+      type: 'min',
+      number: 14,
+    })
+  ).max(
+    14,
+    errorMsg({
+      name: 'Phone Number',
+      type: 'max',
+      number: 14,
+    })
   ).required(
     errorMsg({
       name: 'Phone Number',
@@ -141,8 +158,10 @@ const schema = yup.object().shape({
   )
 });
 
-const useEmployeeProfile = ({dispatch, defaultValue, state}) => {
-  const [shouldUpdate, setShouldUpdate] = React.useState(false);
+const useEmployeeProfile = ({dispatch, defaultValue, state, country}) => {
+  const [shouldUpdate, setShouldUpdate] = useState(false);
+
+  const [states, setStates] = useState([]);
   const {
     errors,
     register,
@@ -154,8 +173,16 @@ const useEmployeeProfile = ({dispatch, defaultValue, state}) => {
     defaultValue
   });
 
+  useEffect(() => {
+    console.log(country)
+    !!country && getStates(country.country).then(data => {
+      setStates(data);
+    });
+  }, [country]);
+
   const onSubmit = (value) => {
-    dispatch(Actions.updateEmployeeProfile(state.id, value))
+    dispatch(Actions.updateEmployeeProfile(state.id, value));
+    setShouldUpdate(!shouldUpdate);
   };
 
   const handleShouldUpdate = () => {
@@ -164,10 +191,13 @@ const useEmployeeProfile = ({dispatch, defaultValue, state}) => {
 
   const handleMenuItemClick = ({ value, name }) => () => {
     if(name === 'country') {
-      dispatch(Actions.getStates(value));
-      swal.fire({
-        text: 'Please select your city of residence',
-        icon: 'info',
+      console.log(value)
+      getStates(value).then(data => {
+        setStates(data);
+        swal.fire({
+          text: 'Please select your city of residence',
+          icon: 'info',
+        });
       });
     }
   }
@@ -180,7 +210,8 @@ const useEmployeeProfile = ({dispatch, defaultValue, state}) => {
     handleShouldUpdate,
     onSubmit,
     control,
-    handleMenuItemClick
+    handleMenuItemClick,
+    states,
   };
 };
 

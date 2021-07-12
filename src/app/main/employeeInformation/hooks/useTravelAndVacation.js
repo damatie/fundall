@@ -8,6 +8,7 @@ import {
   deleteTravelAndVacation,
   updateTravelAndVacation,
 } from '../store/actions';
+import moment from 'moment'
 
 const schema = yup.object().shape({
   activity: yup.string(
@@ -56,12 +57,15 @@ const schema = yup.object().shape({
   ),
 });
 
+const { useState, useEffect } = React;
+
 const useTravelAndVacation = ({ dispatch, employeeId }) => {
   const {
     errors,
     register,
     handleSubmit,
-    control
+    control,
+    getValues
   } = useForm({
     mode: 'onBlur',
     resolver: yupResolver(schema)
@@ -79,6 +83,14 @@ const useTravelAndVacation = ({ dispatch, employeeId }) => {
   const handleDelete = (id) => {
     dispatch(deleteTravelAndVacation({id, employeeId}));
   };
+
+  const [getDate, setGetDate] = useState(new Date);
+
+  const [value] = useState(getValues()?.startDate);
+
+  React.useEffect(() => {
+    setGetDate(new Date(moment(value, 'MMMM Do, YYYY')))
+  }, [value])
   
   return {
     onSubmit,
@@ -86,7 +98,8 @@ const useTravelAndVacation = ({ dispatch, employeeId }) => {
     errors,
     register,
     handleSubmit,
-    control
+    control,
+    getDate
   };
 };
 

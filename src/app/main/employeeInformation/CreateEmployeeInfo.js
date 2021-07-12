@@ -99,8 +99,6 @@ const CreateEmployeeInfo = () => {
 
   React.useEffect(() => {
     dispatch(Actions.getCountries());
-    // dispatch(Actions.getEmployeeProfile(state.id));
-    console.log(params);
   }, []);
 
   const {
@@ -175,6 +173,7 @@ const CreateEmployeeInfo = () => {
                     control={control}
                     rules={{ required: true }}
                   />
+                  <Typography variant="caption" color="error">{errors[input.name]?.message}</Typography>
                 </div>
                 // </Grid>
               )

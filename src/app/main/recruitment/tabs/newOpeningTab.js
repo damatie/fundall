@@ -14,6 +14,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ProgressBtn from 'app/shared/progressBtn';
 import GridSystem from 'app/shared/gridSystem';
+import { Autocomplete } from '@material-ui/lab';
 
 function NewOpening(props) {
 	const dispatch = useDispatch();
@@ -69,6 +70,12 @@ function NewOpening(props) {
 			}
 		})
 	}
+
+	useEffect(() => {
+		if (details.reasonForEmployment.toLowerCase() === "industrial training") {
+			setDetails(prevState => ({ ...prevState, positionType: "Temporary" }))
+		}
+	}, [details.reasonForEmployment])
 
 	const getState = (country) => {
 		dispatch(LocationActions.getStates(country));
@@ -158,6 +165,28 @@ function NewOpening(props) {
 					return <></>
 				}
 			}
+			if (input.name === "requiredSkills") {
+				return (
+					<TextFieldFormsy
+						className="mb-16"
+						type={input.type}
+						name={input.name}
+						label={input.label}
+						value={details[input.name]}
+						onChange={(e) => handleChange(input.name, e.target.value)}
+						InputProps={{
+							endAdornment: (
+								<InputAdornment position="end">
+									<Icon className="text-20" color="action">
+										{input.icon}
+									</Icon>
+								</InputAdornment>
+							)
+						}}
+						variant="outlined"
+						required
+					/>)
+			}
 			else if (input.name === "employeeToBeReplaced") {
 				if (details["reasonForEmployment"].toLowerCase() === "replacement") {
 					return (
@@ -179,7 +208,8 @@ function NewOpening(props) {
 							}}
 							variant="outlined"
 							required
-						/>)
+						/>
+					)
 				}
 				else {
 					return <></>
@@ -253,30 +283,76 @@ function NewOpening(props) {
 					</>
 				)
 			}
-		}
-		else {
+		} else {
 			if (input.name === "employeeToBeReplaced") {
 				if (details["reasonForEmployment"].toLowerCase() === "replacement") {
 					return (
-						<SelectFormsy
-							className="mb-16"
-							name={input.name}
-							label={input.label}
-							variant="outlined"
-							required
-							requiredError='Must not be None'
-							value={details[input.name]}
-							onChange={(e) => handleChange(input.name, e.target.value)}
-						>
-							{input?.data?.map((item, i) => (
-								<MenuItem value={item.id} key={i}>{item.firstName} {item.lastName}</MenuItem>
-							))}
-						</SelectFormsy>
+						<Autocomplete
+							id="combo-box-demo"
+							options={input.data}
+							// renderOption={ }
+							getOptionLabel={(option) => `${option?.firstName} ${option?.lastName}`}
+							renderInput={(params) =>
+								<TextFieldFormsy
+									{...params}
+									className="mb-16"
+									value={details[input.name]}
+									onChange={(e) => handleChange(input.name, e.target.value)}
+									type={input.type}
+									name={input.name}
+									label={input.label}
+									variant="outlined"
+								/>
+							}
+						/>
 					)
 				} else {
 					return <> </>;
 				}
 			} else {
+				if (input.name === "employeeStatus") {
+					if ((details["reasonForEmployment"].toLowerCase() === "industrial training") || (details["reasonForEmployment"].toLowerCase() === "national service")) {
+						return <></>;
+					} else {
+						return (
+							<SelectFormsy
+								className="mb-16"
+								name={input.name}
+								label={input.label}
+								variant="outlined"
+								required
+								requiredError='Must not be None'
+								value={details[input.name]}
+								onChange={(e) => handleChange(input.name, e.target.value)}
+							>
+								{input?.data?.map((item, i) => (
+									<MenuItem value={checkValue(item)} key={i}>{checkName(item)}</MenuItem>
+								))}
+							</SelectFormsy>
+						)
+					}
+				} else if (input.name === "positionType") {
+					if (details["reasonForEmployment"].toLowerCase() === "national service") {
+						return <></>;
+					} else {
+						return (
+							<SelectFormsy
+								className="mb-16"
+								name={input.name}
+								label={input.label}
+								variant="outlined"
+								required
+								requiredError='Must not be None'
+								value={details[input.name]}
+								onChange={(e) => handleChange(input.name, e.target.value)}
+							>
+								{input?.data?.map((item, i) => (
+									<MenuItem value={checkValue(item)} key={i}>{checkName(item)}</MenuItem>
+								))}
+							</SelectFormsy>
+						)
+					}
+				}
 				return (
 					<SelectFormsy
 						className="mb-16"

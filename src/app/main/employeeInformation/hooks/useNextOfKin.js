@@ -48,6 +48,20 @@ const schema = yup.object().shape({
       name: 'Contact Number',
       type: 'string',
     })
+  ).min(
+    14,
+    errorMsg({
+      name: 'Contact Number',
+      type: 'min',
+      number: 14,
+    })
+  ).max(
+    14,
+    errorMsg({
+      name: 'Contact Number',
+      type: 'max',
+      number: 14,
+    })
   ).required(
     errorMsg({
       name: 'Contact Number',

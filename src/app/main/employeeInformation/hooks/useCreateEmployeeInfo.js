@@ -24,6 +24,20 @@ const schema = yup.object().shape({
       type: 'string',
       name: 'Private Mobile Number'
     })
+  ).min(
+    14,
+    errorMsg({
+      type: 'min',
+      name: 'Private Mobile Number',
+      number: 14
+    })
+  ).max(
+    14,
+    errorMsg({
+      type: 'max',
+      name: 'Private Mobile Number',
+      number: 14
+    })
   ).required(
     errorMsg({
       type: 'required',
@@ -45,6 +59,20 @@ const schema = yup.object().shape({
     errorMsg({
       type: 'string',
       name: 'Official Mobile No'
+    })
+  ).min(
+    14,
+    errorMsg({
+      type: 'min',
+      name: 'Official Mobile No',
+      number: 14
+    })
+  ).max(
+    14,
+    errorMsg({
+      type: 'max',
+      name: 'Official Mobile No',
+      number: 14
     })
   ).required(
     errorMsg({
@@ -185,7 +213,7 @@ const schema = yup.object().shape({
   // ),
 });
 
-const useCreateEmployeeInfo = ({dispatch, state}) => {
+const useCreateEmployeeInfo = ({dispatch, state, handleClick}) => {
   const {
     errors,
     register,
@@ -198,6 +226,17 @@ const useCreateEmployeeInfo = ({dispatch, state}) => {
 
   const [signature, setSignature] = React.useState([]);
 
+  const handleClose = () => {
+    swal.fire({
+      text: 'You have to complete your registration',
+      icon: 'info',
+    });
+  };
+
+  const handleReload = () => {
+    location.reload();
+  }
+
   const onSubmit = async (data) => {
     if(signature.length !== 0) {
       const formData = new FormData();
@@ -208,19 +247,12 @@ const useCreateEmployeeInfo = ({dispatch, state}) => {
       for (const [key, value] of Object.entries(entries)) {
         formData.append(key, value);
       }
-      dispatch(createEmployeeInfo({ id:state.id, data: formData }));
+      dispatch(createEmployeeInfo({ id:state.id, data: formData, handleClick: handleClick || handleReload }));
       return;
     }
     swal.fire({
       text: 'Please enter your password',
       icon: 'warn',
-    });
-  };
-
-  const handleClose = () => {
-    swal.fire({
-      text: 'You have to complete your registration',
-      icon: 'info',
     });
   };
 

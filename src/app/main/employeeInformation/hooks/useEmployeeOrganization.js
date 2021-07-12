@@ -141,6 +141,7 @@ const useEmployeeOrganization = ({ dispatch, state, defaultValue }) => {
       contractType: formData.contractType,
     }
     dispatch(updateEmployeeInfo({id: state.id, value}));
+    setShouldUpdate(!shouldUpdate);
   };
 
   const handleShouldUpdate = () => {

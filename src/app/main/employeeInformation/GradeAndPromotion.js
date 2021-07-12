@@ -111,7 +111,7 @@ const GradeAndPromotion = () => {
                 }
               }}
               checkbox={{
-                showCheckbox: true,
+                showCheckbox: false,
                 onClick: (value) => console.log(value),
                 accessor: 'id',
               }}

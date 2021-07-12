@@ -10,6 +10,7 @@ import { regionsReducer } from './regions.reducers';
 import { roleListReducer } from './roles.reducers';
 import { entityListReducer } from './entities.reducers';
 import { departmentReducer } from './departments.reducers';
+import { menuReducer} from './menu.reducers';
 
 const createReducer = asyncReducers =>
 	combineReducers({
@@ -24,7 +25,8 @@ const createReducer = asyncReducers =>
 		regions: regionsReducer,
 		roles: roleListReducer,
 		entities: entityListReducer,
-		departments: departmentReducer
+		departments: departmentReducer,
+		menu: menuReducer
 	});
 
 export default createReducer;

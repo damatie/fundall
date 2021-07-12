@@ -9,6 +9,7 @@ import withReducer from 'app/store/withReducer';
 import *  as Actions from './store/actions';
 import Skeleton from '@material-ui/lab/Skeleton';
 import { useHistory } from 'react-router';
+// import loactions from './store/reducers/locations.reducer';
 
 const Employees = () => {
   const dispatch = useDispatch();
@@ -101,4 +102,5 @@ const Employees = () => {
   );
 };
 
+// withReducer('locations', loactions)(Employees);
 export default withReducer('employeeMgt', reducer)(Employees);

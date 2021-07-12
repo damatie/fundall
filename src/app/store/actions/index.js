@@ -7,3 +7,4 @@ export * from './regions.actions';
 export * from './roles.actions';
 export * from './entities.actions';
 export * from './departments.actions';
+export * from './menu.actions';

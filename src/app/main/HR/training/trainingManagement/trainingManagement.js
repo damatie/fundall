@@ -95,8 +95,9 @@ function TrainingManagement(props) {
 	}, [addNew, data])
 
 	const submitNewTraining = (value) => {
+		console.log("i run submitting")
 		dispatch(TrainingListActions.createTraining(value, history));
-		handleCloseNew();
+		// handleCloseNew();
 	}
 
 	const changeDepartment = (id) => {

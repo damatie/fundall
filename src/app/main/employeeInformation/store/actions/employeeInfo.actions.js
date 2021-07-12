@@ -2,6 +2,7 @@ import api from 'app/services/api';
 import swal from 'sweetalert2';
 import loading from 'utils/loading';
 import catchErrorMsg from 'utils/catchErrorMsg';
+import { getEmployeeProfile } from 'app/store/actions';
 
 export const OPEN_SHARED_MODAL = 'OPEN SHARED MODAL';
 export const CLOSE_SHARED_MODAL = 'CLOSE SHARED MODAL';
@@ -28,18 +29,20 @@ export const getEmployeeInfo = (id, update) => {
   }
 };
 
-export const createEmployeeInfo = ({id, data}) => {
+export const createEmployeeInfo = ({id, data, handleClick}) => {
   return async (dispatch) => {
     try {
       loading('Creating Your Info...')
       const { data: { message, success } } = await api.post(`/info`, data);
-      if(success) {
+      if(true) {
         dispatch(getEmployeeInfo(id, true));
+        disptch(getEmployeeProfile(id))
         swal.fire({
           text: message,
           icon: 'success'
         });
-        return;
+        !!handleClick && handleClick();
+        // return;
       }
       swal.fire({
         text: message,

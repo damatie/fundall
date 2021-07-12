@@ -20,25 +20,24 @@ function Details(props) {
 
 	const dispatch = useDispatch();
 
-	const { jobTitle, status, requiredSkills, createdAt, createdBy, jobDescription, id, mailTo } = props.position;
+	const { jobTitle, status, state, country, dueDate, requiredSkills, createdAt, createdBy, jobDescription, id, urgency, mailTo, entity, department, reasonForEmployment, positionType } = props.position;
 	const role = useSelector(({ profile }) => profile.data.role);
 	const [text, setText] = useState('');
 	const [twitText, settWitText] = useState('');
+
+	useEffect(() => {
+		// console.log(props.position);
+	}, [props.position])
 
 	const hrAccept = () => {
 		Actions.hrCreateOpening(id, dispatch);
 	}
 
 	const loadMessage = (text, type) => {
-		type === "twitter" ?
-			window.open(`https://twitter.com/intent/tweet/?text=${encodeURIComponent(text)}`, "_blank")
-			:
-			type === "facebook" ?
-				window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}${encodeURIComponent(text)}`, "_blank")
-				:
-				type === "email" ?
-					window.open(`mailto:?subject=${encodeURIComponent("New Recruitment")}&body=${encodeURIComponent(text)}`, "_self")
-					: null
+		// type === "twitter" ? window.open(`https://twitter.com/intent/tweet/?text=${encodeURIComponent(text)}`, "_blank")
+		// 	: type === "facebook" ? window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(text)}`, "_blank")
+		// 		: type === "email" ? window.open(`mailto:?subject=${encodeURIComponent("New Recruitment")}&body=${encodeURIComponent(text)}`, "_self")
+		// 			: null
 	}
 
 	useEffect(() => {
@@ -65,15 +64,19 @@ function Details(props) {
 							</AppBar>
 
 							<CardContent>
-								<div className="mb-24">
-									<Typography className="font-bold mb-4 text-15">Entity name</Typography>
-									<Typography>{props.position.entity && props.position.entity.entityName}</Typography>
-								</div>
+								{
+									entity && <div className="mb-24">
+										<Typography className="font-bold mb-4 text-15">Entity name</Typography>
+										<Typography>{entity.entityName}</Typography>
+									</div>
+								}
 
-								<div className="mb-24">
-									<Typography className="font-bold mb-4 text-15">Department name</Typography>
-									<Typography>{props.position.department && props.position.department.departmentName}</Typography>
-								</div>
+								{
+									department && <div className="mb-24">
+										<Typography className="font-bold mb-4 text-15">Department name</Typography>
+										<Typography>{department.departmentName}</Typography>
+									</div>
+								}
 
 								<div className="mb-24">
 									<Typography className="font-bold mb-4 text-15">Job title</Typography>
@@ -92,6 +95,41 @@ function Details(props) {
 									}
 								</div>
 
+								{
+									reasonForEmployment && <div className="mb-24">
+										<Typography className="font-bold mb-4 text-15">Reason for Employment</Typography>
+										<Typography>{reasonForEmployment}</Typography>
+									</div>
+								}
+
+								{
+									positionType && <div className="mb-24">
+										<Typography className="font-bold mb-4 text-15">Position Type</Typography>
+										<Typography>{positionType}</Typography>
+									</div>
+								}
+
+								{
+									dueDate && <div className="mb-24">
+										<Typography className="font-bold mb-4 text-15">Due Date</Typography>
+										<Typography>{<Moment format="Do, MMM YYYY">{dueDate}</Moment>}</Typography>
+									</div>
+								}
+
+								{
+									state && country && <div className="mb-24">
+										<Typography className="font-bold mb-4 text-15">Location</Typography>
+										<Typography>{state}, {country}</Typography>
+									</div>
+								}
+
+								{
+									urgency && <div className="mb-24">
+										<Typography className="font-bold mb-4 text-15">Urgency</Typography>
+										<Typography>{urgency}</Typography>
+									</div>
+								}
+
 								<div className="mb-24">
 									<Typography className="font-bold mb-4 text-15">Created at</Typography>
 									<Typography><Moment format="Do, MMM YYYY">{createdAt}</Moment></Typography>
@@ -100,6 +138,13 @@ function Details(props) {
 									<Typography className="font-bold mb-4 text-15">Created by</Typography>
 									<Typography>{createdBy}</Typography>
 								</div>
+
+								{
+									status && <div className="mb-24">
+										<Typography className="font-bold mb-4 text-15">Status</Typography>
+										<Typography>{status}</Typography>
+									</div>
+								}
 
 							</CardContent>
 						</Card>

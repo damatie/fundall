@@ -111,7 +111,12 @@ function FuseNavigation(props) {
 				className
 			)}
 		>
-			{navigation.map(_item => (
+			{navigation.map(i => {
+						return {
+							...i,
+							id: "MAINMENU"+i.id
+						}
+					}).map(_item => (
 				<FuseNavItem key={_item.id} type={`vertical-${_item.type}`} item={_item} nestedLevel={0} />
 			))}
 		</List>
@@ -128,7 +133,12 @@ function FuseNavigation(props) {
 				className
 			)}
 		>
-			{navigation.map(_item => (
+			{navigation.map(i => {
+						return {
+							...i,
+							id: "MAINMENU"+i.id
+						}
+					}).map(_item => (
 				<FuseNavItem
 					key={_item.id}
 					type={`horizontal-${_item.type}`}

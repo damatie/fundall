@@ -38,7 +38,7 @@ export const getCountries = () => {
       fetch('https://www.universal-tutorial.com/api/countries/', {
         headers: {
           "Accept": "application/json",
-          "Authorization": `Bearer ${token.auth_token}`,
+          "Authorization": `Bearer ${token?.auth_token}`,
         }
       }).then(res => handleResponse(res)).then(
         data => {
@@ -60,7 +60,7 @@ export const getStates = country => {
       fetch(`https://www.universal-tutorial.com/api/states/${country}`, {
         headers: {
           "Accept": "application/json",
-          "Authorization": `Bearer ${token.auth_token}`,
+          "Authorization": `Bearer ${token?.auth_token}`,
         }
       }).then(res => handleResponse(res)).then(
         data => {
@@ -80,7 +80,7 @@ export const getCitites = (state, name) => {
       fetch(`https://www.universal-tutorial.com/api/cities/${state}`, {
         headers: {
           "Accept": "application/json",
-          "Authorization": `Bearer ${token.auth_token}`,
+          "Authorization": `Bearer ${token?.auth_token}`,
         }
       }).then(res => handleResponse(res)).then(
         data => {

@@ -6,32 +6,31 @@ import usePermission from './hook/usePermission';
 import withReducer from 'app/store/withReducer';
 import reducer from './store/reducers/permission.reducer';
 import { useSelector, useDispatch } from 'react-redux';
-import { getAllRoles, getAllRolePermissions } from './store/actions';
+import { getAllRoles, getAllMenus } from './store/actions';
 import PermissionsContainer from './components/PermissionsContainer';
 
 const Permission = () => {
-  const [index, setIndex] = React.useState(0);
+  const [value, setValue] = React.useState(0);
   const dispatch = useDispatch();
-  const state = useSelector(state => state.permissions);
+  const state = useSelector(({permissions}) => permissions);
+  
   React.useEffect(() => {
-    dispatch(getAllRoles(true));
-  }, []);
+    dispatch(getAllRoles());
+    dispatch(getAllMenus());
+  }, [dispatch]);
 
-  React.useEffect(() => {
-    if(state.id !== '') {
-      dispatch(getAllRolePermissions(state.id));
-    }
-  }, [state.id]);
 
-  const { 
-    updateWithCurrentPermissions, 
-    getInitialEndpoint,
-    updateInitialEndpoint,
+  const handleChange = (val) => {
+    setValue(val);
+  }
+
+  const {
     handleSubmit,
     handleClickTab,
-    methodsType
+    role,
+    payload,
+    setPayload
   } = usePermission({state, dispatch});
-
   return (
     <PageLayout
       header={{
@@ -45,23 +44,28 @@ const Permission = () => {
       content={
         <section className='p-12'>
           <VerticalTabs
-          handleChange={handleClickTab}
-          roles={state.roles}
-          handleClick={(ev, value) => setIndex(value)}
-          index={index}
-          loading={state.loading}
-        >
-          <PermissionsContainer
-            state={state}
-            endpoints={endpoints}
-            permissions={{
-              updateWithCurrentPermissions,
-              updateInitialEndpoint,
-              getInitialEndpoint,
-              methodsType
-            }}
-            handleSubmit={handleSubmit}
-          />
+            handleChange={handleClickTab}
+            roles={state.roles}
+            handleClick={(event, newValue) => handleChange(newValue)}
+            value={value}
+            loading={state.loadingRoles}
+          >
+            {
+              state.roles && state.roles.map((r, ind) => {
+                return (
+                  <PermissionsContainer
+                    value={value} 
+                    index={ind}
+                    state={state}
+                    role={role}
+                    data={state.data}
+                    setPayload={setPayload}
+                    payload={payload}
+                    handleSubmit={handleSubmit}
+                  />
+                )
+              })
+            }
         </VerticalTabs>
         </section>
         

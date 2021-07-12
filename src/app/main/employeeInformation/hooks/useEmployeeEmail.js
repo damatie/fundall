@@ -5,6 +5,7 @@ import errorMsg from 'utils/errorMsg';
 import React from 'react';
 import { updateEmployeeInfo } from '../store/actions';
 import * as Actions from 'app/store/actions';
+import { getStates, getCities } from '../services';
 
 const schema = yup.object().shape({
   alternativeEmail: yup.string(
@@ -106,6 +107,20 @@ const schema = yup.object().shape({
       type: 'string',
       name: 'Official Mobile No'
     })
+  ).min(
+    14,
+    errorMsg({
+      name: 'Official Mobile No',
+      type: 'min',
+      number: 14,
+    })
+  ).max(
+    14,
+    errorMsg({
+      name: 'Official Mobile No',
+      type: 'max',
+      number: 14,
+    })
   ).required(
     errorMsg({
       type: 'required',
@@ -202,14 +217,28 @@ const schema = yup.object().shape({
   )
 });
 
+const { useState, useEffect } = React;
+
 const useEmployeeEmail = ({defaultValue, dispatch, state}) => {
   const [shouldUpdate, setShouldUpdate] = React.useState(false);
+
+  const [states, setStates] = useState([]);
+
+  const [cities, setCities] = useState([]);
+
+  useEffect(() => {
+    if(!!defaultValue) {
+      getCities(defaultValue.nationality, defaultValue.stateOfOrigin).then(data => setCities(data));
+      getStates(defaultValue.nationality).then(data => setStates(data));
+    }
+  }, [defaultValue]);
 
   const {
     errors,
     register,
     handleSubmit,
-    control
+    control,
+    getValues
   } = useForm({
     mode: 'onBlur',
     resolver: yupResolver(schema),
@@ -218,6 +247,7 @@ const useEmployeeEmail = ({defaultValue, dispatch, state}) => {
 
   const onSubmit = (value) => {
     dispatch(updateEmployeeInfo({id: state.id, value}));
+    setShouldUpdate(!shouldUpdate);
   };
 
   const handleShouldUpdate = () => {
@@ -226,14 +256,16 @@ const useEmployeeEmail = ({defaultValue, dispatch, state}) => {
 
   const handleMenuItemClick = ({ value, name }) => () => {
     if(name === 'nationality') {
-      dispatch(Actions.getStates(value));
+      // dispatch(Actions.getStates(value));
+      getStates(value).then((data) => setStates(data));
       // swal.fire({
       //   text: 'Please select your city of residence',
       //   icon: 'info',
       // });
     }
     if(name === 'stateOfOrigin') {
-      dispatch(Actions.getCitites(value));
+      // dispatch(Actions.getCitites(value));
+      getCities(getValues()?.nationality, value).then(data => setCities(data));
     }
   }
 
@@ -245,7 +277,9 @@ const useEmployeeEmail = ({defaultValue, dispatch, state}) => {
     handleShouldUpdate,
     onSubmit,
     control,
-    handleMenuItemClick
+    handleMenuItemClick,
+    states,
+    cities,
   };
 };
 
