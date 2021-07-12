@@ -155,6 +155,12 @@ const useKpoList = ({ dispatch, userId, state, push, id, employees, userInfo }) 
 		return kpo.status === 'on-going' ? 'SUBMIT FOR REVIEW' : 'Complete KPO';
 	};
 
+	const showReviewKpoAndAppraisalBtn = () => {
+		if (userRole(userInfo.role) === 'linemanager') {
+			return true;
+		}
+	};
+
 	const showActionButton = user => {
 		if (
 			user?.id === state.kpo.employee?.id &&
@@ -174,14 +180,27 @@ const useKpoList = ({ dispatch, userId, state, push, id, employees, userInfo }) 
 	};
 
 	const showApproveButton = () => {
+		let lineManager;
+		let allowedToApprove;
+
+		if (userRole(userInfo.role) === 'linemanager') {
+			lineManager = true;
+		} else {
+			lineManager = false;
+		}
+
 		if (
-			userRole(userInfo.role) === 'linemanager' &&
 			kpo.status !== 'on-going' &&
 			kpo.status !== 'pending' &&
 			kpo.status !== 'reviewed1' &&
 			kpo.status === 'reviewed2'
-		)
-			return true;
+		) {
+			allowedToApprove = true;
+		} else {
+			allowedToApprove = false;
+		}
+
+		return { lineManager, allowedToApprove };
 	};
 
 	const disableInput = () => {
@@ -216,6 +235,7 @@ const useKpoList = ({ dispatch, userId, state, push, id, employees, userInfo }) 
 		shouldShowAddButton,
 		showActionButton,
 		showApproveButton,
+		showReviewKpoAndAppraisalBtn,
 		handleGetDepartment,
 		disableInput
 	};
