@@ -151,7 +151,7 @@ const KpoDetailEmployeeInfo = ({ customHook }) => {
 									</div>
 								) : (
 									<div className={` ${classes.avatarDpDiv}`}>
-										<Avatar className={` ${classes.avatarDpSize}`}>{details.employee.firstName.charAt(0)}</Avatar>
+										<Avatar className={` ${classes.avatarDpSize}`}>{details?.employee?.firstName.charAt(0)}</Avatar>
 									</div>
 								)}
 							</Grid>
@@ -160,7 +160,7 @@ const KpoDetailEmployeeInfo = ({ customHook }) => {
 									Entity
 								</Typography>
 								<Typography variant="subtitle1" className={` ${classes.secondAndThirdRowContent}`}>
-									{details.entity.entityName}
+									{details?.entity?.entityName}
 								</Typography>
 							</Grid>
 							<Grid item className={` ${classes.secondAndThirdRow}`}>
@@ -168,7 +168,7 @@ const KpoDetailEmployeeInfo = ({ customHook }) => {
 									Line Manager
 								</Typography>
 								<Typography variant="subtitle1" className={` ${classes.secondAndThirdRowContent}`}>
-									{`${details.lineManager.firstName} ${details.lineManager.lastName}`}
+									{`${details?.lineManager?.firstName} ${details?.lineManager?.lastName}`}
 								</Typography>
 							</Grid>
 						</Grid>
@@ -180,13 +180,13 @@ const KpoDetailEmployeeInfo = ({ customHook }) => {
 						>
 							<Grid item className={` ${classes.firstRow} ${classes.employeeNameDiv}`}>
 								<Typography variant="h2" className={` ${classes.employeeName}`} gutterBottom>
-									{`${details.employee.firstName} ${details.employee.lastName}`}
+									{`${details?.employee?.firstName} ${details?.employee?.lastName}`}
 								</Typography>
 								<Typography variant="subtitle2" className={` ${classes.employeeEmail}`}>
-									{details.employee.email}
+									{details?.employee?.email}
 								</Typography>
 								<Typography variant="subtitle2" className={` ${classes.employeeJobTitle}`}>
-									{details.jobTitle.name}
+									{details?.jobTitle?.name}
 								</Typography>
 							</Grid>
 							<Grid item className={` ${classes.secondAndThirdRow}`}>
@@ -194,7 +194,7 @@ const KpoDetailEmployeeInfo = ({ customHook }) => {
 									Department
 								</Typography>
 								<Typography variant="subtitle1" className={` ${classes.secondAndThirdRowContent}`}>
-									{details.department.departmentName}
+									{details?.department?.departmentName}
 								</Typography>
 							</Grid>
 							<Grid item className={` ${classes.secondAndThirdRow}`}>
@@ -202,7 +202,7 @@ const KpoDetailEmployeeInfo = ({ customHook }) => {
 									Reviewing Manager
 								</Typography>
 								<Typography variant="subtitle1" className={` ${classes.secondAndThirdRowContent}`}>
-									{`${details.reviewingManager.firstName} ${details.reviewingManager.lastName}`}
+									{`${details?.reviewingManager?.firstName} ${details?.reviewingManager?.lastName}`}
 								</Typography>
 							</Grid>
 						</Grid>

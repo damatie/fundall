@@ -98,6 +98,7 @@ const EmployeeKpoListTable = ({ customHook, completed }) => {
 	]);
 
 	const { listOfKpo, handleDeleteKpo, push } = customHook;
+	console.log(listOfKpo, 'table data');
 	return (
 		<EnhancedTable
 			columns={columns}
