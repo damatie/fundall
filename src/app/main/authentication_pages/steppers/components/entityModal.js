@@ -81,10 +81,8 @@ export default function EntityModal ({open, setOpen, edit, data}) {
     
       const handleDeleteEntityAddresses = (chip, index) => {
         register({ name: 'address', type: 'custom' }, { required: true });
-        let entityAddressesData = entityAddresses;
-        entityAddressesData.splice(index, 1);
-        setEntityAddresses(entityAddressesData);
-        setValue("address", entityAddressesData);
+        setEntityAddresses((entityAddresses) => entityAddresses.filter((chp) => chp !== chip));
+        setValue("address", entityAddresses);
         setEntityAddressesErr(errors.address?.message);
       };
 

@@ -118,9 +118,7 @@ export default function DepartmentModal ({open, entities, setOpen, data, edit}) 
     
       const handleDeleteAddress = (chip, index) => {
         register({ name: 'address', type: 'custom' }, { required: true });
-        // let address = address;
-        address.splice(index, 1);
-        // setAddress(address);
+        setAddress((address) => address.filter((chp) => chp !== chip));
         setValue("address", address);
         setAddressErr(errors.address?.message);
       };
