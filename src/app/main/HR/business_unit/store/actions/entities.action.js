@@ -9,7 +9,7 @@ export const REMOVE_ENTITY = 'REMOVE ENTITY';
 export function getEntities() {
 
 	return dispatch => {
-      const request = axios.get(`${getBaseUrl()}/entity/all`, {
+      const request = axios.get(`${getBaseUrl()}/entity`, {
         headers: {
           Authorization: `JWT ${useAuth().getToken}`
         }

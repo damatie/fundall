@@ -17,6 +17,7 @@ const CreateEmployeeKpo = ({ customHook }) => {
 
   const {
     entities,
+    entityList,
     departments,
   } = useSelector(state => state.kpo);
 
@@ -27,6 +28,7 @@ const CreateEmployeeKpo = ({ customHook }) => {
 
   useEffect(() => {
     handleGetDepartment(entityId)()
+    console.log('entityList: ', entityList);
   }, []);
 
   return (
