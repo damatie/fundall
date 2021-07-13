@@ -1,5 +1,5 @@
 import EnhancedTable from 'app/shared/table/EnhancedTable';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Grid from '@material-ui/core/Grid';
 import SelectTextField from 'app/shared/TextInput/SelectTextField';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -53,8 +53,6 @@ const ListOfEmployeeKpo = ({ customHook, isAssigned, value, request, type, filte
 		handleOpen,
 		getKpos
 	} = customHook;
-
-	console.log(getKpos(type), 'kpos showing');
 
 	const columns = React.useMemo(() => [
 		{
@@ -141,6 +139,49 @@ const ListOfEmployeeKpo = ({ customHook, isAssigned, value, request, type, filte
 			}
 		}
 	]);
+
+	const [kposToDisplay, setKposToDisplay] = useState([]);
+	useEffect(() => {
+		setKposToDisplay(getKpos(type));
+	}, [type]);
+
+	useEffect(() => console.log(kposToDisplay, 'kpo showing '), [kposToDisplay]);
+
+	function filterByKpoCategory(kpoItem, kpoCategoryFilterId) {
+		let answer;
+		let filtered;
+
+		if (kpoItem.kpoContent.length > 0) {
+			filtered = kpoItem.kpoContent.filter(kpoContentItem => kpoContentItem.kpoCategoryId === kpoCategoryFilterId);
+			if (filtered.length > 0) {
+				answer = true;
+			} else {
+				answer = false;
+			}
+		} else {
+			answer = false;
+		}
+
+		if (answer) {
+			console.log(kpoItem);
+			return kpoItem;
+		}
+	}
+
+	useEffect(() => {
+		const filteredKpoByCategory = [];
+		if (filterState?.kpoCategoryFilter !== '') {
+			kposToDisplay.map(dataToShow => {
+				let value = filterByKpoCategory(dataToShow, filterState?.kpoCategoryFilter);
+				if (value) {
+					filteredKpoByCategory.push(value);
+				}
+			});
+			console.log(filteredKpoByCategory);
+			setKposToDisplay([...filteredKpoByCategory]);
+		}
+	}, [filterState?.kpoCategoryFilter]);
+
 	return (
 		<>
 			{loading ? (
@@ -154,8 +195,8 @@ const ListOfEmployeeKpo = ({ customHook, isAssigned, value, request, type, filte
 							: request
 							? kpoRequest
 							: filterState?.departmentFilter !== ''
-							? getKpos(type).filter(dataToShow => dataToShow.departmentId === filterState?.departmentFilter)
-							: getKpos(type)
+							? kposToDisplay.filter(dataToShow => dataToShow.departmentId === filterState?.departmentFilter)
+							: kposToDisplay
 					}
 					onRowClick={(ev, row) => {
 						if (row && !request) {

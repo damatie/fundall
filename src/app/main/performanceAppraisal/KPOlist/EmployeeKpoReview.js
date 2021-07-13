@@ -62,7 +62,7 @@ const useStyles = makeStyles(theme => ({
 		}
 	},
 	singleFilterSelect: {
-		width: '30% !important'
+		width: '45% !important'
 	}
 }));
 
@@ -117,7 +117,6 @@ const EmployeeKpoReview = () => {
 
 	const [selectFilterState, setSelectFilterState] = React.useState({
 		kpoCategoryFilter: '',
-		branchFilter: '',
 		departmentFilter: ''
 	});
 
@@ -169,21 +168,6 @@ const EmployeeKpoReview = () => {
 								label="KPO Category"
 								onChange={handleSelectFilterChange}
 								// value={selectFilterState.kpoCategoryFilter}
-								// error={errors.jobTitleId}
-								// message={errors.jobTitleId?.message}
-							>
-								{kpoCategory?.length > 0 &&
-									kpoCategory.map(({ name, id }) => (
-										<MenuItem value={id} key={id}>
-											{name}
-										</MenuItem>
-									))}
-							</SelectTextField>
-						</div>
-						<div className={classes.singleFilterSelect}>
-							<SelectTextField
-								name="branchFilter"
-								label="Branch"
 								// error={errors.jobTitleId}
 								// message={errors.jobTitleId?.message}
 							>
