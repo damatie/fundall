@@ -38,6 +38,7 @@ import EmployeeGradeLevelCard from './components/employeeGradeLevelCard';
 import *  as Actions from 'app/main/employeeManagement/store/actions';
 import withReducer from "app/store/withReducer";
 import employeesReducer from "app/main/employeeManagement/store/reducers/employees.reducer";
+import { departments } from 'app/main/HR/business_unit/department/store/reducers/departments.reducer';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -80,6 +81,7 @@ function Departments({handleNext}) {
   const [finance, setFinance] = React.useState(true);
   const [informationTechnology, setInformationTechnology] = React.useState(false);
   let genericDept = [];
+  let localData = {};
   const classes = useStyles();
 
   React.useEffect(() => {
@@ -90,11 +92,17 @@ function Departments({handleNext}) {
     dispatch(Actions.getGradeLevels());
     dispatch(Actions.getDepartments());
     const dataResponse = localStorage.getItem('login_data');
-	  const data = JSON.parse(dataResponse);
-    if (data?.company?.hasEntities === true) {
+	  localData = JSON.parse(dataResponse);
+    if (localData?.company?.hasEntities === true) {
       setHasEntities(true);
+      if (departments.length > 0) {
+        setCanSubmit(true);
+      }
     } else {
       setHasEntities(false);
+      if (departments.length > 0 && grades.length > 0 && gradeLevels.lenth > 0) {
+        setCanSubmit(true);
+      }
     }
   }, []);
 
@@ -154,6 +162,8 @@ function Departments({handleNext}) {
       try {
         loading('processing...');
         await setStepper([], 4);
+        localData.company.regStep = 4;
+        localStorage.setItem('login_data', JSON.stringify(localData));
         swal.fire({
           text: 'Step Completed',
           icon: 'success'

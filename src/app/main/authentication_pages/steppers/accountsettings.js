@@ -108,6 +108,7 @@ export default function AccountSettings({handleNext}) {
   const [dateFormatErr, setDateFormatErr] = React.useState("");
   const [currenciesErr, setCurrenciesErr] = React.useState("");
   const classes = useStyles();
+  let data = {};
 
 
   React.useEffect(() => {
@@ -121,11 +122,13 @@ export default function AccountSettings({handleNext}) {
     setCompensationSettingsErr(errors.compensationSettings?.message);
     setJobTitleErr(errors.jobTitle?.message);
     setEmployeeGradeErr(errors.employeeGrade?.message);
+    setRoleErr(errors.role?.message);
   }, [errors]);
 
   React.useEffect(() => {
-    // console.log('data: ', {...getValues()});
-  }, [getValues])
+    const dataResponse = localStorage.getItem('login_data');
+	  data = JSON.parse(dataResponse);
+  }, [])
 
   const handleTimeZoneChange = (event) => {
     register({ name: 'timeZone', type: 'custom' }, { required: true });
@@ -154,11 +157,11 @@ export default function AccountSettings({handleNext}) {
 
   const handleDeleteEmploymentStatus = (chip, index) => {
     register({ name: 'employmentStatus', type: 'custom' }, { required: true });
-    let employmentStatusData = employmentStatus;
-    employmentStatusData.splice(index, 1);
+    // let employmentStatusData = employmentStatus;
+    employmentStatus.splice(index, 1);
     // console.log("EmploymentStatus: ", employmentStatusData);
-    setEmploymentStatus(employmentStatusData);
-    setValue("employmentStatus", employmentStatusData);
+    // setEmploymentStatus(employmentStatus);
+    setValue("employmentStatus", employmentStatus);
     setEmploymentStatusErr(errors.employmentStatus?.message);
   };
 
@@ -171,10 +174,10 @@ export default function AccountSettings({handleNext}) {
 
   const handleDeleteModeOfEmployment = (chip, index) => {
     register({ name: 'modeOfEmployment', type: 'custom' }, { required: true });
-    let modeOfEmploymentData = modeOfEmployment;
-    modeOfEmploymentData.splice(index, 1);
-    setModeOfEmployment(modeOfEmploymentData);
-    setValue("modeOfEmployment", modeOfEmploymentData);
+    // let modeOfEmploymentData = modeOfEmployment;
+    modeOfEmployment.splice(index, 1);
+    // setModeOfEmployment(modeOfEmployment);
+    setValue("modeOfEmployment", modeOfEmployment);
     setModeOfEmploymentErr(errors.modeOfEmployment?.message);
   };
 
@@ -187,10 +190,10 @@ export default function AccountSettings({handleNext}) {
 
   const handleDeleteLeaveTypes = (chip, index) => {
     register({ name: 'leaveTypes', type: 'custom' }, { required: true });
-    let leaveTypesData = leaveTypes;
-    leaveTypesData.splice(index, 1);
-    setLeaveTypes(leaveTypesData);
-    setValue("leaveTypes", leaveTypesData);
+    // let leaveTypesData = leaveTypes;
+    leaveTypes.splice(index, 1);
+    // setLeaveTypes(leaveTypes);
+    setValue("leaveTypes", leaveTypes);
     setLeaveTypesErr(errors.leaveTypes?.message);
   };
 
@@ -203,9 +206,9 @@ export default function AccountSettings({handleNext}) {
 
   const handleDeleteTrainingCategories = (chip, index) => {
     register({ name: 'trainingCategories', type: 'custom' }, { required: true });
-    let trainingCategoriesData = trainingCategories;
-    trainingCategoriesData.splice(index, 1);
-    setTrainingCategories(trainingCategoriesData);
+    // let trainingCategoriesData = trainingCategories;
+    trainingCategories.splice(index, 1);
+    // setTrainingCategories(trainingCategories);
     setValue("trainingCategories", trainingCategoriesData);
     setTrainingCategoriesErr(errors.trainingCategories?.message);
   };
@@ -219,10 +222,10 @@ export default function AccountSettings({handleNext}) {
 
   const handleDeleteCompensationSettings = (chip, index) => {
     register({ name: 'compensationSettings', type: 'custom' }, { required: true });
-    let compensationSettingsData = compensationSettings;
-    compensationSettingsData.splice(index, 1);
-    setCompensationSettings(compensationSettingsData);
-    setValue("compensationSettings", compensationSettingsData);
+    // let compensationSettingsData = compensationSettings;
+    compensationSettings.splice(index, 1);
+    // setCompensationSettings(compensationSettings);
+    setValue("compensationSettings", compensationSettings);
     setCompensationSettingsErr(errors.compensationSettings?.message);
   };
 
@@ -235,10 +238,10 @@ export default function AccountSettings({handleNext}) {
 
   const handleDeleteRole = (chip, index) => {
     register({ name: 'role', type: 'custom' }, { required: true });
-    let roleData = role;
-    roleData.splice(index, 1);
-    setRole(roleData);
-    setValue("role", roleData);
+    // let roleData = role;
+    role.splice(index, 1);
+    // setRole(role);
+    setValue("role", role);
     setRoleErr(errors.role?.message);
   };
 
@@ -268,10 +271,10 @@ export default function AccountSettings({handleNext}) {
 
   const handleDeleteEmployeeGrade = (chip, index) => {
     register({ name: 'employeeGrade', type: 'custom' }, { required: true });
-    let employeeGradeData = employeeGrade;
-    employeeGradeData.splice(index, 1);
-    setEmployeeGrade(employeeGradeData);
-    setValue("employeeGrade", employeeGradeData);
+    // let employeeGradeData = employeeGrade;
+    employeeGrade.splice(index, 1);
+    // setEmployeeGrade(employeeGrade);
+    setValue("employeeGrade", employeeGrade);
     setEmployeeGradeErr(errors.employeeGrade?.message);
   };
 
@@ -285,6 +288,8 @@ export default function AccountSettings({handleNext}) {
           icon: 'success'
         });
         setStepper([], 1)
+        data.company.regStep = 1;
+        localStorage.setItem('login_data', JSON.stringify(data));
         handleNext();
       } catch (e) {
         swal.fire({
@@ -309,7 +314,7 @@ export default function AccountSettings({handleNext}) {
                   id="demo-simple-select-outlined"
                   name='timeZone'
                   error={errors.timeZone}
-                  message={errors.timeZone?.message}
+                  // message={errors.timeZone?.message}
                   onChange={handleTimeZoneChange}
                   label="Time Zone"
                 >
@@ -331,7 +336,7 @@ export default function AccountSettings({handleNext}) {
                   id="demo-simple-select-outlined"
                   name='dateFormat'
                   error={errors.dateFormat}
-                  message={errors.dateFormat?.message}
+                  // message={errors.dateFormat?.message}
                   onChange={handleDateFormatChange}
                   label="Date Format"
                 >
@@ -353,7 +358,7 @@ export default function AccountSettings({handleNext}) {
                   id="demo-simple-select-outlined"
                   name='currencies'
                   error={errors.currencies}
-                  message={errors.currencies?.message}
+                  // message={errors.currencies?.message}
                   onChange={handleCurrenciesChange}
                   label="Currencies"
                 >
@@ -373,8 +378,8 @@ export default function AccountSettings({handleNext}) {
                 newChipKeyCodes={[188]}
                 style={{ width: '100%'}}
                 error={errors.employmentStatus}
-                message={errors.employmentStatus?.message}
-                helperText={errors.employmentStatus?.message}
+                // message={errors.employmentStatus?.message}
+                // helperText={errors.employmentStatus?.message}
                 // refs={register}
                 allowDuplicates={false}
                 value={employmentStatus}
@@ -391,8 +396,8 @@ export default function AccountSettings({handleNext}) {
                 newChipKeyCodes={[188]}
                 style={{ width: '100%'}}
                 error={errors.modeOfEmployment}
-                message={errors.modeOfEmployment?.message}
-                helperText={errors.modeOfEmployment?.message}
+                // message={errors.modeOfEmployment?.message}
+                // helperText={errors.modeOfEmployment?.message}
                 // refs={register}
                 allowDuplicates={false}
                 value={modeOfEmployment}
@@ -409,8 +414,8 @@ export default function AccountSettings({handleNext}) {
                 newChipKeyCodes={[188]}
                 style={{ width: '100%'}}
                 error={errors.leaveTypes}
-                message={errors.leaveTypes?.message}
-                helperText={errors.leaveTypes?.message}
+                // message={errors.leaveTypes?.message}
+                // helperText={errors.leaveTypes?.message}
                 // refs={register}
                 allowDuplicates={false}
                 value={leaveTypes}
@@ -427,8 +432,8 @@ export default function AccountSettings({handleNext}) {
                 newChipKeyCodes={[188]}
                 style={{ width: '100%'}}
                 error={errors.trainingCategories}
-                message={errors.trainingCategories?.message}
-                helperText={errors.trainingCategories?.message}
+                // message={errors.trainingCategories?.message}
+                // helperText={errors.trainingCategories?.message}
                 // refs={register}
                 allowDuplicates={false}
                 value={trainingCategories}
@@ -445,8 +450,8 @@ export default function AccountSettings({handleNext}) {
                 newChipKeyCodes={[188]}
                 style={{ width: '100%'}}
                 error={errors.role}
-                message={errors.role?.message}
-                helperText={errors.role?.message}
+                // message={errors.role?.message}
+                // helperText={errors.role?.message}
                 // refs={register}
                 allowDuplicates={false}
                 value={role}
@@ -463,8 +468,8 @@ export default function AccountSettings({handleNext}) {
                 newChipKeyCodes={[188]}
                 style={{ width: '100%'}}
                 error={errors.compensationSettings}
-                message={errors.compensationSettings?.message}
-                helperText={errors.compensationSettings?.message}
+                // message={errors.compensationSettings?.message}
+                // helperText={errors.compensationSettings?.message}
                 // refs={register}
                 allowDuplicates={false}
                 value={compensationSettings}
@@ -481,8 +486,8 @@ export default function AccountSettings({handleNext}) {
                 newChipKeyCodes={[188]}
                 style={{ width: '100%'}}
                 error={errors.jobTitle}
-                message={errors.jobTitle?.message}
-                helperText={errors.jobTitle?.message}
+                // message={errors.jobTitle?.message}
+                // helperText={errors.jobTitle?.message}
                 // refs={register}
                 allowDuplicates={false}
                 value={jobTitle}
@@ -499,8 +504,8 @@ export default function AccountSettings({handleNext}) {
                 newChipKeyCodes={[188]}
                 style={{ width: '100%'}}
                 error={errors.employeeGrade}
-                message={errors.employeeGrade?.message}
-                helperText={errors.employeeGrade?.message}
+                // message={errors.employeeGrade?.message}
+                // helperText={errors.employeeGrade?.message}
                 // refs={register}
                 allowDuplicates={false}
                 value={employeeGrade}

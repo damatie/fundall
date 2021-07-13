@@ -72,7 +72,7 @@ const schema = yup.object().shape({
     address: yup.string(errorMsg({ name: 'HQ Address', type: 'string' })),
     branchAddress: yup.array()
         .min(1, 'Must have at least one Branch Address')
-        .required(errorMsg({ name: 'Branch Addresses', type: 'required' })),
+        // .required(errorMsg({ name: 'Branch Addresses', type: 'required' })),
 });
 
 
@@ -104,10 +104,13 @@ function OrganizationInformation({handleNext}) {
   const [cityErr, setCityErr] = React.useState("");
   const [logo, setLogo] = React.useState({});
   const classes = useStyles();
+  let data = {};
 
 
   React.useState(() => {
     dispatch(RegionActions.getCountries());
+    const dataResponse = localStorage.getItem('login_data');
+	  data = JSON.parse(dataResponse);
     // console.log('countries: ', countries)
   }, [])
 
@@ -185,10 +188,10 @@ function OrganizationInformation({handleNext}) {
 
   const handleDeleteBranchAddresses = (chip, index) => {
     register({ name: 'branchAddress', type: 'custom' }, { required: true });
-    let branchAddressesData = branchAddresses;
-    branchAddressesData.splice(index, 1);
-    setBranchAddresses(branchAddressesData);
-    setValue("branchAddress", branchAddressesData);
+    // let branchAddressesData = branchAddresses;
+    branchAddresses.splice(index, 1);
+    // setBranchAddresses(branchAddresses);
+    setValue("branchAddress", branchAddresses);
     setBranchAddressesErr(errors.branchAddress?.message);
   };
 
@@ -205,6 +208,8 @@ function OrganizationInformation({handleNext}) {
         loading('processing...');
         const { data: { message  } } = await api.post('/organization_info', formData);
         await setStepper([], 2);
+        data.company.regStep = 2;
+        localStorage.setItem('login_data', JSON.stringify(data));
         swal.fire({
           text: message,
           icon: 'success'
@@ -272,6 +277,9 @@ function OrganizationInformation({handleNext}) {
                   label='Number Of Branches'
                   name='noOfBranch'
                   type="number"
+                  allowNegative={false}
+                  inputProps={{ min: 0 }}
+                  min={0}
                   error={errors.noOfBranch}
                   message={errors.noOfBranch?.message}
                   helperText={errors.noOfBranch?.message}

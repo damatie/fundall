@@ -81,6 +81,7 @@ function Entities({handleNext}) {
   const [finance, setFinance] = React.useState(true);
   const [informationTechnology, setInformationTechnology] = React.useState(false);
   let genericDept = [];
+  let localData = {};
   const classes = useStyles();
 
   React.useEffect(() => {
@@ -89,8 +90,9 @@ function Entities({handleNext}) {
     dispatch(Actions.getCompensations());
     dispatch(Actions.getGrades());
     dispatch(Actions.getGradeLevels());
-    // console.log('accountSettings: ', accountSettings);
-  }, []);
+    const dataResponse = localStorage.getItem('login_data');
+	  localData = JSON.parse(dataResponse);
+  }, [])
 
   React.useEffect(() => {
     setEntityList(entities);
@@ -149,6 +151,8 @@ function Entities({handleNext}) {
         loading('processing...');
         // const { data: { message  } } = await api.post('/organization_info', form);
         await setStepper(genericDept, 3);
+        localData.company.regStep = 3;
+        localStorage.setItem('login_data', JSON.stringify(localData));
         swal.fire({
           text: 'Step Completed',
           icon: 'success'
