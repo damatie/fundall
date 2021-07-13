@@ -72,14 +72,14 @@ const schema = yup.object().shape({
     website: yup.string(errorMsg({ name: 'Company Website', type: 'string' })),
     address: yup.string(errorMsg({ name: 'HQ Address', type: 'string' })),
     branchAddress: yup.array()
-        .min(1, 'Must have at least one Branch Address')
+        // .min(1, 'Must have at least one Branch Address')
         // .required(errorMsg({ name: 'Branch Addresses', type: 'required' })),
 });
 
 
 function OrganizationInformation({handleNext}) {
   const { register, handleSubmit, formState:{ errors }, setValue, getValues } = useForm({
-    mode: "all",
+    mode: "onBlur",
     reValidateMode: 'onChange',
     resolver: yupResolver(schema)
   });
@@ -105,13 +105,10 @@ function OrganizationInformation({handleNext}) {
   const [cityErr, setCityErr] = React.useState("");
   const [logo, setLogo] = React.useState({});
   const classes = useStyles();
-  let data = {};
 
 
   React.useState(() => {
     dispatch(RegionActions.getCountries());
-    const dataResponse = localStorage.getItem('login_data');
-	  data = JSON.parse(dataResponse);
   }, [])
 
   React.useEffect(() => {
@@ -197,8 +194,11 @@ function OrganizationInformation({handleNext}) {
         loading('processing...');
         const { data: { message  } } = await api.post('/organization_info', formData);
         await setStepper([], 2);
-        data.company.regStep = 2;
-        localStorage.setItem('login_data', JSON.stringify(data));
+        const dataResponse = localStorage.getItem('login_data');
+	      const localData = JSON.parse(dataResponse);
+        console.log('Org. localData: ', localData);
+        localData.company.regStep = 2;
+        localStorage.setItem('login_data', JSON.stringify(localData));
         swal.fire({
           text: message,
           icon: 'success'
@@ -460,7 +460,7 @@ function OrganizationInformation({handleNext}) {
                 style={{ width: '100%'}}
                 error={errors.branchAddress}
                 message={errors.branchAddress?.message}
-                helperText={errors.branchAddress?.message}
+                // helperText={errors.branchAddress?.message}
                 allowDuplicates={false}
                 value={branchAddresses}
                 onAdd={(chip) => handleAddBranchAddresses(chip)}

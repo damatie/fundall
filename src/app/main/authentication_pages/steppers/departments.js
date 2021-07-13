@@ -81,7 +81,6 @@ function Departments({handleNext}) {
   const [informationTechnology, setInformationTechnology] = React.useState(false);
   const [canSubmit, setCanSubmit] = React.useState(false);
   let genericDept = [];
-  let localData = {};
   const classes = useStyles();
 
   React.useEffect(() => {
@@ -92,7 +91,7 @@ function Departments({handleNext}) {
     dispatch(Actions.getGradeLevels());
     dispatch(Actions.getDepartments());
     const dataResponse = localStorage.getItem('login_data');
-	  localData = JSON.parse(dataResponse);
+	  const localData = JSON.parse(dataResponse);
     if (localData?.company?.hasEntities === true) {
       setHasEntities(true);
     } else {
@@ -101,23 +100,15 @@ function Departments({handleNext}) {
   }, []);
 
   React.useEffect(() => {
+    const dataResponse = localStorage.getItem('login_data');
+	  const localData = JSON.parse(dataResponse);
     if (localData?.company?.hasEntities === true) {
       if (departments.length > 0) {
         setCanSubmit(true);
-      } else {
-        swal.fire({
-          text: 'Kindly sAdd Departments Before Proceeding',
-          icon: 'info'
-        })
-      }
+      } 
     } else {
       if (departmentList.length > 0 && grades.length > 0 && gradeLevels.lenth > 0) {
         setCanSubmit(true);
-      } else {
-        swal.fire({
-          text: 'Kindly Complete Setup Before Proceeding',
-          icon: 'info'
-        })
       }
     }
   }, [departmentList, grades, gradeLevels])
@@ -179,6 +170,8 @@ function Departments({handleNext}) {
       try {
         loading('processing...');
         await setStepper([], 4);
+        const dataResponse = localStorage.getItem('login_data');
+	      const localData = JSON.parse(dataResponse);
         localData.company.regStep = 4;
         localStorage.setItem('login_data', JSON.stringify(localData));
         swal.fire({
@@ -193,6 +186,10 @@ function Departments({handleNext}) {
         })
       } 
     } else {
+      swal.fire({
+        text: 'Kindly Complete Setup Before Proceeding',
+        icon: 'info'
+      })
       return;
     }
   };

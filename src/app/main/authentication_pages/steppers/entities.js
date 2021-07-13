@@ -82,7 +82,6 @@ function Entities({handleNext}) {
   const [informationTechnology, setInformationTechnology] = React.useState(false);
   const [canSubmit, setCanSubmit] = React.useState(false);
   let genericDept = [];
-  let localData = {};
   const classes = useStyles();
 
   React.useEffect(() => {
@@ -91,18 +90,11 @@ function Entities({handleNext}) {
     dispatch(Actions.getCompensations());
     dispatch(Actions.getGrades());
     dispatch(Actions.getGradeLevels());
-    const dataResponse = localStorage.getItem('login_data');
-	  localData = JSON.parse(dataResponse);
   }, [])
 
   React.useEffect(() => {
     if (grades.length > 0 && gradeLevels.lenth > 0) {
       setCanSubmit(true);
-    } else {
-      swal.fire({
-        text: 'Kindly Complete Setup Before Proceeding',
-        icon: 'info'
-      })
     }
   }, [grades, gradeLevels])
 
@@ -158,22 +150,30 @@ function Entities({handleNext}) {
 
 
   const onSubmit = async (data) => {
-      try {
-        const form = { ...data }
-        loading('processing...');
-        // const { data: { message  } } = await api.post('/organization_info', form);
-        await setStepper(genericDept, 3);
-        localData.company.regStep = 3;
-        localStorage.setItem('login_data', JSON.stringify(localData));
+      if (canSubmit) {
+        try {
+          const form = { ...data }
+          loading('processing...');
+          await setStepper(genericDept, 3);
+          const dataResponse = localStorage.getItem('login_data');
+	        const localData = JSON.parse(dataResponse);
+          localData.company.regStep = 3;
+          localStorage.setItem('login_data', JSON.stringify(localData));
+          swal.fire({
+            text: 'Step Completed',
+            icon: 'success'
+          });
+          handleNext();
+        } catch (e) {
+          swal.fire({
+            text: e?.message || 'Something went wrong',
+            icon: 'error'
+          })
+        }
+      } else {
         swal.fire({
-          text: 'Step Completed',
-          icon: 'success'
-        });
-        handleNext();
-      } catch (e) {
-        swal.fire({
-          text: e?.message || 'Something went wrong',
-          icon: 'error'
+          text: 'Kindly Complete Setup Before Proceeding',
+          icon: 'info'
         })
       }
   };
