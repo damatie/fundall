@@ -139,7 +139,7 @@ export default function EmployeeGradeLevelModal ({open, entities, setOpen, data,
             try {
                 form.id = data?.id;
                 loading('Updating Employee Grade Level...');
-                const { data: { message, success  } } = await api.patch(`employee-grade-level/`, form);
+                const { data: { message, success  } } = await api.patch(`employee-grade-level/${data?.id}`, form);
                 if (success) {
                     swal.fire({
                         text: message,

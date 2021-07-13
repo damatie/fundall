@@ -138,7 +138,7 @@ export default function DepartmentModal ({open, entities, setOpen, data, edit}) 
             try {
                 form.id = data?.id;
                 loading('Updating Department...');
-                const { data: { message, success  } } = await api.patch(`department/`, form);
+                const { data: { message, success  } } = await api.patch(`department/${data?.id}`, form);
                 if (success) {
                     swal.fire({
                         text: message,
