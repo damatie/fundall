@@ -54,7 +54,8 @@ const schema = yup.object().shape({
         .required(errorMsg({ name: 'Company Type', type: 'required' })),
     startDate: yup.string()
         .required(errorMsg({ name: 'Company Start Date', type: 'required' })),
-    noOfBranch: yup.number(errorMsg({ name: 'Number Of Branches', type: 'string' }))
+    noOfBranch: yup.number(errorMsg({ name: 'Number Of Branches', type: 'number' }))
+        .min(0)
         .required(errorMsg({ name: 'Number Of Branches', type: 'required' })),
     email: yup.string()
         .matches(/^[A-Za-z\d@$!%*#?&]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]{2,})*$/, "Enter a valid Email Address")
@@ -111,24 +112,7 @@ function OrganizationInformation({handleNext}) {
     dispatch(RegionActions.getCountries());
     const dataResponse = localStorage.getItem('login_data');
 	  data = JSON.parse(dataResponse);
-    // console.log('countries: ', countries)
   }, [])
-
-  // React.useState(() => {
-  //   dispatch(RegionActions.getStates(countryValue));
-  // }, [countryValue])
-
-  // React.useState(() => {
-  //   setCountry(countries);
-  // }, [countries])
-
-  // React.useState(() => {
-  //   setStateList(states);
-  // }, [states])
-
-  // React.useState(() => {
-  //   setCityList(cities);
-  // }, [cities])
 
   React.useEffect(() => {
     setCompanyTypeErr(errors.type?.message);
@@ -143,6 +127,12 @@ function OrganizationInformation({handleNext}) {
     register({ name: 'startDate', type: 'custom' }, { required: true });
     setValue("startDate", JSON.stringify(companyStartDate));
   }, [companyStartDate]);
+  
+  React.useEffect(() => {
+    register({ name: 'branchAddress', type: 'custom' }, { required: true });
+    setValue("branchAddress", branchAddresses);
+    setBranchAddresses(branchAddresses);
+  }, [branchAddresses]);
 
   const handleCompanyTypeChange = (event) => {
     register({ name: 'type', type: 'custom' }, { required: true });
@@ -182,15 +172,14 @@ function OrganizationInformation({handleNext}) {
   const handleAddBranchAddresses = (chip) => {
     register({ name: 'branchAddress', type: 'custom' }, { required: true });
     branchAddresses.push(chip)
+    console.log('branchAddresses: ', branchAddresses);
     setValue("branchAddress", branchAddresses);
     setBranchAddressesErr(errors.branchAddress?.message);
   };
 
   const handleDeleteBranchAddresses = (chip, index) => {
     register({ name: 'branchAddress', type: 'custom' }, { required: true });
-    // let branchAddressesData = branchAddresses;
-    branchAddresses.splice(index, 1);
-    // setBranchAddresses(branchAddresses);
+    setBranchAddresses((branchAddresses) => branchAddresses.filter((chp) => chp !== chip));
     setValue("branchAddress", branchAddresses);
     setBranchAddressesErr(errors.branchAddress?.message);
   };
@@ -411,7 +400,7 @@ function OrganizationInformation({handleNext}) {
             </Grid>
             <Grid item lg={5} md={12} sm={12} xs={12}>
               <Input
-                  required
+                  // required
                   label='Company Vision'
                   name='vision'
                   type='text'
@@ -425,7 +414,7 @@ function OrganizationInformation({handleNext}) {
             </Grid>
             <Grid item lg={4} md={12} sm={12} xs={12}>
               <Input
-                  required
+                  // required
                   label='Company Mission'
                   name='mission'
                   type='text'
@@ -439,7 +428,6 @@ function OrganizationInformation({handleNext}) {
             </Grid>
             <Grid item lg={3} md={6} sm={12} xs={12}>
               <Input
-                  required
                   label='Company Website'
                   name='website'
                   error={errors.website}
@@ -464,10 +452,11 @@ function OrganizationInformation({handleNext}) {
             </Grid>
             <Grid item lg={6} md={12} sm={12} xs={12}>
               <ChipInput
-                label='Branch Addresses (Separate with Comma / Enter)'
+                label='Branch Addresses (Separate with Enter)'
                 name='branchAddresses'
                 variant= 'outlined'
-                newChipKeyCodes={[188]}
+                placeholder= 'Enter Branch Addresses Here'
+                // newChipKeyCodes={[188]}
                 style={{ width: '100%'}}
                 error={errors.branchAddress}
                 message={errors.branchAddress?.message}
