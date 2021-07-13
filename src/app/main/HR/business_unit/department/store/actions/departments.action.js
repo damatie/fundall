@@ -1,5 +1,5 @@
-import axios from 'axios';
-import { useAuth } from 'app/hooks/useAuth';
+
+import Api from 'app/services/api';
 
 
 export const GET_DEPARTMENTS = 'GET DEPARTMENTS';
@@ -9,18 +9,12 @@ export const LOADING_DEPARTMENT = 'LOADING DEPARTMENT';
 
 export function getDepartments(id) {
 
-	return dispatch => {
-      const request = axios.get(`https://hris-cbit.herokuapp.com/api/v1/department/all/${id}`, {
-        headers: {
-          Authorization: `JWT ${useAuth().getToken}`
-        }
-      });
-      request.then(res => {
+	return async (dispatch) => {
+      const {data: {data}} = await Api.get(`department/all/${id}`);
         dispatch({
           type: GET_DEPARTMENTS,
-          payload: res.data.data
+          payload: data
         })
-      })
   }
 }
 

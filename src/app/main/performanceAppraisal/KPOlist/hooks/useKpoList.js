@@ -80,8 +80,8 @@ const useKpoList = ({dispatch, userId, state, push, id, employees, userInfo}) =>
     }
   }, [kpo]);
 
-  const handleGetDepartment = (id) => () => {
-    dispatch(getDepartments(id));
+  const handleGetDepartment = (deptId) => () => {
+    dispatch(getDepartments(deptId));
   };
 
   const handleCloseModal = () => {
