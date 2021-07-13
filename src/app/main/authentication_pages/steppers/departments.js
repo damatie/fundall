@@ -80,6 +80,7 @@ function Departments({handleNext}) {
   const [humanResource, setHumanResource] = React.useState(true);
   const [finance, setFinance] = React.useState(true);
   const [informationTechnology, setInformationTechnology] = React.useState(false);
+  const [canSubmit, setCanSubmit] = React.useState(false);
   let genericDept = [];
   let localData = {};
   const classes = useStyles();
@@ -95,17 +96,33 @@ function Departments({handleNext}) {
 	  localData = JSON.parse(dataResponse);
     if (localData?.company?.hasEntities === true) {
       setHasEntities(true);
-      if (departments.length > 0) {
-        setCanSubmit(true);
-      }
     } else {
       setHasEntities(false);
-      if (departments.length > 0 && grades.length > 0 && gradeLevels.lenth > 0) {
-        setCanSubmit(true);
-      }
     }
   }, []);
 
+  React.useEffect(() => {
+    if (localData?.company?.hasEntities === true) {
+      if (departments.length > 0) {
+        setCanSubmit(true);
+      } else {
+        swal.fire({
+          text: 'Kindly sAdd Departments Before Proceeding',
+          icon: 'info'
+        })
+      }
+    } else {
+      if (departmentList.length > 0 && grades.length > 0 && gradeLevels.lenth > 0) {
+        setCanSubmit(true);
+      } else {
+        swal.fire({
+          text: 'Kindly Complete Setup Before Proceeding',
+          icon: 'info'
+        })
+      }
+    }
+  }, [departmentList, grades, gradeLevels])
+  
   React.useEffect(() => {
     setEntityList(entities);
     setGradeList(grades);
@@ -159,6 +176,7 @@ function Departments({handleNext}) {
   }
 
   const onSubmit = async (data) => {
+    if (canSubmit) {
       try {
         loading('processing...');
         await setStepper([], 4);
@@ -174,7 +192,10 @@ function Departments({handleNext}) {
           text: e?.message || 'Something went wrong',
           icon: 'error'
         })
-      }
+      } 
+    } else {
+      return;
+    }
   };
 
   return (

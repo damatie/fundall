@@ -80,6 +80,7 @@ function Entities({handleNext}) {
   const [humanResource, setHumanResource] = React.useState(true);
   const [finance, setFinance] = React.useState(true);
   const [informationTechnology, setInformationTechnology] = React.useState(false);
+  const [canSubmit, setCanSubmit] = React.useState(false);
   let genericDept = [];
   let localData = {};
   const classes = useStyles();
@@ -93,6 +94,17 @@ function Entities({handleNext}) {
     const dataResponse = localStorage.getItem('login_data');
 	  localData = JSON.parse(dataResponse);
   }, [])
+
+  React.useEffect(() => {
+    if (grades.length > 0 && gradeLevels.lenth > 0) {
+      setCanSubmit(true);
+    } else {
+      swal.fire({
+        text: 'Kindly Complete Setup Before Proceeding',
+        icon: 'info'
+      })
+    }
+  }, [grades, gradeLevels])
 
   React.useEffect(() => {
     setEntityList(entities);
