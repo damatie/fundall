@@ -38,7 +38,6 @@ import EmployeeGradeLevelCard from './components/employeeGradeLevelCard';
 import *  as Actions from 'app/main/employeeManagement/store/actions';
 import withReducer from "app/store/withReducer";
 import employeesReducer from "app/main/employeeManagement/store/reducers/employees.reducer";
-import { departments } from 'app/main/HR/business_unit/department/store/reducers/departments.reducer';
 
 const useStyles = makeStyles(theme => ({
     root: {

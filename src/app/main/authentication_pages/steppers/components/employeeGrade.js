@@ -77,6 +77,10 @@ export default function EmployeeGradeModal ({open, employeeGrades, entities, set
     const classes = useStyles();
 
     React.useEffect(() => {
+        console.log('Grade Data: ', data);
+    }, []);
+
+    React.useEffect(() => {
         setEntityErr(errors.entityId?.message);
         setEmployeeGradeErr(errors.gradeName?.message);
       }, [errors]);

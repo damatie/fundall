@@ -76,6 +76,10 @@ export default function EmployeeGradeLevelModal ({open, entities, setOpen, data,
     const classes = useStyles();
 
     React.useEffect(() => {
+        console.log('GradeLevel Data: ', data);
+      }, []);
+
+    React.useEffect(() => {
         setGradeErr(errors.gradeId?.message);
         setPipCompensationsErr(errors.pipCompensations?.message);
       }, [errors]);
