@@ -479,6 +479,7 @@ function AddNewEmployee() {
                 <DatePicker
                   inputVariant="outlined"
                   name='startDate'
+                  maxDate={new Date()}
                   error={errors.startDate}
                   message={errors.startDate?.message}
                   label='Employee Start Date'
