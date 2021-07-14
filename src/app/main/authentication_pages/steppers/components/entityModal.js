@@ -41,10 +41,9 @@ const schema = yup.object().shape({
         .max(60, errorMsg({ name: 'Employee Code Prefix', type: 'max', number: 60 }))
         .required(errorMsg({ name: 'Employee Code Prefix', type: 'required' })),
     description: yup.string(errorMsg({ name: 'Description', type: 'string' }))
-    // .min(3, errorMsg({ name: 'Description', type: 'min', number: 3 }))
+        // .min(3, errorMsg({ name: 'Description', type: 'min', number: 3 }))
         .max(1000, errorMsg({ name: 'Description', type: 'max', number: 1000 })),
     address: yup.array()
-        // .min(1, 'Must have at least one Entity Addresses')
         .required(errorMsg({ name: 'Entity Addresses', type: 'required' })),
 });
 
@@ -63,30 +62,36 @@ export default function EntityModal ({open, setOpen, edit, data}) {
     const [entityName, setEntityName] = React.useState(data?.entityName || "");
     const [description, setDescription] = React.useState(data?.description || "");
     const [employeeCode, setEmployeeCode] = React.useState(data?.employeeCode || "");
-    const [address, setAddress] = React.useState(data?.address || []);
-    const [entityAddressesErr, setEntityAddressesErr] = React.useState("");
+    const [addresses, setAddresses] = React.useState(data.address || []);
+    const [addressesErr, setAddressesErr] = React.useState("");
 
     React.useEffect(() => {
         dispatch(Actions.getEntities());
       }, [newAdded, updated]);
 
     React.useEffect(() => {
-        setEntityAddressesErr(errors.address?.message);
-      }, [errors]);
-
-      const handleAddEntityAddresses = (chip) => {
         register({ name: 'address', type: 'custom' }, { required: true });
-        address.push(chip)
-        setValue("address", address);
-        setEntityAddressesErr(errors.address?.message);
-        // console.log('data: ', JSON.stringify({...getValues()}));
+        setValue("address", addresses);
+        setAddresses(addresses);
+      }, [addresses]);
+    
+    React.useEffect(() => {
+        setAddressesErr(errors.address?.message);
+    }, [errors]);
+
+      const handleAddAddresses = (chip) => {
+        register({ name: 'address', type: 'custom' }, { required: true });
+        addresses.push(chip)
+        console.log('addresses: ', addresses);
+        setValue("address", addresses);
+        setAddressesErr(errors.address?.message);
       };
     
-      const handleDeleteEntityAddresses = (chip, index) => {
+      const handleDeleteAddresses = (chip, index) => {
         register({ name: 'address', type: 'custom' }, { required: true });
-        setAddress((address) => address.filter((chp) => chp !== chip));
-        setValue("address", address);
-        setEntityAddressesErr(errors.address?.message);
+        setAddresses((addresses) => addresses.filter((chp) => chp !== chip));
+        setValue("address", addresses);
+        setAddressesErr(errors.address?.message);
       };
 
     const onSubmit = async (value) => {
@@ -196,21 +201,22 @@ export default function EntityModal ({open, setOpen, edit, data}) {
                 />
             </Grid>
             <Grid item lg={12} md={12} sm={12} xs={12}>
-                <ChipInput
-                    label='Entity Addresses (Separate with Enter)'
-                    name='address'
-                    variant= 'outlined'
-                    placeholder= 'Enter Entity Addresses Here'
-                    // newChipKeyCodes={[188]}
-                    style={{ width: '100%'}}
-                    error={errors.address}
-                    message={errors.address?.message}
-                    allowDuplicates={false}
-                    defaultValue={address}
-                    onAdd={(chip) => handleAddEntityAddresses(chip)}
-                    onDelete={(chip, index) => handleDeleteEntityAddresses(chip, index)}
-                />
-                <FormHelperText style={{ color: 'red'}}>{entityAddressesErr}</FormHelperText>
+              <ChipInput
+                label='Entity Addresses (Separate with Enter)'
+                name='address'
+                variant= 'outlined'
+                placeholder= 'Enter Entity Addresses Here'
+                // newChipKeyCodes={[188]}
+                style={{ width: '100%'}}
+                error={errors.address}
+                message={errors.address?.message}
+                // helperText={errossrs.address?.message}
+                allowDuplicates={false}
+                value={addresses}
+                onAdd={(chip) => handleAddAddresses(chip)}
+                onDelete={(chip, index) => handleDeleteAddresses(chip, index)}
+              />
+              <FormHelperText style={{ color: 'red'}}>{addressesErr}</FormHelperText>
             </Grid>
         </Grid>
         <Grid container spacing={3} justify='center' align='center' className='my-10'>

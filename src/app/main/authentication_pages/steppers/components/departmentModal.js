@@ -298,7 +298,7 @@ export default function DepartmentModal ({open, entities, setOpen, data, edit}) 
                 error={errors.address}
                 message={errors.address?.message}
                 allowDuplicates={false}
-                defaultValue={address}
+                value={address}
                 onAdd={(chip) => handleAddAddress(chip)}
                 onDelete={(chip, index) => handleDeleteAddress(chip, index)}
               />
