@@ -79,6 +79,12 @@ export default function EmployeeGradeModal ({open, employeeGrades, entities, set
     const classes = useStyles();
 
     React.useEffect(() => {
+        register({ name: 'entityId', type: 'custom' }, { required: true });
+        setValue("entityId", entityId);
+        register({ name: 'gradeName', type: 'custom' }, { required: true });
+        setValue("gradeName", gradeName);
+        register({ name: 'gradeDescription', type: 'custom' }, { required: true });
+        setValue("gradeDescription", gradeDescription);
         setPipEligibility(data?.pipEligibility);
         console.log('Grade Data: ', data);
     }, []);
@@ -97,10 +103,14 @@ export default function EmployeeGradeModal ({open, employeeGrades, entities, set
       }, [newAdded, updated]);
 
       const handleEntityChange = async (event) => {
-        setEntityId(event.target.value.id);
+        setEntityId(event.target.value);
         register({ name: 'entityId', type: 'custom' }, { required: true });
-        setValue("entityId", event.target.value.id);
-        setEntityName(event.target.value.entityName);
+        setValue("entityId", event.target.value);
+        entities.forEach(el => {
+            if (el.id === event.target.value) {
+                setEntityName(el.entityName);
+            }
+        });
         setEntityErr(errors.entityId?.message);
       };
 
@@ -190,7 +200,7 @@ export default function EmployeeGradeModal ({open, employeeGrades, entities, set
                     label="Entity"
                     >
                     {entities.map(item => (
-                    <MenuItem key={item.id} value={item}>
+                    <MenuItem key={item.id} value={item.id}>
                         {item.entityName}
                     </MenuItem>))}
                     </Select>
@@ -234,7 +244,7 @@ export default function EmployeeGradeModal ({open, employeeGrades, entities, set
                     refs={register}
                 />
             </Grid>
-            {!edit && <Grid item lg={12} md={12} sm={12} xs={12} align='left' style={{ marginBottom: '-15px', marginTop: '-15px'  }}>
+            {<Grid item lg={12} md={12} sm={12} xs={12} align='left' style={{ marginBottom: '-15px', marginTop: '-15px'  }}>
               <FormControlLabel control={<Checkbox
                 checked={pipEligibility}
                 onChange={handlePipEligibilityChange}

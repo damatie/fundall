@@ -222,7 +222,7 @@ function Entities({handleNext}) {
             
             <Grid item lg={12} md={12} sm={12} xs={12} align='left' className='my-10'>
                {gradeList.map(item => (
-                 <EmployeeGradeCard name={item?.gradeName} entityName={item?.entityName} entities={entityList} description={item?.gradeDescription} employeeGrades={grades} data={item}/>))}
+                 <EmployeeGradeCard name={item?.gradeName} entityName={item?.entityName} entities={entityList} description={item?.gradeDescription} employeeGrades={accountSettingsData?.employeeGrade || []} data={item}/>))}
             </Grid>
 
             <Grid item lg={12} md={12} sm={12} xs={12} align='left' className='my-10'>
@@ -245,7 +245,7 @@ function Entities({handleNext}) {
       </div>
       <EntityModal open={openEntityModal} setOpen={setOpenEntityModal} edit={false} data={{}}/>
       <EmployeeGradeModal open={openEmployeeGradeModal} employeeGrades={accountSettingsData?.employeeGrade || []} entities={entityList} setOpen={setOpenEmployeeGradeModal} data={{}} edit={false}/>
-      <EmployeeGradeLevelModal open={openEmployeeGradeLevelModal}  compensationList={compensationData || []}  employeeGrades={grades || []} entities={entityList} setOpen={setOpenEmployeeGradeLevelModal} data={{}} edit={false}/>
+      <EmployeeGradeLevelModal open={openEmployeeGradeLevelModal}  compensationList={compensationData || []}  employeeGrades={gradeList || []} entities={entityList} setOpen={setOpenEmployeeGradeLevelModal} data={{}} edit={false}/>
     </div>
   );
 }

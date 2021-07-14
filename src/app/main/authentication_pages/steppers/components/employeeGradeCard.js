@@ -42,11 +42,11 @@ export default function EmployeeGradeCard({name, description, data, employeeGrad
                     <Grid item lg={8} md={8} sm={6} xs={12} align='left' className=''>
                         <Typography variant="body2" color="initial" className='my-6'>{description}</Typography>
                     </Grid>
-                    <Grid item lg={2} md={2} sm={3} xs={12} align='left' className=''>
+                    {/* <Grid item lg={2} md={2} sm={3} xs={12} align='left' className=''>
                         <Typography variant="body2" color="initial" className='mr-2'><strong>Entity: </strong></Typography>
                         <br/>
                         <Typography variant="body2" color="initial">{entityName}</Typography>
-                    </Grid>
+                    </Grid> */}
                     </Grid>
                 </Grid>
                 <Grid item lg={3} md={3} sm={3} xs={3} align='left' className='my-10'>

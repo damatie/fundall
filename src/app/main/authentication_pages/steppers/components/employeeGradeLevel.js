@@ -51,11 +51,11 @@ const schema = yup.object().shape({
         .required(errorMsg({ name: 'Level', type: 'required' })),
     description: yup.string(errorMsg({ name: 'Description', type: 'string' }))
         .max(1000, errorMsg({ name: 'Description', type: 'max', number: 1000 })),
-    compensations: yup.object().required(errorMsg({ name: 'Compensations', type: 'required'})),
+    compensations: yup.object(),
     pipCompensations: yup.array(),
 });
 
-export default function EmployeeGradeLevelModal ({open, entities, setOpen, data, edit, compensationList}) {
+export default function EmployeeGradeLevelModal ({open, entities, employeeGrades, setOpen, data, edit, compensationList}) {
     
     const { register, handleSubmit, formState:{ errors }, setValue, getValues } = useForm({
         mode: "all",
@@ -79,7 +79,30 @@ export default function EmployeeGradeLevelModal ({open, entities, setOpen, data,
     const [entityErr, setEntityErr] = React.useState("");
     const classes = useStyles();
 
-    React.useEffect(() => {
+    React.useEffect(async () => {
+        register({ name: 'entityId', type: 'custom' }, { required: true });
+        setValue("entityId", entityId);
+        register({ name: 'level', type: 'custom' }, { required: true });
+        setValue("level", level);
+        register({ name: 'description', type: 'custom' }, { required: true });
+        setValue("description", description);
+        register({ name: 'gradeId', type: 'custom' }, { required: true });
+        setValue("gradeId", gradeId);
+        if (gradeId !== 0) {
+            const dataResponse = localStorage.getItem('login_data');
+	        const localData = JSON.parse(dataResponse);
+            setSelectGrades(false);
+            if (localData?.company?.hasEntities === false) {
+                setGradeList(employeeGrades);
+            } else {
+                const result = await api.get(`/entity/${gradeId}`);
+                if (result.data.success && result.data.data) {
+                    if(result.data.data.employeeGrades.length > 0) {
+                        setGradeList(result.data.data.employeeGrades);
+                    }
+                }
+            } 
+        }
         console.log('GradeLevel Data: ', data);
       }, []);
 
@@ -252,6 +275,9 @@ export default function EmployeeGradeLevelModal ({open, entities, setOpen, data,
                     name='level'
                     type='number'
                     defaultValue={level}
+                    allowNegative={false}
+                    inputProps={{ min: 0 }}
+                    min={0}
                     error={errors.level}
                     message={errors.level?.message}
                     helperText={errors.level?.message}

@@ -86,6 +86,22 @@ export default function DepartmentModal ({open, entities, setOpen, data, edit}) 
     const [addressErr, setAddressErr] = React.useState("");
     const classes = useStyles();
 
+
+    React.useEffect(() => {
+      register({ name: 'entityId', type: 'custom' }, { required: true });
+      setValue("entityId", entityId);
+      register({ name: 'departmentName', type: 'custom' }, { required: true });
+      setValue("departmentName", department);
+      register({ name: 'departmentCode', type: 'custom' }, { required: true });
+      setValue("departmentCode", departmentCode);
+      register({ name: 'startedOn', type: 'custom' }, { required: true });
+      setValue("startedOn", JSON.stringify(startedOn));
+      register({ name: 'description', type: 'custom' }, { required: true });
+      setValue("description", description);
+      register({ name: 'address', type: 'custom' }, { required: true });
+      setValue("address", address);
+    }, []);
+
     React.useEffect(() => {
       register({ name: 'startedOn', type: 'custom' }, { required: true });
       setValue("startedOn", JSON.stringify(startedOn));

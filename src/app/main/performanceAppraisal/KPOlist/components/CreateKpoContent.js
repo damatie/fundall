@@ -77,6 +77,9 @@ const CreateKpoContent = ({customHook}) => {
           Create
         </SharedButton>
       </form>
+      <Button onClick={() => {console.log('Add Method Here')}} variant="contained" color="secondary">
+        <span style={{ marginRight: '5px' }}><AddBoxOutlinedIcon/></span> Add New
+      </Button>
     </SideModal>
   );
 };
