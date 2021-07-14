@@ -44,8 +44,8 @@ const schema = yup.object().shape({
     // .min(3, errorMsg({ name: 'Description', type: 'min', number: 3 }))
         .max(1000, errorMsg({ name: 'Description', type: 'max', number: 1000 })),
     address: yup.array()
-        .min(1, 'Must have at least one Entity Addresses')
-        .required(errorMsg({ name: 'Entity Addresses', type: 'required' })),
+        // .min(1, 'Must have at least one Entity Addresses')
+        // .required(errorMsg({ name: 'Entity Addresses', type: 'required' })),
 });
 
 export default function EntityModal ({open, setOpen, edit, data}) {
@@ -210,7 +210,7 @@ export default function EntityModal ({open, setOpen, edit, data}) {
                     onAdd={(chip) => handleAddEntityAddresses(chip)}
                     onDelete={(chip, index) => handleDeleteEntityAddresses(chip, index)}
                 />
-                <FormHelperText style={{ color: 'red'}}>{emtityAddressesErr}</FormHelperText>
+                <FormHelperText style={{ color: 'red'}}>{entityAddressesErr}</FormHelperText>
             </Grid>
         </Grid>
         <Grid container spacing={3} justify='center' align='center' className='my-10'>
