@@ -8,7 +8,7 @@ import SharedButton from 'app/shared/button/SharedButton';
 import Typography from '@material-ui/core/Typography';
 import { Controller } from 'react-hook-form';
 
-const AddNewEmployee = ({
+const AddNewEmployeeOld = ({
   open,
   handleClose,
   form: {
@@ -206,4 +206,4 @@ const AddNewEmployee = ({
   );
 };
 
-export default AddNewEmployee;
+export default AddNewEmployeeOld;

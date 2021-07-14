@@ -43,7 +43,7 @@ export function getAllCourses() {
 						payload: []
 					})
 			}).catch(err => {
-				// // console.log(err);
+				// console.log(err);
 				dispatch({
 					type: GET_ALL_COURSES,
 					payload: []
@@ -77,7 +77,7 @@ export function getApprovedCourses() {
 						payload: []
 					})
 			}).catch(err => {
-				// // console.log(err);
+				// console.log(err);
 				dispatch({
 					type: GET_APPROVED_COURSES,
 					payload: []
@@ -111,7 +111,7 @@ export function getRejectedCourses() {
 						payload: []
 					})
 			}).catch(err => {
-				// // console.log(err);
+				// console.log(err);
 				dispatch({
 					type: GET_REJECTED_COURSES,
 					payload: []
@@ -145,7 +145,7 @@ export function getPendingCourses() {
 						payload: []
 					})
 			}).catch(err => {
-				// // console.log(err);
+				// console.log(err);
 				dispatch({
 					type: GET_PENDING_COURSES,
 					payload: []
@@ -179,7 +179,7 @@ export function getCourseCategories() {
 						payload: []
 					})
 			}).catch(err => {
-				// // console.log(err);
+				// console.log(err);
 				swal.fire(
 					'Oops!',
 					'something went wrong',
@@ -236,7 +236,7 @@ export function approveCourse(id) {
 						}
 					}
 					).catch(e => {
-						// // console.log(e);
+						// console.log(e);
 						swal.fire(
 							'Oops!',
 							'something went wrong',
@@ -298,7 +298,7 @@ export function rejectCourse(id) {
 						}
 					}
 					).catch(e => {
-						// // console.log(e);
+						// console.log(e);
 						swal.fire(
 							'Oops!',
 							'something went wrong',
@@ -360,7 +360,7 @@ export function deleteCourse(id) {
 						}
 					}
 					).catch(e => {
-						// // // console.log(e);
+						// // console.log(e);
 						swal.fire(
 							'Oops!',
 							'something went wrong',

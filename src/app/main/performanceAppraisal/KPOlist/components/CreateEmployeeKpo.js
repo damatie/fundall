@@ -8,6 +8,7 @@ import { Controller } from 'react-hook-form';
 import AutoCompleteInput from 'app/shared/TextInput/AutoComplete';
 import Input from 'app/shared/TextInput/Input';
 import { useSelector } from 'react-redux';
+import SideModal from 'app/shared/modal/SideModal';
 
 const { useEffect } = React;
 
@@ -16,6 +17,7 @@ const CreateEmployeeKpo = ({ customHook }) => {
 
   const {
     entities,
+    entityList,
     departments,
   } = useSelector(state => state.kpo);
 
@@ -26,10 +28,11 @@ const CreateEmployeeKpo = ({ customHook }) => {
 
   useEffect(() => {
     handleGetDepartment(entityId)()
+    console.log('entityList: ', entityList);
   }, []);
 
   return (
-    <SharedModal
+    <SideModal
       title='Create KPO'
       open={open}
       handleClose={handleCloseModal}
@@ -120,7 +123,7 @@ const CreateEmployeeKpo = ({ customHook }) => {
           Create KPO
         </SharedButton>
       </form>
-    </SharedModal>
+    </SideModal>
   );
 };
 

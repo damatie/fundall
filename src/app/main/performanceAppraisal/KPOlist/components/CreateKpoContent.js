@@ -1,4 +1,4 @@
-import SharedModal from 'app/shared/modal/SharedModal';
+import SideModal from 'app/shared/modal/SideModal';
 import React from 'react';
 import Input from 'app/shared/TextInput/Input';
 import SelectTextField from 'app/shared/TextInput/SelectTextField';
@@ -10,7 +10,7 @@ import { Controller } from 'react-hook-form';
 const CreateKpoContent = ({customHook}) => {
   const { open, handleCloseModal, register, errors, handleSubmit, onSubmit, control, kpoCategory, pipEligibility } = customHook;
   return (
-    <SharedModal
+    <SideModal
       title='Add KPO Content'
       open={open}
       handleClose={handleCloseModal}
@@ -77,7 +77,10 @@ const CreateKpoContent = ({customHook}) => {
           Create
         </SharedButton>
       </form>
-    </SharedModal>
+      <Button onClick={() => {console.log('Add Method Here')}} variant="contained" color="secondary">
+        <span style={{ marginRight: '5px' }}><AddBoxOutlinedIcon/></span> Add New
+      </Button>
+    </SideModal>
   );
 };
 

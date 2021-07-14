@@ -10,12 +10,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
+import { entityListReducer } from './../../../store/reducers/entities.reducers';
 
 const EmployeeKpoList = () => {
 	const [tabValue, setTabValue] = React.useState(0);
 	const dispatch = useDispatch();
 	const { push } = useHistory();
 	const state = useSelector(state => state.kpo.employeeKpoList);
+	const entityList = useSelector(state => state.kpo.kpoReview.entityList);
 	const userId = useSelector(state => state.profile?.data?.id);
 	const employees = useSelector(state => state.employeeList.data);
 
@@ -23,7 +25,7 @@ const EmployeeKpoList = () => {
 		setTabValue(value);
 	}
 
-	// React.useEffect(() => console.log(state), [state]);
+	React.useEffect(() => console.log('ent-List: ', entityList), [entityList]);
 
 	const customHook = useKpoList({
 		userId,

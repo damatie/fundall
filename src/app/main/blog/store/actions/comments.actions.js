@@ -22,7 +22,7 @@ export const DELETE_COMMENT_ERROR = 'DELETE COMMENT ERROR';
 const basUrl = getBaseUrl;
 const headers = fetchHeaders();
 export function getPostComments(id) {
-	console.log("get Post Comments: "+id);
+	// console.log("get Post Comments: "+id);
 	return dispatch => {
 		dispatch({
 			type: LOADING_COMMENTS

@@ -45,7 +45,7 @@ function AssignRecruiter(props) {
 					// console.log(data)
 				}
 			}).catch(err => {
-				// console.log(err);
+				console.log(err);
 			})
 	}, [baseUrl, headers]);
 

@@ -1,4 +1,4 @@
 
 export const formatCurrency = (currency, amount) => {
-    return `${currency} ${amount.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}`;
+    return `${currency}${amount.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}`;
 }

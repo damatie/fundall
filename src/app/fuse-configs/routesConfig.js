@@ -52,6 +52,7 @@ import EmployeeGradeConfig from 'app/main/employeeGrade/EmployeeGradeConfig';
 import BehaviouralAttributeConfig from 'app/main/behaviouralAttribute/BehaviouralAttributeConfig';
 import PermissionConfig from 'app/main/permission/PermissionConfig';
 import EmployeeMgtConfig from 'app/main/employeeManagement/employeeMgtConfig';
+import createEmployeeConfig from 'app/main/employeeManagement/createEmployeeConfig';
 import EmployeeInformationConfig from 'app/main/employeeInformation/employeeInformationConfig';
 import AttendanceConfig from 'app/main/attendance/attendanceConfig';
 import ExitManagement from 'app/main/exitMgt/exitConfig';
@@ -111,6 +112,7 @@ const routeConfigs = [
 	BehaviouralAttributeConfig,
 	PermissionConfig,
 	EmployeeMgtConfig,
+	// createEmployeeConfig,
 	EmployeeInformationConfig,
 	CompensationColumnsConfig
 ];

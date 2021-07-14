@@ -1,6 +1,6 @@
 import PageLayout from 'app/shared/pageLayout/PageLayout';
 import React from 'react';
-import AddNewEmployee from './components/AddNewEmployee';
+// import AddNewEmployee from './AddNewEmployee';
 import EmployeeTable from './components/EmployeeTable';
 import useEmployees from './hooks/useEmployees';
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,7 +13,7 @@ import { useHistory } from 'react-router';
 
 const Employees = () => {
   const dispatch = useDispatch();
-  const { open, employees, entities, departments, roles, grades, loading, jobTitles } = useSelector(state => state.employeeMgt);
+  const { open, employees, entities,  roles, grades, loading, jobTitles } = useSelector(state => state.employeeMgt);
   const { push } = useHistory();
 
   React.useEffect(() => {
@@ -30,7 +30,7 @@ const Employees = () => {
     handleSubmit,
     onSubmit,
     handleCloseModal,
-    handleOpenModal,
+    // handleOpenModal,
     handleDelete,
     handleSearch,
     handleFilter,
@@ -38,6 +38,11 @@ const Employees = () => {
   } = useEmployees({
     dispatch
   });
+
+  const createEmployee = () => {
+    // window.location.assign('/hr/create-employee');
+    window.location.href = "/hr/create-employee";
+  }
 
   return (
     <PageLayout
@@ -49,7 +54,7 @@ const Employees = () => {
       button={{
         showButton: true,
         btnTitle: 'Add New Employee',
-        onClick: handleOpenModal,
+        onClick: createEmployee,
         btnComponent: false,
       }}
       content={
@@ -69,7 +74,7 @@ const Employees = () => {
                     handleDelete={handleDelete}
                     handleFilter={handleFilter}
                   />
-                  <AddNewEmployee
+                  {/* <AddNewEmployee
                     open={open}
                     handleClose={handleCloseModal}
                     data={{
@@ -87,7 +92,7 @@ const Employees = () => {
                       control,
                       errors,
                     }}
-                  />
+                  /> */}
                 </>
               )
           }

@@ -17,8 +17,8 @@ export const DELETE_POST_ERROR = 'DELETE POST ERROR';
 const basUrl = getBaseUrl;
 const headers = fetchHeaders();
 export function getPosts(limit = 10, offset = 0) {
-	console.log("Limit: " + limit);
-	console.log("Offset: " + offset);
+	// console.log("Limit: " + limit);
+	// console.log("Offset: " + offset);
 	return dispatch => {
 		dispatch({
 			type: LOADING_POSTS

@@ -71,7 +71,7 @@ function AdditionalFileForm(props) {
     
     useEffect(()=> {
         if(endorsed.length > 0){
-            console.log("Endorsed File Loaded");
+            // console.log("Endorsed File Loaded");
             let payload = new FormData();
             payload.append("id", (endorsedId) ? endorsedId : 0);
             payload.append("srepId", srepId);
@@ -90,7 +90,7 @@ function AdditionalFileForm(props) {
     useEffect(()=> {
 
         if(emailIndemnity.length > 0){
-            console.log("Email Indemnity File Loaded");
+            // console.log("Email Indemnity File Loaded");
             let payload = new FormData();
             payload.append("id", (emailIndemnityId) ? emailIndemnityId : 0);
             payload.append("srepId", srepId);
@@ -108,7 +108,7 @@ function AdditionalFileForm(props) {
 
     useEffect(()=> {
         if(boardResolution.length > 0 ){
-            console.log("Board Resolution File Loaded");
+            // console.log("Board Resolution File Loaded");
             let payload = new FormData();
             payload.append("id", (boardResolutionId) ? boardResolutionId : 0);
             payload.append("srepId", srepId);

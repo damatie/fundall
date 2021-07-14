@@ -1,204 +1,567 @@
-import FuseAnimate from '@fuse/core/FuseAnimate';
-import FuseAnimateGroup from '@fuse/core/FuseAnimateGroup';
-import _ from '@lodash';
-import Icon from '@material-ui/core/Icon';
-import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
+import React, { useEffect, useState } from 'react';
 import withReducer from 'app/store/withReducer';
-import React from 'react';
-import { useSelector } from 'react-redux';
 import SimplePage from 'app/shared/SimplePage';
-import BarChart from 'app/shared/charts/BarChart';
-import EnhancedTable from 'app/shared/table/EnhancedTable';
-import Paper from '@material-ui/core/Paper';
-import SelectTextField from 'app/shared/TextInput/SelectTextField';
-import MenuItem from '@material-ui/core/MenuItem';
+import { makeStyles } from '@material-ui/core/styles';
+import { Line } from 'react-chartjs-2';
 import Grid from '@material-ui/core/Grid';
-import CardWidget from 'app/shared/widgets/CardWidget';
+import { useDispatch, useSelector } from 'react-redux';
+import Typography from '@material-ui/core/Typography';
+import SelectTextField from 'app/shared/TextInput/SelectTextField';
+import Paper from '@material-ui/core/Paper';
+import * as Actions from '../store/actions';
+import * as UtilActions from '../../../store/actions';
+import reducer from '../store/reducers';
+import MenuItem from '@material-ui/core/MenuItem';
+import Input from '@material-ui/core/Input';
+import Icon from '@material-ui/core/Icon';
+import { TextFieldFormsy } from '@fuse/core/formsy';
+import Formsy from 'formsy-react';
+import Dialog from '@material-ui/core/Dialog';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
+import Button from '@material-ui/core/Button';
+import { AppBar, Toolbar } from '@material-ui/core';
+import EnrollmentListTable from './components/EnrollmentListTable';
+import { filterByMonths } from './components/chartDataFilter';
+import { updatedEnrollmentList } from './components/setEntityDeptName';
+import { filterData } from './components/dataFilter';
 
+    const monthNames = ["January", "February", "March", "April", "May", "June",
+                    "July", "August", "September", "October", "November", "December" ];
 
-const useStyles = makeStyles(theme => ({
-  header: {
-    background: `linear-gradient(to right, ${theme.palette.primary.dark} 0%, ${theme.palette.primary.main} 100%)`,
-    color: theme.palette.getContrastText(theme.palette.primary.main)
-  },
-  headerIcon: {
-    position: 'absolute',
-    top: -64,
-    left: 0,
-    opacity: 0.04,
-    fontSize: 512,
-    width: 512,
-    height: 512,
-    pointerEvents: 'none'
-  },
-  pagination: {
-    display: 'flex',
-    justifyContent: 'center',
-    marginBottom: '32px',
-    marginTop: '30px'
-  },
-  previousBtn: {
-    marginBottom: 10,
-    alignSelf: 'left',
-    [theme.breakpoints.down('xs')]: {
-      display: 'none',
-    },
-    color: 'white',
-    fontSize: 20
-  },
-}));
+    const lineChartData = {
+        labels: monthNames,
+        datasets: [
+            {
+                label: 'Approved',
+                fill: false,			
+                lineTension: 0.1,
+                backgroundColor: 'rgba(75,192,192,0.4)',
+                borderColor: 'rgba(75,192,192,1)',
+                borderCapStyle: 'butt',
+                borderDash: [],
+                borderDashOffset: 0.0,
+                borderJoinStyle: 'miter',
+                pointBorderColor: 'rgba(75,192,192,1)',
+                pointBackgroundColor: '#fff',
+                pointBorderWidth: 1,
+                pointHoverRadius: 5,
+                pointHoverBackgroundColor: 'rgba(75,192,192,1)',
+                pointHoverBorderColor: 'rgba(220,220,220,1)',
+                pointHoverBorderWidth: 2,
+                pointRadius: 1,
+                pointHitRadius: 10,
+                data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            },
+            {
+                label: 'Pending',
+                fill: false,			
+                lineTension: 0.1,
+                backgroundColor: '#FFAB00',
+                borderColor: '#FFAB00',
+                borderCapStyle: 'butt',
+                borderDash: [],
+                borderDashOffset: 0.0,
+                borderJoinStyle: 'miter',
+                pointBorderColor: '#FFAB00',
+                pointBackgroundColor: '#fff',
+                pointBorderWidth: 1,
+                pointHoverRadius: 5,
+                pointHoverBackgroundColor: '#FFAB00',
+                pointHoverBorderColor: '#FFAB00',
+                pointHoverBorderWidth: 2,
+                pointRadius: 1,
+                pointHitRadius: 10,
+                data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            },
+            {
+                label: 'Rejected',
+                fill: false,			
+                lineTension: 0.1,
+                backgroundColor: '#FF5F5F',
+                borderColor: '#FF5F5F',
+                borderCapStyle: 'butt',
+                borderDash: [],
+                borderDashOffset: 0.0,
+                borderJoinStyle: 'miter',
+                pointBorderColor: '#FF5F5F',
+                pointBackgroundColor: '#fff',
+                pointBorderWidth: 1,
+                pointHoverRadius: 5,
+                pointHoverBackgroundColor: '#FF5F5F',
+                pointHoverBorderColor: '#FF5F5F',
+                pointHoverBorderWidth: 2,
+                pointRadius: 1,
+                pointHitRadius: 10,
+                data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            }
+        ]
+    };
 
-const data = [
-  {
-    requestedAmount: '₦200,000',
-    loanDuration: '3 Months',
-    dateApplied: '23 june 2020',
-    status: 'Approved'
-  },
-  {
-    requestedAmount: '₦100,000',
-    loanDuration: '2 Months',
-    dateApplied: '23 june 2019',
-    status: 'Rejected'
-  },
-  {
-    requestedAmount: '₦500,000',
-    loanDuration: '3 Months',
-    dateApplied: '23 may 2020',
-    status: 'Pending'
-  },
-  {
-    requestedAmount: '₦240,000',
-    loanDuration: '3 Months',
-    dateApplied: '23 june 2020',
-    status: 'Approved'
-  },
-];
+    const columns = [
+        {
+            id: 'name',
+            field: 'name',
+            align: 'left',
+            disablePadding: false,
+            label: 'Name',
+            sort: true
+        },
+        {
+            id: 'employeeEmail',
+            field: 'employeeEmail',
+            align: 'left',
+            disablePadding: false,
+            label: 'Email',
+            sort: true
+        },
+        {
+            id: 'entity',
+            field: 'entity',
+            newId: 'entityId',
+            align: 'left',
+            disablePadding: false,
+            label: 'Entity',
+            sort: true,
+        },
+        {
+            id: 'department',
+            field: 'department',
+            newId: 'departmentId',
+            align: 'left',
+            disablePadding: false,
+            label: 'Dept.',
+            sort: true,
+        },
+        {
+            align: 'left',
+            disablePadding: false,
+            label: 'Capital',
+            field: 'capitalFund',
+            sort: true,
+        },
+        {
+            align: 'left',
+            disablePadding: false,
+            label: 'Beneficiary',
+            field: 'beneficiaryName',
+            sort: true,
+        },
+        {
+            align: 'left',
+            disablePadding: false,
+            label: 'Beneficiary Nationality',
+            field: 'beneficiaryNationality',
+            sort: true,
+        },
+        {
+            align: 'left',
+            disablePadding: false,
+            label: 'Beneficiary Gender',
+            field: 'beneficiaryGender',
+            sort: true,
+        },
+        {
+            align: 'left',
+            disablePadding: false,
+            label: 'Relationship',
+            field: 'beneficiaryRelationship',
+            sort: true,
+        },
+        {
+            align: 'left',
+            disablePadding: false,
+            label: 'Beneficiary Email',
+            field: 'beneficiaryEmail',
+            sort: true,
+        },
+    ];
 
-const barChartData = {
-  labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-  datasets: [
-    {
-      label: 'Months',
-      data: [5, 4, 3, 5, 2, 3, 2, 4, 3, 5, 2, 3],
-      backgroundColor: [
-        'rgba(255, 99, 132, 0.2)',
-        'rgba(54, 162, 235, 0.2)',
-        'rgba(255, 206, 86, 0.2)',
-        'rgba(75, 192, 192, 0.2)',
-        'rgba(153, 102, 255, 0.2)',
-        'rgba(255, 159, 64, 0.2)',
-        'rgba(255, 99, 132, 0.2)',
-        'rgba(54, 162, 235, 0.2)',
-        'rgba(255, 206, 86, 0.2)',
-        'rgba(75, 192, 192, 0.2)',
-        'rgba(153, 102, 255, 0.2)',
-        'rgba(255, 159, 64, 0.2)',
-      ],
-      borderColor: [
-        'rgba(255, 99, 132, 1)',
-        'rgba(54, 162, 235, 1)',
-        'rgba(255, 206, 86, 1)',
-        'rgba(75, 192, 192, 1)',
-        'rgba(153, 102, 255, 1)',
-        'rgba(255, 159, 64, 1)',
-        'rgba(255, 99, 132, 1)',
-        'rgba(54, 162, 235, 1)',
-        'rgba(255, 206, 86, 1)',
-        'rgba(75, 192, 192, 1)',
-        'rgba(153, 102, 255, 1)',
-        'rgba(255, 159, 64, 1)',
-      ],
-      borderWidth: 1,
-    },
-  ],
-};
+	
+    function HRsrepDashboard(props) {
+        const dispatch = useDispatch();
+        const HRsrepDashboard = useSelector(({ HRsrepDashboard }) => HRsrepDashboard.HRsrepDashboard);
+        const entities = [{id: 'all', entityName: 'all'}, ...((useSelector(({ entities }) => entities.entityList)) ? useSelector(({ entities }) => entities.entityList) : [])];
+        let enrollmentList = HRsrepDashboard.data.length !== 0 ? HRsrepDashboard.data.srepData : [];
+        enrollmentList = updatedEnrollmentList(enrollmentList, entities);
+        const countEmployees = HRsrepDashboard.data.length !== 0 ? HRsrepDashboard.data.countEmployees : 0;
+        let rejectedList = HRsrepDashboard.data.length !== 0 ? HRsrepDashboard.data.rejectedList : [];
+        rejectedList = updatedEnrollmentList(rejectedList, entities);
+        let approvedList = HRsrepDashboard.data.length !== 0 ? HRsrepDashboard.data.approvedList : [];
+        approvedList = updatedEnrollmentList(approvedList, entities);
+        let pendingList = HRsrepDashboard.data.length !== 0 ? HRsrepDashboard.data.pendingList : [];
+        pendingList = updatedEnrollmentList(pendingList, entities);
+        const [data, setData] = useState([]);
+        const [open, setOpen] = useState(false);
+        const [search, setSearch] = useState('');
+        const thisYear = (new Date).getFullYear();
+        const thisYearString = (new Date).getFullYear().toString();
+        const years = ['all', `${thisYear}`,`${thisYear - 1}`, `${thisYear - 2}`, `${thisYear - 3}`, `${thisYear - 4}`];
+        const departmentList =  [{id: 'all', departmentName: 'all'}, ...((useSelector(({ departments }) => departments.deparmentList)) ? useSelector(({ departments }) => departments.deparmentList) : [])];
+        const departmentList2 =  [{id: 'all', departmentName: 'all'}, ...((useSelector(({ departments }) => departments.deparmentList)) ? useSelector(({ departments }) => departments.deparmentList) : [])];
+        const [filter, setFilter] = useState('all');
+        const [filterNew, setFilterNew] = useState('all');
+        const [chartYearfilter, setChartYearfilter] = useState(thisYearString);
+        const [Entityfilter, setEntityFilter] = useState('all');
+        const [Yearfilter, setYearFilter] = useState('all');
+        const [Departmentfilter, setDepartmentFilter] = useState('all');
+        enrollmentList = filterData(enrollmentList, search, Yearfilter, Entityfilter, Departmentfilter);
+        const [selectedRow, setSelectedRow] = useState({});
+        const [departments, setDepartments] = useState(departmentList);
+        const [departmentsNew, setDepartmentsNew] = useState(departmentList2);
+        lineChartData.labels = monthNames;
+        lineChartData.datasets[0].data = filterByMonths(approvedList, chartYearfilter, filter, filterNew); // Approved
+        lineChartData.datasets[1].data = filterByMonths(pendingList, chartYearfilter, filter, filterNew); // Pending
+        lineChartData.datasets[2].data = filterByMonths(rejectedList, chartYearfilter, filter, filterNew); // Rejected
 
-function HRsrepDashboard(props) {
+        useEffect(() => {
+            dispatch(Actions.getDashboardSrep());
+            dispatch(UtilActions.getEntities());
+        }, []);
 
-  return (
-    <SimplePage title='HR SREP DASHBOARD'>
-      <div className="flex flex-row w-full justify-between">
-        <CardWidget count={13} title={"Number Of  Approved Applications"} color="green" className="mr-6" />
-        <CardWidget count={9} title={"Number of SREP Pending Applications"} color="yellow" />
+        const handleFilter = (event) => {
+            setFilter(event.target.value);
+            const value = entities.filter(e => {
+                return e.entityName.toUpperCase() === event.target.value.toUpperCase();
+            })
+            const depts = value[0].department ?? [];
+            let newDepts = [{departmentName: 'all'}];
+            newDepts.push(...depts);
+            setDepartmentsNew(newDepts);
+            if (event.target.value === "all") {
+                setFilterNew("all");
+            };
+        }
 
-      </div>
-      <Paper className='p-20 my-20 mb-20 rounded-8 h-full'>
+        const handleFilterNew = (event) => {
+            setFilterNew(event.target.value);
+        }
 
-        <Grid container spacing={1} alignItems='center'>
-          <Grid item lg={12}>
-            <Typography variant="subtitle1" color="initial" className='font-semibold text-center'>Number Of Approved SREP Application</Typography>
-          </Grid>
-        </Grid>
-        <section className='flex flex-row items-center w-2/5'>
-          <div>
-          <SelectTextField
-            value={2020}
-            size='small'
-            label='Year'
-          >
-            {[2019, 2020].map(item => (
-              <MenuItem value={item}>
-                {item}
-              </MenuItem>
-            ))}
-          </SelectTextField>
-          </div>
-          
-          <div className='mx-10'>
-            <SelectTextField
-              value={"5C", "C-BIT", "SREL"}
-              size='small'
-              label='Entity'
-            >
-              {["5C", "C-BIT", "SREL"].map(item => (
-                <MenuItem value={item}>
-                  {item}
-                </MenuItem>
-              ))}
-            </SelectTextField>
-          </div>
-          <div className={"mr-24"}>
-            <SelectTextField
-              value={"IT", "Finance", "HR"}
-              size='small'
-              label='Department'
-            >
-              {["IT", "Finance", "HR"].map(item => (
-                <MenuItem value={item}>
-                  {item}
-                </MenuItem>
-              ))}
-            </SelectTextField>
-          </div>
-        </section>
+        const handleSearch = (event) => {
+            setSearch(event.target.value);
+            // filterData();
+        }
 
-        <BarChart data={barChartData} height='100%' />
-      </Paper>
+        const handleChartYearFilter = (event) => {
+            setChartYearfilter(event.target.value);
+        }
 
-    </SimplePage>
-  );
-}
+        const handleYearFilter = (event) => {
+            setYearFilter(event.target.value);
+        }
 
-const Status = ({ status }) => {
-  switch (status.toUpperCase()) {
-    case 'APPROVED':
-      return (
-        <Typography className={'bg-green text-white inline text-11 font-500 px-8 py-4 rounded-4'}>{status}</Typography>
-      );
-    case 'PENDING':
-      return (
-        <Typography className={'bg-yellow text-white inline text-11 font-500 px-8 py-4 rounded-4'}>{status}</Typography>
-      );
-    case 'REJECTED':
-      return (
-        <Typography className={'bg-red text-white inline text-11 font-500 px-8 py-4 rounded-4'}>{status}</Typography>
-      );
-    default: {
-      return status;
-    }
-  }
-};
+        const handleEntityFilter = (event) => {
+            setEntityFilter(event.target.value);
+            const value = entities.filter(e => {
+                return e.entityName.toUpperCase() === event.target.value.toUpperCase();
+            })
+            const depts = value[0].department ?? [];
+            let newDepts = [{departmentName: 'all'}];
+            newDepts.push(...depts);
+            setDepartments(newDepts);
+            if (event.target.value === "all") {
+                setDepartmentFilter("all");
+            };
+        }
 
-export default withReducer('personalTraining', null)(HRsrepDashboard);
+        const handleDepartmentFilter = (event) => {
+            setDepartmentFilter(event.target.value);
+        }
+
+        const ClickOpen = (n) => {
+            setSelectedRow(n);
+            setOpen(true);
+        };
+
+        const handleClose = () => {
+            setOpen(false);
+        };
+
+        const downloadPdf = () => {
+            const divId = 'hrpdf';
+            // const w = document.getElementById(divId).offsetWidth;
+            // const h = document.getElementById(divId).offsetHeight;
+            const input = document.getElementById(divId);
+            // console.log('pdf should download: ', input);
+            const page = `<HTML>
+                    <Head>
+                    <title>EnrollmentList-${new Date().toISOString().substring(0, 16)}</title>
+                        <Style type='text/css' media='print'> 
+                            .container {  
+                                display: grid;  
+                                grid-template-columns: 1fr 1fr 1fr;  
+                                grid-template-rows: 20px 20px;  
+                            }
+                            .container2 {  
+                                display: grid;  
+                                grid-template-columns: 1fr 1fr 1fr 1fr;  
+                                grid-template-rows: 20px 20px;  
+                            }
+                            th {
+                                white-space: nowrap !important;
+                            }
+                            #printSize {width : 670px} 
+                            #printLink {display : none}
+                            table th,
+                            table td {
+                                padding: 12px 15px;
+                            }
+                            table {
+                                border-collapse: collapse;
+                                margin: 25px 0;
+                                font-size: 0.9em;
+                                font-family: sans-serif;
+                                min-width: 400px;
+                                box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+                            }
+                            table thead tr {
+                                background-color: #666666;
+                                color: #ffffff;
+                                text-align: left;
+                            }
+                            table tr {
+                                text-align: left;
+                                border-collapse: collapse;
+                            }
+                            svg {
+                                display: none !important;
+                            }
+                            .MuiTablePagination-root-321 {
+                                display: none !important;
+                            }
+                        </Style>
+                    </Head>
+                    <Body>
+                        <div style="text-align: center;" class="container">
+                            <span>  </span>
+                        </div>
+                        <div class="container">
+                            <div>ENROLLMENT LIST</div>
+                            <div style="z-index: 10; position: absolute; right: 0;">
+                                Total: ${enrollmentList.length} Application(s) 
+                            </div>
+                        </div>
+                        <div class="container">
+                            <div>Date: ${new Date().toISOString().substring(0, 10)}</div>
+                            <div style="z-index: 10; position: absolute; right: 0;">
+                                Employees enrolled in SREP: ${countEmployees ?? 0} Employee(s) 
+                            </div>
+                        </div>
+                        <div class="container2">
+                            <div>
+                                FILTERS
+                            </div>
+                            <div class="container2" style="z-index: 10; position: absolute; right: 0;">
+                                <div>
+                                    Year: ${Yearfilter}
+                                </div>
+                                <div>
+                                    Entity: ${Entityfilter}
+                                </div>
+                                <div>
+                                    Department: ${Departmentfilter} 
+                                </div>
+                            </div>
+                        </div>
+                        <div class="container">${document.getElementById(divId).innerHTML}</div>
+                    </Body>
+                </HTML>`
+            var mywindow = window.open('', 'PRINT', 'height=400,width=600');
+            mywindow.document.write(page);
+            mywindow.document.close(); // necessary for IE >= 10
+            mywindow.focus(); // necessary for IE >= 10*/
+            mywindow.print();
+            mywindow.close();
+            return true;
+        };
+
+        return ( <SimplePage id='HRSREPDASHBOARD' title='HR SREP DASHBOARD'>
+                <section className="widget flex flex-row w-full" style={{ height: "320px" }}>
+                <div className="widget flex w-full sm:w-2/3 p-12" >
+                    <Paper className="w-full rounded-8 shadow-none border-1">
+                        <div className="flex items-center justify-between px-16 h-64 border-b-1">
+                            <Grid container spacing={1}>
+                            <Grid item lg={4}>
+                            <Typography className="text-16 font-semibold mt-8">SREP Statistics Breakdown</Typography>
+                            </Grid>
+                            <Grid item lg={2} md={2} sm={4} xs={4}>
+                                <SelectTextField value={thisYearString} label="Year" size='small' value={chartYearfilter} onChange={ev => handleChartYearFilter(ev)}>
+                                    {years.map((year) => (<MenuItem key={year} value={year}> {year} </MenuItem>))}
+                                </SelectTextField>
+                            </Grid>
+                            <Grid item lg={2}>
+                            <SelectTextField
+                                value={'all'}
+                                size='small'
+                                label='Entity'
+                                value={filter}
+                                onChange={ev => handleFilter(ev)}
+                            >
+                                {entities.map(({id, entityName}) => (
+                                <MenuItem value={entityName} key={id}>
+                                {entityName}
+                              </MenuItem>
+                                ))}
+                            </SelectTextField>
+                            </Grid>
+                            <Grid item lg={2}>
+                            <SelectTextField
+                                value={'all'}
+                                value={filterNew} 
+                                onChange={ev => handleFilterNew(ev)}
+                                size='small'
+                                label='Department'
+                            >
+                                {departmentsNew.map(({id, departmentName}) => (
+                                <MenuItem value={departmentName} key={Math.random()*100}>
+                                    {departmentName}
+                                </MenuItem>
+                                ))}
+                            </SelectTextField>
+                            </Grid>
+                            </Grid>
+                        </div>
+                        <div className="flex h-128 w-full p-32">
+                            <Line options={{ legend: { position: "right", labels: {boxWidth: 10,
+                                fontSize: 12, padding: 10 } } }} height={220} width={870} data={lineChartData} />
+                        </div>
+                    </Paper>
+				</div>
+				<div className="widget flex w-full sm:w-1/3 p-12">
+                    <Paper className="w-full h-full rounded-8 shadow-none border-1">
+                        <div className="flex flex-wrap items-center h-full w-full pb-20 pt-20 pl-8 pr-8">
+                                <div className="flex flex-col text-center h-100 w-full mt-10 p-8 border-b-1" style={{ marginTop: "10px"}}>
+                                    <Typography className="text-14 text-center" color="textSecondary">
+                                    Number of SREP Pending Applications
+                                    </Typography>
+                                    <div className="items-center mt-5 mb-10 text-center" style={{ marginTop: "5px"}}>
+                                        <Typography className="text-32 text-center" style={{ color: "orange" }}>{(enrollmentList && (enrollmentList.length > 0)) ? pendingList.length : 0}</Typography>
+                                    </div>
+                                </div>
+                                <div className="flex flex-col h-100 w-full text-center mt-10 p-8" style={{ marginTop: "10px"}}>
+                                    <Typography className="text-14" color="textSecondary">
+                                    Number Of  Approved Applications
+                                    </Typography>
+                                    <div className="items-center mt-5 text-center" style={{ marginTop: "5px"}}>
+                                        <Typography className="text-32 text-center" style={{ color: "green" }}>{(enrollmentList && (enrollmentList.length > 0)) ? approvedList.length : 0}</Typography>
+                                    </div>
+                                </div>                    
+                            </div>
+                    </Paper>
+				</div>
+                </section>
+
+                <Dialog open={open} onClose={handleClose} fullWidth={true} maxWidth={'sm'} aria-labelledby="form-dialog-title">
+                    <AppBar position="static">
+                        <Toolbar className="flex w-full">
+                            <Typography variant="subtitle1" color="inherit">
+                                Enrollment Details
+                            </Typography>
+                        </Toolbar>
+                    </AppBar>
+                    <DialogContent>
+                    <table className={'w-full text-justify'}>
+                        <tbody>
+                            <tr className="name"><th>Name</th><td>{selectedRow?.name}</td></tr>
+                            <tr className="employeeEmail"><th>Email</th><td>{selectedRow?.employeeEmail}</td></tr>
+                            <tr className="status"><th>Status</th><td>{selectedRow?.status}</td></tr>
+                            <tr className="entity"><th>Entity</th><td>{selectedRow?.entity}</td></tr>
+                            <tr className="department"><th>Department</th><td>{selectedRow?.department}</td></tr>
+                            <tr className="capitalFund"><th>Capital Fund</th><td>{selectedRow?.capitalFund}</td></tr>
+                            <tr className="beneficiaryName"><th>Beneficiary Name</th><td>{selectedRow?.beneficiaryName}</td></tr>
+                            <tr className="beneficiaryRelationship"><th>Beneficiary Relationship</th><td>{selectedRow?.beneficiaryRelationship}</td></tr>
+                            <tr className="beneficiaryNationality"><th>Beneficiary Nationality</th><td>{selectedRow?.beneficiaryNationality}</td></tr>
+                            <tr className="beneficiaryGender"><th>Beneficiary Gender</th><td>{selectedRow?.beneficiaryGender}</td></tr>
+                            <tr className="beneficiaryEmail"><th>Beneficiary Email</th><td>{selectedRow?.beneficiaryEmail}</td></tr>
+                        </tbody>
+                    </table>
+                </DialogContent>
+                <DialogActions className="flex justify-between m-20">
+                    <Button onClick={handleClose} color="primary">
+                        Close
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
+            <Paper className="mt-8 m-12">
+                <div className="flex flex-wrap w-full p-20">
+                    <Grid container spacing={1} >
+                        <Grid className="flex w-full flex-row" style={{ marginTop: "10px" }}>
+                            <Grid item lg={9} md={6} sm={6} xs={6} className="font-semibold text-16">
+                            Enrollment List
+                            </Grid>
+
+                            <Grid item lg={3} md={6} sm={6} xs={6} style={{ display: "flex", float: "right", color: "green" }}>
+                                <Grid style={{ marginLeft: "auto", cursor: "pointer" }} onClick = {downloadPdf}>
+                                    <Icon>{'cloud_download'}</Icon>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                        <Grid container spacing={1} className="flex flex-row mb-20">
+                            <Grid item lg={3} md={6} sm={6} xs={12}>
+                                <Formsy>
+                                    <Grid container spacing={1} className="flex flex-row">
+                                        <Grid item style={{ marginTop: "20px" }} >
+                                        Date: 
+                                        <Typography style={{ color: "blue" }}>
+                                            {new Date().toISOString().substring(0, 10)}
+                                        </Typography>
+                                        </Grid>
+                                    </Grid>
+                                </Formsy>
+                            </Grid>
+                            <Grid item lg={9} md={6} sm={12} xs={12} className="text-right flex-row" style={{ marginTop: "20px" }}>
+                                <Typography style={{ textAlign: "right" }}>
+                                    Employees enrolled in SREP 
+                                </Typography>
+                                <Grid style={{ color: "blue" }}>
+                                {countEmployees ?? 0} Employee(s)
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                        <Grid container spacing={1} className="mt-6 mb-6" >
+                            <Grid item lg={5} md={5} sm={5} xs={5}>
+                                <div className="flex items-center">
+                                    <Paper className="flex items-center w-full px-8 py-4 rounded-8">
+                                        <Icon color="action">search</Icon>
+                                        <Input
+                                            placeholder="Filter SREP"
+                                            className="flex flex-1 mx-8"
+                                            disableUnderline
+                                            fullWidth
+                                            value={search}
+                                            inputProps={{
+                                                'aria-label': 'Search'
+                                            }}
+                                            onChange={e => handleSearch(e)}
+                                        />
+                                    </Paper>
+                                </div>
+                            </Grid>
+                            <Grid item lg={2} md={2} sm={4} xs={4}>
+                                <SelectTextField value={'all'} label="Year" size='small' value={Yearfilter} onChange={ev => handleYearFilter(ev)}>
+                                    {years.map((year) => (<MenuItem key={year} value={year}> {year} </MenuItem>))}
+                                </SelectTextField>
+                            </Grid>
+                            <Grid item lg={3} md={3} sm={4} xs={4}>
+                                <SelectTextField value={'all'} label="Entity" size='small' value={Entityfilter} onChange={ev => handleEntityFilter(ev)} >
+                                    {entities.map(({id, entityName}) => (<MenuItem key={id} value={entityName}> {entityName} </MenuItem>))}
+                                </SelectTextField>
+                            </Grid>
+                            <Grid item lg={2} md={3} sm={4} xs={4}>
+                                <SelectTextField value={'all'} label="Department" size='small' value={Departmentfilter} onChange={ev => handleDepartmentFilter(ev)}>
+                                    {departments.map(({id, departmentName}) => (<MenuItem key={departmentName} value={departmentName}> {departmentName}</MenuItem>))}
+                                </SelectTextField>
+                            </Grid> 
+                        </Grid>
+                    </Grid>
+                </div>
+                <div id="hrpdf">
+                    <EnrollmentListTable data={enrollmentList} rows={columns} handleClick={ClickOpen} type="default"/>
+                </div>
+            </Paper>
+            </SimplePage>
+            );
+        }
+    
+    export default withReducer('HRsrepDashboard', reducer)(HRsrepDashboard);
