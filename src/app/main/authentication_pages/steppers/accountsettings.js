@@ -108,7 +108,7 @@ export default function AccountSettings({handleNext}) {
   const [dateFormatErr, setDateFormatErr] = React.useState("");
   const [currenciesErr, setCurrenciesErr] = React.useState("");
   const classes = useStyles();
-  let localData = {};
+  // let localData = {};
 
 
   React.useEffect(() => {
@@ -125,12 +125,7 @@ export default function AccountSettings({handleNext}) {
     setRoleErr(errors.role?.message);
   }, [errors]);
 
-  React.useEffect(() => {
-    const dataResponse = localStorage.getItem('login_data');
-	  localData = JSON.parse(dataResponse);
-    console.log('localData Account Settings: ', localData);
-  }, [])
-
+  
   const handleTimeZoneChange = (event) => {
     register({ name: 'timeZone', type: 'custom' }, { required: true });
     setValue("timeZone", event.target.value);
@@ -272,6 +267,8 @@ export default function AccountSettings({handleNext}) {
           icon: 'success'
         });
         setStepper([], 1);
+        const dataResponse = localStorage.getItem('login_data');
+	      const localData = JSON.parse(dataResponse);
         localData.company.regStep = 1;
         localStorage.setItem('login_data', JSON.stringify(localData));
         handleNext();
