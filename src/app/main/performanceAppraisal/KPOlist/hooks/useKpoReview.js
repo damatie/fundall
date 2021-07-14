@@ -43,8 +43,8 @@ const useKpoReview = ({ dispatch, push, userInfo, kpoList }) => {
 				return deptKpo.filter(kpo => kpo.status === 'completed');
 			case 'on-going':
 				return deptKpo.filter(kpo => kpo.status === 'on-going');
-			case 'requested':
-				return deptKpo.filter(kpo => kpo.status === 'requested');
+			case 'pending':
+				return deptKpo.filter(kpo => kpo.status === 'pending');
 			default:
 				return deptKpo.filter(kpo => kpo.status !== 'completed');
 		}

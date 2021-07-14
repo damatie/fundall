@@ -48,6 +48,9 @@ const useStyles = makeStyles(theme => ({
 			width: '100%'
 		}
 	},
+	tabItself: {
+		fontWeight: '600 !important'
+	},
 	filterSelectDiv: {
 		width: '45%',
 		display: 'flex',
@@ -154,12 +157,12 @@ const EmployeeKpoReview = () => {
 						classes={{ root: ' h-64' }} /* w-full */
 						className={classes.tabsDiv}
 					>
-						<Tab className="h-64 normal-case" label="Pending KPO" />
-						<Tab className="h-64 normal-case" label="Active KPO" />
+						<Tab className={` h-64 normal-case ${classes.tabItself}`} label="Pending KPO" />
+						<Tab className={` h-64 normal-case ${classes.tabItself}`} label="Active KPO" />
 						{userRole(userInfo.role?.name) === 'hrmanager' && (
-							<Tab className="h-64 normal-case" label="KPO Creation Request" />
+							<Tab className={` h-64 normal-case ${classes.tabItself}`} label="KPO Creation Request" />
 						)}
-						<Tab className="h-64 normal-case" label="Completed KPO" />
+						<Tab className={` h-64 normal-case ${classes.tabItself}`} label="Completed KPO" />
 					</Tabs>
 					<div className={classes.filterSelectDiv}>
 						<div className={classes.singleFilterSelect}>
@@ -167,12 +170,12 @@ const EmployeeKpoReview = () => {
 								name="kpoCategoryFilter"
 								label="KPO Category"
 								onChange={handleSelectFilterChange}
-								// value={selectFilterState.kpoCategoryFilter}
+								value={selectFilterState.kpoCategoryFilter}
 								// error={errors.jobTitleId}
 								// message={errors.jobTitleId?.message}
 							>
 								{kpoCategory?.length > 0 &&
-									kpoCategory.map(({ name, id }) => (
+									[{ name: 'Default Selection', id: '' }, ...kpoCategory].map(({ name, id }) => (
 										<MenuItem value={id} key={id}>
 											{name}
 										</MenuItem>
@@ -183,16 +186,19 @@ const EmployeeKpoReview = () => {
 							<SelectTextField
 								name="departmentFilter"
 								label="Department"
+								value={selectFilterState.departmentFilter}
 								onChange={handleSelectFilterChange}
 								// error={errors.jobTitleId}
 								// message={errors.jobTitleId?.message}
 							>
 								{departmentsToUseToFilter?.length > 0 &&
-									departmentsToUseToFilter.map(({ departmentName, id }) => (
-										<MenuItem value={id} key={id}>
-											{departmentName}
-										</MenuItem>
-									))}
+									[{ departmentName: 'Default Selection', id: '' }, ...departmentsToUseToFilter].map(
+										({ departmentName, id }) => (
+											<MenuItem value={id} key={id}>
+												{departmentName}
+											</MenuItem>
+										)
+									)}
 							</SelectTextField>
 						</div>
 					</div>
@@ -204,7 +210,7 @@ const EmployeeKpoReview = () => {
 						<ListOfEmployeeKpo
 							customHook={value}
 							value={userInfo.entityId}
-							type="requested"
+							type="pending"
 							filterState={selectFilterState}
 						/>
 					)}

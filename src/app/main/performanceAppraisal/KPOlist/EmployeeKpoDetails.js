@@ -81,8 +81,32 @@ const useStyles = makeStyles(theme => ({
 		pointerEvents: 'none'
 	},
 	marginTopCBtn: {
-		marginTop: '15%',
+		marginTop: '10%',
 		marginBottom: '5%'
+	},
+	kpoDetailTopBtnDiv: {
+		width: '110%',
+		marginLeft: '-10%',
+		display: 'flex',
+		justifyContent: 'space-between',
+
+		[theme.breakpoints.down('sm')]: {
+			flexDirection: 'column',
+
+			'& button:first-child': {
+				marginBottom: '10%'
+			}
+		},
+
+		[theme.breakpoints.down('xs')]: {
+			'& button': {
+				fontSize: 10
+			},
+
+			'& button:first-child': {
+				marginBottom: '3% !important'
+			}
+		}
 	}
 }));
 
@@ -156,6 +180,7 @@ const EmployeeKpoDetails = () => {
 	return (
 		<PageLayout
 			noSearch={EmployeeKpoCustomHook.showReviewKpoAndAppraisalBtn() ? false : tabValue === 0 ? false : true}
+			customToolBarSearchDivClass={true}
 			prev={{
 				url: prevUrl
 			}}
@@ -179,7 +204,7 @@ const EmployeeKpoDetails = () => {
 							</Button>
 						)}
 						{EmployeeKpoCustomHook.showReviewKpoAndAppraisalBtn() && (
-							<div>
+							<div className={classes.kpoDetailTopBtnDiv}>
 								<Button
 									variant="contained"
 									color="secondary"

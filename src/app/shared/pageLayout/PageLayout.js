@@ -20,7 +20,8 @@ const PageLayout = ({
 	button: { showButton, btnTitle, btnIcon, btnIconShow, onClick, hidden, btnComponent },
 	customHeader,
 	headerClass,
-	customToolBarClass
+	customToolBarClass,
+	customToolBarSearchDivClass
 }) => {
 	const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
 	return (
@@ -76,7 +77,12 @@ const PageLayout = ({
 							{!noSearch && (
 								<ThemeProvider theme={mainTheme}>
 									{/* <FuseAnimate animation="transition.slideDownIn" delay={300}> */}
-									<Paper className="flex items-center w-full max-w-512 px-8 py-4 rounded-8" elevation={1}>
+									<Paper
+										className={`flex items-center w-full max-w-512 px-8 py-4 rounded-8 ${
+											customToolBarSearchDivClass && 'customToolBarSearchDivClass'
+										}`}
+										elevation={1}
+									>
 										<Icon color="action">search</Icon>
 										<Input
 											placeholder="Search"

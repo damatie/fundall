@@ -179,6 +179,8 @@ const ListOfEmployeeKpo = ({ customHook, isAssigned, value, request, type, filte
 			});
 			console.log(filteredKpoByCategory);
 			setKposToDisplay([...filteredKpoByCategory]);
+		} else if (filterState?.kpoCategoryFilter === '') {
+			setKposToDisplay(getKpos(type));
 		}
 	}, [filterState?.kpoCategoryFilter]);
 
