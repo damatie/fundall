@@ -142,10 +142,13 @@ function Departments({handleNext}) {
   }
 
   const HandleSubmit = async ( ) => {
+    console.log('departmentList: ', departmentList);
+    console.log('grades: ', grades);
+    console.log('gradeLevels: ', gradeLevels);
     const dataResponse = localStorage.getItem('login_data');
 	  const localData = JSON.parse(dataResponse);
-    if (localData?.company?.hasEntities === true) {
-      if (departments.length > 0) {
+    if (localData.company.hasEntities === true) {
+      if (departmentList.length > 0) {
         try {
           loading('processing...');
           await setStepper([], 4);
@@ -172,7 +175,7 @@ function Departments({handleNext}) {
         return;
       } 
     } else {
-      if (departmentList.length > 0 && grades.length > 0 && gradeLevels.lenth > 0) {
+      if (departmentList.length > 0 && grades.length > 0 && gradeLevels.length > 0) {
         try {
           loading('processing...');
           await setStepper(genericDept, 4);
