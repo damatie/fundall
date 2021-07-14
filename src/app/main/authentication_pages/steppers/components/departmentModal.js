@@ -292,11 +292,11 @@ export default function DepartmentModal ({open, entities, setOpen, data, edit}) 
                 label='Addresses'
                 name='address'
                 variant= 'outlined'
+                placeholder= 'Enter Addresses Here'
                 // newChipKeyCodes={[188]}
                 style={{ width: '100%'}}
-                // error={errors.branchAddress}
-                // message={errors.branchAddress?.message}
-                // helperText={errors.branchAddress?.message}
+                error={errors.address}
+                message={errors.address?.message}
                 allowDuplicates={false}
                 defaultValue={address}
                 onAdd={(chip) => handleAddAddress(chip)}

@@ -200,21 +200,17 @@ export default function EntityModal ({open, setOpen, edit, data}) {
                     label='Entity Addresses (Separate with Enter)'
                     name='address'
                     variant= 'outlined'
+                    placeholder= 'Enter Entity Addresses Here'
                     // newChipKeyCodes={[188]}
                     style={{ width: '100%'}}
-                    defaultValue={entityAddresses}
-                    // error={errors.address}
-                    // message={errors.address?.message}
-                    // helperText={errors.address?.message}
-                    // type='text'
-                    // multiline
-                    // rows="6"
+                    error={errors.address}
+                    message={errors.address?.message}
                     allowDuplicates={false}
+                    defaultValue={entityAddresses}
                     onAdd={(chip) => handleAddEntityAddresses(chip)}
                     onDelete={(chip, index) => handleDeleteEntityAddresses(chip, index)}
-                    refs={register}
                 />
-                <FormHelperText style={{ color: 'red'}}>{entityAddressesErr}</FormHelperText>
+                <FormHelperText style={{ color: 'red'}}>{emtityAddressesErr}</FormHelperText>
             </Grid>
         </Grid>
         <Grid container spacing={3} justify='center' align='center' className='my-10'>
