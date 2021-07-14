@@ -86,6 +86,8 @@ export default function EmployeeGradeLevelModal ({open, entities, employeeGrades
         setValue("level", level);
         register({ name: 'description', type: 'custom' }, { required: true });
         setValue("description", description);
+        register({ name: 'compensations', type: 'custom' }, { required: true });
+        setValue("compensations", compensationObj);
         register({ name: 'gradeId', type: 'custom' }, { required: true });
         setValue("gradeId", gradeId);
         if (gradeId !== 0) {

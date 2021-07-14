@@ -74,7 +74,7 @@ export default function EmployeeGradeModal ({open, employeeGrades, entities, set
     const [gradeDescription, setGradeDescription] = React.useState(data?.gradeDescription || "");
     const [entityName, setEntityName] = React.useState("");
     const [employeeGrade, setEmployeeGrade] = React.useState("");
-    const [pipEligibility, setPipEligibility] = React.useState(true);
+    const [pipEligibility, setPipEligibility] = React.useState(data?.pipEligibility || true);
     const [employeeGradeErr, setEmployeeGradeErr] = React.useState("");
     const classes = useStyles();
 
@@ -85,8 +85,8 @@ export default function EmployeeGradeModal ({open, employeeGrades, entities, set
         setValue("gradeName", gradeName);
         register({ name: 'gradeDescription', type: 'custom' }, { required: true });
         setValue("gradeDescription", gradeDescription);
-        setPipEligibility(data?.pipEligibility);
-        console.log('Grade Data: ', data);
+        register({ name: 'pipEligibility', type: 'custom' }, { required: true });
+        setValue("pipEligibility", pipEligibility);
     }, []);
 
     React.useEffect(() => {
