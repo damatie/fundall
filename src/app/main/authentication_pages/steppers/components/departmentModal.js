@@ -62,13 +62,13 @@ const schema = yup.object().shape({
         .required(errorMsg({ name: 'Start Date', type: 'required' })),
     address: yup.array()
         // .min(1, 'Must have at least one Address')
-        // .required(errorMsg({ name: 'Address', type: 'required' })),
+        .required(errorMsg({ name: 'Address', type: 'required' })),
 });
 
 export default function DepartmentModal ({open, entities, setOpen, data, edit}) {
     
     const { register, handleSubmit, formState:{ errors }, setValue, getValues } = useForm({
-        mode: "all",
+        mode: "onBlur",
         reValidateMode: 'onChange',
         resolver: yupResolver(schema)
     });

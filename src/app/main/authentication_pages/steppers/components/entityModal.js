@@ -45,7 +45,7 @@ const schema = yup.object().shape({
         .max(1000, errorMsg({ name: 'Description', type: 'max', number: 1000 })),
     address: yup.array()
         // .min(1, 'Must have at least one Entity Addresses')
-        // .required(errorMsg({ name: 'Entity Addresses', type: 'required' })),
+        .required(errorMsg({ name: 'Entity Addresses', type: 'required' })),
 });
 
 export default function EntityModal ({open, setOpen, edit, data}) {
@@ -63,7 +63,7 @@ export default function EntityModal ({open, setOpen, edit, data}) {
     const [entityName, setEntityName] = React.useState(data?.entityName || "");
     const [description, setDescription] = React.useState(data?.description || "");
     const [employeeCode, setEmployeeCode] = React.useState(data?.employeeCode || "");
-    const [entityAddresses, setEntityAddresses] = React.useState(data?.address || []);
+    const [address, setAddress] = React.useState(data?.address || []);
     const [entityAddressesErr, setEntityAddressesErr] = React.useState("");
 
     React.useEffect(() => {
@@ -76,16 +76,16 @@ export default function EntityModal ({open, setOpen, edit, data}) {
 
       const handleAddEntityAddresses = (chip) => {
         register({ name: 'address', type: 'custom' }, { required: true });
-        entityAddresses.push(chip)
-        setValue("address", entityAddresses);
+        address.push(chip)
+        setValue("address", address);
         setEntityAddressesErr(errors.address?.message);
         // console.log('data: ', JSON.stringify({...getValues()}));
       };
     
       const handleDeleteEntityAddresses = (chip, index) => {
         register({ name: 'address', type: 'custom' }, { required: true });
-        setEntityAddresses((entityAddresses) => entityAddresses.filter((chp) => chp !== chip));
-        setValue("address", entityAddresses);
+        setAddress((address) => address.filter((chp) => chp !== chip));
+        setValue("address", address);
         setEntityAddressesErr(errors.address?.message);
       };
 
@@ -206,7 +206,7 @@ export default function EntityModal ({open, setOpen, edit, data}) {
                     error={errors.address}
                     message={errors.address?.message}
                     allowDuplicates={false}
-                    defaultValue={entityAddresses}
+                    defaultValue={address}
                     onAdd={(chip) => handleAddEntityAddresses(chip)}
                     onDelete={(chip, index) => handleDeleteEntityAddresses(chip, index)}
                 />
