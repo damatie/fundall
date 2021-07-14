@@ -53,17 +53,8 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-const schema = yup.object().shape({
-    branchAddresses: yup.array()
-});
-
 function Entities({handleNext}) {
-  const { register, handleSubmit, formState:{ errors }, setValue, getValues } = useForm({
-    mode: "all",
-    reValidateMode: 'onChange',
-    resolver: yupResolver(schema)
-  });
-
+  
   const { entities, grades, gradeLevels, accountSettings, compensationData } = useSelector(state => state.employeeMgt);
   // console.log('entities: ', entities);
   // console.log('grades: ', grades);
@@ -149,10 +140,9 @@ function Entities({handleNext}) {
   }
 
 
-  const onSubmit = async (data) => {
+  const HandleSubmit = async () => {
       if (canSubmit) {
         try {
-          const form = { ...data }
           loading('processing...');
           await setStepper(genericDept, 3);
           const dataResponse = localStorage.getItem('login_data');
@@ -180,7 +170,7 @@ function Entities({handleNext}) {
 
   return (
     <div className={classes.root}>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <div>
           <Typography variant="h5" color="initial" className='my-10'><strong>Entities</strong></Typography>
           <Typography variant="body1" color="initial" className='my-10'><strong>Please select departments that will be general for all entities</strong></Typography>
           <Grid container spacing={3} justify='space-between' align='center' style={{ marginBottom: '3rem'}}>
@@ -248,11 +238,11 @@ function Entities({handleNext}) {
             </Grid>  
           </Grid>
           <Grid container spacing={3} justify='center' align='center' className='my-10'>
-              <Button variant="contained" type='submit' color="primary">
+              <Button variant="contained" onClick={HandleSubmit} color="primary">
                   Submit 
               </Button>
           </Grid>
-      </form>
+      </div>
       <EntityModal open={openEntityModal} setOpen={setOpenEntityModal} edit={false} data={{}}/>
       <EmployeeGradeModal open={openEmployeeGradeModal} employeeGrades={accountSettingsData?.employeeGrade || []} entities={entityList} setOpen={setOpenEmployeeGradeModal} data={{}} edit={false}/>
       <EmployeeGradeLevelModal open={openEmployeeGradeLevelModal}  compensationList={compensationData || []}  employeeGrades={grades || []} entities={entityList} setOpen={setOpenEmployeeGradeLevelModal} data={{}} edit={false}/>

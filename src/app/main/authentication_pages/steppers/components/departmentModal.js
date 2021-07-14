@@ -61,8 +61,8 @@ const schema = yup.object().shape({
     startedOn: yup.string()
         .required(errorMsg({ name: 'Start Date', type: 'required' })),
     address: yup.array()
-        .min(1, 'Must have at least one Address')
-        .required(errorMsg({ name: 'Address', type: 'required' })),
+        // .min(1, 'Must have at least one Address')
+        // .required(errorMsg({ name: 'Address', type: 'required' })),
 });
 
 export default function DepartmentModal ({open, entities, setOpen, data, edit}) {
@@ -74,24 +74,22 @@ export default function DepartmentModal ({open, entities, setOpen, data, edit}) 
     });
 
     const dispatch = useDispatch();
-    const [startedOn, setStartedOn] = React.useState(new Date());
+    const [startedOn, setStartedOn] = React.useState(data.startedOn && new Date(data?.startedOn) || new Date());
     const [newAdded, setNewAdded] = React.useState(false);
     const [updated, setUpdated] = React.useState(false);
-    const [entityId, setEntityId] = React.useState(0);
+    const [entityId, setEntityId] = React.useState(data?.entityId || 0);
     const [entityErr, setEntityErr] = React.useState("");
-    const [department, setDepartment] = React.useState("");
+    const [department, setDepartment] = React.useState(data?.departmentName || "");
+    const [departmentCode, setDepartmentCode] = React.useState(data?.departmentCode || "");
+    const [description, setDescription] = React.useState(data?.description || "");
     const [address, setAddress] = React.useState(data?.address || []);
     const [addressErr, setAddressErr] = React.useState("");
     const classes = useStyles();
 
     React.useEffect(() => {
-        console.log('Data: ', data);
-      }, []);
-
-      React.useEffect(() => {
-        register({ name: 'startedOn', type: 'custom' }, { required: true });
-        setValue("startedOn", JSON.stringify(startedOn));
-      }, [startedOn]);
+      register({ name: 'startedOn', type: 'custom' }, { required: true });
+      setValue("startedOn", JSON.stringify(startedOn));
+    }, [startedOn]);
 
     React.useEffect(() => {
         setEntityErr(errors.entityId?.message);
@@ -127,7 +125,6 @@ export default function DepartmentModal ({open, entities, setOpen, data, edit}) 
         setDepartment(event.target.value);
         register({ name: 'departmentName', type: 'custom' }, { required: true });
         setValue("departmentName", event.target.value);
-        setEntityErr(errors.departmentName?.message);
       };
 
     const onSubmit = async (value) => {
@@ -202,7 +199,7 @@ export default function DepartmentModal ({open, entities, setOpen, data, edit}) 
                         labelId="demo-simple-select-outlined-label"
                         id="demo-simple-select-outlined"
                         name='entityId'
-                        defaultValue={data?.entityId}
+                        defaultValue={entityId}
                         error={errors.entityId}
                         message={errors.entityId?.message}
                         onChange={handleEntityChange}
@@ -220,7 +217,7 @@ export default function DepartmentModal ({open, entities, setOpen, data, edit}) 
                 <Input
                     name='departmentName'
                     type='text'
-                    defaultValue={data?.departmentName}
+                    defaultValue={department}
                     error={errors.departmentName}
                     message={errors.departmentName?.message}
                     onChange={handleDepartmentChange}
@@ -232,7 +229,7 @@ export default function DepartmentModal ({open, entities, setOpen, data, edit}) 
                 <Input
                     name='departmentCode'
                     type='text'
-                    defaultValue={data?.departmentCode}
+                    defaultValue={departmentCode}
                     error={errors.departmentCode}
                     message={errors.departmentCode?.message}
                     label="Department Code"
@@ -246,7 +243,7 @@ export default function DepartmentModal ({open, entities, setOpen, data, edit}) 
                     type='text'
                     multiline
                     rows="4"
-                    defaultValue={data?.description}
+                    defaultValue={description}
                     error={errors.description}
                     message={errors.description?.message}
                     helperText={errors.description?.message}
@@ -258,12 +255,12 @@ export default function DepartmentModal ({open, entities, setOpen, data, edit}) 
                 <DatePicker
                   inputVariant="outlined"
                   name='startedOn'
-                  defaultValue={data.startedOn && new Date(data?.startedOn)}
+                  maxDate={new Date()}
+                  defaultValue={startedOn}
                   error={errors.startedOn}
                   message={errors.startedOn?.message}
                   label='Start Date'
                   className="w-full"
-                  value={startedOn}
                   onChange={(newValue) => {
                     setStartedOn(newValue);
                     register({ name: 'startedOn', type: 'custom' }, { required: true });
@@ -281,12 +278,11 @@ export default function DepartmentModal ({open, entities, setOpen, data, edit}) 
                 variant= 'outlined'
                 // newChipKeyCodes={[188]}
                 style={{ width: '100%'}}
-                // defaultValue={data?.address}
                 error={errors.branchAddress}
                 message={errors.branchAddress?.message}
-                helperText={errors.branchAddress?.message}
+                // helperText={errors.branchAddress?.message}
                 allowDuplicates={false}
-                value={address}
+                defaultValue={address}
                 onAdd={(chip) => handleAddAddress(chip)}
                 onDelete={(chip, index) => handleDeleteAddress(chip, index)}
               />

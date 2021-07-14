@@ -60,6 +60,9 @@ export default function EntityModal ({open, setOpen, edit, data}) {
     // const entityAdd = data?.address !== '' ? JSON.parse(data?.address) : [];
     const [newAdded, setNewAdded] = React.useState(false);
     const [updated, setUpdated] = React.useState(false);
+    const [entityName, setEntityName] = React.useState(data?.entityName || "");
+    const [description, setDescription] = React.useState(data?.description || "");
+    const [employeeCode, setEmployeeCode] = React.useState(data?.employeeCode || "");
     const [entityAddresses, setEntityAddresses] = React.useState(data?.address || []);
     const [entityAddressesErr, setEntityAddressesErr] = React.useState("");
 
@@ -156,7 +159,7 @@ export default function EntityModal ({open, setOpen, edit, data}) {
                     // type='text'
                     // multiline
                     // rows="4"
-                    defaultValue={data.entityName}
+                    defaultValue={entityName}
                     error={errors.entityName}
                     message={errors.entityName?.message}
                     helperText={errors.entityName?.message}
@@ -171,7 +174,7 @@ export default function EntityModal ({open, setOpen, edit, data}) {
                     // type='text'
                     // multiline
                     // rows="4"
-                    defaultValue={data.employeeCode}
+                    defaultValue={employeeCode}
                     error={errors.employeeCode}
                     message={errors.employeeCode?.message}
                     helperText={errors.employeeCode?.message}
@@ -185,7 +188,7 @@ export default function EntityModal ({open, setOpen, edit, data}) {
                     type='text'
                     multiline
                     rows="4"
-                    defaultValue={data.description}
+                    defaultValue={description}
                     error={errors.description}
                     message={errors.description?.message}
                     helperText={errors.description?.message}
@@ -199,6 +202,7 @@ export default function EntityModal ({open, setOpen, edit, data}) {
                     variant= 'outlined'
                     // newChipKeyCodes={[188]}
                     style={{ width: '100%'}}
+                    defaultValue={entityAddresses}
                     error={errors.address}
                     message={errors.address?.message}
                     helperText={errors.address?.message}
@@ -206,7 +210,6 @@ export default function EntityModal ({open, setOpen, edit, data}) {
                     // multiline
                     // rows="6"
                     allowDuplicates={false}
-                    value={entityAddresses}
                     onAdd={(chip) => handleAddEntityAddresses(chip)}
                     onDelete={(chip, index) => handleDeleteEntityAddresses(chip, index)}
                 />

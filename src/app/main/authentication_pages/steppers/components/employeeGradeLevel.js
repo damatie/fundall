@@ -64,13 +64,17 @@ export default function EmployeeGradeLevelModal ({open, entities, setOpen, data,
     });
 
     const dispatch = useDispatch();
-    const [compensationObj, setCompensationObj] = React.useState(data.compensations || {});
+    const [compensationObj, setCompensationObj] = React.useState(data?.compensations || {});
     const [selectGrades, setSelectGrades] = React.useState(true);
     const [newAdded, setNewAdded] = React.useState(false);
     const [updated, setUpdated] = React.useState(false);
     const [gradeErr, setGradeErr] = React.useState("");
+    const [entityId, setEntityId] = React.useState(data?.entityId || 0);
+    const [gradeId, setGradeId] = React.useState(data?.gradeId || 0);
+    const [level, setLevel] = React.useState(data?.level || 0);
+    const [description, setDescription] = React.useState(data?.description || "");
     const [gradeList, setGradeList] = React.useState([]);
-    const [pipCompensations, setPipCompensations] = React.useState([]);
+    const [pipCompensations, setPipCompensations] = React.useState(data?.pipCompensations || []);
     const [pipCompensationsErr, setPipCompensationsErr] = React.useState("");
     const [entityErr, setEntityErr] = React.useState("");
     const classes = useStyles();
@@ -96,7 +100,7 @@ export default function EmployeeGradeLevelModal ({open, entities, setOpen, data,
 
       const handleEntityChange = async (event) => {
         setSelectGrades(true);
-        const { data: { success, data  } } = await api.get(`/entity/${event.target.value.id}`);
+        const { data: { success, data  } } = await api.get(`/entity/${event.target.value}`);
         if (success && data) {
             // console.log('Grades: ', data.employeeGrades);
             if(data.employeeGrades.length > 0) {
@@ -104,8 +108,9 @@ export default function EmployeeGradeLevelModal ({open, entities, setOpen, data,
                 setSelectGrades(false);
             }
         }
+        setEntityId(event.target.value)
         register({ name: 'entityId', type: 'custom' }, { required: true });
-        setValue("entityId", event.target.value.id);
+        setValue("entityId", event.target.value);
         setEntityErr(errors.entityId?.message);
       };
 
@@ -203,12 +208,12 @@ export default function EmployeeGradeLevelModal ({open, entities, setOpen, data,
                     labelId="demo-simple-select-outlined-label"
                     id="demo-simple-select-outlined"
                     name='entityId'
-                    defaultValue={data?.entityId}
+                    defaultValue={entityId}
                     onChange={handleEntityChange}
                     label="Entity"
                     >
                     {entities.map(item => (
-                    <MenuItem key={item.id} value={item}>
+                    <MenuItem key={item.id} value={item.id}>
                         {item.entityName}
                     </MenuItem>))}
                     </Select>
@@ -226,7 +231,7 @@ export default function EmployeeGradeLevelModal ({open, entities, setOpen, data,
                     name='gradeId'
                     disabled={selectGrades}
                     variant={selectGrades ? 'filled' : 'outlined'}
-                    defaultValue={data?.gradeId}
+                    defaultValue={gradeId}
                     error={errors.gradeId}
                     message={errors.gradeId?.message}
                     onChange={handleGradeChange}
@@ -246,7 +251,7 @@ export default function EmployeeGradeLevelModal ({open, entities, setOpen, data,
                     label='Level'
                     name='level'
                     type='number'
-                    defaultValue={data?.level}
+                    defaultValue={level}
                     error={errors.level}
                     message={errors.level?.message}
                     helperText={errors.level?.message}
@@ -260,7 +265,7 @@ export default function EmployeeGradeLevelModal ({open, entities, setOpen, data,
                     type='text'
                     multiline
                     rows="4"
-                    defaultValue={data?.description}
+                    defaultValue={description}
                     error={errors.description}
                     message={errors.description?.message}
                     helperText={errors.description?.message}
@@ -284,8 +289,7 @@ export default function EmployeeGradeLevelModal ({open, entities, setOpen, data,
                         id="demo-simple-select-outlined"
                         multiple
                         native
-                        defaultValue={data?.pipCompensations}
-                        value={pipCompensations}
+                        defaultValue={pipCompensations}
                         onChange={handlePipCompensationsChange}
                         inputProps={{ id: 'select-multiple-native', }}
                         name='pipCompensations'

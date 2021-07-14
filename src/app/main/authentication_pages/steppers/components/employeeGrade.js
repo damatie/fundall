@@ -68,8 +68,10 @@ export default function EmployeeGradeModal ({open, employeeGrades, entities, set
     const dispatch = useDispatch();
     const [newAdded, setNewAdded] = React.useState(false);
     const [updated, setUpdated] = React.useState(false);
-    const [entityId, setEntityId] = React.useState(0);
+    const [entityId, setEntityId] = React.useState(data?.entityId || 0);
     const [entityErr, setEntityErr] = React.useState("");
+    const [gradeName, setGradeName] = React.useState(data?.gradeName || "");
+    const [gradeDescription, setGradeDescription] = React.useState(data?.gradeDescription || "");
     const [entityName, setEntityName] = React.useState("");
     const [employeeGrade, setEmployeeGrade] = React.useState("");
     const [pipEligibility, setPipEligibility] = React.useState(true);
@@ -77,6 +79,7 @@ export default function EmployeeGradeModal ({open, employeeGrades, entities, set
     const classes = useStyles();
 
     React.useEffect(() => {
+        setPipEligibility(data?.pipEligibility);
         console.log('Grade Data: ', data);
     }, []);
 
@@ -180,7 +183,7 @@ export default function EmployeeGradeModal ({open, employeeGrades, entities, set
                     labelId="demo-simple-select-outlined-label"
                     id="demo-simple-select-outlined"
                     name='entityId'
-                    defaultValue={data.entityId}
+                    defaultValue={entityId}
                     error={errors.entityId}
                     message={errors.entityId?.message}
                     onChange={handleEntityChange}
@@ -203,7 +206,7 @@ export default function EmployeeGradeModal ({open, employeeGrades, entities, set
                     labelId="demo-simple-select-outlined-label"
                     id="demo-simple-select-outlined"
                     name='gradeName'
-                    defaultValue={data.gradeName}
+                    defaultValue={gradeName}
                     error={errors.gradeName}
                     message={errors.gradeName?.message}
                     onChange={handleEmployeeGradeChange}
@@ -224,7 +227,7 @@ export default function EmployeeGradeModal ({open, employeeGrades, entities, set
                     type='text'
                     multiline
                     rows="4"
-                    defaultValue={data.gradeDescription}
+                    defaultValue={gradeDescription}
                     error={errors.gradeDescription}
                     message={errors.gradeDescription?.message}
                     helperText={errors.gradeDescription?.message}
