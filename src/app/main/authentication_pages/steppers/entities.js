@@ -141,12 +141,12 @@ function Entities({handleNext}) {
 
 
   const HandleSubmit = async () => {
-      if (canSubmit) {
+    if (grades.length > 0 && gradeLevels.length > 0) {
         try {
           loading('processing...');
           await setStepper(genericDept, 3);
           const dataResponse = localStorage.getItem('login_data');
-	        const localData = JSON.parse(dataResponse);
+          const localData = JSON.parse(dataResponse);
           localData.company.regStep = 3;
           localStorage.setItem('login_data', JSON.stringify(localData));
           swal.fire({

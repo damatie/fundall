@@ -289,7 +289,7 @@ export default function DepartmentModal ({open, entities, setOpen, data, edit}) 
             </Grid>
             <Grid item lg={6} md={12} sm={12} xs={12}>
               <ChipInput
-                label='Addresses'
+                label='Addresses (Separate with Enter)'
                 name='address'
                 variant= 'outlined'
                 placeholder= 'Enter Addresses Here'
