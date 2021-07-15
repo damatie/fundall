@@ -84,6 +84,14 @@ function Entities({handleNext}) {
   }, [])
 
   React.useEffect(() => {
+    dispatch(Actions.getEntities());
+    dispatch(Actions.getAccountSettings());
+    dispatch(Actions.getCompensations());
+    dispatch(Actions.getGrades());
+    dispatch(Actions.getGradeLevels());
+  }, [openEntityModal, openEmployeeGradeModal, openEmployeeGradeLevelModal]);
+
+  React.useEffect(() => {
     if (grades.length > 0 && gradeLevels.lenth > 0) {
       setCanSubmit(true);
     }

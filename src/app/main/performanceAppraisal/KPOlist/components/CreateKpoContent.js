@@ -6,6 +6,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import SharedButton from 'app/shared/button/SharedButton';
 import useKpoContentList from '../hooks/useKpoContent';
 import { Controller } from 'react-hook-form';
+import Button from '@material-ui/core/Button';
+import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined';
 
 const CreateKpoContent = ({customHook}) => {
   const { open, handleCloseModal, register, errors, handleSubmit, onSubmit, control, kpoCategory, pipEligibility } = customHook;

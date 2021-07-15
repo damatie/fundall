@@ -90,6 +90,15 @@ function Departments({handleNext}) {
   }, []);
 
   React.useEffect(() => {
+    dispatch(Actions.getEntities());
+    dispatch(Actions.getAccountSettings());
+    dispatch(Actions.getCompensations());
+    dispatch(Actions.getGrades());
+    dispatch(Actions.getGradeLevels());
+    dispatch(Actions.getDepartments());
+  }, [openDepartmentModal, openEmployeeGradeModal, openEmployeeGradeLevelModal]);
+
+  React.useEffect(() => {
     setEntityList(entities);
     setGradeList(grades);
     setGradeLevelList(gradeLevels);

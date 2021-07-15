@@ -141,7 +141,6 @@ const organisationList = [
 export default function Register() {
   const { register, handleSubmit, formState:{ errors }, setValue } = useForm({
     mode: "onBlur",
-    // mode: "all",
     reValidateMode: 'onChange',
     resolver: yupResolver(schema)
   });

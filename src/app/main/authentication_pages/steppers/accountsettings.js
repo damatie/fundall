@@ -79,7 +79,7 @@ const schema = yup.object().shape({
 
 export default function AccountSettings({handleNext}) {
   const { register, handleSubmit, formState:{ errors }, setValue, getValues } = useForm({
-    mode: "all",
+    mode: "onBlur",
     reValidateMode: 'onChange',
     resolver: yupResolver(schema)
   });

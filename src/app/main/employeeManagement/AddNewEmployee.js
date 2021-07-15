@@ -88,8 +88,7 @@ const schema = yup.object().shape({
 function AddNewEmployee() {
   
   const { register, handleSubmit, formState:{ errors }, setValue } = useForm({
-    // mode: "onBlur",
-    mode: "all",
+    mode: "onBlur",
     reValidateMode: 'onChange',
     resolver: yupResolver(schema)
   });

@@ -50,15 +50,15 @@ const schema = yup.object().shape({
 export default function EntityModal ({open, setOpen, edit, data}) {
     
     const { register, handleSubmit, formState:{ errors }, setValue, getValues } = useForm({
-        mode: "all",
+        mode: "onBlur",
         reValidateMode: 'onChange',
         resolver: yupResolver(schema)
     });
 
     const dispatch = useDispatch();
     // const entityAdd = data?.address !== '' ? JSON.parse(data?.address) : [];
-    const [newAdded, setNewAdded] = React.useState(false);
-    const [updated, setUpdated] = React.useState(false);
+    const [newAdded, setNewAdded] = React.useState([]);
+    const [updated, setUpdated] = React.useState([]);
     const [entityName, setEntityName] = React.useState(data?.entityName || "");
     const [description, setDescription] = React.useState(data?.description || "");
     const [employeeCode, setEmployeeCode] = React.useState(data?.employeeCode || "");
@@ -74,6 +74,12 @@ export default function EntityModal ({open, setOpen, edit, data}) {
         setValue("address", addresses);
         setAddresses(addresses);
       }, [addresses]);
+    
+    React.useEffect(() => {
+        if (edit === false) {
+            data = {};
+        }
+    }, []);
     
     React.useEffect(() => {
         setAddressesErr(errors.address?.message);
@@ -104,20 +110,22 @@ export default function EntityModal ({open, setOpen, edit, data}) {
                 const { data: { message, success  } } = await api.patch(`/entity/${data.id}`, form);
                 if (success) {
                     swal.fire({
-                        text: message,
+                        text: message ?? 'Something went wrong...',
                         icon: 'success'
                     });
                     setOpen(false);
-                    setUpdated(true);
+                    updated.push('changed')
+                    setUpdated(updated);
+                    data = {};
                 } else {
                     swal.fire({
-                        text: 'Something went wrong...',
+                        text: message ?? 'Something went wrong...',
                         icon: 'error'
                     })
                 }
             } catch (e) {
                 swal.fire({
-                    text: 'Something went wrong...',
+                    text: e?.message ?? 'Something went wrong...',
                     icon: 'error'
                 })
             }
@@ -131,16 +139,18 @@ export default function EntityModal ({open, setOpen, edit, data}) {
                         icon: 'success'
                     });
                     setOpen(false);
-                    setNewAdded(true);
+                    newAdded.push('changed')
+                    setNewAdded(newAdded);
+                    data = {};
                 } else {
                     swal.fire({
-                        text: 'Something went wrong...',
+                        text: message ?? 'Something went wrong...',
                         icon: 'error'
                     })
                 }
             } catch (e) {
                 swal.fire({
-                    text: 'Something went wrong...',
+                    text: e?.message ?? 'Something went wrong...',
                     icon: 'error'
                 })
             }

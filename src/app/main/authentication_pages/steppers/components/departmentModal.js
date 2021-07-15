@@ -61,7 +61,7 @@ const schema = yup.object().shape({
     startedOn: yup.string()
         .required(errorMsg({ name: 'Start Date', type: 'required' })),
     address: yup.array()
-        // .min(1, 'Must have at least one Address')
+        .min(1, 'Must have at least one Address')
         .required(errorMsg({ name: 'Address', type: 'required' })),
 });
 
@@ -75,8 +75,8 @@ export default function DepartmentModal ({open, entities, setOpen, data, edit}) 
 
     const dispatch = useDispatch();
     const [startedOn, setStartedOn] = React.useState(data.startedOn && new Date(data?.startedOn) || new Date());
-    const [newAdded, setNewAdded] = React.useState(false);
-    const [updated, setUpdated] = React.useState(false);
+    const [newAdded, setNewAdded] = React.useState([]);
+    const [updated, setUpdated] = React.useState([]);
     const [entityId, setEntityId] = React.useState(data?.entityId || 0);
     const [entityErr, setEntityErr] = React.useState("");
     const [department, setDepartment] = React.useState(data?.departmentName || "");
@@ -100,6 +100,9 @@ export default function DepartmentModal ({open, entities, setOpen, data, edit}) 
       setValue("description", description);
       register({ name: 'address', type: 'custom' }, { required: true });
       setValue("address", address);
+      if (edit === false) {
+        data = {};
+      }
     }, []);
 
     React.useEffect(() => {
@@ -114,6 +117,8 @@ export default function DepartmentModal ({open, entities, setOpen, data, edit}) 
 
       React.useEffect(() => {
         dispatch(Actions.getDepartments());
+        console.log('newAdded: ', newAdded)
+        console.log('updated: ', updated)
       }, [newAdded, updated]);
 
       const handleEntityChange = async (event) => {
@@ -158,16 +163,18 @@ export default function DepartmentModal ({open, entities, setOpen, data, edit}) 
                         icon: 'success'
                     });
                     setOpen(false);
-                    setUpdated(true);
+                    updated.push('changed')
+                    setUpdated(updated);
+                    data = {};
                 } else {
                     swal.fire({
-                        text: 'Something went wrong...',
+                        text: message ?? 'Something went wrong...',
                         icon: 'error'
                     })
                 }
             } catch (e) {
                 swal.fire({
-                    text: 'Something went wrong...',
+                    text: e?.message ?? 'Something went wrong...',
                     icon: 'error'
                 })
             }
@@ -181,16 +188,18 @@ export default function DepartmentModal ({open, entities, setOpen, data, edit}) 
                         icon: 'success'
                     });
                     setOpen(false);
-                    setNewAdded(true);
+                    newAdded.push('changed')
+                    setNewAdded(newAdded);
+                    data = {};
                 } else {
                     swal.fire({
-                        text: 'Something went wrong...',
+                        text: message ?? 'Something went wrong...',
                         icon: 'error'
                     })
                 }
             } catch (e) {
                 swal.fire({
-                    text: 'Something went wrong...',
+                    text: e?.message ?? 'Something went wrong...',
                     icon: 'error'
                 })
             }
@@ -287,7 +296,7 @@ export default function DepartmentModal ({open, entities, setOpen, data, edit}) 
                 />
               </FormControl>
             </Grid>
-            <Grid item lg={6} md={12} sm={12} xs={12}>
+            <Grid item lg={12} md={12} sm={12} xs={12}>
               <ChipInput
                 label='Addresses (Separate with Enter)'
                 name='address'
