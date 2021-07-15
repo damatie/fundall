@@ -156,8 +156,12 @@ function StepperMain() {
         <>
         <Grid container spacing={3} justify='center' align='center' style={{ marginBottom: '3rem', marginTop: '3rem'}}>
           {/* <Button onClick={handleReset}>Reset</Button> */}
-          <Typography variant="h3" color="initial" className='my-5'>REGISTRATION COMPLETED</Typography>
-          <Typography variant="body2" color="initial" className='my-5'>You have Successfully Completed your Company Registration</Typography>
+          <Grid item lg={12} md={12} sm={12} xs={12} align='center' style={{ marginBottom: '15px' }} >
+            <Typography variant="h3" color="initial" className='my-10'>REGISTRATION COMPLETED</Typography>
+          </Grid>
+          <Grid item lg={12} md={12} sm={12} xs={12} align='center' style={{ marginBottom: '15px' }} >
+            <Typography variant="body2" color="initial" className='my-10'>You have Successfully Completed your Company Registration</Typography>
+          </Grid>
           <Button variant="contained" color="secondary" className='mx-5' style={{ marginLeft: '10px', marginRight: '10px' }} onClick={exitRegistration}>
             EXIT REGISTRATION
           </Button>
