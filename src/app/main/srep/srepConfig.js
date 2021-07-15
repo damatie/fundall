@@ -26,6 +26,10 @@ const SrepConfig = {
 		{
 			path: '/srep/admin/dashboard',
 			component: React.lazy(() => import('./dashboards/HRsrepDashboard'))
+		},
+		{
+			path: '/srep/finance/dashboard',
+			component: React.lazy(() => import('./dashboards/FinanceSrepDashboard'))
 		}
 	]
 };

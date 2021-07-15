@@ -1,85 +1,64 @@
-import SideModal from 'app/shared/modal/SharedModal';
+import SideModal from 'app/shared/modal/SideModal';
 import React from 'react';
 import Input from 'app/shared/TextInput/Input';
-import Card from '@material-ui/core/Card';
-import { CardContent, CardHeader } from '@material-ui/core';
-import { Typography } from '@material-ui/core';
 import SelectTextField from 'app/shared/TextInput/SelectTextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import SharedButton from 'app/shared/button/SharedButton';
 import useKpoContentList from '../hooks/useKpoContent';
+import AddIcon from '@material-ui/icons/Add';
 import { Controller } from 'react-hook-form';
+import KpoPreList from './KpoPreList';
 
 const CreateKpoContent = ({customHook}) => {
-  const { open, handleCloseModal, register, errors, handleSubmit, onSubmit, control, kpoCategory, pipEligibility } = customHook;
+  const { open, handleCloseModal, register, errors, handleSubmit, onSubmit, control, kpoCategory, pipEligibility, handleAddList, contentList, contentSelectedItem, setContentSelectedItem } = customHook;
+  // console.log(errors);
+  // console.log(contentSelectedItem.target);
   return (
     <SideModal
       title='Add KPO Content'
       open={open}
       handleClose={handleCloseModal}
     >
-          <div className="flex-col flex">
-            <div>
-            <Typography variant="subtitle2" className="my-6">
-              KPO Category
-            </Typography>
-            <Typography variant="body2" className="my-6">
-              TEstdnkjndjnkjfd kdfnfd
-            </Typography>
-            </div>
-            </div>
-            <Typography variant="subtitle2" className="my-6 mt-4">
-              Description
-            </Typography>
-            <Typography variant="body2" className="my-6">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Qui autem esse poteris, 
-              nisi te amor ipse ceperit? Atque haec ita iustitiae propria sunt, ut sint virtutum reliquarum communia. 
-              Sed ea mala virtuti magnitudine obruebantur. Sic vester sapiens magno aliquo emolumento commotus cicuta, 
-              si opus erit, dimicabit. Tu vero, inquam, ducas licet, si sequetur; Duo Reges: constructio interrete. Sic, 
-              et quidem diligentius saepiusque ista loquemur inter nos agemusque communiter. Pudebit te, inquam, illius tabulae, 
-              quam Cleanthes sane commode verbis depingere solebat.
-            </Typography>
-            <Typography variant="subtitle2" className="my-6">
-             Target
-            </Typography>
-            <Typography variant="body2" className="my-6">
-              Annually
-            </Typography>
-            <Typography variant="subtitle2" className="my-6">
-              PIP Target
-            </Typography>
-            <Typography variant="body2" className="my-6">
-              100%
-            </Typography>
-      <form onSubmit={handleSubmit(onSubmit())}>
-        <Controller
-          control={control}
-          name='kpoCategoryId'
-          as={
-            <SelectTextField
-              label='KPO Category'
-              className='my-10'
-              error={errors.kpoCategoryId}
-              message={errors.kpoCategoryId?.message}
-            >
-              {kpoCategory.map(item => {
-                if(item.status.toUpperCase() === 'ACTIVE') {
-                  return (
-                    <MenuItem value={item.id}>
-                      {item.name}
-                    </MenuItem>
-                  )
-                }
-              })}
-            </SelectTextField>
-          }
-        />
+      <KpoPreList customHook={customHook}/>
+
+      <form onSubmit={handleSubmit()}>
+          <SelectTextField
+            label='KPO Category'
+            className='my-10'
+            control={control}
+            name='kpoCategoryId'
+            id='kpoCategoryId'
+            error={errors.kpoCategoryId}
+            onChange={ (ev) => setContentSelectedItem({
+              ...contentSelectedItem,
+              kpoCategoryId: parseInt(ev.target.value)
+            })}
+            value={contentSelectedItem?.kpoCategoryId}
+            message={errors.kpoCategoryId?.message}
+          >
+            {kpoCategory.map(item => {
+              if(item.status.toUpperCase() === 'ACTIVE') {
+                return (
+                  <MenuItem value={item.id}>
+                    {item.name}
+                  </MenuItem>
+                )
+              }
+            })}
+          </SelectTextField>
         
         <Input
           name='kpoDescription'
+          id='kpoDescription'
           label='Description'
           className='my-16'
+          value = {contentSelectedItem?.kpoDescription}
+          onChange={ (ev) => setContentSelectedItem({
+            ...contentSelectedItem,
+            kpoDescription: ev.target.value
+          })}
           multiline
+          maxLength={100}
           error={errors.kpoDescription}
           message={errors.kpoDescription?.message}
           refs={register}
@@ -87,30 +66,55 @@ const CreateKpoContent = ({customHook}) => {
         <Input
           className='my-16'
           name='target'
+          id='target'
           label='Target'
+          value={contentSelectedItem?.target}
+          onChange={ (ev) => setContentSelectedItem({
+            ...contentSelectedItem,
+            target: ev.target.value
+          })}
           error={errors.target}
           message={errors.target?.message}
           refs={register}
-          type='text'
+          type='number'
         />
         {pipEligibility && (
           <Input
             className='my-16'
             name='kpoPipTarget'
+            id='kpoPipTarget'
             label='PIP Target'
+            value={contentSelectedItem?.kpoPipTarget}
+            onChange={ (ev) => setContentSelectedItem({
+              ...contentSelectedItem,
+              kpoPipTarget: parseInt(ev.target.value)
+            })}
             error={errors.kpoPipTarget}
             message={errors.kpoPipTarget?.message}
             refs={register}
             type='number'
           />
         )}
+
+          <SharedButton
+            variant='contained'
+            color='secondary'
+            type='button'
+            startIcon={<AddIcon/>}
+            disabled={Object.keys(errors).length !==0 || contentList.length >= 20 || !contentSelectedItem.kpoPipTarget || ! contentSelectedItem.target|| ! contentSelectedItem.kpoDescription|| ! contentSelectedItem.kpoCategoryId}
+            onClick={(ev) => {handleAddList(contentSelectedItem)}}
+          >
+            ADD NEW
+          </SharedButton>
         <SharedButton
           variant='contained'
           color='primary'
-          type='submit'
+          type='button'
           className='flex mx-auto'
+          disabled={!contentList.length }
+          onClick={(ev) => {onSubmit()}}
         >
-          Create
+          SUBMIT
         </SharedButton>
       </form>
     </SideModal>

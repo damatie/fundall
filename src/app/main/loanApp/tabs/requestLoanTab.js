@@ -142,7 +142,7 @@ function RequestLoanTab(props) {
 	// 		if (otherDetails?.amountApproved?.length < 1)
 	// 			setIsFormValid(false)
 	// 		else {
-	// 			console.log("now approve")
+	// 			// console.log("now approve")
 	// 			setIsFormValid(true)
 	// 		}
 	// 	}

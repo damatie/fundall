@@ -99,13 +99,11 @@ const EmployeeTable = ({ data, push, handleDelete, handleFilter, onboarding, col
               size='small'
               onChange={handleFilter}
             >
-              {
-								roles.map(({id, name}) => (
-									<MenuItem key={id} value={id}>
-										{name}
-									</MenuItem>
-								))
-							}
+              {roles.map(({id, name}) => (
+					<MenuItem key={id} value={id}>
+						{name}
+					</MenuItem>
+				))}
             </SelectTextField>
           </Grid> 
         </Grid>

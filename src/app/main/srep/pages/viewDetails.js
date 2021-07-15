@@ -88,7 +88,7 @@ function AddTrustDeed(props) {
     }
 
     const getEntity = (entityId) =>{
-        // console.log(entityId)
+        console.log(entityId)
         let entities = props.entities;
         if(entities){
             const entity = entities.find(entity => {return parseInt(entity.id) === parseInt(entityId)});

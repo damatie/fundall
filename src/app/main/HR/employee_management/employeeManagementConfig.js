@@ -11,10 +11,6 @@ const EmployeeManagementConfig = {
 			component: React.lazy(() => import('./profile/employeeProfile'))
 		},
 		{
-			path: '/hr/employee_management/new',
-			component: React.lazy(() => import('./employee/employee'))
-		},
-		{
 			path: '/hr/employee_management',
 			component: React.lazy(() => import('./employee/manageEmployee'))
 		},

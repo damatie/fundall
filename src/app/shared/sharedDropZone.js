@@ -110,7 +110,7 @@ export default function SharedDropzone(props) {
         <input {...getInputProps()} name={props.name}/>
         {(props.allowMutliple)? 
           <p>Drag 'n' drop some files here, or click to select files</p>
-          : <p>Drag 'n' drop a file here, or click to select a file</p>
+          : <p>{props.placeholder ?? "Drag 'n' drop a file here, or click to select a file"}</p>
         }
         
       </Container>

@@ -24,6 +24,7 @@ const Input = forwardRef((props, ref) => {
     color,
     multiline,
     placeholder,
+    maxLength,
   } = props;
 
   const [showPassword, setShowPassword] = useState(false);
@@ -73,7 +74,7 @@ const Input = forwardRef((props, ref) => {
             </IconButton>
           </InputAdornment>
         ),
-      } : null}
+      } : maxLength ?  { maxLength: maxLength } : null}
     />
   );
 });

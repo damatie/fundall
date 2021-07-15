@@ -6,6 +6,7 @@ import swal from 'sweetalert2';
 export const GET_KPO_BY_DEPT = 'GET KPO BY DEPT';
 export const GET_ASSIGNED_KPO = 'GET ASSIGNED KPO';
 export const GET_ENTITIES = 'GET ENTITIES';
+export const GET_ALL_ENITIES = 'GET ALL ENITIES';
 export const GET_KPO_BY_ROLE = 'GET KPO BY ROLE';
 export const OPEN_REQUEST_KPO_MODAL = 'OPEN REQUEST KPO MODAL';
 export const CLOSE_REQUEST_KPO_MODAL = 'CLOSE REQUEST KPO MODAL';
@@ -70,10 +71,29 @@ export const getKpoByEntity = (id) => {
   }
 };
 
+export const getAllEntities = () => {
+  return async (dispatch) => {
+    try {
+      const { data: { data, success } } = await api.get('/entity');
+      if(success) {
+        dispatch({
+          type: GET_ALL_ENITIES,
+          payload: data || []
+        })
+      }
+    } catch (e) {
+      dispatch({
+        type: GET_ALL_ENITIES,
+        payload: []
+      })
+    }
+  };
+};
+
 export const getEntities = (id) => {
   return async (dispatch) => {
     try {
-      const { data: { data } } = await api.get('/entity/all');
+      const { data: { data } } = await api.get('/entity/');
       dispatch({
         type: GET_ENTITIES,
         payload: data

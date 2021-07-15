@@ -209,7 +209,7 @@ function TrainingList(props) {
     const [tabValue, setTabValue] = React.useState(0);
 
     function handleChangeTab(event, value) {
-        // console.log(event, value)
+        console.log(event, value)
         setTabValue(value);
     }
 
@@ -302,7 +302,7 @@ function TrainingList(props) {
             // console.log(id.id)
             changeDepartment(id.id);
         }
-        // console.log(event)
+        console.log(event)
         setFilter({ ...filter, [event.target.name]: event.target.value });
     }
 

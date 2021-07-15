@@ -8,6 +8,8 @@ import SettingsPanel from 'app/fuse-layouts/shared-components/SettingsPanel';
 import clsx from 'clsx';
 import React, { useContext, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { Redirect } from 'react-router';
+// import { Link, useHistory, Redirect } from 'react-router-dom';
 import { renderRoutes } from 'react-router-config';
 import FooterLayout1 from './components/FooterLayout1';
 import LeftSideLayout1 from './components/LeftSideLayout1';
@@ -93,6 +95,35 @@ const isUserLoggedin = (user) => {
 	return true;
 }
 
+const changePasswordCondition = (profileStateData) => {
+	if (isUserLoggedin(profileStateData) && (profileStateData?.isActivated !== true)) {
+		// route to change password
+		return <Redirect to='/auth/changepassword' />;
+	}
+}
+
+const completeRegCondition = () => {
+	const dataResponse = localStorage.getItem('login_data');
+	const data = JSON.parse(dataResponse);
+	// console.log('User Login Data: ', data);
+	if (data?.role?.name.toLowerCase().trim() === "hr admin") {
+		if (data?.company?.hasEntities === true)  {
+			// route to complete registration
+			if (data?.company?.regStep < 4) {
+				// console.log('should Redirect to Complete Registration ');
+				// window.location.href('/auth/complete-registration');
+				return <Redirect to='/auth/complete-registration' />
+			}
+		} else {
+			// route to complete registration
+			if (data?.company?.regStep < 3) {
+				// console.log('should Redirect to Complete Registration 3 steps');
+				return <Redirect to='/auth/complete-registration' />
+			}
+		}
+	}
+}
+
 function Layout1(props) {
 	const config = useSelector(({ fuse }) => fuse.settings.current.layout.config);
 	const profileState = useSelector(({ profile }) => profile);
@@ -112,6 +143,13 @@ function Layout1(props) {
 			dispatch(Actions.getDepartmentEmployees(profileState.data.department.id))
 		}
 	}, [profileState.data]);
+	
+	useEffect(() => {
+		changePasswordCondition(profileState.data);
+		// completeRegCondition();
+	}, []);
+
+
 
 	const appContext = useContext(AppContext);
 	const classes = useStyles(props);
@@ -175,7 +213,7 @@ function Layout1(props) {
 
 					<FuseMessage />
 					<Permission userProfile={profileState.data} id={id} token={token}/>
-					<ChangePasswordModal open={isUserLoggedin(profileState.data) ? profileState.data?.isActivated ? false : true : false}/>
+					{/* <ChangePasswordModal open={isUserLoggedin(profileState.data) ? profileState.data?.isActivated ? false : true : false}/> */}
 				</div>
 			);
 		}
@@ -229,7 +267,7 @@ function Layout1(props) {
 
 					<FuseMessage />
 					<Permission userProfile={profileState.data} id={id} token={token}/>
-					<ChangePasswordModal open={isUserLoggedin(profileState.data) ? profileState.data?.isActivated ? false : true : false}/>
+					{/* <ChangePasswordModal open={isUserLoggedin(profileState.data) ? profileState.data?.isActivated ? false : true : false}/> */}
 				</div>
 			);
 		}

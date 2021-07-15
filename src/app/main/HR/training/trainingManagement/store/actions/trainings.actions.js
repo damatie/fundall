@@ -40,7 +40,7 @@ export function getApprovedTraining(offset = 0, limit = 20) {
 						payload: []
 					})
 			}).catch(err => {
-				// console.log(err);
+				console.log(err);
 				// swal.fire(
 				//     'Oops!',
 				//     'something went wrong',
@@ -79,7 +79,7 @@ export function getRejectedTraining(offset = 0, limit = 20) {
 						payload: []
 					})
 			}).catch(err => {
-				// console.log(err);
+				console.log(err);
 				// swal.fire(
 				//     'Oops!',
 				//     'something went wrong',
@@ -118,7 +118,7 @@ export function getPendingTraining(offset = 0, limit = 20) {
 						payload: []
 					})
 			}).catch(err => {
-				// console.log(err);
+				console.log(err);
 				// swal.fire(
 				//     'Oops!',
 				//     'something went wrong',
@@ -157,7 +157,7 @@ export function getReviewedTraining(offset = 0, limit = 20) {
 						payload: []
 					})
 			}).catch(err => {
-				// console.log(err);
+				console.log(err);
 				// swal.fire(
 				//     'Oops!',
 				//     'something went wrong',

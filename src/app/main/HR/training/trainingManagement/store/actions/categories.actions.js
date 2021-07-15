@@ -34,7 +34,7 @@ export function getCategories() {
 						payload: []
 					})
 			}).catch(err => {
-				// console.log(err);
+				console.log(err);
 				swal.fire(
 					'Oops!',
 					'something went wrong',
@@ -60,7 +60,7 @@ export function getEntities() {
 						payload: []
 					})
 			}).catch(err => {
-				// // console.log(err);
+				// console.log(err);
 			})
 	}
 }
@@ -81,7 +81,7 @@ export function getDepartments(id) {
 						payload: []
 					})
 			}).catch(err => {
-				// // console.log(err);
+				// console.log(err);
 			})
 	}
 }
@@ -102,7 +102,7 @@ export function getRoles() {
 						payload: []
 					})
 			}).catch(err => {
-				// // console.log(err);
+				// console.log(err);
 			})
 	}
 }
@@ -238,7 +238,7 @@ export function deleteCategory(id) {
 						}
 					}
 					).catch(e => {
-						// console.log(e);
+						console.log(e);
 						swal.fire(
 							'Oops!',
 							'something went wrong',

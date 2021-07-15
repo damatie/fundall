@@ -71,7 +71,7 @@ export function getAllTrainings() {
 							}
 						})
 					}
-					// console.log(events);
+					console.log(events);
 					dispatch({
 						type: GET_TRAININGS,
 						payload: data.data,
@@ -87,7 +87,7 @@ export function getAllTrainings() {
 					})
 				}
 			}).catch(err => {
-				// console.log(err);
+				console.log(err);
 				dispatch({
 					type: GET_TRAININGS,
 					payload: [],
@@ -448,7 +448,7 @@ export function getPendingTrainingPersonal(offset = 0, limit = 20) {
 				payload: response
 			})
 		}).catch((err) => {
-			// console.log(err.response);
+			console.log(err.response);
 			return [];
 		});
 
@@ -469,7 +469,7 @@ export function getPendingTrainingHR(offset = 0, limit = 20) {
 				payload: res.data.data
 			})
 		}).catch((err) => {
-			// console.log(err.response);
+			console.log(err.response);
 			return [];
 		});
 
@@ -494,7 +494,7 @@ export function getReviewedTrainingPersonal(offset = 0, limit = 20) {
 				payload: response
 			})
 		}).catch((err) => {
-			// console.log(err.response);
+			console.log(err.response);
 			return [];
 		});
 
@@ -515,7 +515,7 @@ export function getReviewedTrainingHR(offset = 0, limit = 20) {
 				payload: res.data.data
 			})
 		}).catch((err) => {
-			// console.log(err.response);
+			console.log(err.response);
 			return [];
 		});
 
@@ -538,7 +538,7 @@ export function getCompletedTrainingPersonal(offset = 0, limit = 20) {
 				payload: response
 			})
 		}).catch((err) => {
-			// console.log(err.response);
+			console.log(err.response);
 			return [];
 		});
 	}
@@ -557,7 +557,7 @@ export function getCompletedTrainingHR(offset = 0, limit = 20) {
 				payload: res.data.data
 			})
 		}).catch((err) => {
-			// console.log(err.response);
+			console.log(err.response);
 			return [];
 		});
 	}
@@ -578,7 +578,7 @@ export function getApprovedTrainingPersonal(offset = 0, limit = 20) {
 				payload: response
 			})
 		}).catch((err) => {
-			// console.log(err.response);
+			console.log(err.response);
 			return []
 		});
 	}
@@ -597,7 +597,7 @@ export function getApprovedTrainingHR(offset = 0, limit = 20) {
 				payload: res.data.data
 			})
 		}).catch((err) => {
-			// console.log(err.response);
+			console.log(err.response);
 			return []
 		});
 	}
@@ -620,7 +620,7 @@ export function getRejectedTrainingPersonal(offset = 0, limit = 20) {
 				payload: response
 			})
 		}).catch((err) => {
-			// console.log(err.response);
+			console.log(err.response);
 			return [];
 		});
 	}
@@ -639,7 +639,7 @@ export function getRejectedTrainingHR(offset = 0, limit = 20) {
 				payload: res.data.data
 			})
 		}).catch((err) => {
-			// console.log(err.response);
+			console.log(err.response);
 			return [];
 		});
 	}
@@ -663,7 +663,7 @@ export function getCategories() {
 						payload: []
 					})
 			}).catch(err => {
-				// console.log(err);
+				console.log(err);
 				swal.fire(
 					'Oops!',
 					'something went wrong',
@@ -689,7 +689,7 @@ export function getEntities() {
 						payload: []
 					})
 			}).catch(err => {
-				// console.log(err);
+				console.log(err);
 			})
 	}
 }
@@ -710,7 +710,7 @@ export function getDepartments(id) {
 						payload: []
 					})
 			}).catch(err => {
-				// console.log(err);
+				console.log(err);
 			})
 	}
 }
@@ -731,7 +731,7 @@ export function getRoles() {
 						payload: []
 					})
 			}).catch(err => {
-				// console.log(err);
+				console.log(err);
 			})
 	}
 }

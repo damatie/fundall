@@ -1,10 +1,11 @@
-import { GET_KPO_BY_DEPT, GET_ASSIGNED_KPO, GET_ENTITIES, GET_KPO_BY_ROLE, OPEN_REQUEST_KPO_MODAL, CLOSE_REQUEST_KPO_MODAL } from '../actions';
+import { GET_KPO_BY_DEPT, GET_ASSIGNED_KPO, GET_ENTITIES, GET_ALL_ENITIES, GET_KPO_BY_ROLE, OPEN_REQUEST_KPO_MODAL, CLOSE_REQUEST_KPO_MODAL } from '../actions';
 
 const initialState = {
   deptKpo: [],
   loading: true,
   assignedKpo: [],
   entities: [],
+  entityList: [],
   kpoRequest: [],
   open: false,
   details: {}
@@ -32,6 +33,11 @@ const kpoReviewReducer = (state = initialState, actions) => {
       return {
         ...state,
         entities: actions.payload,
+      }
+    case GET_ALL_ENITIES:
+      return {
+        ...state,
+        entityList: actions.payload,
       }
     case OPEN_REQUEST_KPO_MODAL:
       return {
