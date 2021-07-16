@@ -3,7 +3,7 @@ import userRole from 'utils/userRole';
 import { getKpoByEntity, OPEN_REQUEST_KPO_MODAL, CLOSE_REQUEST_KPO_MODAL, kpoReq } from '../store/actions';
 
 const useKpoReview = ({ dispatch, push, userInfo, kpoList }) => {
-	const { deptKpo, loading, assignedKpo, entities, kpoRequest, details, open } = kpoList;
+	const { deptKpo, loading, assignedKpo, entities, kpoRequest, details, open, kposToReviewByLineManager } = kpoList;
 	const { departmentId, role, id } = userInfo;
 
 	const handleDelete = id => {
@@ -38,15 +38,18 @@ const useKpoReview = ({ dispatch, push, userInfo, kpoList }) => {
 
 	const getKpos = type => {
 		console.log(type);
+		console.log(kposToReviewByLineManager);
 		switch (type) {
 			case 'completed':
-				return deptKpo.filter(kpo => kpo.status === 'completed');
-			case 'on-going':
-				return deptKpo.filter(kpo => kpo.status === 'on-going');
+				return kposToReviewByLineManager.filter(kpo => kpo.status === 'completed');
 			case 'pending':
-				return deptKpo.filter(kpo => kpo.status === 'pending');
+				return kposToReviewByLineManager.filter(kpo => kpo.status === 'pending' || kpo.status === 'created');
+			case 'active':
+				return kposToReviewByLineManager.filter(
+					kpo => kpo.status !== 'completed' && kpo.status !== 'pending' && kpo.status !== 'created'
+				);
 			default:
-				return deptKpo.filter(kpo => kpo.status !== 'completed');
+				return kposToReviewByLineManager.filter(kpo => kpo.status === 'requested');
 		}
 	};
 

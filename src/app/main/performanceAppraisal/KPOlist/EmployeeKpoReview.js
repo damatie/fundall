@@ -10,7 +10,14 @@ import Tabs from '@material-ui/core/Tabs';
 import useKpoReview from './hooks/useKpoReview';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getKpoByDept, getAssignedKpo, getKpoByEntity, getEntities, getKpoByStatus } from './store/actions';
+import {
+	getKpoByDept,
+	getAssignedKpo,
+	getKpoByEntity,
+	getEntities,
+	getKpoByStatus,
+	getAllKposByLineManager
+} from './store/actions';
 import userRole from 'utils/userRole';
 import KpoRequestModal from './components/KpoRequestModal';
 import { Controller } from 'react-hook-form';
@@ -106,6 +113,10 @@ const EmployeeKpoReview = () => {
 			dispatch(getKpoByStatus({ status: 'requested', requested: true }));
 		}
 	}, [userInfo]);
+
+	React.useEffect(() => {
+		dispatch(getAllKposByLineManager());
+	}, []);
 
 	function handleChangeTab(event, value) {
 		setTabValue(value);
@@ -214,7 +225,7 @@ const EmployeeKpoReview = () => {
 							filterState={selectFilterState}
 						/>
 					)}
-					{tabValue === 1 && <ListOfEmployeeKpo customHook={value} type="on-going" filterState={selectFilterState} />}
+					{tabValue === 1 && <ListOfEmployeeKpo customHook={value} type="active" filterState={selectFilterState} />}
 					{(userRole(userInfo.role?.name) === 'hrmanager' ? tabValue === 2 : tabValue === 3) && (
 						<>
 							<ListOfEmployeeKpo customHook={value} request filterState={selectFilterState} />
