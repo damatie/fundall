@@ -54,7 +54,8 @@ const schema = yup.object().shape({
         .required(errorMsg({ name: 'Company Type', type: 'required' })),
     startDate: yup.string()
         .required(errorMsg({ name: 'Company Start Date', type: 'required' })),
-    noOfBranch: yup.number(errorMsg({ name: 'Number Of Branches', type: 'string' }))
+    noOfBranch: yup.number(errorMsg({ name: 'Number Of Branches', type: 'number' }))
+        .min(0)
         .required(errorMsg({ name: 'Number Of Branches', type: 'required' })),
     email: yup.string()
         .matches(/^[A-Za-z\d@$!%*#?&]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]{2,})*$/, "Enter a valid Email Address")
@@ -71,14 +72,14 @@ const schema = yup.object().shape({
     website: yup.string(errorMsg({ name: 'Company Website', type: 'string' })),
     address: yup.string(errorMsg({ name: 'HQ Address', type: 'string' })),
     branchAddress: yup.array()
-        .min(1, 'Must have at least one Branch Address')
+        // .min(1, 'Must have at least one Branch Address')
         // .required(errorMsg({ name: 'Branch Addresses', type: 'required' })),
 });
 
 
 function OrganizationInformation({handleNext}) {
   const { register, handleSubmit, formState:{ errors }, setValue, getValues } = useForm({
-    mode: "all",
+    mode: "onBlur",
     reValidateMode: 'onChange',
     resolver: yupResolver(schema)
   });
@@ -104,31 +105,11 @@ function OrganizationInformation({handleNext}) {
   const [cityErr, setCityErr] = React.useState("");
   const [logo, setLogo] = React.useState({});
   const classes = useStyles();
-  let data = {};
 
 
   React.useState(() => {
     dispatch(RegionActions.getCountries());
-    const dataResponse = localStorage.getItem('login_data');
-	  data = JSON.parse(dataResponse);
-    // console.log('countries: ', countries)
   }, [])
-
-  // React.useState(() => {
-  //   dispatch(RegionActions.getStates(countryValue));
-  // }, [countryValue])
-
-  // React.useState(() => {
-  //   setCountry(countries);
-  // }, [countries])
-
-  // React.useState(() => {
-  //   setStateList(states);
-  // }, [states])
-
-  // React.useState(() => {
-  //   setCityList(cities);
-  // }, [cities])
 
   React.useEffect(() => {
     setCompanyTypeErr(errors.type?.message);
@@ -143,6 +124,12 @@ function OrganizationInformation({handleNext}) {
     register({ name: 'startDate', type: 'custom' }, { required: true });
     setValue("startDate", JSON.stringify(companyStartDate));
   }, [companyStartDate]);
+  
+  React.useEffect(() => {
+    register({ name: 'branchAddress', type: 'custom' }, { required: true });
+    setValue("branchAddress", branchAddresses);
+    setBranchAddresses(branchAddresses);
+  }, [branchAddresses]);
 
   const handleCompanyTypeChange = (event) => {
     register({ name: 'type', type: 'custom' }, { required: true });
@@ -182,15 +169,14 @@ function OrganizationInformation({handleNext}) {
   const handleAddBranchAddresses = (chip) => {
     register({ name: 'branchAddress', type: 'custom' }, { required: true });
     branchAddresses.push(chip)
+    console.log('branchAddresses: ', branchAddresses);
     setValue("branchAddress", branchAddresses);
     setBranchAddressesErr(errors.branchAddress?.message);
   };
 
   const handleDeleteBranchAddresses = (chip, index) => {
     register({ name: 'branchAddress', type: 'custom' }, { required: true });
-    // let branchAddressesData = branchAddresses;
-    branchAddresses.splice(index, 1);
-    // setBranchAddresses(branchAddresses);
+    setBranchAddresses((branchAddresses) => branchAddresses.filter((chp) => chp !== chip));
     setValue("branchAddress", branchAddresses);
     setBranchAddressesErr(errors.branchAddress?.message);
   };
@@ -208,8 +194,11 @@ function OrganizationInformation({handleNext}) {
         loading('processing...');
         const { data: { message  } } = await api.post('/organization_info', formData);
         await setStepper([], 2);
-        data.company.regStep = 2;
-        localStorage.setItem('login_data', JSON.stringify(data));
+        const dataResponse = localStorage.getItem('login_data');
+	      const localData = JSON.parse(dataResponse);
+        console.log('Org. localData: ', localData);
+        localData.company.regStep = 2;
+        localStorage.setItem('login_data', JSON.stringify(localData));
         swal.fire({
           text: message,
           icon: 'success'
@@ -256,6 +245,7 @@ function OrganizationInformation({handleNext}) {
                 <DatePicker
                   inputVariant="outlined"
                   name='startDate'
+                  maxDate={new Date()}
                   error={errors.startDate}
                   message={errors.startDate?.message}
                   label='Company Start Date'
@@ -411,7 +401,7 @@ function OrganizationInformation({handleNext}) {
             </Grid>
             <Grid item lg={5} md={12} sm={12} xs={12}>
               <Input
-                  required
+                  // required
                   label='Company Vision'
                   name='vision'
                   type='text'
@@ -425,7 +415,7 @@ function OrganizationInformation({handleNext}) {
             </Grid>
             <Grid item lg={4} md={12} sm={12} xs={12}>
               <Input
-                  required
+                  // required
                   label='Company Mission'
                   name='mission'
                   type='text'
@@ -439,7 +429,6 @@ function OrganizationInformation({handleNext}) {
             </Grid>
             <Grid item lg={3} md={6} sm={12} xs={12}>
               <Input
-                  required
                   label='Company Website'
                   name='website'
                   error={errors.website}
@@ -464,14 +453,15 @@ function OrganizationInformation({handleNext}) {
             </Grid>
             <Grid item lg={6} md={12} sm={12} xs={12}>
               <ChipInput
-                label='Branch Addresses (Separate with Comma / Enter)'
+                label='Branch Addresses (Separate with Enter)'
                 name='branchAddresses'
                 variant= 'outlined'
-                newChipKeyCodes={[188]}
+                placeholder= 'Enter Branch Addresses Here'
+                // newChipKeyCodes={[188]}
                 style={{ width: '100%'}}
                 error={errors.branchAddress}
                 message={errors.branchAddress?.message}
-                helperText={errors.branchAddress?.message}
+                // helperText={errors.branchAddress?.message}
                 allowDuplicates={false}
                 value={branchAddresses}
                 onAdd={(chip) => handleAddBranchAddresses(chip)}

@@ -36,12 +36,12 @@ const useStyles = makeStyles((theme) => ({
 const KpoPreList = ({customHook}) => {
   const classes = useStyles();
   const { contentList, handleEditList} = customHook;
-  console.log(contentList);
+  // console.log(contentList);
   return (
       <section className={classes.contentItem}>
       {  contentList.length > 0 && contentList.sort((a, b)=> (a.id > b.id) ? 1 : ((b.id > a.id) ? -1 : 0)).map( (content) => {
             return (
-                <Card className={classes.card} key={content.id}  elevation={2}>
+                <Card className={classes.card} key={content.id}  elevation={5}>
                     <CardContent className={classes.cardContent}>
                     <Grid container justifyContent="space-between">
                     <Grid item >

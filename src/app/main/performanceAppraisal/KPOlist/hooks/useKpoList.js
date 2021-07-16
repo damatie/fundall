@@ -152,14 +152,14 @@ const useKpoList = ({ dispatch, userId, state, push, id, employees, userInfo }) 
 	};
 
 	const submitButtonText = () => {
-		return kpo.status === 'on-going' ? 'SUBMIT FOR REVIEW' : 'Complete KPO';
+		return kpo.status === 'on-going' || kpo.status === 'active' ? 'SUBMIT FOR REVIEW' : 'Complete KPO';
 	};
 
-	const showActionButton = user => {
+	const showActionButton = user => { 
 		if (
 			user?.id === state.kpo.employee?.id &&
 			userInfo.data.email === state.kpo.employee?.email &&
-			kpo.status === 'on-going'
+			kpo.status === 'on-going' || kpo.status === 'active'
 		)
 			return true;
 		if (

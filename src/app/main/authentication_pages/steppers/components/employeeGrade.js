@@ -60,21 +60,37 @@ const schema = yup.object().shape({
 export default function EmployeeGradeModal ({open, employeeGrades, entities, setOpen, data, edit}) {
     
     const { register, handleSubmit, formState:{ errors }, setValue, getValues } = useForm({
-        mode: "all",
+        mode: "onBlur",
         reValidateMode: 'onChange',
         resolver: yupResolver(schema)
     });
 
     const dispatch = useDispatch();
-    const [newAdded, setNewAdded] = React.useState(false);
-    const [updated, setUpdated] = React.useState(false);
-    const [entityId, setEntityId] = React.useState(0);
+    const [newAdded, setNewAdded] = React.useState([]);
+    const [updated, setUpdated] = React.useState([]);
+    const [entityId, setEntityId] = React.useState(data?.entityId || 0);
     const [entityErr, setEntityErr] = React.useState("");
+    const [gradeName, setGradeName] = React.useState(data?.gradeName || "");
+    const [gradeDescription, setGradeDescription] = React.useState(data?.gradeDescription || "");
     const [entityName, setEntityName] = React.useState("");
     const [employeeGrade, setEmployeeGrade] = React.useState("");
-    const [pipEligibility, setPipEligibility] = React.useState(true);
+    const [pipEligibility, setPipEligibility] = React.useState(data?.pipEligibility || true);
     const [employeeGradeErr, setEmployeeGradeErr] = React.useState("");
     const classes = useStyles();
+
+    React.useEffect(() => {
+        register({ name: 'entityId', type: 'custom' }, { required: true });
+        setValue("entityId", entityId);
+        register({ name: 'gradeName', type: 'custom' }, { required: true });
+        setValue("gradeName", gradeName);
+        register({ name: 'gradeDescription', type: 'custom' }, { required: true });
+        setValue("gradeDescription", gradeDescription);
+        register({ name: 'pipEligibility', type: 'custom' }, { required: true });
+        setValue("pipEligibility", pipEligibility);
+        if (edit === false) {
+            data = {};
+        }
+    }, []);
 
     React.useEffect(() => {
         setEntityErr(errors.entityId?.message);
@@ -90,10 +106,14 @@ export default function EmployeeGradeModal ({open, employeeGrades, entities, set
       }, [newAdded, updated]);
 
       const handleEntityChange = async (event) => {
-        setEntityId(event.target.value.id);
+        setEntityId(event.target.value);
         register({ name: 'entityId', type: 'custom' }, { required: true });
-        setValue("entityId", event.target.value.id);
-        setEntityName(event.target.value.entityName);
+        setValue("entityId", event.target.value);
+        entities.forEach(el => {
+            if (el.id === event.target.value) {
+                setEntityName(el.entityName);
+            }
+        });
         setEntityErr(errors.entityId?.message);
       };
 
@@ -112,23 +132,25 @@ export default function EmployeeGradeModal ({open, employeeGrades, entities, set
             try {
                 form.id = data?.id;
                 loading('Updating Employee Grade...');
-                const { data: { message, success  } } = await api.patch(`employee-grade/`, form);
+                const { data: { message, success  } } = await api.patch(`employee-grade/${data?.id}`, form);
                 if (success) {
                     swal.fire({
                         text: message,
                         icon: 'success'
                     });
                     setOpen(false);
-                    setUpdated(true);
+                    updated.push('changed')
+                    setUpdated(updated);
+                    data = {};
                 } else {
                     swal.fire({
-                        text: 'Something went wrong...',
+                        text: message ?? 'Something went wrong...',
                         icon: 'error'
                     })
                 }
             } catch (e) {
                 swal.fire({
-                    text: 'Something went wrong...',
+                    text: e?.message ?? 'Something went wrong...',
                     icon: 'error'
                 })
             }
@@ -142,16 +164,18 @@ export default function EmployeeGradeModal ({open, employeeGrades, entities, set
                         icon: 'success'
                     });
                     setOpen(false);
-                    setNewAdded(true);
+                    newAdded.push('changed')
+                    setNewAdded(newAdded);
+                    data = {};
                 } else {
                     swal.fire({
-                        text: 'Something went wrong...',
+                        text: message ?? 'Something went wrong...',
                         icon: 'error'
                     })
                 }
             } catch (e) {
                 swal.fire({
-                    text: 'Something went wrong...',
+                    text: e?.message ?? 'Something went wrong...',
                     icon: 'error'
                 })
             }
@@ -176,14 +200,14 @@ export default function EmployeeGradeModal ({open, employeeGrades, entities, set
                     labelId="demo-simple-select-outlined-label"
                     id="demo-simple-select-outlined"
                     name='entityId'
-                    defaultValue={data.entityId}
+                    defaultValue={entityId}
                     error={errors.entityId}
                     message={errors.entityId?.message}
                     onChange={handleEntityChange}
                     label="Entity"
                     >
                     {entities.map(item => (
-                    <MenuItem key={item.id} value={item}>
+                    <MenuItem key={item.id} value={item.id}>
                         {item.entityName}
                     </MenuItem>))}
                     </Select>
@@ -199,7 +223,7 @@ export default function EmployeeGradeModal ({open, employeeGrades, entities, set
                     labelId="demo-simple-select-outlined-label"
                     id="demo-simple-select-outlined"
                     name='gradeName'
-                    defaultValue={data.gradeName}
+                    defaultValue={gradeName}
                     error={errors.gradeName}
                     message={errors.gradeName?.message}
                     onChange={handleEmployeeGradeChange}
@@ -220,14 +244,14 @@ export default function EmployeeGradeModal ({open, employeeGrades, entities, set
                     type='text'
                     multiline
                     rows="4"
-                    defaultValue={data.gradeDescription}
+                    defaultValue={gradeDescription}
                     error={errors.gradeDescription}
                     message={errors.gradeDescription?.message}
                     helperText={errors.gradeDescription?.message}
                     refs={register}
                 />
             </Grid>
-            {!edit && <Grid item lg={12} md={12} sm={12} xs={12} align='left' style={{ marginBottom: '-15px', marginTop: '-15px'  }}>
+            {<Grid item lg={12} md={12} sm={12} xs={12} align='left' style={{ marginBottom: '-15px', marginTop: '-15px'  }}>
               <FormControlLabel control={<Checkbox
                 checked={pipEligibility}
                 onChange={handlePipEligibilityChange}

@@ -51,29 +51,66 @@ const schema = yup.object().shape({
         .required(errorMsg({ name: 'Level', type: 'required' })),
     description: yup.string(errorMsg({ name: 'Description', type: 'string' }))
         .max(1000, errorMsg({ name: 'Description', type: 'max', number: 1000 })),
-    compensations: yup.object().required(errorMsg({ name: 'Compensations', type: 'required'})),
+    compensations: yup.object(),
     pipCompensations: yup.array(),
 });
 
-export default function EmployeeGradeLevelModal ({open, entities, setOpen, data, edit, compensationList}) {
+export default function EmployeeGradeLevelModal ({open, entities, employeeGrades, setOpen, data, edit, compensationList}) {
     
     const { register, handleSubmit, formState:{ errors }, setValue, getValues } = useForm({
-        mode: "all",
+        mode: "onBlur",
         reValidateMode: 'onChange',
         resolver: yupResolver(schema)
     });
 
     const dispatch = useDispatch();
-    const [compensationObj, setCompensationObj] = React.useState(data.compensations || {});
+    const [compensationObj, setCompensationObj] = React.useState(data?.compensations || {});
     const [selectGrades, setSelectGrades] = React.useState(true);
-    const [newAdded, setNewAdded] = React.useState(false);
-    const [updated, setUpdated] = React.useState(false);
+    const [newAdded, setNewAdded] = React.useState([]);
+    const [updated, setUpdated] = React.useState([]);
     const [gradeErr, setGradeErr] = React.useState("");
+    const [entityId, setEntityId] = React.useState(data?.entityId || 0);
+    const [gradeId, setGradeId] = React.useState(data?.gradeId || 0);
+    const [level, setLevel] = React.useState(data?.level || 0);
+    const [description, setDescription] = React.useState(data?.description || "");
     const [gradeList, setGradeList] = React.useState([]);
-    const [pipCompensations, setPipCompensations] = React.useState([]);
+    const [pipCompensations, setPipCompensations] = React.useState(data?.pipCompensations || []);
     const [pipCompensationsErr, setPipCompensationsErr] = React.useState("");
     const [entityErr, setEntityErr] = React.useState("");
     const classes = useStyles();
+
+    React.useEffect(async () => {
+        register({ name: 'entityId', type: 'custom' }, { required: true });
+        setValue("entityId", entityId);
+        register({ name: 'level', type: 'custom' }, { required: true });
+        setValue("level", level);
+        register({ name: 'description', type: 'custom' }, { required: true });
+        setValue("description", description);
+        register({ name: 'compensations', type: 'custom' }, { required: true });
+        setValue("compensations", compensationObj);
+        register({ name: 'gradeId', type: 'custom' }, { required: true });
+        setValue("gradeId", gradeId);
+        if (gradeId !== 0) {
+            const dataResponse = localStorage.getItem('login_data');
+	        const localData = JSON.parse(dataResponse);
+            setSelectGrades(false);
+            if (localData?.company?.hasEntities === false) {
+                setGradeList(employeeGrades);
+            } else {
+                const result = await api.get(`/entity/${gradeId}`);
+                console.log('Result: ', result);
+                if (result.data.success && result.data.data) {
+                    if(result.data.data.employeeGrades.length > 0) {
+                        setGradeList(result.data.data.employeeGrades);
+                    }
+                }
+            } 
+        }
+        if (edit === false) {
+            data = {};
+        }
+        console.log('GradeLevel Data: ', data);
+      }, []);
 
     React.useEffect(() => {
         setGradeErr(errors.gradeId?.message);
@@ -92,7 +129,7 @@ export default function EmployeeGradeLevelModal ({open, entities, setOpen, data,
 
       const handleEntityChange = async (event) => {
         setSelectGrades(true);
-        const { data: { success, data  } } = await api.get(`/entity/${event.target.value.id}`);
+        const { data: { success, data  } } = await api.get(`/entity/${event.target.value}`);
         if (success && data) {
             // console.log('Grades: ', data.employeeGrades);
             if(data.employeeGrades.length > 0) {
@@ -100,8 +137,9 @@ export default function EmployeeGradeLevelModal ({open, entities, setOpen, data,
                 setSelectGrades(false);
             }
         }
+        setEntityId(event.target.value)
         register({ name: 'entityId', type: 'custom' }, { required: true });
-        setValue("entityId", event.target.value.id);
+        setValue("entityId", event.target.value);
         setEntityErr(errors.entityId?.message);
       };
 
@@ -135,23 +173,25 @@ export default function EmployeeGradeLevelModal ({open, entities, setOpen, data,
             try {
                 form.id = data?.id;
                 loading('Updating Employee Grade Level...');
-                const { data: { message, success  } } = await api.patch(`employee-grade-level/`, form);
+                const { data: { message, success  } } = await api.patch(`employee-grade-level/${data?.id}`, form);
                 if (success) {
                     swal.fire({
                         text: message,
                         icon: 'success'
                     });
                     setOpen(false);
-                    setUpdated(true);
+                    updated.push('changed')
+                    setUpdated(updated);
+                    data = {};
                 } else {
                     swal.fire({
-                        text: 'Something went wrong...',
+                        text: message ?? 'Something went wrong...',
                         icon: 'error'
                     })
                 }
             } catch (e) {
                 swal.fire({
-                    text: 'Something went wrong...',
+                    text: e?.message ?? 'Something went wrong...',
                     icon: 'error'
                 })
             }
@@ -165,16 +205,18 @@ export default function EmployeeGradeLevelModal ({open, entities, setOpen, data,
                         icon: 'success'
                     });
                     setOpen(false);
-                    setNewAdded(true);
+                    newAdded.push('changed')
+                    setNewAdded(newAdded);
+                    data = {};
                 } else {
                     swal.fire({
-                        text: 'Something went wrong...',
+                        text: message ?? 'Something went wrong...',
                         icon: 'error'
                     })
                 }
             } catch (e) {
                 swal.fire({
-                    text: 'Something went wrong...',
+                    text: e?.message ?? 'Something went wrong...',
                     icon: 'error'
                 })
             }
@@ -199,12 +241,12 @@ export default function EmployeeGradeLevelModal ({open, entities, setOpen, data,
                     labelId="demo-simple-select-outlined-label"
                     id="demo-simple-select-outlined"
                     name='entityId'
-                    defaultValue={data?.entityId}
+                    defaultValue={entityId}
                     onChange={handleEntityChange}
                     label="Entity"
                     >
                     {entities.map(item => (
-                    <MenuItem key={item.id} value={item}>
+                    <MenuItem key={item.id} value={item.id}>
                         {item.entityName}
                     </MenuItem>))}
                     </Select>
@@ -222,7 +264,7 @@ export default function EmployeeGradeLevelModal ({open, entities, setOpen, data,
                     name='gradeId'
                     disabled={selectGrades}
                     variant={selectGrades ? 'filled' : 'outlined'}
-                    defaultValue={data?.gradeId}
+                    defaultValue={gradeId}
                     error={errors.gradeId}
                     message={errors.gradeId?.message}
                     onChange={handleGradeChange}
@@ -242,7 +284,10 @@ export default function EmployeeGradeLevelModal ({open, entities, setOpen, data,
                     label='Level'
                     name='level'
                     type='number'
-                    defaultValue={data?.level}
+                    defaultValue={level}
+                    allowNegative={false}
+                    inputProps={{ min: 0 }}
+                    min={0}
                     error={errors.level}
                     message={errors.level?.message}
                     helperText={errors.level?.message}
@@ -256,7 +301,7 @@ export default function EmployeeGradeLevelModal ({open, entities, setOpen, data,
                     type='text'
                     multiline
                     rows="4"
-                    defaultValue={data?.description}
+                    defaultValue={description}
                     error={errors.description}
                     message={errors.description?.message}
                     helperText={errors.description?.message}
@@ -280,8 +325,7 @@ export default function EmployeeGradeLevelModal ({open, entities, setOpen, data,
                         id="demo-simple-select-outlined"
                         multiple
                         native
-                        defaultValue={data?.pipCompensations}
-                        value={pipCompensations}
+                        defaultValue={pipCompensations}
                         onChange={handlePipCompensationsChange}
                         inputProps={{ id: 'select-multiple-native', }}
                         name='pipCompensations'

@@ -79,7 +79,7 @@ const schema = yup.object().shape({
 
 export default function AccountSettings({handleNext}) {
   const { register, handleSubmit, formState:{ errors }, setValue, getValues } = useForm({
-    mode: "all",
+    mode: "onBlur",
     reValidateMode: 'onChange',
     resolver: yupResolver(schema)
   });
@@ -108,7 +108,7 @@ export default function AccountSettings({handleNext}) {
   const [dateFormatErr, setDateFormatErr] = React.useState("");
   const [currenciesErr, setCurrenciesErr] = React.useState("");
   const classes = useStyles();
-  let data = {};
+  // let localData = {};
 
 
   React.useEffect(() => {
@@ -125,11 +125,7 @@ export default function AccountSettings({handleNext}) {
     setRoleErr(errors.role?.message);
   }, [errors]);
 
-  React.useEffect(() => {
-    const dataResponse = localStorage.getItem('login_data');
-	  data = JSON.parse(dataResponse);
-  }, [])
-
+  
   const handleTimeZoneChange = (event) => {
     register({ name: 'timeZone', type: 'custom' }, { required: true });
     setValue("timeZone", event.target.value);
@@ -157,10 +153,7 @@ export default function AccountSettings({handleNext}) {
 
   const handleDeleteEmploymentStatus = (chip, index) => {
     register({ name: 'employmentStatus', type: 'custom' }, { required: true });
-    // let employmentStatusData = employmentStatus;
-    employmentStatus.splice(index, 1);
-    // console.log("EmploymentStatus: ", employmentStatusData);
-    // setEmploymentStatus(employmentStatus);
+    setEmploymentStatus((employmentStatus) => employmentStatus.filter((chp) => chp !== chip));
     setValue("employmentStatus", employmentStatus);
     setEmploymentStatusErr(errors.employmentStatus?.message);
   };
@@ -174,9 +167,7 @@ export default function AccountSettings({handleNext}) {
 
   const handleDeleteModeOfEmployment = (chip, index) => {
     register({ name: 'modeOfEmployment', type: 'custom' }, { required: true });
-    // let modeOfEmploymentData = modeOfEmployment;
-    modeOfEmployment.splice(index, 1);
-    // setModeOfEmployment(modeOfEmployment);
+    setModeOfEmployment((modeOfEmployment) => modeOfEmployment.filter((chp) => chp !== chip));
     setValue("modeOfEmployment", modeOfEmployment);
     setModeOfEmploymentErr(errors.modeOfEmployment?.message);
   };
@@ -190,9 +181,7 @@ export default function AccountSettings({handleNext}) {
 
   const handleDeleteLeaveTypes = (chip, index) => {
     register({ name: 'leaveTypes', type: 'custom' }, { required: true });
-    // let leaveTypesData = leaveTypes;
-    leaveTypes.splice(index, 1);
-    // setLeaveTypes(leaveTypes);
+    setLeaveTypes((leaveTypes) => leaveTypes.filter((chp) => chp !== chip));
     setValue("leaveTypes", leaveTypes);
     setLeaveTypesErr(errors.leaveTypes?.message);
   };
@@ -206,10 +195,8 @@ export default function AccountSettings({handleNext}) {
 
   const handleDeleteTrainingCategories = (chip, index) => {
     register({ name: 'trainingCategories', type: 'custom' }, { required: true });
-    // let trainingCategoriesData = trainingCategories;
-    trainingCategories.splice(index, 1);
-    // setTrainingCategories(trainingCategories);
-    setValue("trainingCategories", trainingCategoriesData);
+    setTrainingCategories((trainingCategories) => trainingCategories.filter((chp) => chp !== chip));
+    setValue("trainingCategories", trainingCategories);
     setTrainingCategoriesErr(errors.trainingCategories?.message);
   };
 
@@ -222,9 +209,7 @@ export default function AccountSettings({handleNext}) {
 
   const handleDeleteCompensationSettings = (chip, index) => {
     register({ name: 'compensationSettings', type: 'custom' }, { required: true });
-    // let compensationSettingsData = compensationSettings;
-    compensationSettings.splice(index, 1);
-    // setCompensationSettings(compensationSettings);
+    setCompensationSettings((compensationSettings) => compensationSettings.filter((chp) => chp !== chip));
     setValue("compensationSettings", compensationSettings);
     setCompensationSettingsErr(errors.compensationSettings?.message);
   };
@@ -238,9 +223,7 @@ export default function AccountSettings({handleNext}) {
 
   const handleDeleteRole = (chip, index) => {
     register({ name: 'role', type: 'custom' }, { required: true });
-    // let roleData = role;
-    role.splice(index, 1);
-    // setRole(role);
+    setRole((role) => role.filter((chp) => chp !== chip));
     setValue("role", role);
     setRoleErr(errors.role?.message);
   };
@@ -254,10 +237,8 @@ export default function AccountSettings({handleNext}) {
 
   const handleDeleteJobTitle = (chip, index) => {
     register({ name: 'jobTitle', type: 'custom' }, { required: true });
-    let jobTitleData = jobTitle;
-    jobTitleData.splice(index, 1);
-    setJobTitle(jobTitleData);
-    setValue("jobTitle", jobTitleData);
+    setJobTitle((jobTitle) => jobTitle.filter((chp) => chp !== chip));
+    setValue("jobTitle", jobTitle);
     setJobTitleErr(errors.jobTitle?.message);
   };
 
@@ -271,9 +252,7 @@ export default function AccountSettings({handleNext}) {
 
   const handleDeleteEmployeeGrade = (chip, index) => {
     register({ name: 'employeeGrade', type: 'custom' }, { required: true });
-    // let employeeGradeData = employeeGrade;
-    employeeGrade.splice(index, 1);
-    // setEmployeeGrade(employeeGrade);
+    setEmployeeGrade((employeeGrade) => employeeGrade.filter((chp) => chp !== chip));
     setValue("employeeGrade", employeeGrade);
     setEmployeeGradeErr(errors.employeeGrade?.message);
   };
@@ -287,9 +266,11 @@ export default function AccountSettings({handleNext}) {
           text: message,
           icon: 'success'
         });
-        setStepper([], 1)
-        data.company.regStep = 1;
-        localStorage.setItem('login_data', JSON.stringify(data));
+        setStepper([], 1);
+        const dataResponse = localStorage.getItem('login_data');
+	      const localData = JSON.parse(dataResponse);
+        localData.company.regStep = 1;
+        localStorage.setItem('login_data', JSON.stringify(localData));
         handleNext();
       } catch (e) {
         swal.fire({

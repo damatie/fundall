@@ -53,17 +53,8 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-const schema = yup.object().shape({
-    branchAddresses: yup.array()
-});
-
 function Entities({handleNext}) {
-  const { register, handleSubmit, formState:{ errors }, setValue, getValues } = useForm({
-    mode: "all",
-    reValidateMode: 'onChange',
-    resolver: yupResolver(schema)
-  });
-
+  
   const { entities, grades, gradeLevels, accountSettings, compensationData } = useSelector(state => state.employeeMgt);
   // console.log('entities: ', entities);
   // console.log('grades: ', grades);
@@ -82,7 +73,6 @@ function Entities({handleNext}) {
   const [informationTechnology, setInformationTechnology] = React.useState(false);
   const [canSubmit, setCanSubmit] = React.useState(false);
   let genericDept = [];
-  let localData = {};
   const classes = useStyles();
 
   React.useEffect(() => {
@@ -91,18 +81,19 @@ function Entities({handleNext}) {
     dispatch(Actions.getCompensations());
     dispatch(Actions.getGrades());
     dispatch(Actions.getGradeLevels());
-    const dataResponse = localStorage.getItem('login_data');
-	  localData = JSON.parse(dataResponse);
   }, [])
+
+  React.useEffect(() => {
+    dispatch(Actions.getEntities());
+    dispatch(Actions.getAccountSettings());
+    dispatch(Actions.getCompensations());
+    dispatch(Actions.getGrades());
+    dispatch(Actions.getGradeLevels());
+  }, [openEntityModal, openEmployeeGradeModal, openEmployeeGradeLevelModal]);
 
   React.useEffect(() => {
     if (grades.length > 0 && gradeLevels.lenth > 0) {
       setCanSubmit(true);
-    } else {
-      swal.fire({
-        text: 'Kindly Complete Setup Before Proceeding',
-        icon: 'info'
-      })
     }
   }, [grades, gradeLevels])
 
@@ -157,30 +148,37 @@ function Entities({handleNext}) {
   }
 
 
-  const onSubmit = async (data) => {
-      try {
-        const form = { ...data }
-        loading('processing...');
-        // const { data: { message  } } = await api.post('/organization_info', form);
-        await setStepper(genericDept, 3);
-        localData.company.regStep = 3;
-        localStorage.setItem('login_data', JSON.stringify(localData));
+  const HandleSubmit = async () => {
+    if (grades.length > 0 && gradeLevels.length > 0) {
+        try {
+          loading('processing...');
+          await setStepper(genericDept, 3);
+          const dataResponse = localStorage.getItem('login_data');
+          const localData = JSON.parse(dataResponse);
+          localData.company.regStep = 3;
+          localStorage.setItem('login_data', JSON.stringify(localData));
+          swal.fire({
+            text: 'Step Completed',
+            icon: 'success'
+          });
+          handleNext();
+        } catch (e) {
+          swal.fire({
+            text: e?.message || 'Something went wrong',
+            icon: 'error'
+          })
+        }
+      } else {
         swal.fire({
-          text: 'Step Completed',
-          icon: 'success'
-        });
-        handleNext();
-      } catch (e) {
-        swal.fire({
-          text: e?.message || 'Something went wrong',
-          icon: 'error'
+          text: 'Kindly Complete Setup Before Proceeding',
+          icon: 'info'
         })
       }
   };
 
   return (
     <div className={classes.root}>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <div>
           <Typography variant="h5" color="initial" className='my-10'><strong>Entities</strong></Typography>
           <Typography variant="body1" color="initial" className='my-10'><strong>Please select departments that will be general for all entities</strong></Typography>
           <Grid container spacing={3} justify='space-between' align='center' style={{ marginBottom: '3rem'}}>
@@ -232,7 +230,7 @@ function Entities({handleNext}) {
             
             <Grid item lg={12} md={12} sm={12} xs={12} align='left' className='my-10'>
                {gradeList.map(item => (
-                 <EmployeeGradeCard name={item?.gradeName} entityName={item?.entityName} entities={entityList} description={item?.gradeDescription} employeeGrades={grades} data={item}/>))}
+                 <EmployeeGradeCard name={item?.gradeName} entityName={item?.entityName} entities={entityList} description={item?.gradeDescription} employeeGrades={accountSettingsData?.employeeGrade || []} data={item}/>))}
             </Grid>
 
             <Grid item lg={12} md={12} sm={12} xs={12} align='left' className='my-10'>
@@ -248,14 +246,14 @@ function Entities({handleNext}) {
             </Grid>  
           </Grid>
           <Grid container spacing={3} justify='center' align='center' className='my-10'>
-              <Button variant="contained" type='submit' color="primary">
+              <Button variant="contained" onClick={HandleSubmit} color="primary">
                   Submit 
               </Button>
           </Grid>
-      </form>
+      </div>
       <EntityModal open={openEntityModal} setOpen={setOpenEntityModal} edit={false} data={{}}/>
       <EmployeeGradeModal open={openEmployeeGradeModal} employeeGrades={accountSettingsData?.employeeGrade || []} entities={entityList} setOpen={setOpenEmployeeGradeModal} data={{}} edit={false}/>
-      <EmployeeGradeLevelModal open={openEmployeeGradeLevelModal}  compensationList={compensationData || []}  employeeGrades={grades || []} entities={entityList} setOpen={setOpenEmployeeGradeLevelModal} data={{}} edit={false}/>
+      <EmployeeGradeLevelModal open={openEmployeeGradeLevelModal}  compensationList={compensationData || []}  employeeGrades={gradeList || []} entities={entityList} setOpen={setOpenEmployeeGradeLevelModal} data={{}} edit={false}/>
     </div>
   );
 }

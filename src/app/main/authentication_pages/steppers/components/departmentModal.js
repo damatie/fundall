@@ -68,30 +68,47 @@ const schema = yup.object().shape({
 export default function DepartmentModal ({open, entities, setOpen, data, edit}) {
     
     const { register, handleSubmit, formState:{ errors }, setValue, getValues } = useForm({
-        mode: "all",
+        mode: "onBlur",
         reValidateMode: 'onChange',
         resolver: yupResolver(schema)
     });
 
     const dispatch = useDispatch();
-    const [startedOn, setStartedOn] = React.useState(new Date());
-    const [newAdded, setNewAdded] = React.useState(false);
-    const [updated, setUpdated] = React.useState(false);
-    const [entityId, setEntityId] = React.useState(0);
+    const [startedOn, setStartedOn] = React.useState(data.startedOn && new Date(data?.startedOn) || new Date());
+    const [newAdded, setNewAdded] = React.useState([]);
+    const [updated, setUpdated] = React.useState([]);
+    const [entityId, setEntityId] = React.useState(data?.entityId || 0);
     const [entityErr, setEntityErr] = React.useState("");
-    const [department, setDepartment] = React.useState("");
+    const [department, setDepartment] = React.useState(data?.departmentName || "");
+    const [departmentCode, setDepartmentCode] = React.useState(data?.departmentCode || "");
+    const [description, setDescription] = React.useState(data?.description || "");
     const [address, setAddress] = React.useState(data?.address || []);
     const [addressErr, setAddressErr] = React.useState("");
     const classes = useStyles();
 
-    React.useEffect(() => {
-        console.log('Data: ', data);
-      }, []);
 
-      React.useEffect(() => {
-        register({ name: 'startedOn', type: 'custom' }, { required: true });
-        setValue("startedOn", JSON.stringify(startedOn));
-      }, [startedOn]);
+    React.useEffect(() => {
+      register({ name: 'entityId', type: 'custom' }, { required: true });
+      setValue("entityId", entityId);
+      register({ name: 'departmentName', type: 'custom' }, { required: true });
+      setValue("departmentName", department);
+      register({ name: 'departmentCode', type: 'custom' }, { required: true });
+      setValue("departmentCode", departmentCode);
+      register({ name: 'startedOn', type: 'custom' }, { required: true });
+      setValue("startedOn", JSON.stringify(startedOn));
+      register({ name: 'description', type: 'custom' }, { required: true });
+      setValue("description", description);
+      register({ name: 'address', type: 'custom' }, { required: true });
+      setValue("address", address);
+      if (edit === false) {
+        data = {};
+      }
+    }, []);
+
+    React.useEffect(() => {
+      register({ name: 'startedOn', type: 'custom' }, { required: true });
+      setValue("startedOn", JSON.stringify(startedOn));
+    }, [startedOn]);
 
     React.useEffect(() => {
         setEntityErr(errors.entityId?.message);
@@ -100,6 +117,8 @@ export default function DepartmentModal ({open, entities, setOpen, data, edit}) 
 
       React.useEffect(() => {
         dispatch(Actions.getDepartments());
+        console.log('newAdded: ', newAdded)
+        console.log('updated: ', updated)
       }, [newAdded, updated]);
 
       const handleEntityChange = async (event) => {
@@ -118,9 +137,7 @@ export default function DepartmentModal ({open, entities, setOpen, data, edit}) 
     
       const handleDeleteAddress = (chip, index) => {
         register({ name: 'address', type: 'custom' }, { required: true });
-        // let address = address;
-        address.splice(index, 1);
-        // setAddress(address);
+        setAddress((address) => address.filter((chp) => chp !== chip));
         setValue("address", address);
         setAddressErr(errors.address?.message);
       };
@@ -129,7 +146,6 @@ export default function DepartmentModal ({open, entities, setOpen, data, edit}) 
         setDepartment(event.target.value);
         register({ name: 'departmentName', type: 'custom' }, { required: true });
         setValue("departmentName", event.target.value);
-        setEntityErr(errors.departmentName?.message);
       };
 
     const onSubmit = async (value) => {
@@ -140,23 +156,25 @@ export default function DepartmentModal ({open, entities, setOpen, data, edit}) 
             try {
                 form.id = data?.id;
                 loading('Updating Department...');
-                const { data: { message, success  } } = await api.patch(`department/`, form);
+                const { data: { message, success  } } = await api.patch(`department/${data?.id}`, form);
                 if (success) {
                     swal.fire({
                         text: message,
                         icon: 'success'
                     });
                     setOpen(false);
-                    setUpdated(true);
+                    updated.push('changed')
+                    setUpdated(updated);
+                    data = {};
                 } else {
                     swal.fire({
-                        text: 'Something went wrong...',
+                        text: message ?? 'Something went wrong...',
                         icon: 'error'
                     })
                 }
             } catch (e) {
                 swal.fire({
-                    text: 'Something went wrong...',
+                    text: e?.message ?? 'Something went wrong...',
                     icon: 'error'
                 })
             }
@@ -170,16 +188,18 @@ export default function DepartmentModal ({open, entities, setOpen, data, edit}) 
                         icon: 'success'
                     });
                     setOpen(false);
-                    setNewAdded(true);
+                    newAdded.push('changed')
+                    setNewAdded(newAdded);
+                    data = {};
                 } else {
                     swal.fire({
-                        text: 'Something went wrong...',
+                        text: message ?? 'Something went wrong...',
                         icon: 'error'
                     })
                 }
             } catch (e) {
                 swal.fire({
-                    text: 'Something went wrong...',
+                    text: e?.message ?? 'Something went wrong...',
                     icon: 'error'
                 })
             }
@@ -204,7 +224,7 @@ export default function DepartmentModal ({open, entities, setOpen, data, edit}) 
                         labelId="demo-simple-select-outlined-label"
                         id="demo-simple-select-outlined"
                         name='entityId'
-                        defaultValue={data?.entityId}
+                        defaultValue={entityId}
                         error={errors.entityId}
                         message={errors.entityId?.message}
                         onChange={handleEntityChange}
@@ -222,7 +242,7 @@ export default function DepartmentModal ({open, entities, setOpen, data, edit}) 
                 <Input
                     name='departmentName'
                     type='text'
-                    defaultValue={data?.departmentName}
+                    defaultValue={department}
                     error={errors.departmentName}
                     message={errors.departmentName?.message}
                     onChange={handleDepartmentChange}
@@ -234,7 +254,7 @@ export default function DepartmentModal ({open, entities, setOpen, data, edit}) 
                 <Input
                     name='departmentCode'
                     type='text'
-                    defaultValue={data?.departmentCode}
+                    defaultValue={departmentCode}
                     error={errors.departmentCode}
                     message={errors.departmentCode?.message}
                     label="Department Code"
@@ -248,7 +268,7 @@ export default function DepartmentModal ({open, entities, setOpen, data, edit}) 
                     type='text'
                     multiline
                     rows="4"
-                    defaultValue={data?.description}
+                    defaultValue={description}
                     error={errors.description}
                     message={errors.description?.message}
                     helperText={errors.description?.message}
@@ -260,12 +280,12 @@ export default function DepartmentModal ({open, entities, setOpen, data, edit}) 
                 <DatePicker
                   inputVariant="outlined"
                   name='startedOn'
-                  defaultValue={data.startedOn && new Date(data?.startedOn)}
+                  maxDate={new Date()}
+                  defaultValue={startedOn}
                   error={errors.startedOn}
                   message={errors.startedOn?.message}
                   label='Start Date'
                   className="w-full"
-                  value={startedOn}
                   onChange={(newValue) => {
                     setStartedOn(newValue);
                     register({ name: 'startedOn', type: 'custom' }, { required: true });
@@ -276,17 +296,16 @@ export default function DepartmentModal ({open, entities, setOpen, data, edit}) 
                 />
               </FormControl>
             </Grid>
-            <Grid item lg={6} md={12} sm={12} xs={12}>
+            <Grid item lg={12} md={12} sm={12} xs={12}>
               <ChipInput
-                label='Addresses'
+                label='Addresses (Separate with Enter)'
                 name='address'
                 variant= 'outlined'
+                placeholder= 'Enter Addresses Here'
                 // newChipKeyCodes={[188]}
                 style={{ width: '100%'}}
-                // defaultValue={data?.address}
-                error={errors.branchAddress}
-                message={errors.branchAddress?.message}
-                helperText={errors.branchAddress?.message}
+                error={errors.address}
+                message={errors.address?.message}
                 allowDuplicates={false}
                 value={address}
                 onAdd={(chip) => handleAddAddress(chip)}

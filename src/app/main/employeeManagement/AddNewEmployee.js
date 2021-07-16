@@ -88,8 +88,7 @@ const schema = yup.object().shape({
 function AddNewEmployee() {
   
   const { register, handleSubmit, formState:{ errors }, setValue } = useForm({
-    // mode: "onBlur",
-    mode: "all",
+    mode: "onBlur",
     reValidateMode: 'onChange',
     resolver: yupResolver(schema)
   });
@@ -479,6 +478,7 @@ function AddNewEmployee() {
                 <DatePicker
                   inputVariant="outlined"
                   name='startDate'
+                  // maxDate={new Date()}
                   error={errors.startDate}
                   message={errors.startDate?.message}
                   label='Employee Start Date'

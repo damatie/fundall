@@ -36,13 +36,16 @@ export default function CompensationItem({name, compensationObj, setCompensation
         <div>
             <Grid container spacing={1} direction="row" style={{ paddingLeft: '10px', paddingRight: '10px', paddingBottom: '2px'}}>
                 <Grid item lg={12} md={12} sm={12} xs={12} align='left' className='my-10 flex-row'>
-                    <span variant="body1" color="initial" className='mr-5'><strong>{name}</strong></span>
+                    {/* <span variant="body1" color="initial" className='mr-5'><strong>{name}</strong></span> */}
                     <Input
                         className='float-left'
                         label={name}
                         name={name}
                         type='number'
-                        value={compensationObj[name] ?? undefined}
+                        allowNegative={false}
+                        inputProps={{ min: 0 }}
+                        min={0}
+                        defaultValue={compensationObj[name] ?? undefined}
                         onChange={handleCompensationObjChange}
                     />
                 </Grid>

@@ -375,6 +375,7 @@ function createEmployeeAccount() {
                 <DatePicker
                   inputVariant="outlined"
                   inputRef={register}
+                  maxDate={new Date()}
                   label='Employee Start Date'
                   className="w-full"
                   value={startDate}

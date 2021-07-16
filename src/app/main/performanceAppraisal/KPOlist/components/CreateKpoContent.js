@@ -8,6 +8,8 @@ import useKpoContentList from '../hooks/useKpoContent';
 import AddIcon from '@material-ui/icons/Add';
 import { Controller } from 'react-hook-form';
 import KpoPreList from './KpoPreList';
+import Button from '@material-ui/core/Button';
+import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined';
 
 const CreateKpoContent = ({customHook}) => {
   const { open, handleCloseModal, register, errors, handleSubmit, onSubmit, control, kpoCategory, pipEligibility, handleAddList, contentList, contentSelectedItem, setContentSelectedItem } = customHook;
@@ -117,6 +119,9 @@ const CreateKpoContent = ({customHook}) => {
           SUBMIT
         </SharedButton>
       </form>
+      {/* <Button onClick={() => {console.log('Add Method Here')}} variant="contained" color="secondary">
+        <span style={{ marginRight: '5px' }}><AddBoxOutlinedIcon/></span> Add New
+      </Button> */}
     </SideModal>
   );
 };
