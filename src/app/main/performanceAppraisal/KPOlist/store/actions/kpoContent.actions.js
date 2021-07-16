@@ -41,11 +41,11 @@ export const addKpoContent = (model) => {
           text: message,
           icon: 'success'
         })
-        dispatch(getAllKpoContent(model.kpoId));
+        dispatch(getAllKpoContent(model?.kpoId));
       }
     } catch (e) {
       swal.fire({
-        text: e.response?.data.message || e.response?.data.error || 'Service Unavailable',
+        text: e.response?.data.message || e.response?.data.error || e.response?.data.errors.toString() || 'Service Unavailable',
         icon: 'error'
       });
     }
