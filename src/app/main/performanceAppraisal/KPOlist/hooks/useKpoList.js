@@ -172,6 +172,7 @@ const useKpoList = ({ dispatch, userId, state, push, id, employees, userInfo }) 
 			userRole(userInfo.role) === 'linemanager' &&
 			kpo.status !== 'on-going' &&
 			kpo.status !== 'pending' &&
+			kpo.status !== 'created' &&
 			kpo.status !== 'reviewed1' &&
 			kpo.status !== 'reviewed2' &&
 			kpo.status !== 'completed'
@@ -190,9 +191,7 @@ const useKpoList = ({ dispatch, userId, state, push, id, employees, userInfo }) 
 		}
 
 		if (
-			kpo.status !== 'on-going' &&
-			kpo.status !== 'pending' &&
-			kpo.status !== 'reviewed1' &&
+			(kpo.status !== 'on-going' && kpo.status !== 'pending' && kpo.status !== 'reviewed1') ||
 			kpo.status === 'reviewed2'
 		) {
 			allowedToApprove = true;
