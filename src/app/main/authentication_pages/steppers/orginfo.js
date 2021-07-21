@@ -245,6 +245,7 @@ function OrganizationInformation({handleNext}) {
                 <DatePicker
                   inputVariant="outlined"
                   name='startDate'
+                  maxDate={new Date()}
                   error={errors.startDate}
                   message={errors.startDate?.message}
                   label='Company Start Date'

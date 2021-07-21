@@ -68,7 +68,7 @@ const schema = yup.object().shape({
         .email(),
     password: yup.string()
       .min(6)
-      .matches(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{6,}$/,
+      .matches(/^(?=.*[A-Z])(?=.*[a-z])(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{6,}$/,
         "Must Contain 6 Characters, One Uppercase, One Lowercase, One Number and one special case Character")
       .required(errorMsg({ name: 'Password', type: 'required' })),
     confirmPassword: yup.string().oneOf([yup.ref('password'), null], 'Passwords must match').required(errorMsg({ name: 'Confirm Password', type: 'required' })),
@@ -141,7 +141,6 @@ const organisationList = [
 export default function Register() {
   const { register, handleSubmit, formState:{ errors }, setValue } = useForm({
     mode: "onBlur",
-    // mode: "all",
     reValidateMode: 'onChange',
     resolver: yupResolver(schema)
   });

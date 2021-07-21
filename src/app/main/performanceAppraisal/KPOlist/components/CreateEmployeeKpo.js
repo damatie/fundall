@@ -14,7 +14,7 @@ const { useEffect } = React;
 
 const CreateEmployeeKpo = ({ customHook }) => {
   const { handleGetDepartment, getEmployeesByRole, handleCloseModal, open, register, errors, handleSubmit, onSubmit, control, jobTitles } = customHook;
-
+  const [linemanagers, setLinemanagers] = React.useState([]);
   const {
     entities,
     entityList,
@@ -27,10 +27,9 @@ const CreateEmployeeKpo = ({ customHook }) => {
   } = useSelector(state => state.profile.data);
 
   useEffect(() => {
-    handleGetDepartment(entityId)()
-    console.log('entityList: ', entityList);
-  }, []);
-
+    handleGetDepartment(entityId)();
+    setLinemanagers(getEmployeesByRole('financemanager'));
+  }, [setLinemanagers]);
   return (
     <SideModal
       title='Create KPO'
@@ -42,7 +41,7 @@ const CreateEmployeeKpo = ({ customHook }) => {
           className='my-16'
           name='jobTitleId'
           label='Job Title'
-          data={jobTitles}
+          data={jobTitles || []}
           error={errors.jobTitleId}
           helperText={errors.jobTitleId?.message}
           onChange={(ev, value) => register({ name: 'jobTitleId', value: value?.id })}
@@ -99,9 +98,9 @@ const CreateEmployeeKpo = ({ customHook }) => {
           className='my-16'
           name='lineManagerId'
           label='Line Manager'
-          data={getEmployeesByRole('linemanager')}
-          error={errors.lineManagerId}
-          helperText={errors.lineManagerId?.message}
+          data={linemanagers || []}
+          error={errors.lineManagerId || !linemanagers.length}
+          helperText={errors.lineManagerId?.message || !linemanagers.length ? 'No line Managers found' : ''}
           onChange={(ev, value) => register({ name: 'lineManagerId', value: value?.id })}
         />
 
@@ -109,9 +108,9 @@ const CreateEmployeeKpo = ({ customHook }) => {
           className='my-16'
           name='reviewingManagerId'
           label='Reviewing Manager'
-          data={getEmployeesByRole('linemanager')}
-          error={errors.reviewingManagerId}
-          helperText={errors.reviewingManagerId?.message}
+          data={linemanagers || []}
+          error={errors.reviewingManagerId || !linemanagers.length}
+          helperText={errors.reviewingManagerId?.message || !linemanagers.length ? 'No reviewing managers found' : ''}
           onChange={(ev, value) => register({ name: 'reviewingManagerId', value: value?.id })}
         />
         <SharedButton
