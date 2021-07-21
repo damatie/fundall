@@ -161,7 +161,7 @@ const useKpoList = ({ dispatch, userId, state, push, id, employees, userInfo }) 
 		}
 	};
 
-	const showActionButton = user => {
+	const showActionButton = user => { 
 		if (
 			user?.id === state.kpo.employee?.id &&
 			userInfo.data.email === state.kpo.employee?.email &&
