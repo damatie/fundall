@@ -38,6 +38,7 @@ import EmployeeGradeLevelCard from './components/employeeGradeLevelCard';
 import *  as Actions from 'app/main/employeeManagement/store/actions';
 import withReducer from "app/store/withReducer";
 import employeesReducer from "app/main/employeeManagement/store/reducers/employees.reducer";
+import departments from 'app/main/HR/business_unit/department/store/reducers/departments.reducer';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -88,6 +89,15 @@ function Departments({handleNext}) {
       setHasEntities(false);
     }
   }, []);
+
+  React.useEffect(() => {
+    dispatch(Actions.getEntities());
+    dispatch(Actions.getAccountSettings());
+    dispatch(Actions.getCompensations());
+    dispatch(Actions.getGrades());
+    dispatch(Actions.getGradeLevels());
+    dispatch(Actions.getDepartments());
+  }, [openDepartmentModal, openEmployeeGradeModal, openEmployeeGradeLevelModal]);
 
   React.useEffect(() => {
     setEntityList(entities);

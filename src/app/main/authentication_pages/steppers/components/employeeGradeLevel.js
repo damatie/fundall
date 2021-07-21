@@ -58,7 +58,7 @@ const schema = yup.object().shape({
 export default function EmployeeGradeLevelModal ({open, entities, employeeGrades, setOpen, data, edit, compensationList}) {
     
     const { register, handleSubmit, formState:{ errors }, setValue, getValues } = useForm({
-        mode: "all",
+        mode: "onBlur",
         reValidateMode: 'onChange',
         resolver: yupResolver(schema)
     });
@@ -66,8 +66,8 @@ export default function EmployeeGradeLevelModal ({open, entities, employeeGrades
     const dispatch = useDispatch();
     const [compensationObj, setCompensationObj] = React.useState(data?.compensations || {});
     const [selectGrades, setSelectGrades] = React.useState(true);
-    const [newAdded, setNewAdded] = React.useState(false);
-    const [updated, setUpdated] = React.useState(false);
+    const [newAdded, setNewAdded] = React.useState([]);
+    const [updated, setUpdated] = React.useState([]);
     const [gradeErr, setGradeErr] = React.useState("");
     const [entityId, setEntityId] = React.useState(data?.entityId || 0);
     const [gradeId, setGradeId] = React.useState(data?.gradeId || 0);
@@ -86,6 +86,8 @@ export default function EmployeeGradeLevelModal ({open, entities, employeeGrades
         setValue("level", level);
         register({ name: 'description', type: 'custom' }, { required: true });
         setValue("description", description);
+        register({ name: 'compensations', type: 'custom' }, { required: true });
+        setValue("compensations", compensationObj);
         register({ name: 'gradeId', type: 'custom' }, { required: true });
         setValue("gradeId", gradeId);
         if (gradeId !== 0) {
@@ -96,12 +98,16 @@ export default function EmployeeGradeLevelModal ({open, entities, employeeGrades
                 setGradeList(employeeGrades);
             } else {
                 const result = await api.get(`/entity/${gradeId}`);
+                console.log('Result: ', result);
                 if (result.data.success && result.data.data) {
                     if(result.data.data.employeeGrades.length > 0) {
                         setGradeList(result.data.data.employeeGrades);
                     }
                 }
             } 
+        }
+        if (edit === false) {
+            data = {};
         }
         console.log('GradeLevel Data: ', data);
       }, []);
@@ -174,16 +180,18 @@ export default function EmployeeGradeLevelModal ({open, entities, employeeGrades
                         icon: 'success'
                     });
                     setOpen(false);
-                    setUpdated(true);
+                    updated.push('changed')
+                    setUpdated(updated);
+                    data = {};
                 } else {
                     swal.fire({
-                        text: 'Something went wrong...',
+                        text: message ?? 'Something went wrong...',
                         icon: 'error'
                     })
                 }
             } catch (e) {
                 swal.fire({
-                    text: 'Something went wrong...',
+                    text: e?.message ?? 'Something went wrong...',
                     icon: 'error'
                 })
             }
@@ -197,16 +205,18 @@ export default function EmployeeGradeLevelModal ({open, entities, employeeGrades
                         icon: 'success'
                     });
                     setOpen(false);
-                    setNewAdded(true);
+                    newAdded.push('changed')
+                    setNewAdded(newAdded);
+                    data = {};
                 } else {
                     swal.fire({
-                        text: 'Something went wrong...',
+                        text: message ?? 'Something went wrong...',
                         icon: 'error'
                     })
                 }
             } catch (e) {
                 swal.fire({
-                    text: 'Something went wrong...',
+                    text: e?.message ?? 'Something went wrong...',
                     icon: 'error'
                 })
             }

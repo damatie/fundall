@@ -45,7 +45,7 @@ function SideModal(props) {
       <Dialog classes={{ paper: classes.dialog }} fullScreen style={{ width: "80%" }} open={open} onClose={handleClose} TransitionComponent={Transition}>
         <AppBar position="static" className={classes.appBar}>
             <Toolbar className="flex w-full" justify='space-between'>
-              <Grid container spacing={3} justify='space-between' style={{ marginBottom: '1rem', marginTop: '1rem' }}>
+              <Grid container spacing={3} justifyContent='space-between' style={{ marginBottom: '1rem', marginTop: '1rem' }}>
                 <Grid item align='left'>
                   <Typography variant="h6" color="inherit">
                     {title}
@@ -62,7 +62,7 @@ function SideModal(props) {
           <DialogContent>
             { children }
           </DialogContent>
-          <DialogActions justify="center" align="center">
+          <DialogActions justifyContent="center" align="center">
             {actionButton && <Button onClick={actionButton} color="primary">
               Close
             </Button>}

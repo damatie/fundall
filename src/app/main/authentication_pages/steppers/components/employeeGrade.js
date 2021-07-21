@@ -60,21 +60,21 @@ const schema = yup.object().shape({
 export default function EmployeeGradeModal ({open, employeeGrades, entities, setOpen, data, edit}) {
     
     const { register, handleSubmit, formState:{ errors }, setValue, getValues } = useForm({
-        mode: "all",
+        mode: "onBlur",
         reValidateMode: 'onChange',
         resolver: yupResolver(schema)
     });
 
     const dispatch = useDispatch();
-    const [newAdded, setNewAdded] = React.useState(false);
-    const [updated, setUpdated] = React.useState(false);
+    const [newAdded, setNewAdded] = React.useState([]);
+    const [updated, setUpdated] = React.useState([]);
     const [entityId, setEntityId] = React.useState(data?.entityId || 0);
     const [entityErr, setEntityErr] = React.useState("");
     const [gradeName, setGradeName] = React.useState(data?.gradeName || "");
     const [gradeDescription, setGradeDescription] = React.useState(data?.gradeDescription || "");
     const [entityName, setEntityName] = React.useState("");
     const [employeeGrade, setEmployeeGrade] = React.useState("");
-    const [pipEligibility, setPipEligibility] = React.useState(true);
+    const [pipEligibility, setPipEligibility] = React.useState(data?.pipEligibility || true);
     const [employeeGradeErr, setEmployeeGradeErr] = React.useState("");
     const classes = useStyles();
 
@@ -85,8 +85,11 @@ export default function EmployeeGradeModal ({open, employeeGrades, entities, set
         setValue("gradeName", gradeName);
         register({ name: 'gradeDescription', type: 'custom' }, { required: true });
         setValue("gradeDescription", gradeDescription);
-        setPipEligibility(data?.pipEligibility);
-        console.log('Grade Data: ', data);
+        register({ name: 'pipEligibility', type: 'custom' }, { required: true });
+        setValue("pipEligibility", pipEligibility);
+        if (edit === false) {
+            data = {};
+        }
     }, []);
 
     React.useEffect(() => {
@@ -136,16 +139,18 @@ export default function EmployeeGradeModal ({open, employeeGrades, entities, set
                         icon: 'success'
                     });
                     setOpen(false);
-                    setUpdated(true);
+                    updated.push('changed')
+                    setUpdated(updated);
+                    data = {};
                 } else {
                     swal.fire({
-                        text: 'Something went wrong...',
+                        text: message ?? 'Something went wrong...',
                         icon: 'error'
                     })
                 }
             } catch (e) {
                 swal.fire({
-                    text: 'Something went wrong...',
+                    text: e?.message ?? 'Something went wrong...',
                     icon: 'error'
                 })
             }
@@ -159,16 +164,18 @@ export default function EmployeeGradeModal ({open, employeeGrades, entities, set
                         icon: 'success'
                     });
                     setOpen(false);
-                    setNewAdded(true);
+                    newAdded.push('changed')
+                    setNewAdded(newAdded);
+                    data = {};
                 } else {
                     swal.fire({
-                        text: 'Something went wrong...',
+                        text: message ?? 'Something went wrong...',
                         icon: 'error'
                     })
                 }
             } catch (e) {
                 swal.fire({
-                    text: 'Something went wrong...',
+                    text: e?.message ?? 'Something went wrong...',
                     icon: 'error'
                 })
             }
