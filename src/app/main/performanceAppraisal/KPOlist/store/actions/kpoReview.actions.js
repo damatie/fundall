@@ -189,7 +189,7 @@ export const getAllKposByLineManager = () => {
 			} = await api.get(`/appraisal/kpo/all/by-linemanager?limit=10&offset=0`);
 			dispatch({
 				type: GET_ALL_KPOS_BY_LINE_MANAGER,
-				payload: rows
+				payload: rows ?? []
 			});
 		} catch {
 			dispatch({
