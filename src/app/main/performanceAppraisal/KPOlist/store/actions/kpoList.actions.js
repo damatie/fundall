@@ -293,7 +293,7 @@ export const approveKpo = (id) => {
       loading('Approving...');
       const { data: { message }} = await api.patch(`/appraisal/kpo/lm/submit/${id}`);
       swal.fire({
-        text: message,
+        text: 'This KPO has been Approved',
         icon: 'success'
       });
       dispatch(getOneKpo(id));
