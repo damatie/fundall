@@ -25,6 +25,8 @@ import Button from '@material-ui/core/Button';
 import userRole from 'utils/userRole';
 import PipInformation from './components/PipInformation';
 import KpoDetailEmployeeInfo from './components/KpoDetailEmployeeInfo';
+import SideModal from 'app/shared/modal/SideModal';
+import KpoContentCard from './components/KpoContentCard';
 
 const CustomTabs = withStyles({
 	root: {
@@ -65,8 +67,8 @@ const useStyles = makeStyles(theme => ({
 		backgroundColor: '#19ac4b',
 		color: '#daf2e2',
 		fontSize: '1.2rem',
-		padding: '15px 90px',
-		margin: '8% auto',
+		padding: '15px 90px !important',
+		margin: '8% auto !important',
 
 		'&:hover': {
 			backgroundColor: '#07571E'
@@ -78,7 +80,9 @@ const useStyles = makeStyles(theme => ({
 	approveKpoBtn: {
 		backgroundColor: '#d8d8d8',
 		color: '#252525',
-		pointerEvents: 'none'
+		pointerEvents: 'none',
+		padding: '15px 90px !important',
+		margin: '8% auto !important'
 	},
 	marginTopCBtn: {
 		marginTop: '10%',
@@ -117,10 +121,16 @@ const EmployeeKpoDetails = () => {
 	const { push } = useHistory();
 	const location = useLocation();
 	const [prevUrl, setPrevUrl] = React.useState('/performance_appraisal/kpoList');
+	const [toggleSideModal, setToggleSideModal] = React.useState(false);
+	const [editKpoContent, setEditKpoContent] = React.useState(false);
 
 	React.useEffect(() => {
 		location.pathname === `/performance_appraisal/kpo/review/details/${params.id}` &&
 			setPrevUrl('/performance_appraisal/kpo/review/');
+
+		return () => {
+			setApproveBtnActive(false);
+		};
 	}, []);
 
 	const EmployeeKpo = useSelector(state => state.kpo.employeeKpoList);
@@ -170,6 +180,7 @@ const EmployeeKpoDetails = () => {
 	});
 
 	const [tabValue, setTabValue] = React.useState(0);
+	const [approveBtnActive, setApproveBtnActive] = React.useState(false);
 
 	function handleChangeTab(event, value) {
 		setTabValue(value);
@@ -208,7 +219,10 @@ const EmployeeKpoDetails = () => {
 								<Button
 									variant="contained"
 									color="secondary"
-									// onClick={customHook.handleOpenModal}
+									onClick={() => {
+										setToggleSideModal(true);
+										setApproveBtnActive(true);
+									}}
 								>
 									REVIEW KPO{' '}
 								</Button>
@@ -245,9 +259,13 @@ const EmployeeKpoDetails = () => {
 							<CreateKpoContent customHook={customHook} />
 							{EmployeeKpoCustomHook.showApproveButton().lineManager && (
 								<CustomIconButton
-									type={EmployeeKpoCustomHook.showApproveButton().allowedToApprove ? 'success' : 'not-approved'}
+									type={EmployeeKpoCustomHook.showApproveButton().allowedToApprove ? '' : ''}
 									className={` flex flex-col mx-auto ${
-										EmployeeKpoCustomHook.showApproveButton().allowedToApprove ? '' : classes.approveKpoBtn
+										!approveBtnActive
+											? classes.approveKpoBtn
+											: EmployeeKpoCustomHook.showApproveButton().allowedToApprove
+											? classes.submitKpoForReviewBtn
+											: classes.approveKpoBtn
 									} ${classes.marginTopCBtn}`}
 									onClick={EmployeeKpoCustomHook.approveKpo}
 								>
@@ -279,6 +297,25 @@ const EmployeeKpoDetails = () => {
 							)}
 						</>
 					)}
+					<SideModal open={toggleSideModal} handleClose={() => setToggleSideModal(false)} title="KPO Review">
+						{console.log(state.data)}
+						{state.data?.length > 0 ? (
+							state.data.map((kpoContent, index) => (
+								<KpoContentCard
+									index={index}
+									theKpoCategory={kpoContent?.kpoCategory?.name}
+									description={kpoContent?.kpoCategory?.description}
+									target={kpoContent?.target}
+									pipTarget={kpoContent?.kpoPipTarget}
+									entireData={kpoContent}
+									// edit={editKpoContent}
+									// setEdit={setEditKpoContent}
+								/>
+							))
+						) : (
+							<span>No Data</span>
+						)}
+					</SideModal>
 				</div>
 			}
 		/>
