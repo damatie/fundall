@@ -299,7 +299,7 @@ const EmployeeKpoDetails = () => {
 					)}
 					<SideModal open={toggleSideModal} handleClose={() => setToggleSideModal(false)} title="KPO Review">
 						<>{state.data?.length > 0 ? (
-							state.data.map((kpoContent, index) => (
+							customHook.kpoData.map((kpoContent, index) => (
 								<KpoContentCard
 									index={index}
 									theKpoCategory={kpoContent?.kpoCategory?.name}

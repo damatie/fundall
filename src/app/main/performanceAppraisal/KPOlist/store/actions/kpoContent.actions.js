@@ -76,6 +76,7 @@ export const updateKpoContent = (model) => {
     try {
       loading('Updating...');
       const { data: { message, success } } = await api.patch(`/appraisal/kpo-content/${model.kpoId}`, model);
+      console.log(`Updating KPO Content with ID: ${model.kpoId} - `, model);
       if(success) {
         swal.fire({
           text: message,

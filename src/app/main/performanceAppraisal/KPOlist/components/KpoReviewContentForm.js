@@ -128,9 +128,7 @@ export default function KpoReviewContentForm({
 		setSaving(true);
 		const form = { ...value };
 		form.id = data?.id;
-		// console.log(form);
-		const result = await api.patch(`kpoReview/${data?.id}`, form);
-		console.log(result);
+		const result = await api.patch(`appraisal/kpo-content/${data?.id}`, form);
 		if (result.status === 200) {
 			setSaveSuccessful(true);
 		} else {
