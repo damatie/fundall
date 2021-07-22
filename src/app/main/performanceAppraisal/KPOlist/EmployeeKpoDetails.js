@@ -298,8 +298,7 @@ const EmployeeKpoDetails = () => {
 						</>
 					)}
 					<SideModal open={toggleSideModal} handleClose={() => setToggleSideModal(false)} title="KPO Review">
-						{console.log(state.data)}
-						{state.data?.length > 0 ? (
+						<>{state.data?.length > 0 ? (
 							state.data.map((kpoContent, index) => (
 								<KpoContentCard
 									index={index}
@@ -315,6 +314,19 @@ const EmployeeKpoDetails = () => {
 						) : (
 							<span>No Data</span>
 						)}
+						{<span>
+							<Button
+
+								className='flex my-20 mx-auto'
+								justify='center'
+								align='center'
+								variant="contained"
+								color="secondary"
+								onClick={() => setToggleSideModal(false)}
+							>
+								Close
+							</Button>
+						</span>}</>
 					</SideModal>
 				</div>
 			}

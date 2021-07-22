@@ -62,7 +62,7 @@ export default function KpoContentCard({
 						boxShadow={3}
 						bgcolor="background.paper"
 						p={0}
-						style={{ borderRadius: '15px', marginTop: '15px', marginBottom: '15px' }}
+						style={{ borderRadius: '15px', marginTop: '25px', marginBottom: '25px' }}
 					>
 						<Grid
 							container
