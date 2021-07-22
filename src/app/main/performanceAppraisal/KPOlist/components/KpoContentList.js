@@ -5,7 +5,6 @@ import useKpoContentList from '../hooks/useKpoContent';
 import Skeleton from '@material-ui/lab/Skeleton';
 import { useLocation } from 'react-router-dom';
 import KpoContentStatus from './KpoContentStatus';
-import editIcon from '../../../../../assets/icons/editIcon.svg';
 
 const KpoContentList = ({ customHook }) => {
 	const columns = React.useMemo(() => [
@@ -94,21 +93,7 @@ const KpoContentList = ({ customHook }) => {
 			Cell: ({ row }) => {
 				return <>{row.original.kpoPipAchieved || '-'}</>;
 			}
-		},
-		customHook?.shouldShowEditIcon()
-			? {
-					Header: '',
-					accessor: 'edit',
-					sortable: true,
-					Cell: ({ row }) => {
-						return <img style={{ width: '70%' }} src={editIcon} alt="edit icon" />;
-					}
-			  }
-			: {
-					Header: '',
-					accessor: 'empty',
-					sortable: true
-			  }
+		}
 		// space for the edit icon on admin only
 	]);
 	const { kpoData, push, id, handleDelete, loading } = customHook;
