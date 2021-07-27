@@ -147,6 +147,49 @@ input:-webkit-autofill {
     }
 }
 
+.kpo-custom-swal-popup {
+    width: 52em !important;
+}
+
+.kpo-custom-swal-title {
+    font-size: 22px !important;
+    font-weight: 700 !important;
+    color: #000000 !important;
+    line-height: 27.61px !important;
+}
+
+.kpo-custom-swal-icon.swal2-info {
+    border-color: #F0AD02 !important;
+    color: #F0AD02 !important;
+}
+
+.kpo-custom-swal-icon {
+    width: 37px !important;
+    height: 37px !important;
+}
+
+.kpo-custom-swal-icon .swal2-icon-content {
+    font-size: 2.5em !important;
+}
+
+.kpo-custom-swal-icon .swal2-icon-content {
+    transform: rotate(180deg) !important;
+}
+
+.kpo-custom-swal-text {
+    font-size: 12px !important;
+    margin: 2%;
+}
+
+.kpo-custom-swal-btn {
+    width: 130px !important;
+    height: 40px !important;
+    text-transform: uppercase;
+    font-size: 13px !important;
+    display: inline-block !important;
+    margin-bottom: 5% !important;
+}
+
 @import 'print.css';
 @import 'tables.css';
 @import 'prism.css';

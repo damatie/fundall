@@ -106,6 +106,55 @@ const KpoContentList = ({ customHook }) => {
 			setUrl(`/performance_appraisal/kpo/review/details/${id}/kpoContent`);
 	}, []);
 
+	const kpoDetail = [
+		// REMOVE the kpoDetail array here
+		{
+			kpoCategory: {
+				name: 'Business Growth'
+			},
+			kpoDescription: 'Description',
+			target: 'Target',
+			kpoPipTarget: '80',
+			Q1: '',
+			Q2: '',
+			Q3: '',
+			Q4: '',
+			kpoYearendScore: '',
+			kpoYearendRemarks: '',
+			kpoPipAchieved: ''
+		},
+		{
+			kpoCategory: {
+				name: 'Behavioral Attribute'
+			},
+			kpoDescription: 'Description',
+			target: 'Target',
+			kpoPipTarget: '80',
+			Q1: '',
+			Q2: '',
+			Q3: '',
+			Q4: '',
+			kpoYearendScore: '',
+			kpoYearendRemarks: '',
+			kpoPipAchieved: ''
+		},
+		{
+			kpoCategory: {
+				name: 'Personal Development'
+			},
+			kpoDescription: 'Description',
+			target: 'Target',
+			kpoPipTarget: '80',
+			Q1: '',
+			Q2: '',
+			Q3: '',
+			Q4: '',
+			kpoYearendScore: '',
+			kpoYearendRemarks: '',
+			kpoPipAchieved: ''
+		}
+	];
+
 	return (
 		<>
 			{loading ? (
@@ -114,7 +163,7 @@ const KpoContentList = ({ customHook }) => {
 				<>
 					<EnhancedTable
 						columns={columns}
-						data={kpoData || []}
+						data={kpoDetail || kpoData || []} // REMOVE THE kpoDetail HERE
 						onRowClick={(ev, row) => {
 							if (row) {
 								push(`${url}/${row.original.id}`);

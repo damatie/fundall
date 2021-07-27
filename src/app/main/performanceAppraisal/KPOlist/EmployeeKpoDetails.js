@@ -27,6 +27,7 @@ import PipInformation from './components/PipInformation';
 import KpoDetailEmployeeInfo from './components/KpoDetailEmployeeInfo';
 import SideModal from 'app/shared/modal/SideModal';
 import KpoContentCard from './components/KpoContentCard';
+import Swal from 'sweetalert2';
 
 const CustomTabs = withStyles({
 	root: {
@@ -122,6 +123,7 @@ const EmployeeKpoDetails = () => {
 	const location = useLocation();
 	const [prevUrl, setPrevUrl] = React.useState('/performance_appraisal/kpoList');
 	const [toggleSideModal, setToggleSideModal] = React.useState(false);
+	const [toggleUpdateKpoModal, setToggleUpdateKpoModal] = React.useState(false);
 	const [editKpoContent, setEditKpoContent] = React.useState(false);
 
 	React.useEffect(() => {
@@ -187,6 +189,93 @@ const EmployeeKpoDetails = () => {
 	}
 
 	// React.useEffect(() => console.log(tabValue), [tabValue]);
+	const confirmUpdate = () => {
+		Swal.fire({
+			icon: 'info',
+			title: 'Do you want to start \n KPO Review ?',
+			html:
+				'<p class="kpo-custom-swal-text">Note that by clicking on continue, you will activeate your KPO \n quarterly review.</p>',
+			showConfirmButton: true,
+			showCancelButton: true,
+			confirmButtonText: `CONTINUE`,
+			confirmButtonColor: '#19AC4B',
+			cancelButtonColor: '#FA1C1C',
+			// confirmButtonSize: '14px'
+			// allowOutsideClick: false,
+			// showClass: {
+			//   popup: 'animate__animated animate__fadeInDown'
+			// },
+			// hideClass: {
+			//   popup: 'animate__animated animate__fadeOutUp'
+			// },
+			customClass: {
+				cancelButton: 'kpo-custom-swal-btn',
+				confirmButton: 'kpo-custom-swal-btn',
+				title: 'kpo-custom-swal-title',
+				popup: 'kpo-custom-swal-popup',
+				icon: 'kpo-custom-swal-icon'
+			}
+		}).then(result => {
+			if (result.isConfirmed) {
+				setToggleUpdateKpoModal(true);
+			}
+		});
+	};
+
+	const kpoDetail = [
+		// REMOVE the kpoDetail array here
+		{
+			kpoCategory: {
+				name: 'Business Growth',
+				description:
+					"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+			},
+			kpoDescription: 'Description',
+			target: 'Target',
+			kpoPipTarget: '80',
+			Q1: '',
+			Q2: '',
+			Q3: '',
+			Q4: '',
+			kpoYearendScore: '',
+			kpoYearendRemarks: '',
+			kpoPipAchieved: ''
+		},
+		{
+			kpoCategory: {
+				name: 'Behavioral Attribute',
+				description:
+					"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+			},
+			kpoDescription: 'Description',
+			target: 'Target',
+			kpoPipTarget: '80',
+			Q1: '',
+			Q2: '',
+			Q3: '',
+			Q4: '',
+			kpoYearendScore: '',
+			kpoYearendRemarks: '',
+			kpoPipAchieved: ''
+		},
+		{
+			kpoCategory: {
+				name: 'Personal Development',
+				description:
+					"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+			},
+			kpoDescription: 'Description',
+			target: 'Target',
+			kpoPipTarget: '80',
+			Q1: '',
+			Q2: '',
+			Q3: '',
+			Q4: '',
+			kpoYearendScore: '',
+			kpoYearendRemarks: '',
+			kpoPipAchieved: ''
+		}
+	];
 
 	return (
 		<PageLayout
@@ -204,6 +293,9 @@ const EmployeeKpoDetails = () => {
 				showButton: true,
 				btnComponent: tabValue === 0 && (
 					<>
+						<Button variant="contained" color="secondary" onClick={confirmUpdate}>
+							UPDATE KPO
+						</Button>
 						{EmployeeKpoCustomHook.shouldShowAddButton() && (
 							<Button
 								variant="contained"
@@ -298,35 +390,58 @@ const EmployeeKpoDetails = () => {
 						</>
 					)}
 					<SideModal open={toggleSideModal} handleClose={() => setToggleSideModal(false)} title="KPO Review">
-						<>{state.data?.length > 0 ? (
-							customHook.kpoData.map((kpoContent, index) => (
+						<>
+							{state.data?.length > 0 ? (
+								customHook.kpoData.map((detail, index) => (
+									<KpoContentCard
+										index={index}
+										theKpoCategory={detail?.kpoCategory?.name}
+										description={detail?.kpoCategory?.description}
+										target={detail?.target}
+										pipTarget={detail?.kpoPipTarget}
+										entireData={detail}
+										// edit={editKpoContent}
+										// setEdit={setEditKpoContent}
+									/>
+								))
+							) : (
+								<span>No Data</span>
+							)}
+							{
+								<span>
+									<Button
+										className="flex my-20 mx-auto"
+										justify="center"
+										align="center"
+										variant="contained"
+										color="secondary"
+										onClick={() => setToggleSideModal(false)}
+									>
+										Close
+									</Button>
+								</span>
+							}
+						</>
+					</SideModal>
+
+					<SideModal
+						open={toggleUpdateKpoModal}
+						handleClose={() => setToggleUpdateKpoModal(false)}
+						title="KPO Quarterly Review"
+					>
+						<>
+							{kpoDetail.map((detail, index) => (
 								<KpoContentCard
 									index={index}
-									theKpoCategory={kpoContent?.kpoCategory?.name}
-									description={kpoContent?.kpoCategory?.description}
-									target={kpoContent?.target}
-									pipTarget={kpoContent?.kpoPipTarget}
-									entireData={kpoContent}
-									// edit={editKpoContent}
-									// setEdit={setEditKpoContent}
+									theKpoCategory={detail?.kpoCategory?.name}
+									description={detail?.kpoCategory?.description}
+									target={detail?.target}
+									pipTarget={detail?.kpoPipTarget}
+									entireData={detail}
+									update={true}
 								/>
-							))
-						) : (
-							<span>No Data</span>
-						)}
-						{<span>
-							<Button
-
-								className='flex my-20 mx-auto'
-								justify='center'
-								align='center'
-								variant="contained"
-								color="secondary"
-								onClick={() => setToggleSideModal(false)}
-							>
-								Close
-							</Button>
-						</span>}</>
+							))}
+						</>
 					</SideModal>
 				</div>
 			}

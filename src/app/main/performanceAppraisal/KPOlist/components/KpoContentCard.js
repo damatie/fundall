@@ -25,14 +25,7 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-export default function KpoContentCard({
-	index,
-	theKpoCategory,
-	description,
-	target,
-	pipTarget,
-	entireData /* , edit, setEdit */
-}) {
+export default function KpoContentCard({ index, theKpoCategory, description, target, pipTarget, entireData, update }) {
 	const dispatch = useDispatch();
 	const [edit, setEdit] = React.useState(false);
 	const classes = useStyles();
@@ -111,14 +104,14 @@ export default function KpoContentCard({
 									<Grid item lg={2} md={2} sm={2} xs={2} align="left" className="my-10">
 										<Button
 											onClick={() => {
-												setEdit(true);
+												update ? console.log('go to update page') : setEdit(true);
 											}}
 											variant="contained"
 										>
 											<span style={{ marginRight: '5px' }}>
 												<EditIcon />
 											</span>{' '}
-											Edit
+											{update ? 'Update' : 'Edit'}
 										</Button>
 									</Grid>
 									<Grid item lg={12} md={12} sm={12} xs={12} align="left" className="">

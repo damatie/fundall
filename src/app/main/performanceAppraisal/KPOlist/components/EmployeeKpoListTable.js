@@ -99,13 +99,114 @@ const EmployeeKpoListTable = ({ customHook, completed }) => {
 
 	const { listOfKpo, handleDeleteKpo, push } = customHook;
 	console.log(listOfKpo, 'table data');
+
+	const temporaryKpoList = [
+		// REMOVE this temporaryKpoList
+		{
+			id: 1,
+			Q1: '',
+			Q2: '',
+			Q3: '',
+			Q4: '',
+			kpoCategory: {
+				name: 'First Category'
+			},
+			kpoDescription: '',
+			target: '',
+			kpoPipTarget: '',
+			kpoYearendRemarks: '',
+			kpoYearendScore: '',
+			status: 'pending',
+			reviewingManager: {
+				firstName: 'John',
+				lastName: 'Travolta'
+			},
+			lineManager: {
+				firstName: 'Boss',
+				lastName: 'Manager'
+			},
+			employee: {
+				email: 'jt@gmail.com'
+			},
+			jobTitle: {
+				name: 'Software Dev'
+			},
+			createdAt: '2021-07-27T12:29:23.000Z'
+		},
+		{
+			id: 2,
+			Q1: '',
+			Q2: '',
+			Q3: '',
+			Q4: '',
+			kpoCategory: {
+				name: 'Second Category'
+			},
+			kpoDescription: '',
+			target: '',
+			kpoPipTarget: '',
+			kpoYearendRemarks: '',
+			kpoYearendScore: '',
+			status: 'created',
+			reviewingManager: {
+				firstName: 'Damon',
+				lastName: 'Salvatore'
+			},
+			lineManager: {
+				firstName: 'Boss',
+				lastName: 'Manager'
+			},
+			employee: {
+				email: 'ds@gmail.com'
+			},
+			jobTitle: {
+				name: 'Software Tester'
+			},
+			createdAt: '2021-07-27T11:29:23.000Z'
+		},
+		{
+			id: 3,
+			Q1: '',
+			Q2: '',
+			Q3: '',
+			Q4: '',
+			kpoCategory: {
+				name: 'Second Category'
+			},
+			kpoDescription: '',
+			target: '',
+			kpoPipTarget: '',
+			kpoYearendRemarks: '',
+			kpoYearendScore: '',
+			status: 'completed',
+			reviewingManager: {
+				firstName: 'Stefan',
+				lastName: 'Salvatore'
+			},
+			lineManager: {
+				firstName: 'Zack',
+				lastName: 'Salvatore'
+			},
+			employee: {
+				email: 'sts@gmail.com'
+			},
+			jobTitle: {
+				name: 'Software Developer'
+			},
+			createdAt: '2021-07-27T11:28:23.000Z'
+		}
+	];
+
+	localStorage.setItem('kpoDetail', JSON.stringify(temporaryKpoList)); // REMOVE this
+
+	console.log(temporaryKpoList, 'the new table data'); // REMOVE this
 	return (
 		<EnhancedTable
 			columns={columns}
 			data={
 				completed
-					? listOfKpo.filter(kpo => kpo.status === 'completed')
-					: listOfKpo.filter(kpo => kpo.status !== 'completed')
+					? temporaryKpoList.filter(kpo => kpo.status === 'completed') // REMOVE the temporaryKpoList here
+					: temporaryKpoList.filter(kpo => kpo.status !== 'completed') // REMOVE the temporaryKpoList here
 			}
 			onRowClick={(ev, row) => {
 				if (row && row.original.status !== 'rejected' && row.original.status !== 'requested') {
