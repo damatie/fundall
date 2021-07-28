@@ -5,11 +5,12 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined';
 import EditIcon from '@material-ui/icons/Edit';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import KpoReviewContentForm from './KpoReviewContentForm';
 import kpoCategoryReducer from '../../KPOcategoryList/store/reducers/categoryList.reducer';
 import withReducer from 'app/store/withReducer';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -25,11 +26,24 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
+const UpdateButton = withStyles(theme => ({
+	root: {
+		color: '#000000',
+		backgroundColor: '#62DAFC',
+		'&:hover': {
+			backgroundColor: '#62DAFC'
+		}
+	}
+}))(Button);
+
 export default function KpoContentCard({ index, theKpoCategory, description, target, pipTarget, entireData, update }) {
 	const dispatch = useDispatch();
+	const history = useHistory();
 	const [edit, setEdit] = React.useState(false);
 	const classes = useStyles();
 	const { data: kpoCategory } = useSelector(state => state.kpoCategory);
+
+	localStorage.setItem('prevUrlFromKpoContentCard', JSON.stringify(history.location.pathname));
 
 	React.useEffect(() => console.log(kpoCategory, 'the kpo category'), [kpoCategory]);
 
@@ -102,17 +116,33 @@ export default function KpoContentCard({ index, theKpoCategory, description, tar
 										</Typography>
 									</Grid>
 									<Grid item lg={2} md={2} sm={2} xs={2} align="left" className="my-10">
-										<Button
-											onClick={() => {
-												update ? console.log('go to update page') : setEdit(true);
-											}}
-											variant="contained"
-										>
-											<span style={{ marginRight: '5px' }}>
-												<EditIcon />
-											</span>{' '}
-											{update ? 'Update' : 'Edit'}
-										</Button>
+										{update ? (
+											<UpdateButton
+												onClick={() => {
+													console.log('go to update page');
+													history.push('/performance_appraisal/kpoList/KpoQuarterlyReview');
+												}}
+												variant="contained"
+												color="primary"
+											>
+												<span style={{ marginRight: '5px' }}>
+													<EditIcon />
+												</span>{' '}
+												Update
+											</UpdateButton>
+										) : (
+											<Button
+												onClick={() => {
+													setEdit(true);
+												}}
+												variant="contained"
+											>
+												<span style={{ marginRight: '5px' }}>
+													<EditIcon />
+												</span>{' '}
+												Edit
+											</Button>
+										)}
 									</Grid>
 									<Grid item lg={12} md={12} sm={12} xs={12} align="left" className="">
 										<Typography variant="body2" color="initial" className="my-6">

@@ -5,6 +5,7 @@ import useKpoContentList from '../hooks/useKpoContent';
 import Skeleton from '@material-ui/lab/Skeleton';
 import { useLocation } from 'react-router-dom';
 import KpoContentStatus from './KpoContentStatus';
+import EditIcon from '@material-ui/icons/Edit';
 
 const KpoContentList = ({ customHook }) => {
 	const columns = React.useMemo(() => [
@@ -43,7 +44,7 @@ const KpoContentList = ({ customHook }) => {
 			accessor: 'q1',
 			sortable: true,
 			Cell: ({ row }) => {
-				return <>{row.original.Q1 || '-'}</>;
+				return <>{row.original.Q1?.content || '-'}</>;
 			}
 		},
 		{
@@ -51,7 +52,7 @@ const KpoContentList = ({ customHook }) => {
 			accessor: 'q2',
 			sortable: true,
 			Cell: ({ row }) => {
-				return <>{row.original.Q2 || '-'}</>;
+				return <>{row.original.Q2?.content || '-'}</>;
 			}
 		},
 		{
@@ -59,7 +60,7 @@ const KpoContentList = ({ customHook }) => {
 			accessor: 'q3',
 			sortable: true,
 			Cell: ({ row }) => {
-				return <>{row.original.Q3 || '-'}</>;
+				return <>{row.original.Q3?.content || '-'}</>;
 			}
 		},
 		{
@@ -67,7 +68,7 @@ const KpoContentList = ({ customHook }) => {
 			accessor: 'q4',
 			sortable: true,
 			Cell: ({ row }) => {
-				return <>{row.original.Q4 || '-'}</>;
+				return <>{row.original.Q4?.content || '-'}</>;
 			}
 		},
 		{
@@ -93,6 +94,14 @@ const KpoContentList = ({ customHook }) => {
 			Cell: ({ row }) => {
 				return <>{row.original.kpoPipAchieved || '-'}</>;
 			}
+		},
+		{
+			Header: '',
+			accessor: 'edit',
+			// sortable: true,
+			Cell: ({ row }) => {
+				return <EditIcon />;
+			}
 		}
 		// space for the edit icon on admin only
 	]);
@@ -106,55 +115,6 @@ const KpoContentList = ({ customHook }) => {
 			setUrl(`/performance_appraisal/kpo/review/details/${id}/kpoContent`);
 	}, []);
 
-	const kpoDetail = [
-		// REMOVE the kpoDetail array here
-		{
-			kpoCategory: {
-				name: 'Business Growth'
-			},
-			kpoDescription: 'Description',
-			target: 'Target',
-			kpoPipTarget: '80',
-			Q1: '',
-			Q2: '',
-			Q3: '',
-			Q4: '',
-			kpoYearendScore: '',
-			kpoYearendRemarks: '',
-			kpoPipAchieved: ''
-		},
-		{
-			kpoCategory: {
-				name: 'Behavioral Attribute'
-			},
-			kpoDescription: 'Description',
-			target: 'Target',
-			kpoPipTarget: '80',
-			Q1: '',
-			Q2: '',
-			Q3: '',
-			Q4: '',
-			kpoYearendScore: '',
-			kpoYearendRemarks: '',
-			kpoPipAchieved: ''
-		},
-		{
-			kpoCategory: {
-				name: 'Personal Development'
-			},
-			kpoDescription: 'Description',
-			target: 'Target',
-			kpoPipTarget: '80',
-			Q1: '',
-			Q2: '',
-			Q3: '',
-			Q4: '',
-			kpoYearendScore: '',
-			kpoYearendRemarks: '',
-			kpoPipAchieved: ''
-		}
-	];
-
 	return (
 		<>
 			{loading ? (
@@ -163,7 +123,7 @@ const KpoContentList = ({ customHook }) => {
 				<>
 					<EnhancedTable
 						columns={columns}
-						data={kpoDetail || kpoData || []} // REMOVE THE kpoDetail HERE
+						data={JSON.parse(localStorage.getItem('tempKpoDetailArr')) || kpoData || []} // REMOVE THE "tempKpoDetailArr" here
 						onRowClick={(ev, row) => {
 							if (row) {
 								push(`${url}/${row.original.id}`);
