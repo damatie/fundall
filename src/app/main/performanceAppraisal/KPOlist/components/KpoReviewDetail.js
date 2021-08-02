@@ -3,6 +3,7 @@ import ApprovedKpoReviewDetail from './ApprovedKpoReviewDetail';
 import { makeStyles } from '@material-ui/core/styles';
 import QuarterlyKpoReviewForm from './QuarterlyKpoReviewForm';
 import ApprovedQuarterlyKpoReview from './ApprovedQuarterlyKpoReview';
+import UnApprovedQuarterlyKpoReview from './UnApprovedQuarterlyKpoReview';
 
 const useStyles = makeStyles(theme => ({
 	approvedKpoReviewDetail: {
@@ -68,7 +69,8 @@ const KpoReviewDetail = ({ kpoDetailArray, currentlyShownKpoDetail, updateKpo })
 			<ApprovedKpoReviewDetail kpoIndividualDetail={currentKpo} kpoIndexPosition={currentlyShownKpoDetail} />
 			<div className={` ${classes.completedQuarterlies}`}>
 				{completedQuarterlies.map((quarterly, index) => (
-					<ApprovedQuarterlyKpoReview key={index} list={quarterly} />
+					// <ApprovedQuarterlyKpoReview key={index} list={quarterly} />
+					<UnApprovedQuarterlyKpoReview key={index} list={quarterly} />
 				))}
 			</div>
 			<QuarterlyKpoReviewForm

@@ -28,6 +28,8 @@ import KpoDetailEmployeeInfo from './components/KpoDetailEmployeeInfo';
 import SideModal from 'app/shared/modal/SideModal';
 import KpoContentCard from './components/KpoContentCard';
 import Swal from 'sweetalert2';
+import PerformanceAppraisalConfig from '../PerformanceAppraisalConfig';
+import PerformanceAppraisal from './components/PerformanceAppraisal';
 
 const CustomTabs = withStyles({
 	root: {
@@ -240,8 +242,8 @@ const EmployeeKpoDetails = () => {
 				label: 'Q1'
 			},
 			Q2: {
-				content: '',
-				comment: '',
+				content: 'This is the Q2',
+				comment: 'took a galley of type and scrambled it to make a type specimen book',
 				label: 'Q2'
 			},
 			Q3: {
@@ -268,8 +270,9 @@ const EmployeeKpoDetails = () => {
 			target: 'Target',
 			kpoPipTarget: '80',
 			Q1: {
-				content: '',
-				comment: '',
+				content: 'Second q1',
+				comment:
+					'Took a galley of type and scrambled it to make a,took a galley of type and scrambled it to make a type specimen book,took a galley of type and scrambled it to make a type specimen book, took a galley of type and scrambled it to make a type specimen book, took a galley of type and scrambled it to make a type specimen book, took a galley of type and scrambled it to make a type specimen book, took a galley of type and scrambled it to make a type specimen book, took a galley of type and scrambled it to make a type specimen book,took a galley of type and scrambled it to make a type specimen book type specimen book took a galley of type and scrambled it to make a type specimen book',
 				label: 'Q1'
 			},
 			Q2: {
@@ -344,9 +347,11 @@ const EmployeeKpoDetails = () => {
 				showButton: true,
 				btnComponent: tabValue === 0 && (
 					<>
-						<Button variant="contained" color="secondary" onClick={confirmUpdate}>
-							UPDATE KPO
-						</Button>
+						{!EmployeeKpoCustomHook.showReviewKpoAndAppraisalBtn() && (
+							<Button variant="contained" color="secondary" onClick={confirmUpdate}>
+								UPDATE KPO
+							</Button>
+						)}
 						{EmployeeKpoCustomHook.shouldShowAddButton() && (
 							<Button
 								variant="contained"
@@ -389,7 +394,7 @@ const EmployeeKpoDetails = () => {
 					className={` ${classes.kpoDetailsTab}`}
 				>
 					<CustomTab className="h-64 normal-case" label="KPO Detail" />
-					<CustomTab className="h-64 normal-case" label="Performance Appraisal" disabled />
+					<CustomTab className="h-64 normal-case" label="Performance Appraisal" />
 					<CustomTab className="h-64 normal-case" label="%PIP" disabled />
 				</CustomTabs>
 			}
@@ -430,7 +435,8 @@ const EmployeeKpoDetails = () => {
 							)}
 						</>
 					)}
-					{tabValue === 1 && <KpoComments kpoSummary={kpoSummary} />}
+					{/* {tabValue === 1 && <KpoComments kpoSummary={kpoSummary} />} */}
+					{tabValue === 1 && <PerformanceAppraisal />}
 					{tabValue === 2 && (
 						<>
 							{EmployeeKpo.kpo.pipInformation ? (
@@ -442,22 +448,24 @@ const EmployeeKpoDetails = () => {
 					)}
 					<SideModal open={toggleSideModal} handleClose={() => setToggleSideModal(false)} title="KPO Review">
 						<>
-							{state.data?.length > 0 ? (
-								customHook.kpoData.map((detail, index) => (
-									<KpoContentCard
-										index={index}
-										theKpoCategory={detail?.kpoCategory?.name}
-										description={detail?.kpoCategory?.description}
-										target={detail?.target}
-										pipTarget={detail?.kpoPipTarget}
-										entireData={detail}
-										// edit={editKpoContent}
-										// setEdit={setEditKpoContent}
-									/>
-								))
-							) : (
-								<span>No Data</span>
-							)}
+							{
+								/* state.data? */ kpoDetail.length > 0 ? (
+									/* customHook.kpoData */ kpoDetail.map((detail, index) => (
+										<KpoContentCard
+											index={index}
+											theKpoCategory={detail?.kpoCategory?.name}
+											description={detail?.kpoCategory?.description}
+											target={detail?.target}
+											pipTarget={detail?.kpoPipTarget}
+											entireData={detail}
+											// edit={editKpoContent}
+											// setEdit={setEditKpoContent}
+										/>
+									))
+								) : (
+									<span>No Data</span>
+								)
+							}
 							{
 								<span>
 									<Button

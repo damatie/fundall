@@ -11,6 +11,7 @@ import KpoReviewContentForm from './KpoReviewContentForm';
 import kpoCategoryReducer from '../../KPOcategoryList/store/reducers/categoryList.reducer';
 import withReducer from 'app/store/withReducer';
 import { useHistory } from 'react-router-dom';
+import FilledQuarterlyKpoDetail from './FilledQuarterlyKpoDetail';
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -22,6 +23,27 @@ const useStyles = makeStyles(theme => ({
 		padding: '5rem',
 		'& form': {
 			width: '100%'
+		}
+	},
+	kpoDetailLabel: {
+		fontWeight: 600,
+		fontSize: 12,
+		// lineHeight: 15,
+		color: '#6F6F6F',
+
+		[theme.breakpoints.down('xs')]: {
+			fontSize: 10
+		}
+	},
+	kpoDetailContent: {
+		fontWeight: 600,
+		fontSize: 14,
+		// lineHeight: 20,
+		textAlign: 'justify',
+		color: '#000000',
+
+		[theme.breakpoints.down('xs')]: {
+			fontSize: 11
 		}
 	}
 }));
@@ -108,10 +130,15 @@ export default function KpoContentCard({ index, theKpoCategory, description, tar
 							<Grid item lg={11} md={11} sm={11} xs={11}>
 								<Grid container spacing={3} style={{ padding: '20px' }}>
 									<Grid item lg={10} md={10} sm={10} xs={10} align="left" className="">
-										<Typography variant="body2" color="initial" className="my-6">
+										<Typography variant="body2" color="initial" className={` my-6 ${classes.kpoDetailLabel}`}>
 											KPO Category
 										</Typography>
-										<Typography variant="body2" color="initial" style={{ textTransform: 'uppercase' }} className="my-6">
+										<Typography
+											variant="body2"
+											color="initial"
+											style={{ textTransform: 'uppercase' }}
+											className={` my-6 ${classes.kpoDetailContent}`}
+										>
 											{theKpoCategory}
 										</Typography>
 									</Grid>
@@ -145,29 +172,34 @@ export default function KpoContentCard({ index, theKpoCategory, description, tar
 										)}
 									</Grid>
 									<Grid item lg={12} md={12} sm={12} xs={12} align="left" className="">
-										<Typography variant="body2" color="initial" className="my-6">
+										<Typography variant="body2" color="initial" className={` my-6 ${classes.kpoDetailLabel}`}>
 											Description
 										</Typography>
-										<Typography variant="body2" color="initial" className="my-6">
+										<Typography variant="body2" color="initial" className={` my-6 ${classes.kpoDetailContent}`}>
 											{description}
 										</Typography>
 									</Grid>
-									<Grid item lg={12} md={12} sm={12} xs={12} align="left" className="">
+									<Grid item lg={12} md={12} sm={12} xs={12} align="left" className={` ${classes.kpoDetailLabel}`}>
 										<Typography variant="body2" color="initial" className="my-6">
 											Target
 										</Typography>
-										<Typography variant="body2" color="initial" className="my-6">
+										<Typography variant="body2" color="initial" className={` my-6 ${classes.kpoDetailContent}`}>
 											{target}
 										</Typography>
 									</Grid>
 									<Grid item lg={12} md={12} sm={12} xs={12} align="left" className="">
-										<Typography variant="body2" color="initial" className="my-6">
+										<Typography variant="body2" color="initial" className={` my-6 ${classes.kpoDetailLabel}`}>
 											Pip Target
 										</Typography>
-										<Typography variant="body2" color="initial" className="my-6">
+										<Typography variant="body2" color="initial" className={` my-6 ${classes.kpoDetailContent}`}>
 											{pipTarget}
 										</Typography>
 									</Grid>
+									{(entireData?.Q1?.content || entireData?.Q1?.comment) && (
+										<Grid item lg={12} md={12} sm={12} xs={12} align="left" className="">
+											<FilledQuarterlyKpoDetail entireData={entireData} />
+										</Grid>
+									)}
 								</Grid>
 							</Grid>
 						</Grid>
