@@ -1,6 +1,6 @@
 import PageLayout from 'app/shared/pageLayout/PageLayout';
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
@@ -26,6 +26,37 @@ import userRole from 'utils/userRole';
 import PipInformation from './components/PipInformation';
 import KpoDetailEmployeeInfo from './components/KpoDetailEmployeeInfo';
 
+const CustomTabs = withStyles({
+	root: {
+		borderBottom: '2px solid #00ccf2',
+		width: '50%'
+	},
+	indicator: {
+		backgroundColor: '#00ccf2'
+	}
+})(Tabs);
+
+const CustomTab = withStyles(theme => ({
+	root: {
+		textTransform: 'none',
+		minWidth: 72,
+		fontWeight: theme.typography.fontWeightRegular,
+		marginRight: theme.spacing(4),
+		'&:hover': {
+			color: '#40a9ff',
+			opacity: 1
+		},
+		'&$selected': {
+			color: '#050505',
+			fontWeight: theme.typography.fontWeightBold
+		},
+		'&:focus': {
+			color: '#40a9ff'
+		}
+	},
+	selected: {}
+}))(props => <Tab disableRipple {...props} />);
+
 const useStyles = makeStyles(theme => ({
 	kpoDetailsTab: {
 		marginLeft: '8%'
@@ -43,6 +74,39 @@ const useStyles = makeStyles(theme => ({
 	},
 	submitKpoForReviewBtnOuterDiv: {
 		display: 'flex'
+	},
+	approveKpoBtn: {
+		backgroundColor: '#d8d8d8',
+		color: '#252525',
+		pointerEvents: 'none'
+	},
+	marginTopCBtn: {
+		marginTop: '10%',
+		marginBottom: '5%'
+	},
+	kpoDetailTopBtnDiv: {
+		width: '110%',
+		marginLeft: '-10%',
+		display: 'flex',
+		justifyContent: 'space-between',
+
+		[theme.breakpoints.down('sm')]: {
+			flexDirection: 'column',
+
+			'& button:first-child': {
+				marginBottom: '10%'
+			}
+		},
+
+		[theme.breakpoints.down('xs')]: {
+			'& button': {
+				fontSize: 10
+			},
+
+			'& button:first-child': {
+				marginBottom: '3% !important'
+			}
+		}
 	}
 }));
 
@@ -115,7 +179,8 @@ const EmployeeKpoDetails = () => {
 
 	return (
 		<PageLayout
-			noSearch={tabValue === 1 ? false : true}
+			noSearch={EmployeeKpoCustomHook.showReviewKpoAndAppraisalBtn() ? false : tabValue === 0 ? false : true}
+			customToolBarSearchDivClass={true}
 			prev={{
 				url: prevUrl
 			}}
@@ -138,24 +203,38 @@ const EmployeeKpoDetails = () => {
 								Add KPO Content
 							</Button>
 						)}
+						{EmployeeKpoCustomHook.showReviewKpoAndAppraisalBtn() && (
+							<div className={classes.kpoDetailTopBtnDiv}>
+								<Button
+									variant="contained"
+									color="secondary"
+									// onClick={customHook.handleOpenModal}
+								>
+									REVIEW KPO{' '}
+								</Button>
+								<Button variant="contained" color="secondary" /* onClick={customHook.handleOpenModal} */ disabled>
+									START APPRAISAL
+								</Button>
+							</div>
+						)}
 					</>
 				)
 			}}
 			contentToolbar={
-				<Tabs
+				<CustomTabs
 					value={tabValue}
 					onChange={handleChangeTab}
 					indicatorColor="primary"
 					textColor="primary"
 					variant="scrollable"
 					scrollButtons="auto"
-					classes={{ root: 'w-full h-64' }}
+					classes={{ root: 'h-64' }}
 					className={` ${classes.kpoDetailsTab}`}
 				>
-					<Tab className="h-64 normal-case" label="KPO Detail" />
-					<Tab className="h-64 normal-case" label="Performance Appraisal" disabled />
-					<Tab className="h-64 normal-case" label="%PIP" disabled />
-				</Tabs>
+					<CustomTab className="h-64 normal-case" label="KPO Detail" />
+					<CustomTab className="h-64 normal-case" label="Performance Appraisal" disabled />
+					<CustomTab className="h-64 normal-case" label="%PIP" disabled />
+				</CustomTabs>
 			}
 			content={
 				<div className=" sm:p-24 ">
@@ -164,10 +243,12 @@ const EmployeeKpoDetails = () => {
 							<KpoDetailEmployeeInfo customHook={EmployeeKpoCustomHook} />
 							<KpoContentList customHook={customHook} />
 							<CreateKpoContent customHook={customHook} />
-							{EmployeeKpoCustomHook.showApproveButton() && (
+							{EmployeeKpoCustomHook.showApproveButton().lineManager && (
 								<CustomIconButton
-									type="success"
-									className="flex flex-col my-10 mx-auto"
+									type={EmployeeKpoCustomHook.showApproveButton().allowedToApprove ? 'success' : 'not-approved'}
+									className={` flex flex-col mx-auto ${
+										EmployeeKpoCustomHook.showApproveButton().allowedToApprove ? '' : classes.approveKpoBtn
+									} ${classes.marginTopCBtn}`}
 									onClick={EmployeeKpoCustomHook.approveKpo}
 								>
 									Approve

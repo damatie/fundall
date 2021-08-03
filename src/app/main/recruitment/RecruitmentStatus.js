@@ -24,7 +24,7 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-const KpoStatus = ({ status }) => {
+const RecruitmentStatus = ({ status }) => {
 	const classes = useStyles();
 
 	const capitalizeFirstLetter = str => {
@@ -64,4 +64,4 @@ const KpoStatus = ({ status }) => {
 	);
 };
 
-export default KpoStatus;
+export default RecruitmentStatus;

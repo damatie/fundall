@@ -24,7 +24,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ThemeProvider } from '@material-ui/core/styles';
 import * as Actions from './store/actions';
 import reducer from './store/reducers';
-import Table from './RecruitmentTable';
+import Table from './RecruitmentTable.js_old';
 // import { useAuth } from 'app/hooks/useAuth';
 
 const columns = [

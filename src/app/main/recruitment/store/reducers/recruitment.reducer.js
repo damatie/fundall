@@ -5,11 +5,24 @@ const initialState = {
 	data: [],
 	onePosition: [],
 	success: false,
-	colse: false
+	open: false,
+	close: false
 };
 
 const recruitmentReducer = (state = initialState, action) => {
 	switch (action.type) {
+		case Actions.OPEN_CREATE_OPENING_MODAL: {
+			return {
+				...state,
+				open: true,
+			}
+		}
+		case Actions.CLOSE_CREATE_OPENING_MODAL: {
+			return {
+				...state,
+				open: false,
+			}
+		}
 		case Actions.LOADING_POSITIONS: {
 			return {
 				...state,

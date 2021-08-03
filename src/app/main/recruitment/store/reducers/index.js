@@ -1,12 +1,12 @@
 import { combineReducers } from 'redux';
-import entity from './entity.reducer';
 import recruitment from './recruitment.reducer';
 import candidate from './candidate.reducer';
+import employeeInformation from './employees.reducer';
 
 const reducer = combineReducers({
-  entity,
   recruitment,
   candidate,
+  employeeInformation
 });
 
 export default reducer;

@@ -1,31 +1,27 @@
 import FuseAnimate from '@fuse/core/FuseAnimate';
-// import FuseChipSelect from '@fuse/core/FuseChipSelect';
-// import FuseLoading from '@fuse/core/FuseLoading';
 import FusePageSimple from '@fuse/core/FusePageSimple';
-// import { useForm, useDeepCompareEffect } from '@fuse/hooks';
-// import FuseUtils from '@fuse/utils';
 import _ from '@lodash';
 import Button from '@material-ui/core/Button';
-// import { orange } from '@material-ui/core/colors';
 import Icon from '@material-ui/core/Icon';
-// import InputAdornment from '@material-ui/core/InputAdornment';
-// import { makeStyles } from '@material-ui/core/styles';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
-// import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import Input from '@material-ui/core/Input';
 import Paper from '@material-ui/core/Paper';
 import withReducer from 'app/store/withReducer';
+import PageLayout from 'app/shared/pageLayout/PageLayout';
 // import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { ThemeProvider } from '@material-ui/core/styles';
 import * as Actions from '../store/actions';
+import AddIcon from '@material-ui/icons/Add';
 import reducer from '../store/reducers';
-import Table from '../RecruitmentTable';
+import Table from '../RecruitmentTable.js';
 import { useAuth } from 'app/hooks/useAuth';
+import useRecruitmentOpening from '../hooks/useRecruitmentOpening';
+import CreateNewOpening from './CreateNewOpening';
 
 const columns = [
 	{
@@ -83,96 +79,46 @@ function Recruitment(props) {
 	const dispatch = useDispatch();
 
 	const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
-	const rows = useSelector(({ Recruitment }) => Recruitment.recruitment.data);
-
+	const state = useSelector(state => state.Recruitment);
 	const userData = useAuth().getUserData;
 
 	const [search, setSearch] = useState('');
-	const [approvedRows, setApprovedRows] = useState([]);
-	const [pendingRows, setPendingRows] = useState([]);
-	const [closedRow, setClosedRow] = useState([]);
 	const [tabValue, setTabValue] = useState(0);
+	
+	const RecruitmentHook = useRecruitmentOpening({
+		state,
+		dispatch,
+		userInfo: userData,
+	});
 
-	useEffect(() => {
-		dispatch(Actions.getAllOpenPositions());
-		dispatch(Actions.getEntities());
-	}, [dispatch])
 
-	useEffect(() => {
-		setApprovedRows(rows.filter(row => row.status === 'open'));
-		setPendingRows(rows.filter(row => row.status === 'pending' || row.status === 'added'));
-		setClosedRow(rows.filter(row => row.status === 'closed'));
-	}, [rows]);
+
+	const {
+		approvedRows, 
+		pendingRows,
+		closedRow,
+		isManager,
+		rows,
+		handleOpenModal
+	} = RecruitmentHook;
 
 	function handleChangeTab(event, value) {
 		setTabValue(value);
 	}
 
-	const isManager = () => userData.role.toUpperCase() === 'LINE MANAGER';
-
 	return (
-		<FusePageSimple
-			classes={{
-				toolbar: 'p-0',
-				header: 'min-h-72 h-72 sm:h-136 sm:min-h-136'
+		<PageLayout
+			header={{
+				icon: '',
+				title: 'RECRUITMENT LIST',
+				handleSearch: ({ target: { value } }) => console.log(value)
 			}}
-			header={
-				<div className="flex flex-1 w-full items-center justify-between px-24">
-					<div className="flex flex-col items-start max-w-full">
-						<div className="flex items-center">
-							<FuseAnimate animation="transition.expandIn" delay={300}>
-								<Icon className="text-32">shopping_basket</Icon>
-							</FuseAnimate>
-							<FuseAnimate animation="transition.slideLeftIn" delay={300}>
-								<Typography className="hidden sm:flex mx-0 sm:mx-12" variant="h6">
-									List of Opening
-								</Typography>
-							</FuseAnimate>
-						</div>
-					</div>
-
-					<div className="flex flex-1 items-center justify-center px-12">
-						<ThemeProvider theme={mainTheme}>
-							<FuseAnimate animation="transition.slideDownIn" delay={300}>
-								<Paper className="flex items-center w-full max-w-512 px-8 py-4 rounded-8" elevation={1}>
-									<Icon color="action">search</Icon>
-									<Input
-										placeholder="Search"
-										className="flex flex-1 mx-8"
-										disableUnderline
-										fullWidth
-										value={search}
-										inputProps={{
-											'aria-label': 'Search'
-										}}
-										onChange={ev => setSearch(ev.target.value)}
-									/>
-								</Paper>
-							</FuseAnimate>
-						</ThemeProvider>
-					</div>
-
-					{isManager() &&
-						<div className="flex items-center max-w-full">
-							<div className="flex flex-col min-w-0 mx-8 sm:mc-16">
-								<FuseAnimate animation="transition.slideLeftIn" delay={300}>
-									<Button
-										className="mb-16"
-										component={Link}
-										to='/recruitment/create_opening'
-										role='button'
-										variant="contained"
-										color="secondary"
-										disableElevation
-									>
-										Create New Opening
-									</Button>
-								</FuseAnimate>
-							</div>
-						</div>
-					}
-				</div>
-			}
+			button={{
+				showButton: isManager(),
+				btnTitle: 'CREATE NEW REQUEST',
+				onClick: handleOpenModal,
+				btnComponent: false,
+			}}
 			contentToolbar={
 				<Tabs
 					value={tabValue}
@@ -181,47 +127,43 @@ function Recruitment(props) {
 					textColor="primary"
 					variant="scrollable"
 					scrollButtons="off"
-					className="w-full border-b-1 px-24"
+					// className="w-full border-b-1 px-24"
+					classes={{ root: 'w-full h-64' }}
 				>
-					<Tab className="text-14 font-600 normal-case" label="All Openings" />
-					<Tab className="text-14 font-600 normal-case" label="Approved Openings" />
-					<Tab className="text-14 font-600 normal-case" label="Pending Openings" />
-					<Tab className="text-14 font-600 normal-case" label="Closed Openings" />
+					<Tab className="text-14 normal-case" label="Unpublished" />
+					<Tab className="text-14 normal-case" label="Published" />
+					<Tab className="text-14 normal-case" label="Closed" />
 				</Tabs>
 			}
 			content={
 				<div className=" sm:px-24 py-16 ">
+				<CreateNewOpening customHook={RecruitmentHook} />
 					{tabValue === 0 && (
 						<Table
-							columns={columns}
-							rows={rows}
-							search={search}
+							customHook = {RecruitmentHook}
+							// columns={columns}
+							// rows={pendingRows}
+							// search={search}
 						/>
 					)}
 					{tabValue === 1 && (
 						<Table
-							columns={columns}
-							rows={approvedRows}
-							search={search}
+						customHook = {RecruitmentHook}
+						// columns={columns}
+						// rows={pendingRows}
+						// search={search}
 						/>
 					)}
 					{tabValue === 2 && (
 						<Table
-							columns={columns}
-							rows={pendingRows}
-							search={search}
-						/>
-					)}
-					{tabValue === 3 && (
-						<Table
-							columns={columns}
-							rows={closedRow}
-							search={search}
+						customHook = {RecruitmentHook}
+						// columns={columns}
+						// rows={pendingRows}
+						// search={search}
 						/>
 					)}
 				</div>
 			}
-			innerScroll
 		/>
 	);
 }
