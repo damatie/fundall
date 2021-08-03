@@ -9,6 +9,7 @@ import AutoCompleteInput from 'app/shared/TextInput/AutoComplete';
 import Input from 'app/shared/TextInput/Input';
 import { useSelector } from 'react-redux';
 import SideModal from 'app/shared/modal/SideModal';
+import KpoContentCard from './KpoContentCard';
 
 const { useEffect } = React;
 
@@ -122,6 +123,7 @@ const CreateEmployeeKpo = ({ customHook }) => {
           Create KPO
         </SharedButton>
       </form>
+      {/* <KpoContentCard index={0} kpoCategory={'kpoCategory'} description={'description'} target={'target'} pipTarget={'pip target'}/> */}
     </SideModal>
   );
 };

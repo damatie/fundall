@@ -5,7 +5,7 @@ import useKpoContentList from '../hooks/useKpoContent';
 import Skeleton from '@material-ui/lab/Skeleton';
 import { useLocation } from 'react-router-dom';
 import KpoContentStatus from './KpoContentStatus';
-import editIcon from '../../../../../assets/icons/editIcon.svg';
+import EditIcon from '@material-ui/icons/Edit';
 
 const KpoContentList = ({ customHook }) => {
 	const columns = React.useMemo(() => [
@@ -44,7 +44,7 @@ const KpoContentList = ({ customHook }) => {
 			accessor: 'q1',
 			sortable: true,
 			Cell: ({ row }) => {
-				return <>{row.original.Q1 || '-'}</>;
+				return <>{row.original.Q1?.content || '-'}</>;
 			}
 		},
 		{
@@ -52,7 +52,7 @@ const KpoContentList = ({ customHook }) => {
 			accessor: 'q2',
 			sortable: true,
 			Cell: ({ row }) => {
-				return <>{row.original.Q2 || '-'}</>;
+				return <>{row.original.Q2?.content || '-'}</>;
 			}
 		},
 		{
@@ -60,7 +60,7 @@ const KpoContentList = ({ customHook }) => {
 			accessor: 'q3',
 			sortable: true,
 			Cell: ({ row }) => {
-				return <>{row.original.Q3 || '-'}</>;
+				return <>{row.original.Q3?.content || '-'}</>;
 			}
 		},
 		{
@@ -68,7 +68,7 @@ const KpoContentList = ({ customHook }) => {
 			accessor: 'q4',
 			sortable: true,
 			Cell: ({ row }) => {
-				return <>{row.original.Q4 || '-'}</>;
+				return <>{row.original.Q4?.content || '-'}</>;
 			}
 		},
 		{
@@ -95,20 +95,14 @@ const KpoContentList = ({ customHook }) => {
 				return <>{row.original.kpoPipAchieved || '-'}</>;
 			}
 		},
-		customHook?.shouldShowEditIcon()
-			? {
-					Header: '',
-					accessor: 'edit',
-					sortable: true,
-					Cell: ({ row }) => {
-						return <img style={{ width: '70%' }} src={editIcon} alt="edit icon" />;
-					}
-			  }
-			: {
-					Header: '',
-					accessor: 'empty',
-					sortable: true
-			  }
+		{
+			Header: '',
+			accessor: 'edit',
+			// sortable: true,
+			Cell: ({ row }) => {
+				return <EditIcon />;
+			}
+		}
 		// space for the edit icon on admin only
 	]);
 	const { kpoData, push, id, handleDelete, loading } = customHook;
@@ -129,7 +123,7 @@ const KpoContentList = ({ customHook }) => {
 				<>
 					<EnhancedTable
 						columns={columns}
-						data={kpoData || []}
+						data={JSON.parse(localStorage.getItem('tempKpoDetailArr')) || kpoData || []} // REMOVE THE "tempKpoDetailArr" here
 						onRowClick={(ev, row) => {
 							if (row) {
 								push(`${url}/${row.original.id}`);

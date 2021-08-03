@@ -126,9 +126,37 @@ const KpoDetailEmployeeInfo = ({ customHook }) => {
 	// useEffect(() => console.log(loadingSingleKpo, 'the loadingSingleKpo from the kpodetailemployeeinfo'), [customHook]);
 	// useEffect(() => console.log(details, 'the details from the kpodetailemployeeinfo'), [customHook]);
 
+	const customDetails = {
+		// REMOVE this customDetails object
+		employee: {
+			firstName: 'Andrea',
+			lastName: 'Jones',
+			email: 'employee@cbitindustries.com',
+			jobTitle: {
+				name: 'Software Dev'
+			}
+		},
+		entity: {
+			entityName: 'IT'
+		},
+		lineManager: {
+			firstName: 'Boss',
+			lastName: 'Manager'
+		},
+		department: {
+			departmentName: 'CBIT'
+		},
+		reviewingManager: {
+			lastName: 'Tommy',
+			firstName: 'Shelby'
+		}
+	};
+
+	// REMOVE all occurence of customDetails to details?
+
 	return (
 		<>
-			{loadingSingleKpo ? (
+			{!loadingSingleKpo ? (
 				<Skeleton animation="wave" width="100%" height="350px" variant="rect" />
 			) : (
 				<>
@@ -151,7 +179,9 @@ const KpoDetailEmployeeInfo = ({ customHook }) => {
 									</div>
 								) : (
 									<div className={` ${classes.avatarDpDiv}`}>
-										<Avatar className={` ${classes.avatarDpSize}`}>{details?.employee?.firstName.charAt(0)}</Avatar>
+										<Avatar className={` ${classes.avatarDpSize}`}>
+											{customDetails.employee?.firstName.charAt(0)}
+										</Avatar>
 									</div>
 								)}
 							</Grid>
@@ -160,7 +190,7 @@ const KpoDetailEmployeeInfo = ({ customHook }) => {
 									Entity
 								</Typography>
 								<Typography variant="subtitle1" className={` ${classes.secondAndThirdRowContent}`}>
-									{details?.entity?.entityName}
+									{customDetails.entity?.entityName}
 								</Typography>
 							</Grid>
 							<Grid item className={` ${classes.secondAndThirdRow}`}>
@@ -168,7 +198,7 @@ const KpoDetailEmployeeInfo = ({ customHook }) => {
 									Line Manager
 								</Typography>
 								<Typography variant="subtitle1" className={` ${classes.secondAndThirdRowContent}`}>
-									{`${details?.lineManager?.firstName} ${details?.lineManager?.lastName}`}
+									{`${customDetails.lineManager?.firstName} ${customDetails.lineManager?.lastName}`}
 								</Typography>
 							</Grid>
 						</Grid>
@@ -180,13 +210,13 @@ const KpoDetailEmployeeInfo = ({ customHook }) => {
 						>
 							<Grid item className={` ${classes.firstRow} ${classes.employeeNameDiv}`}>
 								<Typography variant="h2" className={` ${classes.employeeName}`} gutterBottom>
-									{`${details?.employee?.firstName} ${details?.employee?.lastName}`}
+									{`${customDetails.employee?.firstName} ${customDetails.employee?.lastName}`}
 								</Typography>
 								<Typography variant="subtitle2" className={` ${classes.employeeEmail}`}>
-									{details?.employee?.email}
+									{customDetails.employee?.email}
 								</Typography>
 								<Typography variant="subtitle2" className={` ${classes.employeeJobTitle}`}>
-									{details?.jobTitle?.name}
+									{customDetails.jobTitle?.name}
 								</Typography>
 							</Grid>
 							<Grid item className={` ${classes.secondAndThirdRow}`}>
@@ -194,7 +224,7 @@ const KpoDetailEmployeeInfo = ({ customHook }) => {
 									Department
 								</Typography>
 								<Typography variant="subtitle1" className={` ${classes.secondAndThirdRowContent}`}>
-									{details?.department?.departmentName}
+									{customDetails.department?.departmentName}
 								</Typography>
 							</Grid>
 							<Grid item className={` ${classes.secondAndThirdRow}`}>
@@ -202,7 +232,7 @@ const KpoDetailEmployeeInfo = ({ customHook }) => {
 									Reviewing Manager
 								</Typography>
 								<Typography variant="subtitle1" className={` ${classes.secondAndThirdRowContent}`}>
-									{`${details?.reviewingManager?.firstName} ${details?.reviewingManager?.lastName}`}
+									{`${customDetails.reviewingManager?.firstName} ${customDetails.reviewingManager?.lastName}`}
 								</Typography>
 							</Grid>
 						</Grid>

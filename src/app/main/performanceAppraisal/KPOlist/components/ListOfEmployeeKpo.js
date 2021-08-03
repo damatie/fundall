@@ -140,9 +140,107 @@ const ListOfEmployeeKpo = ({ customHook, isAssigned, value, request, type, filte
 		}
 	]);
 
+	const temporaryKpoList = [
+		// REMOVE this temporaryKpoList
+		{
+			id: 1,
+			Q1: '',
+			Q2: '',
+			Q3: '',
+			Q4: '',
+			kpoCategory: {
+				name: 'First Category'
+			},
+			kpoDescription: '',
+			target: '',
+			kpoPipTarget: '',
+			kpoYearendRemarks: '',
+			kpoYearendScore: '',
+			status: 'pending',
+			reviewingManager: {
+				firstName: 'John',
+				lastName: 'Travolta'
+			},
+			lineManager: {
+				firstName: 'Boss',
+				lastName: 'Manager'
+			},
+			employee: {
+				email: 'jt@gmail.com'
+			},
+			jobTitle: {
+				name: 'Software Dev'
+			},
+			createdAt: '2021-07-27T12:29:23.000Z'
+		},
+		{
+			id: 2,
+			Q1: '',
+			Q2: '',
+			Q3: '',
+			Q4: '',
+			kpoCategory: {
+				name: 'Second Category'
+			},
+			kpoDescription: '',
+			target: '',
+			kpoPipTarget: '',
+			kpoYearendRemarks: '',
+			kpoYearendScore: '',
+			status: 'created',
+			reviewingManager: {
+				firstName: 'Damon',
+				lastName: 'Salvatore'
+			},
+			lineManager: {
+				firstName: 'Boss',
+				lastName: 'Manager'
+			},
+			employee: {
+				email: 'ds@gmail.com'
+			},
+			jobTitle: {
+				name: 'Software Tester'
+			},
+			createdAt: '2021-07-27T11:29:23.000Z'
+		},
+		{
+			id: 3,
+			Q1: '',
+			Q2: '',
+			Q3: '',
+			Q4: '',
+			kpoCategory: {
+				name: 'Second Category'
+			},
+			kpoDescription: '',
+			target: '',
+			kpoPipTarget: '',
+			kpoYearendRemarks: '',
+			kpoYearendScore: '',
+			status: 'completed',
+			reviewingManager: {
+				firstName: 'Stefan',
+				lastName: 'Salvatore'
+			},
+			lineManager: {
+				firstName: 'Zack',
+				lastName: 'Salvatore'
+			},
+			employee: {
+				email: 'sts@gmail.com'
+			},
+			jobTitle: {
+				name: 'Software Developer'
+			},
+			createdAt: '2021-07-27T11:28:23.000Z'
+		}
+	];
+
 	const [kposToDisplay, setKposToDisplay] = useState([]);
 	useEffect(() => {
-		setKposToDisplay(getKpos(type));
+		// setKposToDisplay(getKpos(type));
+		setKposToDisplay(temporaryKpoList);
 	}, [type]);
 
 	useEffect(() => console.log(kposToDisplay, 'kpo showing '), [kposToDisplay]);
@@ -178,9 +276,11 @@ const ListOfEmployeeKpo = ({ customHook, isAssigned, value, request, type, filte
 				}
 			});
 			console.log(filteredKpoByCategory);
-			setKposToDisplay([...filteredKpoByCategory]);
+			// setKposToDisplay([...filteredKpoByCategory]);
+			setKposToDisplay(temporaryKpoList);
 		} else if (filterState?.kpoCategoryFilter === '') {
-			setKposToDisplay(getKpos(type));
+			// setKposToDisplay(getKpos(type));
+			setKposToDisplay(temporaryKpoList);
 		}
 	}, [filterState?.kpoCategoryFilter]);
 

@@ -107,36 +107,38 @@ function Departments({handleNext}) {
     // setDepartmentList(departmentList);
   }, [grades, departmentList, entities, gradeLevels, accountSettings])
 
-  const handleHumanResourceChange = (event) => {
-    setHumanResource(event.target.checked);
-    let data = {};
-    data.name = "Human Resource";
-    if (humanResource === true) {
-      !genericDept.includes(data) ? genericDept.push(data) : '';
-    } else {
-      genericDept.filter(e => e !== data);
-    }
-  };
-  const handleFinanceChange = (event) => {
-    setFinance(event.target.checked);
-    let data = {};
-    data.name = "Finance";
-    if (finance === true) {
-      !genericDept.includes(data) ? genericDept.push(data) : '';
-    } else {
-      genericDept.filter(e => e !== data);
-    }
-  };
-  const handleInformationTechnologyChange = (event) => {
-    setInformationTechnology(event.target.checked);
-    let data = {};
-    data.name = "Information Technology";
-    if (finance === true) {
-      !genericDept.includes(data) ? genericDept.push(data) : '';
-    } else {
-      genericDept.filter(e => e !== data);
-    }
-  };
+  // const handleHumanResourceChange = (event) => {
+  //   setHumanResource(event.target.checked);
+  //   let data = {};
+  //   data.name = "Human Resource";
+  //   if (humanResource === true) {
+  //     !genericDept.includes(data) ? genericDept.push(data) : '';
+  //   } else {
+  //     genericDept.filter(e => e !== data);
+  //   }
+  // };
+
+  // const handleFinanceChange = (event) => {
+  //   setFinance(event.target.checked);
+  //   let data = {};
+  //   data.name = "Finance";
+  //   if (finance === true) {
+  //     !genericDept.includes(data) ? genericDept.push(data) : '';
+  //   } else {
+  //     genericDept.filter(e => e !== data);
+  //   }
+  // };
+  
+  // const handleInformationTechnologyChange = (event) => {
+  //   setInformationTechnology(event.target.checked);
+  //   let data = {};
+  //   data.name = "Information Technology";
+  //   if (finance === true) {
+  //     !genericDept.includes(data) ? genericDept.push(data) : '';
+  //   } else {
+  //     genericDept.filter(e => e !== data);
+  //   }
+  // };
 
 
   const HandleAddDepartment = () => {
@@ -152,9 +154,6 @@ function Departments({handleNext}) {
   }
 
   const HandleSubmit = async ( ) => {
-    console.log('departmentList: ', departmentList);
-    console.log('grades: ', grades);
-    console.log('gradeLevels: ', gradeLevels);
     const dataResponse = localStorage.getItem('login_data');
 	  const localData = JSON.parse(dataResponse);
     if (localData.company.hasEntities === true) {
@@ -188,7 +187,7 @@ function Departments({handleNext}) {
       if (departmentList.length > 0 && grades.length > 0 && gradeLevels.length > 0) {
         try {
           loading('processing...');
-          await setStepper(genericDept, 4);
+          await setStepper([], 4);
           const dataResponse = localStorage.getItem('login_data');
           const localData = JSON.parse(dataResponse);
           localData.company.regStep = 4;
@@ -218,7 +217,7 @@ function Departments({handleNext}) {
     <div className={classes.root}>
       <div>
           <Typography variant="h5" color="initial" className='my-10'><strong>Departments</strong></Typography>
-          {!hasEntities && <Grid container spacing={3} justify='space-between' align='center' style={{ marginBottom: '3rem'}}>
+          {/* {!hasEntities && <Grid container spacing={3} justify='space-between' align='center' style={{ marginBottom: '3rem'}}>
           <Typography variant="body1" color="initial" className='my-10' style={{ marginLeft: '15px' }}><strong>Please select departments that will be general for all entities</strong></Typography>
             <Grid item lg={12} md={12} sm={12} xs={12} align='left' style={{ marginBottom: '-15px' }}>
               <FormControlLabel control={<Checkbox
@@ -247,7 +246,7 @@ function Departments({handleNext}) {
               />}
               label="Information Technology" />
             </Grid>
-          </Grid>}          
+          </Grid>}           */}
           <Grid container spacing={3} justify='space-between' align='center' style={{ marginBottom: '3rem'}}>
             <Grid item lg={12} md={12} sm={12} xs={12} align='left' className='mt-10'>
               <Button onClick={HandleAddDepartment} variant="contained" color="secondary">
