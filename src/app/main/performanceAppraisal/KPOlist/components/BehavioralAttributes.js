@@ -45,17 +45,81 @@ const BehavioralAttributes = () => {
 		{
 			id: 2,
 			label: 'Integrity',
-			type: 'itgy'
+			type: 'itgy',
+			tableData: [
+				{
+					id: '1itgy',
+					title: 'Decision Making',
+					content:
+						'Make appreciate and timely choices for the company, our personnel, our customers and our stakeholders.',
+					name: 'decisionMaking'
+				},
+				{
+					id: '2itgy',
+					title: 'Responsibility',
+					content:
+						'Take personal ownership and accountability for service outcome, HSE, work quality, ethics and sustainability.',
+					name: 'responsibility'
+				}
+			]
 		},
 		{
 			id: 3,
 			label: 'Teamwork',
-			type: 'twrk'
+			type: 'twrk',
+			tableData: [
+				{
+					id: '1twrk',
+					title: 'Collaborating',
+					content: 'Contribute to the team and encourage the contribution of others.',
+					name: 'collaborating'
+				},
+				{
+					id: '2twrk',
+					title: 'Communicating',
+					content: 'Convey messages and ideas effectively, timely, while actively listening and welcoming feedback.',
+					name: 'communicating'
+				},
+				{
+					id: '3twrk',
+					title: 'Guiding, Coaching and Mentoring',
+					content:
+						'Nurture and inspire talent whenever the opportunity arises. Also creates opportunities for nurturing others.',
+					name: 'guidingCoachingAndMentoring'
+				},
+				{
+					id: '4twrk',
+					title: 'Diversity',
+					content: 'Understand and support diversity at nationality, culture, gender, and thought.',
+					name: 'diversity'
+				}
+			]
 		},
 		{
 			id: 4,
 			label: 'Personal Drive',
-			type: 'pd'
+			type: 'pd',
+			tableData: [
+				{
+					id: '1pd',
+					title: 'Results Focus',
+					content: "Stay focused on your and company's priorities",
+					name: 'resultsFocus'
+				},
+				{
+					id: '2pd',
+					title: 'Initiative and Creativity',
+					content:
+						'Be proactive and take action without being prompted. \n Seek innovative and new ways and ideas to have a positive impact.',
+					name: 'initiativeAndCreativity'
+				},
+				{
+					id: '3pd',
+					title: 'Adaptability',
+					content: 'Embrace change and is flexible to new approach and ideas.',
+					name: 'adaptability'
+				}
+			]
 		}
 	];
 

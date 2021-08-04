@@ -30,6 +30,7 @@ import KpoContentCard from './components/KpoContentCard';
 import Swal from 'sweetalert2';
 import PerformanceAppraisalConfig from '../PerformanceAppraisalConfig';
 import PerformanceAppraisal from './components/PerformanceAppraisal';
+import EditIcon from '../../../../assets/icons/editIcon.svg';
 
 const CustomTabs = withStyles({
 	root: {
@@ -345,42 +346,56 @@ const EmployeeKpoDetails = () => {
 			}}
 			button={{
 				showButton: true,
-				btnComponent: tabValue === 0 && (
-					<>
-						{!EmployeeKpoCustomHook.showReviewKpoAndAppraisalBtn() && (
-							<Button variant="contained" color="secondary" onClick={confirmUpdate}>
-								UPDATE KPO
-							</Button>
-						)}
-						{EmployeeKpoCustomHook.shouldShowAddButton() && (
+				btnComponent:
+					tabValue === 0 ? (
+						<>
+							{!EmployeeKpoCustomHook.showReviewKpoAndAppraisalBtn() && (
+								<Button variant="contained" color="secondary" onClick={confirmUpdate}>
+									UPDATE KPO
+								</Button>
+							)}
+							{EmployeeKpoCustomHook.shouldShowAddButton() && (
+								<Button
+									variant="contained"
+									color="secondary"
+									onClick={customHook.handleOpenModal}
+									startIcon={<AddIcon />}
+								>
+									Add KPO Content
+								</Button>
+							)}
+							{EmployeeKpoCustomHook.showReviewKpoAndAppraisalBtn() && (
+								<div className={classes.kpoDetailTopBtnDiv}>
+									<Button
+										variant="contained"
+										color="secondary"
+										onClick={() => {
+											setToggleSideModal(true);
+											setApproveBtnActive(true);
+										}}
+									>
+										REVIEW KPO{' '}
+									</Button>
+									<Button variant="contained" color="secondary" /* onClick={customHook.handleOpenModal} */ disabled>
+										START APPRAISAL
+									</Button>
+								</div>
+							)}
+						</>
+					) : (
+						tabValue === 1 && (
+							// EmployeeKpoCustomHook.shouldShowAddButton() && (
 							<Button
 								variant="contained"
 								color="secondary"
 								onClick={customHook.handleOpenModal}
-								startIcon={<AddIcon />}
+								startIcon={<img src={EditIcon} alt="edit icon" />}
 							>
-								Add KPO Content
+								Edit
 							</Button>
-						)}
-						{EmployeeKpoCustomHook.showReviewKpoAndAppraisalBtn() && (
-							<div className={classes.kpoDetailTopBtnDiv}>
-								<Button
-									variant="contained"
-									color="secondary"
-									onClick={() => {
-										setToggleSideModal(true);
-										setApproveBtnActive(true);
-									}}
-								>
-									REVIEW KPO{' '}
-								</Button>
-								<Button variant="contained" color="secondary" /* onClick={customHook.handleOpenModal} */ disabled>
-									START APPRAISAL
-								</Button>
-							</div>
-						)}
-					</>
-				)
+						)
+						// )
+					)
 			}}
 			contentToolbar={
 				<CustomTabs

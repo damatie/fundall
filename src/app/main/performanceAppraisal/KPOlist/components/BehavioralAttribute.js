@@ -1,7 +1,8 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import PlayArrowRoundedIcon from '@material-ui/icons/PlayArrowRounded';
 import BehavioralAttributeTable from './BehavioralAttributeTable';
+import AppraisalScoreInputDiv from './AppraisalScoreInputDiv';
 
 const useStyles = makeStyles(theme => ({
 	behavioralAttribute: {
@@ -48,6 +49,11 @@ const useStyles = makeStyles(theme => ({
 	baSpan: {
 		fontWeight: 700,
 		fontSize: 14
+	},
+	noTableData: {
+		display: 'flex',
+		justifyContent: 'center',
+		fontWeight: 800
 	}
 }));
 
@@ -59,6 +65,14 @@ const BehavioralAttribute = ({ label, tableData }) => {
 		setShowTable(!showTable);
 	};
 
+	useEffect(() => {
+		if (showTable) {
+			localStorage.setItem('overAllPerformanceScore', JSON.stringify(true));
+		} else {
+			localStorage.setItem('overAllPerformanceScore', JSON.stringify(false));
+		}
+	}, [showTable]);
+
 	return (
 		<Fragment>
 			<div className={` ${classes.behavioralAttribute} ${showTable && classes.behavioralAttributeClicked}`}>
@@ -67,7 +81,22 @@ const BehavioralAttribute = ({ label, tableData }) => {
 					<PlayArrowRoundedIcon className={` ${classes.playArrowIcon} ${showTable && classes.playArrowIconDown}`} />
 				</span>
 			</div>
-			{showTable && <BehavioralAttributeTable tableData={tableData} />}
+			{showTable && (
+				<>
+					{tableData?.length > 0 ? (
+						<>
+							<BehavioralAttributeTable tableData={tableData} />
+							<AppraisalScoreInputDiv
+								spanText="Behavioral Factors and Performance Attributes Total Score"
+								inputValue=""
+								disabled={false}
+							/>
+						</>
+					) : (
+						<div className={` ${classes.noTableData}`}>No Data Here</div>
+					)}
+				</>
+			)}
 		</Fragment>
 	);
 };

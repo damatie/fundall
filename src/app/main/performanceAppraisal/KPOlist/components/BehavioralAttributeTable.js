@@ -4,8 +4,8 @@ import Checkbox from '@material-ui/core/Checkbox';
 
 const useStyles = makeStyles(theme => ({
 	baTable: {
-		width: '90%',
-		marginBottom: '10%'
+		width: '90%' /* ,
+		marginBottom: '10%' */
 	},
 	largeTr: {
 		width: '45%'
