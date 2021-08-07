@@ -18,6 +18,7 @@ const Input = forwardRef((props, ref) => {
     value,
     type,
     size,
+    rows,
     className,
     onBlur,
     refs,
@@ -58,7 +59,7 @@ const Input = forwardRef((props, ref) => {
       helperText={message}
       onBlur={onBlur}
       inputRef={refs || ref}
-      rows={multiline && 4}
+      rows={multiline && rows || 4}
       multiline={multiline && true}
       placeholder={placeholder}
       InputProps={type === 'password' ? {

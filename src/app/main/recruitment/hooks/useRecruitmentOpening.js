@@ -20,7 +20,7 @@ const schema = yup.object().shape({
           type: 'required'
         })
       ),
-      employeeGrade: yup.string(
+      employeeGradeId: yup.string(
         errorMsg({
           name: 'Employee Grade',
           type: 'string'
@@ -127,7 +127,7 @@ const schema = yup.object().shape({
           type: 'required'
         })
       ),
-      country: yup.string(
+      countryId: yup.string(
         errorMsg({
           name: 'Country',
           type: 'string'
@@ -138,7 +138,7 @@ const schema = yup.object().shape({
           type: 'required'
         })
       ),
-      state: yup.string(
+      stateId: yup.string(
         errorMsg({
           name: 'State',
           type: 'string'
@@ -146,34 +146,53 @@ const schema = yup.object().shape({
       ).required(
         errorMsg({
           name: 'State',
+          type: 'required'
+        })
+      ),
+      contactEmail: yup.string(
+        errorMsg({
+          name: 'Contact Email',
+          type: 'string'
+        })
+      ).required(
+        errorMsg({
+          name: 'Contact Email',
+          type: 'required'
+        })
+      ),
+      closingDate: yup.date(
+        errorMsg({
+          name: 'Closing Date',
+          type: 'date'
+        })
+      ).required(
+        errorMsg({
+          name: 'Closing Date',
           type: 'required'
         })
       ),
     });
 
-const useRecruitmentOpening = ({ state, dispatch, kpoCategory, userInfo }) => {
-	const { open, data, loading} = state.recruitment;
+const useRecruitmentOpening = ({ state, dispatch, push, id, userInfo, description, setDescription }) => {
+	const { open, data, loading, oneLoading, onePosition} = state.recruitment;
 	const employeeInfo = state.employeeInformation;
+  const employees = employeeInfo.employees.filter(em => em.id !== userInfo.id).map(em => {
+    return {
+      name: `${em.firstName} ${em.lastName}`,
+      id: em.id
+    };
+  });
 
 	const { register, handleSubmit, errors, control, getValues , reset} = useForm({
 		mode: 'onBlur',
 		resolver: yupResolver(schema)
 	});
 
-  console.log(employeeInfo);
-  console.log(state);
-
-  // const { 
-  //   entities,
-  //   departments,
-  //   jobTitle,
-  //   employeeGrade,
-  //   roles, 
-  // } = employeeInformation;
+  // console.log(state);
 
 	const [shouldDisableButton, setShouldDisableButton] = React.useState(false);
-	const [approvedRows, setApprovedRows] = React.useState([]);
-	const [pendingRows, setPendingRows] = React.useState([]);
+	const [publishedRows, setPublishedRows] = React.useState([]);
+	const [unpublishedRows, setUnpublishedRows] = React.useState([]);
 	const [closedRow, setClosedRow] = React.useState([]);
   const [radioValue, setRadioValue] = React.useState('');
   const [positionType, setPositionType] = React.useState('');
@@ -182,30 +201,58 @@ const useRecruitmentOpening = ({ state, dispatch, kpoCategory, userInfo }) => {
   const [contentList, setContentList] = React.useState([]);
   const [contentSelectedItem, setContentSelectedItem] = React.useState({
     id: 0,
-    kpoCategoryId: '',
-    category: '',
-    kpoDescription: '',
-    target: '',
-    kpoPipTarget: ''
-  });
-  
+    entityId: '',
+    employeeGradeId: '',
+    departmentId: '',
+    jobRoleId: '',
+    jobDescription: '<p></p>',
+    openingType: '',
+    employeeToReplace: 0,
+    duration: '',
+    positionType: '',
+    startDate: '',
+    endDate: '',
+    hireDate: '',
+    urgency: '',
+    countryId: '',
+    stateId: '',
+    contanctEmail: '',
+    closingDate: ''
+});
+
   React.useEffect(() => {
+		dispatch(Actions.getEntities());
     getCountries().then((res) => setCountries(res));
     dispatch(Actions.getEntities());
     dispatch(Actions.getDept(userInfo.entityId));
     dispatch(Actions.getJobTitle());
-  }, []);
-
-
-  React.useEffect(() => {
+    dispatch(Actions.getGrades());
+    dispatch(Actions.getEmployees());
 		dispatch(Actions.getAllOpenPositions());
-		dispatch(Actions.getEntities());
+    if(id){
+      dispatch(Actions.getOneOpenPosition(id));
+    }
 	}, [dispatch])
 
+  React.useEffect(() => {
+    if(id){
+        setContentSelectedItem({
+            ...onePosition,
+            entityName: onePosition?.entity?.entityName,
+            departmentName: onePosition?.department?.departmentName,
+            jobRoleName: onePosition?.jobTitles?.name,
+            employeeGrade: onePosition?.grade?.gradeName,
+            countryName: countries.find(country => country.id === onePosition.countryId)?.name,
+            employeeName: employees.find(emp => emp.id === onePosition.employeeToReplace)?.name
+        });
+        setDescription(onePosition?.jobDescription);
+    }
+  }, [id, onePosition]);
+
 	React.useEffect(() => {
-		setApprovedRows(data.filter(row => row.status === 'open'));
-		setPendingRows(data.filter(row => row.status === 'pending' || row.status === 'added'));
-		setClosedRow(data.filter(row => row.status === 'closed'));
+		setPublishedRows(data.filter(row => row.status === 'PUBLISHED'));
+		setUnpublishedRows(data.filter(row => row.status === 'UNPUBLISHED'));
+		setClosedRow(data.filter(row => row.status === 'CLOSED'));
 	}, [data]);
 
 	const handleOpenModal = () => {
@@ -220,11 +267,45 @@ const useRecruitmentOpening = ({ state, dispatch, kpoCategory, userInfo }) => {
     getStates(ev.target.value).then((st) => setStates(st));
   }
 
-  const isManager = () => userInfo.role.toUpperCase() === 'LINE MANAGER';
+  const isManager = () => userRole(userInfo?.role?.name) === 'linemanager';
 
-	  const onSubmit = () => {
-        
-      };
+  const isHR = () => userRole(userInfo?.role?.name) === 'hrmanager' || userRole(userInfo?.role?.name).includes('hr');
+
+  const onSubmit = () => {
+      console.log(contentList);
+      const payload = {
+        openings: contentList
+      }
+      dispatch(Actions.createOpening(payload));
+  };
+
+  const getDurations = () => {
+    let items = [];
+    for(let i = 1; i <= 12; i++){
+      let item = (i <= 1) ? `${i} Month` : `${i} Months`;
+      items.push(item);
+    }
+    return items;
+  }
+
+  const publishOpening = () => {
+    const payload = {
+      employeeGradeId: Number(contentSelectedItem.employeeGradeId),
+      jobRoleId: Number(contentSelectedItem.jobRoleId),
+      jobDescription: contentSelectedItem.jobDescription,
+      openingType: contentSelectedItem.openingType,
+      employeeToReplace: contentSelectedItem.employeeToReplace,
+      duration: contentSelectedItem.duration,
+      positionType: contentSelectedItem.positionType,
+      startDate: contentSelectedItem.startDate,
+      endDate: contentSelectedItem.endDate,
+      hireDate: contentSelectedItem.hireDate,
+      urgency: contentSelectedItem.urgency,
+      countryId: contentSelectedItem.countryId,
+      stateId: contentSelectedItem.stateId,
+    }
+    dispatch(Actions.publishOpening(payload, contentSelectedItem.id));
+  }
 
   const handleChangeRadioBtn = (ev) => {
     setRadioValue(ev.target.value);
@@ -234,29 +315,63 @@ const useRecruitmentOpening = ({ state, dispatch, kpoCategory, userInfo }) => {
     setPositionType(ev.target.value);
   }
 
-	const disableInput = () => {
-		if (userRole(userInfo.role) !== 'linemanager') {
-			return {
-				disabled: true
-			};
-		}
-	};
+  const handleAddList = (model) => {
+    // console.log(model);
+    contentList.push({
+      ...model,
+      id: model.id || contentList.length+1,
+      jobDescription: description,
+      entityName: employeeInfo.entities.find(en => en.id === model.entityId)?.entityName,
+      departmentName: employeeInfo.departments.find(dep => dep.id === model.departmentId)?.departmentName,
+      jobRoleName: employeeInfo.jobTitles.find(job => job.id === model.jobRoleId)?.name,
+      employeeGrade: employeeInfo.grades.find(emp => emp.id === model.employeeGradeId)?.gradeName,
+      countryName: countries.find(country => country.id === model.countryId)?.name,
+      employeeName: employees.find(emp => emp.id === model.employeeToReplace)?.name
+    });
+    setContentList(contentList);
+    reset();
+    setContentSelectedItem({
+      id: 0,
+      entityId: '',
+      employeeGradeId: '',
+      departmentId: '',
+      jobRoleId: '',
+      jobDescription: '',
+      openingType: '',
+      employeeToReplace: 0,
+      duration: '',
+      positionType: '',
+      startDate: '',
+      endDate: '',
+      hireDate: '',
+      urgency: '',
+      countryId: '',
+      stateId: '',
+      contanctEmail: '',
+      closingDate: ''
+    });
+    setDescription('');
+    // console.log(contentSelectedItem);
+  }
 
-	const shouldShowEditIcon = () => {
-		if (userRole(userInfo.role) === 'linemanager') {
-			return true;
-		} else {
-			return false;
-		}
-	};
+  const handleEditList = (id) => {
+    // console.log(id);
+    setContentSelectedItem(contentList.find(content => content.id === id));
+    console.log(contentSelectedItem?.jobDescription);
+    setDescription(contentSelectedItem?.jobDescription);
+    setContentList(contentList.filter(content => content.id !== id));
+  }
   
-  const handleDeleteRecruitment = () => {
+  const handleDeleteRecruitment = (payload) => {
+    dispatch(Actions.deleteOpening(payload));
+  }
 
+  const handleExtendClsoingDate = () => {
+    dispatch(Actions.extendClosingDate('1'))
   }
 
 	return {
 		...state,
-		disableInput,
 		open,
 		handleOpenModal,
 		handleCloseModal,
@@ -265,16 +380,19 @@ const useRecruitmentOpening = ({ state, dispatch, kpoCategory, userInfo }) => {
 		handleSubmit,
 		register,
 		onSubmit,
+    publishOpening,
 		loading,
-		kpoCategory,
-		shouldDisableButton,
-		shouldShowEditIcon,
-    approvedRows,
-    pendingRows,
+    push,
+		isHR,
+    publishedRows,
+    unpublishedRows,
     closedRow,
+    oneLoading,
+    content: onePosition,
     isManager,
     rows: data,
     handleDeleteRecruitment,
+    handleExtendClsoingDate,
     handleChangeRadioBtn,
     radioValue,
     handleChangePositionType,
@@ -282,11 +400,16 @@ const useRecruitmentOpening = ({ state, dispatch, kpoCategory, userInfo }) => {
     handleCountryChange,
     countries,
     states,
-    employeeInfo
-    // jobTitle,
-    // entities,
-    // employeeGrade,
-    // roles
+    employeeInfo,
+    employees,
+    handleAddList,
+    handleEditList,
+    contentList,
+    contentSelectedItem,
+    setContentSelectedItem,
+    description,
+    setDescription,
+    getDurations
 	};
 };
 

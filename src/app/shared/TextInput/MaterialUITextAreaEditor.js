@@ -1,6 +1,5 @@
 import React from 'react';
-import MUIRichTextEditor from 'mui-rte';
-import {convertFromHTML, ContentState, convertToRaw } from 'draft-js';
+import MUIEditor, { MUIEditorState } from "react-mui-draft-wysiwyg";
 import {
     makeStyles,
     createMuiTheme,
@@ -30,7 +29,7 @@ Object.assign(defaultTheme, {
 });
 
 
-const MaterialUITextAreaEditor = (props) => {
+const TextAreaEditor = (props) => {
     const {
         id,
         value,
@@ -39,32 +38,26 @@ const MaterialUITextAreaEditor = (props) => {
         message,
         refs,
         name,
+        setState,
         className
     } = props;
-    const contentHTML = convertFromHTML(value || '');
-    const state = ContentState.createFromBlockArray(contentHTML.contentBlocks, contentHTML.entityMap);
-    const content = JSON.stringify(convertToRaw(state));
+    React.useEffect(() => {
+      setState(MUIEditorState.createEmpty());
+    }, []);
     return (
-    <MuiThemeProvider theme={defaultTheme}>
-          <MUIRichTextEditor
+      <MuiThemeProvider theme={defaultTheme}>
+          <MUIEditor
             {...props}
             label={label}
             className = {className}
             error={error}
             message={message}
             refs={refs}
-            value = {content}
+            value = {value}
             id= {id}
-          // onSave={save}
-            customControls={[
-              {
-                name: name,
-              },
-            ]}
-            inlineToolbar
           />
-        </MuiThemeProvider>
+      </MuiThemeProvider>
     );
 }
 
-export default MaterialUITextAreaEditor;
+export default TextAreaEditor;

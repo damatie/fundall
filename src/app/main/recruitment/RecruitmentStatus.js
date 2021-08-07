@@ -47,14 +47,14 @@ const RecruitmentStatus = ({ status }) => {
 
 	return (
 		<>
-			{status === 'completed' ? (
-				<span className={`bg-green-100 text-green-800 text-center p-4 rounded-4 ${classes.status}`}>
+			{status === 'LOW' ? (
+				<span className={`bg-green-200 text-green-800 text-center p-4 rounded-4 ${classes.status}`}>
 					{checkStringAndCapitalizeFirstLetter(status?.toLowerCase())}
 				</span>
-			) : status === 'created' ? (
-				<span className={`text-center p-4 rounded-4 ${classes.createdStatus} ${classes.status}`}>Pending</span>
-			) : status === 'pending' ? (
-				<span className={`text-center p-4 rounded-4 ${classes.pendingStatus} ${classes.status}`}>Pending</span>
+			): status === 'HIGH' ? (
+				<span className={`bg-red-200 text-red-800 text-center p-4 rounded-4 ${classes.status}`}>
+					{checkStringAndCapitalizeFirstLetter(status?.toLowerCase())}
+				</span>
 			) : (
 				<span className={`bg-yellow-100 text-yellow-800 text-center p-4 rounded-4 ${classes.status}`}>
 					{checkStringAndCapitalizeFirstLetter(status?.toLowerCase())}

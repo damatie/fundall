@@ -1,19 +1,12 @@
-import FuseAnimate from '@fuse/core/FuseAnimate';
-import FusePageSimple from '@fuse/core/FusePageSimple';
 import _ from '@lodash';
-import Button from '@material-ui/core/Button';
-import Icon from '@material-ui/core/Icon';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
-import Typography from '@material-ui/core/Typography';
-import Input from '@material-ui/core/Input';
-import Paper from '@material-ui/core/Paper';
 import withReducer from 'app/store/withReducer';
 import PageLayout from 'app/shared/pageLayout/PageLayout';
 // import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { ThemeProvider } from '@material-ui/core/styles';
 import * as Actions from '../store/actions';
 import AddIcon from '@material-ui/icons/Add';
@@ -21,86 +14,41 @@ import reducer from '../store/reducers';
 import Table from '../RecruitmentTable.js';
 import { useAuth } from 'app/hooks/useAuth';
 import useRecruitmentOpening from '../hooks/useRecruitmentOpening';
-import CreateNewOpening from './CreateNewOpening';
-
-const columns = [
-	{
-		id: 'jobTitle',
-		// align: 'center',
-		disablePadding: false,
-		label: 'Job title',
-		sort: true
-	},
-	{
-		id: 'jobDescription',
-		// align: 'center',
-		disablePadding: false,
-		label: 'Job Description',
-		sort: true
-	},
-	{
-		id: 'employeeStatus',
-		// align: 'center',
-		disablePadding: false,
-		label: 'Employee status',
-		sort: true
-	},
-	{
-		id: 'urgency',
-		// align: 'center',
-		disablePadding: false,
-		label: 'Urgency',
-		sort: true
-	},
-	{
-		id: 'createdAt',
-		// align: 'center',
-		disablePadding: false,
-		label: 'Created At',
-		sort: true
-	},
-	{
-		id: 'status',
-		// align: 'center',
-		disablePadding: false,
-		label: 'Status',
-		sort: true
-	},
-	{
-		id: 'actions',
-		// align: 'center',
-		disablePadding: false,
-		label: 'Actions',
-		sort: true
-	},
-];
+import CreateNewOpening from './components/CreateNewOpening';
 
 function Recruitment(props) {
 	const dispatch = useDispatch();
+	const { push } = useHistory();
 
 	const mainTheme = useSelector(({ fuse }) => fuse.settings.mainTheme);
 	const state = useSelector(state => state.Recruitment);
-	const userData = useAuth().getUserData;
+	const userData = useAuth().getUserProfile;
 
 	const [search, setSearch] = useState('');
 	const [tabValue, setTabValue] = useState(0);
+	const [description, setDescription] = React.useState('');
 	
 	const RecruitmentHook = useRecruitmentOpening({
 		state,
+		id: '',
 		dispatch,
+		push,
 		userInfo: userData,
+		description,
+		setDescription
 	});
 
 
 
 	const {
-		approvedRows, 
-		pendingRows,
+		publishedRows,
+		unpublishedRows,
 		closedRow,
 		isManager,
 		rows,
 		handleOpenModal
 	} = RecruitmentHook;
+
 
 	function handleChangeTab(event, value) {
 		setTabValue(value);
@@ -111,7 +59,7 @@ function Recruitment(props) {
 			header={{
 				icon: '',
 				title: 'RECRUITMENT LIST',
-				handleSearch: ({ target: { value } }) => console.log(value)
+				handleSearch: ({ target: { value } }) => setSearch(value)
 			}}
 			button={{
 				showButton: isManager(),
@@ -137,29 +85,26 @@ function Recruitment(props) {
 			}
 			content={
 				<div className=" sm:px-24 py-16 ">
-				<CreateNewOpening customHook={RecruitmentHook} />
+				<CreateNewOpening customHook={RecruitmentHook}/>
 					{tabValue === 0 && (
 						<Table
 							customHook = {RecruitmentHook}
-							// columns={columns}
-							// rows={pendingRows}
-							// search={search}
+							rows={unpublishedRows}
+							search={search}
 						/>
 					)}
 					{tabValue === 1 && (
 						<Table
 						customHook = {RecruitmentHook}
-						// columns={columns}
-						// rows={pendingRows}
-						// search={search}
+						rows={publishedRows}
+						search={search}
 						/>
 					)}
 					{tabValue === 2 && (
 						<Table
 						customHook = {RecruitmentHook}
-						// columns={columns}
-						// rows={pendingRows}
-						// search={search}
+						rows={closedRow}
+						search={search}
 						/>
 					)}
 				</div>

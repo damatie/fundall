@@ -18,6 +18,8 @@ import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import Icon from '@material-ui/core/Icon';
 import Typography from '@material-ui/core/Typography';
+import DownloadIcon from '@material-ui/icons/SaveAlt';
+import SharedButton from 'app/shared/button/SharedButton';
 
 const useStyles = makeStyles(theme => ({
 	bg: {
@@ -57,8 +59,9 @@ const IndeterminateCheckbox = React.forwardRef(({ indeterminate, ...rest }, ref)
 });
 
 let globalArray = [];
-const EnhancedTable = ({ columns, data, onRowClick, checkbox, selectAll, toolBar, handleDelete, pagination }) => {
+const EnhancedTable = ({ columns, data, onRowClick, checkbox, downloadButton, selectAll, toolBar, handleDelete, pagination }) => {
 	const [selectedItems, setSelectedItems] = React.useState([]);
+	const showDeleteIcon = (typeof checkbox?.showDeleteIcon === 'undefined') ? true : checkbox?.showDeleteIcon;
 	// add or remove table row id to selectedItems state
 	const handleCheckbox = (id) => {
 		const newSelectedItems = selectedItems.length === 0 ? globalArray : selectedItems;
@@ -66,6 +69,10 @@ const EnhancedTable = ({ columns, data, onRowClick, checkbox, selectAll, toolBar
 		index === -1 ? newSelectedItems.push(id) : newSelectedItems.splice(index, 1);
 		setSelectedItems(newSelectedItems);
 	};
+
+	React.useEffect(() => {
+		setSelectedItems([]);
+	}, [data]);
 
 	//add all table rows id to selectedItems state
 	const handleCheckAll = (items) => {
@@ -110,7 +117,7 @@ const EnhancedTable = ({ columns, data, onRowClick, checkbox, selectAll, toolBar
 							<IndeterminateCheckbox {...getToggleAllRowsSelectedProps()} onClick={(e) => {
 								const result = rows.map(item => item.values);
 								handleCheckAll(e.target.checked ? result : []);
-								checkbox && selectAll(result);
+								checkbox && selectAll(e.target.checked ? result : []);
 							}} />
 						</div>
 					),
@@ -124,7 +131,7 @@ const EnhancedTable = ({ columns, data, onRowClick, checkbox, selectAll, toolBar
 									ev.stopPropagation();
 									handleCheckbox(row.values.id)
 									checkbox && checkbox.onClick(row.values);
-		
+									(checkbox && checkbox.handleCheckBox) && checkbox.handleCheckBox(ev.target.checked, row.values);
 								}}
 							/>
 						</div>
@@ -156,19 +163,21 @@ const EnhancedTable = ({ columns, data, onRowClick, checkbox, selectAll, toolBar
 	return (
 		<TableContainer className={clsx("min-h-full sm:border-1 sm:rounded-8 rounded-8 bg-white", classes.bg)}>
 			{
-				toolBar || selectedItems.length > 0 ? (
+				toolBar || (selectedItems.length > 0 && showDeleteIcon) ? (
 					<Toolbar className={clsx(classes.root, {
-						[classes.highlight]: selectedItems.length > 0
+						[classes.highlight]: selectedItems.length > 0 && showDeleteIcon
 					})}>
 						{selectedItems.length > 0 ? (
-							<>
-							<Typography className={classes.title} color="inherit" variant="subtitle1" component="div">
-							{selectedItems.length}
-							</Typography>
-							<IconButton onClick={() => {handleDelete && DeleteRow(selectedItems)}}>
-								<Icon>delete</Icon>
-							</IconButton>
-						</>
+							showDeleteIcon && (
+								<>
+									<Typography className={classes.title} color="inherit" variant="subtitle1" component="div">
+									{selectedItems.length}
+									</Typography>
+									<IconButton onClick={() => {handleDelete && DeleteRow(selectedItems)}}>
+										<Icon>delete</Icon>
+									</IconButton>
+								</>
+							)
 						) : toolBar }
 						
 					</Toolbar>
@@ -197,6 +206,13 @@ const EnhancedTable = ({ columns, data, onRowClick, checkbox, selectAll, toolBar
 									) : null}
 								</TableCell>
 							))}
+							{(downloadButton && downloadButton?.show) && (
+								<TableCell
+									className="whitespace-no-wrap p-12"
+								>
+									
+								</TableCell>
+							)}
 						</TableRow>
 					))}
 				</TableHead>
@@ -206,13 +222,13 @@ const EnhancedTable = ({ columns, data, onRowClick, checkbox, selectAll, toolBar
 						return (
 							<TableRow
 								{...row.getRowProps()}
-								onClick={ev => onRowClick(ev, row)}
 								className='truncate cursor-pointer'
 							>
 								{row.cells.map(cell => {
 									return (
 										<TableCell
 											{...cell.getCellProps()}
+											onClick={ev => onRowClick(ev, row)}
 											className={clsx('p-12', cell.column.className, {
 												[classes.highlight]: selectedItems.some(id => id === row.original.id)
 											})}
@@ -221,6 +237,23 @@ const EnhancedTable = ({ columns, data, onRowClick, checkbox, selectAll, toolBar
 										</TableCell>
 									);
 								})}
+								{(downloadButton && downloadButton?.show) && (
+									<TableCell
+										className={clsx('p-12', {
+											[classes.highlight]: selectedItems.some(id => id === row.original.id)
+										})}
+									>
+										{<SharedButton 
+											color="secondary" 
+											variant="contained"
+											className="my-10"
+											onClick={() => downloadButton.handleDownload(row.original[downloadButton?.accessor])}
+										>
+											<DownloadIcon fontSize="normal"/>
+										</SharedButton>
+										}
+									</TableCell>
+								)}
 							</TableRow>
 						);
 					})}

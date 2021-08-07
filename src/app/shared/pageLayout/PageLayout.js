@@ -14,6 +14,7 @@ const PageLayout = ({
 	contentToolbar,
 	content,
 	noSearch,
+	showHeader,
 	prev,
 	props,
 	header: { icon, title, handleSearch, url, isState },
@@ -31,6 +32,7 @@ const PageLayout = ({
 				header: `min-h-72 sm:${headerClass || 'h-136'} sm:min-${headerClass || 'h-136'} h-72`
 			}}
 			header={
+				!showHeader && (
 				customHeader ? (
 					customHeader
 				) : (
@@ -124,6 +126,7 @@ const PageLayout = ({
 							</div>
 						)}
 					</div>
+				)
 				)
 			}
 			contentToolbar={contentToolbar}

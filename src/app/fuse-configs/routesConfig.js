@@ -57,6 +57,7 @@ import EmployeeInformationConfig from 'app/main/employeeInformation/employeeInfo
 import AttendanceConfig from 'app/main/attendance/attendanceConfig';
 import ExitManagement from 'app/main/exitMgt/exitConfig';
 import CompensationColumnsConfig from 'app/main/compensationColumns/CompensationColumnsConfig';
+import ExternalCandidateConfig from 'app/main/recruitment/externalCandidate/externalCandidateConfig';
 
 const routeConfigs = [
 	// ExampleConfig,
@@ -114,7 +115,8 @@ const routeConfigs = [
 	EmployeeMgtConfig,
 	// createEmployeeConfig,
 	EmployeeInformationConfig,
-	CompensationColumnsConfig
+	CompensationColumnsConfig,
+	ExternalCandidateConfig
 ];
 
 const checkIfLoggedIn = () => {

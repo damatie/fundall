@@ -1,26 +1,9 @@
 import EnhancedTable from 'app/shared/table/EnhancedTable';
 import React from 'react';
-import KpoStatus from './RecruitmentStatus';
+import RecruitmentStatus from './RecruitmentStatus';
+import moment from 'moment';
 
-const RecruitmentTable = ({ customHook, completed }) => {
-	function parseISOString(s) {
-		let b = s.split(/\D+/);
-		let date = new Date(Date.UTC(b[0], --b[1], b[2], b[3], b[4], b[5], b[6]));
-		//zero-pad a single zero if needed
-		let zp = function (val) {
-			return val <= 9 ? '0' + val : '' + val;
-		};
-
-		//zero-pad up to two zeroes if needed
-		let zp2 = function (val) {
-			return val <= 99 ? (val <= 9 ? '00' + val : '0' + val) : '' + val;
-		};
-
-		let d = date.getDate();
-		let m = date.getMonth() + 1;
-		let y = date.getFullYear();
-		return '' + zp(d) + '-' + zp(m) + '-' + y;
-	}
+const RecruitmentTable = ({ customHook, search, rows }) => {
 
 	const columns = React.useMemo(() => [
 		{
@@ -46,20 +29,20 @@ const RecruitmentTable = ({ customHook, completed }) => {
 					original: { jobDescription }
 				}
 			}) => {
-				return <>{jobDescription}</>;
+				return <>{<span style={{wordWrap: 'break-word'}} dangerouslySetInnerHTML={{ __html: jobDescription.substr(0, 500) +'...'}} />}</>;
 			}
 		},
 		{
 			Header: 'Employment Type',
-			accessor: 'employmentType',
+			accessor: 'positionType',
 			// className: 'font-bold',
 			sortable: true,
 			Cell: ({
 				row: {
-					original: { employmentType }
+					original: { positionType }
 				}
 			}) => {
-				return <>{employmentType}</>;
+				return <>{positionType}</>;
 			}
 		},
 		{
@@ -72,7 +55,7 @@ const RecruitmentTable = ({ customHook, completed }) => {
 					original: { desiredHiredDate }
 				}
 			}) => {
-				return <>{parseISOString(desiredHiredDate)}</>;
+				return <>{moment(desiredHiredDate).format('DD-MM-YYYY')}</>;
 			}
 		},
 		{
@@ -84,7 +67,7 @@ const RecruitmentTable = ({ customHook, completed }) => {
 					original: { employeeGrade }
 				}
 			}) => {
-				return <>{`${employeeGrade?.name}`}</>;
+				return <>{`${employeeGrade?.gradeName}`}</>;
 			}
 		},
 		{
@@ -93,10 +76,10 @@ const RecruitmentTable = ({ customHook, completed }) => {
 			sortable: true,
 			Cell: ({
 				row: {
-					original: { dateModified }
+					original: { modifiedAt }
 				}
 			}) => {
-				return <>{`${dateModified}`}</>;
+				return <>{`${moment(modifiedAt).format('DD-MM-YYYY')}`}</>;
 			}
 		},
 		{
@@ -108,7 +91,7 @@ const RecruitmentTable = ({ customHook, completed }) => {
 					original: { candidates }
 				}
 			}) => {
-				return <>{`${candidates}`}</>;
+				return <>{`${candidates.length}`}</>;
 			}
 		},
 		{
@@ -116,30 +99,35 @@ const RecruitmentTable = ({ customHook, completed }) => {
 			accessor: 'urgency',
 			// className: 'font-bold',
 			sortable: true,
-			Cell: ({ row: { urgency } }) => {
-				return <KpoStatus status={urgency} />;
+			Cell: ({ row: { 
+				original: { urgency } 
+			} }) => {
+				return <RecruitmentStatus status={urgency?.toUpperCase()} />;
 			}
 		}
 	]);
 
-	const { rows, handleDeleteKpo, push } = customHook;
-	console.log(rows, 'table data');
+	const { handleDeleteRecruitment, push } = customHook;
+	const data = rows.filter(row => row?.jobTitle?.name?.toLowerCase().includes(search.toLowerCase()) 
+	|| row?.employeeGrade?.gradeName?.toLowerCase().includes(search.toLowerCase())
+	|| row?.positionType?.toLowerCase().includes(search.toLowerCase())
+	|| row?.urgency?.toLowerCase().includes(search.toLowerCase()));
 	return (
 		<EnhancedTable
 			columns={columns}
-			data={rows}
-			// onRowClick={(ev, row) => {
-			// 	if (row && row.original.status !== 'rejected' && row.original.status !== 'requested') {
-			// 		push(`/performance_appraisal/kpoList/details/${row.original.id}`);
-			// 	}
-			// }}
+			data={data}
+			onRowClick={(ev, row) => {
+				// if (row && row.original.status !== 'rejected' && row.original.status !== 'requested') {
+					push(`/recruitment/position_details/${row.original.id}`);
+				// }
+			}}
 			checkbox={{
 				showCheckbox: true,
 				onClick: value => console.log(value),
 				accessor: 'id'
 			}}
 			selectAll={value => console.log(value)}
-			handleDelete={handleDeleteKpo}
+			handleDelete={handleDeleteRecruitment}
 		/>
 	);
 };
