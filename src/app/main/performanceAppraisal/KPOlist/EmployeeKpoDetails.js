@@ -1,6 +1,8 @@
 import PageLayout from 'app/shared/pageLayout/PageLayout';
 import React from 'react';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
+import Popper from '@material-ui/core/Popper';
+import Fade from '@material-ui/core/Fade';
 import AddIcon from '@material-ui/icons/Add';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
@@ -31,6 +33,8 @@ import Swal from 'sweetalert2';
 import PerformanceAppraisalConfig from '../PerformanceAppraisalConfig';
 import PerformanceAppraisal from './components/PerformanceAppraisal';
 import EditIcon from '../../../../assets/icons/editIcon.svg';
+import ModificationRequestIcon from '../../../../assets/icons/modificationRequestIcon.svg';
+import ModificationRequestTimeline from './components/ModificationRequestTimeline';
 
 const CustomTabs = withStyles({
 	root: {
@@ -115,6 +119,41 @@ const useStyles = makeStyles(theme => ({
 				marginBottom: '3% !important'
 			}
 		}
+	},
+	modificationRequestDiv: {
+		display: 'flex',
+		flexDirection: 'column',
+		backgroundColor: '#ffffff',
+		boxShadow: '0px 4px 4px 0px #00000040',
+		marginTop: '15%',
+		height: 100,
+		justifyContent: 'space-evenly',
+		width: '155%',
+		marginLeft: '-40%',
+		alignItems: 'center',
+		borderRadius: 5,
+		position: 'relative',
+
+		'&:after': {
+			content: "''",
+			position: 'absolute',
+			backgroundColor: '#ffffff',
+			width: 20,
+			height: 20,
+			transform: 'rotate(45deg)',
+			top: '-9%',
+			right: '7%'
+		}
+	},
+	modificationRequestDivHr: {
+		width: '90%'
+	},
+	modificationRequestIcon: {
+		width: '2.1%',
+		cursor: 'pointer'
+	},
+	modificationRequestItem: {
+		cursor: 'pointer'
 	}
 }));
 
@@ -127,6 +166,7 @@ const EmployeeKpoDetails = () => {
 	const [prevUrl, setPrevUrl] = React.useState('/performance_appraisal/kpoList');
 	const [toggleSideModal, setToggleSideModal] = React.useState(false);
 	const [toggleUpdateKpoModal, setToggleUpdateKpoModal] = React.useState(false);
+	const [toggleModificationTimeLineModal, setToggleModificationTimeLineModal] = React.useState(false);
 	const [editKpoContent, setEditKpoContent] = React.useState(false);
 
 	React.useEffect(() => {
@@ -143,6 +183,16 @@ const EmployeeKpoDetails = () => {
 	const state = useSelector(state => state.kpo.kpoContentList);
 	const userInfo = useSelector(state => state.auth?.user);
 	const employees = useSelector(state => state.employeeList.data);
+
+	const [anchorElModificationRequest, setAnchorElModificationRequest] = React.useState(null);
+	const [openModificationRequest, setOpenModificationRequest] = React.useState(false);
+	const [placementModificationRequest, setPlacementModificationRequest] = React.useState();
+
+	const handleClick = newPlacement => event => {
+		setAnchorElModificationRequest(event.currentTarget);
+		setOpenModificationRequest(prev => placementModificationRequest !== newPlacement || !prev);
+		setPlacementModificationRequest(newPlacement);
+	};
 
 	// const entireState = useSelector(state => state /* .kpo.kpoContentList */);
 
@@ -376,9 +426,53 @@ const EmployeeKpoDetails = () => {
 									>
 										REVIEW KPO{' '}
 									</Button>
-									<Button variant="contained" color="secondary" /* onClick={customHook.handleOpenModal} */ disabled>
+									<Button variant="contained" color="secondary" onClick={customHook.handleOpenModal} disabled>
 										START APPRAISAL
 									</Button>
+									{/* <Button onClick={handleClick('bottom-end')}>Show</Button> */}
+									<img
+										onClick={handleClick('bottom-end')}
+										src={ModificationRequestIcon}
+										alt="ModificationRequestIcon"
+										className={` ${classes.modificationRequestIcon}`}
+									/>
+									{/* <Popper
+										placement="bottom-start"
+										disablePortal={false}
+										modifiers={{
+										flip: {
+											enabled: true,
+										},
+										preventOverflow: {
+											enabled: true,
+											boundariesElement: 'scrollParent',
+										},
+										arrow: {
+											enabled: false,
+											element: arrowRef,
+										},
+										}}
+									></Popper> */}
+									<Popper
+										open={openModificationRequest}
+										anchorEl={anchorElModificationRequest}
+										placement={placementModificationRequest}
+										transition
+									>
+										<div className={` ${classes.modificationRequestDiv}`}>
+											<span className={` ${classes.modificationRequestItem}`}>MODIFICATION REQUESTS</span>
+											<hr className={` ${classes.modificationRequestDivHr}`} />
+											<span
+												className={` ${classes.modificationRequestItem}`}
+												onClick={() => {
+													setToggleModificationTimeLineModal(true);
+													setOpenModificationRequest(false);
+												}}
+											>
+												MODIFICATION TIMELINE
+											</span>
+										</div>
+									</Popper>
 								</div>
 							)}
 						</>
@@ -516,6 +610,13 @@ const EmployeeKpoDetails = () => {
 								/>
 							))}
 						</>
+					</SideModal>
+					<SideModal
+						open={toggleModificationTimeLineModal}
+						handleClose={() => setToggleModificationTimeLineModal(false)}
+						title="Modification Timeline"
+					>
+						<ModificationRequestTimeline />
 					</SideModal>
 				</div>
 			}

@@ -156,7 +156,7 @@ const KpoDetailEmployeeInfo = ({ customHook }) => {
 
 	return (
 		<>
-			{!loadingSingleKpo ? (
+			{loadingSingleKpo ? (
 				<Skeleton animation="wave" width="100%" height="350px" variant="rect" />
 			) : (
 				<>
