@@ -235,12 +235,8 @@ export default function KpoReviewContentForm({
 						/>
 					</Grid>
 				</Grid>
-				{console.log(data, 'data')}
-				<QuarterlyKpoReviewForm
-					kpoQuarter={data?.Q1}
-					qLabel={data?.Q1?.label}
-					// updateKpo={updateKpo}
-				/>
+				{console.log(data.Q1.label, 'data')}
+				<QuarterlyKpoReviewForm kpoQuarter={data?.Q1} qLabel={data?.Q1?.label} /* updateKpo={updateKpo} */ />
 				<Grid container spacing={3} justify="left" align="center" className="my-10">
 					<div className={classes.wrapper}>
 						<Button

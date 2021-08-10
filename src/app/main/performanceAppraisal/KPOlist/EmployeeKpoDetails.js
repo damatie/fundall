@@ -3,6 +3,8 @@ import React from 'react';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Popper from '@material-ui/core/Popper';
 import Fade from '@material-ui/core/Fade';
+import Modal from '@material-ui/core/Modal';
+import Backdrop from '@material-ui/core/Backdrop';
 import AddIcon from '@material-ui/icons/Add';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
@@ -154,6 +156,59 @@ const useStyles = makeStyles(theme => ({
 	},
 	modificationRequestItem: {
 		cursor: 'pointer'
+	},
+	modal: {
+		display: 'flex',
+		alignItems: 'center',
+		justifyContent: 'center'
+	},
+	paper: {
+		backgroundColor: theme.palette.background.paper,
+		boxShadow: theme.shadows[5],
+		padding: theme.spacing(2, 4, 3)
+	},
+	innerPopUpDiv: {
+		width: 476,
+		height: '64%',
+		borderRadius: 5
+	},
+	popUpTitle: {
+		color: '#000000',
+		fontWeight: 700,
+		fontSize: 18
+		// textAlign: 'left',
+		// width: '90%',
+		// marginLeft: '-10%'
+	},
+	popUpForm: {
+		marginTop: '7%'
+	},
+	popUpFormLabel: {
+		color: '#525252',
+		fontWeight: 600,
+		fontSize: 12
+	},
+	popUpTextArea: {
+		backgroundColor: '#F4F4F4',
+		width: '100%',
+		height: 176,
+		marginTop: '3%',
+		borderRadius: 5,
+
+		'&:focus': {
+			border: '1px solid #12cff3',
+			outline: 'none'
+		}
+	},
+	popUpFormBtn: {
+		backgroundColor: '#132432',
+		width: '30%',
+		height: 36.25,
+		margin: 'auto',
+		display: 'block',
+		marginTop: '6%',
+		borderRadius: 5,
+		color: '#ffffff'
 	}
 }));
 
@@ -186,13 +241,57 @@ const EmployeeKpoDetails = () => {
 
 	const [anchorElModificationRequest, setAnchorElModificationRequest] = React.useState(null);
 	const [openModificationRequest, setOpenModificationRequest] = React.useState(false);
+	const [modificationRequest, setModificationRequest] = React.useState(false);
 	const [placementModificationRequest, setPlacementModificationRequest] = React.useState();
+
+	const [open, setOpen] = React.useState(false);
+	const handleOpenPopUpModal = () => {
+		setOpen(true);
+	};
+
+	const handleClosePopUpModal = () => {
+		setOpen(false);
+	};
 
 	const handleClick = newPlacement => event => {
 		setAnchorElModificationRequest(event.currentTarget);
 		setOpenModificationRequest(prev => placementModificationRequest !== newPlacement || !prev);
 		setPlacementModificationRequest(newPlacement);
 	};
+
+	// const submitTheModificationRequest = () => {
+	// 	(async () => {
+	// 		/* const { value: text } = await  */ Swal.fire({
+	// 			title: 'Kindly Input reasons for making the modification',
+	// 			html:
+	// 				'<form class="mr-custom-swal-input-div">' +
+	// 				'<label class="mr-custom-swal-label" for="summary">Summary</label>' +
+	// 				'<textarea id="theTextAreaValue" required class="mr-custom-swal-text-area"></textarea>' +
+	// 				'</form>',
+	// 			confirmButtonText: 'Submit',
+	// 			customClass: {
+	// 				confirmButton: 'mr-custom-swal-btn',
+	// 				title: 'mr-custom-swal-title',
+	// 				popup: 'mr-custom-swal-popup'
+	// 			}
+	// 		}).then(() => {
+	// 			const theTextAreaValue = document.getElementById('theTextAreaValue');
+	// 			console.log(theTextAreaValue.value);
+	// 		});
+
+	// 		// if (text === '') {
+	// 		// 	Swal.fire({
+	// 		// 		icon: 'error',
+	// 		// 		text: 'Please fill in the input before submitting'
+	// 		// 	});
+	// 		// } else {
+	// 		// 	Swal.fire({
+	// 		// 		icon: 'success',
+	// 		// 		title: 'Successfully submitted'
+	// 		// 	});
+	// 		// }
+	// 	})();
+	// };
 
 	// const entireState = useSelector(state => state /* .kpo.kpoContentList */);
 
@@ -240,6 +339,11 @@ const EmployeeKpoDetails = () => {
 	function handleChangeTab(event, value) {
 		setTabValue(value);
 	}
+
+	const handleModificationSubmit = e => {
+		e.preventDefault();
+		console.log('submitted');
+	};
 
 	// React.useEffect(() => console.log(tabValue), [tabValue]);
 	const confirmUpdate = () => {
@@ -460,7 +564,16 @@ const EmployeeKpoDetails = () => {
 										transition
 									>
 										<div className={` ${classes.modificationRequestDiv}`}>
-											<span className={` ${classes.modificationRequestItem}`}>MODIFICATION REQUESTS</span>
+											<span
+												className={` ${classes.modificationRequestItem}`}
+												onClick={() => {
+													setToggleSideModal(true);
+													setModificationRequest(true);
+													setOpenModificationRequest(false);
+												}}
+											>
+												MODIFICATION REQUESTS
+											</span>
 											<hr className={` ${classes.modificationRequestDivHr}`} />
 											<span
 												className={` ${classes.modificationRequestItem}`}
@@ -575,7 +688,20 @@ const EmployeeKpoDetails = () => {
 									<span>No Data</span>
 								)
 							}
-							{
+							{modificationRequest ? (
+								<span>
+									<Button
+										className="flex my-20 mx-auto"
+										justify="center"
+										align="center"
+										variant="contained"
+										color="secondary"
+										onClick={handleOpenPopUpModal}
+									>
+										Submit
+									</Button>
+								</span>
+							) : (
 								<span>
 									<Button
 										className="flex my-20 mx-auto"
@@ -588,7 +714,7 @@ const EmployeeKpoDetails = () => {
 										Close
 									</Button>
 								</span>
-							}
+							)}
 						</>
 					</SideModal>
 
@@ -618,6 +744,35 @@ const EmployeeKpoDetails = () => {
 					>
 						<ModificationRequestTimeline />
 					</SideModal>
+					<Modal
+						aria-labelledby="transition-modal-title"
+						aria-describedby="transition-modal-description"
+						className={classes.modal}
+						open={open}
+						onClose={handleClosePopUpModal}
+						closeAfterTransition
+						BackdropComponent={Backdrop}
+						BackdropProps={{
+							timeout: 500
+						}}
+					>
+						<Fade in={open}>
+							<div className={`${classes.paper} ${classes.innerPopUpDiv}`}>
+								<h2 className={` ${classes.popUpTitle}`}>
+									Kindly Input reasons for making the <br /> modification
+								</h2>
+								<form className={classes.popUpForm} onSubmit={handleModificationSubmit}>
+									<label className={` ${classes.popUpFormLabel}`} for="summary">
+										Summary
+									</label>
+									<textarea className={` ${classes.popUpTextArea}`} id="theTextAreaValue" required></textarea>
+									<button type="submit" className={` ${classes.popUpFormBtn}`}>
+										Submit
+									</button>
+								</form>
+							</div>
+						</Fade>
+					</Modal>
 				</div>
 			}
 		/>

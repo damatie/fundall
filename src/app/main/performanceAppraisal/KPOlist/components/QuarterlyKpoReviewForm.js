@@ -50,6 +50,8 @@ const UpdateKpoButton = withStyles(theme => ({
 
 const QuarterlyKpoReviewForm = ({ kpoQuarter, qLabel, updateKpo }) => {
 	const classes = useStyles();
+	console.log(kpoQuarter, 'kpoQuarter');
+	console.log(qLabel, 'qLabel');
 
 	return (
 		<div className={` ${classes.quarterlyKpoReviewForm}`}>
