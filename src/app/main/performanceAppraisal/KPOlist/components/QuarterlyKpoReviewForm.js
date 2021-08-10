@@ -87,18 +87,21 @@ const QuarterlyKpoReviewForm = ({ kpoQuarter, qLabel, updateKpo }) => {
 				<span className={` ${classes.attachSpan}`}>ATTACH</span>
 			</label>
 			<input id="attachment" type="file" style={{ display: 'none' }} />
-			<div className={` ${classes.updateKpoBtnDiv}`}>
-				<UpdateKpoButton
-					onClick={() => {
-						console.log('go to update page');
-						updateKpo(true);
-					}}
-					variant="contained"
-					color="primary"
-				>
-					UPDATE KPO
-				</UpdateKpoButton>
-			</div>
+			{console.log(updateKpo)}
+			{updateKpo && (
+				<div className={` ${classes.updateKpoBtnDiv}`}>
+					<UpdateKpoButton
+						onClick={() => {
+							console.log('go to update page');
+							updateKpo(true);
+						}}
+						variant="contained"
+						color="primary"
+					>
+						UPDATE KPO
+					</UpdateKpoButton>
+				</div>
+			)}
 		</div>
 	);
 };
