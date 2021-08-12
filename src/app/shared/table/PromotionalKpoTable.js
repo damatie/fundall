@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Checkbox from '@material-ui/core/Checkbox';
 import MaUTable from '@material-ui/core/Table';
 import PropTypes from 'prop-types';
@@ -18,6 +18,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import Icon from '@material-ui/core/Icon';
 import Typography from '@material-ui/core/Typography';
+import MailIcon from '@material-ui/icons/Mail';
 
 const useStyles = makeStyles(theme => ({
 	tableOuterDiv: {
@@ -46,7 +47,123 @@ const useStyles = makeStyles(theme => ({
 			: {
 					color: theme.palette.text.primary,
 					backgroundColor: theme.palette.secondary.dark
-			  }
+			  },
+	customTableBody: {
+		position: 'relative'
+	},
+	customTableRow: {
+		backgroundColor: '#ffffff',
+
+		'&:hover': {
+			backgroundColor: '#f8f8f8'
+		}
+	},
+	hoverCardDiv: {
+		position: 'absolute',
+		width: 400,
+		padding: 30,
+		backgroundColor: '#ffffff',
+		borderRadius: 20,
+		boxShadow: '0 5px 10px rgb(154 160 185 / 5%), 0 15px 40px rgb(166 173 201 / 20%)'
+	},
+	hoverCardDivHeaderImage: {
+		display: 'flex',
+		justifyContent: 'space-between'
+	},
+	imageDiv: {
+		width: '20%'
+	},
+	image: {
+		width: '100%',
+		borderRadius: 10
+	},
+	role: {
+		backgroundColor: '#effbff',
+		height: 'fit-content',
+		padding: '8px 30px',
+		borderRadius: 5,
+		color: '#98e7fc',
+		fontWeight: 600
+	},
+	nameDiv: {
+		marginTop: '7%'
+	},
+	name: {
+		color: '#2d3037',
+		fontSize: 22,
+		fontWeight: 700
+	},
+	jobTitle: {
+		fontWeight: 700,
+		color: '#98e7fc',
+		marginTop: '1%'
+	},
+	emailDiv: {
+		marginTop: '10%',
+		backgroundColor: '#ff5ba0',
+		padding: 5,
+		borderRadius: 8,
+		paddingLeft: 15,
+		color: '#ffffff',
+		display: 'flex',
+		alignItems: 'center'
+	},
+	email: {
+		marginLeft: '5%',
+		fontSize: 18
+	},
+	inputBoxDiv: {
+		backgroundColor: '#f3f3f3',
+		width: 'fit-content',
+		padding: '2px 13px',
+		borderRadius: 8
+	},
+	inputBoxTitle: {
+		color: '#cecece',
+		fontSize: 10,
+		fontWeight: 700
+	},
+	inputBoxText: {
+		fontSize: 14,
+		color: '#2d3037',
+		fontWeight: 700
+	},
+	inputBoxDivMain: {
+		display: 'flex',
+		justifyContent: 'space-between',
+		marginTop: '10%'
+	},
+	firstInputBox: {
+		marginTop: '8%'
+	},
+	secondInputBox: {
+		// marginTop: '14%',
+	},
+	thirdInputBox: {
+		// marginTop: '18%',
+	},
+	departmentInputBox: {
+		maxWidth: '60%'
+	},
+	staffIdInputBox: {
+		maxWidth: '30%',
+		marginLeft: '5%'
+	},
+	staffIdInputBoxSpec: {
+		display: 'flex'
+	},
+	phoneNumberInputBox: {
+		maxWidth: '48%'
+	},
+	genderInputBox: {
+		maxWidth: '20%'
+	},
+	gradeLevelInputBox: {
+		maxWidth: '25%'
+	},
+	addressInputBox: {
+		maxWidth: '70%'
+	}
 }));
 const IndeterminateCheckbox = React.forwardRef(({ indeterminate, ...rest }, ref) => {
 	const defaultRef = React.useRef();
@@ -62,6 +179,31 @@ const IndeterminateCheckbox = React.forwardRef(({ indeterminate, ...rest }, ref)
 		</>
 	);
 });
+
+const InputBoxes = ({ title, text, type }) => {
+	const classes = useStyles();
+
+	return (
+		<div
+			className={` ${classes.inputBoxDiv} ${
+				type === 'dept'
+					? classes.departmentInputBox
+					: type === 'staffId'
+					? classes.staffIdInputBox
+					: type === 'phoneNo'
+					? classes.phoneNumberInputBox
+					: type === 'gender'
+					? classes.genderInputBox
+					: type === 'gradeLvl'
+					? classes.gradeLevelInputBox
+					: type === 'address' && classes.addressInputBox
+			}`}
+		>
+			<span className={` ${classes.inputBoxTitle}`}>{title}</span>
+			<p className={` ${classes.inputBoxText}`}>{text}</p>
+		</div>
+	);
+};
 
 let globalArray = [];
 const PromotionalKpoTable = ({ columns, data, onRowClick, checkbox, selectAll, toolBar, handleDelete, pagination }) => {
@@ -163,6 +305,14 @@ const PromotionalKpoTable = ({ columns, data, onRowClick, checkbox, selectAll, t
 
 	const classes = useStyles();
 
+	const [hoverCardProps, setHoverCardProps] = useState(null);
+	const [hoverCardPosition, setHoverCardPosition] = useState({
+		x: 0,
+		y: 0
+	});
+
+	React.useEffect(() => console.log(hoverCardPosition, 'hoverCardPosition'), [hoverCardPosition]);
+
 	// Render the UI for your table
 	return (
 		<TableContainer className={clsx('min-h-full sm:border-1 sm:rounded-8 rounded-8', classes.tableOuterDiv)}>
@@ -216,7 +366,7 @@ const PromotionalKpoTable = ({ columns, data, onRowClick, checkbox, selectAll, t
 						</TableRow>
 					))}
 				</TableHead>
-				<TableBody>
+				<TableBody className={` ${classes.customTableBody}`}>
 					{page.map((row, i) => {
 						prepareRow(row);
 						return (
@@ -224,10 +374,22 @@ const PromotionalKpoTable = ({ columns, data, onRowClick, checkbox, selectAll, t
 								<TableRow
 									{...row.getRowProps()}
 									onClick={ev => onRowClick(ev, row)}
-									onHover={() => console.log('hovered')}
 									hover={true}
-									className="truncate cursor-pointer"
-									style={{ backgroundColor: '#ffffff' }}
+									onMouseOver={e => {
+										// console.log(row.original);
+										console.log(e);
+										console.log(e.currentTarget);
+										console.log(e.clientX, 'x-axis', e.clientY, 'y-axis');
+										setHoverCardPosition({
+											x: e.clientX + 200 > 950 ? 950 : e.clientX + 200,
+											y: e.clientY - 200
+										});
+										setHoverCardProps(row.original);
+									}}
+									// onMouseOut={() => {
+									// 	setHoverCardProps(null);
+									// }}
+									className={`truncate cursor-pointer ${classes.customTableRow}`}
 								>
 									{row.cells.map(cell => {
 										return (
@@ -246,13 +408,44 @@ const PromotionalKpoTable = ({ columns, data, onRowClick, checkbox, selectAll, t
 											</TableCell>
 										);
 									})}
+									{/* {console.log(row.original)} */}
 								</TableRow>
 								<br />
 							</>
 						);
 					})}
+					{hoverCardProps && (
+						<div className={` ${classes.hoverCardDiv}`} style={{ left: hoverCardPosition.x, top: hoverCardPosition.y }}>
+							{console.log(hoverCardProps, 'details to show on card')}
+							<div className={` ${classes.hoverCardDivHeaderImage}`}>
+								<div className={` ${classes.imageDiv}`}>
+									<img src={hoverCardProps.image} className={` ${classes.image}`} alt="employee" />
+								</div>
+								<p className={` ${classes.role}`}>{hoverCardProps.role}</p>
+							</div>
+							<div className={` ${classes.nameDiv}`}>
+								<p className={` ${classes.name}`}>{hoverCardProps.employeeName}</p>
+								<p className={` ${classes.jobTitle}`}>{hoverCardProps.jobTitle}</p>
+							</div>
+							<div className={` ${classes.emailDiv}`}>
+								<MailIcon />
+								<span className={` ${classes.email}`}>{hoverCardProps.employeeEmail}</span>
+							</div>
+							<div className={` ${classes.firstInputBox} ${classes.staffIdInputBoxSpec}`}>
+								<InputBoxes title="Department" text={hoverCardProps.department} type="dept" />
+								<InputBoxes title="Staff ID" text={hoverCardProps.staffId} type="staffId" />
+							</div>
+							<div className={` ${classes.secondInputBox} ${classes.inputBoxDivMain}`}>
+								<InputBoxes title="Phone Number" text={hoverCardProps.contactNumber} type="phoneNo" />
+								<InputBoxes title="Gender" text={hoverCardProps.gender} type="gender" />
+								<InputBoxes title="Grade Level" text={hoverCardProps.gradeLevel} type="gradeLvl" />
+							</div>
+							<div className={` ${classes.thirdInputBox} ${classes.inputBoxDivMain}`}>
+								<InputBoxes title="Address" text={hoverCardProps.address} type="address" />
+							</div>
+						</div>
+					)}
 				</TableBody>
-
 				<TableFooter>
 					<TableRow>
 						<TablePagination

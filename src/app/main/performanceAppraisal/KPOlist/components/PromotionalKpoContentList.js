@@ -9,7 +9,11 @@ const useStyles = makeStyles(theme => ({
 		width: '50%',
 		borderRadius: '50%',
 		display: 'block',
-		margin: 'auto'
+		margin: 'auto',
+
+		[theme.breakpoints.down('md')]: {
+			width: '100%'
+		}
 	}
 }));
 
@@ -131,7 +135,7 @@ const PromotionalKpoContentList = ({ customHook, filterState }) => {
 							// if (row) {
 							// 	push(`${url}/${row.original.id}`);
 							// }
-							console.log('clicked');
+							console.log(ev, 'event', row, 'row', 'clicked');
 						}}
 						checkbox={{
 							showCheckbox: true,

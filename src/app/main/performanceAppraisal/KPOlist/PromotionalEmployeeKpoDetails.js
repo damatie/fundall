@@ -88,6 +88,7 @@ const PromotionalEmployeeKpoDetails = () => {
 			gender: 'Female',
 			gradeLevel: 'GL234',
 			staffId: 'SRG1093',
+			officerTitle: 'Recruitment Officer',
 			image: `${process.env.PUBLIC_URL}/assets/images/avatars/alice.jpg`
 		},
 		{
@@ -103,6 +104,7 @@ const PromotionalEmployeeKpoDetails = () => {
 			gender: 'Female',
 			gradeLevel: 'GL234',
 			staffId: 'SRG1093',
+			officerTitle: 'Recruitment Officer',
 			image: `${process.env.PUBLIC_URL}/assets/images/avatars/Barrera.jpg`
 		},
 		{
@@ -118,6 +120,7 @@ const PromotionalEmployeeKpoDetails = () => {
 			gender: 'Female',
 			gradeLevel: 'GL234',
 			staffId: 'SRG1093',
+			officerTitle: 'Recruitment Officer',
 			image: `${process.env.PUBLIC_URL}/assets/images/avatars/Nancy.jpg`
 		},
 		{
@@ -133,6 +136,7 @@ const PromotionalEmployeeKpoDetails = () => {
 			gender: 'Female',
 			gradeLevel: 'GL234',
 			staffId: 'SRG1093',
+			officerTitle: 'Recruitment Officer',
 			image: `${process.env.PUBLIC_URL}/assets/images/avatars/Nora.jpg`
 		},
 		{
@@ -148,6 +152,7 @@ const PromotionalEmployeeKpoDetails = () => {
 			gender: 'Female',
 			gradeLevel: 'GL234',
 			staffId: 'SRG1093',
+			officerTitle: 'Recruitment Officer',
 			image: `${process.env.PUBLIC_URL}/assets/images/avatars/Katina.jpg`
 		},
 		{
@@ -163,6 +168,7 @@ const PromotionalEmployeeKpoDetails = () => {
 			gender: 'Female',
 			gradeLevel: 'GL234',
 			staffId: 'SRG1093',
+			officerTitle: 'Recruitment Officer',
 			image: `${process.env.PUBLIC_URL}/assets/images/avatars/joyce.jpg`
 		},
 		{
@@ -178,6 +184,7 @@ const PromotionalEmployeeKpoDetails = () => {
 			gender: 'Female',
 			gradeLevel: 'GL234',
 			staffId: 'SRG1093',
+			officerTitle: 'Recruitment Officer',
 			image: `${process.env.PUBLIC_URL}/assets/images/avatars/Helen.jpg`
 		},
 		{
@@ -193,6 +200,7 @@ const PromotionalEmployeeKpoDetails = () => {
 			gender: 'Female',
 			gradeLevel: 'GL234',
 			staffId: 'SRG1093',
+			officerTitle: 'Recruitment Officer',
 			image: `${process.env.PUBLIC_URL}/assets/images/avatars/Estes.jpg`
 		},
 		{
@@ -208,6 +216,7 @@ const PromotionalEmployeeKpoDetails = () => {
 			gender: 'Male',
 			gradeLevel: 'GL234',
 			staffId: 'SRG1093',
+			officerTitle: 'Recruitment Officer',
 			image: `${process.env.PUBLIC_URL}/assets/images/avatars/vincent.jpg`
 		},
 		{
@@ -223,6 +232,7 @@ const PromotionalEmployeeKpoDetails = () => {
 			gender: 'Male',
 			gradeLevel: 'GL234',
 			staffId: 'SRG1093',
+			officerTitle: 'Recruitment Officer',
 			image: `${process.env.PUBLIC_URL}/assets/images/avatars/Velazquez.jpg`
 		} /* ,
 		{
@@ -238,6 +248,7 @@ const PromotionalEmployeeKpoDetails = () => {
 			gender: 'Male',
 			gradeLevel: 'GL234',
 			staffId: 'SRG1093',
+			officerTitle: "Recruitment Officer",
 			image: `${process.env.PUBLIC_URL}/assets/images/avatars/Abbott.jpg`
 		} */
 	];
