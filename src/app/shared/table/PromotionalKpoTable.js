@@ -28,6 +28,12 @@ const useStyles = makeStyles(theme => ({
 	tdCustom: {
 		borderBottom: 'none'
 	},
+	thCustomImage: {
+		visibility: 'hidden'
+	},
+	tdCustomImage: {
+		width: '5%'
+	},
 	bg: {
 		background: '#fff'
 	},
@@ -53,6 +59,7 @@ const useStyles = makeStyles(theme => ({
 	},
 	customTableRow: {
 		backgroundColor: '#ffffff',
+		position: 'relative',
 
 		'&:hover': {
 			backgroundColor: '#f8f8f8'
@@ -131,10 +138,10 @@ const useStyles = makeStyles(theme => ({
 	inputBoxDivMain: {
 		display: 'flex',
 		justifyContent: 'space-between',
-		marginTop: '10%'
+		marginTop: '5%'
 	},
 	firstInputBox: {
-		marginTop: '8%'
+		marginTop: '4%'
 	},
 	secondInputBox: {
 		// marginTop: '14%',
@@ -311,7 +318,7 @@ const PromotionalKpoTable = ({ columns, data, onRowClick, checkbox, selectAll, t
 		y: 0
 	});
 
-	React.useEffect(() => console.log(hoverCardPosition, 'hoverCardPosition'), [hoverCardPosition]);
+	React.useEffect(() => console.log(hoverCardProps, 'hoverCardProps'), [hoverCardProps]);
 
 	// Render the UI for your table
 	return (
@@ -346,9 +353,9 @@ const PromotionalKpoTable = ({ columns, data, onRowClick, checkbox, selectAll, t
 				<TableHead>
 					{headerGroups.map(headerGroup => (
 						<TableRow {...headerGroup.getHeaderGroupProps()}>
-							{headerGroup.headers.map(column => (
+							{headerGroup.headers.map((column, index) => (
 								<TableCell
-									className={`whitespace-no-wrap p-12 ${classes.tdCustom}`}
+									className={`whitespace-no-wrap p-12 ${classes.tdCustom} ${index === 1 && classes.thCustomImage}`}
 									{...(!column.sortable
 										? column.getHeaderProps()
 										: column.getHeaderProps(column.getSortByToggleProps()))}
@@ -376,22 +383,22 @@ const PromotionalKpoTable = ({ columns, data, onRowClick, checkbox, selectAll, t
 									onClick={ev => onRowClick(ev, row)}
 									hover={true}
 									onMouseOver={e => {
-										// console.log(row.original);
-										console.log(e);
-										console.log(e.currentTarget);
-										console.log(e.clientX, 'x-axis', e.clientY, 'y-axis');
-										setHoverCardPosition({
-											x: e.clientX + 200 > 950 ? 950 : e.clientX + 200,
-											y: e.clientY - 200
-										});
-										setHoverCardProps(row.original);
+										// setHoverCardPosition({
+										// 	x: Math.sign(calcXAxis) === 1 ? calcXAxis : 0,
+										// 	y: /* Math.sign(calcXAxis) === 1 ? 30 : 80 */ /* window.innerHeight -  */ -17 /* e.clientY */
+										// });
+										if (!hoverCardProps) {
+											if (row?.original?.id !== hoverCardProps?.id) {
+												setHoverCardProps(row.original);
+											}
+										}
 									}}
-									// onMouseOut={() => {
-									// 	setHoverCardProps(null);
-									// }}
+									onMouseOut={() => {
+										setHoverCardProps(null);
+									}}
 									className={`truncate cursor-pointer ${classes.customTableRow}`}
 								>
-									{row.cells.map(cell => {
+									{row.cells.map((cell, index) => {
 										return (
 											<TableCell
 												{...cell.getCellProps()}
@@ -401,50 +408,70 @@ const PromotionalKpoTable = ({ columns, data, onRowClick, checkbox, selectAll, t
 													{
 														[classes.highlight]: selectedItems.some(id => id === row.original.id)
 													},
-													classes.tdCustom
+													classes.tdCustom,
+													index === 1 && classes.tdCustomImage
 												)}
 											>
 												{cell.render('Cell')}
 											</TableCell>
 										);
 									})}
+									{hoverCardProps && hoverCardProps?.id === row.original.id && (
+										<div style={{ position: 'fixed', zIndex: 1300, inset: 0, width: 400, height: 466, padding: 0 }}>
+											<div
+												aria-hidden={true}
+												style={{
+													zIndex: -1,
+													position: 'fixed',
+													inset: 0,
+													backgroundColor: 'transparent',
+													color: 'transparent',
+													width: 400,
+													height: 466,
+													padding: 0
+												}}
+											></div>
+											<div style={{ opacity: 1 }}>
+												<div
+													className={` ${classes.hoverCardDiv}`}
+													style={{ left: /* hoverCardPosition.x */ 600, top: /* hoverCardPosition.y */ 200 }}
+												>
+													<div className={` ${classes.hoverCardDivHeaderImage}`}>
+														<div className={` ${classes.imageDiv}`}>
+															<img src={hoverCardProps.image} className={` ${classes.image}`} alt="employee" />
+														</div>
+														<p className={` ${classes.role}`}>{hoverCardProps.role}</p>
+													</div>
+													<div className={` ${classes.nameDiv}`}>
+														<p className={` ${classes.name}`}>{hoverCardProps.employeeName}</p>
+														<p className={` ${classes.jobTitle}`}>{hoverCardProps.jobTitle}</p>
+													</div>
+													<div className={` ${classes.emailDiv}`}>
+														<MailIcon />
+														<span className={` ${classes.email}`}>{hoverCardProps.employeeEmail}</span>
+													</div>
+													<div className={` ${classes.firstInputBox} ${classes.staffIdInputBoxSpec}`}>
+														<InputBoxes title="Department" text={hoverCardProps.department} type="dept" />
+														<InputBoxes title="Staff ID" text={hoverCardProps.staffId} type="staffId" />
+													</div>
+													<div className={` ${classes.secondInputBox} ${classes.inputBoxDivMain}`}>
+														<InputBoxes title="Phone Number" text={hoverCardProps.contactNumber} type="phoneNo" />
+														<InputBoxes title="Gender" text={hoverCardProps.gender} type="gender" />
+														<InputBoxes title="Grade Level" text={hoverCardProps.gradeLevel} type="gradeLvl" />
+													</div>
+													<div className={` ${classes.thirdInputBox} ${classes.inputBoxDivMain}`}>
+														<InputBoxes title="Address" text={hoverCardProps.address} type="address" />
+													</div>
+												</div>
+											</div>
+										</div>
+									)}
 									{/* {console.log(row.original)} */}
 								</TableRow>
 								<br />
 							</>
 						);
 					})}
-					{hoverCardProps && (
-						<div className={` ${classes.hoverCardDiv}`} style={{ left: hoverCardPosition.x, top: hoverCardPosition.y }}>
-							{console.log(hoverCardProps, 'details to show on card')}
-							<div className={` ${classes.hoverCardDivHeaderImage}`}>
-								<div className={` ${classes.imageDiv}`}>
-									<img src={hoverCardProps.image} className={` ${classes.image}`} alt="employee" />
-								</div>
-								<p className={` ${classes.role}`}>{hoverCardProps.role}</p>
-							</div>
-							<div className={` ${classes.nameDiv}`}>
-								<p className={` ${classes.name}`}>{hoverCardProps.employeeName}</p>
-								<p className={` ${classes.jobTitle}`}>{hoverCardProps.jobTitle}</p>
-							</div>
-							<div className={` ${classes.emailDiv}`}>
-								<MailIcon />
-								<span className={` ${classes.email}`}>{hoverCardProps.employeeEmail}</span>
-							</div>
-							<div className={` ${classes.firstInputBox} ${classes.staffIdInputBoxSpec}`}>
-								<InputBoxes title="Department" text={hoverCardProps.department} type="dept" />
-								<InputBoxes title="Staff ID" text={hoverCardProps.staffId} type="staffId" />
-							</div>
-							<div className={` ${classes.secondInputBox} ${classes.inputBoxDivMain}`}>
-								<InputBoxes title="Phone Number" text={hoverCardProps.contactNumber} type="phoneNo" />
-								<InputBoxes title="Gender" text={hoverCardProps.gender} type="gender" />
-								<InputBoxes title="Grade Level" text={hoverCardProps.gradeLevel} type="gradeLvl" />
-							</div>
-							<div className={` ${classes.thirdInputBox} ${classes.inputBoxDivMain}`}>
-								<InputBoxes title="Address" text={hoverCardProps.address} type="address" />
-							</div>
-						</div>
-					)}
 				</TableBody>
 				<TableFooter>
 					<TableRow>

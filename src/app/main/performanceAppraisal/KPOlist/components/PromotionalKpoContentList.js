@@ -1,28 +1,29 @@
 import React from 'react';
 import PromotionalKpoTable from 'app/shared/table/PromotionalKpoTable';
 import Skeleton from '@material-ui/lab/Skeleton';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
 	profileImage: {
-		width: '50%',
+		// width: '50%',
 		borderRadius: '50%',
 		display: 'block',
-		margin: 'auto',
+		margin: 'auto' /* ,
 
 		[theme.breakpoints.down('md')]: {
 			width: '100%'
-		}
+		} */
 	}
 }));
 
 const PromotionalKpoContentList = ({ customHook, filterState }) => {
 	const classes = useStyles();
+	const history = useHistory();
 
 	const columns = React.useMemo(() => [
 		{
-			Header: '',
+			Header: 'Image',
 			accessor: 'displayPicture',
 			// sortable: true,
 			Cell: ({ row }) => {
@@ -132,9 +133,7 @@ const PromotionalKpoContentList = ({ customHook, filterState }) => {
 						columns={columns}
 						data={listToShow || []}
 						onRowClick={(ev, row) => {
-							// if (row) {
-							// 	push(`${url}/${row.original.id}`);
-							// }
+							history.push(`/performance_appraisal/promotionalKpodetail`);
 							console.log(ev, 'event', row, 'row', 'clicked');
 						}}
 						checkbox={{
