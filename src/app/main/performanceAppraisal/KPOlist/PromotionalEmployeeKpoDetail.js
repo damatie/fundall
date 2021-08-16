@@ -13,6 +13,11 @@ import SelectTextField from 'app/shared/TextInput/SelectTextField';
 import { MenuItem } from '@material-ui/core';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
+import EmployeeInformation from './components/EmployeeInformation';
+import GradeAndPromotion from './components/GradeAndPromotion';
+import Compensation from './components/Compensation';
+import Exit from './components/Exit';
+import ConfidentialInformation from './components/ConfidentialInformation';
 
 const CustomTabs = withStyles({
 	root: {
@@ -28,18 +33,21 @@ const CustomTab = withStyles(theme => ({
 	root: {
 		textTransform: 'none',
 		minWidth: 72,
-		fontWeight: theme.typography.fontWeightRegular,
+		fontWeight: theme.typography.fontWeightBold,
 		marginRight: theme.spacing(4),
 		'&:hover': {
 			color: '#40a9ff',
 			opacity: 1
 		},
 		'&$selected': {
-			color: '#050505',
+			color: '#000000',
 			fontWeight: theme.typography.fontWeightBold
 		},
 		'&:focus': {
-			color: '#40a9ff'
+			color: '#000000'
+		},
+		'&:disabled': {
+			color: '#c1c1c1'
 		}
 	},
 	selected: {}
@@ -48,6 +56,10 @@ const CustomTab = withStyles(theme => ({
 const useStyles = makeStyles(theme => ({
 	promotionalContentDiv: {
 		marginTop: '7.5%'
+	},
+	toolBarCustomDiv: {
+		width: '80%',
+		margin: 'auto'
 	}
 }));
 
@@ -60,6 +72,43 @@ const PromotionalEmployeeKpoDetail = () => {
 		setTabValue(value);
 	}
 	// React.useEffect(() => console.log(tabValue), [tabValue]);
+
+	const userData = {
+		image: `${process.env.PUBLIC_URL}/assets/images/avatars/Velazquez.jpg`,
+		firstName: 'Tanjiro',
+		lastName: 'Kamado',
+		email: 'tanjiro@anime.com',
+		jobTitle: 'Recruitment Officer',
+		companyName: '5C Limited',
+		department: 'Human Resources',
+		employeeInformation: {
+			dateOfEmployment: '12/9/2019',
+			dateOfConfirmation: '12/8/2019',
+			dateOfLastPromotion: '12/2/2020',
+			natureOfEngagement: 'New Hire',
+			grade: 'GL234'
+		},
+		promotionHistory: [
+			{
+				id: 1,
+				jobTitle: 'Recruitment Manager',
+				companyName: 'C-BIT Industries Limited',
+				department: 'Human Resources',
+				dateFrom: '12-07-2019',
+				dateTo: '12/2/2020',
+				tag: 'Recent'
+			},
+			{
+				id: 2,
+				jobTitle: 'Recruitment Manager',
+				companyName: 'C-BIT Industries Limited',
+				department: 'Human Resources',
+				dateFrom: '12-07-2019',
+				dateTo: '12/2/2020',
+				tag: 'Recent'
+			}
+		]
+	};
 
 	return (
 		<PageLayout
@@ -87,11 +136,11 @@ const PromotionalEmployeeKpoDetail = () => {
 					value={tabValue}
 					onChange={handleChangeTab}
 					indicatorColor="primary"
-					textColor="primary"
+					textColor="black"
 					variant="scrollable"
 					scrollButtons="auto"
 					classes={{ root: 'h-64' }}
-					className={` ${classes.kpoDetailsTab}`}
+					className={` ${classes.toolBarCustomDiv}`}
 				>
 					<CustomTab className="h-64 normal-case" label="Employee Information" />
 					<CustomTab className="h-64 normal-case" label="Grade And Promotion" />
@@ -102,8 +151,25 @@ const PromotionalEmployeeKpoDetail = () => {
 			}
 			content={
 				<div className={`sm:p-24 ${classes.promotionalContentDiv}`}>
-					<>JUST TEXT NOTHING YET</>
-					{/* <SideModal
+					{tabValue === 0 ? (
+						<EmployeeInformation />
+					) : tabValue === 1 ? (
+						<GradeAndPromotion userData={userData} />
+					) : tabValue === 2 ? (
+						<Compensation />
+					) : tabValue === 3 ? (
+						<Exit />
+					) : (
+						tabValue === 4 && <ConfidentialInformation />
+					)}
+				</div>
+			}
+		/>
+	);
+};
+
+{
+	/* <SideModal
 						open={toggleUpdateKpoModal}
 						handleClose={() => setToggleUpdateKpoModal(false)}
 						title="KPO Quarterly Review"
@@ -121,12 +187,8 @@ const PromotionalEmployeeKpoDetail = () => {
 								/>
 							))}
 						</>
-					</SideModal> */}
-				</div>
-			}
-		/>
-	);
-};
+					</SideModal> */
+}
 
 withReducer('kpoCategory', kpoCategoryReducer)(PromotionalEmployeeKpoDetail);
 export default withReducer('kpo', reducer)(PromotionalEmployeeKpoDetail);

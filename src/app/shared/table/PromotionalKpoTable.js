@@ -62,7 +62,9 @@ const useStyles = makeStyles(theme => ({
 		position: 'relative',
 
 		'&:hover': {
-			backgroundColor: '#f8f8f8'
+			border: '0.5px solid #E4E4E4',
+			// backgroundColor: '#ffffff',
+			boxShadow: '0px 7px 26px rgba(0, 0, 0, 0.15)'
 		}
 	},
 	hoverCardDiv: {
@@ -381,7 +383,7 @@ const PromotionalKpoTable = ({ columns, data, onRowClick, checkbox, selectAll, t
 								<TableRow
 									{...row.getRowProps()}
 									onClick={ev => onRowClick(ev, row)}
-									hover={true}
+									// hover={true}
 									onMouseOver={e => {
 										// setHoverCardPosition({
 										// 	x: Math.sign(calcXAxis) === 1 ? calcXAxis : 0,
