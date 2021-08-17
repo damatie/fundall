@@ -2,15 +2,10 @@ import PageLayout from 'app/shared/pageLayout/PageLayout';
 import React from 'react';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
-import PromotionalKpoContentList from './components/PromotionalKpoContentList';
-import CreateKpoContent from './components/CreateKpoContent';
 import reducer from './store/reducers';
 import withReducer from 'app/store/withReducer';
 import kpoCategoryReducer from '../KPOcategoryList/store/reducers/categoryList.reducer';
 import Button from '@material-ui/core/Button';
-import SideModal from 'app/shared/modal/SideModal';
-import SelectTextField from 'app/shared/TextInput/SelectTextField';
-import { MenuItem } from '@material-ui/core';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import EmployeeInformation from './components/EmployeeInformation';
@@ -18,6 +13,21 @@ import GradeAndPromotion from './components/GradeAndPromotion';
 import Compensation from './components/Compensation';
 import Exit from './components/Exit';
 import ConfidentialInformation from './components/ConfidentialInformation';
+import Education from '../../../../assets/icons/Education.svg';
+import EducationIdentifier from '../../../../assets/icons/EducationIdentifier.svg';
+import Emergency from '../../../../assets/icons/Emergency.svg';
+import EmergencyIdentifier from '../../../../assets/icons/EmergencyIdentifier.svg';
+import EmployeeInfo from '../../../../assets/icons/EmployeeInfo.svg';
+import Family from '../../../../assets/icons/Family.svg';
+import FamilyIdentifier from '../../../../assets/icons/FamilyIdentifier.svg';
+import Organization from '../../../../assets/icons/Organization.svg';
+import OrganizationIdentifier from '../../../../assets/icons/OrganizationIdentifier.svg';
+import Trainings from '../../../../assets/icons/Trainings.svg';
+import TrainingsIdentifier from '../../../../assets/icons/TrainingsIdentifier.svg';
+import Travel from '../../../../assets/icons/Travel.svg';
+import TravelIdentifier from '../../../../assets/icons/TravelIdentifier.svg';
+import Work from '../../../../assets/icons/Work.svg';
+import WorkIdentifier from '../../../../assets/icons/WorkIdentifier.svg';
 
 const CustomTabs = withStyles({
 	root: {
@@ -107,6 +117,91 @@ const PromotionalEmployeeKpoDetail = () => {
 				dateTo: '12/2/2020',
 				tag: 'Recent'
 			}
+		],
+		employeeInformationTab: [
+			{
+				id: 1,
+				identifier: EmployeeInfo,
+				labelImg: '',
+				name: 'Employee Information',
+				color: '#000000',
+				content: {
+					title: 'Mr',
+					staffId: 'SRG219',
+					firstName: 'Jon',
+					gender: 'Male',
+					middleName: 'John',
+					surname: 'Doe',
+					maritalStatus: 'Married',
+					nickName: 'DJOE',
+					officialNo: '0902172712',
+					officeNo: '119828337',
+					officeExtension: '3322',
+					privateNo: '992991182',
+					officeEmail: 'joe@contoso.com',
+					alternativeEmail: 'joe@gmail.com',
+					fbHandle: 'Djoe23',
+					linkedInHandle: 'Jon Doe',
+					instaHandle: 'Jon_Doe',
+					twitterHandle: 'Jon_Doe'
+				}
+			},
+			{
+				id: 2,
+				identifier: TravelIdentifier,
+				labelImg: Travel,
+				name: 'Travel and Vacation Schedule',
+				color: '#0063D7',
+				content: {}
+			},
+			{
+				id: 3,
+				identifier: WorkIdentifier,
+				labelImg: Work,
+				name: 'Work Location',
+				color: '#B4B722',
+				content: {}
+			},
+			{
+				id: 4,
+				identifier: OrganizationIdentifier,
+				labelImg: Organization,
+				name: 'Organization',
+				color: '#DD763D',
+				content: {}
+			},
+			{
+				id: 5,
+				identifier: EducationIdentifier,
+				labelImg: Education,
+				name: 'Education',
+				color: '#00BD79',
+				content: {}
+			},
+			{
+				id: 6,
+				identifier: TrainingsIdentifier,
+				labelImg: Trainings,
+				name: 'Trainings',
+				color: '#CD4991',
+				content: {}
+			},
+			{
+				id: 7,
+				identifier: EmergencyIdentifier,
+				labelImg: Emergency,
+				name: 'Emergency Contacts',
+				color: '#49CDCD',
+				content: {}
+			},
+			{
+				id: 8,
+				identifier: FamilyIdentifier,
+				labelImg: Family,
+				name: 'Family',
+				color: '#2700C3',
+				content: {}
+			}
 		]
 	};
 
@@ -122,12 +217,8 @@ const PromotionalEmployeeKpoDetail = () => {
 			button={{
 				showButton: true,
 				btnComponent: (
-					<Button
-						variant="contained"
-						color="secondary"
-						/* onClick={customHook.handleOpenModal} */ startIcon={<AddIcon />}
-					>
-						Add Employee
+					<Button variant="contained" color="secondary" startIcon={<AddIcon />}>
+						Add Promotion
 					</Button>
 				)
 			}}
@@ -152,7 +243,7 @@ const PromotionalEmployeeKpoDetail = () => {
 			content={
 				<div className={`sm:p-24 ${classes.promotionalContentDiv}`}>
 					{tabValue === 0 ? (
-						<EmployeeInformation />
+						<EmployeeInformation userData={userData} />
 					) : tabValue === 1 ? (
 						<GradeAndPromotion userData={userData} />
 					) : tabValue === 2 ? (
@@ -167,28 +258,6 @@ const PromotionalEmployeeKpoDetail = () => {
 		/>
 	);
 };
-
-{
-	/* <SideModal
-						open={toggleUpdateKpoModal}
-						handleClose={() => setToggleUpdateKpoModal(false)}
-						title="KPO Quarterly Review"
-					>
-						<>
-							{kpoDetail.map((detail, index) => (
-								<KpoContentCard
-									index={index}
-									theKpoCategory={detail?.kpoCategory?.name}
-									description={detail?.kpoCategory?.description}
-									target={detail?.target}
-									pipTarget={detail?.kpoPipTarget}
-									entireData={detail}
-									update={true}
-								/>
-							))}
-						</>
-					</SideModal> */
-}
 
 withReducer('kpoCategory', kpoCategoryReducer)(PromotionalEmployeeKpoDetail);
 export default withReducer('kpo', reducer)(PromotionalEmployeeKpoDetail);

@@ -190,6 +190,10 @@ input:-webkit-autofill {
     margin-bottom: 5% !important;
 }
 
+.forty-five {
+    width: 45% !important;
+}
+
 @import 'print.css';
 @import 'tables.css';
 @import 'prism.css';
