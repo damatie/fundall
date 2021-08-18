@@ -6,6 +6,9 @@ import reducer from './store/reducers';
 import withReducer from 'app/store/withReducer';
 import kpoCategoryReducer from '../KPOcategoryList/store/reducers/categoryList.reducer';
 import Button from '@material-ui/core/Button';
+import SideModal from 'app/shared/modal/SideModal';
+import SelectTextField from 'app/shared/TextInput/SelectTextField';
+import { MenuItem } from '@material-ui/core';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import EmployeeInformation from './components/EmployeeInformation';
@@ -13,6 +16,8 @@ import GradeAndPromotion from './components/GradeAndPromotion';
 import Compensation from './components/Compensation';
 import Exit from './components/Exit';
 import ConfidentialInformation from './components/ConfidentialInformation';
+import Input from 'app/shared/TextInput/Input';
+import SharedButton from 'app/shared/button/SharedButton';
 import Education from '../../../../assets/icons/Education.svg';
 import EducationIdentifier from '../../../../assets/icons/EducationIdentifier.svg';
 import Emergency from '../../../../assets/icons/Emergency.svg';
@@ -70,6 +75,19 @@ const useStyles = makeStyles(theme => ({
 	toolBarCustomDiv: {
 		width: '80%',
 		margin: 'auto'
+	},
+	row: {
+		display: 'flex',
+		justifyContent: 'space-between'
+	},
+	newPromotionalKpoInput: {
+		width: '45%'
+	},
+	newPromotionalKpoSelect: {
+		width: '100%'
+	},
+	saveButton: {
+		marginTop: '10%'
 	}
 }));
 
@@ -77,6 +95,7 @@ const PromotionalEmployeeKpoDetail = () => {
 	const classes = useStyles();
 
 	const [tabValue, setTabValue] = React.useState(0);
+	const [toggleAddContentModal, setToggleAddContentModal] = React.useState(false);
 
 	function handleChangeTab(event, value) {
 		setTabValue(value);
@@ -205,6 +224,10 @@ const PromotionalEmployeeKpoDetail = () => {
 		]
 	};
 
+	const filterStateData = {
+		jobTitles: ['Front End Developer', 'Back End Developer', 'UI/UX Designer']
+	};
+
 	return (
 		<PageLayout
 			noSearch={true}
@@ -217,7 +240,12 @@ const PromotionalEmployeeKpoDetail = () => {
 			button={{
 				showButton: true,
 				btnComponent: (
-					<Button variant="contained" color="secondary" startIcon={<AddIcon />}>
+					<Button
+						variant="contained"
+						color="secondary"
+						onClick={() => setToggleAddContentModal(true)}
+						startIcon={<AddIcon />}
+					>
 						Add Promotion
 					</Button>
 				)
@@ -253,6 +281,125 @@ const PromotionalEmployeeKpoDetail = () => {
 					) : (
 						tabValue === 4 && <ConfidentialInformation />
 					)}
+
+					<SideModal
+						open={toggleAddContentModal}
+						handleClose={() => setToggleAddContentModal(false)}
+						title="Add Promotion"
+					>
+						<div>
+							<div className={` ${classes.row}`}>
+								<Input
+									className={`my-16 ${classes.newPromotionalKpoInput}`}
+									name="jobTitle"
+									id="jobTitle"
+									label="Job Title"
+									value={''}
+									type="text"
+									noFullWidth={true}
+								/>
+								<Input
+									className={`my-16 ${classes.newPromotionalKpoInput}`}
+									name="role"
+									id="role"
+									label="Role"
+									value={''}
+									type="text"
+									noFullWidth={true}
+								/>
+							</div>
+							<div className={` ${classes.row}`}>
+								<SelectTextField
+									name="entityFilter"
+									label="Entity"
+									value={''}
+									className={` ${classes.newPromotionalKpoSelect}`}
+									noFullWidth={true}
+								>
+									{filterStateData.jobTitles?.length > 0 &&
+										['', ...filterStateData.jobTitles].map((entity, index) => (
+											<MenuItem value={entity} key={index}>
+												{entity === '' ? 'Default Selection' : entity}
+											</MenuItem>
+										))}
+								</SelectTextField>
+								<SelectTextField
+									name="department"
+									label="Department"
+									value={''}
+									className={` ${classes.newPromotionalKpoSelect}`}
+									noFullWidth={true}
+								>
+									{filterStateData.jobTitles?.length > 0 &&
+										['', ...filterStateData.jobTitles].map((entity, index) => (
+											<MenuItem value={entity} key={index}>
+												{entity === '' ? 'Default Selection' : entity}
+											</MenuItem>
+										))}
+								</SelectTextField>
+							</div>
+							<div className={` ${classes.row}`}>
+								<SelectTextField
+									name="gradeLevel"
+									label="Grade Level"
+									value={''}
+									className={` ${classes.newPromotionalKpoSelect}`}
+									noFullWidth={true}
+									mySixTeen={true}
+								>
+									{filterStateData.jobTitles?.length > 0 &&
+										['', ...filterStateData.jobTitles].map((entity, index) => (
+											<MenuItem value={entity} key={index}>
+												{entity === '' ? 'Default Selection' : entity}
+											</MenuItem>
+										))}
+								</SelectTextField>
+								<Input
+									className={`my-16 ${classes.newPromotionalKpoInput}`}
+									name="effectiveFrom"
+									id="effectiveFrom"
+									// label="Effective From"
+									value={''}
+									type="date"
+									noFullWidth={true}
+								/>
+							</div>
+							<div className={` ${classes.row}`}>
+								<SelectTextField
+									name="lineManager"
+									label="Line Manager"
+									value={''}
+									className={` ${classes.newPromotionalKpoSelect}`}
+									noFullWidth={true}
+									mySixTeen={true}
+								>
+									{filterStateData.jobTitles?.length > 0 &&
+										['', ...filterStateData.jobTitles].map((entity, index) => (
+											<MenuItem value={entity} key={index}>
+												{entity === '' ? 'Default Selection' : entity}
+											</MenuItem>
+										))}
+								</SelectTextField>
+								<Input
+									className={`my-16 ${classes.newPromotionalKpoInput}`}
+									name="functionalManager"
+									id="functionalManager"
+									label="Functional Manager"
+									value={''}
+									type="text"
+									noFullWidth={true}
+								/>
+							</div>
+							<SharedButton
+								variant="contained"
+								color="primary"
+								type="button"
+								className={`flex mx-auto ${classes.saveButton}`}
+							>
+								SAVE
+							</SharedButton>
+						</div>
+					</SideModal>
 				</div>
 			}
 		/>

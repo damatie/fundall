@@ -22,12 +22,14 @@ import userRole from 'utils/userRole';
 import KpoRequestModal from './components/KpoRequestModal';
 import { Controller } from 'react-hook-form';
 import SelectTextField from 'app/shared/TextInput/SelectTextField';
-import { MenuItem } from '@material-ui/core';
+import { Button, MenuItem } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { getAllCategory } from '../KPOcategoryList/store/actions';
 import kpoCategoryReducer from '../KPOcategoryList/store/reducers/categoryList.reducer';
 import departmentsReducer from 'app/main/HR/business_unit/department/store/reducers/departments.reducer';
 import { getDepartments } from 'app/main/HR/business_unit/department/store/actions';
+import CenterModal from 'app/shared/modal/CenterModal';
+import PromotionalKpoRequesterProfile from './components/PromotionalKpoRequesterProfile';
 
 const useStyles = makeStyles(theme => ({
 	toolBarDiv: {
@@ -144,6 +146,21 @@ const EmployeeKpoReview = () => {
 	};
 
 	React.useEffect(() => console.log(selectFilterState, 'selectFilterState'), [selectFilterState]);
+	React.useEffect(() => console.log(tabValue, 'tabValue'), [tabValue]);
+
+	const [togglePromotionalKpoRequest, setTogglePromotionalKpoRequest] = React.useState(true);
+	const kpoRequester = {
+		image: `${process.env.PUBLIC_URL}/assets/images/avatars/Velazquez.jpg`,
+		firstName: 'Naruto',
+		lastName: 'Uzumaki',
+		jobTitle: 'Recruitment Officer',
+		email: 'naruto@email.com',
+		entity: 'Cbit Industries',
+		department: 'Dev Ops',
+		lineManager: 'Tommy Shelby',
+		reviewingManager: 'Jane Doe',
+		staffId: 'SRG001'
+	};
 
 	return (
 		<PageLayout
@@ -174,6 +191,7 @@ const EmployeeKpoReview = () => {
 							<Tab className={` h-64 normal-case ${classes.tabItself}`} label="KPO Creation Request" />
 						)}
 						<Tab className={` h-64 normal-case ${classes.tabItself}`} label="Completed KPO" />
+						<Tab className={` h-64 normal-case ${classes.tabItself}`} label="Promotional KPO" />
 					</Tabs>
 					<div className={classes.filterSelectDiv}>
 						<div className={classes.singleFilterSelect}>
@@ -239,6 +257,20 @@ const EmployeeKpoReview = () => {
 							type="completed"
 							filterState={selectFilterState}
 						/>
+					)}
+					{tabValue === 3 && (
+						<div>
+							<Button variant="contained" color="primary" onClick={() => setTogglePromotionalKpoRequest(true)}>
+								SHOW THE MODAL AGAIN
+							</Button>
+							<CenterModal
+								open={togglePromotionalKpoRequest}
+								handleClose={() => setTogglePromotionalKpoRequest(false)}
+								title="Promotional KPO"
+							>
+								<PromotionalKpoRequesterProfile userData={kpoRequester} />
+							</CenterModal>
+						</div>
 					)}
 				</div>
 			}

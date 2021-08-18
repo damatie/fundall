@@ -21,13 +21,14 @@ const SelectTextField = React.forwardRef((props, ref) => {
 		refs,
 		register,
 		noFullWidth,
-		mySixTeen
+		mySixTeen,
+		disabled
 	} = props;
 	return (
 		<FormControl
 			variant={variant || 'outlined'}
 			size={size || 'medium'}
-			className={` ${noFullWidth ? 'forty-five' : 'w-full'} ${mySixTeen && 'my-16'}`}
+			className={` ${noFullWidth ? 'forty-five' : 'w-full'} ${mySixTeen && 'my-16'} ${disabled && 'disabled-stuff'}`}
 		>
 			<InputLabel error={error} id="demo-simple-select-outlined-label">
 				{label}
@@ -46,6 +47,7 @@ const SelectTextField = React.forwardRef((props, ref) => {
 				// defaultValue={value}
 				onBlur={onBlur}
 				inputRef={register}
+				disabled={disabled ? true : false}
 				{...props}
 			>
 				{children}
