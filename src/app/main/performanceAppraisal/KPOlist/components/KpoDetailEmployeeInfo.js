@@ -1,8 +1,9 @@
 import { Avatar, Grid, Typography } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import ModificationRequestNotification from './ModificationRequestNotification';
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -118,6 +119,7 @@ const useStyles = makeStyles(theme => ({
 const KpoDetailEmployeeInfo = ({ customHook }) => {
 	const userData = useSelector(state => state.auth.user.data);
 	const { details, loadingSingleKpo } = customHook;
+	const [showModificationRequest, setShowModificationRequest] = useState(true);
 
 	const classes = useStyles();
 
@@ -237,6 +239,9 @@ const KpoDetailEmployeeInfo = ({ customHook }) => {
 							</Grid>
 						</Grid>
 					</Grid>
+					{showModificationRequest && (
+						<ModificationRequestNotification show={showModificationRequest} setShow={setShowModificationRequest} />
+					)}
 				</>
 			)}
 		</>

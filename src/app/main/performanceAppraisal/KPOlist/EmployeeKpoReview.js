@@ -75,6 +75,20 @@ const useStyles = makeStyles(theme => ({
 	},
 	singleFilterSelect: {
 		width: '45% !important'
+	},
+	modificationRequest: {
+		marginTop: '-9%'
+	},
+	modificationRequestIcon: {
+		backgroundColor: 'red',
+		color: '#ffffff',
+		position: 'absolute',
+		right: '1%',
+		borderRadius: '50%',
+		padding: '3px 5px 3px 5px',
+		fontSize: 10,
+		fontWeight: 800,
+		top: '3%'
 	}
 }));
 
@@ -192,6 +206,11 @@ const EmployeeKpoReview = () => {
 						)}
 						<Tab className={` h-64 normal-case ${classes.tabItself}`} label="Completed KPO" />
 						<Tab className={` h-64 normal-case ${classes.tabItself}`} label="Promotional KPO" />
+						<Tab
+							className={` h-64 normal-case ${classes.tabItself}`}
+							label={<span className={` ${classes.modificationRequest}`}>Modification Request</span>}
+							icon={<span className={` ${classes.modificationRequestIcon}`}>24</span>}
+						/>
 					</Tabs>
 					<div className={classes.filterSelectDiv}>
 						<div className={classes.singleFilterSelect}>
@@ -271,6 +290,14 @@ const EmployeeKpoReview = () => {
 								<PromotionalKpoRequesterProfile userData={kpoRequester} />
 							</CenterModal>
 						</div>
+					)}
+					{tabValue === 4 && (
+						<ListOfEmployeeKpo
+							customHook={value}
+							value={userInfo.entityId}
+							type="pending"
+							filterState={selectFilterState}
+						/>
 					)}
 				</div>
 			}
