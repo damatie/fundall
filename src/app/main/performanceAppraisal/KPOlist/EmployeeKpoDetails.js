@@ -37,6 +37,7 @@ import PerformanceAppraisal from './components/PerformanceAppraisal';
 import EditIcon from '../../../../assets/icons/editIcon.svg';
 import ModificationRequestIcon from '../../../../assets/icons/modificationRequestIcon.svg';
 import ModificationRequestTimeline from './components/ModificationRequestTimeline';
+import PIPCalculation from './components/PIPCalculation';
 
 const CustomTabs = withStyles({
 	root: {
@@ -617,7 +618,7 @@ const EmployeeKpoDetails = () => {
 				>
 					<CustomTab className="h-64 normal-case" label="KPO Detail" />
 					<CustomTab className="h-64 normal-case" label="Performance Appraisal" />
-					<CustomTab className="h-64 normal-case" label="%PIP" disabled />
+					<CustomTab className="h-64 normal-case" label="%PIP" />
 				</CustomTabs>
 			}
 			content={
@@ -659,13 +660,18 @@ const EmployeeKpoDetails = () => {
 					)}
 					{/* {tabValue === 1 && <KpoComments kpoSummary={kpoSummary} />} */}
 					{tabValue === 1 && <PerformanceAppraisal />}
-					{tabValue === 2 && (
+					{/* {tabValue === 2 && (
 						<>
 							{EmployeeKpo.kpo.pipInformation ? (
 								<PipInformation pip={EmployeeKpo.kpo.pipInformation} />
 							) : (
 								<KpoContentPipScore calculatePip={calculatePip} kpoDetails={EmployeeKpo.kpo} />
 							)}
+						</>
+					)} */}
+					{tabValue === 2 && (
+						<>
+							<PIPCalculation />
 						</>
 					)}
 					<SideModal open={toggleSideModal} handleClose={() => setToggleSideModal(false)} title="KPO Review">

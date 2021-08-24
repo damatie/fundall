@@ -1,5 +1,5 @@
 import { Button, makeStyles } from '@material-ui/core';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
 
 const useStyles = makeStyles(theme => ({
@@ -18,7 +18,9 @@ const useStyles = makeStyles(theme => ({
 		marginBottom: '5%',
 		position: 'relative',
 		borderRadius: 5,
-
+		cursor: 'pointer'
+	},
+	labelBtnDownCaret: {
 		'&:after': {
 			top: '40%',
 			left: '47%',
@@ -30,6 +32,9 @@ const useStyles = makeStyles(theme => ({
 			transform: 'rotate(45deg)',
 			backgroundColor: '#49CDCD'
 		}
+	},
+	hideBtn: {
+		display: 'none'
 	},
 	btnDiv: {
 		display: 'flex',
@@ -110,58 +115,65 @@ const ModificationRequestNotification = ({ show, setShow }) => {
 	// 	}
 	// });
 
-	Swal.fire({
-		icon: 'success',
-		title: 'Request has been sent to HR Manager',
-		html: '<p class="mrn-custom-swal-text">The access will be locked until the HR Manager approves the request</p>',
-		showConfirmButton: true,
-		showCancelButton: true,
-		confirmButtonText: `CONTINUE`,
-		confirmButtonColor: '#19AC4B',
-		cancelButtonColor: '#FA1C1C',
-		customClass: {
-			cancelButton: 'kpo-custom-swal-btn',
-			confirmButton: 'kpo-custom-swal-btn',
-			title: 'mrn-custom-swal-title',
-			popup: 'mrQ-custom-swal-popup',
-			icon: 'mrn-custom-swal-icon'
-		}
-	}).then(result => {
-		if (result.isConfirmed) {
-			console.log('confirmed');
-		}
-	});
+	// Swal.fire({
+	// 	icon: 'success',
+	// 	title: 'Request has been sent to HR Manager',
+	// 	html: '<p class="mrn-custom-swal-text">The access will be locked until the HR Manager approves the request</p>',
+	// 	showConfirmButton: true,
+	// 	showCancelButton: true,
+	// 	confirmButtonText: `CONTINUE`,
+	// 	confirmButtonColor: '#19AC4B',
+	// 	cancelButtonColor: '#FA1C1C',
+	// 	customClass: {
+	// 		cancelButton: 'kpo-custom-swal-btn',
+	// 		confirmButton: 'kpo-custom-swal-btn',
+	// 		title: 'mrn-custom-swal-title',
+	// 		popup: 'mrQ-custom-swal-popup',
+	// 		icon: 'mrn-custom-swal-icon'
+	// 	}
+	// }).then(result => {
+	// 	if (result.isConfirmed) {
+	// 		console.log('confirmed');
+	// 	}
+	// });
 
-	React.useEffect(() => console.log(show, 'show'), [show]);
+	useEffect(() => console.log(show, 'show'), [show]);
+	const [showButtons, setShowButtons] = useState(false);
 
 	return (
 		<>
-			{show ? (
+			{show && (
 				<div className={` ${classes.mReqNoti}`}>
-					<p className={` ${classes.labelBtn}`}>MODIFICATION REQUEST</p>
-					<div className={` ${classes.btnDiv}`}>
-						<Button className={` ${classes.btn} ${classes.approveBtn}`} onClick={consentModal}>
-							APPROVE
-						</Button>
-						<Button
-							className={` ${classes.btn} ${classes.declineBtn}`}
-							onClick={() => {
-								Swal.fire({
-									icon: 'success',
-									title: 'Declined Successfully'
-								});
-								setShow(!show);
-							}}
-						>
-							DECLINE
-						</Button>
-					</div>
+					<p
+						className={` ${classes.labelBtn} ${showButtons && classes.labelBtnDownCaret}`}
+						onClick={() => setShowButtons(true)}
+					>
+						MODIFICATION REQUEST
+					</p>
+					{showButtons && (
+						<div className={` ${classes.btnDiv}`}>
+							<Button className={` ${classes.btn} ${classes.approveBtn}`} onClick={consentModal}>
+								APPROVE
+							</Button>
+							<Button
+								className={` ${classes.btn} ${classes.declineBtn}`}
+								onClick={() => {
+									Swal.fire({
+										icon: 'success',
+										title: 'Declined Successfully'
+									});
+									setShow(!show);
+								}}
+							>
+								DECLINE
+							</Button>
+						</div>
+					)}
 				</div>
-			) : (
-				<Button className={` ${classes.modified}`} disabled>
-					Modified
-				</Button>
 			)}
+			{/* <Button className={` ${classes.modified}`} disabled>
+				Modified
+			</Button> */}
 		</>
 	);
 };
