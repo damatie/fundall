@@ -153,7 +153,13 @@ const useStyles = makeStyles(theme => ({
 	},
 	modificationRequestIcon: {
 		width: '2.1%',
-		cursor: 'pointer'
+		cursor: 'pointer',
+
+		[theme.breakpoints.down('sm')]: {
+			margin: 'auto',
+			marginTop: '5%',
+			transform: 'rotate(90deg)'
+		}
 	},
 	modificationRequestItem: {
 		cursor: 'pointer'

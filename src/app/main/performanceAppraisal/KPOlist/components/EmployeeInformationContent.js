@@ -4,12 +4,16 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import EmployeeInformationComponent from './EmployeeInformationComponent';
 
+import BlueDot from '../../../../../assets/icons/blue-dot.svg';
+import BlackDot from '../../../../../assets/icons/black-dot.svg';
+
 const useStyles = makeStyles(theme => ({
 	gradeAndPromotionContentDiv: {
 		marginBottom: '5%'
 	},
 	employeeInformationContentLabel: {
 		display: 'flex'
+		// backgroundColor: '#ffffff'
 	},
 	identifierDiv: {
 		display: 'flex' /* ,
@@ -74,16 +78,17 @@ function EmployeeInformationContentLabel({
 	const classes = useStyles();
 
 	return (
-		<div className={` ${classes.employeeInformationContentLabel}`}>
-			<div
+		<div className={` ${classes.employeeInformationContentLabel}`} onClick={toggleFunction}>
+			{/* <div
 				className={` ${classes.identifierDiv} ${theName === 'Employee Information' ? classes.employeeInfoLabel : ''}`}
 			>
 				<img src={identifier} alt="identifier" />
-			</div>
+			</div> */}
 			<div className={` ${classes.spanAndCaret}`}>
-				{!noLabelImg && <img className={` ${classes.labelImg}`} src={labelImg} alt="message icon" />}
+				<img src={BlackDot} alt="identifier" />
+				<img className={` ${classes.labelImg}`} src={labelImg} alt="message icon" />
 				<span style={{ color: color }}>{theName}</span>
-				{toggleVariable ? (
+				{/* {toggleVariable ? (
 					<span onClick={toggleFunction}>
 						<ExpandMoreIcon className={` ${classes.caretIcon}`} />
 					</span>
@@ -91,13 +96,13 @@ function EmployeeInformationContentLabel({
 					<span onClick={toggleFunction}>
 						<ChevronRightIcon className={` ${classes.caretIcon}`} />
 					</span>
-				)}
+				)} */}
 			</div>
 		</div>
 	);
 }
 
-const EmployeeInformationContent = ({ identifier, labelImg, name, content, color }) => {
+const EmployeeInformationContent = ({ labelImg, name, content, color }) => {
 	const classes = useStyles();
 	const [expandDropDown, setExpandDropDown] = useState(false);
 
@@ -112,7 +117,6 @@ const EmployeeInformationContent = ({ identifier, labelImg, name, content, color
 				toggleFunction={toggleExpandDropDown}
 				theName={name}
 				toggleVariable={expandDropDown}
-				identifier={identifier}
 				labelImg={labelImg}
 				noLabelImg={name === 'Employee Information' ? true : false}
 				color={color}

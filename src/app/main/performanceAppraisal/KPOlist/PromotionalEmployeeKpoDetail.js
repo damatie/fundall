@@ -18,20 +18,20 @@ import Exit from './components/Exit';
 import ConfidentialInformation from './components/ConfidentialInformation';
 import Input from 'app/shared/TextInput/Input';
 import SharedButton from 'app/shared/button/SharedButton';
-import Education from '../../../../assets/icons/Education.svg';
+import Education from '../../../../assets/icons/teacher.svg';
 import EducationIdentifier from '../../../../assets/icons/EducationIdentifier.svg';
-import Emergency from '../../../../assets/icons/Emergency.svg';
+import Emergency from '../../../../assets/icons/emergency-bulb.svg';
 import EmergencyIdentifier from '../../../../assets/icons/EmergencyIdentifier.svg';
-import EmployeeInfo from '../../../../assets/icons/EmployeeInfo.svg';
-import Family from '../../../../assets/icons/Family.svg';
+import EmployeeInfo from '../../../../assets/icons/user.svg';
+import Family from '../../../../assets/icons/people.svg';
 import FamilyIdentifier from '../../../../assets/icons/FamilyIdentifier.svg';
-import Organization from '../../../../assets/icons/Organization.svg';
+import Organization from '../../../../assets/icons/briefcase.svg';
 import OrganizationIdentifier from '../../../../assets/icons/OrganizationIdentifier.svg';
-import Trainings from '../../../../assets/icons/Trainings.svg';
+import Trainings from '../../../../assets/icons/note-2.svg';
 import TrainingsIdentifier from '../../../../assets/icons/TrainingsIdentifier.svg';
-import Travel from '../../../../assets/icons/Travel.svg';
+import Travel from '../../../../assets/icons/airplane.svg';
 import TravelIdentifier from '../../../../assets/icons/TravelIdentifier.svg';
-import Work from '../../../../assets/icons/Work.svg';
+import Work from '../../../../assets/icons/gps.svg';
 import WorkIdentifier from '../../../../assets/icons/WorkIdentifier.svg';
 
 const CustomTabs = withStyles({
@@ -140,8 +140,7 @@ const PromotionalEmployeeKpoDetail = () => {
 		employeeInformationTab: [
 			{
 				id: 1,
-				identifier: EmployeeInfo,
-				labelImg: '',
+				labelImg: EmployeeInfo,
 				name: 'Employee Information',
 				color: '#000000',
 				content: {
@@ -167,7 +166,6 @@ const PromotionalEmployeeKpoDetail = () => {
 			},
 			{
 				id: 2,
-				identifier: TravelIdentifier,
 				labelImg: Travel,
 				name: 'Travel and Vacation Schedule',
 				color: '#0063D7',
@@ -175,7 +173,6 @@ const PromotionalEmployeeKpoDetail = () => {
 			},
 			{
 				id: 3,
-				identifier: WorkIdentifier,
 				labelImg: Work,
 				name: 'Work Location',
 				color: '#B4B722',
@@ -183,7 +180,6 @@ const PromotionalEmployeeKpoDetail = () => {
 			},
 			{
 				id: 4,
-				identifier: OrganizationIdentifier,
 				labelImg: Organization,
 				name: 'Organization',
 				color: '#DD763D',
@@ -191,7 +187,6 @@ const PromotionalEmployeeKpoDetail = () => {
 			},
 			{
 				id: 5,
-				identifier: EducationIdentifier,
 				labelImg: Education,
 				name: 'Education',
 				color: '#00BD79',
@@ -199,7 +194,6 @@ const PromotionalEmployeeKpoDetail = () => {
 			},
 			{
 				id: 6,
-				identifier: TrainingsIdentifier,
 				labelImg: Trainings,
 				name: 'Trainings',
 				color: '#CD4991',
@@ -207,7 +201,6 @@ const PromotionalEmployeeKpoDetail = () => {
 			},
 			{
 				id: 7,
-				identifier: EmergencyIdentifier,
 				labelImg: Emergency,
 				name: 'Emergency Contacts',
 				color: '#49CDCD',
@@ -215,7 +208,6 @@ const PromotionalEmployeeKpoDetail = () => {
 			},
 			{
 				id: 8,
-				identifier: FamilyIdentifier,
 				labelImg: Family,
 				name: 'Family',
 				color: '#2700C3',

@@ -16,45 +16,91 @@ const useStyles = makeStyles(theme => ({
 		height: 150
 	},
 	mainDiv: {
-		width: '60%',
-		margin: 'auto',
+		// marginLeft: '9%',
 		display: 'flex',
-		alignItems: 'center'
+		justifyContent: 'center',
+		alignItems: 'center',
+
+		// [theme.breakpoints.down('md')]: {
+		// 	marginLeft: '7%'
+		// },
+
+		[theme.breakpoints.down('sm')]: {
+			marginLeft: 0,
+			flexDirection: 'column'
+		}
 	},
 	profileInfoDiv: {
-		color: '#000000',
 		marginLeft: '5%',
+		border: '1px solid #DAD5D5',
+		borderRadius: 10,
+		position: 'relative',
+		width: '65%',
+		padding: '10px 0 10px 30px',
+
+		[theme.breakpoints.down('sm')]: {
+			width: '90%',
+			margin: 'auto',
+			marginTop: '5%'
+		},
 
 		[theme.breakpoints.down('xs')]: {
-			marginLeft: 0
+			marginLeft: '3%',
+			padding: '5px 0 5px 20px'
+		}
+	},
+	profileInfoItem: {
+		display: 'flex',
+		alignItems: 'center',
+		marginBottom: '2%'
+	},
+	profileInfoLabel: {
+		fontWeight: 600,
+		fontSize: 15,
+		color: '#3D3D3D',
+		width: '30%',
+
+		[theme.breakpoints.down('sm')]: {
+			fontSize: 12
+		}
+	},
+	profileInfoContent: {
+		fontWeight: 600,
+		fontSize: 18,
+		width: '60%',
+		color: '#000000',
+
+		[theme.breakpoints.down('sm')]: {
+			fontSize: 15
 		}
 	},
 	userName: {
 		fontWeight: 700,
-		fontSize: 30
+		fontSize: 25,
+
+		[theme.breakpoints.down('sm')]: {
+			fontSize: 20
+		}
 	},
 	email: {
-		fontWeight: 600,
-		fontSize: 15
+		color: '#00CCF2',
+		fontSize: 20,
+
+		[theme.breakpoints.down('sm')]: {
+			fontSize: 16
+		}
 	},
-	jobTitle: {
-		fontWeight: 700,
-		fontSize: 17
-	},
-	companyAndDept: {
-		display: 'flex',
-		fontWeight: 600,
-		fontSize: 11
-	} /* ,
-	companyName: {
-		fontSize: 10
-	},
-	department: {
-		fontSize: 11
-	} */,
-	pipe: {
-		display: 'inline-block',
-		margin: '0 3%'
+	hrClass: {
+		width: 2,
+		height: '83%',
+		top: '7%',
+		left: '28%',
+		position: 'absolute',
+		background: '#ECEAEA',
+
+		[theme.breakpoints.down('sm')]: {
+			display: 'none'
+		}
 	}
 }));
 
@@ -76,20 +122,29 @@ const PromotionalKpoEmployeeProfile = ({ userData }) => {
 					)}
 				</Grid>
 				<Grid item className={` ${classes.profileInfoDiv}`}>
-					<Typography variant="body1" display="block" className={` ${classes.userName}`}>
-						{userData.firstName} &nbsp; {userData.lastName}
-					</Typography>
-					<Typography variant="body1" display="block" className={` ${classes.email}`}>
-						{userData.email}
-					</Typography>
-					<Typography variant="body1" display="block" className={` ${classes.jobTitle}`}>
-						{userData.jobTitle}
-					</Typography>
-					<Typography variant="body1" display="block" className={` ${classes.companyAndDept}`}>
-						<span className={` ${classes.companyName}`}>{userData.companyName}</span>
-						<span className={` ${classes.pipe}`}>|</span>
-						<span className={` ${classes.department}`}>{userData.department}</span>
-					</Typography>
+					<div className={` ${classes.profileInfoItem}`}>
+						<p className={` ${classes.profileInfoLabel}`}>Name</p>
+						<p className={` ${classes.userName}`}>
+							{userData.firstName} &nbsp; {userData.lastName}
+						</p>
+					</div>
+					<div className={` ${classes.profileInfoItem}`}>
+						<p className={` ${classes.profileInfoLabel}`}>Email Address</p>
+						<p className={` ${classes.profileInfoContent} ${classes.email}`}>{userData.email}</p>
+					</div>
+					<div className={` ${classes.profileInfoItem}`}>
+						<p className={` ${classes.profileInfoLabel}`}>Entity</p>
+						<p className={` ${classes.profileInfoContent}`}>{userData.companyName}</p>
+					</div>
+					<div className={` ${classes.profileInfoItem}`}>
+						<p className={` ${classes.profileInfoLabel}`}>Department</p>
+						<p className={` ${classes.profileInfoContent}`}>{userData.department}</p>
+					</div>
+					<div className={` ${classes.profileInfoItem}`}>
+						<p className={` ${classes.profileInfoLabel}`}>Job Role</p>
+						<p className={` ${classes.profileInfoContent}`}>{userData.jobTitle}</p>
+					</div>
+					<hr className={` ${classes.hrClass}`} />
 				</Grid>
 			</Grid>
 		</>

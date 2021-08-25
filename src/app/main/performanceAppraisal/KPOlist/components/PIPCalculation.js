@@ -19,14 +19,14 @@ const useStyles = makeStyles(theme => ({
 		marginTop: '10%'
 	},
 	generalDiv: {
-		marginBottom: '15%'
+		marginBottom: '10%'
 	},
 	editableField: {
 		border: '1px  solid #E0E0E0',
 
 		'&:focus': {
-			outline: '1px solid #000000 !important',
-			borderRadius: 10
+			border: '1px solid #000000 !important',
+			outline: 'none'
 		}
 	},
 	totalPipAchievedInput: {
@@ -35,7 +35,8 @@ const useStyles = makeStyles(theme => ({
 	inputField: {
 		borderRadius: 5,
 		width: '100%',
-		height: 50
+		height: 50,
+		paddingLeft: 10
 	},
 	inputLabel: {
 		color: '#000000',
@@ -84,36 +85,55 @@ const PIPCalculation = () => {
 		}
 	];
 
+	const handleEmployeeSalaryChange = evt => {
+		const { value } = evt.target;
+
+		setEmployeesSalary(value);
+		const totalPip = (60 / 100) * Number(value);
+		setBonusAndPipAchieved({
+			...bonusAndPipAchieved,
+			pipBonus: `₦ ${totalPip}`
+		});
+	};
+
 	useEffect(() => {
 		console.log(pipSelect, 'pipSelect');
+		if (pipSelect !== '') {
+			setBonusAndPipAchieved({
+				...bonusAndPipAchieved,
+				pipAchieved: '60%'
+			});
+		}
 	}, [pipSelect]);
 
 	return (
 		<form className={` ${classes.form}`}>
-			<SelectTextField
-				name="compensationType"
-				// label="Compensation Type"
-				onChange={handleChange}
-				value={pipSelect !== '' ? pipSelect : 'Compensation Type'}
-				className={` ${classes.generalDiv} ${classes.selectDiv}`}
-				placeho
-				// error={errors.jobTitleId}
-				// message={errors.jobTitleId?.message}
-			>
-				{compensationType?.length > 0 &&
-					compensationType.map(({ content, id }) => (
-						<MenuItem value={content} key={id}>
-							{content}
-						</MenuItem>
-					))}
-			</SelectTextField>
+			<div className={` ${classes.selectDiv}`}>
+				<SelectTextField
+					name="compensationType"
+					label="Compensation Type"
+					onChange={handleChange}
+					value={pipSelect}
+					className={` ${classes.generalDiv}`}
+					placeho
+					// error={errors.jobTitleId}
+					// message={errors.jobTitleId?.message}
+				>
+					{compensationType?.length > 0 &&
+						compensationType.map(({ content, id }) => (
+							<MenuItem value={content} key={id}>
+								{content}
+							</MenuItem>
+						))}
+				</SelectTextField>
+			</div>
 			{pipSelect !== '' && (
 				<div className={` ${classes.generalDiv}`}>
 					<h3 className={` ${classes.inputLabel}`}>Employee {pipSelect}</h3>
 					<input
 						type="text"
 						value={employeesSalary}
-						onChange={e => setEmployeesSalary(e.target.value)}
+						onChange={handleEmployeeSalaryChange}
 						className={` ${classes.inputField} ${classes.editableField}`}
 					/>
 				</div>

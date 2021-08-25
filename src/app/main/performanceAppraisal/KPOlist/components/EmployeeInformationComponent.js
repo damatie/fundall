@@ -3,17 +3,17 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
 	employeeInformationComponentDiv: {
-		marginTop: '-2%',
-		marginLeft: '36.5%',
+		marginTop: '8.5%',
+		paddingLeft: '7%',
 
 		[theme.breakpoints.down('md')]: {
-			marginTop: '1%',
-			marginLeft: '38.5%'
+			// marginTop: '1%',
+			// marginLeft: '38.5%'
 		},
 
 		[theme.breakpoints.down('sm')]: {
-			marginTop: '4%',
-			marginLeft: '13.5%'
+			// marginTop: '4%',
+			// marginLeft: '13.5%'
 		}
 	},
 	firstRow: {},
@@ -33,17 +33,29 @@ const useStyles = makeStyles(theme => ({
 	firstRowLabel: {
 		color: '#3D3D3D',
 		fontWeight: 700,
-		fontSize: 12
+		fontSize: 12,
+
+		[theme.breakpoints.down('sm')]: {
+			fontSize: 8
+		}
 	},
 	generalRowLabel: {
 		color: '#525252',
 		fontWeight: 700,
-		fontSize: 12
+		fontSize: 12,
+
+		[theme.breakpoints.down('sm')]: {
+			fontSize: 8
+		}
 	},
 	content: {
 		color: '#000000',
 		fontWeight: 700,
-		fontSize: 20
+		fontSize: 20,
+
+		[theme.breakpoints.down('sm')]: {
+			fontSize: 10
+		}
 	},
 	rowHeading: {
 		color: '#525252',
@@ -53,12 +65,16 @@ const useStyles = makeStyles(theme => ({
 		position: 'relative',
 		paddingBottom: 5,
 
+		[theme.breakpoints.down('sm')]: {
+			fontSize: 13
+		},
+
 		'&:after': {
 			content: "' '",
 			position: 'absolute',
 			width: '60%',
-			height: 2,
-			backgroundColor: '#C8C8C8',
+			height: 4,
+			backgroundColor: '#00CCF2',
 			bottom: 0,
 			left: 0
 		}
@@ -92,6 +108,7 @@ const EmployeeInformationComponent = ({
 	return (
 		<div className={` ${classes.employeeInformationComponentDiv}`}>
 			<div className={` ${classes.firstRow}`}>
+				<h3 className={` ${classes.rowHeading}`}>Employee Information</h3>
 				<div className={` ${classes.row}`}>
 					<div className={` ${classes.rowItem}`}>
 						<p className={` ${classes.firstRowLabel}`}>Title</p>
