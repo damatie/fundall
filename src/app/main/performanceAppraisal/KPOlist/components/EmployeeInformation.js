@@ -11,7 +11,8 @@ const useStyles = makeStyles(theme => ({
 		// borderLeft: '2px solid #c8c8c8'
 		backgroundColor: '#F5F5F5',
 		display: 'flex',
-		marginLeft: '8%'
+		marginLeft: '8%',
+		width: '85%'
 	},
 	labelOuterDiv: {
 		backgroundColor: '#fcfcfc',
@@ -71,9 +72,6 @@ const EmployeeInformation = ({ userData }) => {
 						/>
 					))}
 				</div>
-				{/* {userData.employeeInformationTab.map(({ id, labelImg, name, content, color }) => (
-					<EmployeeInformationContent key={id} labelImg={labelImg} name={name} content={content} color={color} />
-				))} */}
 				<div className={` ${classes.contentOuterDiv} ${showContent !== 'Employee Information' && classes.noContent}`}>
 					{showContent === 'Employee Information' ? (
 						<EmployeeInformationComponent content={contentToShow} />

@@ -31,7 +31,7 @@ function ToolbarLayout1(props) {
 				id="fuse-toolbar"
 				className="flex relative z-10"
 				color="default"
-				style={{ backgroundColor: '#4B507E' /* toolbarTheme.palette.background.default */ }}
+				style={{ backgroundColor: toolbarTheme.palette.background.default }}
 			>
 				<Toolbar className="p-0">
 					{config.navbar.display && config.navbar.position === 'left' && (
@@ -50,15 +50,15 @@ function ToolbarLayout1(props) {
 					<div className="flex">
 						<UserMenu />
 
-						<div className={classes.separator} />
+						{/* <div className={classes.separator} /> */}
 
 						<FuseSearch />
 
-						<div className={classes.separator} />
+						{/* <div className={classes.separator} /> */}
 
 						<LanguageSwitcher />
 
-						<div className={classes.separator} />
+						{/* <div className={classes.separator} /> */}
 
 						<QuickPanelToggleButton />
 					</div>

@@ -19,20 +19,15 @@ import ConfidentialInformation from './components/ConfidentialInformation';
 import Input from 'app/shared/TextInput/Input';
 import SharedButton from 'app/shared/button/SharedButton';
 import Education from '../../../../assets/icons/teacher.svg';
-import EducationIdentifier from '../../../../assets/icons/EducationIdentifier.svg';
 import Emergency from '../../../../assets/icons/emergency-bulb.svg';
-import EmergencyIdentifier from '../../../../assets/icons/EmergencyIdentifier.svg';
 import EmployeeInfo from '../../../../assets/icons/user.svg';
 import Family from '../../../../assets/icons/people.svg';
-import FamilyIdentifier from '../../../../assets/icons/FamilyIdentifier.svg';
 import Organization from '../../../../assets/icons/briefcase.svg';
-import OrganizationIdentifier from '../../../../assets/icons/OrganizationIdentifier.svg';
 import Trainings from '../../../../assets/icons/note-2.svg';
-import TrainingsIdentifier from '../../../../assets/icons/TrainingsIdentifier.svg';
 import Travel from '../../../../assets/icons/airplane.svg';
-import TravelIdentifier from '../../../../assets/icons/TravelIdentifier.svg';
 import Work from '../../../../assets/icons/gps.svg';
-import WorkIdentifier from '../../../../assets/icons/WorkIdentifier.svg';
+import UserSquare from '../../../../assets/icons/user-square.svg';
+import PromotionHistory from '../../../../assets/icons/promotion-history.svg';
 
 const CustomTabs = withStyles({
 	root: {
@@ -210,6 +205,28 @@ const PromotionalEmployeeKpoDetail = () => {
 				id: 8,
 				labelImg: Family,
 				name: 'Family',
+				color: '#2700C3',
+				content: {}
+			}
+		],
+		gradeAndPromotionTab: [
+			{
+				id: 1,
+				labelImg: UserSquare,
+				name: 'Employee Information',
+				color: '#2700C3',
+				content: {
+					employeeGrade: 'GL234',
+					natureOfEngagement: 'New Hire',
+					confirmationDate: '12/8/2019',
+					dateOfEmployment: '12/9/2019',
+					dateOfLastPromotion: '12/2/2020'
+				}
+			},
+			{
+				id: 2,
+				labelImg: PromotionHistory,
+				name: 'Promotion History',
 				color: '#2700C3',
 				content: {}
 			}

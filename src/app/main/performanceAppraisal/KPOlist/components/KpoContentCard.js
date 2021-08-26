@@ -113,7 +113,7 @@ export default function KpoContentCard({ index, theKpoCategory, description, tar
 									borderTopLeftRadius: '15px',
 									borderBottomLeftRadius: '15px',
 									color: '#fff',
-									backgroundColor: '#192d3e',
+									backgroundColor: '#252C67',
 									display: 'flex',
 									justifyContent: 'center'
 								}}
