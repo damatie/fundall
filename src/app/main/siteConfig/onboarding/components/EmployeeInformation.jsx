@@ -18,10 +18,17 @@ const useStyles = makeStyles(theme => ({
         width: "80%",
         margin: "auto",
         marginTop: "10%"
+    },
+    uploadCompanyLogo: {
+        "& section": {
+            "& div": {
+                backgroundColor: "#F8F8F8"
+            }
+        }
     }
 }));
 
-const EmployeeInformation = () => {
+const EmployeeInformation = ({ goToNextStepper }) => {
     const classes = useStyles();
     const { countries, states, cities } = useSelector(state => state.regions);
     const dispatch = useDispatch();
@@ -83,8 +90,8 @@ const EmployeeInformation = () => {
             // type: '',
         },
         {
-            name: 'employeeManager2',
-            label: 'Employee Manager 2',
+            name: 'functionalManager',
+            label: 'Functional Manager',
             // type: '',
         },
         {
@@ -107,7 +114,8 @@ const EmployeeInformation = () => {
         <div className={` ${classes.employeeInformationDiv}`}>
             <form onSubmit={e => {
                 e.preventDefault();
-                console.log(e);
+                // console.log(e);
+                goToNextStepper();
             }}>
                 <GridSystem>
                     {inputs.map((input) => {
@@ -159,11 +167,12 @@ const EmployeeInformation = () => {
                         )
                     })}
                 </GridSystem>
-                <div>
+                <div className={` ${classes.uploadCompanyLogo}`}>
                     <Typography variant="body2" color="initial" className='my-20'>{'Signature'}</Typography>
                     <SharedDropzone
                         setValue={(e) => console.log(e)}
                         name='signature'
+                        placeholder="Upload Company Logo"
                     />
                 </div>
                 <SharedButton

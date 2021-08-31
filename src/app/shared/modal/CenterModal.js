@@ -29,14 +29,25 @@ const useStyles = makeStyles(theme => ({
 		marginLeft: theme.spacing(2),
 		flex: 1
 	},
+	normalWidth: {
+		width: 476
+	},
+	largeWidth: {
+		width: 600
+	},
 	dialogClass: {
-		width: 476,
 		margin: 'auto',
 		height: '85vh',
 
 		[theme.breakpoints.down('sm')]: {
 			width: '90%'
 		}
+	},
+	borderRadiusClass: {
+		borderRadius: 15
+	},
+	shortHeight: {
+		minHeight: 'fit-content !important'
 	}
 }));
 
@@ -44,13 +55,27 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 	return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const CenterModal = ({ open, handleClose, title, children, actionButton }) => {
+const CenterModal = ({
+	open,
+	handleClose,
+	title,
+	children,
+	actionButton,
+	hideCloseIcon,
+	borderRadius,
+	spacedAppBarHeight,
+	largeWidth
+}) => {
 	const classes = useStyles();
 
 	return (
 		<div>
 			<Dialog
-				classes={{ paper: classes.dialog }}
+				classes={{
+					paper: `${classes.dialog} ${largeWidth ? classes.largeWidth : classes.normalWidth}  ${
+						borderRadius && classes.borderRadiusClass
+					}`
+				}}
 				fullScreen
 				className={` ${classes.dialogClass}`}
 				open={open}
@@ -58,18 +83,20 @@ const CenterModal = ({ open, handleClose, title, children, actionButton }) => {
 				TransitionComponent={Transition}
 			>
 				<AppBar position="static" className={classes.appBar}>
-					<Toolbar className="flex w-full" justify="space-between" style={{ minHeight: 'fit-content' }}>
+					<Toolbar className={`flex w-full ${!spacedAppBarHeight && classes.shortHeight}`} justify="space-between">
 						<Grid container spacing={3} justifyContent="space-between" style={{ alignItems: 'center' }}>
 							<Grid item align="left">
 								<Typography variant="h6" color="inherit">
 									{title}
 								</Typography>
 							</Grid>
-							<Grid item align="right">
-								<IconButton edge="end" color="inherit" onClick={handleClose} aria-label="close">
-									<CloseIcon />
-								</IconButton>
-							</Grid>
+							{!hideCloseIcon && (
+								<Grid item align="right">
+									<IconButton edge="end" color="inherit" onClick={handleClose} aria-label="close">
+										<CloseIcon />
+									</IconButton>
+								</Grid>
+							)}
 						</Grid>
 					</Toolbar>
 				</AppBar>
