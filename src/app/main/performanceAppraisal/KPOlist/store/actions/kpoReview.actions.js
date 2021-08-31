@@ -179,14 +179,14 @@ export const kpoReq = ({ id, type }) => {
 	};
 };
 
-export const getAllKposByLineManager = () => {
+export const getAllKposByLineManager = (limit=10000, offset=0) => {
 	return async dispatch => {
 		try {
 			const {
 				data: {
 					data: { rows }
 				}
-			} = await api.get(`/appraisal/kpo/all/by-linemanager?limit=10&offset=0`);
+			} = await api.get(`/appraisal/kpo/all/by-linemanager?limit=${offset}&offset=${offset}`);
 			dispatch({
 				type: GET_ALL_KPOS_BY_LINE_MANAGER,
 				payload: rows ?? []
