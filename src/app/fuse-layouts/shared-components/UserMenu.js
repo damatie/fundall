@@ -10,12 +10,23 @@ import * as authActions from 'app/auth/store/actions';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useHistory, Redirect } from 'react-router-dom';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles({
+	userDiv: {
+		backgroundColor: '#252C67',
+		borderRadius: 40,
+		height: '4.7rem',
+		margin: 'auto'
+	}
+});
 
 function UserMenu(props) {
+	const classes = useStyles();
 	const dispatch = useDispatch();
 	const user = useSelector(({ auth }) => auth.user);
 	const profile = useSelector(({ profile }) => profile.data);
-	
+
 	const [redirect, setRedirect] = useState(false);
 
 	const history = useHistory();
@@ -30,13 +41,14 @@ function UserMenu(props) {
 		setUserMenu(null);
 	};
 
-	if(redirect) {
-		return <Redirect to='/auth/login' />
+	if (redirect) {
+		return <Redirect to="/auth/login" />;
 	}
 
 	return (
 		<>
-			<Button className="h-64" onClick={userMenuClick}>
+			<Button className={` ${classes.userDiv}`} onClick={userMenuClick}>
+				{/* h-64 */}
 				{user.data.photoURL ? (
 					<Avatar className="" alt="user photo" src={profile.profilePicture} />
 				) : (
@@ -103,7 +115,7 @@ function UserMenu(props) {
 								localStorage.clear();
 								// history.push('/auth/login');
 								// setRedirect(true);
-								window.location.assign('/auth/login')
+								window.location.assign('/auth/login');
 							}}
 						>
 							<ListItemIcon className="min-w-40">

@@ -50,15 +50,15 @@ function ToolbarLayout1(props) {
 					<div className="flex">
 						<UserMenu />
 
-						<div className={classes.separator} />
+						{/* <div className={classes.separator} /> */}
 
 						<FuseSearch />
 
-						<div className={classes.separator} />
+						{/* <div className={classes.separator} /> */}
 
 						<LanguageSwitcher />
 
-						<div className={classes.separator} />
+						{/* <div className={classes.separator} /> */}
 
 						<QuickPanelToggleButton />
 					</div>

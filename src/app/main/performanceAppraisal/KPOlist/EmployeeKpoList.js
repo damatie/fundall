@@ -10,9 +10,23 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
+import Button from '@material-ui/core/Button';
+import AddIcon from '@material-ui/icons/Add';
+import Swal from 'sweetalert2';
 import { entityListReducer } from './../../../store/reducers/entities.reducers';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles(theme => ({
+	promotionalKpoBtn: {
+		[theme.breakpoints.down('sm')]: {
+			fontSize: 10
+		}
+	}
+}));
 
 const EmployeeKpoList = () => {
+	const classes = useStyles();
+
 	const [tabValue, setTabValue] = React.useState(0);
 	const dispatch = useDispatch();
 	const { push } = useHistory();
@@ -34,6 +48,33 @@ const EmployeeKpoList = () => {
 		state,
 		employees
 	});
+	const createdKpoBefore = true;
+
+	const confirmCreatePromotionalKpo = () => {
+		Swal.fire({
+			icon: 'info',
+			title: 'You can only create one \n KPO per year.',
+			html:
+				'<p class="kpo-custom-swal-text">Note that you can create a promotion kpo, to do so please click continue.</p>',
+			showConfirmButton: true,
+			showCancelButton: true,
+			confirmButtonText: `CONTINUE`,
+			confirmButtonColor: '#19AC4B',
+			cancelButtonColor: '#FA1C1C',
+			customClass: {
+				cancelButton: 'kpo-custom-swal-btn',
+				confirmButton: 'kpo-custom-swal-btn',
+				title: 'kpo-custom-swal-title',
+				popup: 'kpo-custom-swal-popup',
+				icon: 'kpo-custom-swal-icon'
+			}
+		}).then(result => {
+			if (result.isConfirmed) {
+				customHook.handleOpenModal();
+			}
+		});
+	};
+
 	return (
 		<PageLayout
 			header={{
@@ -43,9 +84,22 @@ const EmployeeKpoList = () => {
 			}}
 			button={{
 				showButton: true,
-				btnTitle: 'Create KPO',
-				onClick: customHook.handleOpenModal,
-				btnComponent: false
+				// btnTitle: 'Create KPO',
+				// onClick: customHook.handleOpenModal,
+				// btnComponent: false
+				btnComponent: createdKpoBefore ? (
+					<Button
+						variant="contained"
+						color="secondary"
+						onClick={confirmCreatePromotionalKpo}
+						className={` ${classes.promotionalKpoBtn}`}
+						startIcon={<AddIcon />}
+					>
+						Create Promotional KPO
+					</Button>
+				) : (
+					<Button onClick={customHook.handleOpenModal}>Create KPO</Button>
+				)
 			}}
 			contentToolbar={
 				<Tabs
