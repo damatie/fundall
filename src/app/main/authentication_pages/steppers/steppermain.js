@@ -9,7 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import AccountSettings from './accountsettings';
 import OrganizationInformation from './orginfo';
 import Entities from './entities';
-import Departments from './departments';
+import Compensation from './compensation';
 // import { Link, useHistory, Redirect } from 'react-router-dom';
 import { Redirect } from 'react-router';
 
@@ -51,8 +51,8 @@ function getSteps(hasEntities) {
       },
       {
         id: 4,
-        title: 'Departments', 
-        details: 'Configure departments in your organization'
+        title: 'Employee Compensation Details', 
+        details: 'Employee Compensation Details for your organization'
       }
     ];  
   } else {
@@ -69,8 +69,8 @@ function getSteps(hasEntities) {
         }, 
         {
           id: 3,
-          title: 'Departments', 
-          details: 'Configure departments in your organization'
+          title: 'Employee Compensation Details', 
+          details: 'Employee Compensation Details for your organization'
         }
       ];
   }
@@ -86,7 +86,7 @@ function getStepContent(stepIndex, handleNext, handleBack, hasEntities) {
       case 2:
         return <><Entities handleNext={handleNext} handleBack={handleBack}/></>;
       case 3:
-        return <><Departments handleNext={handleNext} handleBack={handleBack}/></>
+        return <><Compensation handleNext={handleNext} handleBack={handleBack}/></>
       default:
         return <></>;
     }
@@ -97,7 +97,7 @@ function getStepContent(stepIndex, handleNext, handleBack, hasEntities) {
       case 1:
         return <><OrganizationInformation handleNext={handleNext} handleBack={handleBack}/></>;
       case 2:
-        return <><Departments handleNext={handleNext} handleBack={handleBack}/></>
+        return <><Compensation handleNext={handleNext} handleBack={handleBack}/></>
       default:
         return <></>;
     }
