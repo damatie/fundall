@@ -48,44 +48,19 @@ const ViewCandidate = () => {
 			}}
 			header={{
 				icon: '',
-				title: 'UPDATE CANDIDATE',
+				title: candidateHook.showEdit ? 'UPDATE CANDIDATE' : 'CANDIDATE INFO',
 				handleSearch: ({ target: { value } }) => console.log(value)
 			}}
 			button={{
 				showButton: false,
 				btnComponent: (
 					<>
-					{/* {customHook?.content?.status === 'PUBLISHED' &&( <Button
-							variant="contained"
-							color="secondary"
-							onClick={candidateHook.handleOpenModal}
-							startIcon={<AddIcon />}
-						>
-							Add Candidate
-						</Button>
-					)}
-
-						{customHook?.content?.status === 'UNPUBLISHED' &&( <Button
-							variant="contained"
-							color="secondary"
-							onClick={customHook.handleOpenModal}
-							startIcon={<EditIcon />}
-							disabled={customHook?.content?.status === 'PUBLISHED' || customHook?.oneLoading}
-						>
-							Publish
-						</Button>
-					)} */}
 					</>
 				)
 			}}
 			content={
 				<div className=" sm:p-24 ">
-					{/* {candidateHook.oneLoading ? (
-						<Skeleton animation="wave" width="100%" height="315px" variant="rect" />
-					) :
-					( */}
-                    	<CandidateDetails customHook={candidateHook}/>
-					{/* )} */}
+                    <CandidateDetails customHook={candidateHook}/>
                     
 				</div>
 			}

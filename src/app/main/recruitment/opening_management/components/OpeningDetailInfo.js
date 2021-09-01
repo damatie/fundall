@@ -182,20 +182,21 @@ const OpeningDetailInfo = ({ customHook, candidateHook }) => {
                                                     {content?.closingDate ? moment(content?.closingDate).format('DD-MM-YYYY') :'N/A'}
                                                 </Typography>
                                             </div>
-
-                                            <Tooltip title="Extend Closing Date">
-                                                <IconButton
-                                                    variant="contained"
-                                                    type="button"
-                                                    size="small"
-                                                    color="secondary"
-                                                    style={{fontSize: '12px', maxWidth: '10px'}}
-                                                    onClick={ev => handleExtendClsoingDate()}
-                                                    // style={{display: 'flex', verticalAlign:'middle', position:'relative', lineHeight: '18px'}}
-                                                >
-                                                    <EditIcon />
-                                                </IconButton>
-                                            </Tooltip>
+                                            {(content?.status === 'PUBLISHED' && isHR()) && (
+                                                <Tooltip title="Extend Closing Date">
+                                                    <IconButton
+                                                        variant="contained"
+                                                        type="button"
+                                                        size="small"
+                                                        color="secondary"
+                                                        style={{fontSize: '12px', maxWidth: '10px'}}
+                                                        onClick={ev => handleExtendClsoingDate()}
+                                                        // style={{display: 'flex', verticalAlign:'middle', position:'relative', lineHeight: '18px'}}
+                                                    >
+                                                        <EditIcon />
+                                                    </IconButton>
+                                                </Tooltip>
+                                            )}
                                         </GridSystem>
                                     </GridSystem>
                                     <div>

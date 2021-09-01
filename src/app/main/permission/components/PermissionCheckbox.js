@@ -13,7 +13,7 @@ const PermissionCheckBox = ({
     id,
     checked,
 }) => {
-    const [state, setState] = React.useState({id, checked});
+    const [state, setState] = React.useState({id, checked:false});
     React.useEffect(() => {
         setState({id, checked});
     }, [id, checked]);
@@ -44,7 +44,7 @@ const PermissionCheckBox = ({
     };
   return (
     <FormControlLabel
-        control={<Checkbox checked={state.checked} onChange={handleChange} name={id} />}
+        control={<Checkbox checked={state.checked} onChange={handleChange} name={id} id={id} />}
         label={name}
     />
   );

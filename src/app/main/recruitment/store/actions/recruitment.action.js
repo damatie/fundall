@@ -222,9 +222,9 @@ export function publishOpening(model, id) {
 
 export function extendClosingDate(id) {
 	return dispatch => {
-		dispatch({
-			type: LOADING_POSITIONS
-		});
+		// dispatch({
+		// 	type: LOADING_POSITIONS
+		// });
 		
 		swal.fire({
 			title: 'Extend clsoing date of the Job Opening',

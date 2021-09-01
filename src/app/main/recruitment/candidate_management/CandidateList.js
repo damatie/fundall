@@ -25,6 +25,7 @@ const CandidateList = ({positionId, candidateHook}) => {
 	const {
 		shortlistedRows,
 		activeRows,
+		isManager,
 		rows,
 		showButton,
 		loading,
@@ -59,7 +60,7 @@ const CandidateList = ({positionId, candidateHook}) => {
 					</Tabs>
 				</Grid>
 				<Grid item lg={6} md={6} sm={6} xs={6} spacing={6} align="right" className="">
-					{tabValue === 0 && (
+					{(tabValue === 0 && isManager()) && (
 						<SharedButton
 							variant="contained"
 							color="secondary"
@@ -82,7 +83,7 @@ const CandidateList = ({positionId, candidateHook}) => {
 				<Table
 					customHook = {candidateHook}
 					rows={activeRows}
-					showCheckBox={true}
+					showCheckBox={isManager()}
 				/>
 			)}
 			{tabValue === 1 && (

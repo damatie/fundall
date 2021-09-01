@@ -45,6 +45,7 @@ const PermissionsContainer = ({
                   id={`main_${item.id}`}
                 >
                   <Typography variant="h6" className='font-semibold' color="initial"> {capitalizeWords(item.title)} </Typography>
+                  
                 </AccordionSummary>
                 <AccordionDetails>
                   <SubMenuList setPayload={setPayload} payload={payload} data={data} mainMenuId={item.id} role={role}/>

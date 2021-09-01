@@ -101,7 +101,7 @@ const schema = yup.object().shape({
 });
 
 const useCandidates = ({ state, dispatch, push, id, hash, positionId, userInfo }) => {
-	const { open, data, loading, showButton, oneCandidate, oneLoading, showEdit } = state;
+	const { open, data, loading, showButton, oneCandidate, oneLoading, showEdit } = state?.candidate;
 
 	const { register, handleSubmit, errors, control, getValues, reset } = useForm({
 		mode: 'onBlur',
@@ -215,6 +215,7 @@ const useCandidates = ({ state, dispatch, push, id, hash, positionId, userInfo }
 		contentList.push({
 			...model,
 			id: model.id || contentList.length + 1,
+			openPositionId: positionId
 		});
 		reset();
 		setContentSelectedItem({

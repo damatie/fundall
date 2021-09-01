@@ -174,7 +174,7 @@ const schema = yup.object().shape({
     });
 
 const useRecruitmentOpening = ({ state, dispatch, push, id, userInfo, description, setDescription }) => {
-	const { open, data, loading, oneLoading, onePosition} = state.recruitment;
+	const { open, data, loading, oneLoading, onePosition} = state?.recruitment;
 	const employeeInfo = state.employeeInformation;
   const employees = employeeInfo.employees.filter(em => em.id !== userInfo.id).map(em => {
     return {
@@ -216,7 +216,7 @@ const useRecruitmentOpening = ({ state, dispatch, push, id, userInfo, descriptio
     urgency: '',
     countryId: '',
     stateId: '',
-    contanctEmail: '',
+    contactEmail: '',
     closingDate: ''
 });
 
@@ -303,6 +303,8 @@ const useRecruitmentOpening = ({ state, dispatch, push, id, userInfo, descriptio
       urgency: contentSelectedItem.urgency,
       countryId: contentSelectedItem.countryId,
       stateId: contentSelectedItem.stateId,
+      contactEmail: contentSelectedItem.contactEmail,
+      closingDate: contentSelectedItem.closingDate
     }
     dispatch(Actions.publishOpening(payload, contentSelectedItem.id));
   }
@@ -347,7 +349,7 @@ const useRecruitmentOpening = ({ state, dispatch, push, id, userInfo, descriptio
       urgency: '',
       countryId: '',
       stateId: '',
-      contanctEmail: '',
+      contactEmail: '',
       closingDate: ''
     });
     setDescription('');
