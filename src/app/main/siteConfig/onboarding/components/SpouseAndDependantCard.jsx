@@ -46,6 +46,9 @@ const useStyles = makeStyles(theme => ({
         color: "#000000",
         borderRadius: 5
     },
+    rowItemAddress: {
+        width: "50%"
+    },
     editButtonWithIcon: {
         textTransform: "capitalize !important"
     },
@@ -102,7 +105,7 @@ const SpouseAndDependantCard = ({ spouseAndDependant }) => {
                     <p className={` ${classes.rowItemLabel}`}>Nationality</p>
                     <p className={` ${classes.rowItemContent}`}>{spouseAndDependant.nationality}</p>
                 </div>
-                <div className={` ${classes.rowItem}`}>
+                <div className={` ${classes.rowItem} ${classes.rowItemAddress}`}>
                     <p className={` ${classes.rowItemLabel}`}>Nationality</p>
                     <p className={` ${classes.rowItemContent} ${classes.addressPara}`}>{spouseAndDependant.address}</p>
                 </div>
