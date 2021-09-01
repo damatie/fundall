@@ -13,30 +13,20 @@ import { useHistory } from 'react-router';
 
 const Employees = () => {
   const dispatch = useDispatch();
-  const { open, employees, entities,  roles, grades, loading, jobTitles } = useSelector(state => state.employeeMgt);
+  const state = useSelector(state => state.employeeMgt);
   const { push } = useHistory();
 
-  React.useEffect(() => {
-    dispatch(Actions.getEmployees());
-    dispatch(Actions.getEntities());
-    dispatch(Actions.getRoles());
-    dispatch(Actions.getGrades());
-    dispatch(Actions.getJobTitle());
-  }, []);
   const {
-    control,
-    errors,
-    register,
-    handleSubmit,
-    onSubmit,
-    handleCloseModal,
-    // handleOpenModal,
     handleDelete,
     handleSearch,
     handleFilter,
-    handleGetDept
+    roles,
+    entities,
+    employees,
+    loading
   } = useEmployees({
-    dispatch
+    dispatch,
+    state
   });
 
   const createEmployee = () => {

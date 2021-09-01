@@ -5,12 +5,12 @@ import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import EmployeeInformation from './components/EmployeeInformation';
-import SpouseAndDependant from './components/SpouseAndDependant';
-import NextOfKin from './components/NextOfKin';
-import EmergencyContact from './components/EmergencyContact';
-import EducationQualification from './components/EducationQualification';
+import NewEmployeeForm from './components/NewEmployeeForm';
 import PageLayout from 'app/shared/pageLayout/PageLayout';
+import withReducer from "app/store/withReducer";
+import employeesReducer from "./store/reducers/employees.reducer";
+import useEmployees from "./hooks/useEmployees";
+import { useDispatch, useSelector } from 'react-redux';
 
 const useStyles = makeStyles(theme => ({
 	onBoardingStepperMain: {
@@ -55,26 +55,41 @@ const useStyles = makeStyles(theme => ({
 
 function getSteps() {
 	return [
-		'Employee Information',
-		'Spouse and Dependant',
-		'Next of Kin',
-		'Emergency Contact',
-		'Education Qualification'
+		{
+            title: 'Employee Basic Information',
+            label: 'Fill the basic employee information for onboarding'
+        },
+		{
+            title: 'Compensation Details',
+            label: 'Configure the employee Compensation'
+        }
 	];
 }
 
-const OnboardingStepperMain = () => {
+const EmployeeCreation = () => {
 	const classes = useStyles();
+    const dispatch = useDispatch();
+    const state = useSelector(state => state.employeeMgt);
+
 	const [activeStep, setActiveStep] = React.useState(0);
 	const steps = getSteps();
 
-	const handleBack = () => {
-		setActiveStep(prevActiveStep => prevActiveStep - 1);
-	};
+    const customHook = useEmployees({
+          state,
+          dispatch
+      });
 
-	const handleNext = () => {
-		setActiveStep(prevActiveStep => prevActiveStep + 1);
-	};
+    const {
+        handleBack,
+        handleNext
+    } = customHook;
+	// const handleBack = () => {
+	// 	setActiveStep(prevActiveStep => prevActiveStep - 1);
+	// };
+
+	// const handleNext = () => {
+	// 	setActiveStep(prevActiveStep => prevActiveStep + 1);
+	// };
 
 	const handleStepperClick = (index) => {
 		if(index > activeStep){
@@ -91,15 +106,9 @@ const OnboardingStepperMain = () => {
 	function getStepContent(stepIndex) {
 		switch (stepIndex) {
 			case 0:
-				return <EmployeeInformation goToNextStepper={handleNext} />;
+				return <NewEmployeeForm customHook={customHook} goToNextStepper={handleNext} />;
 			case 1:
-				return <SpouseAndDependant />;
-			case 2:
-				return <NextOfKin />;
-			case 3:
-				return <EmergencyContact />;
-			case 4:
-				return <EducationQualification />;
+				return <></>;
 			default:
 				return 'Unknown stepIndex';
 		}
@@ -110,12 +119,7 @@ const OnboardingStepperMain = () => {
 			noSearch
 			header={{
 				icon: ''
-				// title: 'Quarterly Review',
-				// handleSearch: ({ target: { value } }) => console.log(value)
 			}}
-			// prev={{
-			// 	url: prevUrl
-			// }}
 			button={{
 				showButton: false,
 				btnComponent: false
@@ -123,9 +127,12 @@ const OnboardingStepperMain = () => {
 			content={
 				<div className={classes.onBoardingStepperMain}>
 					<Stepper activeStep={activeStep} alternativeLabel className={` ${classes.stepperBg}`}>
-						{steps.map((label, index) => (
-							<Step key={label} onClick={(ev) => handleStepperClick(index)}>
-								<StepLabel>{label}</StepLabel>
+						{steps.map((item, index) => (
+							<Step key={index} onClick={(ev) => handleStepperClick(index)}>
+								<StepLabel>
+                                    <Typography variant="h5" color="initial" className='my-10'><strong>{item.title}</strong></Typography>
+                                    <Typography variant="body1" color="initial" className='my-10'>{item.label}</Typography>
+                                </StepLabel>
 							</Step>
 						))}
 					</Stepper>
@@ -137,7 +144,7 @@ const OnboardingStepperMain = () => {
 					) : (
 						<>
 							<div className={` ${classes.instructions} ${classes.commonWidth}`}>{getStepContent(activeStep)}</div>
-							{activeStep === 0 ? null : (
+							{/* {activeStep === 0 ? null : (
 								<div className={` ${classes.navigation} ${classes.commonWidth}`}>
 									<Button disabled={activeStep === 0} onClick={handleBack} className={` ${classes.backButton}`}>
 										Back
@@ -146,7 +153,7 @@ const OnboardingStepperMain = () => {
 										{activeStep === steps.length - 1 ? 'Finish' : 'Next'}
 									</Button>
 								</div>
-							)}
+							)} */}
 						</>
 					)}
 				</div>
@@ -154,5 +161,5 @@ const OnboardingStepperMain = () => {
 		/>
 	);
 };
-
-export default OnboardingStepperMain;
+withReducer('employeeMgt', employeesReducer)(EmployeeCreation);
+export default EmployeeCreation;
