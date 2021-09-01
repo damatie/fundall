@@ -88,6 +88,7 @@ export default function AccountSettings({handleNext}) {
   const timezones = timeZone();
   const dateFormats = dateFormatList();
   const currencies = currencyList();
+  const [currencySet, setCurrencySet] = React.useState([]);
   const [employmentStatus, setEmploymentStatus] = React.useState([]);
   const [employmentStatusErr, setEmploymentStatusErr] = React.useState("");
   const [modeOfEmployment, setModeOfEmployment] = React.useState([]);
@@ -143,6 +144,20 @@ export default function AccountSettings({handleNext}) {
     setValue("currencies", event.target.value);
     setCurrenciesErr(errors.currencies?.message);
   };
+
+  const handleAddCurrency = (chip) => {
+    register({ name: 'currencies', type: 'custom' }, { required: true });
+		currencySet.push(chip);
+		setValue('currencies', currencySet);
+		setCurrenciesErr(errors.currencies?.message);
+  }
+
+  const handleDeleteCurrency = (chip, index) => {
+		register({ name: 'currencies', type: 'custom' }, { required: true });
+		setCurrencySet(currencySet => currencySet.filter(chp => chp !== chip));
+		setValue('currencies', currencySet);
+		setEmploymentStatusErr(errors.currencies?.message);
+	};
 
   const handleAddEmploymentStatus = (chip) => {
     register({ name: 'employmentStatus', type: 'custom' }, { required: true });
@@ -281,229 +296,218 @@ export default function AccountSettings({handleNext}) {
   };
 
   return (
-    <div className={classes.root}>
-      <form onSubmit={handleSubmit(onSubmit)}>
-          <Typography variant="body1" color="initial" className='my-10'><strong>Account Settings</strong></Typography>
-          <Grid container spacing={3} justify='space-between' align='center' style={{ marginBottom: '3rem'}}>
-            <Grid item lg={4} md={6} sm={12} xs={12}>
-              <FormControl variant="outlined" style={{ width: '100%', margin: '8px 0px' }} className={classes.formControl}>
-                <InputLabel id="demo-simple-select-outlined-label">Time Zone</InputLabel>
-                <Select
-                  justify='left'
-                  align='left'
-                  labelId="demo-simple-select-outlined-label"
-                  id="demo-simple-select-outlined"
-                  name='timeZone'
-                  error={errors.timeZone}
-                  // message={errors.timeZone?.message}
-                  onChange={handleTimeZoneChange}
-                  label="Time Zone"
-                >
-                  {timezones.map(item => (
-                  <MenuItem key={item.id} value={item.value}>
-                    {item.label}
-                  </MenuItem>))}
-                </Select>
-                <FormHelperText style={{ color: 'red'}}>{timeZoneErr}</FormHelperText>
-              </FormControl>
-            </Grid>
-            <Grid item lg={4} md={6} sm={12} xs={12}>
-              <FormControl variant="outlined" style={{ width: '100%', margin: '8px 0px' }} className={classes.formControl}>
-                <InputLabel id="demo-simple-select-outlined-label">Date Format</InputLabel>
-                <Select
-                  justify='left'
-                  align='left'
-                  labelId="demo-simple-select-outlined-label"
-                  id="demo-simple-select-outlined"
-                  name='dateFormat'
-                  error={errors.dateFormat}
-                  // message={errors.dateFormat?.message}
-                  onChange={handleDateFormatChange}
-                  label="Date Format"
-                >
-                  {dateFormats.map(item => (
-                  <MenuItem key={item.id} value={item.value}>
-                    {item.label}
-                  </MenuItem>))}
-                </Select>
-                <FormHelperText style={{ color: 'red'}}>{dateFormatErr}</FormHelperText>
-              </FormControl>
-            </Grid>
-            <Grid item lg={4} md={6} sm={12} xs={12}>
-              <FormControl variant="outlined" style={{ width: '100%', margin: '8px 0px' }} className={classes.formControl}>
-                <InputLabel id="demo-simple-select-outlined-label">Currencies</InputLabel>
-                <Select
-                  justify='left'
-                  align='left'
-                  labelId="demo-simple-select-outlined-label"
-                  id="demo-simple-select-outlined"
-                  name='currencies'
-                  error={errors.currencies}
-                  // message={errors.currencies?.message}
-                  onChange={handleCurrenciesChange}
-                  label="Currencies"
-                >
-                  {currencies.map(item => (
-                  <MenuItem key={item.id} value={item.cc}>
-                    {item.label}
-                  </MenuItem>))}
-                </Select>
-                <FormHelperText style={{ color: 'red'}}>{currenciesErr}</FormHelperText>
-              </FormControl>
-            </Grid>
-            <Grid item lg={4} md={6} sm={12} xs={12}>
-              <ChipInput
-                label='Employment Status (Separate with Comma / Enter)'
-                name='employmentStatus'
-                variant= 'outlined'
-                newChipKeyCodes={[188]}
-                style={{ width: '100%'}}
-                error={errors.employmentStatus}
-                // message={errors.employmentStatus?.message}
-                // helperText={errors.employmentStatus?.message}
-                // refs={register}
-                allowDuplicates={false}
-                value={employmentStatus}
-                onAdd={(chip) => handleAddEmploymentStatus(chip)}
-                onDelete={(chip, index) => handleDeleteEmploymentStatus(chip, index)}
-              />
-              <FormHelperText style={{ color: 'red'}}>{employmentStatusErr}</FormHelperText>
-            </Grid>
-            <Grid item lg={4} md={6} sm={12} xs={12}>
-              <ChipInput
-                label='Mode Of Employment (Separate with Comma / Enter)'
-                name='modeOfEmployment'
-                variant= 'outlined'
-                newChipKeyCodes={[188]}
-                style={{ width: '100%'}}
-                error={errors.modeOfEmployment}
-                // message={errors.modeOfEmployment?.message}
-                // helperText={errors.modeOfEmployment?.message}
-                // refs={register}
-                allowDuplicates={false}
-                value={modeOfEmployment}
-                onAdd={(chip) => handleAddModeOfEmployment(chip)}
-                onDelete={(chip, index) => handleDeleteModeOfEmployment(chip, index)}
-              />
-              <FormHelperText style={{ color: 'red'}}>{modeOfEmploymentErr}</FormHelperText>
-            </Grid>
-            <Grid item lg={4} md={6} sm={12} xs={12}>
-              <ChipInput
-                label='Leave Status (Separate with Comma / Enter)'
-                name='leaveTypes'
-                variant= 'outlined'
-                newChipKeyCodes={[188]}
-                style={{ width: '100%'}}
-                error={errors.leaveTypes}
-                // message={errors.leaveTypes?.message}
-                // helperText={errors.leaveTypes?.message}
-                // refs={register}
-                allowDuplicates={false}
-                value={leaveTypes}
-                onAdd={(chip) => handleAddLeaveTypes(chip)}
-                onDelete={(chip, index) => handleDeleteLeaveTypes(chip, index)}
-              />
-              <FormHelperText style={{ color: 'red'}}>{leaveTypesErr}</FormHelperText>
-            </Grid>
-            <Grid item lg={4} md={6} sm={12} xs={12}>
-              <ChipInput
-                label='Training Categories (Separate with Comma / Enter)'
-                name='trainingCategories'
-                variant= 'outlined'
-                newChipKeyCodes={[188]}
-                style={{ width: '100%'}}
-                error={errors.trainingCategories}
-                // message={errors.trainingCategories?.message}
-                // helperText={errors.trainingCategories?.message}
-                // refs={register}
-                allowDuplicates={false}
-                value={trainingCategories}
-                onAdd={(chip) => handleAddTrainingCategories(chip)}
-                onDelete={(chip, index) => handleDeleteTrainingCategories(chip, index)}
-              />
-              <FormHelperText style={{ color: 'red'}}>{trainingCategoriesErr}</FormHelperText>
-            </Grid>
-            <Grid item lg={4} md={6} sm={12} xs={12}>
-              <ChipInput
-                label='Role (Separate with Comma / Enter)'
-                name='role'
-                variant= 'outlined'
-                newChipKeyCodes={[188]}
-                style={{ width: '100%'}}
-                error={errors.role}
-                // message={errors.role?.message}
-                // helperText={errors.role?.message}
-                // refs={register}
-                allowDuplicates={false}
-                value={role}
-                onAdd={(chip) => handleAddRole(chip)}
-                onDelete={(chip, index) => handleDeleteRole(chip, index)}
-              />
-              <FormHelperText style={{ color: 'red'}}>{roleErr}</FormHelperText>
-            </Grid>
-            <Grid item lg={4} md={6} sm={12} xs={12}>
-              <ChipInput
-                label='Compensation Data (Separate with Comma / Enter)'
-                name='compensationSettings'
-                variant= 'outlined'
-                newChipKeyCodes={[188]}
-                style={{ width: '100%'}}
-                error={errors.compensationSettings}
-                // message={errors.compensationSettings?.message}
-                // helperText={errors.compensationSettings?.message}
-                // refs={register}
-                allowDuplicates={false}
-                value={compensationSettings}
-                onAdd={(chip) => handleAddCompensationSettings(chip)}
-                onDelete={(chip, index) => handleDeleteCompensationSettings(chip, index)}
-              />
-              <FormHelperText style={{ color: 'red'}}>{compensationSettingsErr}</FormHelperText>
-            </Grid>
-            <Grid item lg={4} md={6} sm={12} xs={12}>
-              <ChipInput
-                label='Job Title (Separate with Comma / Enter)'
-                name='jobTitle'
-                variant= 'outlined'
-                newChipKeyCodes={[188]}
-                style={{ width: '100%'}}
-                error={errors.jobTitle}
-                // message={errors.jobTitle?.message}
-                // helperText={errors.jobTitle?.message}
-                // refs={register}
-                allowDuplicates={false}
-                value={jobTitle}
-                onAdd={(chip) => handleAddJobTitle(chip)}
-                onDelete={(chip, index) => handleDeleteJobTitle(chip, index)}
-              />
-              <FormHelperText style={{ color: 'red'}}>{jobTitleErr}</FormHelperText>
-            </Grid>
-            <Grid item lg={4} md={6} sm={12} xs={12}>
-              <ChipInput
-                label='Employee Grade (Separate with Comma / Enter)'
-                name='employeeGrade'
-                variant= 'outlined'
-                newChipKeyCodes={[188]}
-                style={{ width: '100%'}}
-                error={errors.employeeGrade}
-                // message={errors.employeeGrade?.message}
-                // helperText={errors.employeeGrade?.message}
-                // refs={register}
-                allowDuplicates={false}
-                value={employeeGrade}
-                onAdd={(chip) => handleAddEmployeeGrade(chip)}
-                onDelete={(chip, index) => handleDeleteEmployeeGrade(chip, index)}
-              />
-              <FormHelperText style={{ color: 'red'}}>{employeeGradeErr}</FormHelperText>
-            </Grid>
-            <Grid item lg={4} md={6} sm={12} xs={12}>
-            </Grid>  
-          </Grid>
-          <Grid container spacing={3} justify='center' align='center' className='my-10'>
-              <Button variant="contained" type='submit' color="primary">
-                  Submit 
-              </Button>
-          </Grid>
-      </form>
-    </div>
-  );
+		<div className={classes.root}>
+			<form onSubmit={handleSubmit(onSubmit)}>
+				<Typography variant="body1" color="initial" className="my-10">
+					<strong>Account Settings</strong>
+				</Typography>
+				<Grid container spacing={3} justify="space-between" align="center" style={{ marginBottom: '3rem' }}>
+					<Grid item lg={4} md={6} sm={12} xs={12}>
+						<FormControl
+							variant="outlined"
+							style={{ width: '100%', margin: '8px 0px' }}
+							className={classes.formControl}
+						>
+							<InputLabel id="demo-simple-select-outlined-label">Time Zone</InputLabel>
+							<Select
+								justify="left"
+								align="left"
+								labelId="demo-simple-select-outlined-label"
+								id="demo-simple-select-outlined"
+								name="timeZone"
+								error={errors.timeZone}
+								// message={errors.timeZone?.message}
+								onChange={handleTimeZoneChange}
+								label="Time Zone"
+							>
+								{timezones.map(item => (
+									<MenuItem key={item.id} value={item.value}>
+										{item.label}
+									</MenuItem>
+								))}
+							</Select>
+							<FormHelperText style={{ color: 'red' }}>{timeZoneErr}</FormHelperText>
+						</FormControl>
+					</Grid>
+					<Grid item lg={4} md={6} sm={12} xs={12}>
+						<FormControl
+							variant="outlined"
+							style={{ width: '100%', margin: '8px 0px' }}
+							className={classes.formControl}
+						>
+							<InputLabel id="demo-simple-select-outlined-label">Date Format</InputLabel>
+							<Select
+								justify="left"
+								align="left"
+								labelId="demo-simple-select-outlined-label"
+								id="demo-simple-select-outlined"
+								name="dateFormat"
+								error={errors.dateFormat}
+								// message={errors.dateFormat?.message}
+								onChange={handleDateFormatChange}
+								label="Date Format"
+							>
+								{dateFormats.map(item => (
+									<MenuItem key={item.id} value={item.value}>
+										{item.label}
+									</MenuItem>
+								))}
+							</Select>
+							<FormHelperText style={{ color: 'red' }}>{dateFormatErr}</FormHelperText>
+						</FormControl>
+					</Grid>
+					<Grid item lg={4} md={6} sm={12} xs={12}>
+						<ChipInput
+							label="Currencies (Separate with Comma / Enter)"
+							name="currencies"
+							variant="outlined"
+							newChipKeyCodes={[188]}
+							style={{ width: '100%' }}
+							error={errors.currencies}
+							allowDuplicates={false}
+							value={currencySet}
+							onAdd={chip => handleAddCurrency(chip)}
+							onDelete={(chip, index) => handleDeleteCurrency(chip, index)}
+						/>
+						<FormHelperText style={{ color: 'red' }}>{currenciesErr}</FormHelperText>
+					</Grid>
+					<Grid item lg={4} md={6} sm={12} xs={12}>
+						<ChipInput
+							label="Employment Status (Separate with Comma / Enter)"
+							name="employmentStatus"
+							variant="outlined"
+							newChipKeyCodes={[188]}
+							style={{ width: '100%' }}
+							error={errors.employmentStatus}
+							// message={errors.employmentStatus?.message}
+							// helperText={errors.employmentStatus?.message}
+							// refs={register}
+							allowDuplicates={false}
+							value={employmentStatus}
+							onAdd={chip => handleAddEmploymentStatus(chip)}
+							onDelete={(chip, index) => handleDeleteEmploymentStatus(chip, index)}
+						/>
+						<FormHelperText style={{ color: 'red' }}>{employmentStatusErr}</FormHelperText>
+					</Grid>
+					<Grid item lg={4} md={6} sm={12} xs={12}>
+						<ChipInput
+							label="Mode Of Employment (Separate with Comma / Enter)"
+							name="modeOfEmployment"
+							variant="outlined"
+							newChipKeyCodes={[188]}
+							style={{ width: '100%' }}
+							error={errors.modeOfEmployment}
+							// message={errors.modeOfEmployment?.message}
+							// helperText={errors.modeOfEmployment?.message}
+							// refs={register}
+							allowDuplicates={false}
+							value={modeOfEmployment}
+							onAdd={chip => handleAddModeOfEmployment(chip)}
+							onDelete={(chip, index) => handleDeleteModeOfEmployment(chip, index)}
+						/>
+						<FormHelperText style={{ color: 'red' }}>{modeOfEmploymentErr}</FormHelperText>
+					</Grid>
+					<Grid item lg={4} md={6} sm={12} xs={12}>
+						<ChipInput
+							label="Leave Status (Separate with Comma / Enter)"
+							name="leaveTypes"
+							variant="outlined"
+							newChipKeyCodes={[188]}
+							style={{ width: '100%' }}
+							error={errors.leaveTypes}
+							// message={errors.leaveTypes?.message}
+							// helperText={errors.leaveTypes?.message}
+							// refs={register}
+							allowDuplicates={false}
+							value={leaveTypes}
+							onAdd={chip => handleAddLeaveTypes(chip)}
+							onDelete={(chip, index) => handleDeleteLeaveTypes(chip, index)}
+						/>
+						<FormHelperText style={{ color: 'red' }}>{leaveTypesErr}</FormHelperText>
+					</Grid>
+					<Grid item lg={4} md={6} sm={12} xs={12}>
+						<ChipInput
+							label="Training Categories (Separate with Comma / Enter)"
+							name="trainingCategories"
+							variant="outlined"
+							newChipKeyCodes={[188]}
+							style={{ width: '100%' }}
+							error={errors.trainingCategories}
+							// message={errors.trainingCategories?.message}
+							// helperText={errors.trainingCategories?.message}
+							// refs={register}
+							allowDuplicates={false}
+							value={trainingCategories}
+							onAdd={chip => handleAddTrainingCategories(chip)}
+							onDelete={(chip, index) => handleDeleteTrainingCategories(chip, index)}
+						/>
+						<FormHelperText style={{ color: 'red' }}>{trainingCategoriesErr}</FormHelperText>
+					</Grid>
+					<Grid item lg={4} md={6} sm={12} xs={12}>
+						<ChipInput
+							label="Role (Separate with Comma / Enter)"
+							name="role"
+							variant="outlined"
+							newChipKeyCodes={[188]}
+							style={{ width: '100%' }}
+							error={errors.role}
+							// message={errors.role?.message}
+							// helperText={errors.role?.message}
+							// refs={register}
+							allowDuplicates={false}
+							value={role}
+							onAdd={chip => handleAddRole(chip)}
+							onDelete={(chip, index) => handleDeleteRole(chip, index)}
+						/>
+						<FormHelperText style={{ color: 'red' }}>{roleErr}</FormHelperText>
+					</Grid>
+					<Grid item lg={4} md={6} sm={12} xs={12}>
+						
+					</Grid>
+					<Grid item lg={4} md={6} sm={12} xs={12}>
+						<ChipInput
+							label="Job Title (Separate with Comma / Enter)"
+							name="jobTitle"
+							variant="outlined"
+							newChipKeyCodes={[188]}
+							style={{ width: '100%' }}
+							error={errors.jobTitle}
+							// message={errors.jobTitle?.message}
+							// helperText={errors.jobTitle?.message}
+							// refs={register}
+							allowDuplicates={false}
+							value={jobTitle}
+							onAdd={chip => handleAddJobTitle(chip)}
+							onDelete={(chip, index) => handleDeleteJobTitle(chip, index)}
+						/>
+						<FormHelperText style={{ color: 'red' }}>{jobTitleErr}</FormHelperText>
+					</Grid>
+					<Grid item lg={4} md={6} sm={12} xs={12}>
+						<ChipInput
+							label="Employee Grade (Separate with Comma / Enter)"
+							name="employeeGrade"
+							variant="outlined"
+							newChipKeyCodes={[188]}
+							style={{ width: '100%' }}
+							error={errors.employeeGrade}
+							// message={errors.employeeGrade?.message}
+							// helperText={errors.employeeGrade?.message}
+							// refs={register}
+							allowDuplicates={false}
+							value={employeeGrade}
+							onAdd={chip => handleAddEmployeeGrade(chip)}
+							onDelete={(chip, index) => handleDeleteEmployeeGrade(chip, index)}
+						/>
+						<FormHelperText style={{ color: 'red' }}>{employeeGradeErr}</FormHelperText>
+					</Grid>
+					<Grid item lg={4} md={6} sm={12} xs={12}></Grid>
+				</Grid>
+				<Grid container spacing={3} justify="center" align="center" className="my-10">
+					<Button variant="contained" type="submit" color="primary">
+						Submit
+					</Button>
+				</Grid>
+			</form>
+		</div>
+	);
 }
