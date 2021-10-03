@@ -29,6 +29,7 @@ import dateFormatList from 'app/shared/dateformat';
 import { FormHelperText } from '@material-ui/core';
 import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined';
 import EntityModal from './components/entityModal';
+import Entity from './components/entity';
 import EntityCard from './components/entityCard';
 import EmployeeGradeCard from './components/employeeGradeCard';
 import EmployeeGradeModal from './components/employeeGrade';
@@ -56,7 +57,9 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function Entities({ handleNext }) {
-	const { entities, grades, gradeLevels, accountSettings, departmentList, compensationData } = useSelector(state => state.employeeMgt);
+	const { entities, grades, gradeLevels, accountSettings, departmentList, compensationData } = useSelector(
+		state => state.employeeMgt
+	);
 	// console.log('entities: ', entities);
 	// console.log('grades: ', grades);
 
@@ -105,7 +108,7 @@ function Entities({ handleNext }) {
 	React.useEffect(() => {
 		setEntityList(entities);
 		setGradeList(grades);
-    setDepartments(departmentList);
+		setDepartments(departmentList);
 		setGradeLevelList(gradeLevels);
 		setAccountSettingsData(accountSettings);
 	}, [grades, entities, gradeLevels, accountSettings]);
@@ -243,6 +246,21 @@ function Entities({ handleNext }) {
 							label="Sales"
 						/>
 					</Grid>
+
+					{entityList.length > 0 && (
+						<>
+							{entityList.map(item => (
+								<Entity
+									key={item.id}
+									item={item}
+									handleAddEmployeeGrade={handleAddEmployeeGrade}
+									handleAddDepartment={handleAddDepartment}
+									handleAddEntity={HandleAddEntity}
+								/>
+							))}
+						</>
+					)}
+
 					<Grid item lg={12} md={12} sm={12} xs={12} align="left" className="mt-10">
 						<Button onClick={HandleAddEntity} variant="contained" color="secondary">
 							<span style={{ marginRight: '5px' }}>
@@ -250,57 +268,6 @@ function Entities({ handleNext }) {
 							</span>{' '}
 							Add Entity
 						</Button>
-					</Grid>
-
-					<Grid item lg={12} md={12} sm={12} xs={12} align="left" className="my-10">
-						{entityList.map(item => (
-							<EntityCard name={item.entityName} description={item.description} entities={entities} data={item} />
-						))}
-					</Grid>
-
-					<Grid item lg={12} md={12} sm={12} xs={12} align="left" className="my-10">
-						<Button onClick={handleAddEmployeeGrade} variant="contained" color="secondary">
-							<span style={{ marginRight: '5px' }}>
-								<AddBoxOutlinedIcon />
-							</span>{' '}
-							Add Employee Grade
-						</Button>
-					</Grid>
-
-					<Grid item lg={12} md={12} sm={12} xs={12} align="left" className="my-10">
-						{gradeList.map(item => (
-							<EmployeeGradeCard
-								name={item?.gradeName}
-								entityName={item?.entityName}
-								entities={entityList}
-								description={item?.gradeDescription}
-								employeeGrades={accountSettingsData?.employeeGrade || []}
-								data={item}
-							/>
-						))}
-					</Grid>
-
-					<Grid container spacing={3} justify="space-between" align="center" style={{ marginBottom: '3rem' }}>
-						<Grid item lg={12} md={12} sm={12} xs={12} align="left" className="mt-10">
-							<Button onClick={handleAddDepartment} variant="contained" color="secondary">
-								<span style={{ marginRight: '5px' }}>
-									<AddBoxOutlinedIcon />
-								</span>{' '}
-								Add Department
-							</Button>
-						</Grid>
-
-						<Grid item lg={12} md={12} sm={12} xs={12} align="left" className="my-10">
-							{departments &&
-								departments.map(item => (
-									<DepartmentCard
-										name={item.departmentName}
-										description={item.description}
-										entities={entities}
-										data={item}
-									/>
-								))}
-						</Grid>
 					</Grid>
 				</Grid>
 
