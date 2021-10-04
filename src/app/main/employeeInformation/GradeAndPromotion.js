@@ -84,16 +84,16 @@ const GradeAndPromotion = () => {
   return (
     <>
       <Typography variant="subtitle1" color="initial" className='my-20'>
-        <strong>Employee Date of Employment:</strong>&nbsp;<span>{info.startDate}</span>
+        <strong>Employee Date of Employment:</strong>&nbsp;<span>{info && info.startDate}</span>
       </Typography>
       <Typography variant="subtitle1" color="initial" className='my-20'>
-        <strong>Employee Confirmation Date:</strong>&nbsp;<span>{info.confirmationDate}</span>
+        <strong>Employee Confirmation Date:</strong>&nbsp;<span>{info && info.confirmationDate}</span>
       </Typography>
       <Typography variant="subtitle1" color="initial" className='my-20'>
-        <strong>Employee Grade:</strong>&nbsp;<span>{info.employeeGrade.gradeName}</span>
+        <strong>Employee Grade:</strong>&nbsp;<span>{info.employeeGrade && info.employeeGrade.gradeName}</span>
       </Typography>
       <Typography variant="subtitle1" color="initial" className='my-20'>
-        <strong>Employee Date of Last Promotion</strong>&nbsp;<span>{info.dateOfLastPromotion}</span>
+        <strong>Employee Date of Last Promotion</strong>&nbsp;<span>{info && info.dateOfLastPromotion}</span>
       </Typography>
       {/* <Typography variant="subtitle1" color="initial" className='my-20'>
       <strong>New Hire Or Rehire:</strong>&nbsp;<span>New Hire</span>

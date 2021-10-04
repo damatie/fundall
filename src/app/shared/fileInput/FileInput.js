@@ -1,15 +1,17 @@
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
 
-const FileInput = ({ onChange }) => {
+const FileInput = ({id, onChange, className, label, accept }) => {
   return (
     <div>
       <TextField
-        accept="image/*"
-        id="outlined-secondary"
+        accept={accept}
+        id={id}
+        className={className}
         type="file"
+        label={label}
         variant="outlined"
-        onChange={onchange}
+        onChange={onChange}
       />
     </div>
   );

@@ -13,7 +13,6 @@ export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_LOADING = 'LOGIN_LOADING';
 
 export function submitLogin(data, x) {
-
 	return dispatch => {
 		dispatch({
 			type: LOGIN_LOADING
@@ -21,43 +20,80 @@ export function submitLogin(data, x) {
 		api.post(`/auth/${x || "employee"}/login`, data).then((response) => {
 			console.log(response.data)
 			const { success, message, token, data } = response.data;
-
 			if (success) {
-
-				dispatch(getUserMenu({ id: data?.id, token }));
-				setTimeout(() => {
+				api.defaults.headers.Authorization = `JWT ${token}`;
+				localStorage.setItem('jwt_access_token', JSON.stringify(token));
+				localStorage.setItem('login_data', JSON.stringify(data));
+				let redirectUrl = '/employee/dashboard';
+				if (data?.role?.name.toLowerCase().trim() === "hr admin") {
+					if (data?.company?.hasEntities === true)  {
+						// route to complete registration
+						if (data?.company?.regStep < 4) {
+							// console.log('should Redirect to Complete Registration ');
+							redirectUrl ='/auth/complete-registration';
+							Swal.fire({
+								title: 'Login Successful',
+								text: 'Kindly Complete Company Registration',
+								icon: 'success',
+								timer: 3000,
+							});
+						} else {
+							Swal.fire({
+								title: 'Login Successful',
+								text: message,
+								icon: 'success',
+								timer: 3000,
+							});
+						}
+					} else {
+						// route to complete registration
+						if (data?.company?.regStep < 3) {
+							// console.log('should Redirect to Complete Registration 3 steps');
+							redirectUrl ='/auth/complete-registration';
+							Swal.fire({
+								title: 'Login Successful',
+								text: 'Kindly Complete Company Registration',
+								icon: 'success',
+								timer: 3000,
+							});
+						} else {
+							Swal.fire({
+								title: 'Login Successful',
+								text: message,
+								icon: 'success',
+								timer: 3000,
+							});	
+						}
+					}
+				} else {
 					Swal.fire({
 						title: 'Login Successful',
 						text: message,
 						icon: 'success',
 						timer: 3000,
-					});
-					api.defaults.headers.Authorization = `JWT ${token}`;
-					localStorage.setItem('jwt_access_token', JSON.stringify(token));
-					const userState = {
-						role: data?.role.name.toUpperCase() ?? x.toUpperCase(),
-						redirectUrl: '/employee/dashboard',
-						id: data?.id,
-						data: {
-							displayName: `${data?.firstName ?? response.firstName} ${data?.lastName ?? response.lastName}`,
-							photoURL: data?.profilePicture,
-							email: data?.email ?? response.email,
-							shortcuts: ['loan_request', 'request_leave', 'blog_list', 'todo'],
-							department: data?.department,
-							details: data?.info,
-							employeeGrade: data?.employeeGrade
-						}
-					};
-					localStorage.setItem('user_data', JSON.stringify(userState));
-					dispatch(getProfile({ id: data?.id, token }));
-					dispatch(UserActions.setUserData(userState));
-					// dispatch(getNotification(token));
-					dispatch(getDepartmentEmployees(data.department?.id));
+					});							
+				}
 
-					return dispatch({
-						type: LOGIN_SUCCESS
-					});
-				}, 2000);
+				const userState = {
+					role: data?.role.name.toUpperCase() ?? x.toUpperCase(),
+					redirectUrl,
+					id: data?.id,
+					data: {
+						displayName: `${data?.firstName ?? response.firstName} ${data?.lastName ?? response.lastName}`,
+						photoURL: data?.profilePicture,
+						email: data?.email ?? response.email,
+						shortcuts: ['loan_request', 'request_leave', 'blog_list', 'todo'],
+						department: data?.department,
+						details: data?.info,
+						employeeGrade: data?.employeeGrade
+					}
+				};
+				localStorage.setItem('user_data', JSON.stringify(userState));
+				dispatch(getProfile({ id: data?.id, token }));
+				dispatch(UserActions.setUserData(userState));
+				// dispatch(getNotification(token));
+				dispatch(getDepartmentEmployees(data.department?.id));
+				dispatch(getUserMenu({ id: data?.id, token }));
 			} else {
 				console.log("inside else")
 				Swal.fire({

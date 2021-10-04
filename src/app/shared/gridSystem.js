@@ -5,7 +5,7 @@ const useStyles = makeStyles(theme => ({
   grid: {
     display: 'grid',
     gridTemplateColumns: '1fr 1fr',
-    gridGap: 30,
+    gridGap: 20,
     [theme.breakpoints.down('xs')]: {
       gridTemplateColumns: '1fr',
       gridGap: 0,

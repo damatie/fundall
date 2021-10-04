@@ -9,10 +9,30 @@ export const GET_ALL_KPO = 'GET ALL KPO';
 export const GET_ONE_KPO = 'GET ONE KPO';
 export const CLEAR_KPO_DATA = 'CLEAR KPO DATA';
 export const GET_JOBTITLE = 'GET JOBTITLE';
+// export const GET_ALL_ENITIES = 'GET ALL ENITIES';
 
 const getApprovedKpo = (data) => {
   return data.filter((item) => item.status !== 'rejected');
 };
+
+// export const getAllEntities = () => {
+//   return async (dispatch) => {
+//     try {
+//       const { data: { data, success } } = await api.get('/entity');
+//       if(success) {
+//         dispatch({
+//           type: GET_ALL_ENITIES,
+//           payload: data || []
+//         })
+//       }
+//     } catch (e) {
+//       dispatch({
+//         type: GET_ALL_ENITIES,
+//         payload: []
+//       })
+//     }
+//   };
+// };
 
 export const getJobTitle = () => {
   return async (dispatch) => {
@@ -273,7 +293,7 @@ export const approveKpo = (id) => {
       loading('Approving...');
       const { data: { message }} = await api.patch(`/appraisal/kpo/lm/submit/${id}`);
       swal.fire({
-        text: message,
+        text: 'This KPO has been Approved',
         icon: 'success'
       });
       dispatch(getOneKpo(id));

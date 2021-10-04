@@ -19,7 +19,7 @@ export const useAuth = item => {
   }
 
   if (profile) {
-    // userProfile = JSON.parse(profile);
+    userProfile = JSON.parse(profile);
   }
 
   const setItems = itemName => {

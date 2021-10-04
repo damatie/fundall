@@ -65,7 +65,7 @@ function EventDialog(props) {
 		 * Dialog type: 'edit'
 		 */
 		if (eventDialog.type === 'edit' && eventDialog.data) {
-			// console.log(eventDialog.data);
+			console.log(eventDialog.data);
 			setCourseId(eventDialog.data.course.id);
 			setColor(eventDialog.data.color);
 			setStart(moment(eventDialog.data.start, 'MM/DD/YYYY'));

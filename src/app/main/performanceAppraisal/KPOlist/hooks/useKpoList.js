@@ -9,194 +9,235 @@ import { getBusinessUnits } from 'app/main/HR/business_unit/store/actions';
 import { getDepartments } from 'app/main/HR/business_unit/department/store/actions';
 
 const schema = yup.object().shape({
-  jobTitleId: yup.string(
-    errorMssg({
-      name: 'Job Title',
-      type: 'string',
-    })
-  ).required(
-    errorMssg({
-      name: 'Job Role',
-      type: 'required',
-    })
-  ),
-  lineManagerId: yup.number(
-    errorMssg({
-      name: 'Line Manager',
-      type: 'number',
-    })
-  ).required(
-    errorMssg({
-      name: 'Line Manager',
-      type: 'required',
-    })
-  ),
-  reviewingManagerId: yup.number(
-    errorMssg({
-      name: 'Reviewing Manager',
-      type: 'number',
-    })
-  ).required(
-    errorMssg({
-      name: 'Review Manager',
-      type: 'required',
-    })
-  ),
-})
+	jobTitleId: yup
+		.string(
+			errorMssg({
+				name: 'Job Title',
+				type: 'string'
+			})
+		)
+		.required(
+			errorMssg({
+				name: 'Job Role',
+				type: 'required'
+			})
+		),
+	lineManagerId: yup
+		.number(
+			errorMssg({
+				name: 'Line Manager',
+				type: 'number'
+			})
+		)
+		.required(
+			errorMssg({
+				name: 'Line Manager',
+				type: 'required'
+			})
+		),
+	reviewingManagerId: yup
+		.number(
+			errorMssg({
+				name: 'Reviewing Manager',
+				type: 'number'
+			})
+		)
+		.required(
+			errorMssg({
+				name: 'Review Manager',
+				type: 'required'
+			})
+		)
+});
 
+const useKpoList = ({ dispatch, userId, state, push, id, employees, userInfo }) => {
+	const { open, kpoList, loading, kpo, loadingSingleKpo, jobTitles } = state;
 
-const useKpoList = ({dispatch, userId, state, push, id, employees, userInfo}) => {
+	const { errors, handleSubmit, register, control, setValue } = useForm({
+		mode: 'onBlur',
+		resolver: yupResolver(schema)
+	});
 
-  const { open, kpoList, loading, kpo, loadingSingleKpo, jobTitles } = state;
+	React.useEffect(() => {
+		if (!id) {
+			if (userId) {
+				dispatch(Actions.getAllKpo(userId));
+			}
+		} else {
+			dispatch(Actions.getOneKpo(id));
+		}
+		dispatch(Actions.getJobTitle());
+		dispatch(getBusinessUnits());
+	}, [userId, id]);
 
-  const {
-    errors,
-    handleSubmit,
-    register,
-    control,
-    setValue
-  } = useForm({
-    mode: 'onBlur',
-    resolver: yupResolver(schema),
-  });
+	React.useEffect(() => {
+		if (id && Object.entries(kpo).length > 0) {
+			register({ name: 'lineManagerId', value: kpo?.lineManagerId });
+			register({ name: 'reviewingManagerId', value: kpo?.reviewingManagerId });
+			register({ name: 'jobTitleId', value: kpo?.jobTitleId });
+		}
+	}, [kpo]);
 
-  React.useEffect(() => {
-    if(!id) {
-      if(userId) {
-        dispatch(Actions.getAllKpo(userId));
-      }
-    } else {
-      dispatch(Actions.getOneKpo(id));
-    }
-    dispatch(Actions.getJobTitle());
-    dispatch(getBusinessUnits());
-  }, [userId, id]);
+	const handleGetDepartment = id => () => {
+		dispatch(getDepartments(id));
+	};
 
-  React.useEffect(() => {
-    if(id && Object.entries(kpo).length > 0) {
-      register({name: 'lineManagerId', value: kpo?.lineManagerId});
-      register({name: 'reviewingManagerId', value: kpo?.reviewingManagerId});
-      register({name: 'jobTitleId', value: kpo?.jobTitleId});
-    }
-  }, [kpo]);
+	const handleCloseModal = () => {
+		dispatch({
+			type: Actions.CLOSE_EMPLOYEE_KPO_LIST_MODAL
+		});
+	};
 
-  const handleGetDepartment = (id) => () => {
-    dispatch(getDepartments(id));
-  };
+	const handleOpenModal = () => {
+		dispatch({
+			type: Actions.OPEN_EMPLOYEE_KPO_LIST_MODAL
+		});
+	};
 
-  const handleCloseModal = () => {
-    dispatch({
-      type: Actions.CLOSE_EMPLOYEE_KPO_LIST_MODAL
-    });
-  };
+	const showSubmitBtn = tabValue => {
+		return kpo.employeeId === userInfo.id && kpo.employee.email === userInfo.email && tabValue === 0;
+	};
 
-  const handleOpenModal = () => {
-    dispatch({
-      type: Actions.OPEN_EMPLOYEE_KPO_LIST_MODAL
-    })
-  };
+	const getEmployeesByRole = role => {
+		return employees
+			.filter(employee => userRole(employee?.role?.name) === role)
+			.map(newEmployee => {
+				return {
+					name: `${newEmployee.firstName} ${newEmployee.lastName}`,
+					id: newEmployee.id
+				};
+			});
+	};
 
-  const showSubmitBtn = (tabValue) => {
-    return (kpo.employeeId === userInfo.id && kpo.employee.email === userInfo.email && tabValue === 0);
-  }
+	const onSubmit = value => {
+		const model = {
+			...value,
+			kpoYear: `${new Date().getFullYear()}`
+		};
+		if (id) {
+			return dispatch(
+				Actions.updateKpo({
+					id,
+					userId,
+					model
+				})
+			);
+		}
+		dispatch(Actions.createKpo({ userId, item: model }));
+	};
 
-  const getEmployeesByRole = (role) => {
-    return employees.filter((employee) => userRole(employee?.role?.name) === role).map(newEmployee => {
-      return {
-        name: `${newEmployee.firstName} ${newEmployee.lastName}`,
-        id: newEmployee.id
-      }
-    });
-  };
+	const handleDeleteKpo = kpoId => {
+		dispatch(
+			Actions.deleteKpo({
+				id: kpoId,
+				userId
+			})
+		);
+	};
 
-  const onSubmit = (value) => {
-    const model = {
-      ...value,
-      kpoYear: `${new Date().getFullYear()}`
-    }
-    if(id) {
-      return dispatch(Actions.updateKpo({
-        id,
-        userId,
-        model
-      }));
-    }
-    dispatch(Actions.createKpo({ userId, item: model }));
-  };
+	const submitKpo = () => {
+		if (kpo.status === 'on-going') {
+			dispatch(Actions.submitKpo(id));
+			return;
+		}
+		dispatch(Actions.CompleteKpo(id));
+	};
 
-  const handleDeleteKpo = (kpoId) => {
-    
-    dispatch(Actions.deleteKpo({
-      id: kpoId,
-      userId
-    }))
-  };
+	const approveKpo = () => {
+		dispatch(Actions.approveKpo(id));
+	};
 
-  const submitKpo = () => {
-    if(kpo.status === 'on-going') {
-      dispatch(Actions.submitKpo(id));
-      return;
-    }
-    dispatch(Actions.CompleteKpo(id));
-  };
+	const shouldShowAddButton = () => {
+		return userInfo?.id === state?.kpo?.employee?.id && userInfo?.data?.email === state?.kpo?.employee?.email;
+	};
 
-  const approveKpo = () => {
-    dispatch(Actions.approveKpo(id));
-  };
+	const submitButtonText = () => {
+		return kpo.status === 'on-going' ? 'SUBMIT FOR REVIEW' : 'Complete KPO';
+	};
 
-  const shouldShowAddButton = () => {
-    return (userInfo?.id === state.kpo.employee.id && userInfo.data.email === state.kpo.employee.email);
-  };
+	const showReviewKpoAndAppraisalBtn = () => {
+		if (userRole(userInfo.role) === 'linemanager') {
+			return true;
+		}
+	};
 
+	const showActionButton = user => {
+		if (
+			user?.id === state.kpo.employee?.id &&
+			userInfo.data.email === state.kpo.employee?.email &&
+			kpo.status === 'on-going'
+		)
+			return true;
+		if (
+			userRole(userInfo.role) === 'linemanager' &&
+			kpo.status !== 'on-going' &&
+			kpo.status !== 'pending' &&
+			kpo.status !== 'created' &&
+			kpo.status !== 'reviewed1' &&
+			kpo.status !== 'reviewed2' &&
+			kpo.status !== 'completed'
+		)
+			return true;
+	};
 
-  const submitButtonText = () => {
-    return kpo.status === 'on-going' ? 'Submit KPO for Review' : 'Complete KPO'
-  };
+	const showApproveButton = () => {
+		let lineManager;
+		let allowedToApprove;
 
-  const showActionButton = (user) => {
-    if(user?.id === state.kpo.employee?.id && userInfo.data.email === state.kpo.employee?.email && kpo.status === 'on-going') return true;
-    if(userRole(userInfo.role) === 'linemanager' && kpo.status !== 'on-going' && kpo.status !== 'pending' && kpo.status !== 'reviewed1' && kpo.status !== 'reviewed2' && kpo.status !== 'completed') return true;
-  }
+		if (userRole(userInfo.role) === 'linemanager') {
+			lineManager = true;
+		} else {
+			lineManager = false;
+		}
 
-  const showApproveButton = () => {
-    if(userRole(userInfo.role) === 'linemanager' && kpo.status !== 'on-going' && kpo.status !== 'pending' && kpo.status !== 'reviewed1' && kpo.status === 'reviewed2') return true;
-  }
+		if (
+			(kpo.status !== 'on-going' && kpo.status !== 'pending' && kpo.status !== 'reviewed1') ||
+			kpo.status === 'reviewed2'
+		) {
+			allowedToApprove = true;
+		} else {
+			allowedToApprove = false;
+		}
 
-  const disableInput = () => {
-    if(userRole(userInfo.role) !== 'linemanager') {
-      return {
-        disabled: true,
-      }
-    }
-  }
+		return { lineManager, allowedToApprove };
+	};
 
-  return {
-    handleCloseModal,
-    handleOpenModal,
-    open,
-    handleSubmit,
-    errors,
-    register,
-    onSubmit,
-    control,
-    handleDeleteKpo,
-    listOfKpo: kpoList,
-    loading,
-    push,
-    details: kpo,
-    loadingSingleKpo,
-    jobTitles,
-    getEmployeesByRole,
-    showSubmitBtn,
-    submitKpo,
-    submitButtonText,
-    approveKpo,
-    shouldShowAddButton,
-    showActionButton,
-    showApproveButton,
-    handleGetDepartment,
-    disableInput
-  };
+	const disableInput = () => {
+		if (userRole(userInfo.role) !== 'linemanager') {
+			return {
+				disabled: true
+			};
+		}
+	};
+
+	return {
+		handleCloseModal,
+		handleOpenModal,
+		open,
+		handleSubmit,
+		errors,
+		register,
+		onSubmit,
+		control,
+		handleDeleteKpo,
+		listOfKpo: kpoList,
+		loading,
+		push,
+		details: kpo,
+		loadingSingleKpo,
+		jobTitles,
+		getEmployeesByRole,
+		showSubmitBtn,
+		submitKpo,
+		submitButtonText,
+		approveKpo,
+		shouldShowAddButton,
+		showActionButton,
+		showApproveButton,
+		showReviewKpoAndAppraisalBtn,
+		handleGetDepartment,
+		disableInput
+	};
 };
 
 export default useKpoList;

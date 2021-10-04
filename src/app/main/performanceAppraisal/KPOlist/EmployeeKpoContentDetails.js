@@ -26,7 +26,7 @@ const EmployeeKpoContentDetails = () => {
   }, [])
   const { data: kpoCategory } = useSelector(state => state.kpoCategory);
   const state = useSelector(state => state.kpo.kpoContentList);
-  const userInfo = useSelector(state => state.auth.user)
+  const userInfo = useSelector (state => state.auth.user)
   const customHook = useKpoContent({
     config: {type: tabValue === 1 && 'quarter'},
     state,
@@ -55,7 +55,7 @@ const EmployeeKpoContentDetails = () => {
       }}
       header={{
         icon: '',
-        title: 'KPO Content Details',
+        title: 'KPO Content Details 2',
         handleSearch: ({target: { value }}) => console.log(value),
       }}
       button={{

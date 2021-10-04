@@ -32,7 +32,8 @@ const useStyles = makeStyles(theme => ({
 		maxWidth: '100%',
 		minWidth: 0,
 		height: '100%',
-		backgroundColor: theme.palette.background.default
+		// backgroundColor: theme.palette.background.default
+		backgroundColor: '#fcfcfc'
 	},
 	header: {
 		height: headerHeight,
@@ -40,7 +41,7 @@ const useStyles = makeStyles(theme => ({
 		display: 'flex',
 		background: `linear-gradient(to right, ${theme.palette.primary.dark} 0%, ${theme.palette.primary.main} 100%)`,
 		color: theme.palette.primary.contrastText,
-		backgroundSize: 'cover',
+		backgroundSize: 'cover'
 		// backgroundColor: theme.palette.primary.dark
 	},
 	topBg: {
@@ -183,13 +184,8 @@ const FusePageSimple = React.forwardRef((props, ref) => {
 					{/*    className={clsx(classes.contentCardWrapper, props.sidebarInner && classes.contentCardWrapperInnerSidebar)} */}
 					{/*    enable={props.innerScroll && props.sidebarInner} */}
 					{/* > */}
-					<FuseScrollbars
-						className={classes.contentWrapper}
-						enable={props.innerScroll && !props.sidebarInner}
-					>
-						{props.header && !props.sidebarInner && (
-							<FusePageSimpleHeader header={props.header} classes={classes} />
-						)}
+					<FuseScrollbars className={classes.contentWrapper} enable={props.innerScroll && !props.sidebarInner}>
+						{props.header && !props.sidebarInner && <FusePageSimpleHeader header={props.header} classes={classes} />}
 
 						{props.contentToolbar && <div className={classes.toolbar}>{props.contentToolbar}</div>}
 

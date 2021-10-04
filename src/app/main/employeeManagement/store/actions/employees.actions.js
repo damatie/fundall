@@ -8,9 +8,13 @@ export const CLOSE_ADD_NEW_EMPLOYEE_MODAL = 'CLOSE ADD NEW EMPLOYEE MODAL';
 export const GET_EMPLOYEES = 'GET EMPLOYEES';
 export const GET_ENITIES = 'GET ENTITIES';
 export const GET_DEPARTMENTS = 'GET DEPARTMENTS';
+export const GET_ALL_DEPARTMENTS = 'GET ALL DEPARTMENTS';
 export const GET_ROLES = 'GET ROLES';
 export const EMPLOYEE_GRADES = 'EMPLOYEE GRADES';
+export const EMPLOYEE_GRADE_LEVELS = 'EMPLOYEE GRADE LEVELS';
 export const GET_JOBTITLE = 'JOB TITLE';
+export const ACCOUNT_SETTINGS = 'ACCOUNT SETTINGS'
+export const COMPENSATIONS = 'COMPENSATIONS'
 
 export const getJobTitle = () => {
   return async (dispatch) => {
@@ -32,7 +36,8 @@ export const getJobTitle = () => {
 export const getEmployees = () => {
   return async (dispatch) => {
     try {
-      const { data: { data, success } } = await api.get('/auth/employee/data/all');
+      const { data: { data, success } } = await api.get('/auth/employee/');
+      // const { data: { data, success } } = await api.get('/auth/employee/data/all');
       if(success) {
         dispatch({
           type: GET_EMPLOYEES,
@@ -51,7 +56,7 @@ export const getEmployees = () => {
 export const getEntities = () => {
   return async (dispatch) => {
     try {
-      const { data: { data, success } } = await api.get('/entity/all');
+      const { data: { data, success } } = await api.get('/entity/');
       if(success) {
         dispatch({
           type: GET_ENITIES,
@@ -76,6 +81,8 @@ export const getRoles = () => {
           type: GET_ROLES,
           payload: data || []
         })
+
+        // // console.log('Roles Data: ', data);
       }
     } catch (e) {
       dispatch({
@@ -86,10 +93,31 @@ export const getRoles = () => {
   };
 };
 
+export const getDepartments = () => {
+  return async (dispatch) => {
+    try {
+      const { data: { data, success } } = await api.get(`/department/`);
+      console.log('Department data: ', data);
+      if(success) {
+        dispatch({
+          type: GET_ALL_DEPARTMENTS,
+          payload: data || []
+        })
+      }
+    } catch (e) {
+      dispatch({
+        type: GET_ALL_DEPARTMENTS,
+        payload: []
+      })
+    }
+  };
+};
+
 export const getDept = (id) => {
   return async (dispatch) => {
     try {
       const { data: { data, success } } = await api.get(`/department/all/${id}`);
+      console.log(data);
       if(success) {
         dispatch({
           type: GET_DEPARTMENTS,
@@ -118,6 +146,70 @@ export const getGrades = () => {
     } catch (e) {
       dispatch({
         type: EMPLOYEE_GRADES,
+        payload: []
+      })
+    }
+  };
+};
+
+
+export const getGradeLevels = () => {
+  return async (dispatch) => {
+    try {
+      const { data: { data, success } } = await api.get('/employee-grade-level');
+      if(success) {
+        dispatch({
+          type: EMPLOYEE_GRADE_LEVELS,
+          payload: data || []
+        })
+      }
+    } catch (e) {
+      dispatch({
+        type: EMPLOYEE_GRADE_LEVELS,
+        payload: []
+      })
+    }
+  };
+};
+
+
+export const getAccountSettings = () => {
+  return async (dispatch) => {
+    try {
+      // const userData = localStorage.getItem('user_profile');
+      // console.log("Account Settings Called")
+      const { data: { data, success } } = await api.get(`/account_settings`);
+      if(success) {
+        dispatch({
+          type: ACCOUNT_SETTINGS,
+          payload: data || {}
+        })
+        // console.log("Account Settings Data: ", data)
+      }
+    } catch (e) {
+      dispatch({
+        type: ACCOUNT_SETTINGS,
+        payload: {}
+      })
+    }
+  };
+};
+export const getCompensations = () => {
+  return async (dispatch) => {
+    try {
+      // const userData = localStorage.getItem('user_profile');
+      // console.log("Compensations Called")
+      const { data: { data, success } } = await api.get(`/compensation`);
+      if(success) {
+        dispatch({
+          type: COMPENSATIONS,
+          payload: data || []
+        })
+        // console.log("Compensations Data: ", data)
+      }
+    } catch (e) {
+      dispatch({
+        type: COMPENSATIONS,
         payload: []
       })
     }

@@ -52,10 +52,12 @@ import EmployeeGradeConfig from 'app/main/employeeGrade/EmployeeGradeConfig';
 import BehaviouralAttributeConfig from 'app/main/behaviouralAttribute/BehaviouralAttributeConfig';
 import PermissionConfig from 'app/main/permission/PermissionConfig';
 import EmployeeMgtConfig from 'app/main/employeeManagement/employeeMgtConfig';
+import createEmployeeConfig from 'app/main/employeeManagement/createEmployeeConfig';
 import EmployeeInformationConfig from 'app/main/employeeInformation/employeeInformationConfig';
 import AttendanceConfig from 'app/main/attendance/attendanceConfig';
 import ExitManagement from 'app/main/exitMgt/exitConfig';
 import CompensationColumnsConfig from 'app/main/compensationColumns/CompensationColumnsConfig';
+import ExternalCandidateConfig from 'app/main/recruitment/externalCandidate/externalCandidateConfig';
 
 const routeConfigs = [
 	// ExampleConfig,
@@ -111,8 +113,10 @@ const routeConfigs = [
 	BehaviouralAttributeConfig,
 	PermissionConfig,
 	EmployeeMgtConfig,
+	// createEmployeeConfig,
 	EmployeeInformationConfig,
-	CompensationColumnsConfig
+	CompensationColumnsConfig,
+	ExternalCandidateConfig
 ];
 
 const checkIfLoggedIn = () => {

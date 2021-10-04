@@ -5,10 +5,14 @@ const initialState = {
   employees: [],
   entities: [],
   departments: [],
+  departmentList: [],
   roles: [],
   grades: [],
+  gradeLevels: [],
   loading: true,
   jobTitles: [],
+  accountSettings: {},
+  compensationData: []
 }
 
 const employeesReducer = (state = initialState, actions) => {
@@ -44,6 +48,11 @@ const employeesReducer = (state = initialState, actions) => {
         ...state,
         departments: actions.payload
       }
+    case Actions.GET_ALL_DEPARTMENTS:
+      return {
+        ...state,
+        departmentList: actions.payload
+      }
     case Actions.GET_ROLES:
       return {
         ...state,
@@ -53,6 +62,21 @@ const employeesReducer = (state = initialState, actions) => {
       return {
         ...state,
         grades: actions.payload
+      }
+    case Actions.EMPLOYEE_GRADE_LEVELS:
+      return {
+        ...state,
+        gradeLevels: actions.payload
+      }
+    case Actions.ACCOUNT_SETTINGS:
+      return {
+        ...state,
+        accountSettings: actions.payload
+      }
+    case Actions.COMPENSATIONS:
+      return {
+        ...state,
+        compensationData: actions.payload
       }
     default:
       return state;

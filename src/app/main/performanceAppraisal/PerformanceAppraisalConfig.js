@@ -10,12 +10,12 @@ const PerformanceAppraisalConfig = {
 		{
 			path: '/hr/performance_appraisal/dashboard',
 			component: React.lazy(() => import('./dashboards/HrPerformanceAppraisalDashboard'))
-    },
-    {
+		},
+		{
 			path: '/line_manager/performance_appraisal/dashboard',
 			component: React.lazy(() => import('./dashboards/LMperformanceAppraisalDashboard'))
-    },
-    {
+		},
+		{
 			path: '/finance_manager/performance_appraisal/dashboard',
 			component: React.lazy(() => import('./dashboards/FMperformanceAppraisalDashboard'))
 		},
@@ -32,6 +32,10 @@ const PerformanceAppraisalConfig = {
 			component: React.lazy(() => import('./KPOlist/EmployeeKpoDetails'))
 		},
 		{
+			path: '/performance_appraisal/kpoList/KpoQuarterlyReview',
+			component: React.lazy(() => import('./KPOlist/KpoQuarterlyReview'))
+		},
+		{
 			path: '/performance_appraisal/kpo/review/details/:id/kpoContent/:kpoContentId',
 			component: React.lazy(() => import('./KPOlist/EmployeeKpoContentDetails'))
 		},
@@ -46,8 +50,7 @@ const PerformanceAppraisalConfig = {
 		{
 			path: '/performance_appraisal/kpoList',
 			component: React.lazy(() => import('./KPOlist/EmployeeKpoList'))
-		},
-		
+		}
 	]
 };
 

@@ -4,16 +4,36 @@ const initialState = {
 	loading: false,
 	data: [],
 	onePosition: [],
+	oneLoading: false,
 	success: false,
-	colse: false
+	open: false,
+	close: false
 };
 
 const recruitmentReducer = (state = initialState, action) => {
 	switch (action.type) {
+		case Actions.OPEN_CREATE_OPENING_MODAL: {
+			return {
+				...state,
+				open: true,
+			}
+		}
+		case Actions.CLOSE_CREATE_OPENING_MODAL: {
+			return {
+				...state,
+				open: false,
+			}
+		}
 		case Actions.LOADING_POSITIONS: {
 			return {
 				...state,
 				loading: true,
+			}
+		}
+		case Actions.LOADING_ONE_POSITIONS: {
+			return {
+				...state,
+				oneLoading: true,
 			}
 		}
 		case Actions.ClOSE_SUCCESS: {
@@ -42,7 +62,7 @@ const recruitmentReducer = (state = initialState, action) => {
 		case Actions.GET_ONE_OPEN_POSITIONS_SUCCESS: {
 			return {
 				...state,
-				loading: false,
+				oneLoading: false,
 				success: true,
 				onePosition: action.payload,
 			}
@@ -50,7 +70,7 @@ const recruitmentReducer = (state = initialState, action) => {
 		case Actions.GET_ONE_OPEN_POSITIONS_ERROR: {
 			return {
 				...state,
-				loading: false,
+				oneLoading: false,
 				success: false,
 				onePosition: [],
 			};
@@ -63,6 +83,20 @@ const recruitmentReducer = (state = initialState, action) => {
 			};
 		}
 		case Actions.CREATE_OPENING_ERROR: {
+			return {
+				...state,
+				loading: false,
+				success: false
+			};
+		}
+		case Actions.PUBLISH_OPENING_SUCCESS: {
+			return {
+				...state,
+				loading: false,
+				succcess: true,
+			};
+		}
+		case Actions.PUBLISH_OPENING_ERROR: {
 			return {
 				...state,
 				loading: false,

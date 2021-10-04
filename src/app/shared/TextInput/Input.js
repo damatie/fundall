@@ -18,12 +18,14 @@ const Input = forwardRef((props, ref) => {
     value,
     type,
     size,
+    rows,
     className,
     onBlur,
     refs,
     color,
     multiline,
     placeholder,
+    maxLength,
   } = props;
 
   const [showPassword, setShowPassword] = useState(false);
@@ -57,7 +59,7 @@ const Input = forwardRef((props, ref) => {
       helperText={message}
       onBlur={onBlur}
       inputRef={refs || ref}
-      rows={multiline && 4}
+      rows={multiline && rows || 4}
       multiline={multiline && true}
       placeholder={placeholder}
       InputProps={type === 'password' ? {
@@ -73,7 +75,7 @@ const Input = forwardRef((props, ref) => {
             </IconButton>
           </InputAdornment>
         ),
-      } : null}
+      } : maxLength ?  { maxLength: maxLength } : null}
     />
   );
 });

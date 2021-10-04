@@ -77,11 +77,15 @@ const schema = (type) => {
             name: 'Description',
             type: 'required'
           })
-        ),
-        target: yup.string(
+        ).max(100, errorMsg({
+          number: 100,
+          name: 'Description',
+          type: 'max'
+        })),
+        target: yup.number(
           errorMsg({
             name: 'Target',
-            type: 'string'
+            type: 'number'
           })
         ).required(
           errorMsg({
@@ -107,6 +111,7 @@ const useKpoContentList = ({config, state, dispatch, params, push, kpoCategory, 
   const {
     register,
     handleSubmit,
+    reset,
     errors,
     control,
     getValues
@@ -117,7 +122,15 @@ const useKpoContentList = ({config, state, dispatch, params, push, kpoCategory, 
 
   const [shouldDisableButton, setShouldDisableButton] = React.useState(false);
   const [contentValue, setContentValue] = React.useState({});
-
+  const [contentList, setContentList] = React.useState([]);
+  const [contentSelectedItem, setContentSelectedItem] = React.useState({
+    id: 0,
+    kpoCategoryId: '',
+    category: '',
+    kpoDescription: '',
+    target: '',
+    kpoPipTarget: ''
+  });
   React.useEffect(() => {
     if(kpoId) {
       dispatch(Actions.getOneKpoContent(kpoId))
@@ -146,19 +159,32 @@ const useKpoContentList = ({config, state, dispatch, params, push, kpoCategory, 
     dispatch({type: Actions.CLOSE_ADD_KPO_CONTENT_MODAL})
   };
 
-  const onSubmit = (type) => (model) => {
-    const body = {
-      ...model,
-      kpoId: +kpoId || +id
-    };
+  const onSubmit = () => {
+    // console.log(model)
+    // const body = {
+    //   ...model,
+    //   kpoId: +kpoId || +id
+    // };
+    const payload = {
+        kpoId: +kpoId || +id,
+        kpoContent: contentList.map( content => {
+          return {
+            kpoCategoryId: content.kpoCategoryId,
+            category: content.category,
+            kpoDescription: content.kpoDescription,
+            target: content.target,
+            kpoPipTarget: content.kpoPipTarget
+          }
+        })
+    }
     if(id && !kpoId) {
-      dispatch(Actions.addKpoContent(body));
+      dispatch(Actions.addKpoContent(payload));
     } else if (kpoId) {
-      if(type === 'quarterly' && kpoContent.updateStatus !== 'approved') {
-        dispatch(Actions.updateKpoContentQuarterly(body));
-        return;
-      }
-      dispatch(Actions.updateKpoContent({...body, ...contentValue}));
+      // if(type === 'quarterly' && kpoContent.updateStatus !== 'approved') {
+      //   dispatch(Actions.updateKpoContentQuarterly(body));
+      //   return;
+      // }
+      // dispatch(Actions.updateKpoContent({...body, ...contentValue}));
       return;
     }
     return;
@@ -170,6 +196,31 @@ const useKpoContentList = ({config, state, dispatch, params, push, kpoCategory, 
       kpoId: id
     }));
   };
+
+  const handleAddList = (model) => {
+    console.log(model);
+    contentList.push({
+      ...model,
+      id: model.id || contentList.length+1,
+      category: kpoCategory.find(cat => cat.id === model.kpoCategoryId).name
+    });
+    setContentList(contentList);
+    reset();
+    setContentSelectedItem({
+      id: 0,
+      kpoCategoryId: '',
+      category: '',
+      kpoDescription: '',
+      target: '',
+      kpoPipTarget: 0
+    });
+  }
+
+  const handleEditList = (id) => {
+    console.log(id);
+    setContentSelectedItem(contentList.find(content => content.id === id));
+    setContentList(contentList.filter(content => content.id !== id));
+  }
 
   const KpoContentValue = () => {
     setContentValue(getValues());
@@ -239,7 +290,18 @@ const useKpoContentList = ({config, state, dispatch, params, push, kpoCategory, 
     shouldShowInput,
     shouldDisableButton,
     pipEligibility: userInfo.data.employeeGrade?.pipEligibility,
-    KpoContentValue
+    KpoContentValue,
+    handleAddList,
+    handleEditList,
+    contentList, /*: [{
+        kpoCategoryId: 0,
+        category: '',
+        kpoDescription: '',
+        target: 0,
+        kpoPipTarget: 0
+    }],*/
+    contentSelectedItem,
+    setContentSelectedItem
   };
 };
 

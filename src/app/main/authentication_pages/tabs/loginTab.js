@@ -39,6 +39,7 @@ function LoginTab(props) {
 	}
 
 	function handleSubmit(model) {
+		// console.log("Model", model);
 		dispatch(authActions.submitLogin(model));
 	}
 

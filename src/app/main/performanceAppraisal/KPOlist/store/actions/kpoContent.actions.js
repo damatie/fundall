@@ -41,11 +41,11 @@ export const addKpoContent = (model) => {
           text: message,
           icon: 'success'
         })
-        dispatch(getAllKpoContent(model.kpoId));
+        dispatch(getAllKpoContent(model?.kpoId));
       }
     } catch (e) {
       swal.fire({
-        text: e.response?.data.message || e.response?.data.error || 'Service Unavailable',
+        text: e.response?.data.message || e.response?.data.error || e.response?.data.errors.toString() || 'Service Unavailable',
         icon: 'error'
       });
     }
@@ -76,6 +76,7 @@ export const updateKpoContent = (model) => {
     try {
       loading('Updating...');
       const { data: { message, success } } = await api.patch(`/appraisal/kpo-content/${model.kpoId}`, model);
+      console.log(`Updating KPO Content with ID: ${model.kpoId} - `, model);
       if(success) {
         swal.fire({
           text: message,
