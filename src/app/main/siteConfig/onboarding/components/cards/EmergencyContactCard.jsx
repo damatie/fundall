@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import EditIcon from '../../../../../assets/icons/edit.png';
+import EditIcon from '../../../../../../assets/icons/edit.png';
 
 const useStyles = makeStyles(theme => ({
     mainCard: {
@@ -26,7 +26,6 @@ const useStyles = makeStyles(theme => ({
     },
     row: {
         display: "flex",
-        // justifyContent: "space-between",
         marginBottom: "3%"
     },
     rowItem: {
@@ -34,8 +33,8 @@ const useStyles = makeStyles(theme => ({
         marginRight: "7%",
     },
     addressPara: {
-        width: "70%",
-        overflow: "hidden",
+        // width: "70%",
+        // overflow: "hidden",
         whiteSpace: "nowrap",
         textOverflow: "ellipsis",
     },
@@ -58,12 +57,13 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const NextOfKinCard = ({ nextOfKinDetails }) => {
+const EmergencyContactCard = ({ emergencyContactDetails, customHook, index, isUpdate  }) => {
     const classes = useStyles();
 
-    useEffect(() => console.log(nextOfKinDetails, "nextOfKinDetails"));
-
-    //  Edit BUtton
+    const {
+        handleEditItem,
+        setShowOnScreen
+    } = customHook;
 
     return (
         <div className={` ${classes.mainCard}`}>
@@ -73,6 +73,7 @@ const NextOfKinCard = ({ nextOfKinDetails }) => {
                     color="secondary"
                     onClick={() => {
                         console.log("clicked");
+                        handleEditItem(index, isUpdate)
                     }}
                     startIcon={<img src={EditIcon} alt="edit icon" />}
                     className={` ${classes.editButtonWithIcon}`}
@@ -83,43 +84,39 @@ const NextOfKinCard = ({ nextOfKinDetails }) => {
             <div className={` ${classes.firstRow}`}>
                 <div className={` ${classes.rowItemFirstRow}`}>
                     <p className={` ${classes.rowItemLabel}`}>First Name</p>
-                    <p className={` ${classes.rowItemContent}`}>{nextOfKinDetails.firstName}</p>
+                    <p className={` ${classes.rowItemContent}`}>{emergencyContactDetails.firstName}</p>
                 </div>
                 <div className={` ${classes.rowItemFirstRow}`}>
                     <p className={` ${classes.rowItemLabel}`}>Last Name</p>
-                    <p className={` ${classes.rowItemContent}`}>{nextOfKinDetails.lastName}</p>
+                    <p className={` ${classes.rowItemContent}`}>{emergencyContactDetails.lastName}</p>
                 </div>
                 <div className={` ${classes.rowItemFirstRow}`}>
                     <p className={` ${classes.rowItemLabel}`}>Gender</p>
-                    <p className={` ${classes.rowItemContent}`}>{nextOfKinDetails.gender}</p>
-                </div>
-                <div className={` ${classes.rowItemFirstRow}`}>
-                    <p className={` ${classes.rowItemLabel}`}>Date of birth</p>
-                    <p className={` ${classes.rowItemContent}`}>{nextOfKinDetails.dob}</p>
+                    <p className={` ${classes.rowItemContent}`}>{emergencyContactDetails.gender}</p>
                 </div>
             </div>
             <div className={` ${classes.row}`}>
                 <div className={` ${classes.rowItem}`}>
                     <p className={` ${classes.rowItemLabel}`}>Nationality</p>
-                    <p className={` ${classes.rowItemContent}`}>{nextOfKinDetails.nationality}</p>
+                    <p className={` ${classes.rowItemContent}`}>{emergencyContactDetails.nationality}</p>
                 </div>
                 <div className={` ${classes.rowItem}`}>
                     <p className={` ${classes.rowItemLabel}`}>Address</p>
-                    <p className={` ${classes.rowItemContent}  ${classes.addressPara}`}>{nextOfKinDetails.address}</p>
+                    <p className={` ${classes.rowItemContent}  ${classes.addressPara}`}>{emergencyContactDetails.address}</p>
                 </div>
             </div>
             <div className={` ${classes.row}`}>
                 <div className={` ${classes.rowItem}`}>
-                    <p className={` ${classes.rowItemLabel}`}>Contact Email</p>
-                    <p className={` ${classes.rowItemContent}`}>{nextOfKinDetails.contactEmail}</p>
+                    <p className={` ${classes.rowItemLabel}`}>Contact Number</p>
+                    <p className={` ${classes.rowItemContent}`}>{emergencyContactDetails.contactNumber}</p>
                 </div>
                 <div className={` ${classes.rowItem}`}>
-                    <p className={` ${classes.rowItemLabel}`}>Contact Number</p>
-                    <p className={` ${classes.rowItemContent}`}>{nextOfKinDetails.contactNo}</p>
+                    <p className={` ${classes.rowItemLabel}`}>Relationship</p>
+                    <p className={` ${classes.rowItemContent}`}>{emergencyContactDetails.relationship}</p>
                 </div>
             </div>
         </div>
     )
 }
 
-export default NextOfKinCard
+export default EmergencyContactCard

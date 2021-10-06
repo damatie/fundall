@@ -179,6 +179,7 @@ export const getAccountSettings = () => {
       // const userData = localStorage.getItem('user_profile');
       // console.log("Account Settings Called")
       const { data: { data, success } } = await api.get(`/account_settings`);
+      console.log({data});
       if(success) {
         dispatch({
           type: ACCOUNT_SETTINGS,

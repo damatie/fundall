@@ -366,8 +366,8 @@ const NewEmployeeForm = ({customHook}) => {
                     label="Job Title"
                     >
                     {jobTitles.map(item => (
-                    <MenuItem key={item.id} value={item.id}>
-                        {capitalizeWords(item.name)}
+                    <MenuItem key={item} value={item}>
+                        {capitalizeWords(item)}
                     </MenuItem>))}
                     </Select>
                     <FormHelperText style={{ color: 'red'}}>{errors.jobTitleId?.message}</FormHelperText>

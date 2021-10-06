@@ -68,10 +68,11 @@ const useEmployees = ({dispatch, state}) => {
     resolver: yupResolver(schema)
   });
 
-  const { entities, roles, jobTitles, accountSettings, grades, loading, employees } = state;
+  const { entities, roles, accountSettings, grades, loading, employees } = state;
   // // console.log('roles: ', roles);
   const employmentStatusList = accountSettings?.employmentStatus ?? [];
   const modeOfEmploymentList = accountSettings?.modeOfEmployment ?? [];
+  const jobTitles = accountSettings?.jobTitle ?? [];
   const [checked, setChecked] = React.useState(true);
   const [departments, setDepartments] = React.useState([]);
   const [activeStep, setActiveStep] = React.useState(0);

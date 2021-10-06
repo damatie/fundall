@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import EditIcon from '../../../../../assets/icons/edit.png';
+import EditIcon from '../../../../../../assets/icons/edit.png';
+import moment from 'moment';
 
 const useStyles = makeStyles(theme => ({
     mainCard: {
@@ -26,6 +27,7 @@ const useStyles = makeStyles(theme => ({
     },
     row: {
         display: "flex",
+        // justifyContent: "space-between",
         marginBottom: "3%"
     },
     rowItem: {
@@ -33,7 +35,7 @@ const useStyles = makeStyles(theme => ({
         marginRight: "7%",
     },
     addressPara: {
-        width: "70%",
+        // width: "70%",
         overflow: "hidden",
         whiteSpace: "nowrap",
         textOverflow: "ellipsis",
@@ -57,8 +59,13 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const EducationalQualificationCard = ({ educationalQualificationDetails }) => {
+const NextOfKinCard = ({ nextOfKinDetails, customHook, index, isUpdate }) => {
     const classes = useStyles();
+
+    const {
+        handleEditItem,
+        setShowOnScreen
+    } = customHook;
 
     return (
         <div className={` ${classes.mainCard}`}>
@@ -68,6 +75,7 @@ const EducationalQualificationCard = ({ educationalQualificationDetails }) => {
                     color="secondary"
                     onClick={() => {
                         console.log("clicked");
+                        handleEditItem(index, isUpdate)
                     }}
                     startIcon={<img src={EditIcon} alt="edit icon" />}
                     className={` ${classes.editButtonWithIcon}`}
@@ -77,36 +85,48 @@ const EducationalQualificationCard = ({ educationalQualificationDetails }) => {
             </div>
             <div className={` ${classes.firstRow}`}>
                 <div className={` ${classes.rowItemFirstRow}`}>
-                    <p className={` ${classes.rowItemLabel}`}>Institution/School</p>
-                    <p className={` ${classes.rowItemContent}`}>{educationalQualificationDetails.institution}</p>
+                    <p className={` ${classes.rowItemLabel}`}>First Name</p>
+                    <p className={` ${classes.rowItemContent}`}>{nextOfKinDetails?.firstName}</p>
                 </div>
                 <div className={` ${classes.rowItemFirstRow}`}>
-                    <p className={` ${classes.rowItemLabel}`}>Major/Department</p>
-                    <p className={` ${classes.rowItemContent}`}>{educationalQualificationDetails.department}</p>
+                    <p className={` ${classes.rowItemLabel}`}>Last Name</p>
+                    <p className={` ${classes.rowItemContent}`}>{nextOfKinDetails?.lastName}</p>
+                </div>
+                <div className={` ${classes.rowItemFirstRow}`}>
+                    <p className={` ${classes.rowItemLabel}`}>Gender</p>
+                    <p className={` ${classes.rowItemContent}`}>{nextOfKinDetails?.gender}</p>
+                </div>
+                <div className={` ${classes.rowItemFirstRow}`}>
+                    <p className={` ${classes.rowItemLabel}`}>Date of birth</p>
+                    <p className={` ${classes.rowItemContent}`}>{moment(nextOfKinDetails?.dob).format("DD/MM/YYYY")}</p>
                 </div>
             </div>
             <div className={` ${classes.row}`}>
                 <div className={` ${classes.rowItem}`}>
-                    <p className={` ${classes.rowItemLabel}`}>Grade</p>
-                    <p className={` ${classes.rowItemContent}`}>{educationalQualificationDetails.grade}</p>
+                    <p className={` ${classes.rowItemLabel}`}>Nationality</p>
+                    <p className={` ${classes.rowItemContent}`}>{nextOfKinDetails?.nationality}</p>
+                </div>
+                <div className={` ${classes.rowItem} ${classes.rowItemAddress}`}>
+                    <p className={` ${classes.rowItemLabel}`}>Address</p>
+                    <p className={` ${classes.rowItemContent} ${classes.addressPara}`}>{nextOfKinDetails?.address}</p>
                 </div>
                 <div className={` ${classes.rowItem}`}>
-                    <p className={` ${classes.rowItemLabel}`}>Qualification</p>
-                    <p className={` ${classes.rowItemContent}  ${classes.addressPara}`}>{educationalQualificationDetails.qualification}</p>
+                    <p className={` ${classes.rowItemLabel}`}>Contact Number</p>
+                    <p className={` ${classes.rowItemContent}`}>{nextOfKinDetails?.contactNumber}</p>
                 </div>
             </div>
-            <div className={` ${classes.row}`}>
+            {/* <div className={` ${classes.row}`}>
                 <div className={` ${classes.rowItem}`}>
-                    <p className={` ${classes.rowItemLabel}`}>Start Year</p>
-                    <p className={` ${classes.rowItemContent}`}>{educationalQualificationDetails.startYear}</p>
+                    <p className={` ${classes.rowItemLabel}`}>Contact Email</p>
+                    <p className={` ${classes.rowItemContent}`}>{nextOfKinDetails?.contactEmail}</p>
                 </div>
                 <div className={` ${classes.rowItem}`}>
-                    <p className={` ${classes.rowItemLabel}`}>End Year</p>
-                    <p className={` ${classes.rowItemContent}`}>{educationalQualificationDetails.endYear}</p>
+                    <p className={` ${classes.rowItemLabel}`}>Contact Number</p>
+                    <p className={` ${classes.rowItemContent}`}>{nextOfKinDetails?.contactNumber}</p>
                 </div>
-            </div>
+            </div> */}
         </div>
     )
 }
 
-export default EducationalQualificationCard
+export default NextOfKinCard

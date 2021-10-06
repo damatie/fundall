@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import EditIcon from '../../../../../assets/icons/edit.png';
+import EditIcon from '../../../../../../assets/icons/edit.png';
+import moment from 'moment';
 
 const useStyles = makeStyles(theme => ({
     mainCard: {
@@ -26,11 +27,18 @@ const useStyles = makeStyles(theme => ({
     },
     row: {
         display: "flex",
-        justifyContent: "space-between",
+        // justifyContent: "space-between",
         marginBottom: "3%"
     },
     rowItem: {
-        margin: "2% 1%"
+        margin: "2% 1%",
+        marginRight: "7%",
+    },
+    addressPara: {
+        // width: "70%",
+        overflow: "hidden",
+        whiteSpace: "nowrap",
+        textOverflow: "ellipsis",
     },
     rowItemLabel: {
         fontWeight: 600,
@@ -46,26 +54,18 @@ const useStyles = makeStyles(theme => ({
         color: "#000000",
         borderRadius: 5
     },
-    rowItemAddress: {
-        width: "50%"
-    },
     editButtonWithIcon: {
         textTransform: "capitalize !important"
-    },
-    addressPara: {
-        width: "70%",
-        overflow: "hidden",
-        whiteSpace: "nowrap",
-        textOverflow: "ellipsis",
-    },
+    }
 }));
 
-const SpouseAndDependantCard = ({ spouseAndDependant }) => {
+const NextOfKinCard = ({ nextOfKinDetails, customHook, index, isUpdate }) => {
     const classes = useStyles();
 
-    useEffect(() => console.log(spouseAndDependant, "spouseAndDependant"));
-
-    //  Edit BUtton
+    const {
+        handleEditItem,
+        setShowOnScreen
+    } = customHook;
 
     return (
         <div className={` ${classes.mainCard}`}>
@@ -75,6 +75,7 @@ const SpouseAndDependantCard = ({ spouseAndDependant }) => {
                     color="secondary"
                     onClick={() => {
                         console.log("clicked");
+                        handleEditItem(index, isUpdate)
                     }}
                     startIcon={<img src={EditIcon} alt="edit icon" />}
                     className={` ${classes.editButtonWithIcon}`}
@@ -85,51 +86,47 @@ const SpouseAndDependantCard = ({ spouseAndDependant }) => {
             <div className={` ${classes.firstRow}`}>
                 <div className={` ${classes.rowItemFirstRow}`}>
                     <p className={` ${classes.rowItemLabel}`}>First Name</p>
-                    <p className={` ${classes.rowItemContent}`}>{spouseAndDependant.firstName}</p>
+                    <p className={` ${classes.rowItemContent}`}>{nextOfKinDetails?.firstName}</p>
                 </div>
                 <div className={` ${classes.rowItemFirstRow}`}>
                     <p className={` ${classes.rowItemLabel}`}>Last Name</p>
-                    <p className={` ${classes.rowItemContent}`}>{spouseAndDependant.lastName}</p>
+                    <p className={` ${classes.rowItemContent}`}>{nextOfKinDetails?.lastName}</p>
                 </div>
                 <div className={` ${classes.rowItemFirstRow}`}>
                     <p className={` ${classes.rowItemLabel}`}>Gender</p>
-                    <p className={` ${classes.rowItemContent}`}>{spouseAndDependant.gender}</p>
+                    <p className={` ${classes.rowItemContent}`}>{nextOfKinDetails?.gender}</p>
                 </div>
                 <div className={` ${classes.rowItemFirstRow}`}>
                     <p className={` ${classes.rowItemLabel}`}>Date of birth</p>
-                    <p className={` ${classes.rowItemContent}`}>{spouseAndDependant.dob}</p>
+                    <p className={` ${classes.rowItemContent}`}>{moment(nextOfKinDetails?.dob).format("DD/MM/YYYY")}</p>
                 </div>
             </div>
             <div className={` ${classes.row}`}>
                 <div className={` ${classes.rowItem}`}>
                     <p className={` ${classes.rowItemLabel}`}>Nationality</p>
-                    <p className={` ${classes.rowItemContent}`}>{spouseAndDependant.nationality}</p>
+                    <p className={` ${classes.rowItemContent}`}>{nextOfKinDetails?.nationality}</p>
                 </div>
                 <div className={` ${classes.rowItem} ${classes.rowItemAddress}`}>
-                    <p className={` ${classes.rowItemLabel}`}>Nationality</p>
-                    <p className={` ${classes.rowItemContent} ${classes.addressPara}`}>{spouseAndDependant.address}</p>
+                    <p className={` ${classes.rowItemLabel}`}>Address</p>
+                    <p className={` ${classes.rowItemContent} ${classes.addressPara}`}>{nextOfKinDetails?.address}</p>
                 </div>
                 <div className={` ${classes.rowItem}`}>
                     <p className={` ${classes.rowItemLabel}`}>Contact Number</p>
-                    <p className={` ${classes.rowItemContent}`}>{spouseAndDependant.contactNo}</p>
+                    <p className={` ${classes.rowItemContent}`}>{nextOfKinDetails?.contactNumber}</p>
                 </div>
             </div>
-            <div className={` ${classes.row}`}>
+            {/* <div className={` ${classes.row}`}>
                 <div className={` ${classes.rowItem}`}>
                     <p className={` ${classes.rowItemLabel}`}>Contact Email</p>
-                    <p className={` ${classes.rowItemContent}`}>{spouseAndDependant.contactEmail}</p>
+                    <p className={` ${classes.rowItemContent}`}>{nextOfKinDetails?.contactEmail}</p>
                 </div>
                 <div className={` ${classes.rowItem}`}>
-                    <p className={` ${classes.rowItemLabel}`}>Passport Number</p>
-                    <p className={` ${classes.rowItemContent}`}>{spouseAndDependant.passportNo}</p>
+                    <p className={` ${classes.rowItemLabel}`}>Contact Number</p>
+                    <p className={` ${classes.rowItemContent}`}>{nextOfKinDetails?.contactNumber}</p>
                 </div>
-                <div className={` ${classes.rowItem}`}>
-                    <p className={` ${classes.rowItemLabel}`}>Relationship</p>
-                    <p className={` ${classes.rowItemContent}`}>{spouseAndDependant.relationship}</p>
-                </div>
-            </div>
+            </div> */}
         </div>
     )
 }
 
-export default SpouseAndDependantCard
+export default NextOfKinCard

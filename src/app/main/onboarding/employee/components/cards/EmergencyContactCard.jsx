@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import EditIcon from '../../../../../assets/icons/edit.png';
+import EditIcon from '../../../../../../assets/icons/edit.png';
 
 const useStyles = makeStyles(theme => ({
     mainCard: {
@@ -33,8 +33,8 @@ const useStyles = makeStyles(theme => ({
         marginRight: "7%",
     },
     addressPara: {
-        width: "70%",
-        overflow: "hidden",
+        // width: "70%",
+        // overflow: "hidden",
         whiteSpace: "nowrap",
         textOverflow: "ellipsis",
     },
@@ -57,12 +57,13 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const EmergencyContactCard = ({ emergencyContactDetails }) => {
+const EmergencyContactCard = ({ emergencyContactDetails, customHook, index, isUpdate  }) => {
     const classes = useStyles();
 
-    useEffect(() => console.log(emergencyContactDetails, "emergencyContactDetails"));
-
-    //  Edit BUtton
+    const {
+        handleEditItem,
+        setShowOnScreen
+    } = customHook;
 
     return (
         <div className={` ${classes.mainCard}`}>
@@ -72,6 +73,7 @@ const EmergencyContactCard = ({ emergencyContactDetails }) => {
                     color="secondary"
                     onClick={() => {
                         console.log("clicked");
+                        handleEditItem(index, isUpdate)
                     }}
                     startIcon={<img src={EditIcon} alt="edit icon" />}
                     className={` ${classes.editButtonWithIcon}`}
@@ -106,7 +108,7 @@ const EmergencyContactCard = ({ emergencyContactDetails }) => {
             <div className={` ${classes.row}`}>
                 <div className={` ${classes.rowItem}`}>
                     <p className={` ${classes.rowItemLabel}`}>Contact Number</p>
-                    <p className={` ${classes.rowItemContent}`}>{emergencyContactDetails.contactNo}</p>
+                    <p className={` ${classes.rowItemContent}`}>{emergencyContactDetails.contactNumber}</p>
                 </div>
                 <div className={` ${classes.rowItem}`}>
                     <p className={` ${classes.rowItemLabel}`}>Relationship</p>
