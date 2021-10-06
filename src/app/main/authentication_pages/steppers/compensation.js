@@ -122,6 +122,12 @@ function Compensation({ handleNext }) {
 				data={{}}
 				edit={false}
 			/>
+
+			<Box mt={5} width="100%" display="flex" justifyContent="center" alignItems="center">
+				<Button variant="contained" color="primary">
+					Save
+				</Button>
+			</Box>
 		</div>
 	);
 }
