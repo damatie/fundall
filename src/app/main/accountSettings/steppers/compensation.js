@@ -72,17 +72,35 @@ function Compensation({ handleNext }) {
 		setEntityList(entities);
 	}, [entities]);
 
-	// const HandleAddDepartment = () => {
-	// 	setOpenDepartmentModal(true);
-	// };
-
-	// const handleAddEmployeeGrade = () => {
-	// 	setOpenEmployeeGradeModal(true);
-	// };
-
-	// const handleAddEmployeeGradeLevel = () => {
-	// 	setOpenEmployeeGradeLevelModal(true);
-	// };
+	
+	const HandleSubmit = async () => {
+		// if (grades.length > 0 && gradeLevels.length > 0) {
+		// 	try {
+		// 		loading('processing...');
+		// 		await setStepper(genericDept, 3);
+		// 		const dataResponse = localStorage.getItem('login_data');
+		// 		const localData = JSON.parse(dataResponse);
+		// 		localData.company.regStep = 3;
+		// 		localStorage.setItem('login_data', JSON.stringify(localData));
+		// 		swal.fire({
+		// 			text: 'Step Completed',
+		// 			icon: 'success'
+		// 		});
+		// 		handleNext();
+		// 	} catch (e) {
+		// 		swal.fire({
+		// 			text: e?.message || 'Something went wrong',
+		// 			icon: 'error'
+		// 		});
+		// 	}
+		// } else {
+		// 	swal.fire({
+		// 		text: 'Kindly Complete Setup Before Proceeding',
+		// 		icon: 'info'
+		// 	});
+		// }
+		window.location = '/employee/dashboard';
+	};
 
 	const handleCompensationCardClicked = (entity, action) => {
 		console.log(action);
@@ -113,6 +131,11 @@ function Compensation({ handleNext }) {
 				data={{}}
 				edit={false}
 			/>
+			<Box mt={5} width="100%" display="flex" justifyContent="center" alignItems="center">
+				<Button variant="contained" color="primary">
+					Save
+				</Button>
+			</Box>
 		</div>
 	);
 }

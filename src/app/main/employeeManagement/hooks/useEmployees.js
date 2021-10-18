@@ -140,7 +140,7 @@ const useEmployees = ({dispatch, state}) => {
 
   const onSubmit = () => {
     console.log(contentSelectedItem)
-    // dispatch(Actions.addEmployee(contentSelectedItem));
+    dispatch(Actions.addEmployee(contentSelectedItem));
   };
 
   const handleOpenModal = () => {
