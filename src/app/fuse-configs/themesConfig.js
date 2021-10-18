@@ -159,8 +159,8 @@ const themesConfig = {
 				dark: skyBlue[900]
 			},
 			background: {
-				paper: '#1E2125',
-				default: '#121212'
+				paper: '#252C67' /* #1E2125 */,
+				default: '#4B507E' /* #121212 4B507E*/
 			},
 			error: red
 		},

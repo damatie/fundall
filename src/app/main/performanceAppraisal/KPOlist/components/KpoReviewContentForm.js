@@ -15,6 +15,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import { Button, FormHelperText } from '@material-ui/core';
 import Swal from 'sweetalert2';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import QuarterlyKpoReviewForm from './QuarterlyKpoReviewForm';
 import { green, red } from '@material-ui/core/colors';
 
 const useStyles = makeStyles(theme => ({
@@ -153,6 +154,8 @@ export default function KpoReviewContentForm({
 		}
 	}, [saveSuccessful, saveFailed]);
 
+	React.useEffect(() => console.log(data, 'data'), [data]);
+
 	return (
 		<div>
 			<form onSubmit={handleSubmit(onSubmit)}>
@@ -232,6 +235,8 @@ export default function KpoReviewContentForm({
 						/>
 					</Grid>
 				</Grid>
+				{console.log(data.Q1.label, 'data')}
+				<QuarterlyKpoReviewForm kpoQuarter={data?.Q1} qLabel={data?.Q1?.label} /* updateKpo={updateKpo} */ />
 				<Grid container spacing={3} justify="left" align="center" className="my-10">
 					<div className={classes.wrapper}>
 						<Button

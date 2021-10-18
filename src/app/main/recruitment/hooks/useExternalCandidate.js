@@ -103,6 +103,7 @@ const schema = yup.object().shape({
 
 const useExternalCandidate = ({ state, dispatch, push, hash }) => {
 	const { onePosition, oneLoading } = state.recruitment;
+	const { success, loading } = state.candidate;
 
 	const { register, handleSubmit, errors, control, reset } = useForm({
 		mode: 'onBlur',
@@ -141,6 +142,7 @@ const useExternalCandidate = ({ state, dispatch, push, hash }) => {
 			applicantName: `${model.firstName} ${model.lastName}`
 		};
 		dispatch(Actions.candidateApply(payload, hash, setApply));
+		reset();
 	};
 	
 	const convertFileToBase64 = (fileData) => {
@@ -163,6 +165,8 @@ const useExternalCandidate = ({ state, dispatch, push, hash }) => {
 		register,
 		onSubmit,
 		oneLoading,
+		loading,
+		success,
 		push,
 		content: onePosition,
 		contentSelectedItem,

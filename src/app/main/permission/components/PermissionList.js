@@ -28,10 +28,12 @@ const permissions = [
     },
 ]
 
-const getPermission = (item, list, mainMenuId, subMenuId, roleId = 1) => {
+const getPermission = (item, list, mainMenuId, subMenuId, checked, roleId) => {
     try{
+      // console.log(checked)
         const permission = list.find( per => per?.mainMenuId === mainMenuId && per?.subMenuId === subMenuId && per?.roleId === roleId);
-        return permission[item.id];
+        const isChecked =  checked.find(c => c.id === subMenuId && c.roleId === roleId)?.checked
+        return (isChecked && permission[item?.id]);
     }catch(e){
         return false;
     }
@@ -43,7 +45,8 @@ const PermissionList = ({
     mainMenuId,
     subMenuId,
     roleId,
-    permissionList
+    permissionList,
+    checkAll
 }) => {
   return (
     // <section className='my-16'>
@@ -51,7 +54,7 @@ const PermissionList = ({
       <FormGroup row>
         {
           permissions.map(item => (
-            <PermissionCheckbox setPayload={setPayload} payload={payload} mainMenuId={mainMenuId} subMenuId={subMenuId} roleId={roleId || 1} id={item.id} name={item.name} checked={getPermission(item, permissionList, mainMenuId,subMenuId,roleId)}/>
+            <PermissionCheckbox setPayload={setPayload} payload={payload} mainMenuId={mainMenuId} subMenuId={subMenuId} roleId={roleId} id={item.id} name={item.name} checked={getPermission(item, permissionList, mainMenuId,subMenuId,checkAll,roleId)}/>
           ))
         }
       </FormGroup>

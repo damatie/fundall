@@ -154,30 +154,33 @@ const CreateNewOpening = ({ customHook}) => {
 							);
 						})}
 					</SelectTextField>
-
-					<SelectTextField
-						label="Application Status"
-						className="my-10"
-						control={control}
-						name="applicationStatus"
-						id="applicationStatus"
-						register={register}
-						error={errors.applicationStatus}
-						message={errors.applicationStatus?.message}
-						value={contentSelectedItem?.applicationStatus}
-						onChange={ (ev) => setContentSelectedItem({
-							...contentSelectedItem,
-							applicationStatus: ev.target.value
-						})}
-					>
-						{['Permanent', 'Temporary'].map((item, index) => {
-							return (
-								<MenuItem value={item} key={index}>
-									{item}
-								</MenuItem>
-							);
-						})}
-					</SelectTextField>
+					<div className="my-16">
+						<SelectTextField
+							label="Application Status"
+							className="my-10"
+							control={control}
+							name="applicationStatus"
+							id="applicationStatus"
+							register={register}
+							error={errors.applicationStatus}
+							message={errors.applicationStatus?.message}
+							value={contentSelectedItem?.applicationStatus}
+							onChange={ (ev) => setContentSelectedItem({
+								...contentSelectedItem,
+								applicationStatus: ev.target.value
+							})}
+						>
+							{['Permanent', 'Temporary'].map((item, index) => {
+								return (
+									<MenuItem value={item} key={index}>
+										{item}
+									</MenuItem>
+								);
+							})}
+						</SelectTextField>
+					</div>
+					<div>
+					<Typography>CV / Resume</Typography>
 					<FileInput
 						accept="application/pdf"
 						id="input"
@@ -198,6 +201,7 @@ const CreateNewOpening = ({ customHook}) => {
 							});
 						}}
 					/>
+					</div>
 				</GridSystem>
 				{(contentList.length <= 3) && (
 					<SharedButton

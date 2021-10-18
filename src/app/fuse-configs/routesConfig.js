@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import FuseUtils from '@fuse/utils';
@@ -39,14 +38,14 @@ import RecruitmentConfig from 'app/main/recruitment/recruitmentConfig';
 import ContactsAppConfig from 'app/main/contact_list/ContactsAppConfig';
 import DisciplinaryCaseConfig from 'app/main/disciplinary_case/DisciplinaryCaseConfig';
 import CheckListConfig from 'app/main/check_list/CheckListConfig';
-import SrepConfig from 'app/main/srep/srepConfig'
+import SrepConfig from 'app/main/srep/srepConfig';
 import DashboardConfig from 'app/main/personalTraining/personalTrainingDashboard/DashboardConfig';
 import LineManagerDashboardConfig from 'app/main/line_manager/training/TrainingDashboard/lineManagerDashboardConfig';
 import LeaveMgtConfig from 'app/main/leaveMgt/leaveMgtConfig';
 import PerformanceAppraisalConfig from 'app/main/performanceAppraisal/PerformanceAppraisalConfig';
 import FinanceManagerDashboardConfig from 'app/main/file-manager/TrainingDashboard/FinanceManagerDashboardConfig';
 import HRRecruitmentDashboardConfig from 'app/main/recruitment/recruitmentDashboard/DashboardConfig';
-import LoanDashboardConfig from "app/main/loanApp/dashboard/loanDashboardConfig";
+import LoanDashboardConfig from 'app/main/loanApp/dashboard/loanDashboardConfig';
 import JobTitleConfig from 'app/main/jobTitle/JobTitleConfig';
 import EmployeeGradeConfig from 'app/main/employeeGrade/EmployeeGradeConfig';
 import BehaviouralAttributeConfig from 'app/main/behaviouralAttribute/BehaviouralAttributeConfig';
@@ -58,6 +57,8 @@ import AttendanceConfig from 'app/main/attendance/attendanceConfig';
 import ExitManagement from 'app/main/exitMgt/exitConfig';
 import CompensationColumnsConfig from 'app/main/compensationColumns/CompensationColumnsConfig';
 import ExternalCandidateConfig from 'app/main/recruitment/externalCandidate/externalCandidateConfig';
+import SiteConfig from 'app/main/siteConfig/SiteConfig';
+import AccountSettingsConfig from 'app/main/accountSettings/accountSettingsConfig';
 
 const routeConfigs = [
 	// ExampleConfig,
@@ -116,7 +117,9 @@ const routeConfigs = [
 	// createEmployeeConfig,
 	EmployeeInformationConfig,
 	CompensationColumnsConfig,
-	ExternalCandidateConfig
+	ExternalCandidateConfig,
+	SiteConfig,
+	AccountSettingsConfig
 ];
 
 const checkIfLoggedIn = () => {
@@ -125,15 +128,17 @@ const checkIfLoggedIn = () => {
 	} else {
 		return false;
 	}
-}
+};
 
 const routes = [
 	...FuseUtils.generateRoutesFromConfigs(routeConfigs),
 	{
 		path: '/',
 		exact: true,
-		component: checkIfLoggedIn() ? React.lazy(() => import('app/main/employee/dashboard/ProjectDashboardApp')) : () => <Redirect to="/auth/login" />
-	},
+		component: checkIfLoggedIn()
+			? React.lazy(() => import('app/main/employee/dashboard/ProjectDashboardApp'))
+			: () => <Redirect to="/auth/login" />
+	}
 ];
 
 export default routes;

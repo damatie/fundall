@@ -230,45 +230,97 @@ const CreateNewOpening = ({ customHook}) => {
 						}
 					/>
 				</div>
-				<GridSystem>
-					{!(contentSelectedItem?.openingType === 'National Service' || contentSelectedItem?.openingType === 'Industrial Training') && (
-						<>
-						{contentSelectedItem?.openingType === 'Replacement' && (
-							<AutoCompleteInput
-								// className='my-10'
-								name='employeeToReplace'
-								label='Employee to be replaced'
-								// control={control}
-								data={employees || []}
-								value={contentSelectedItem?.employeeToReplace}
-								defaultValue={contentSelectedItem?.employeeToReplace}
-								error={errors.employeeToReplace || !employees.length}
-								helperText={errors.employeeToReplace?.message || !employees.length ? 'No Employees found' : ''}
-								onChange={(ev, value) => {
-									register({ name: 'employeeToReplace', value: value?.id });
-									setContentSelectedItem({
+				{contentSelectedItem?.openingType &&(
+					<>
+						<GridSystem>
+							{!(contentSelectedItem?.openingType === 'National Service' || contentSelectedItem?.openingType === 'Industrial Training') && (
+								<>
+								{contentSelectedItem?.openingType === 'Replacement' && (
+									<AutoCompleteInput
+										// className='my-10'
+										name='employeeToReplace'
+										label='Employee to be replaced'
+										// control={control}
+										data={employees || []}
+										value={contentSelectedItem?.employeeToReplace}
+										defaultValue={contentSelectedItem?.employeeToReplace}
+										error={errors.employeeToReplace || !employees.length}
+										helperText={errors.employeeToReplace?.message || !employees.length ? 'No Employees found' : ''}
+										onChange={(ev, value) => {
+											register({ name: 'employeeToReplace', value: value?.id });
+											setContentSelectedItem({
+												...contentSelectedItem,
+												employeeToReplace: value?.id
+											})
+										}}
+									/>
+								)}
+
+									<SelectTextField
+										label="Position Type"
+										className="my-10"
+										control={control}
+										name="positionType"
+										id="positionType"
+										error={errors.positionType}
+										message={errors.positionType?.message}
+										value={contentSelectedItem?.positionType}
+										onChange={ (ev) => setContentSelectedItem({
 										...contentSelectedItem,
-										employeeToReplace: value?.id
-									  })
-								}}
-							/>
-						)}
+										positionType: ev.target.value
+										})}
+									>
+										{['Permanent (On Site)', 'Permanent (Remote)', 'Temporary (On Site)', 'Temporary (Remote)'].map((item, index) => {
+											return (
+												<MenuItem value={item} key={index}>
+													{item}
+												</MenuItem>
+											);
+										})}
+									</SelectTextField>
+								</>
+							)}
+
+							{(contentSelectedItem?.openingType === 'National Service' || contentSelectedItem?.openingType === 'Industrial Training') && (
+								<SelectTextField
+									label="Duration"
+									className="my-10"
+									control={control}
+									name="duration"
+									id="duration"
+									error={errors.duration}
+									message={errors.duration?.message}
+									value={contentSelectedItem?.duration}
+									onChange={ (ev) => setContentSelectedItem({
+									...contentSelectedItem,
+									duration: ev.target.value
+									})}
+								>
+									{getDurations().map((item, index) => {
+										return (
+											<MenuItem value={item} key={index}>
+												{item}
+											</MenuItem>
+										);
+									})}
+								</SelectTextField>
+							)}
 
 							<SelectTextField
-								label="Position Type"
-								className="my-10"
+								label="Urgency"
+								className="mt-10 my-10"
 								control={control}
-								name="positionType"
-								id="positionType"
-								error={errors.positionType}
-								message={errors.positionType?.message}
-								value={contentSelectedItem?.positionType}
+								name="urgency"
+								id="urgency"
+								error={errors.urgency}
+								message={errors.urgency?.message}
+								value={contentSelectedItem?.urgency}
 								onChange={ (ev) => setContentSelectedItem({
-								  ...contentSelectedItem,
-								  positionType: ev.target.value
+								...contentSelectedItem,
+								urgency: ev.target.value
 								})}
 							>
-								{['Permanent (On Site)', 'Permanent (Remote)', 'Temporary (On Site)', 'Temporary (Remote)'].map((item, index) => {
+								{['High','Medium', 'Low'].map((item, index) => {
 									return (
 										<MenuItem value={item} key={index}>
 											{item}
@@ -276,148 +328,98 @@ const CreateNewOpening = ({ customHook}) => {
 									);
 								})}
 							</SelectTextField>
-						</>
-					)}
-
-					{(contentSelectedItem?.openingType === 'National Service' || contentSelectedItem?.openingType === 'Industrial Training') && (
-						<SelectTextField
-							label="Duration"
-							className="my-10"
-							control={control}
-							name="duration"
-							id="duration"
-							error={errors.duration}
-							message={errors.duration?.message}
-							value={contentSelectedItem?.duration}
-							onChange={ (ev) => setContentSelectedItem({
-							  ...contentSelectedItem,
-							  duration: ev.target.value
-							})}
-						>
-							{getDurations().map((item, index) => {
-								return (
-									<MenuItem value={item} key={index}>
-										{item}
-									</MenuItem>
-								);
-							})}
-						</SelectTextField>
-					)}
-
-					<SelectTextField
-						label="Urgency"
-						className="mt-10 my-10"
-						control={control}
-						name="urgency"
-						id="urgency"
-						error={errors.urgency}
-						message={errors.urgency?.message}
-						value={contentSelectedItem?.urgency}
-						onChange={ (ev) => setContentSelectedItem({
-						  ...contentSelectedItem,
-						  urgency: ev.target.value
-						})}
-					>
-						{['High','Medium', 'Low'].map((item, index) => {
-							return (
-								<MenuItem value={item} key={index}>
-									{item}
-								</MenuItem>
-							);
-						})}
-					</SelectTextField>
-					<div>
-						<Typography>Desired Hire date</Typography>
-						<Input
-							className="my-10"
-							name="hireDate"
-							id="hireDate"
-							value={contentSelectedItem?.hireDate}
-							onChange={ (ev) => setContentSelectedItem({
-							...contentSelectedItem,
-							hireDate: ev.target.value
-							})}
-							error={errors.hireDate}
-							message={errors.hireDate?.message}
-							refs={register}
-							type="date"
-						/>
-					</div>
-				</GridSystem>
-				{(contentSelectedItem?.openingType === 'National Service' || contentSelectedItem?.openingType === 'Industrial Training') && (
-					<Paper variant="outlined" className={classes.root} title="Position type">
-						<Typography>Temporary</Typography>
-						<GridSystem>
 							<div>
-								<Typography>Start Date</Typography>
+								<Typography>Desired Hire date</Typography>
 								<Input
-									className="my-5"
-									name="startDate"
-									id="startDate"
-									value={contentSelectedItem?.startDate}
+									className="my-10"
+									name="hireDate"
+									id="hireDate"
+									value={contentSelectedItem?.hireDate}
 									onChange={ (ev) => setContentSelectedItem({
 									...contentSelectedItem,
-									startDate: ev.target.value
+									hireDate: ev.target.value
 									})}
-									error={errors.startDate}
-									message={errors.startDate?.message}
-									refs={register}
-									type="date"
-								/>
-							</div>
-
-							<div>
-								<Typography>End Date</Typography>
-								<Input
-									className="my-5"
-									name="endDate"
-									id="endDate"
-									value={contentSelectedItem?.endDate}
-									onChange={ (ev) => setContentSelectedItem({
-									...contentSelectedItem,
-									endDate: ev.target.value
-									})}
-									error={errors.endDate}
-									message={errors.endDate?.message}
+									error={errors.hireDate}
+									message={errors.hireDate?.message}
 									refs={register}
 									type="date"
 								/>
 							</div>
 						</GridSystem>
-						<RadioComponent
-							label="Position may become permanent"
-							checked={contentSelectedItem?.positionType === 'Temporary (Position may become permanent)'}
-							id="becomePermanent"
-							value="Temporary (Position may become permanent)"
-							name="becomePermanent"
-							color="primary"
-							onChange={(ev) => {
-								setContentSelectedItem({
-									...contentSelectedItem,
-									positionType: ev.target.value
-								  })
-								}
-							}
-						/>
-						<RadioComponent
-							label="Position may be reappointed"
-							checked={contentSelectedItem?.positionType === 'Temporary (Position may be reappointed)'}
-							id="beReappionted"
-							value="Temporary (Position may be reappointed)"
-							name="beReappionted"
-							color="primary"
-							onChange={(ev) => {
-								setContentSelectedItem({
-									...contentSelectedItem,
-									positionType: ev.target.value
-								  })
-								}
-							}
-						/>
-					</Paper>
-				)}
-				
-				<GridSystem className="my-12">
+						{(contentSelectedItem?.openingType === 'National Service' || contentSelectedItem?.openingType === 'Industrial Training') && (
+							<Paper variant="outlined" className={classes.root} title="Position type">
+								<Typography>Temporary</Typography>
+								<GridSystem>
+									<div>
+										<Typography>Start Date</Typography>
+										<Input
+											className="my-5"
+											name="startDate"
+											id="startDate"
+											value={contentSelectedItem?.startDate}
+											onChange={ (ev) => setContentSelectedItem({
+											...contentSelectedItem,
+											startDate: ev.target.value
+											})}
+											error={errors.startDate}
+											message={errors.startDate?.message}
+											refs={register}
+											type="date"
+										/>
+									</div>
+
+									<div>
+										<Typography>End Date</Typography>
+										<Input
+											className="my-5"
+											name="endDate"
+											id="endDate"
+											value={contentSelectedItem?.endDate}
+											onChange={ (ev) => setContentSelectedItem({
+											...contentSelectedItem,
+											endDate: ev.target.value
+											})}
+											error={errors.endDate}
+											message={errors.endDate?.message}
+											refs={register}
+											type="date"
+										/>
+									</div>
+								</GridSystem>
+								<RadioComponent
+									label="Position may become permanent"
+									checked={contentSelectedItem?.positionType === 'Temporary (Position may become permanent)'}
+									id="becomePermanent"
+									value="Temporary (Position may become permanent)"
+									name="becomePermanent"
+									color="primary"
+									onChange={(ev) => {
+										setContentSelectedItem({
+											...contentSelectedItem,
+											positionType: ev.target.value
+										})
+										}
+									}
+								/>
+								<RadioComponent
+									label="Position may be reappointed"
+									checked={contentSelectedItem?.positionType === 'Temporary (Position may be reappointed)'}
+									id="beReappionted"
+									value="Temporary (Position may be reappointed)"
+									name="beReappionted"
+									color="primary"
+									onChange={(ev) => {
+										setContentSelectedItem({
+											...contentSelectedItem,
+											positionType: ev.target.value
+										})
+										}
+									}
+								/>
+							</Paper>
+						)}
+					
+						<GridSystem className="my-12">
 					<SelectTextField
 						label="Country"
 						className="my-10"
@@ -461,6 +463,8 @@ const CreateNewOpening = ({ customHook}) => {
 						</SelectTextField>
 					)}
 				</GridSystem>
+					</>
+				)}
 
 				{(contentList.length <= 3) && (
 					<SharedButton

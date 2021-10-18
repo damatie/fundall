@@ -111,7 +111,8 @@ const CandidatesTable = ({ customHook, search,  rows, showCheckBox }) => {
 		push,
 		positionId,
 		handleDownload,
-		handleSelectShorted
+		handleSelectShorted,
+		isManager
 	} = customHook;
 	const data = rows
 
@@ -133,7 +134,7 @@ const CandidatesTable = ({ customHook, search,  rows, showCheckBox }) => {
 				accessor: 'id'
 			}}
 			downloadButton={{
-				show: true,
+				show: isManager(),
 				handleDownload: handleDownload,
 				accessor: 'resume'
 			}}

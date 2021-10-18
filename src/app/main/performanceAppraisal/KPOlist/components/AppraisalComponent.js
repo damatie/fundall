@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import identifier from '../../../../../assets/icons/identifier.svg';
 import BehavioralAttributes from './BehavioralAttributes';
+import AppraisalScoreInputDiv from './AppraisalScoreInputDiv';
+import SummaryOfPerformanceReview from './SummaryOfPerformanceReview';
+import PersonalDevelopmentalNeeds from './PersonalDevelopmentalNeeds';
 
 const useStyles = makeStyles(theme => ({
 	appraisalComponentDiv: {
@@ -74,16 +77,40 @@ function AppraisalComponentLabel({ theName, toggleFunction, toggleVariable }) {
 const AppraisalComponent = ({ name, type }) => {
 	const classes = useStyles();
 	const [expandDropDown, setExpandDropDown] = useState(false);
+	const [showOverAllPerformanceScore, setShowOverAllPerformanceScore] = useState(false);
 
 	const toggleExpandDropDown = () => {
 		console.log('clicked');
 		setExpandDropDown(!expandDropDown);
 	};
 
+	setInterval(() => {
+		if (JSON.parse(localStorage.getItem('overAllPerformanceScore'))) {
+			setShowOverAllPerformanceScore(true);
+		} else {
+			setShowOverAllPerformanceScore(false);
+		}
+	}, 100);
+
+	useEffect(() => console.log(showOverAllPerformanceScore, 'showOverAllPerformanceScore'), [
+		showOverAllPerformanceScore
+	]);
+
 	return (
 		<div className={` ${classes.appraisalComponentDiv}`}>
 			<AppraisalComponentLabel toggleFunction={toggleExpandDropDown} theName={name} toggleVariable={expandDropDown} />
-			{expandDropDown && type === 'ba' ? <BehavioralAttributes /> : null}
+			{expandDropDown && type === 'ba' ? (
+				<>
+					<BehavioralAttributes />
+					{showOverAllPerformanceScore && (
+						<AppraisalScoreInputDiv spanText="Overall Performance Score" inputValue="" disabled={true} />
+					)}
+				</>
+			) : expandDropDown && type === 'sopr' ? (
+				<SummaryOfPerformanceReview />
+			) : (
+				expandDropDown && type === 'pdn' && <PersonalDevelopmentalNeeds />
+			)}
 		</div>
 	);
 };

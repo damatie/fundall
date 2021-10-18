@@ -80,26 +80,26 @@ function getStepContent(stepIndex, handleNext, handleBack, hasEntities) {
   if (hasEntities) {
     switch (stepIndex) {
       case 0:
-        return <><AccountSettings handleNext={handleNext} handleBack={handleBack}/></>;
+        return <section><AccountSettings handleNext={handleNext} handleBack={handleBack}/></section>;
       case 1:
-        return <><OrganizationInformation handleNext={handleNext} handleBack={handleBack}/></>;
+        return <section><OrganizationInformation handleNext={handleNext} handleBack={handleBack}/></section>;
       case 2:
-        return <><Entities handleNext={handleNext} handleBack={handleBack}/></>;
+        return <section><Entities handleNext={handleNext} handleBack={handleBack}/></section>;
       case 3:
-        return <><Compensation handleNext={handleNext} handleBack={handleBack}/></>
+        return <section><Compensation handleNext={handleNext} handleBack={handleBack}/></section>
       default:
-        return <></>;
+        return <section></section>;
     }
   } else {
     switch (stepIndex) {
       case 0:
-        return <><AccountSettings handleNext={handleNext} handleBack={handleBack}/></>;
+        return <section><AccountSettings handleNext={handleNext} handleBack={handleBack}/></section>;
       case 1:
-        return <><OrganizationInformation handleNext={handleNext} handleBack={handleBack}/></>;
+        return <section><OrganizationInformation handleNext={handleNext} handleBack={handleBack}/></section>;
       case 2:
-        return <><Compensation handleNext={handleNext} handleBack={handleBack}/></>
+        return <section><Compensation handleNext={handleNext} handleBack={handleBack}/></section>
       default:
-        return <></>;
+        return <section></section>;
     }
   }
 }
@@ -135,11 +135,19 @@ function StepperMain() {
     setActiveStep(0);
   };
 
+  const handleStepperClick = (index) => {
+		if(index > activeStep){
+			handleNext();
+		}else{
+			handleBack();
+		}
+	}
+
   return (
-    <div className={classes.root}>
+    <section className={classes.root}>
       <Stepper activeStep={activeStep} alternativeLabel>
-        {steps.map((label) => (
-          <Step key={label.id}>
+        {steps.map((label, index) => (
+          <Step key={label.id} onClick={(ev) => handleStepperClick(index)}>
             <StepLabel>
               <span><strong>{label.title}</strong></span>
               <span><Typography variant="body2" color="initial" className='my-5'>{label.details}</Typography></span>
@@ -147,7 +155,7 @@ function StepperMain() {
           </Step>
         ))}
       </Stepper>
-      <div>
+      <section>
         {activeStep === steps.length ? (
         //   <div>
         //     <Typography className={classes.instructions}>All steps completed</Typography>
@@ -170,7 +178,7 @@ function StepperMain() {
         ) : (
           <div>
             <div style={{ background: '#fff', height: '100%', overflowY: 'scroll'}}>
-              <Typography className={classes.instructions}>{getStepContent(activeStep, handleNext, handleBack, data?.company?.hasEntities)}</Typography>
+             {getStepContent(activeStep, handleNext, handleBack, data?.company?.hasEntities)}
             </div>
             {/* <div>
               <Button
@@ -185,9 +193,10 @@ function StepperMain() {
               </Button>
             </div> */}
           </div>
+          // getStepContent(activeStep, handleNext, handleBack, data?.company?.hasEntities)
         )}
-      </div>
-    </div>
+      </section>
+    </section>
   );
 }
 

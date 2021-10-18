@@ -446,8 +446,8 @@ const CreateNewOpening = ({ customHook}) => {
 							id="closingDate"
 							value={contentSelectedItem?.closingDate}
 							onChange={ (ev) => setContentSelectedItem({
-							...contentSelectedItem,
-							closingDate: ev.target.value
+								...contentSelectedItem,
+								closingDate: ev.target.value
 							})}
 							error={errors.closingDate}
 							message={errors.closingDate?.message}

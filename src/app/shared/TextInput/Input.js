@@ -26,26 +26,28 @@ const Input = forwardRef((props, ref) => {
     multiline,
     placeholder,
     maxLength,
+    style,
+	noFullWidth
   } = props;
 
-  const [showPassword, setShowPassword] = useState(false);
+	const [showPassword, setShowPassword] = useState(false);
 
-  const handleClickShowPassword = () => {
-    setShowPassword(!showPassword);
-  };
+	const handleClickShowPassword = () => {
+		setShowPassword(!showPassword);
+	};
 
-  const handleMouseDownPassword = (e) => {
-    e.preventDefault();
-  };
+	const handleMouseDownPassword = e => {
+		e.preventDefault();
+	};
 
-  const toggleType = () => {
-    return showPassword ? 'text' : 'password';
-  };
+	const toggleType = () => {
+		return showPassword ? 'text' : 'password';
+	};
 
   return (
     <TextField
       {...props}
-      className={clsx('w-full', className)}
+	  className={clsx(!noFullWidth && 'w-full', className)}
       size={size || 'medium'}
       color={color || 'secondary'}
       type={type === 'password' ? toggleType() : type}
@@ -62,6 +64,7 @@ const Input = forwardRef((props, ref) => {
       rows={multiline && rows || 4}
       multiline={multiline && true}
       placeholder={placeholder}
+      style={style}
       InputProps={type === 'password' ? {
         endAdornment: (
           <InputAdornment position="end">

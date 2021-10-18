@@ -57,7 +57,7 @@ const Permission = () => {
                     value={value} 
                     index={ind}
                     state={state}
-                    role={role}
+                    role={(Object.keys(role).length > 0) ? role : state.roles[0]}
                     data={state.data}
                     setPayload={setPayload}
                     payload={payload}

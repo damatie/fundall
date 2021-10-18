@@ -6,8 +6,8 @@ const createEmployeeConfig = {
 	},
 	routes: [
 		{
-			path: '/hr/create-employee',
-			component: React.lazy(() => import('./AddNewEmployee'))
+			path: '/hr/createEmployee',
+			component: React.lazy(() => import('./EmployeeCreation'))
 		},
 	]
 };

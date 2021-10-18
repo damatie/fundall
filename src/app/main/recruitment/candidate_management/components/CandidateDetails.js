@@ -68,7 +68,8 @@ export default function CandidateDetails({ customHook }) {
         content,
         handleEdit,
         showEdit,
-        handleDownload
+        handleDownload,
+		isHR,
     } = customHook;
     // console.log(customHook);
 	return (
@@ -125,7 +126,7 @@ export default function CandidateDetails({ customHook }) {
 									</GridSystem>
 								</Grid>
 								<Grid item lg={2} md={2} sm={2} xs={2} align="left" className="my-10">
-									<UpdateButton
+									{isHR() && (<UpdateButton
 											onClick={() => {
 												console.log(content);
 												console.log('go to update page');
@@ -139,25 +140,10 @@ export default function CandidateDetails({ customHook }) {
                                         </span>{' '}
                                         Update
                                     </UpdateButton>
+                                    )}
 								</Grid>
                             <Grid item lg={10} md={10} sm={10} xs={10} align="left" className="">
                                 <GridSystem>
-                                    <div>
-                                        <Typography variant="body2" color="initial" className={` my-10 ${classes.openingDetailLabel}`}>
-                                            Applicant Name
-                                        </Typography>
-                                        <Typography variant="body2" color="initial" className={` my-10 ${classes.openingDetailContent}`}>
-                                            {content?.applicantName}
-                                        </Typography>
-                                    </div>
-                                    <div>
-                                        <Typography variant="body2" color="initial" className={` my-10 ${classes.openingDetailLabel}`}>
-                                            Applicant Email
-                                        </Typography>
-                                        <Typography variant="body2" color="initial" className={` my-10 ${classes.openingDetailContent}`}>
-                                            {content?.applicantEmail}
-                                        </Typography>
-                                    </div>
                                     <div>
                                         <Typography variant="body2" color="initial" className={` my-10 ${classes.openingDetailLabel}`}>
                                             Contact Number
@@ -199,7 +185,7 @@ export default function CandidateDetails({ customHook }) {
                                             Application Status
                                         </Typography>
                                         <Typography variant="body2" color="initial" className={` my-10 ${classes.openingDetailContent}`}>
-                                            {content?.applicationStatus}
+                                            {content?.status}
                                         </Typography>
                                     </div>
                                 </GridSystem>

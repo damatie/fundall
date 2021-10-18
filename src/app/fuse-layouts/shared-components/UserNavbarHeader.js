@@ -34,6 +34,10 @@ const useStyles = makeStyles(theme => ({
 		'& > img': {
 			borderRadius: '50%'
 		}
+	},
+	avatarDiv: {
+		backgroundColor: '#191e52',
+		color: '#ffffff'
 	}
 }));
 
@@ -58,13 +62,9 @@ function UserNavbarHeader(props) {
 				{profile.email}
 			</Typography>
 			<Avatar
-				className={clsx(classes.avatar, 'avatar')}
+				className={clsx(classes.avatar, 'avatar', classes.avatarDiv, 'avatarDiv')}
 				alt="user photo"
-				src={
-					user.data.photoURL && user.data.photoURL !== ''
-						? profile.profilePicture
-						: user.data.displayName[0]
-				}
+				src={user.data.photoURL && user.data.photoURL !== '' ? profile.profilePicture : user.data.displayName[0]}
 			/>
 		</AppBar>
 	);

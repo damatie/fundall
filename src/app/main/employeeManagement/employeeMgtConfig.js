@@ -15,7 +15,7 @@ const EmployeeMgtConfig = {
 		},
 		{
 			path: '/hr/create-employee',
-			component: React.lazy(() => import('./AddNewEmployee'))
+			component: React.lazy(() => import('./EmployeeCreation'))
 		}
 	]
 };

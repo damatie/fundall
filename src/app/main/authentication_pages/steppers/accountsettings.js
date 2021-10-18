@@ -27,6 +27,7 @@ import currencyList from "app/shared/currencies";
 import dateFormatList from "app/shared/dateformat";
 import { FormHelperText } from "@material-ui/core";
 import { setStepper } from './components/setStepper';
+import moment from 'moment-timezone';
 
 
 const useStyles = makeStyles(theme => ({
@@ -48,7 +49,8 @@ const schema = yup.object().shape({
         .required(errorMsg({ name: 'Time Zone', type: 'required' })),
     dateFormat: yup.string()
         .required(errorMsg({ name: 'Date Format', type: 'required' })),
-    currencies: yup.string()
+    currencies: yup.array()
+        .min(1, 'Must have at least one Currency')
         .required(errorMsg({ name: 'Currencies', type: 'required' })),
     employmentStatus: yup.array()
         .min(1, 'Must have at least one Employment Status')
@@ -83,6 +85,8 @@ export default function AccountSettings({handleNext}) {
     reValidateMode: 'onChange',
     resolver: yupResolver(schema)
   });
+
+  console.log(moment.tz.names);
 
   const dispatch = useDispatch();
   const timezones = timeZone();
@@ -315,14 +319,20 @@ export default function AccountSettings({handleNext}) {
 								labelId="demo-simple-select-outlined-label"
 								id="demo-simple-select-outlined"
 								name="timeZone"
+                value={moment().zoneName()}
 								error={errors.timeZone}
 								// message={errors.timeZone?.message}
 								onChange={handleTimeZoneChange}
 								label="Time Zone"
 							>
-								{timezones.map(item => (
+								{/* {timezones.map(item => (
 									<MenuItem key={item.id} value={item.value}>
 										{item.label}
+									</MenuItem>
+								))} */}
+                {moment.tz.names().map((item, index) => (
+									<MenuItem key={index} value={item}>
+										{item}
 									</MenuItem>
 								))}
 							</Select>

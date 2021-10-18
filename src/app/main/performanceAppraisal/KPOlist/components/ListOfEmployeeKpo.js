@@ -9,8 +9,29 @@ import KpoStatus from './KpoStatus';
 // import { getAllCategory } from '../../KPOcategoryList/store/actions';
 // import withReducer from 'app/store/withReducer';
 // import kpoCategoryReducer from '../../KPOcategoryList/store/reducers/categoryList.reducer';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles(theme => ({
+	employeeNameDiv: {
+		// display: "flex",
+
+		'& span': {
+			display: 'block'
+		}
+	},
+	requestModification: {
+		backgroundColor: '#49CDCD',
+		marginTop: '3%',
+		borderRadius: 10,
+		color: '#ffffff',
+		fontSize: 11,
+		padding: '3px 7px 3px 7px',
+		width: 'fit-content'
+	}
+}));
 
 const ListOfEmployeeKpo = ({ customHook, isAssigned, value, request, type, filterState }) => {
+	const classes = useStyles();
 	// const dispatch = useDispatch();
 	// const entireState = useSelector(state => state);
 	// const { data: kpoCategory } = useSelector(state => state.kpoCategory);
@@ -65,7 +86,14 @@ const ListOfEmployeeKpo = ({ customHook, isAssigned, value, request, type, filte
 					original: { employee }
 				}
 			}) => {
-				return <>{`${employee?.firstName} ${employee?.lastName}`}</>;
+				return (
+					<div className={` ${classes.employeeNameDiv}`}>
+						<span>{`${employee?.firstName} ${employee?.lastName}`}</span>
+						{employee.requestModification && (
+							<span className={` ${classes.requestModification}`}>Request Modification</span>
+						)}
+					</div>
+				);
 			}
 		},
 		{
@@ -166,7 +194,10 @@ const ListOfEmployeeKpo = ({ customHook, isAssigned, value, request, type, filte
 				lastName: 'Manager'
 			},
 			employee: {
-				email: 'jt@gmail.com'
+				email: 'jt@gmail.com',
+				firstName: 'Naruto',
+				lastName: 'Uzumaki',
+				requestModification: true
 			},
 			jobTitle: {
 				name: 'Software Dev'
@@ -197,7 +228,10 @@ const ListOfEmployeeKpo = ({ customHook, isAssigned, value, request, type, filte
 				lastName: 'Manager'
 			},
 			employee: {
-				email: 'ds@gmail.com'
+				email: 'ds@gmail.com',
+				firstName: 'Emiya',
+				lastName: 'Shirou',
+				requestModification: true
 			},
 			jobTitle: {
 				name: 'Software Tester'
@@ -228,7 +262,10 @@ const ListOfEmployeeKpo = ({ customHook, isAssigned, value, request, type, filte
 				lastName: 'Salvatore'
 			},
 			employee: {
-				email: 'sts@gmail.com'
+				email: 'sts@gmail.com',
+				firstName: 'Sakura',
+				lastName: 'Haruno',
+				requestModification: false
 			},
 			jobTitle: {
 				name: 'Software Developer'

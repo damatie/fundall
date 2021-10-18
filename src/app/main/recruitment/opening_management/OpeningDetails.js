@@ -30,8 +30,8 @@ const OpeningDetails = () => {
 			setPrevUrl('/performance_appraisal/kpo/review/');
 	}, []);
 
-	const state = useSelector(state => state.Recruitment);
-	const candidateState = useSelector(state => state.Candidate.candidate);
+	const state = useSelector(state => state?.Recruitment);
+	const candidateState = useSelector(state => state?.Candidate);
 
 	const customHook = useRecruitmentOpening({
 		dispatch,
@@ -61,7 +61,7 @@ const OpeningDetails = () => {
 			}}
 			header={{
 				icon: '',
-				title: 'RECRUIMENT LIST',
+				title: 'RECRUITMENT LIST',
 				handleSearch: ({ target: { value } }) => console.log(value)
 			}}
 			button={{
