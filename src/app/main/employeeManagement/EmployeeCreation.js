@@ -11,6 +11,7 @@ import withReducer from "app/store/withReducer";
 import employeesReducer from "./store/reducers/employees.reducer";
 import useEmployees from "./hooks/useEmployees";
 import { useDispatch, useSelector } from 'react-redux';
+import EmployeeCompensation from './components/EmployeeCompensation';
 
 const useStyles = makeStyles(theme => ({
 	onBoardingStepperMain: {
@@ -71,7 +72,7 @@ const EmployeeCreation = () => {
     const dispatch = useDispatch();
     const state = useSelector(state => state.employeeMgt);
 
-	const [activeStep, setActiveStep] = React.useState(0);
+	// const [activeStep, setActiveStep] = React.useState(0);
 	const steps = getSteps();
 
     const customHook = useEmployees({
@@ -80,6 +81,7 @@ const EmployeeCreation = () => {
       });
 
     const {
+		activeStep,
         handleBack,
         handleNext
     } = customHook;
@@ -92,6 +94,7 @@ const EmployeeCreation = () => {
 	// };
 
 	const handleStepperClick = (index) => {
+		console.log(index)
 		if(index > activeStep){
 			handleNext();
 		}else{
@@ -108,7 +111,7 @@ const EmployeeCreation = () => {
 			case 0:
 				return <NewEmployeeForm customHook={customHook} goToNextStepper={handleNext} />;
 			case 1:
-				return <></>;
+				return <EmployeeCompensation customHook={customHook} />;
 			default:
 				return 'Unknown stepIndex';
 		}

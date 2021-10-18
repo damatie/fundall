@@ -133,10 +133,10 @@ export const getDept = (id) => {
   };
 };
 
-export const getGrades = () => {
+export const getGrades = (entityId) => {
   return async (dispatch) => {
     try {
-      const { data: { data, success } } = await api.get('/employee-grade');
+      const { data: { data, success } } = await api.get(`/employee-grade/entity/${entityId}`);
       if(success) {
         dispatch({
           type: EMPLOYEE_GRADES,
@@ -195,12 +195,12 @@ export const getAccountSettings = () => {
     }
   };
 };
-export const getCompensations = () => {
+export const getCompensations = (entityId) => {
   return async (dispatch) => {
     try {
       // const userData = localStorage.getItem('user_profile');
       // console.log("Compensations Called")
-      const { data: { data, success } } = await api.get(`/compensation`);
+      const { data: { data, success } } = await api.get(`/compensation/${entityId}`);
       if(success) {
         dispatch({
           type: COMPENSATIONS,
@@ -217,7 +217,7 @@ export const getCompensations = () => {
   };
 };
 
-export const addEmployee = (data) => {
+export const addEmployee = (data,) => {
   return async (dispatch) => {
     try {
       loading('Adding Employee...');

@@ -45,6 +45,7 @@ function Compensation({ handleNext }) {
 
 	const dispatch = useDispatch();
 	const [entityList, setEntityList] = React.useState([]);
+	const [type, setType] = React.useState("");
 	const [selectedEntity, setSelectedEntity] = React.useState({});
 	const [accountSettingsData, setAccountSettingsData] = React.useState({});
 	const [openCompensationModal, setOpenCompensationModal] = React.useState(false);
@@ -83,18 +84,21 @@ function Compensation({ handleNext }) {
 	// 	setOpenEmployeeGradeLevelModal(true);
 	// };
 
-	const handleCompensationCardClicked = item => {
-		setSelectedEntity(item);
+	const handleCompensationCardClicked = (entity, action) => {
+		console.log(action);
+		setType(action);
+		setSelectedEntity(entity);
+		dispatch(Actions.getEntities());
 		setOpenCompensationModal(true);
 	};
 
 	return (
 		<div className={classes.root}>
-			<Typography variant="h5" color="initial" className="my-10">
+			<Typography variant="h5" color="initial" className="my-10" style={{marginBottom: "2em"}}>
 				<strong>Add Compensation Elements</strong>
 			</Typography>
 
-			<Box width="100%">
+			<Box width="100%" className="mt-6" style={{marginTop: "2em"}}>
 				{entityList.map((item, index) => (
 					<CompensationCard key={index} entity={item} onClickHandler={handleCompensationCardClicked} />
 				))}
@@ -103,7 +107,9 @@ function Compensation({ handleNext }) {
 			<CompensationModal
 				open={openCompensationModal}
 				selectedEntity={selectedEntity}
-				setOpen={setOpenCompensationModal}
+				setOpen={setOpenCompensationModal} 
+				type={type}
+				setType={setType}
 				data={{}}
 				edit={false}
 			/>

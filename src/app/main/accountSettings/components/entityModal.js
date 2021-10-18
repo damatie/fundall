@@ -47,8 +47,9 @@ const schema = yup.object().shape({
         .required(errorMsg({ name: 'Entity Addresses', type: 'required' })),
 });
 
-export default function EntityModal ({open, setOpen, edit, data}) {
-    
+export default function EntityModal ({open, setOpen, item, edit, data, type}) {
+    console.log(type)
+    console.log(item)
     const { register, handleSubmit, formState:{ errors }, setValue, getValues } = useForm({
         mode: "onBlur",
         reValidateMode: 'onChange',
@@ -59,10 +60,10 @@ export default function EntityModal ({open, setOpen, edit, data}) {
     // const entityAdd = data?.address !== '' ? JSON.parse(data?.address) : [];
     const [newAdded, setNewAdded] = React.useState([]);
     const [updated, setUpdated] = React.useState([]);
-    const [entityName, setEntityName] = React.useState(data?.entityName || "");
-    const [description, setDescription] = React.useState(data?.description || "");
-    const [employeeCode, setEmployeeCode] = React.useState(data?.employeeCode || "");
-    const [addresses, setAddresses] = React.useState(data.address || []);
+    const [entityName, setEntityName] = React.useState((type?.option === 'EDIT' && type?.component === 'ENTITY') ? data?.entityName || item?.entityName : "");
+    const [description, setDescription] = React.useState((type?.option === 'EDIT' && type?.component === 'ENTITY') ? data?.description || item?.description : "");
+    const [employeeCode, setEmployeeCode] = React.useState((type?.option === 'EDIT' && type?.component === 'ENTITY') ? data?.employeeCode || item?.employeeCode  : "");
+    const [addresses, setAddresses] = React.useState((type?.option === 'EDIT' && type?.component === 'ENTITY') ? data.address || item?.address : []);
     const [addressesErr, setAddressesErr] = React.useState("");
 
     React.useEffect(() => {
@@ -76,10 +77,18 @@ export default function EntityModal ({open, setOpen, edit, data}) {
       }, [addresses]);
     
     React.useEffect(() => {
-        if (edit === false) {
+        if (edit === false || !(type?.option === 'EDIT' && type?.component === 'ENTITY')) {
             data = {};
         }
     }, []);
+
+    React.useEffect(() => {
+        setEntityName((type?.option === 'EDIT' && type?.component === 'ENTITY') ? data?.entityName || item?.entityName : "");
+        setDescription((type?.option === 'EDIT' && type?.component === 'ENTITY') ? data?.description || item?.description : "");
+        setEmployeeCode((type?.option === 'EDIT' && type?.component === 'ENTITY') ? data?.employeeCode || item?.employeeCode  : "");
+        setAddresses((type?.option === 'EDIT' && type?.component === 'ENTITY') ? data.address || item?.address : []);
+    
+    }, [type, item])
     
     React.useEffect(() => {
         setAddressesErr(errors.address?.message);
@@ -103,11 +112,11 @@ export default function EntityModal ({open, setOpen, edit, data}) {
     const onSubmit = async (value) => {
         const form = { ...value};
         // console.log('form: ', form);
-        if (edit) {
+        if (edit || (type?.option === 'EDIT' && type?.component === 'ENTITY')) {
             try {
-                form.id = data?.id;
+                form.id = data?.id || item?.id;
                 loading('Updating Entity...');
-                const { data: { message, success  } } = await api.patch(`/entity/${data.id}`, form);
+                const { data: { message, success  } } = await api.patch(`/entity/${form.id}`, form);
                 if (success) {
                     swal.fire({
                         text: message ?? 'Something went wrong...',
@@ -160,7 +169,7 @@ export default function EntityModal ({open, setOpen, edit, data}) {
 
   return (
     <Modal
-      title={edit ? 'Edit Entity' : 'Add Entity'}
+      title={(type?.option === 'EDIT' && type?.component === 'ENTITY') || edit ? 'Edit Entity' : 'Add Entity'}
       handleClose={() => setOpen(false)}
       open={open}
     >

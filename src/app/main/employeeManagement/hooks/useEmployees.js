@@ -68,17 +68,21 @@ const useEmployees = ({dispatch, state}) => {
     resolver: yupResolver(schema)
   });
 
-  const { entities, roles, accountSettings, grades, loading, employees } = state;
+  const { entities, roles, accountSettings, compensationData, jobTitles, grades, loading, employees } = state;
   // // console.log('roles: ', roles);
   const employmentStatusList = accountSettings?.employmentStatus ?? [];
   const modeOfEmploymentList = accountSettings?.modeOfEmployment ?? [];
-  const jobTitles = accountSettings?.jobTitle ?? [];
+  const compensations = compensationData?.columns || [];
+  // const jobTitles = accountSettings?.jobTitle ?? [];
   const [checked, setChecked] = React.useState(true);
   const [departments, setDepartments] = React.useState([]);
   const [activeStep, setActiveStep] = React.useState(0);
 	const [contentSelectedItem, setContentSelectedItem] = React.useState({
 		id: 0,
+    entityId: 0,
 		firstName: '',
+    email: '',
+    personalEmail: '',
 		lastName: '',
 		middleName: '',
 		srgIdNumber: '',
@@ -90,25 +94,53 @@ const useEmployees = ({dispatch, state}) => {
 		employmentStatus: '',
     modeOfEmployment: '',
     startDate: '',
-    newsletter: false
+    newsletter: false,
+    compensation: compensationData?.columns || [],
+    monthlyGross: 0
 	});
 
   React.useEffect(() => {
     dispatch(Actions.getEntities());
     dispatch(Actions.getRoles());
-    dispatch(Actions.getGrades());
     dispatch(Actions.getJobTitle());
     dispatch(Actions.getAccountSettings());
     dispatch(Actions.getEmployees());
+  }, []);
+
+  React.useEffect(() => {
+    if(contentSelectedItem?.entityId > 0){
+      dispatch(Actions.getCompensations(contentSelectedItem?.entityId));
+      dispatch(Actions.getGrades(contentSelectedItem?.entityId));
+    }
+  }, [contentSelectedItem?.entityId])
+
+  React.useEffect(() => {
+      setContentSelectedItem({
+          ...contentSelectedItem,
+          compensation: compensations?.map((comp) => {
+              return {
+                  name: comp.name,
+                  value: (Number(comp.value) / 100) * Number(contentSelectedItem?.grossAnnualSalary).toFixed(2)
+              }
+          })
+      })
   }, []);
 
   const handleCheckedChange = (event) => {
     setChecked(event.target.checked);
   };
 
-  const onSubmit = (value) => {
-    console.log(value)
-    dispatch(Actions.addEmployee(contentSelectedItem));
+  const handleBack = () => {
+		setActiveStep(prevActiveStep => prevActiveStep - 1);
+	};
+
+	const handleNext = () => {
+		setActiveStep(prevActiveStep => prevActiveStep + 1);
+	};
+
+  const onSubmit = () => {
+    console.log(contentSelectedItem)
+    // dispatch(Actions.addEmployee(contentSelectedItem));
   };
 
   const handleOpenModal = () => {
@@ -139,14 +171,6 @@ const useEmployees = ({dispatch, state}) => {
     dispatch(Actions.getDept(id));
   }
 
-  const handleBack = () => {
-		setActiveStep(prevActiveStep => prevActiveStep - 1);
-	};
-
-	const handleNext = () => {
-		setActiveStep(prevActiveStep => prevActiveStep + 1);
-	};
-
   return {
     control,
     errors,
@@ -160,6 +184,7 @@ const useEmployees = ({dispatch, state}) => {
     handleFilter,
     handleBack,
     handleNext,
+    activeStep,
     handleGetDept,
     handleCheckedChange,
     employmentStatusList,
@@ -173,7 +198,8 @@ const useEmployees = ({dispatch, state}) => {
     departments,
     setDepartments,
     contentSelectedItem,
-    setContentSelectedItem
+    setContentSelectedItem,
+    compensations
   };
 };
 

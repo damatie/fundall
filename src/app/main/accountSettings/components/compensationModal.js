@@ -18,21 +18,9 @@ import * as Actions from 'app/main/employeeManagement/store/actions';
 import { FormHelperText } from '@material-ui/core';
 import Modal from './modal';
 
-export default function CompensationModal({ open, setOpen, selectedEntity, data }) {
-	// const {
-	// 	register,
-	// 	handleSubmit,
-	// 	formState: { errors },
-	// 	setValue,
-	// 	getValues
-	// } = useForm({
-	// 	mode: 'onBlur',
-	// 	reValidateMode: 'onChange',
-	// 	resolver: yupResolver(schema)
-	// });
+export default function CompensationModal({ open, setOpen, selectedEntity, data, type, setType }) {
 
-	// console.log(selectedEntity);
-
+	console.log({type});
 	const dispatch = useDispatch();
 	// const entityAdd = data?.address !== '' ? JSON.parse(data?.address) : [];
 	const [extraMonth, setExtraMonth] = React.useState(false);
@@ -45,6 +33,34 @@ export default function CompensationModal({ open, setOpen, selectedEntity, data 
 			percentage: 0
 		}
 	});
+
+	const columns = selectedEntity?.compensation?.columns || [];
+
+	React.useEffect(() => {
+		if(type === 'EDIT'){
+			setTotalPercentage(columns?.map(c => Number(c.value))?.reduce((a, b) => a + b))
+			setExtraMonth(columns.map(c => c.name).includes("13th Month"));
+			setExtraMonthPercentage(Number(columns.find(c => c.name === "13th Month")?.value));
+			let data = columns.filter(c => c.name !== '13th Month').map((item, index) => {
+				return {
+					name: item.name,
+					percentage: Number(item.value)
+				}
+			});
+			setCompensations({
+				...compensations,
+				...Object.assign({}, data)
+			})
+		}
+		else if(type === 'CREATE'){
+			setCompensations({
+				0: {
+					name: '',
+					percentage: 0
+				}
+			})
+		}
+	}, [type]);
 
 	React.useEffect(() => {
 		let sum = 0;
@@ -62,6 +78,17 @@ export default function CompensationModal({ open, setOpen, selectedEntity, data 
             setExtraMonthPercentage(0);
         }
 	};
+
+	const resetInput = () => {
+		if(type !== 'EDIT'){
+			setCompensations({
+				0: {
+					name: '',
+					percentage: 0
+				}
+			});
+		}
+	}
 
 	const handleInputChange = (event, index) => {
 		const compensation = compensations[index];
@@ -88,6 +115,7 @@ export default function CompensationModal({ open, setOpen, selectedEntity, data 
 	};
 
 	const onSubmit = async() => {
+		console.log(compensations)
 		let payload = {
 			entityId: selectedEntity?.id,
 			columns: Object.values(compensations)?.map(({name, percentage}) => {
@@ -102,32 +130,56 @@ export default function CompensationModal({ open, setOpen, selectedEntity, data 
 				value: `${extraMonthPercentage}`
 			})
 		}
-		console.log(payload);
-		try {
-			loading('Adding Compensations...');
-			const { data: { message, success  } } = await api.post('/compensation', payload);
-			if (success) {
+		if(type === 'EDIT'){
+			console.log(payload);
+			try {
+				loading('Updating Compensations...');
+				const { data: { message, success  } } = await api.patch(`/compensation/${selectedEntity?.compensation?.id}`, payload);
+				if (success) {
+					swal.fire({
+						text: message,
+						icon: 'success'
+					});
+					setOpen(false);
+				} else {
+					swal.fire({
+						text: message ?? 'Something went wrong...',
+						icon: 'error'
+					})
+				}
+			} catch (e) {
 				swal.fire({
-					text: message,
-					icon: 'success'
-				});
-				setOpen(false);
-			} else {
-				swal.fire({
-					text: message ?? 'Something went wrong...',
+					text: e?.message ?? 'Something went wrong...',
 					icon: 'error'
 				})
 			}
-		} catch (e) {
-			swal.fire({
-				text: e?.message ?? 'Something went wrong...',
-				icon: 'error'
-			})
+		}else{
+			try {
+				loading('Adding Compensations...');
+				const { data: { message, success  } } = await api.post('/compensation', payload);
+				if (success) {
+					swal.fire({
+						text: message,
+						icon: 'success'
+					});
+					setOpen(false);
+				} else {
+					swal.fire({
+						text: message ?? 'Something went wrong...',
+						icon: 'error'
+					})
+				}
+			} catch (e) {
+				swal.fire({
+					text: e?.message ?? 'Something went wrong...',
+					icon: 'error'
+				})
+			}
 		}
 	}
 
 	return (
-		<Modal title="Add Compensation" handleClose={() => setOpen(false)} open={open}>
+		<Modal title={type=== 'EDIT' ? 'Edit Compensation' :"Add Compensation"} handleClose={() => { setOpen(false); setType(''); resetInput()}} open={open}>
 			<Box display="flex" justifyContent="center" mb={3}>
 				<Box maxWidth={500}>
 					<Alert severity="warning">Compensation percentage must be 100% before you can save</Alert>
@@ -147,7 +199,7 @@ export default function CompensationModal({ open, setOpen, selectedEntity, data 
 					disabled={(totalPercentage === 100 && !extraMonth)}
 				/>
 
-				{Object.values(compensations).map(({ name, percentage }, index) => (
+				{(Object.values(compensations).map(({ name, percentage }, index) => (
 					<Grid container spacing={3} align="center" key={index}>
 						<Grid item lg={6} md={6} sm={6} xs={6}>
 							<Input
@@ -182,7 +234,7 @@ export default function CompensationModal({ open, setOpen, selectedEntity, data 
 							/>
 						</Grid>
 					</Grid>
-				))}
+				)))}
 
 				{extraMonth && (
 					<Grid container spacing={3} align="center">
@@ -228,7 +280,7 @@ export default function CompensationModal({ open, setOpen, selectedEntity, data 
 						variant="contained"
 						color="secondary"
 					>
-						Save
+						{type === 'EDIT' ? 'Edit' : "Save"}
 					</Button>
 				</Box>
 			</form>

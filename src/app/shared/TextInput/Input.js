@@ -26,6 +26,7 @@ const Input = forwardRef((props, ref) => {
     multiline,
     placeholder,
     maxLength,
+    style,
 	noFullWidth
   } = props;
 
@@ -63,6 +64,7 @@ const Input = forwardRef((props, ref) => {
       rows={multiline && rows || 4}
       multiline={multiline && true}
       placeholder={placeholder}
+      style={style}
       InputProps={type === 'password' ? {
         endAdornment: (
           <InputAdornment position="end">

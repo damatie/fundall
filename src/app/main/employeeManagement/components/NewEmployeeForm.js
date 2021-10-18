@@ -49,6 +49,7 @@ const NewEmployeeForm = ({customHook}) => {
     modeOfEmploymentList,
     handleSubmit,
     onSubmit,
+    handleNext,
     setContentSelectedItem,
     contentSelectedItem,
     setDepartments,
@@ -83,6 +84,14 @@ const NewEmployeeForm = ({customHook}) => {
 //       })
 //     }
 //   };
+
+  const grade = () => {
+    return grades.find((g) => Number(g?.id) === Number(contentSelectedItem?.employeeGradeId));
+  }
+
+  const validate = () => {
+      return ((Number(grade()?.minGross) > contentSelectedItem?.grossAnnualSalary) || (Number(grade()?.maxGross) < contentSelectedItem?.grossAnnualSalary));
+  }
 
   return (
     // <Card className={classes.root}>
@@ -185,7 +194,7 @@ const NewEmployeeForm = ({customHook}) => {
                     refs={register}
                 />
                 </Grid>
-                <Grid item lg={12} md={12} sm={12} xs={12}>
+                {/* <Grid item lg={12} md={12} sm={12} xs={12}>
                 <FormControlLabel control={<Checkbox
                     checked={contentSelectedItem?.newsletter}
                     // onChange={handleCheckedChange}
@@ -198,7 +207,7 @@ const NewEmployeeForm = ({customHook}) => {
                     style={{ marginLeft: '10px' }}
                 />}
                 label="I want to recieve newsletters and updates" />
-                </Grid>
+                </Grid> */}
             </Grid>
 
             <Typography variant="body1" color="initial" className='my-10'><strong>Company Information</strong></Typography>
@@ -231,30 +240,32 @@ const NewEmployeeForm = ({customHook}) => {
                     <FormHelperText style={{ color: 'red'}}>{errors.entityId?.message}</FormHelperText>
                 </FormControl>
                 </Grid>
-                <Grid item lg={4} md={6} sm={12} xs={12}>
-                <FormControl variant="outlined" style={{ width: '100%', margin: '8px 0px' }} className={classes.formControl}>
-                    <InputLabel id="demo-simple-select-outlined-label">Department</InputLabel>
-                    <Select
-                    justify='left'
-                    align='left'
-                    name='departmentId'
-                    error={errors.departmentId}
-                    message={errors.departmentId?.message}
-                    value={contentSelectedItem?.departmentId || ''}
-                    onChange={ (ev) => setContentSelectedItem({
-                        ...contentSelectedItem,
-                        departmentId: ev.target.value
-                    })}
-                    label="Department"
-                    >
-                    {departments.map(item => (
-                    <MenuItem key={item.id} value={item.id}>
-                        {capitalizeWords(item.departmentName)}
-                    </MenuItem>))}
-                    </Select>
-                    <FormHelperText style={{ color: 'red'}}>{errors.departmentId?.message}</FormHelperText>
-                </FormControl>
-                </Grid>
+                {contentSelectedItem?.entityId > 0 && (
+                    <Grid item lg={4} md={6} sm={12} xs={12}>
+                    <FormControl variant="outlined" style={{ width: '100%', margin: '8px 0px' }} className={classes.formControl}>
+                        <InputLabel id="demo-simple-select-outlined-label">Department</InputLabel>
+                        <Select
+                        justify='left'
+                        align='left'
+                        name='departmentId'
+                        error={errors.departmentId}
+                        message={errors.departmentId?.message}
+                        value={contentSelectedItem?.departmentId || ''}
+                        onChange={ (ev) => setContentSelectedItem({
+                            ...contentSelectedItem,
+                            departmentId: ev.target.value
+                        })}
+                        label="Department"
+                        >
+                        {departments.map(item => (
+                        <MenuItem key={item.id} value={item.id}>
+                            {capitalizeWords(item.departmentName)}
+                        </MenuItem>))}
+                        </Select>
+                        <FormHelperText style={{ color: 'red'}}>{errors.departmentId?.message}</FormHelperText>
+                    </FormControl>
+                    </Grid>
+                )}
                 <Grid item lg={4} md={6} sm={12} xs={12}>
                 <FormControl variant="outlined" style={{ width: '100%', margin: '8px 0px' }} className={classes.formControl}>
                     <InputLabel id="demo-simple-select-outlined-label">Role</InputLabel>
@@ -267,7 +278,7 @@ const NewEmployeeForm = ({customHook}) => {
                     value={contentSelectedItem?.roleId || ''}
                     onChange={ (ev) => setContentSelectedItem({
                         ...contentSelectedItem,
-                        roleId: ev.target.valu
+                        roleId: ev.target.value
                     })}
                     label="Role"
                     >
@@ -366,63 +377,71 @@ const NewEmployeeForm = ({customHook}) => {
                     label="Job Title"
                     >
                     {jobTitles.map(item => (
-                    <MenuItem key={item} value={item}>
-                        {capitalizeWords(item)}
+                    <MenuItem key={item.id} value={item.name}>
+                        {capitalizeWords(item.name)}
                     </MenuItem>))}
                     </Select>
                     <FormHelperText style={{ color: 'red'}}>{errors.jobTitleId?.message}</FormHelperText>
                 </FormControl>
                 </Grid>
-                <Grid item lg={4} md={6} sm={12} xs={12}>
-                <FormControl variant="outlined" style={{ width: '100%', margin: '8px 0px' }} className={classes.formControl}>
-                    <InputLabel id="demo-simple-select-outlined-label">Employee Grade</InputLabel>
-                    <Select
-                    justify='left'
-                    align='left'
-                    name='employeeGradeId'
-                    error={errors.employeeGradeId}
-                    message={errors.employeeGradeId?.message}
-                    value={contentSelectedItem?.employeeGradeId || ''}
-                    onChange={ (ev) => setContentSelectedItem({
-                        ...contentSelectedItem,
-                        employeeGradeId: ev.target.value
-                    })}
-                    label="Employee Grade"
-                    >
-                    {grades.map(item => (
-                    <MenuItem key={item.id} value={item.id}>
-                        {item.gradeName}
-                    </MenuItem>))}
-                    </Select>
-                    <FormHelperText style={{ color: 'red'}}>{errors.employeeGradeId?.message}</FormHelperText>
-                </FormControl>
-                </Grid>
-                <Grid item lg={4} md={6} sm={12} xs={12}>
-
+                {grades.length > 0 && (
+                    <Grid item lg={4} md={6} sm={12} xs={12}>
                     <FormControl variant="outlined" style={{ width: '100%', margin: '8px 0px' }} className={classes.formControl}>
-                        <Input
-                            required
-                            label='Gross Annual Salary'
-                            name='grossAnnualSalary'
-                            error={errors.grossAnnualSalary}
-                            message={errors.grossAnnualSalary?.message}
-                            helperText={errors.grossAnnualSalary?.message}
-                            value={contentSelectedItem?.grossAnnualSalary || ''}
-                            onChange={ (ev) => setContentSelectedItem({
-                                ...contentSelectedItem,
-                                grossAnnualSalary: ev.target.value
-                            })}
-                            refs={register}
-                        />
+                        <InputLabel id="demo-simple-select-outlined-label">Employee Grade</InputLabel>
+                        <Select
+                        justify='left'
+                        align='left'
+                        name='employeeGradeId'
+                        error={errors.employeeGradeId}
+                        message={errors.employeeGradeId?.message}
+                        value={contentSelectedItem?.employeeGradeId || ''}
+                        onChange={ (ev) => setContentSelectedItem({
+                            ...contentSelectedItem,
+                            employeeGradeId: ev.target.value
+                        })}
+                        label="Employee Grade"
+                        >
+                            {grades.map(item => (
+                            <MenuItem key={item.id} value={item.id}>
+                                {`${item.gradeName} - (${item.minGross} - ${item.maxGross})`}
+                            </MenuItem>))}
+                        </Select>
+                        <FormHelperText style={{ color: 'red'}}>{errors.employeeGradeId?.message}</FormHelperText>
                     </FormControl>
-                </Grid>
+                    </Grid>
+                )}
+                {contentSelectedItem?.employeeGradeId > 0 && (
+                    <Grid item lg={4} md={6} sm={12} xs={12}>
+                        <FormControl variant="outlined" style={{ width: '100%', margin: '8px 0px' }} className={classes.formControl}>
+                            <Input
+                                required
+                                label='Gross Annual Salary'
+                                name='grossAnnualSalary'
+                                type="number"
+                                error={errors.grossAnnualSalary || validate()}
+                                message={errors.grossAnnualSalary?.message || validate() ? `Gross Salary must not be between ${grade()?.minGross} - ${grade()?.maxGross}` : ""}
+                                helperText={errors.grossAnnualSalary?.message || validate() ? `Gross Salary must not be between ${grade()?.minGross} - ${grade()?.maxGross}` : ""}
+                                value={contentSelectedItem?.grossAnnualSalary || ''}
+                                // min={grades.find((g) => Number(g?.id) === Number(contentSelectedItem?.employeeGradeId))?.minGross}
+                                // max={grades.find((g) => Number(g?.id) === Number(contentSelectedItem?.employeeGradeId))?.maxGross}
+                                onChange={ (ev) => setContentSelectedItem({
+                                    ...contentSelectedItem,
+                                    grossAnnualSalary: Number(ev.target.value),
+                                    monthlyGross: Number(ev.target.value) / 12
+                                })}
+                                refs={register}
+                            />
+                        </FormControl>
+                    </Grid>
+                )}
             </Grid>
             <Grid container spacing={3} justify='center' align='center'>
                 <Button 
                     variant="contained" 
-                    type='submit' 
+                    type='button' 
                     color="primary"
-                    disabled={Object.keys(errors).length !== 0 }
+                    disabled={Object.keys(errors).length !== 0 || (contentSelectedItem?.entityId?.length > 0 && validate())}
+                    onClick={() => {handleNext()}}
                 >
                     Submit 
                 </Button>
