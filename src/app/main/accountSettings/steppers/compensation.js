@@ -132,7 +132,7 @@ function Compensation({ handleNext }) {
 				edit={false}
 			/>
 			<Box mt={5} width="100%" display="flex" justifyContent="center" alignItems="center">
-				<Button variant="contained" color="primary">
+				<Button variant="contained" color="primary" onClick={() => HandleSubmit()}>
 					Save
 				</Button>
 			</Box>
