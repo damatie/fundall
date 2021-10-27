@@ -14,27 +14,27 @@ const index = () => {
 				title: 'Employee Survey',
 				handleSearch: ({ target: { value } }) => console.log(value)
 			}}
-			button={{
+			button = {{
 				showButton: true,
-				// btnTitle: 'Create KPO',
-				// onClick: customHook.handleOpenModal,
-				// btnComponent: false
 				btnComponent:(
 					<Button
 						variant="contained"
 						color="secondary"
 						onClick={()=>console.log('modal opened')}
-						// className={}
 						startIcon={<AddIcon />}
 					>
 						Create Survey
 					</Button>
 				)
 			}}
-        >
-			<Cards/>
-
-        </PageLayout>
+			content={
+				<div className="w-4/12">
+					<Cards className="p-10 bg-white">
+						Hi
+					</Cards>
+				</div>
+			}
+        />
     )
 }
 
