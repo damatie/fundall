@@ -59,6 +59,7 @@ import CompensationColumnsConfig from 'app/main/compensationColumns/Compensation
 import ExternalCandidateConfig from 'app/main/recruitment/externalCandidate/externalCandidateConfig';
 import SiteConfig from 'app/main/siteConfig/SiteConfig';
 import AccountSettingsConfig from 'app/main/accountSettings/accountSettingsConfig';
+import EmployeeSurveyConfig from 'app/main/employee_survey/employeeSurveyConfig'
 
 const routeConfigs = [
 	// ExampleConfig,
@@ -119,7 +120,8 @@ const routeConfigs = [
 	CompensationColumnsConfig,
 	ExternalCandidateConfig,
 	SiteConfig,
-	AccountSettingsConfig
+	AccountSettingsConfig,
+	EmployeeSurveyConfig
 ];
 
 const checkIfLoggedIn = () => {
