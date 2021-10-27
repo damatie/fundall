@@ -8,7 +8,7 @@ const EmployeeSurveyConfig = {
 	},
 	routes: [
 		{
-			path: '/employeeSurvey',
+			path: '/employee-survey',
 			component: React.lazy(() => import('./index'))
 		},
 	]
