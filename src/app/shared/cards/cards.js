@@ -9,7 +9,7 @@ import Typography from '@material-ui/core/Typography';
 export default function Cards({children,className}) {
 
   return (
-    <Card className={`${className} bg-white shadow-md`}>
+    <Card className={`${className} bg-white shadow-md rounded-20`}>
       <CardContent>
       {children}
       </CardContent>
