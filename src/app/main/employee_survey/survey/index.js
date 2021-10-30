@@ -4,7 +4,8 @@ import React, { useState } from 'react'
 
 const SurveyIndexPage = () => {
 
-    const [surveyCard, setSurveyCard] = useState([
+
+	const [surveyCard, setSurveyCard] = useState([
         {
             title:"Company policy survey",
             description:"This is a description.Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia",
@@ -34,6 +35,7 @@ const SurveyIndexPage = () => {
             responseRate:88
         },
     ])
+
 
     return (
         <div className="">

@@ -9,7 +9,7 @@ import Cards from '../cards/cards';
 
 
 
-export default function TabsContainer({content, children, index, ...other}) {
+export default function TabsContainer({content, surveyCard, setOpenCreateAudience, children, index, ...other}) {
   const [value, setValue] = useState(0);
 
   const handleChange = (event, newValue) => {
@@ -21,13 +21,13 @@ export default function TabsContainer({content, children, index, ...other}) {
       <AppBar position="static" className="bg-transparent text-black shadow-none">
         <Tabs value={value} onChange={handleChange}  className="capitalize" aria-label="simple tabs example">
           {content?.map((label,i)=>(
-              <Tab label={label.title} value={i} key={i}   className="capitalize text-base"/>
+              <Tab label={label.title} value={i} key={i}   className="capitalize text-base" surveyCard={surveyCard} />
             ))}
         </Tabs>
       </AppBar>
       {content.map((body,i)=>(
         <>
-          <TabPanels value={value} index={i} key ={i} text={body.body} Comp={body.ComponentName} />
+          <TabPanels value={value} index={i} key ={i} text={body.body} Comp={body.ComponentName} surveyCard={surveyCard} setOpenCreateAudience={setOpenCreateAudience} />
         </>
       ))}
     </div>

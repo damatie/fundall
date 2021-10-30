@@ -5,7 +5,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import SharedButton from 'app/shared/button/SharedButton'
 import Cards from 'app/shared/cards/cards'
 
-const AudienceGroupIndexPage = () => {
+const AudienceGroupIndexPage = ({setOpenCreateAudience}) => {
 
     const [audienceCard, setAudienceCard] = useState([
         {
@@ -39,6 +39,7 @@ const AudienceGroupIndexPage = () => {
                     color="secondary"
                     className="py-8 px-60 text-12 cursor-pointer"
                     startIcon={<AddCircleOutlineIcon />}
+                    onClick={()=>setOpenCreateAudience(true)}
                 >
                     Create Audience/Group
                 </Button>

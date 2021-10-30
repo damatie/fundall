@@ -20,38 +20,28 @@ const index = () => {
 	const [openCreateAudience, setOpenCreateAudience] = useState(false)
 	const [createSurveyModal, setCreateSurveyModal] = useState(false)
 
+
+
 	const [content, setContent] = useState([
 		{
 		  title:'Surveys',
-		  body:'Lorem Ipsum',
-		  ComponentName:SurveyIndexPage
+		  ComponentName:SurveyIndexPage,
 		},
 		{
 		  title:'Audience/Groups',
 		  body:'Lorem Ipsum2',
-		  ComponentName:AudienceGroupIndexPage
+		  ComponentName:AudienceGroupIndexPage,
+		  openModal:setOpenCreateAudience,
 		},
 		{
 		  title:'Reports',
 		  body:'Lorem Ipsum3',
 		  ComponentName:Cards,
 		},
-		{
-		  title:'Item Four',
-		  body:'Lorem Ipsum4',
-		  ComponentName:Cards,
-		}
 	])
 
-	// const dispatch = useDispatch();
-	// const { push } = useHistory();
-	// const state = useSelector(state => state.kpo.employeeKpoList);
 
-	// const customHook = useEmployeeSurveyList({
-	// 	dispatch,
-	// 	push,
-	// 	state,
-	// });
+
 
     return (
         <PageLayout
@@ -75,7 +65,7 @@ const index = () => {
 			className="bg-blue-900 relative"
 			content={
 				<>
-					<TabsContainer content={content} />
+					<TabsContainer content={content} setOpenCreateAudience={setOpenCreateAudience} />
 					{openCreateAudience	&& <CreateAudience setOpenCreateAudience={setOpenCreateAudience} />}
 					{createSurveyModal && <CreateSurvey setCreateSurveyModal={setCreateSurveyModal} />}
 				</>
