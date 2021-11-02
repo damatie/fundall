@@ -29,9 +29,7 @@ const index = () => {
 		},
 		{
 		  title:'Audience/Groups',
-		  body:'Lorem Ipsum2',
 		  ComponentName:AudienceGroupIndexPage,
-		  openModal:setOpenCreateAudience,
 		},
 		{
 		  title:'Reports',
@@ -66,7 +64,7 @@ const index = () => {
 			content={
 				<>
 					<TabsContainer content={content} setOpenCreateAudience={setOpenCreateAudience} />
-					{openCreateAudience	&& <CreateAudience setOpenCreateAudience={setOpenCreateAudience} />}
+					{/* {openCreateAudience	&& <CreateAudience setOpenCreateAudience={setOpenCreateAudience} />} */}
 					{createSurveyModal && <CreateSurvey setCreateSurveyModal={setCreateSurveyModal} />}
 				</>
 			}
