@@ -14,6 +14,7 @@ module.exports = {
 		colors: {
 			transparent: 'transparent',
 			black: '#22292F',
+			night: '#00000',
 			white: '#FFF',
 			grey: {
 				50: '#FAFAFA',
@@ -30,25 +31,26 @@ module.exports = {
 				A100: '#D5D5D5',
 				A200: '#AAAAAA',
 				A400: '#303030',
-				A700: '#616161'
+				A700: '#616161',
+				A800: '#878787'
 			},
-			gray: {
-				50: '#FAFAFA',
-				100: '#F5F5F5',
-				200: '#EEEEEE',
-				300: '#E0E0E0',
-				400: '#BDBDBD',
-				500: '#9E9E9E',
-				default: '#9E9E9E',
-				600: '#757575',
-				700: '#616161',
-				800: '#424242',
-				900: '#212121',
-				A100: '#D5D5D5',
-				A200: '#AAAAAA',
-				A400: '#303030',
-				A700: '#616161'
-			},
+			// gray: {
+			// 	50: '#FAFAFA',
+			// 	100: '#F5F5F5',
+			// 	200: '#EEEEEE',
+			// 	300: '#E0E0E0',
+			// 	400: '#BDBDBD',
+			// 	500: '#9E9E9E',
+			// 	default: '#9E9E9E',
+			// 	600: '#757575',
+			// 	700: '#616161',
+			// 	800: '#424242',
+			// 	900: '#212121',
+			// 	A100: '#D5D5D5',
+			// 	A200: '#AAAAAA',
+			// 	A400: '#303030',
+			// 	A700: '#616161'
+			// },
 			red: {
 				50: '#FFEBEE',
 				100: '#FFCDD2',
@@ -184,6 +186,7 @@ module.exports = {
 				A200: '#448AFF',
 				A400: '#2979FF',
 				A700: '#2962FF'
+				
 			},
 			'light-blue': {
 				50: '#E1F5FE',
@@ -200,7 +203,8 @@ module.exports = {
 				A100: '#80D8FF',
 				A200: '#40C4FF',
 				A400: '#00B0FF',
-				A700: '#0091EA'
+				A700: '#0091EA',
+				A800: '#61DAFB'
 			},
 			indigo: {
 				50: '#E8EAF6',
@@ -449,6 +453,7 @@ module.exports = {
 			'12': '1.2rem',
 			'16': '1.6rem',
 			'20': '2rem',
+			'20px': '20px',
 			'24': '2.4rem',
 			'28': '2.8rem',
 			'32': '3.2rem'
@@ -512,7 +517,9 @@ module.exports = {
 			'23':
 				'0px 11px 14px -7px rgba(0,0,0,0.2),0px 23px 36px 3px rgba(0,0,0,0.14),0px 9px 44px 8px rgba(0,0,0,0.12)',
 			'24':
-				'0px 11px 15px -7px rgba(0,0,0,0.2),0px 24px 38px 3px rgba(0,0,0,0.14),0px 9px 46px 8px rgba(0,0,0,0.12)'
+				'0px 11px 15px -7px rgba(0,0,0,0.2),0px 24px 38px 3px rgba(0,0,0,0.14),0px 9px 46px 8px rgba(0,0,0,0.12)',
+			'25':
+				'0 1rem 2rem rgb(0 0 0 / 5%)'
 		},
 		container: {},
 		cursor: {

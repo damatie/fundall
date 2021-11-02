@@ -11,6 +11,10 @@ const themesConfig = {
 				main: skyBlue[500],
 				dark: skyBlue[900]
 			},
+			switchColor: {
+				// light:'#FFFFF',
+				dark:'red'
+			},
 			background: {
 				paper: '#FFFFFF',
 				default: '#F7F7F7'

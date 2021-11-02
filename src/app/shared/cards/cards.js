@@ -13,6 +13,6 @@ export default function Cards({children,className}) {
       <CardContent>
       {children}
       </CardContent>
-    </Card>
+    </Card> 
   );
 }
