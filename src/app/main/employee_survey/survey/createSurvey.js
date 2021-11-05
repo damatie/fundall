@@ -211,6 +211,94 @@ function CreateSurvey({setCreateSurveyModal,setSurveyCard,surveyCard}) {
                                             <Checkbox checked={departments.indexOf(dept) > -1} />
                                             <ListItemText primary={dept} />
                                         </MenuItem>
+        <div className="bg-white pb-48 flex-col overflow-y-scroll flex h-full right-0 top-10 absolute w-7/12 pt-64">
+            <div className="bg-blue-900 text-3xl text-white flex justify-between items-center p-20">
+                <h3 className="text-2xl">Create Survey</h3>
+                <CloseRoundedIcon className="cursor-pointer" onClick={()=>setCreateSurveyModal(false)} />
+            </div>
+            <div className="h-full w-11/12 mt-8 mx-auto">
+                <form className=" p-28 rounded-lg" >
+                    <TextField
+                        label="Survey Name"
+                        id="outlined-margin-normal"
+                        defaultValue=""
+                        className="inline-block p-1 mb-24"
+                        variant="outlined"
+                        fullWidth
+                        onChange={(e)=>handleName(e)}
+                    />
+                    <TextField
+                        id="outlined-multiline-static"
+                        label="Description"
+                        multiline
+                        rows={4}
+                        fullWidth
+                        className="mb-16"
+                        defaultValue=""
+                        variant="outlined"
+                        onChange={(e)=>handleDescription(e)}
+                    />
+                    <div className="pb-10 border-gray-400 border-b-1 ">
+                        <h4 className="text-14 text-grey-700 pb-4 mb-6 font-semibold border-gray-400 border-b-1 ">Who do you intend to send this survey to?</h4>
+                        <div className="w-full flex items-center justify-between mb-16">
+                            <FormControl className="w-1/3">
+                                <InputLabel id="demo-group-name-label">Department</InputLabel>
+                                <Select
+                                labelId="demo-group-name-label"
+                                id="demo-mutiple-name"
+                                multiple
+                                value={departments}
+                                onChange={handleChange}
+                                input={<Input />}
+                                renderValue={(selected) => selected.join(', ')}
+                                div
+                                >
+                                {department.map((dept) => (
+                                    <MenuItem key={dept} value={dept}>
+                                        <Checkbox checked={departments.indexOf(dept) > -1} />
+                                        <ListItemText primary={dept} />
+                                    </MenuItem>
+                                ))}
+                                </Select>
+                            </FormControl>
+                            <FormControl className="w-1/3">
+                                <InputLabel id="group-label">Groups</InputLabel>
+                                <Select
+                                labelId="group-label"
+                                id="demo-group-checkbox"
+                                multiple
+                                value={groups}
+                                onChange={handleChangeGroup}
+                                input={<Input />}
+                                renderValue={(selected) => selected.join(', ')}
+                                div
+                                >
+                                {group.map((groupItem) => (
+                                    <MenuItem key={groupItem} value={groupItem}>
+                                    <Checkbox checked={groups.indexOf(groupItem) > -1} />
+                                    <ListItemText primary={groupItem} />
+                                    </MenuItem>
+                                ))}
+                                </Select>
+                            </FormControl>
+                        </div>
+                        <TextField id="outlined-basic" label="Individual's email" value={individuals} variant="outlined" onChange={handleChangeIndividuals} onKeyDown={onKeyDownIndividuals} fullWidth className="mb-24" />
+                        <div className="">
+                            <h4 className="capitalize text-14 text-grey-700 pb-8">survey participants</h4>
+                            <div className="border-gray-400 border-1 px-16 py-14 rounded-md flex items-start overflow-y-scroll flex-wrap min-h-36">
+                                <div className="flex flex-wrap">
+                                    {departments?.map((item,i)=>(
+                                        <div key={i} className="flex bg-blue-500 my-8 mx-8 rounded-md px-12 py-6 items-center justify-between text-gray-100">
+                                            <h5 className='pr-12 text-14 font-semibold'>{item}</h5>
+                                        </div>
+                                    ))}
+                                </div>
+                                <div className="flex flex-wrap">
+                                    {groups?.map((item,i)=>(
+                                        <div key={i} className="flex bg-blue-500 my-8 mx-8 rounded-md px-12 py-6 items-center justify-between text-gray-100">
+                                            <h5 className='pr-12 text-14 font-semibold'>{item}</h5>
+                                        </div>
+>>>>>>> 3d369648b878106833959196b90a1df9fca142ab
                                     ))}
                                     </Select>
                                 </FormControl>
