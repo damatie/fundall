@@ -1,6 +1,6 @@
-import SharedButton from 'app/shared/button/SharedButton'
-import Cards from 'app/shared/cards/cards'
 import React, { useState } from 'react'
+import Cards from 'app/shared/cards/cards'
+import SharedButton from 'app/shared/button/SharedButton'
 
 const SurveyIndexPage = () => {
 
