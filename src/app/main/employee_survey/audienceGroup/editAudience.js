@@ -159,7 +159,7 @@ function EditAudience({openEditAudience,setOpenEditAudience,item,singleAudienceI
 
     return (
         <div className="fixed top-0 right-0 w-full h-full overflow-y-hidden bg-opacity-75 bg-black">
-            <div className="bg-gray-100 pb-48 flex-col overflow-y-scroll flex h-full right-0 top-10 absolute w-7/12 pt-64">
+            <div className="bg-white pb-48 flex-col overflow-y-scroll flex h-full right-0 top-10 absolute w-7/12 pt-64">
                 <div className="bg-blue-900 text-3xl text-white flex justify-between items-center p-20">
                     <h3 className="text-2xl">Audience/Groups</h3>
                     <CloseRoundedIcon className="cursor-pointer" onClick={() => setOpenEditAudience(false)} />
