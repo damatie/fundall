@@ -174,7 +174,7 @@ const AudienceGroupIndexPage = () => {
             </>
                 {openEditAudience && <EditAudience setOpenEditAudience={setOpenEditAudience} openEditAudience={openEditAudience} singleAudienceItem={singleAudienceItem} setSingleAudienceItem={setSingleAudienceItem} singleAudienceId={singleAudienceId} setSingleAudienceId={setSingleAudienceId} />}
 
-                {deleteModal && <DeleteModal setDeleteModal={setDeleteModal} deleteAudience={deleteAudience} singleAudienceId={singleAudienceId} singleAudienceItem={singleAudienceItem} />}
+                {/* {deleteModal && <DeleteModal setDeleteModal={setDeleteModal} deleteAudience={deleteAudience} singleAudienceId={singleAudienceId} singleAudienceItem={singleAudienceItem} />} */}
 
                 {openCreateAudience && <CreateAudience setOpenCreateAudience={setOpenCreateAudience} audienceCard={audienceCard} />  }
 
