@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import EditAudience from './editAudience';
 import DeleteModal from './deleteModal'
 import CreateAudience from './createAudience';
+import Swal from 'sweetalert2';
 
 const AudienceGroupIndexPage = () => {
     
@@ -71,7 +72,7 @@ const AudienceGroupIndexPage = () => {
 
 
     const deleteAudience = (id) => {
-        // console.log(id)
+        console.log(id)
         const items = audienceCard;
         if (items.length > 0) {
             console.log(id)
@@ -92,39 +93,32 @@ const AudienceGroupIndexPage = () => {
         setDeleteModal(true)
     }
 
-    // const customHook = useKpoList({
-	// 	userId,
-	// 	dispatch,
-	// 	push,
-	// 	state,
-	// 	employees
-	// });
-
-    // const confirmDeleteAudience= () => {
-	// 	Swal.fire({
-	// 		icon: 'info',
-	// 		title: "Are you sure you want to delete",
-	// 		html:
-    //             <h3 class="text-xl font-semibold py-20">Are you sure you want to delete</h3>,
-	// 		showConfirmButton: true,
-	// 		showCancelButton: true,
-	// 		confirmButtonText: `CONTINUE`,
-	// 		confirmButtonColor: '#19AC4B',
-	// 		cancelButtonColor: '#FA1C1C',
-	// 		customClass: {
-	// 			cancelButton: 'kpo-custom-swal-btn',
-	// 			confirmButton: 'kpo-custom-swal-btn',
-	// 			title: 'kpo-custom-swal-title',
-	// 			popup: 'kpo-custom-swal-popup',
-	// 			icon: 'kpo-custom-swal-icon'
-	// 		}
-	// 	}).then(result => {
-	// 		if (result.isConfirmed) {
-	// 			customHook.handleOpenModal();
-	// 		}
-	// 	});
-	// };
-
+	const confirmDeleteAudience = (audienceCardItem,i) => {
+        let title = audienceCardItem.title
+        console.log(title)
+		Swal.fire({
+			icon: 'info',
+			title: 'Do you want to delete \n this Audience ?',
+			html:
+                `<h3 class="py-20">Note that by clicking on continue, you will delete <span class="font-bold">${title}</span>.</h3>`,
+			showConfirmButton: true,
+			showCancelButton: true,
+			confirmButtonText: `CONTINUE`,
+			confirmButtonColor: '#19AC4B',
+			cancelButtonColor: '#FA1C1C',
+			customClass: {
+				cancelButton: 'kpo-custom-swal-btn',
+				confirmButton: 'kpo-custom-swal-btn',
+				title: 'kpo-custom-swal-title',
+				popup: 'kpo-custom-swal-popup',
+				icon: 'kpo-custom-swal-icon'
+			}
+		}).then(result => {
+			if (result.isConfirmed) {
+                deleteAudience(i)
+			}
+		});
+	};
 
 
     return (
@@ -160,7 +154,8 @@ const AudienceGroupIndexPage = () => {
                                     color="secondary"
                                     className="px-20 py-6 text-12 bg-red-200 ml-10 cursor-pointer text-red-900"
                                     startIcon={<DeleteIcon />}
-                                    onClick={() => openDeleteModal(audienceCardItem,i)}
+                                    onClick={() => confirmDeleteAudience(audienceCardItem,i)}
+                                    // onClick={() => openDeleteModal(audienceCardItem,i)}
                                 >
                                     Delete
                                 </Button>
