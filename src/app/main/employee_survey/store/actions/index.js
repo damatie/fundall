@@ -1,1 +1,1 @@
-export * from './employeeSurveyList.actions'
+export * from './employeeSurvey.actions'

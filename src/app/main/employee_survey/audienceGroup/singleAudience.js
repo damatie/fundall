@@ -4,6 +4,7 @@ import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import TrendingUpIcon from '@material-ui/icons/TrendingUp';
 import ArrowRightAltRoundedIcon from '@material-ui/icons/ArrowRightAltRounded';
+import DoubleArrowRoundedIcon from '@material-ui/icons/DoubleArrowRounded';
 import { Link, useHistory, useParams } from 'react-router-dom'
 import Cards from 'app/shared/cards/cards'
 import SharedButton from 'app/shared/button/SharedButton';
@@ -72,75 +73,38 @@ function SingleAudience() {
     const [membersList, setMembersList] = useState([
         {
             name:'HR Department',
-            date:"12/01/2021"
+            date:"12/01/2021",
+            // id:0,
         },
         {
             name:'HR Department',
-            date:"12/01/2021"
+            date:"12/01/2021",
+            // id:1,
         },
         {
             name:'HR Department',
-            date:"12/01/2021"
+            date:"12/01/2021",
+            // id:2,
         },
         {
             name:'HR Department',
-            date:"12/01/2021"
+            date:"12/01/2021",
+            // id:3,
         },
         {
             name:'HR Department',
-            date:"12/01/2021"
+            date:"12/01/2021",
+            // id:4,
         },
         {
             name:'HR Department',
-            date:"12/01/2021"
+            date:"12/01/2021",
+            // id:5,
         },
         {
             name:'HR Department',
-            date:"12/01/2021"
-        },
-        {
-            name:'HR Department',
-            date:"12/01/2021"
-        },
-        {
-            name:'HR Department',
-            date:"12/01/2021"
-        },
-        {
-            name:'HR Department',
-            date:"12/01/2021"
-        },
-        {
-            name:'HR Department',
-            date:"12/01/2021"
-        },
-        {
-            name:'HR Department',
-            date:"12/01/2021"
-        },
-        {
-            name:'HR Department',
-            date:"12/01/2021"
-        },
-        {
-            name:'HR Department',
-            date:"12/01/2021"
-        },
-        {
-            name:'HR Department',
-            date:"12/01/2021"
-        },
-        {
-            name:'HR Department',
-            date:"12/01/2021"
-        },
-        {
-            name:'HR Department',
-            date:"12/01/2021"
-        },
-        {
-            name:'HR Department',
-            date:"12/01/2021"
+            date:"12/01/2021",
+            // id:6,
         },
     ])
 
@@ -150,17 +114,27 @@ function SingleAudience() {
         setFullMemberList(prev => !prev)
     }
 
-
-    console.log(useParams())
+    const deleteAudienceMember = (id) => {
+        const items = membersList;
+        if (items.length > 0) {
+            console.log(id)
+          setMembersList(items.filter((item, index) => index !== id));
+        }
+        console.log(123)
+    }
 
 
     return (
         <div  className="w-10/12 mx-auto">
-            <Link to="/employee-survey">
-                <div className="inline-block transform rotate-180 text-blue-800 mt-16">
-                    <ArrowRightAltRoundedIcon className="text-4xl" />
-                </div>
-            </Link>
+            <div className="my-16 flex items-center">
+                <Link to="/employee-survey">
+                    <p className="inline-block capitalize text-blue-800">
+                        Audience / Groups
+                    </p>
+                </Link>
+                <DoubleArrowRoundedIcon className="text-20 mx-6 text-black" />
+                <p className="font-semibold">Employee work life balance survey group</p>
+            </div>
             <div className="w-full space-y-56">
                 <Cards className="w-1/2 mb-24 px-10 py-10">
                     <h2 className="py-6 text-black font-bold text-2xl">Employee work life balance survey group</h2>
@@ -220,43 +194,49 @@ function SingleAudience() {
                     </Cards>
                     <Cards className="w-2/5 pt-4">
                         <h4 className="pb-10 text-black font-bold text-lg">Group Member List</h4>
-                        <div className="">
-                            <table class="table-fixed text-left">
-                                <thead  className='border-b-1 border-grey-400'>
-                                    <tr className="">
-                                        <th class="w-1/2 text-gray-400 font-semibold">Member Name</th>
-                                        <th class="w-1/2 text-gray-400 font-semibold">Date Added </th>
-                                    </tr>
-                                </thead>
-                                <div className="my-10"></div>
-                                <tbody>
-                                    {   fullMemberList ?
-                                            membersList?.slice(0,3).map((member,i) => (
-                                            <>
-                                                <tr className="border-b-1 border-grey-400" key={i}>
-                                                    <td className="">{member?.name}</td>
-                                                    <td className="">{member?.date}</td>
-                                                    <td className="text-red-500 px-12 hover:text-red-300 transition py-4 cursor-pointer rounded-8 "><DeleteForeverIcon/></td>
-                                                </tr>
-                                                <div className="my-10"></div>
-                                            </>
-                                            ))
-                                        :
-                                            membersList?.map((member,i) => (
-                                            <>
-                                                <tr className="border-b-1 border-grey-400" key={i}>
-                                                    <td className="">{member?.name}</td>
-                                                    <td className="">{member?.date}</td>
-                                                    <td className="text-red-500 px-12 py-4 cursor-pointer rounded-8 "><DeleteForeverIcon/></td>
-                                                </tr>
-                                                <div className="my-10"></div>
-                                            </>
-                                            ))
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                        <Button className="text-white bg-purple-400 py-10 px-20 text-14 rounded-20 my-12" onClick={showFullList}>See {fullMemberList ? <> more <ArrowForwardIcon/></> : <> less <ArrowUpwardIcon /> </>}</Button>
+                        {!membersList.length > 0 ? (
+                            <h4 className="text-black text-16 text-center p-10 font-semibold">There are no members in this Audience/Group</h4>
+                        ) : (
+                            <div className="">
+                                <table class="table-fixed text-left">
+                                    <thead  className='border-b-1 border-grey-400'>
+                                        <tr className="">
+                                            <th class="w-1/2 text-gray-400 font-semibold">Member Name</th>
+                                            <th class="w-1/2 text-gray-400 font-semibold">Date Added </th>
+                                        </tr>
+                                    </thead>
+                                    <div className="my-10"></div>
+                                    <tbody>
+                                        {   fullMemberList ?
+                                                membersList?.slice(0,3).map((member,i) => (
+                                                <>
+                                                    <tr className="border-b-1 border-grey-400" key={i}>
+                                                        <td className="">{member?.name}</td>
+                                                        <td className="">{member?.date}</td>
+                                                        <td className="text-red-500 px-12 hover:text-red-300 transition py-4 cursor-pointer rounded-8" onClick={() => deleteAudienceMember(i)}><DeleteForeverIcon/></td>
+                                                    </tr>
+                                                    <div className="my-10"></div>
+                                                </>
+                                                ))
+                                            :
+                                                membersList?.map((member,i) => (
+                                                <>
+                                                    <tr className="border-b-1 border-grey-400" key={i}>
+                                                        <td className="">{member?.name}</td>
+                                                        <td className="">{member?.date}</td>
+                                                        <td className="text-red-500 px-12 py-4 cursor-pointer rounded-8" onClick={() => deleteAudienceMember(i)}><DeleteForeverIcon/></td>
+                                                    </tr>
+                                                    <div className="my-10"></div>
+                                                </>
+                                                ))
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        ) }
+                        {membersList.length > 3 && (
+                            <Button className="text-white bg-purple-400 py-10 px-20 text-14 rounded-20 my-12" onClick={showFullList}>See {fullMemberList ? <> more <ArrowForwardIcon/></> : <> less <ArrowUpwardIcon /> </>}</Button>
+                        )}
                     </Cards>
                 </div>
             </div>

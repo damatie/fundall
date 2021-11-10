@@ -9,9 +9,10 @@ import Cards from 'app/shared/cards/cards'
 import TabsContainer from 'app/shared/tabs/tabsContainer';
 import SurveyIndexPage from './survey';
 import AudienceGroupIndexPage from './audienceGroup';
-import useEmployeeSurveyList from './hooks/useEmployeeSurveyList';
 import CreateAudience from './audienceGroup/createAudience';
 import CreateSurvey from './survey/createSurvey';
+import EditAudience from './audienceGroup/editAudience';
+import useEmployeeSurvey from './hooks/useEmployeeSurvey';
 
 
 const index = () => {
@@ -19,6 +20,17 @@ const index = () => {
 
 	const [openCreateAudience, setOpenCreateAudience] = useState(false)
 	const [createSurveyModal, setCreateSurveyModal] = useState(false)
+	
+	const dispatch = useDispatch();
+	const { push } = useHistory();
+	const state = useSelector(state => state.open);
+
+
+	const customHook = useEmployeeSurvey({
+		dispatch,
+		push,
+		state
+	});
 
 
 
@@ -54,7 +66,8 @@ const index = () => {
 					<Button
 						variant="contained"
 						color="secondary"
-						onClick={()=>setCreateSurveyModal(true)}
+						onClick={() => setCreateSurveyModal(true)}
+						// onClick={ () => customHook.handleOpenModal()}
 					>
 						Create Survey
 					</Button>
@@ -64,8 +77,10 @@ const index = () => {
 			content={
 				<>
 					<TabsContainer content={content} setOpenCreateAudience={setOpenCreateAudience} />
-					{/* {openCreateAudience	&& <CreateAudience setOpenCreateAudience={setOpenCreateAudience} />} */}
+					{/* <CreateAudience/> */}
+					{openCreateAudience	&& <CreateAudience setOpenCreateAudience={setOpenCreateAudience} />}
 					{createSurveyModal && <CreateSurvey setCreateSurveyModal={setCreateSurveyModal} />}
+
 				</>
 			}
         />
