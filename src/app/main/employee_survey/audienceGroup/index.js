@@ -6,7 +6,6 @@ import SharedButton from 'app/shared/button/SharedButton'
 import Cards from 'app/shared/cards/cards'
 import { Link } from 'react-router-dom';
 import EditAudience from './editAudience';
-import DeleteModal from './deleteModal'
 import CreateAudience from './createAudience';
 import Swal from 'sweetalert2';
 
@@ -21,8 +20,35 @@ const AudienceGroupIndexPage = () => {
             description:"This is a description. Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia",
             numberOfMembers:40,
             id:0,
-            participantDepartments:["Media", "Concierge"],
-            participantGroups:[],
+            participantDepartments:[
+                {
+                    label:"Human Resources",
+                    value:1,
+                    id:12
+                },
+            ],
+            participantGroups:[
+                {
+                    label:"Company Policy Survey Group",
+                    value:1,
+                    id:10
+                },
+                {
+                    label:"Manager Performance Survey Group",
+                    value:2,
+                    id:11
+                },
+                {
+                    label:"Network Performance Survey Group",
+                    value:3,
+                    id:12
+                },
+                {
+                    label:"Employee Work Life Balance Survey Group",
+                    value:4,
+                    id:13
+                }
+            ],
             participantIndividualEmail:[],
             recipientParticipantDepartments:[],
             recipientParticipantGroups:["Company Policy Survey Group"],
@@ -33,8 +59,35 @@ const AudienceGroupIndexPage = () => {
             description:"This is a description. Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia",
             numberOfMembers:40,
             id:1,
-            participantDepartments:["Human Resources"],
-            participantGroups:[],
+            participantDepartments:[
+                {
+                    label:"Human Resources",
+                    value:1,
+                    id:12
+                },
+                {
+                    label:"Finance",
+                    value:2,
+                    id:13
+                },
+            ],
+            participantGroups:[
+                {
+                    label:"Company Policy Survey Group",
+                    value:1,
+                    id:10
+                },
+                {
+                    label:"Manager Performance Survey Group",
+                    value:2,
+                    id:11
+                },
+                {
+                    label:"Network Performance Survey Group",
+                    value:3,
+                    id:12
+                },
+            ],
             participantIndividualEmail:[],
             recipientParticipantDepartments:[],
             recipientParticipantGroups:["Company Policy Survey Group"],
@@ -45,7 +98,18 @@ const AudienceGroupIndexPage = () => {
             description:"This is a description. Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia",
             numberOfMembers:40,
             id:2,
-            participantDepartments:["Human Resources", "Media", "Concierge"],
+            participantDepartments:[
+                {
+                    label:"Media",
+                    value:3,
+                    id:14
+                },
+                {
+                    label:"Concierge",
+                    value:4,
+                    id:15
+                }
+            ],
             participantGroups:[],
             participantIndividualEmail:[],
             recipientParticipantDepartments:[],
@@ -57,8 +121,35 @@ const AudienceGroupIndexPage = () => {
             description:"This is a description.",
             numberOfMembers:40,
             id:3,
-            participantDepartments:["Human Resources", "Media", "Concierge"],
-            participantGroups:["Company Policy Survey Group", "Manager Performance Survey Group"],
+            participantDepartments:[
+                {
+                    label:"Human Resources",
+                    value:1,
+                    id:12
+                },
+                {
+                    label:"Media",
+                    value:3,
+                    id:14
+                },
+                {
+                    label:"Concierge",
+                    value:4,
+                    id:15
+                }
+            ],
+            participantGroups:[
+                {
+                    label:"Company Policy Survey Group",
+                    value:1,
+                    id:10
+                },
+                {
+                    label:"Employee Work Life Balance Survey Group",
+                    value:4,
+                    id:13
+                }
+            ],
             participantIndividualEmail:["johndoe@email.co", "aceo@company.co"],
             recipientParticipantDepartments:["Human Resources", "Media"],
             recipientParticipantGroups:["Company Policy Survey Group"],
@@ -173,8 +264,6 @@ const AudienceGroupIndexPage = () => {
                 }
             </>
                 {openEditAudience && <EditAudience setOpenEditAudience={setOpenEditAudience} openEditAudience={openEditAudience} singleAudienceItem={singleAudienceItem} setSingleAudienceItem={setSingleAudienceItem} singleAudienceId={singleAudienceId} setSingleAudienceId={setSingleAudienceId} />}
-
-                {/* {deleteModal && <DeleteModal setDeleteModal={setDeleteModal} deleteAudience={deleteAudience} singleAudienceId={singleAudienceId} singleAudienceItem={singleAudienceItem} />} */}
 
                 {openCreateAudience && <CreateAudience setOpenCreateAudience={setOpenCreateAudience} audienceCard={audienceCard} />  }
 

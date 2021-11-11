@@ -13,19 +13,79 @@ import SideModal from 'app/shared/modal/SideModal';
 import SharedButton from 'app/shared/button/SharedButton';
 
 
-const department = [
-    "Human Resources",
-    "Finance",
-    "Media",
-    "Concierge"
-];
 
 const group = [
-    "Company Policy Survey Group",
-    "Manager Performance Survey Group",
-    "Network Performance Survey Group",
-    "Employee Work Life Balance Survey Group",
+    {
+        label:"Company Policy Survey Group",
+        value:1,
+        id:10
+    },
+    {
+        label:"Manager Performance Survey Group",
+        value:2,
+        id:11
+    },
+    {
+        label:"Network Performance Survey Group",
+        value:3,
+        id:12
+    },
+    {
+        label:"Employee Work Life Balance Survey Group",
+        value:4,
+        id:13
+    }
 ]
+
+const department = [
+    {
+        label:"Human Resources",
+        value:1,
+        id:12
+    },
+    {
+        label:"Finance",
+        value:2,
+        id:13
+    },
+    {
+        label:"Media",
+        value:3,
+        id:14
+    },
+    {
+        label:"Concierge",
+        value:4,
+        id:15
+    }
+];
+
+//////////////////////////////////////
+
+
+// const group = [
+//     {
+//         label:"Company Policy Survey Group",
+//         value:1,
+//         id:10
+//     },
+//     {
+//         label:"Manager Performance Survey Group",
+//         value:2,
+//         id:11
+//     },
+//     {
+//         label:"Network Performance Survey Group",
+//         value:3,
+//         id:12
+//     },
+//     {
+//         label:"Employee Work Life Balance Survey Group",
+//         value:4,
+//         id:13
+//     }
+// ]
+//////////////////////////////////////
 
 
 const recipientDepartment = [
@@ -48,11 +108,10 @@ function EditAudience({openEditAudience,setOpenEditAudience,item,singleAudienceI
 
     const [name, setName] = useState(singleAudienceItem?.title)
     const [description, setDescription] =  useState(singleAudienceItem?.description)
-    const [departments, setDepartments] = useState(singleAudienceItem?.participantDepartments)
+    const [departments, setDepartments] = useState(singleAudienceItem?.participantDepartments.map(singleDep => singleDep.id))
     const [pickedDepartments, setPickedDepartments] = useState([])
     const [recipientDepartments, setRecipientDepartments] = useState(singleAudienceItem?.recipientParticipantDepartments)
     const [recipientPickedDepartments, setRecipientPickedDepartments] = useState([])
-    const [groups, setGroups] = useState(singleAudienceItem?.participantGroups)
     const [recipientGroups, setRecipientGroups] = useState(singleAudienceItem?.recipientParticipantGroups)
     const [surveyParticipants, setSurveyParticipants] = useState(singleAudienceItem?.participantIndividualEmail)
     const [recipientSurveyParticipants, setRecipientSurveyParticipants] = useState(singleAudienceItem?.recipientParticipantIndividualEmail)
@@ -62,9 +121,10 @@ function EditAudience({openEditAudience,setOpenEditAudience,item,singleAudienceI
         name,
         description,
         participantDepartments:departments,
-        participantGroups:groups,
         participantIndividualEmail:surveyParticipants
     })
+
+
 
     const handleName  = (e)  =>  {
         setSurveyFormData({...surveyFormData,name:e.target.value})
@@ -99,7 +159,6 @@ function EditAudience({openEditAudience,setOpenEditAudience,item,singleAudienceI
         setRecipientIndividuals(e.target.value)
     }
 
-
     const onKeyDownIndividualsRecipient = (e) => {
         const { keyCode }  =  e
         const trimmedIndividualInput = recipientIndividuals.trim()
@@ -120,7 +179,6 @@ function EditAudience({openEditAudience,setOpenEditAudience,item,singleAudienceI
             setSurveyFormData({...surveyFormData,reportingIndividualEmail:result})
         }
     }
-
 
     const handleChangeIndividuals = (e) => {
         setIndividuals(e.target.value)
@@ -184,44 +242,21 @@ function EditAudience({openEditAudience,setOpenEditAudience,item,singleAudienceI
                     <div className="pb-10 border-gray-400 border-b-1 ">
                         <h4 className="text-14 text-grey-700 pb-4 font-bold border-gray-400 border-b-1">Fill in members you want to be in this group</h4>
                         <div className="w-full pt-16 flex items-center justify-between mb-16">
-                            <FormControl className="w-1/3">
+                            <FormControl className="w-full">
                                 <InputLabel id="demo-group-name-label">Department</InputLabel>
                                 <Select
-                                labelId="demo-group-name-label"
-                                id="demo-mutiple-name"
-                                multiple
-                                value={departments}
-                                onChange={handleChange}
-                                input={<Input />}
-                                renderValue={(selected) => selected.join(', ')}
-                                div
+                                    value={departments}
+                                    onChange={handleChange}
+                                    displayEmpty
+                                    multiple
+                                    className=""
+                                    inputProps={{ 'aria-label': 'Without label' }}
                                 >
-                                {department.map((dept) => (
-                                    <MenuItem key={dept} value={dept}>
-                                        <Checkbox checked={departments.indexOf(dept) > -1} />
-                                        <ListItemText primary={dept} />
-                                    </MenuItem>
-                                ))}
-                                </Select>
-                            </FormControl>
-                            <FormControl className="w-1/3">
-                                <InputLabel id="group-label">Groups</InputLabel>
-                                <Select
-                                labelId="group-label"
-                                id="demo-group-checkbox"
-                                multiple
-                                value={groups}
-                                onChange={handleChangeGroup}
-                                input={<Input />}
-                                renderValue={(selected) => selected.join(', ')}
-                                div
-                                >
-                                {group.map((groupItem) => (
-                                    <MenuItem key={groupItem} value={groupItem}>
-                                    <Checkbox checked={groups.indexOf(groupItem) > -1} />
-                                    <ListItemText primary={groupItem} />
-                                    </MenuItem>
-                                ))}
+                                    {department.map((ag) => {
+                                        return (
+                                            <MenuItem key={ag.id} value={ag.id}>{ag.label}</MenuItem>
+                                        )
+                                    })}
                                 </Select>
                             </FormControl>
                         </div>
@@ -230,18 +265,14 @@ function EditAudience({openEditAudience,setOpenEditAudience,item,singleAudienceI
                             <h4 className="capitalize text-14 text-grey-700 pb-8 font-bold">members</h4>
                             <div className="border-gray-400 border-1 py-14 rounded-md flex items-start overflow-y-scroll flex-wrap min-h-36">
                                 <div className="flex flex-wrap">
-                                    {departments?.map((item,i)=>(
-                                        <div key={i} className="flex bg-blue-500 my-8 mx-8 rounded-md px-12 py-6 items-center justify-between text-white">
-                                            <h5 className='pr-12 text-14 font-semibold'>{item}</h5>
-                                        </div>
-                                    ))}
-                                </div>
-                                <div className="flex flex-wrap">
-                                    {groups?.map((item,i)=>(
-                                        <div key={i} className="flex bg-blue-500 my-8 mx-8 rounded-md px-12 py-6 items-center justify-between text-white">
-                                            <h5 className='pr-12 text-14 font-semibold'>{item}</h5>
-                                        </div>
-                                    ))}
+                                    {departments.map((single,i) => {
+                                        let deptChoices = ( department.find( ({ label,value,id }) => id === single ))
+                                        return (
+                                            <div key={i} className="flex bg-blue-500 my-8 mx-8 rounded-md px-12 py-6 items-center justify-between text-white">
+                                                <h5 className='text-14 font-semibold'>{deptChoices?.label}</h5>
+                                            </div>
+                                        )
+                                    })}
                                 </div>
                                 <div className="flex flex-wrap">
                                     {surveyParticipants?.map((item,i)=>(
