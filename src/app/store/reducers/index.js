@@ -11,6 +11,8 @@ import { roleListReducer } from './roles.reducers';
 import { entityListReducer } from './entities.reducers';
 import { departmentReducer } from './departments.reducers';
 import { menuReducer} from './menu.reducers';
+// import { surveyFormsReducer} from '../../main/employee_survey/store/reducers/surveyForms.reducer';
+
 
 const createReducer = asyncReducers =>
 	combineReducers({
@@ -26,7 +28,8 @@ const createReducer = asyncReducers =>
 		roles: roleListReducer,
 		entities: entityListReducer,
 		departments: departmentReducer,
-		menu: menuReducer
+		menu: menuReducer,
+		// surveyForms: surveyFormsReducer
 	});
 
 export default createReducer;
