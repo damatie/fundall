@@ -241,7 +241,8 @@ input:-webkit-autofill {
     color:#C4C4C4;
     font-size: 18px;
     border-radius:17px;
-    padding: 10px 5px;
+    line-height: 20px;
+    padding: 12px 5px;
     cursor:pointer
   }
 
@@ -249,7 +250,6 @@ input:-webkit-autofill {
     background:#4B507E;
     color: white;
     border-radius:17px;
-    padding: 10px 5px;
     cursor:pointer
   }
 #topToBottom {
@@ -259,6 +259,7 @@ input:-webkit-autofill {
   -o-animation: topToBottom ease .5s;
   -ms-animation: topToBottom ease .5s;
 }
+
 @keyframes topToBottom {
   0% {
     margin-top: -4%;
@@ -304,6 +305,7 @@ input:-webkit-autofill {
   }
 }
 
+/* End Survey Forms  */
 @import 'print.css';
 @import 'tables.css';
 @import 'prism.css';

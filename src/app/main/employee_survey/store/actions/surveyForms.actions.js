@@ -1,9 +1,10 @@
 
-export function inputTypeSelected(selectedValue,) {
+export function inputTypeSelected(selectedValue, inputTypeValue) {
 	return dispatch => {
 		dispatch({
 		  type: 'INPUTTYPESELECTED',
 			selected: selectedValue,
+			inputType: inputTypeValue,
 		
 		});
 	}
