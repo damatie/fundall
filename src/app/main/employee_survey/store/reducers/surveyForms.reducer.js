@@ -12,7 +12,7 @@ export const surveyFormsReducer = (state = initialState , action) =>{
 			console.log(state.selected+1)
 			return{
 				selected: action.selected,
-				inputType: 'TEST MAXWELL'
+				inputType: action.inputType
 
 			}
 			break;  

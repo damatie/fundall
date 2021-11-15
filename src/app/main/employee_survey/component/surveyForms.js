@@ -71,16 +71,15 @@ const surveyForms = () => {
   // handle selected input type option
   function handleSelected(name,value,icon) {
     setInputTypeIcon(icon)
-    // dispatch(allSurveyFormActions.inputNameSelected(name));
     switch(value) {
       case 'multipleChoice':
-        return dispatch(allSurveyFormActions.inputTypeSelected(multiChoice));
+        return dispatch(allSurveyFormActions.inputTypeSelected(multiChoice, name));
         break;
         case 'checkBox':
-        return dispatch(allSurveyFormActions.inputTypeSelected(checkBox));
+        return dispatch(allSurveyFormActions.inputTypeSelected(checkBox,  name));
         break;
       default:
-        return dispatch(allSurveyFormActions.inputTypeSelected(null));
+        return dispatch(allSurveyFormActions.inputTypeSelected(null, null));
     }
   }
   // handle dropdown event hide when click outside
@@ -104,7 +103,7 @@ const surveyForms = () => {
   }, []);
   // intial event
   useEffect(() => {
-	  dispatch(allSurveyFormActions.inputTypeSelected())
+	  dispatch(allSurveyFormActions.inputTypeSelected(null, null))
     console.log(reducer)
 	}, [dispatch]);
 
@@ -163,7 +162,7 @@ const surveyForms = () => {
             inputTypes.map((name, index)=>
               <li className=" block inputTypeOptionsLi" key={index} onClick={() => handleSelected(name.name,name.value,name.icon)}>
                 <span className="  w-full px-4 block" >
-                  <span style={{ fontSize: 26, color:'#00CCF2'}}>
+                  <span style={{ fontSize: 20, color:'#00CCF2'}}>
                   {name.icon}
                   </span>
                   <span className="pl-20 font-semibold">
