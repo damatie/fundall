@@ -1,16 +1,19 @@
 
 const initialState  = {
-    selected:0
+  selected: null,
+	inputType: ''
 }
 
 export const surveyFormsReducer = (state = initialState , action) =>{
 	
 	switch (action.type) {
-		case `INPUTSELECTEDTYPE`: {
+		case `INPUTTYPESELECTED`: {
 			console.log('reducer', state, action)
 			console.log(state.selected+1)
 			return{
-				selected: state.selected+1
+				selected: action.selected,
+				inputType: 'TEST MAXWELL'
+
 			}
 			break;  
 		}

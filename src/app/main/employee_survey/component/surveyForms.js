@@ -60,27 +60,27 @@ const checkBox = (
    
 const surveyForms = () => {
   const dispatch = useDispatch();
-  const counter = useSelector((state => state.surveyForms.selected ))
+  const isSelected = useSelector((state => state.surveyForms.surveyFormsReducer.selected ))
+  const inputType = useSelector((state => state.surveyForms.surveyFormsReducer.inputType ))
   const [showInputTypeList,setShowInputTypeList] = useState(false)
-  const [inputType,setInputType] = useState(null)
+  // const [inputType,setInputType] = useState(null)
   const [inputTypeIcon,setInputTypeIcon] = useState()
   const [isRequired, setIsRequired] = useState( false )
-  const [inputTypeSelected, setInputTypeSelected] = useState( null)
   const compRef = useRef();
 
   // handle selected input type option
   function handleSelected(name,value,icon) {
     setInputTypeIcon(icon)
-    setInputType(name)
+    // dispatch(allSurveyFormActions.inputNameSelected(name));
     switch(value) {
       case 'multipleChoice':
-        return setInputTypeSelected(multiChoice);
+        return dispatch(allSurveyFormActions.inputTypeSelected(multiChoice));
         break;
         case 'checkBox':
-        return setInputTypeSelected(checkBox);
+        return dispatch(allSurveyFormActions.inputTypeSelected(checkBox));
         break;
       default:
-        return setInputTypeSelected(null);
+        return dispatch(allSurveyFormActions.inputTypeSelected(null));
     }
   }
   // handle dropdown event hide when click outside
@@ -104,7 +104,7 @@ const surveyForms = () => {
   }, []);
   // intial event
   useEffect(() => {
-	  dispatch(allSurveyFormActions.selectedInputType())
+	  dispatch(allSurveyFormActions.inputTypeSelected())
     console.log(reducer)
 	}, [dispatch]);
 
@@ -114,7 +114,6 @@ const surveyForms = () => {
   return(
     <div className=" flex  w-full relative ">
       <Cards className="w-7/12 mx-auto py-10 px-16 rounded-20px shadow-10 ">
-       value {counter}
         <div className=" mb-24 ">
         <span className=" text- px-10 py-6 rounded-md cursor-pointer text-12 font-medium flex w-64 float-right mb-20" style={{background:'#61DAFB', color:'#242B63'}}>
         <AddIcon style={{ fontSize: 15 }} /> Add
@@ -143,7 +142,7 @@ const surveyForms = () => {
           </span>
         </div>
         </div>
-        {inputTypeSelected}
+        {isSelected}
         <div className="mt-10">
           <span className=" float-right -mt-8 pl-10">
             <span className="text-grey-A800 text-13"> Required</span>

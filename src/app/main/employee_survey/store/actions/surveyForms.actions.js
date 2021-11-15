@@ -1,7 +1,19 @@
-export function selectedInputType() {
+
+export function inputTypeSelected(selectedValue,) {
 	return dispatch => {
 		dispatch({
-		  type: 'INPUTSELECTEDTYPE'
+		  type: 'INPUTTYPESELECTED',
+			selected: selectedValue,
+		
 		});
 	}
 }
+// export function inputNameSelected(inputTypeValue) {
+// 	return dispatch => {
+// 		dispatch({
+// 		  type: 'INPUTNAMESELECTED',
+// 			inputType: inputTypeValue,
+// 		});
+// 	}
+// }
+
