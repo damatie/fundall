@@ -15,7 +15,6 @@ import SideModal from 'app/shared/modal/SideModal';
 import SharedButton from 'app/shared/button/SharedButton';
 
 
-
 const department = [
     {
         label:"Human Resources",
@@ -39,43 +38,6 @@ const department = [
     }
 ];
 
-const group = [
-    {
-        label:"Company Policy Survey Group",
-        value:1,
-        id:10
-    },
-    {
-        label:"Manager Performance Survey Group",
-        value:2,
-        id:11
-    },
-    {
-        label:"Network Performance Survey Group",
-        value:3,
-        id:12
-    },
-    {
-        label:"Employee Work Life Balance Survey Group",
-        value:4,
-        id:13
-    }
-]
-
-
-const recipientDepartment = [
-    "Human Resources",
-    "Finance",
-    "Media",
-    "Concierge"
-];
-
-const recipientGroup = [
-    "Company Policy Survey Group",
-    "Manager Performance Survey Group",
-    "Network Performance Survey Group",
-    "Employee Work Life Balance Survey Group",
-]
 
 function CreateAudience({ setOpenCreateAudience }) {
 
@@ -90,10 +52,8 @@ function CreateAudience({ setOpenCreateAudience }) {
         name:'',
         description:'',
         participantDepartments:[],
-        participantGroups: [],
         participantIndividualEmail:[],
     })
-
 
 
     const handleName  = (e)  =>  {
@@ -107,12 +67,8 @@ function CreateAudience({ setOpenCreateAudience }) {
     const handleChange = (event) => {
         setDepartments(event.target.value);
         setAudienceFormData({...audienceFormData, participantDepartments:event.target.value})
-      };
+    };
 
-    const handleChangeGroup = (event) => {
-        setGroups(event.target.value)
-        setAudienceFormData({...audienceFormData,participantGroups:event.target.value})
-    }
 
     const handleChangeIndividuals = (e) => {
         setIndividuals(e.target.value)
@@ -178,7 +134,7 @@ function CreateAudience({ setOpenCreateAudience }) {
                     <div className="pb-10">
                         <h4 className="text-14 text-grey-700 pb-4 font-bold border-gray-400 border-b-1">Fill in members you want to be in this group</h4>
                         <div className="w-full pt-16 flex items-center justify-between mb-16">
-                            <FormControl className="w-1/3">
+                            <FormControl className="w-full">
                                 <InputLabel id="demo-group-name-label">Department</InputLabel>
                                 <Select
                                     value={departments}
@@ -193,23 +149,6 @@ function CreateAudience({ setOpenCreateAudience }) {
                                 ))}
                                 </Select>
                             </FormControl>
-                            <FormControl className="w-1/3">
-                                <InputLabel id="group-label">Groups</InputLabel>
-                                <Select
-                                    value={groups}
-                                    onChange={handleChangeGroup}
-                                    displayEmpty
-                                    multiple
-                                    className=""
-                                    inputProps={{ 'aria-label': 'Without label' }}
-                                >
-                                {group.map((groupItem) => (
-                                    <MenuItem key={groupItem.id} value={groupItem.id}>
-                                        {groupItem.label}
-                                    </MenuItem>
-                                ))}
-                                </Select>
-                            </FormControl>
                         </div>
                         <TextField id="outlined-basic" label="Individual's email" value={individuals} variant="outlined" onChange={handleChangeIndividuals} onKeyDown={onKeyDownIndividuals} fullWidth className="mb-24" />
                         <div className="">
@@ -221,16 +160,6 @@ function CreateAudience({ setOpenCreateAudience }) {
                                         return (
                                             <div key={i} className="flex bg-blue-500 my-8 mx-8 rounded-md px-12 py-6 items-center justify-between text-white">
                                                 <h5 className='text-14 font-semibold'>{deptChoices.label}</h5>
-                                            </div>
-                                        )
-                                    })}
-                                </div>
-                                <div className="flex flex-wrap">
-                                    {groups?.map((item,i)=> {
-                                        let groupChoices = (group.find(({ label,value,id }) => id === item ))
-                                        return (
-                                            <div key={i} className="flex bg-blue-500 my-8 mx-8 rounded-md px-12 py-6 items-center justify-between text-white">
-                                                <h5 className='text-14 font-semibold'>{groupChoices.label}</h5>
                                             </div>
                                         )
                                     })}

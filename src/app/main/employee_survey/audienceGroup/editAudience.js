@@ -1,41 +1,13 @@
 import React, { useState,useEffect } from 'react'
 import TextField from '@material-ui/core/TextField';
-import { Button, Paper } from '@material-ui/core';
-import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
-import ListItemText from '@material-ui/core/ListItemText';
 import Select from '@material-ui/core/Select';
-import Checkbox from '@material-ui/core/Checkbox';
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
 import SideModal from 'app/shared/modal/SideModal';
 import SharedButton from 'app/shared/button/SharedButton';
 
-
-
-const group = [
-    {
-        label:"Company Policy Survey Group",
-        value:1,
-        id:10
-    },
-    {
-        label:"Manager Performance Survey Group",
-        value:2,
-        id:11
-    },
-    {
-        label:"Network Performance Survey Group",
-        value:3,
-        id:12
-    },
-    {
-        label:"Employee Work Life Balance Survey Group",
-        value:4,
-        id:13
-    }
-]
 
 const department = [
     {
@@ -58,65 +30,15 @@ const department = [
         value:4,
         id:15
     }
-];
-
-//////////////////////////////////////
-
-
-// const group = [
-//     {
-//         label:"Company Policy Survey Group",
-//         value:1,
-//         id:10
-//     },
-//     {
-//         label:"Manager Performance Survey Group",
-//         value:2,
-//         id:11
-//     },
-//     {
-//         label:"Network Performance Survey Group",
-//         value:3,
-//         id:12
-//     },
-//     {
-//         label:"Employee Work Life Balance Survey Group",
-//         value:4,
-//         id:13
-//     }
-// ]
-//////////////////////////////////////
-
-
-const recipientDepartment = [
-    "Human Resources",
-    "Finance",
-    "Media",
-    "Concierge"
-];
-
-const recipientGroup = [
-    "Company Policy Survey Group",
-    "Manager Performance Survey Group",
-    "Network Performance Survey Group",
-    "Employee Work Life Balance Survey Group",
 ]
-
-
 
 function EditAudience({openEditAudience,setOpenEditAudience,item,singleAudienceId,singleAudienceItem,setSingleAudienceItem}) {
 
     const [name, setName] = useState(singleAudienceItem?.title)
     const [description, setDescription] =  useState(singleAudienceItem?.description)
     const [departments, setDepartments] = useState(singleAudienceItem?.participantDepartments.map(singleDep => singleDep.id))
-    const [pickedDepartments, setPickedDepartments] = useState([])
-    const [recipientDepartments, setRecipientDepartments] = useState(singleAudienceItem?.recipientParticipantDepartments)
-    const [recipientPickedDepartments, setRecipientPickedDepartments] = useState([])
-    const [recipientGroups, setRecipientGroups] = useState(singleAudienceItem?.recipientParticipantGroups)
     const [surveyParticipants, setSurveyParticipants] = useState(singleAudienceItem?.participantIndividualEmail)
-    const [recipientSurveyParticipants, setRecipientSurveyParticipants] = useState(singleAudienceItem?.recipientParticipantIndividualEmail)
     const [individuals, setIndividuals] = useState("")
-    const [recipientIndividuals, setRecipientIndividuals] = useState("")
     const [surveyFormData, setSurveyFormData] = useState({
         name,
         description,
@@ -137,48 +59,7 @@ function EditAudience({openEditAudience,setOpenEditAudience,item,singleAudienceI
     const handleChange = (event) => {
         setDepartments(event.target.value);
         setSurveyFormData({...surveyFormData, participantDepartments:event.target.value})
-      };
-
-    const handleChangeRecipient = (event) => {
-        setRecipientDepartments(event.target.value)
-        setRecipientPickedDepartments(event.target.value)
-        setSurveyFormData({...surveyFormData,reportingDepartments:event.target.value})
-    }
-
-    const handleChangeGroup = (event) => {
-        setGroups(event.target.value)
-        setSurveyFormData({...surveyFormData,participantGroups:event.target.value})
-    }
-
-    const handleChangeGroupRecipient = (event) => {
-        setRecipientGroups(event.target.value)
-        setSurveyFormData({...surveyFormData,reportingGroups:event.target.value})
-    }
-
-    const handleChangeIndividualsRecipient = (e) => {
-        setRecipientIndividuals(e.target.value)
-    }
-
-    const onKeyDownIndividualsRecipient = (e) => {
-        const { keyCode }  =  e
-        const trimmedIndividualInput = recipientIndividuals.trim()
-
-        if ( keyCode === 13 && trimmedIndividualInput.length && !recipientSurveyParticipants.includes(trimmedIndividualInput) ) {
-            e.preventDefault()
-            setRecipientSurveyParticipants((prevState) => [...prevState, trimmedIndividualInput])
-            setSurveyFormData({...surveyFormData,reportingIndividualEmail:([...recipientSurveyParticipants,trimmedIndividualInput])})
-            setRecipientIndividuals('')
-        }
-    }
-
-    const deleteTagRecipient = (id) => {
-        const items = recipientSurveyParticipants;
-        if (items.length > 0) {
-            const result = items.filter(item => item !== items[id])
-            setRecipientSurveyParticipants(result)
-            setSurveyFormData({...surveyFormData,reportingIndividualEmail:result})
-        }
-    }
+    };
 
     const handleChangeIndividuals = (e) => {
         setIndividuals(e.target.value)

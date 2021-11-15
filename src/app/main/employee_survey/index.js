@@ -12,7 +12,6 @@ import AudienceGroupIndexPage from './audienceGroup';
 import CreateAudience from './audienceGroup/createAudience';
 import CreateSurvey from './survey/createSurvey';
 import EditAudience from './audienceGroup/editAudience';
-import useEmployeeSurvey from './hooks/useEmployeeSurvey';
 
 
 const index = () => {
@@ -20,17 +19,6 @@ const index = () => {
 
 	const [openCreateAudience, setOpenCreateAudience] = useState(false)
 	const [createSurveyModal, setCreateSurveyModal] = useState(false)
-	
-	const dispatch = useDispatch();
-	const { push } = useHistory();
-	const state = useSelector(state => state.open);
-
-
-	const customHook = useEmployeeSurvey({
-		dispatch,
-		push,
-		state
-	});
 
 
 
