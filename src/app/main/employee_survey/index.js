@@ -11,7 +11,6 @@ import SurveyIndexPage from './survey';
 import AudienceGroupIndexPage from './audienceGroup';
 import CreateAudience from './audienceGroup/createAudience';
 import CreateSurvey from './survey/createSurvey';
-import EditAudience from './audienceGroup/editAudience';
 
 
 const index = () => {
