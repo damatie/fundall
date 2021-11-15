@@ -53,7 +53,8 @@ const index = () => {
 					<Button
 						variant="contained"
 						color="secondary"
-						onClick={()=>setCreateSurveyModal(true)}
+						onClick={() => setCreateSurveyModal(true)}
+						// onClick={ () => customHook.handleOpenModal()}
 					>
 						Create Survey
 					</Button>
@@ -63,8 +64,10 @@ const index = () => {
 			content={
 				<>
 					<TabsContainer content={content} setOpenCreateAudience={setOpenCreateAudience} />
-					{/* {openCreateAudience	&& <CreateAudience setOpenCreateAudience={setOpenCreateAudience} />} */}
+					{/* <CreateAudience/> */}
+					{openCreateAudience	&& <CreateAudience setOpenCreateAudience={setOpenCreateAudience} />}
 					{createSurveyModal && <CreateSurvey setCreateSurveyModal={setCreateSurveyModal} />}
+
 				</>
 			}
         />
