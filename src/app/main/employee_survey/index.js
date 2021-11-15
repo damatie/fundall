@@ -9,7 +9,6 @@ import Cards from 'app/shared/cards/cards'
 import TabsContainer from 'app/shared/tabs/tabsContainer';
 import SurveyIndexPage from './survey';
 import AudienceGroupIndexPage from './audienceGroup';
-import useEmployeeSurveyList from './hooks/useEmployeeSurveyList';
 import CreateAudience from './audienceGroup/createAudience';
 import CreateSurvey from './survey/createSurvey';
 
