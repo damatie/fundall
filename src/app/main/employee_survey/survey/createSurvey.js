@@ -1,4 +1,5 @@
 import React, { useState,useEffect } from 'react'
+import axios from "axios"
 import TextField from '@material-ui/core/TextField';
 import FormLabel from '@material-ui/core/FormLabel';
 import FormGroup from '@material-ui/core/FormGroup';
@@ -14,31 +15,12 @@ import Select from '@material-ui/core/Select';
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
 import SideModal from 'app/shared/modal/SideModal';
 import SharedButton from 'app/shared/button/SharedButton';
+import { getBaseUrl } from 'app/shared/getBaseUrl'
+import { useAuth } from 'app/hooks/useAuth'
 
 
 
-const department = [
-    {
-        label:"Human Resources",
-        value:1,
-        id:12
-    },
-    {
-        label:"Finance",
-        value:2,
-        id:13
-    },
-    {
-        label:"Media",
-        value:3,
-        id:14
-    },
-    {
-        label:"Concierge",
-        value:4,
-        id:15
-    }
-];
+
 
 const group = [
     {
@@ -88,6 +70,7 @@ const recipientGroup = [
 
 
 
+
 function CreateSurvey({setCreateSurveyModal,setSurveyCard,surveyCard}) {
 
     const [name, setName] = useState("")
@@ -103,22 +86,55 @@ function CreateSurvey({setCreateSurveyModal,setSurveyCard,surveyCard}) {
     const [individuals, setIndividuals] = useState("")
     const [recipientIndividuals, setRecipientIndividuals] = useState("")
     const [listOfDepartments,setListOfDepartments] = useState([])
+    const [dept,setDept] = useState([
+        // {
+        //     "id": 2,
+        //     "departmentName": "SALES",
+        //     "entityId": 2,
+        //     "departmentCode": null,
+        //     "departmentHeadId": null,
+        //     "startedOn": "2021-10-21",
+        //     "address": null,
+        //     "description": "Sales",
+        //     "companyId": 1,
+        //     "createdAt": "2021-10-21T12:06:50.577Z",
+        //     "updatedAt": "2021-10-21T12:06:50.577Z"
+        //   },
+    ])
     const [surveyFormData, setSurveyFormData] = useState({
-        name:'',
+        // name:'',
+        title:'',
         description:'',
-        participantDepartments:[],
-        participantGroups: [],
-        participantIndividualEmail:[],
+        // participantDepartments:[],
+        addNewDepartments:[],
+        // participantGroups: [],
+        addGroups:[],
+        // participantIndividualEmail:[],
+        emails:[],
         reportingGroups: [],
         reportingIndividualEmail:[],
     })
+
+	const auth = useAuth
     
+    
+    useEffect(() => {
+        axios.get(`${getBaseUrl()}/department/all/2`, {
+            headers: { Authorization: `JWT ${auth().getToken}` }
+        })
+        .then(data => setDept(data.data.data))
+        .catch(e => console.error(e));
+    }, []);
+
+    
+
+
     const [errorName, setErrorName] = useState(false)
 
 
 
     const handleName  = (e)  =>  {
-        setSurveyFormData({...surveyFormData,name:e.target.value})
+        setSurveyFormData({...surveyFormData,title:e.target.value})
     }
 
     const handleDescription  = (e)  =>  {
@@ -134,7 +150,8 @@ function CreateSurvey({setCreateSurveyModal,setSurveyCard,surveyCard}) {
 
     const handleChangeGroup = (event) => {
         setGroups(event.target.value)
-        setSurveyFormData({...surveyFormData,participantGroups:event.target.value})
+        // setSurveyFormData({...surveyFormData,participantGroups:event.target.value})
+        setSurveyFormData({...surveyFormData,addGroups:event.target.value})
     }
 
     const handleChangeGroupRecipient = (event) => {
@@ -181,7 +198,8 @@ function CreateSurvey({setCreateSurveyModal,setSurveyCard,surveyCard}) {
         if ( keyCode === 13 && trimmedIndividualInput.length && !surveyParticipants.includes(trimmedIndividualInput) ) {
             e.preventDefault()
             setSurveyParticipants((prevState) => [...prevState, trimmedIndividualInput])
-            setSurveyFormData({...surveyFormData,participantIndividualEmail:([...surveyParticipants,trimmedIndividualInput])})
+            // setSurveyFormData({...surveyFormData,participantIndividualEmail:([...surveyParticipants,trimmedIndividualInput])})
+            setSurveyFormData({...surveyFormData,emails:([...surveyParticipants,trimmedIndividualInput])})
             setIndividuals('')
         }
     }
@@ -191,25 +209,71 @@ function CreateSurvey({setCreateSurveyModal,setSurveyCard,surveyCard}) {
         if (items.length > 0) {
             const result = items.filter(item => item !== items[id])
             setSurveyParticipants(result)
-            setSurveyFormData({...surveyFormData,participantIndividualEmail:result})
+            // setSurveyFormData({...surveyFormData,participantIndividualEmail:result})
+            setSurveyFormData({...surveyFormData,emails:result})
         }
     }
 
     const submitSurveyForm  =   (e)  =>  {
         e.preventDefault();
         console.log(surveyFormData)
+        // axios({
+        //     method: 'post',
+        //     url:`${getBaseUrl()}/survey/create-survey`,
+        //     data: {
+        //         title:surveyFormData.title,
+        //         description:surveyFormData.description,
+        //         addNewDepartments:surveyFormData.addNewDepartments,
+        //         addGroups: surveyFormData.addGroups,
+        //         emails: surveyFormData.emails,
+        //         reportingGroups: [],
+        //         reportingIndividualEmail:[],
+        //     },
+        //     headers: { Authorization: `JWT ${auth().getToken}` }
+        // })
+        // .then(response => console.log(response))
+        // .catch(err => console.error(err))
     }
+///////////////////////////////
+
+// const [surveyFormData, setSurveyFormData] = useState({
+//     // name:'',
+//     title:'',
+//     description:'',
+//     // participantDepartments:[],
+//     addNewDepartments:[],
+//     // participantGroups: [],
+//     addGroups:[],
+//     // participantIndividualEmail:[],
+//     emails:[],
+//     reportingGroups: [],
+//     reportingIndividualEmail:[],
+// })
+
+// const auth = useAuth
+
+
+// useEffect(() => {
+//     axios.get(`${getBaseUrl()}/department/all/2`, {
+//         headers: { Authorization: `JWT ${auth().getToken}` }
+//     })
+//     .then(data => setDept(data.data.data))
+//     .catch(e => console.error(e));
+// }, []);
+
+    ////////////////////////////
 
 
 
     const handleChangeDepartments = (event) => {
       setDepartments(event.target.value);
-      setSurveyFormData({...surveyFormData,participantDepartments:event.target.value})
+    //   setSurveyFormData({...surveyFormData,participantDepartments:event.target.value})
+      setSurveyFormData({...surveyFormData,addNewDepartments:event.target.value})
     };
 
 
     function SubmitButton(){
-        if (surveyFormData.name && surveyFormData.description && (surveyFormData.participantDepartments.length > 0 || surveyFormData.participantGroups.length > 0 || surveyFormData.participantIndividualEmail.length > 0 )){
+        if (surveyFormData.title && surveyFormData.description && (surveyFormData.addNewDepartments.length > 0 || surveyFormData.addGroups.length > 0 || surveyFormData.emails.length > 0 )){
           return (
             <SharedButton
                 variant="contained"
@@ -274,9 +338,12 @@ function CreateSurvey({setCreateSurveyModal,setSurveyCard,surveyCard}) {
                                     className=""
                                     inputProps={{ 'aria-label': 'Without label' }}
                                 >
-                                {department.map((ag) => (
-                                    <MenuItem key={ag.id} value={ag.id}>{ag.label}</MenuItem>
+                                {dept.map((ag) => (
+                                    <MenuItem key={ag.id} value={ag.id}>{ag.departmentName}</MenuItem>
                                 ))}
+                                {/* {department.map((ag) => (
+                                    <MenuItem key={ag.id} value={ag.id}>{ag.departmentName}</MenuItem>
+                                ))} */}
                                 </Select>
                             </FormControl>
                             <FormControl className="w-1/3">
@@ -312,10 +379,10 @@ function CreateSurvey({setCreateSurveyModal,setSurveyCard,surveyCard}) {
                             <div className="border-gray-400 border-1  py-14 rounded-md flex items-start overflow-y-scroll flex-wrap min-h-36">
                                 <div className="flex flex-wrap">
                                     {departments.map((single,i) => {
-                                        let deptChoices = ( department.find( ({ label,value,id }) => id === single ))
+                                        let deptChoices = ( dept.find( ({ label,value,id }) => id === single ))
                                         return (
                                             <div key={i} className="flex bg-blue-500 my-8 mx-8 rounded-md px-12 py-6 items-center justify-between text-white">
-                                                <h5 className='text-14 font-semibold'>{deptChoices.label}</h5>
+                                                <h5 className='text-14 font-semibold'>{deptChoices.departmentName}</h5>
                                             </div>
                                         )
                                     })}
