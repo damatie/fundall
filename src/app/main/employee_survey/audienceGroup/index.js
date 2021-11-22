@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import EditAudience from './editAudience';
 import CreateAudience from './createAudience';
 import Swal from 'sweetalert2';
+import { useAxiosGet } from '../hooks/useAxiosHook';
 
 const AudienceGroupIndexPage = () => {
 
@@ -14,146 +15,45 @@ const AudienceGroupIndexPage = () => {
 	const [openCreateAudience, setOpenCreateAudience] = useState(false)
 
     const [audienceCard, setAudienceCard] = useState([
-        {
-            title:"Employee Work Life Balance Survey Group",
-            description:"This is a description. Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia",
-            numberOfMembers:40,
-            id:0,
-            participantDepartments:[
-                {
-                    label:"Human Resources",
-                    value:1,
-                    id:12
-                },
-            ],
-            participantGroups:[
-                {
-                    label:"Company Policy Survey Group",
-                    value:1,
-                    id:10
-                },
-                {
-                    label:"Manager Performance Survey Group",
-                    value:2,
-                    id:11
-                },
-                {
-                    label:"Network Performance Survey Group",
-                    value:3,
-                    id:12
-                },
-                {
-                    label:"Employee Work Life Balance Survey Group",
-                    value:4,
-                    id:13
-                }
-            ],
-            participantIndividualEmail:["hello@email.co","hi@gmai.co"],
-            recipientParticipantDepartments:[],
-            recipientParticipantGroups:["Company Policy Survey Group"],
-            recipientParticipantIndividualEmail:[],
-        },
-        {
-            title:"Company Policy Survey Group",
-            description:"This is a description. Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia",
-            numberOfMembers:40,
-            id:1,
-            participantDepartments:[
-                {
-                    label:"Human Resources",
-                    value:1,
-                    id:12
-                },
-                {
-                    label:"Finance",
-                    value:2,
-                    id:13
-                },
-            ],
-            participantGroups:[
-                {
-                    label:"Company Policy Survey Group",
-                    value:1,
-                    id:10
-                },
-                {
-                    label:"Manager Performance Survey Group",
-                    value:2,
-                    id:11
-                },
-                {
-                    label:"Network Performance Survey Group",
-                    value:3,
-                    id:12
-                },
-            ],
-            participantIndividualEmail:[],
-            recipientParticipantDepartments:[],
-            recipientParticipantGroups:["Company Policy Survey Group"],
-            recipientParticipantIndividualEmail:[],
-        },
-        {
-            title:"Manager Performance Survey Group",
-            description:"This is a description. Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia",
-            numberOfMembers:40,
-            id:2,
-            participantDepartments:[
-                {
-                    label:"Media",
-                    value:3,
-                    id:14
-                },
-                {
-                    label:"Concierge",
-                    value:4,
-                    id:15
-                }
-            ],
-            participantGroups:[],
-            participantIndividualEmail:[],
-            recipientParticipantDepartments:[],
-            recipientParticipantGroups:["Company Policy Survey Group"],
-            recipientParticipantIndividualEmail:[],
-        },
-        {
-            title:"Network Performance Survey Group",
-            description:"This is a description.",
-            numberOfMembers:40,
-            id:3,
-            participantDepartments:[
-                {
-                    label:"Human Resources",
-                    value:1,
-                    id:12
-                },
-                {
-                    label:"Media",
-                    value:3,
-                    id:14
-                },
-                {
-                    label:"Concierge",
-                    value:4,
-                    id:15
-                }
-            ],
-            participantGroups:[
-                {
-                    label:"Company Policy Survey Group",
-                    value:1,
-                    id:10
-                },
-                {
-                    label:"Employee Work Life Balance Survey Group",
-                    value:4,
-                    id:13
-                }
-            ],
-            participantIndividualEmail:["johndoe@email.co", "aceo@company.co"],
-            recipientParticipantDepartments:["Human Resources", "Media"],
-            recipientParticipantGroups:["Company Policy Survey Group"],
-            recipientParticipantIndividualEmail:["johndoe@email.co", "hello@company.co"],
-        },
+        // {
+        //     title:"Employee Work Life Balance Survey Group",
+        //     description:"This is a description. Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia",
+        //     numberOfMembers:40,
+        //     id:0,
+        //     participantDepartments:[
+        //         {
+        //             label:"Human Resources",
+        //             value:1,
+        //             id:12
+        //         },
+        //     ],
+        //     participantGroups:[
+        //         {
+        //             label:"Company Policy Survey Group",
+        //             value:1,
+        //             id:10
+        //         },
+        //         {
+        //             label:"Manager Performance Survey Group",
+        //             value:2,
+        //             id:11
+        //         },
+        //         {
+        //             label:"Network Performance Survey Group",
+        //             value:3,
+        //             id:12
+        //         },
+        //         {
+        //             label:"Employee Work Life Balance Survey Group",
+        //             value:4,
+        //             id:13
+        //         }
+        //     ],
+        //     participantIndividualEmail:["hello@email.co","hi@gmai.co"],
+        //     recipientParticipantDepartments:[],
+        //     recipientParticipantGroups:["Company Policy Survey Group"],
+        //     recipientParticipantIndividualEmail:[],
+        // },
     ])
 
     const [singleAudienceId,setSingleAudienceId] = useState()
@@ -182,6 +82,8 @@ const AudienceGroupIndexPage = () => {
     //     setSingleAudienceId(i)
     //     setDeleteModal(true)
     // }
+
+    useAxiosGet('surveyGroup',setAudienceCard)
 
 	const confirmDeleteAudience = (audienceCardItem,i) => {
         let title = audienceCardItem.title
@@ -253,11 +155,11 @@ const AudienceGroupIndexPage = () => {
                                 </div>
                                 <div className="py-10 w-8/12">
                                     <Link to={'employee-survey/single-audience/' + audienceCardItem?.id } className="text-black hover:no-underline">
-                                        <h3 className="text-2xl p-4 pb-0 border-b-2 border-gray-A100 font-bold">   {audienceCardItem?.title}
+                                        <h3 className="text-2xl p-4 pb-0 border-b-2 border-gray-A100 font-bold">   {audienceCardItem?.name}
                                         </h3>
                                     </Link>
                                     <h5 className="py-10 text-16 w-full">{audienceCardItem?.description}</h5>
-                                    <p className="text-blue-400 cursor-pointer text-18">{audienceCardItem?.numberOfMembers} members in this group</p>
+                                    <p className="text-blue-400 cursor-pointer text-18">{audienceCardItem?.numberOfMembers ? audienceCardItem?.numberOfMembers : 0} members in this group</p>
                                 </div>
                             </Cards>
                         ))

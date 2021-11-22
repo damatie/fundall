@@ -1,40 +1,13 @@
 import React, { useState,useEffect } from 'react'
-import axios from "axios"
+import { useAxiosGetAllSurveys } from '../hooks/useAxiosHook'
 import Cards from 'app/shared/cards/cards'
-import SharedButton from 'app/shared/button/SharedButton'
-import { getBaseUrl } from 'app/shared/getBaseUrl'
-// import { Auth } from 'app/auth'
-import { useAuth } from 'app/hooks/useAuth'
-import { TextField } from '@material-ui/core'
 
 const SurveyIndexPage = () => {
 
-
-	const [surveyCard, setSurveyCard] = useState([
-        // {
-        //     title:"Company policy survey",
-        //     description:"This is a description.Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia",
-        //     date:"13/10/2021",
-        //     noOfRecipients:0,
-        //     recipients:[
-        //         {email: 'finance@cbitindustries.com'},
-        //         {email: 'hr@cbitindustries.com'},
-        //     ],
-        //     responseRate:88
-        // }
-    ])
+	const [surveyCard, setSurveyCard] = useState([])
     
-	const auth = useAuth
-
-    useEffect(() => {
-		axios.get(`${getBaseUrl()}/survey`, {
-			headers: { Authorization: `JWT ${auth().getToken}` }
-		})
-        .then(data => setSurveyCard(data.data.message))
-        .catch(e => console.error(e));
-	}, []);
-
-
+    useAxiosGetAllSurveys('survey',setSurveyCard)
+    
 
     return (
         <div className="">
@@ -42,9 +15,8 @@ const SurveyIndexPage = () => {
             <Cards className="w-9/12 mx-auto px-16">
                 <h2 className="text-xl mb-16 font-semibold capitalize">survey list</h2>
 
-
                 {
-                    surveyCard.length ? (
+                    surveyCard?.length ? (
                         surveyCard?.map((surveyCardItem,i)=>(
                         <div className="flex justify-between w-full bg-white shadow-md mb-40 py-16 px-36 rounded-20">
                             <div className="w-2/3">
