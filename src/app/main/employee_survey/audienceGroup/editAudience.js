@@ -7,58 +7,109 @@ import Select from '@material-ui/core/Select';
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
 import SideModal from 'app/shared/modal/SideModal';
 import SharedButton from 'app/shared/button/SharedButton';
+import { useAxiosGet } from '../hooks/useAxiosHook';
+import { useHistory, useParams } from 'react-router';
+import { useAuth } from 'app/hooks/useAuth';
+import axios from 'axios';
 
 
-const department = [
-    {
-        label:"Human Resources",
-        value:1,
-        id:12
-    },
-    {
-        label:"Finance",
-        value:2,
-        id:13
-    },
-    {
-        label:"Media",
-        value:3,
-        id:14
-    },
-    {
-        label:"Concierge",
-        value:4,
-        id:15
-    }
-]
+// const department = [
+//     {
+//         label:"Human Resources",
+//         value:1,
+//         id:12
+//     },
+//     {
+//         label:"Finance",
+//         value:2,
+//         id:13
+//     },
+//     {
+//         label:"Media",
+//         value:3,
+//         id:14
+//     },
+//     {
+//         label:"Concierge",
+//         value:4,
+//         id:15
+//     }
+// ]
 
-function EditAudience({openEditAudience,setOpenEditAudience,item,singleAudienceId,singleAudienceItem,setSingleAudienceItem}) {
+function EditAudience({openEditAudience,setOpenEditAudience,testData,item,singleAudienceId,singleAudienceItem,setSingleAudienceItem}) {
+    // console.log(singleAudienceItem)
 
-    const [name, setName] = useState(singleAudienceItem?.title)
-    const [description, setDescription] =  useState(singleAudienceItem?.description)
-    const [departments, setDepartments] = useState(singleAudienceItem?.participantDepartments.map(singleDep => singleDep.id))
-    const [surveyParticipants, setSurveyParticipants] = useState(singleAudienceItem?.participantIndividualEmail)
+    // const { id } = useParams()
+
+    // let paramsId = id
+
+    const [updateGroupData,setUpdateGroupData] = useState({
+        existingGroupInfo:{
+            description:'',
+            groupId:null,
+            groupName:updateGroupData?.existingGroupInfo?.groupName,
+        },
+        emailMembers:[],
+        deptMembers:[]
+    })
+    console.log(testData)
+    useAxiosGet(`surveyGroup/${singleAudienceId}`,setUpdateGroupData)
+    // console.log('updated group',updateGroupData)
+    // console.log('singleAudienceItem',singleAudienceItem)
+    // console.log(singleAudienceItem.name)
+
+    // const [name, setName] = useState(singleAudienceItem?.title)
+    // const [description, setDescription] =  useState(singleAudienceItem?.description)
+    // const [department,setDepartment] = useState([])
+    // const [departments, setDepartments] = useState(singleAudienceItem?.participantDepartments.map(singleDep => singleDep.id))
+    // const [surveyParticipants, setSurveyParticipants] = useState(singleAudienceItem?.participantIndividualEmail)
+    // const [individuals, setIndividuals] = useState("")
+    // const [surveyFormData, setSurveyFormData] = useState({
+    //     name,
+    //     description,
+    //     participantDepartments:departments,
+    //     participantIndividualEmail:surveyParticipants
+    // })
+    // ************************************
+    // const [name, setName] = useState(singleAudienceItem?.name)
+    // const [name, setName] = useState(updateGroupData?.existingGroupInfo?.groupName)
+    const [name, setName] = useState(testData?.existingGroupInfo?.groupName)
+    // const [name, setName] = useState('')
+    const [description, setDescription] =  useState(testData?.existingGroupInfo?.description)
+    const [department,setDepartment] = useState([])
+    // const [departments, setDepartments] = useState(updateGroupData?.deptMembers?.map(singleDep => singleDep.id))
+    const [departments, setDepartments] = useState(testData?.deptMembers?.map(singleDep => singleDep.id))
+    const [surveyParticipants, setSurveyParticipants] = useState(testData?.emailMembers)
     const [individuals, setIndividuals] = useState("")
-    const [surveyFormData, setSurveyFormData] = useState({
+    const [newUpdatedFormData, setNewUpdatedFormData] = useState({
         name,
         description,
-        participantDepartments:departments,
-        participantIndividualEmail:surveyParticipants
+        // participantDepartments:departments,
+        deptIds:departments,
+        // participantIndividualEmail:surveyParticipants
+        emails:surveyParticipants
     })
 
 
 
+    useAxiosGet('department/all/2',setDepartment)
+
+    // console.log(updateGroupData?.existingGroupInfo?.groupName)
+    // console.log(name)
+
+
     const handleName  = (e)  =>  {
-        setSurveyFormData({...surveyFormData,name:e.target.value})
+        setNewUpdatedFormData({...newUpdatedFormData,name:e.target.value})
     }
 
     const handleDescription  = (e)  =>  {
-        setSurveyFormData({...surveyFormData,description:e.target.value})
+        setNewUpdatedFormData({...newUpdatedFormData,description:e.target.value})
     }
 
     const handleChange = (event) => {
         setDepartments(event.target.value);
-        setSurveyFormData({...surveyFormData, participantDepartments:event.target.value})
+        // setSurveyFormData({...surveyFormData, participantDepartments:event.target.value})
+        setNewUpdatedFormData({...newUpdatedFormData, deptIds:event.target.value})
     };
 
     const handleChangeIndividuals = (e) => {
@@ -74,7 +125,8 @@ function EditAudience({openEditAudience,setOpenEditAudience,item,singleAudienceI
             // newArr = [...surveyParticipants]
             setSurveyParticipants((prevState) => [...prevState, trimmedIndividualInput])
             // setSurveyParticipants(newArr)
-            setSurveyFormData({...surveyFormData,participantIndividualEmail:([...surveyParticipants, trimmedIndividualInput])})
+            // setSurveyFormData({...surveyFormData,participantIndividualEmail:([...surveyParticipants, trimmedIndividualInput])})
+            setNewUpdatedFormData({...newUpdatedFormData,emails:([...surveyParticipants, trimmedIndividualInput])})
             setIndividuals('')
         }
     }
@@ -84,35 +136,54 @@ function EditAudience({openEditAudience,setOpenEditAudience,item,singleAudienceI
         if (items.length > 0) {
             const result = items.filter(item => item !== items[id])
             setSurveyParticipants(result)
-            setSurveyFormData({...surveyFormData,participantIndividualEmail:result})
+            setNewUpdatedFormData({...newUpdatedFormData,emails:result})
         }
     }
 
-    const submitSurveyForm  =   (e)  =>  {
+    const auth = useAuth        
+    const history = useHistory()
+
+    const submitUpdateGroupForm  =   (e)  =>  {
         e.preventDefault();
-        console.log(surveyFormData)
+        // console.log(newUpdatedFormData)
+        // surveyGroup/:id
+
+        axios.patch(
+           `https://agile-dawn-03556.herokuapp.com/api/v1/surveyGroup/${testData.existingGroupInfo.groupId}`,
+            newUpdatedFormData,
+            {headers: { Authorization: `JWT ${auth().getToken}` }}
+            )
+        .then(response => {
+            if(response.status === 200) setOpenCreateAudience(false)
+            console.log(response)
+            // history.push('/employee-survey')
+            window.location.reload()
+        })
+        .catch(err => console.error(err))
     }
 
 
 
     return (
         <SideModal title="Audience/Groups" open={open} handleClose={() => setOpenEditAudience(false)} >
-            <h3 className="mt-8 w-11/12 mx-auto py-10 text-xl font-semibold">Edit {singleAudienceItem?.title}</h3>
+            <h3 className="mt-8 w-11/12 mx-auto py-10 text-xl font-semibold">Edit {updateGroupData?.existingGroupInfo?.groupName}</h3>
             <div className="bg-white w-11/12 mt-8 mx-auto shadow mb-56 rounded-20">
                 <form className="p-28">
                     <TextField
                         label="Group Name"
                         id="outlined-margin-normal"
                         className="inline-block p-1 mb-24"
-                        defaultValue={singleAudienceItem?.title}
                         variant="outlined"
+                        defaultValue={testData?.existingGroupInfo?.groupName}
                         fullWidth
+                        name="name"
                         onChange={(e)=>handleName(e)}
                     />
+                    
                     <TextField
                         id="outlined-multiline-static"
                         label="Description"
-                        defaultValue={singleAudienceItem?.description}
+                        defaultValue={testData?.existingGroupInfo?.description}
                         multiline
                         rows={4}
                         fullWidth
@@ -135,7 +206,7 @@ function EditAudience({openEditAudience,setOpenEditAudience,item,singleAudienceI
                                 >
                                     {department.map((ag) => {
                                         return (
-                                            <MenuItem key={ag.id} value={ag.id}>{ag.label}</MenuItem>
+                                            <MenuItem key={ag?.id} value={ag?.id}>{ag?.departmentName}</MenuItem>
                                         )
                                     })}
                                 </Select>
@@ -150,7 +221,7 @@ function EditAudience({openEditAudience,setOpenEditAudience,item,singleAudienceI
                                         let deptChoices = ( department.find( ({ label,value,id }) => id === single ))
                                         return (
                                             <div key={i} className="flex bg-blue-500 my-8 mx-8 rounded-md px-12 py-6 items-center justify-between text-white">
-                                                <h5 className='text-14 font-semibold'>{deptChoices?.label}</h5>
+                                                <h5 className='text-14 font-semibold'>{deptChoices?.departmentName}</h5>
                                             </div>
                                         )
                                     })}
@@ -171,7 +242,7 @@ function EditAudience({openEditAudience,setOpenEditAudience,item,singleAudienceI
                             variant="contained"
                             color="primary"
                             className="py-8 px-28 my-24 text-white font-normal"
-                            onClick={(e)=>submitSurveyForm(e)}
+                            onClick={(e)=>submitUpdateGroupForm(e)}
                         >
                             submit
                         </SharedButton>
@@ -183,3 +254,5 @@ function EditAudience({openEditAudience,setOpenEditAudience,item,singleAudienceI
 }
 
 export default EditAudience
+
+

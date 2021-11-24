@@ -18,6 +18,7 @@ import { useAxiosGet } from '../hooks/useAxiosHook';
 import axios from 'axios';
 import { getBaseUrl } from 'app/shared/getBaseUrl'
 import { useAuth } from 'app/hooks/useAuth'
+import { useHistory } from 'react-router';
 
 
 
@@ -188,11 +189,10 @@ function CreateSurvey({setCreateSurveyModal,setSurveyCard,surveyCard}) {
 
     const auth = useAuth
 
+    const history = useHistory()
 
     const submitSurveyForm  =   (e)  =>  {
         e.preventDefault();
-        // console.log(surveyFormData)
-        setLoading(true)
         axios.post(
             'https://agile-dawn-03556.herokuapp.com/api/v1/survey/create-survey',
             surveyFormData,
@@ -201,10 +201,10 @@ function CreateSurvey({setCreateSurveyModal,setSurveyCard,surveyCard}) {
         .then(response => {
             if(response.status === 200) setCreateSurveyModal(false)
             console.log(response)
+            history.push('/employee-survey')
+            // window.location.reload()
         })
         .catch(err => console.error(err))
-        setLoading(false)
-       
     }
 
     const handleChangeDepartments = (event) => {
@@ -222,6 +222,7 @@ function CreateSurvey({setCreateSurveyModal,setSurveyCard,surveyCard}) {
                 color="primary"
                 className="py-8 px-44 my-24 text-14 text-white font-normal"
                 onClick={(e)=>submitSurveyForm(e)}
+                disabled={loading}
             >
                 submit
             </SharedButton>

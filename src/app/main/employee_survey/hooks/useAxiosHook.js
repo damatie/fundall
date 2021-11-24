@@ -26,3 +26,11 @@ export function useAxiosGetAllSurveys (urlString,newData) {
     },[urlString,newData])
 }
 
+
+// export function useAxiosGetSingle(urlString,newData) {
+//     useEffect(() => {
+//         baseAuthGet(urlString)
+//         .then(data => newData(data.data.message))
+//         .catch(e => console.error(e));
+//     },[urlString,newData])
+// }
