@@ -3,6 +3,7 @@ import PageLayout from 'app/shared/pageLayout/PageLayout'
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 import SurveyForms from '../component/surveyForms'
+import SurveyQuestion from '../component/surveyQuestion'
 import SaveIcon from '@material-ui/icons/Save';
 
 
@@ -38,7 +39,9 @@ const surveyForm = () =>{
           </span>
         </div>
         <div className=" mt-72">
+          <SurveyQuestion/>
           <SurveyForms/>
+          
         </div>
       </div>
       }
