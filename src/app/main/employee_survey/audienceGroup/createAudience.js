@@ -11,38 +11,28 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Chip from '@material-ui/core/Chip';
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
 import {Link} from "react-router-dom"
+import { useHistory } from "react-router"
 import SideModal from 'app/shared/modal/SideModal';
 import SharedButton from 'app/shared/button/SharedButton';
+import { useAxiosGet } from '../hooks/useAxiosHook';
+import axios from 'axios';
+import { useAuth } from 'app/hooks/useAuth';
 
 
-const department = [
-    {
-        label:"Human Resources",
-        value:1,
-        id:12
-    },
-    {
-        label:"Finance",
-        value:2,
-        id:13
-    },
-    {
-        label:"Media",
-        value:3,
-        id:14
-    },
-    {
-        label:"Concierge",
-        value:4,
-        id:15
-    }
-];
+// const department = [
+//     {
+//         departmentName:"Human Resources",
+//         value:1,
+//         id:12
+//     }
+// ];
 
 
 function CreateAudience({ setOpenCreateAudience }) {
 
     const [name, setName] = useState("")
     const [description, setDescription] =  useState("")
+    const [department,setDepartment] = useState([])
     const [departments, setDepartments] = useState([])
     const [pickedDepartments, setPickedDepartments] = useState([])
     const [groups, setGroups] = useState([])
@@ -51,9 +41,13 @@ function CreateAudience({ setOpenCreateAudience }) {
     const [audienceFormData, setAudienceFormData] = useState({
         name:'',
         description:'',
-        participantDepartments:[],
-        participantIndividualEmail:[],
+        // participantDepartments:[],
+        deptIds:[],
+        // participantIndividualEmail:[],
+        emails:[]
     })
+
+    useAxiosGet('department/all/2',setDepartment)
 
 
     const handleName  = (e)  =>  {
@@ -66,7 +60,8 @@ function CreateAudience({ setOpenCreateAudience }) {
 
     const handleChange = (event) => {
         setDepartments(event.target.value);
-        setAudienceFormData({...audienceFormData, participantDepartments:event.target.value})
+        // setAudienceFormData({...audienceFormData, participantDepartments:event.target.value})
+        setAudienceFormData({...audienceFormData, deptIds:event.target.value})
     };
 
 
@@ -81,7 +76,8 @@ function CreateAudience({ setOpenCreateAudience }) {
         if ( keyCode === 13 && trimmedIndividualInput.length && !audienceParticipants.includes(trimmedIndividualInput) ) {
             e.preventDefault()
             setAudienceParticipants((prevState) => [...prevState, trimmedIndividualInput])
-            setAudienceFormData({...audienceFormData,participantIndividualEmail:([...audienceParticipants,trimmedIndividualInput])})
+            // setAudienceFormData({...audienceFormData,participantIndividualEmail:([...audienceParticipants,trimmedIndividualInput])})
+            setAudienceFormData({...audienceFormData,emails:([...audienceParticipants,trimmedIndividualInput])})
             setIndividuals('')
         }
     }
@@ -91,15 +87,33 @@ function CreateAudience({ setOpenCreateAudience }) {
         if (items.length > 0) {
             const result = items.filter(item => item !== items[id])
             setAudienceParticipants(result)
-            setAudienceFormData({...audienceFormData,participantIndividualEmail:result})
+            // setAudienceFormData({...audienceFormData,participantIndividualEmail:result})
+            setAudienceFormData({...audienceFormData,emails:result})
         }
     }
 
+    const auth = useAuth
+
+    const history = useHistory()
+
     const submitAudienceForm  =   (e)  =>  {
         e.preventDefault();
-        console.log(audienceFormData)
+        // console.log(audienceFormData)
         // closeCreateAudienceModal()
+        axios.post(
+            'https://agile-dawn-03556.herokuapp.com/api/v1/surveyGroup',
+            audienceFormData,
+            {headers: { Authorization: `JWT ${auth().getToken}` }}
+            )
+        .then(response => {
+            if(response.status === 200) setOpenCreateAudience(false)
+            console.log(response)
+            history.push('/employee-survey')
+            // window.location.reload()
+        })
+        .catch(err => console.error(err))
     }
+    
 
     const closeCreateAudienceModal = () =>{
         setOpenCreateAudience(false)
@@ -145,7 +159,7 @@ function CreateAudience({ setOpenCreateAudience }) {
                                     inputProps={{ 'aria-label': 'Without label' }}
                                 >
                                 {department.map((ag) => (
-                                    <MenuItem key={ag.id} value={ag.id}>{ag.label}</MenuItem>
+                                    <MenuItem key={ag.id} value={ag.id}>{ag.departmentName}</MenuItem>
                                 ))}
                                 </Select>
                             </FormControl>
@@ -159,7 +173,7 @@ function CreateAudience({ setOpenCreateAudience }) {
                                         let deptChoices = ( department.find( ({ label,value,id }) => id === single ))
                                         return (
                                             <div key={i} className="flex bg-blue-500 my-8 mx-8 rounded-md px-12 py-6 items-center justify-between text-white">
-                                                <h5 className='text-14 font-semibold'>{deptChoices.label}</h5>
+                                                <h5 className='text-14 font-semibold'>{deptChoices.departmentName}</h5>
                                             </div>
                                         )
                                     })}
