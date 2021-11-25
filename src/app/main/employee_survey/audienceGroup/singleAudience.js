@@ -9,6 +9,10 @@ import { Link, useHistory, useParams } from 'react-router-dom'
 import Cards from 'app/shared/cards/cards'
 import SharedButton from 'app/shared/button/SharedButton';
 import { Button } from '@material-ui/core';
+import axios from 'axios';
+import { useAuth } from 'app/hooks/useAuth';
+import { useAxiosGet } from '../hooks/useAxiosHook';
+import moment from 'moment';
 
 
 
@@ -16,97 +20,13 @@ import { Button } from '@material-ui/core';
 
 
 function SingleAudience() {
-    const [surveyCard, setSurveyCard] = useState([
-        {
-            title:"Company policy survey",
-            description:"This is a description.Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia",
-            date:"12/10/2021",
-            numberOfPeople:400,
-            responseRate:88
-        },
-        {
-            title:"Company policy survey",
-            description:"This is a description.Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia",
-            date:"12/10/2021",
-            numberOfPeople:400,
-            responseRate:88,
-        },
-        {
-            title:"Company policy survey",
-            description:"This is a description.Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia",
-            date:"12/10/2021",
-            numberOfPeople:400,
-            responseRate:88,
-        },
-        {
-            title:"Company policy survey",
-            description:"This is a description.Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia",
-            date:"12/10/2021",
-            numberOfPeople:400,
-            responseRate:88
-        },
-    ])
+    const [surveyCard, setSurveyCard] = useState([])
 
-    const [audienceCard, setAudienceCard] = useState([
-        {
-            title:"Employee work life balance survey group",
-            description:"This is a description.Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia",
-            numberOfMembers:40
-        },
-        {
-            title:"Company policy survey group",
-            description:"This is a description.Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia",
-            numberOfMembers:40
-        },
-        {
-            title:"Manager performance survey group",
-            description:"This is a description.Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia",
-            numberOfMembers:40
-        },
-        {
-            title:"Network performance survey group",
-            description:"This is a description.Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia",
-            numberOfMembers:40
-        },
-    ])
+    const [audienceCard, setAudienceCard] = useState([])
 
-    const [membersList, setMembersList] = useState([
-        {
-            name:'HR Department',
-            date:"12/01/2021",
-            // id:0,
-        },
-        {
-            name:'HR Department',
-            date:"12/01/2021",
-            // id:1,
-        },
-        {
-            name:'HR Department',
-            date:"12/01/2021",
-            // id:2,
-        },
-        {
-            name:'HR Department',
-            date:"12/01/2021",
-            // id:3,
-        },
-        {
-            name:'HR Department',
-            date:"12/01/2021",
-            // id:4,
-        },
-        {
-            name:'HR Department',
-            date:"12/01/2021",
-            // id:5,
-        },
-        {
-            name:'HR Department',
-            date:"12/01/2021",
-            // id:6,
-        },
-    ])
+    const [clickedAudience,setClickedAudience] = useState()
+
+    const [membersList, setMembersList] = useState([])
 
     const [fullMemberList, setFullMemberList] = useState(false)
 
@@ -123,22 +43,50 @@ function SingleAudience() {
         console.log(123)
     }
 
+    useEffect(() => {
+
+    },[])
+
+    const { id } = useParams()
+
+    let paramsId = id
+    // console.log('paramsId',paramsId)
+
+    const auth = useAuth
+
+    
+    // axios.get(`${getBaseUrl()}/department/all/2`, {
+    useEffect(()=> {
+        axios.get( `https://agile-dawn-03556.herokuapp.com/api/v1/surveyGroup/${paramsId}/members`,{headers: { Authorization: `JWT ${auth().getToken}` }}  )
+        .then(data => console.log(data.data.data))
+        .catch(e => console.error(e));
+    },[])
+
+
+    useAxiosGet(`surveyGroup/${paramsId}`,setClickedAudience)
+    useAxiosGet(`surveyGroup/${paramsId}/surveys`,setSurveyCard)
+    useAxiosGet(`surveyGroup/${paramsId}/members`,setMembersList)
+    
+    // console.log(clickedAudience)
+
 
     return (
         <div  className="w-10/12 mx-auto">
             <div className="my-16 flex items-center">
-                <Link to="/employee-survey">
+                {/* <Link to="/employee-survey"> */}
+                <div className="cursor-pointer" onClick={() => history.goBack()}>
                     <p className="inline-block capitalize text-blue-800">
                         Audience / Groups
                     </p>
-                </Link>
+                </div>
+                {/* </Link> */}
                 <DoubleArrowRoundedIcon className="text-20 mx-6 text-black" />
                 <p className="font-semibold">Employee work life balance survey group</p>
             </div>
             <div className="w-full space-y-56">
                 <Cards className="w-1/2 mb-24 px-10 py-10">
-                    <h2 className="py-6 text-black font-bold text-2xl">Employee work life balance survey group</h2>
-                    <h5 className="text-16">This is a description.Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,</h5>
+                    <h2 className="py-6 text-black font-bold text-2xl">{clickedAudience?.existingGroupInfo.groupName}</h2>
+                    <h5 className="text-16">{clickedAudience?.existingGroupInfo.description}</h5>
                     <p className="text-blue-800 py-6 text-18">40 members in this group</p>
                 </Cards>
                 <div className="flex items-start space-x-52 justify-between w-full">
@@ -175,22 +123,30 @@ function SingleAudience() {
                 </div>
                 <div className="flex items-start justify-between w-full pb-16 space-x-48">
                     <Cards className="px-16 w-3/5">
-                        <h2 className="mb-16 font-bold text-black text-2xl capitalize">participated surveys</h2>
-                        {
-                            surveyCard?.map((surveyCardItem,i)=>(
-                                <div className="flex justify-between w-full bg-white shadow-md mb-40 py-16 px-36 rounded-20">
-                                    <div className="w-2/3">
-                                        <h3 className="font-bold text-xl">{surveyCardItem?.title}</h3>
-                                        <h5 className="text-16 py-8 w-full">{surveyCardItem?.description}</h5>
-                                        <p className="text-blue-400 text-14">Created {surveyCardItem?.date}</p>
-                                    </div>
-                                    <div className="w-1/3">
-                                        <p className="text-blue-400 text-14 pt-8 text-right">Survey sent to {surveyCardItem?.numberOfPeople}</p>
-                                        <p className="text-blue-400 text-14 pt-8 text-right">{surveyCardItem?.responseRate}% response rate</p>
-                                    </div>
-                                </div>
-                            ))
-                        }
+                        {!surveyCard?.length > 0 ? (
+                            <div className="w-12/12">
+                                <h3 className="w-10/12 text-center mx-auto font-bold text-20">The members of this group have not yet participated in any surveys yet</h3>
+                            </div>
+                        ) : (
+                            <>
+                                <h2 className="mb-16 font-bold text-black text-2xl capitalize">participated surveys</h2>
+                                {
+                                    surveyCard?.map((surveyCardItem,i)=>(
+                                        <div className="flex justify-between w-full bg-white shadow-md mb-40 py-16 px-36 rounded-20">
+                                            <div className="w-2/3">
+                                                <h3 className="font-bold text-xl">{surveyCardItem?.title}</h3>
+                                                <h5 className="text-16 py-8 w-full">{surveyCardItem?.description}</h5>
+                                                <p className="text-blue-400 text-14">Created {surveyCardItem?.date}</p>
+                                            </div>
+                                            <div className="w-1/3">
+                                                <p className="text-blue-400 text-14 pt-8 text-right">Survey sent to {surveyCardItem?.numberOfPeople}</p>
+                                                <p className="text-blue-400 text-14 pt-8 text-right">{surveyCardItem?.responseRate}% response rate</p>
+                                            </div>
+                                        </div>
+                                    ))
+                                }
+                            </>
+                        )}
                     </Cards>
                     <Cards className="w-2/5 pt-4">
                         <h4 className="pb-10 text-black font-bold text-lg">Group Member List</h4>
@@ -201,8 +157,8 @@ function SingleAudience() {
                                 <table class="table-fixed text-left">
                                     <thead  className='border-b-1 border-grey-400'>
                                         <tr className="">
-                                            <th class="w-1/2 text-gray-400 font-semibold">Member Name</th>
-                                            <th class="w-1/2 text-gray-400 font-semibold">Date Added </th>
+                                            <th className="w-1/2 text-gray-400 font-semibold">{ membersList?.length === 1 ? 'Member' : 'Members' }</th>
+                                            <th className="w-1/2 text-gray-400 font-semibold">Date Added </th>
                                         </tr>
                                     </thead>
                                     <div className="my-10"></div>
@@ -213,7 +169,10 @@ function SingleAudience() {
                                                     <tr className="border-b-1 border-grey-400" key={i}>
                                                         <td className="">{member?.name}</td>
                                                         <td className="">{member?.date}</td>
-                                                        <td className="text-red-500 px-12 hover:text-red-300 transition py-4 cursor-pointer rounded-8" onClick={() => deleteAudienceMember(i)}><DeleteForeverIcon/></td>
+                                                        <td className="text-red-500 px-12 hover:text-red-300 transition py-4 cursor-pointer rounded-8" 
+                                                            onClick={() => deleteAudienceMember(i)}>
+                                                                <DeleteForeverIcon/>
+                                                        </td>
                                                     </tr>
                                                     <div className="my-10"></div>
                                                 </>
@@ -221,9 +180,9 @@ function SingleAudience() {
                                             :
                                                 membersList?.map((member,i) => (
                                                 <>
-                                                    <tr className="border-b-1 border-grey-400" key={i}>
-                                                        <td className="">{member?.name}</td>
-                                                        <td className="">{member?.date}</td>
+                                                    <tr className="border-b-1 border-grey-400" key={membersList?.id}>
+                                                        <td className="">{ member?.name ? (member?.name) : (member?.email) }</td>
+                                                        <td className="">{moment().format('MMM Do YY',member?.createdAt)}</td>
                                                         <td className="text-red-500 px-12 py-4 cursor-pointer rounded-8" onClick={() => deleteAudienceMember(i)}><DeleteForeverIcon/></td>
                                                     </tr>
                                                     <div className="my-10"></div>

@@ -1,5 +1,5 @@
 import React from 'react'
-import { useState,useRef, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Cards from 'app/shared/cards/cards'
 import AddIcon from '@material-ui/icons/Add';
@@ -17,6 +17,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import reducer from '../store/reducers';
 import withReducer from 'app/store/withReducer';
 
+
 // List Of Input Types
 const inputTypes = [
   { name:'Multiple Choice', value:'multipleChoice', icon:<RadioButtonCheckedIcon/>},
@@ -31,100 +32,141 @@ const inputTypes = [
   { name:'Matrix Dropdown ', value:'matrixDropdown', icon:''},
 ]
 
-//  Input types layout
-const multiChoice = (
-  <div className=" w-full mt-20">
-    <span className="flex"> 
-      <span className="  inline-block w-16 h-16  rounded-full border border-grey-A800"></span>
-      <span className=" capitalize pl-10 text-12 text-grey-A800">Option 1</span>
-    </span>
-    <span className="flex mt-10"> 
-      <AddIcon style={{ fontSize: 15 }} />
-      <span className=" capitalize pl-10 text-12 text-grey-A800">Add Option </span>
-    </span>
-  </div>
-)
 
-const checkBox = (
-  <div className=" w-full mt-20">
-    <span className="flex"> 
-      <span className="  inline-block w-16 h-16  rounded-sm border border-grey-A800"></span>
-      <span className=" capitalize pl-10 text-12 text-grey-A800">Option 1</span>
-    </span>
-    <span className="flex mt-10"> 
-      <AddIcon style={{ fontSize: 15 }} />
-      <span className=" capitalize pl-10 text-12 text-grey-A800">Add Option </span>
-    </span>
-  </div>
-)
-   
 const surveyForms = () => {
+  // Using redux
   const dispatch = useDispatch();
-  const isSelected = useSelector((state => state.surveyForms.surveyFormsReducer.selected ))
-  const inputType = useSelector((state => state.surveyForms.surveyFormsReducer.inputType ))
+  const stateData = useSelector((state => state.surveyForms.surveyFormsReducer ))
+  // Using useState
   const [showInputTypeList,setShowInputTypeList] = useState(false)
-  // const [inputType,setInputType] = useState(null)
   const [inputTypeIcon,setInputTypeIcon] = useState()
   const [isRequired, setIsRequired] = useState( false )
-  const compRef = useRef();
+  console.log('new' + stateData.inputType)
+   let newData = {
+    body:stateData.body,
+    selected:stateData.selected,
+    isRequired: true,
+    options: [...stateData.optionsArray]
+ }
+ //  Input types layout
+  // Radio input
+  const multiChoice = (
+    <div className=" w-full mt-20">
+       { stateData.optionsArray?.map((option, index) =>
 
-  // handle selected input type option
+          <span className="flex pb-16" key={index}> 
+            <span className="  inline-block w-16 h-16  mt-8 rounded-full border border-grey-A800"></span>
+              <span className=" capitalize pl-10 text-12 text-grey-A800 inline-block w-8/12 ">
+              <TextField value={option.name } className=" float-right w-full"  onChange={ (e) => handelUpdateOptionsArray(e.target.value,index)} />
+            </span>
+            <span className=" text-red-400 font-700 pt-10 pl-20 cursor-pointer" onClick={() =>handleRemoveOption(index)}> Remove </span>
+          </span>
+          )
+        }
+
+      <span className="flex"> 
+        
+      </span>
+      <span className="flex mt-16">
+        <AddIcon style={{ fontSize: 15 }} />
+        <span className=" capitalize pl-10 text-12 text-grey-A800" onClick={()=> handleAddOption('multiChoice')}>
+          Add Option </span>
+      </span>
+    </div>
+  )
+  //  Checkbox input
+  const checkBox = (
+    <div className=" w-full mt-20">
+        {stateData.optionsArray?.map((option, index) =>
+          <span className="flex pb-16" key={index}> 
+          <span className="  inline-block w-16 h-16  rounded-sm border border-grey-A800 mt-8"></span>
+          <span className=" capitalize pl-10 text-12 text-grey-A800 inline-block w-8/12 ">
+              <TextField value={option.name } className=" float-right w-full"  onChange={ (e) => handelUpdateOptionsArray(e.target.value,index)} />
+          </span>
+            <span className=" text-red-400 font-700 pt-10 pl-20 cursor-pointer" onClick={() =>handleRemoveOption(index)}> Remove </span>
+        </span>
+          )
+        }
+
+    <span className="flex mt-16" > 
+    <AddIcon style={{ fontSize: 15 }} />
+    <span className=" capitalize pl-10 text-12 text-grey-A800" 
+      onClick={()=> handleAddOption('checkBox')}>
+          Add Option 
+    </span>
+    </span>
+      
+    </div>
+  )
+
+  // Handle selected input type option
   function handleSelected(name,value,icon) {
     setInputTypeIcon(icon)
-    // dispatch(allSurveyFormActions.inputNameSelected(name));
     switch(value) {
       case 'multipleChoice':
-        return dispatch(allSurveyFormActions.inputTypeSelected(multiChoice));
+        return dispatch(allSurveyFormActions.inputTypeSelected('multiChoice', name));
         break;
         case 'checkBox':
-        return dispatch(allSurveyFormActions.inputTypeSelected(checkBox));
+        return dispatch(allSurveyFormActions.inputTypeSelected('checkBox',  name));
         break;
       default:
-        return dispatch(allSurveyFormActions.inputTypeSelected(null));
+        return dispatch(allSurveyFormActions.inputTypeSelected(null, name));
     }
   }
-  // handle dropdown event hide when click outside
-  const handleClick = e => {
-    if (compRef.current?.contains(e.target)) {
-      // when dropdown  is clicked show list
-      setShowInputTypeList(true)
-      // inside click
-      return;
-    }
-    // when dropdown  is clicked close list
-    setShowInputTypeList(false)
-  };
-   // 
-   useEffect(() => {
-    // document.addEventListener("mousedown", handleClick);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClick);
-    };
-  }, []);
-  // intial event
-  useEffect(() => {
-	  dispatch(allSurveyFormActions.inputTypeSelected())
-    console.log(reducer)
-	}, [dispatch]);
-
+// Handle add option
+  function handleAddOption () {
+    dispatch(allSurveyFormActions.addNewOption());
+  }
  
+  // Handle remove option
+  function handleRemoveOption (id) {
+    dispatch(allSurveyFormActions.removeOption(id));
+   }
 
+  //  Handle update Options Array
+   function handelUpdateOptionsArray(value,id){
+    dispatch(allSurveyFormActions.updateOption(value,id));
+   }
+  //  Handle update body
+  function handleUpdateBody(value){
+    dispatch(allSurveyFormActions.updateBody(value));
+  }
+  //  Handle add survey question
+  function handleAddSurveyQuestion() {
+    dispatch(allSurveyFormActions.addSurveyQuestion(
+      newData
+    ));
+  }
+  console.log(newData)
+
+  // Intial event
+  useEffect(() => {
+	  dispatch(allSurveyFormActions.inputTypeSelected(null, null))
+	}, [dispatch]);
 
   return(
     <div className=" flex  w-full relative ">
+  
+
       <Cards className="w-7/12 mx-auto py-10 px-16 rounded-20px shadow-10 ">
+      
         <div className=" mb-24 ">
-        <span className=" text- px-10 py-6 rounded-md cursor-pointer text-12 font-medium flex w-64 float-right mb-20" style={{background:'#61DAFB', color:'#242B63'}}>
-        <AddIcon style={{ fontSize: 15 }} /> Add
-        </span>
+          {
+          stateData.inputType === null?
+            ""
+            :
+            <span className=" text- px-10 py-6 rounded-md cursor-pointer text-12 font-medium flex w-64 float-right mb-20" style={{background:'#61DAFB', color:'#242B63'}} onClick={()=>handleAddSurveyQuestion()}>
+            <AddIcon style={{ fontSize: 15 }} /> Add
+            </span>
+            }
         </div>
         <div className="flex  w-full">
         <div className=" flex-none w-7/12 inline-block ">
             <TextField
+            onChange={(e)=>handleUpdateBody(e.target.value)}
             required
             label="Question"
-            defaultValue="Hello World"
+            value={stateData.body} 
             variant="outlined"
             style ={{width: '90%'}}
           />
@@ -135,14 +177,14 @@ const surveyForms = () => {
            {inputTypeIcon}
           </span>
           <span className=" flex-1 px-6 text-12">
-          {inputType === null? 'Select Input Type' : inputType}
+          {stateData.inputType === null? 'Select Input Type' : stateData.inputType}
              </span>
           <span className=" inline-block -mt-5 float-right text-right cursor-pointer text-grey-A800 ">
             <ArrowDropDownIcon style={{ fontSize: 30 }}/>
           </span>
         </div>
         </div>
-        {isSelected}
+        {stateData.selected ==='multiChoice'?   multiChoice : stateData.selected ==='checkBox'? checkBox : '' }
         <div className="mt-10">
           <span className=" float-right -mt-8 pl-10">
             <span className="text-grey-A800 text-13"> Required</span>
@@ -154,16 +196,17 @@ const surveyForms = () => {
         </div>
         
       </Cards>
-     { !showInputTypeList? "" :
+      {/*End Survey Questions */}
+      { !showInputTypeList? "" :
     
       <div className=" block w-288  inputTypeOptions " id="topToBottom">
-      <Cards  className=" block  py-4 px-16 rounded-20px shadow-10 mb-32 "  ref={compRef}>
+      <Cards  className=" block  py-4 px-16 rounded-20px shadow-10 mb-32 "  >
         <ul className="block">
           {
             inputTypes.map((name, index)=>
               <li className=" block inputTypeOptionsLi" key={index} onClick={() => handleSelected(name.name,name.value,name.icon)}>
                 <span className="  w-full px-4 block" >
-                  <span style={{ fontSize: 26, color:'#00CCF2'}}>
+                  <span style={{ fontSize: 20, color:'#00CCF2'}}>
                   {name.icon}
                   </span>
                   <span className="pl-20 font-semibold">
