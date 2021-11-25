@@ -47,7 +47,15 @@ function CreateAudience({ setOpenCreateAudience }) {
         emails:[]
     })
 
-    useAxiosGet('department/all/2',setDepartment)
+    useAxiosGet('department/all/1',setDepartment)
+    // useAxiosGet('department/all/1',setDepartment)
+    const auth = useAuth
+    // axios.get(
+    //     'https://agile-dawn-03556.herokuapp.com/api/v1/department/all/1',
+    //     {headers: { Authorization: `JWT ${auth().getToken}` }}
+    //     )
+    // .then(data => console.log(data))
+    // .catch(err => console.error(err))
 
 
     const handleName  = (e)  =>  {
@@ -92,7 +100,7 @@ function CreateAudience({ setOpenCreateAudience }) {
         }
     }
 
-    const auth = useAuth
+
 
     const history = useHistory()
 
@@ -108,8 +116,8 @@ function CreateAudience({ setOpenCreateAudience }) {
         .then(response => {
             if(response.status === 200) setOpenCreateAudience(false)
             console.log(response)
-            history.push('/employee-survey')
-            // window.location.reload()
+            // useAxiosGet('surveyGroup',audienceCard)
+            window.location.reload()
         })
         .catch(err => console.error(err))
     }

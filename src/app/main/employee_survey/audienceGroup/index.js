@@ -10,65 +10,25 @@ import Swal from 'sweetalert2';
 import { useAxiosGet } from '../hooks/useAxiosHook';
 import axios from 'axios';
 import { useAuth } from 'app/hooks/useAuth';
+import AudienceCardLoader from '../utils/audienceCardLoader';
 
 const AudienceGroupIndexPage = () => {
 
 	const [openEditAudience, setOpenEditAudience] = useState(false)
 	const [openCreateAudience, setOpenCreateAudience] = useState(false)
 
-    const [audienceCard, setAudienceCard] = useState([
-        // {
-        //     title:"Employee Work Life Balance Survey Group",
-        //     description:"This is a description. Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia",
-        //     numberOfMembers:40,
-        //     id:0,
-        //     participantDepartments:[
-        //         {
-        //             label:"Human Resources",
-        //             value:1,
-        //             id:12
-        //         },
-        //     ],
-        //     participantGroups:[
-        //         {
-        //             label:"Company Policy Survey Group",
-        //             value:1,
-        //             id:10
-        //         },
-        //         {
-        //             label:"Manager Performance Survey Group",
-        //             value:2,
-        //             id:11
-        //         },
-        //         {
-        //             label:"Network Performance Survey Group",
-        //             value:3,
-        //             id:12
-        //         },
-        //         {
-        //             label:"Employee Work Life Balance Survey Group",
-        //             value:4,
-        //             id:13
-        //         }
-        //     ],
-        //     participantIndividualEmail:["hello@email.co","hi@gmai.co"],
-        //     recipientParticipantDepartments:[],
-        //     recipientParticipantGroups:["Company Policy Survey Group"],
-        //     recipientParticipantIndividualEmail:[],
-        // },
-    ])
+    const [audienceCard, setAudienceCard] = useState([])
 
     const [singleAudienceId,setSingleAudienceId] = useState()
     const [singleAudienceItem,setSingleAudienceItem] = useState()
     const [deleteModal, setDeleteModal] = useState(false)
     const [testData,setTestData] = useState({})
+    const [loadingAudienceCard, setLoadingAudienceCard] = useState(false)
+    const [deleteNotification, setDeleteNotification] = useState('')
 
     const deleteAudience = (i,id) => {
-        // console.log(i)
         const items = audienceCard;
-        // console.log(audienceCard)
         if (items.length > 0) {
-            // console.log(i)
           setAudienceCard(items.filter((item, index) => index !== i));
           axios.delete( `https://agile-dawn-03556.herokuapp.com/api/v1/surveyGroup/${id}`,
           {headers: { Authorization: `JWT ${auth().getToken}` }} )
@@ -90,26 +50,14 @@ const AudienceGroupIndexPage = () => {
                     setOpenEditAudience(true)
                 })
                 .catch(e => console.error(e));
-        // getData(i)
-        // console.log(singleAudienceId)
     }
-    // const getData = (id) => useAxiosGet(`surveyGroup/${id}`,setTestData)
-    // console.log(singleAudienceId)
-    // console.log(testData)
 
 
-    // const openDeleteModal = (audienceCardItem,i) => {
-    //     setSingleAudienceItem(audienceCardItem)
-    //     setSingleAudienceId(i)
-    //     setDeleteModal(true)
-    // }
-
-    useAxiosGet('surveyGroup',setAudienceCard)
-
+    useAxiosGet('surveyGroup',setAudienceCard,setLoadingAudienceCard)
+    // useAxiosGet('surveyGroup',setAudienceCard,setLoadingAudienceCard)
+    
 	const confirmDeleteAudience = (audienceCardItem,i,id) => {
         let name = audienceCardItem.name
-        // console.log(title)
-        // console.log(audienceCardItem)
 		Swal.fire({
 			icon: 'info',
 			title: 'Do you want to delete \n this Audience ?',
@@ -150,7 +98,16 @@ const AudienceGroupIndexPage = () => {
                         Create Audience/Group
                     </Button>
                 </div>
-                {
+                {loadingAudienceCard ? (
+                    <>
+                        <AudienceCardLoader/>
+                        <AudienceCardLoader/>
+                        <AudienceCardLoader/>
+                        <AudienceCardLoader/>
+                    </>
+                ) : (
+                    <>
+                    {
                     audienceCard.length > 0 ? (
                         audienceCard?.map((audienceCardItem,i)=>(
                             <Cards className="mb-44 px-12 py-8" key={audienceCardItem?.id}>
@@ -181,7 +138,8 @@ const AudienceGroupIndexPage = () => {
                                         </h3>
                                     </Link>
                                     <h5 className="py-10 text-16 w-full">{audienceCardItem?.description}</h5>
-                                    <p className="text-blue-400 cursor-pointer text-18">{audienceCardItem?.numberOfMembers ? audienceCardItem?.numberOfMembers : 0} members in this group</p>
+                                    <p className="text-blue-400 cursor-pointer text-18">
+                                        {audienceCardItem?.totalMembers ? audienceCardItem?.totalMembers : 0} {audienceCardItem?.totalMembers > 1 ? 'members' : 'member'} in this group</p>
                                 </div>
                             </Cards>
                         ))
@@ -192,6 +150,8 @@ const AudienceGroupIndexPage = () => {
                         </div>
                     )
                 }
+                    </>
+                )}
             </>
                 {openEditAudience && <EditAudience setOpenEditAudience={setOpenEditAudience} openEditAudience={openEditAudience} testData={testData} singleAudienceItem={singleAudienceItem} setSingleAudienceItem={setSingleAudienceItem} singleAudienceId={singleAudienceId} setSingleAudienceId={setSingleAudienceId} />}
 
