@@ -1,8 +1,10 @@
 import { combineReducers } from 'redux';
-import surveyFormsReducer from './surveyForms.reducer'
+import {surveyFormsReducer,optionsArrayReducer} from './surveyForms.reducer'
 
 const reducer =  combineReducers({
-    surveyFormsReducer
+    surveyFormsReducer,
+    // optionsArrayReducer
+    
 });
 
 export default reducer;
