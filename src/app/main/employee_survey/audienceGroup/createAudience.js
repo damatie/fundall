@@ -19,14 +19,6 @@ import axios from 'axios';
 import { useAuth } from 'app/hooks/useAuth';
 
 
-// const department = [
-//     {
-//         departmentName:"Human Resources",
-//         value:1,
-//         id:12
-//     }
-// ];
-
 
 function CreateAudience({ setOpenCreateAudience }) {
 
@@ -38,24 +30,16 @@ function CreateAudience({ setOpenCreateAudience }) {
     const [groups, setGroups] = useState([])
     const [audienceParticipants, setAudienceParticipants] = useState([])
     const [individuals, setIndividuals] = useState("")
+    const [loadingDepartment, setLoadingDepartment] = useState(false)
     const [audienceFormData, setAudienceFormData] = useState({
         name:'',
         description:'',
-        // participantDepartments:[],
         deptIds:[],
-        // participantIndividualEmail:[],
         emails:[]
     })
 
-    useAxiosGet('department/all/1',setDepartment)
-    // useAxiosGet('department/all/1',setDepartment)
+    useAxiosGet('department/all/1',setDepartment,setLoadingDepartment)
     const auth = useAuth
-    // axios.get(
-    //     'https://agile-dawn-03556.herokuapp.com/api/v1/department/all/1',
-    //     {headers: { Authorization: `JWT ${auth().getToken}` }}
-    //     )
-    // .then(data => console.log(data))
-    // .catch(err => console.error(err))
 
 
     const handleName  = (e)  =>  {
@@ -106,8 +90,6 @@ function CreateAudience({ setOpenCreateAudience }) {
 
     const submitAudienceForm  =   (e)  =>  {
         e.preventDefault();
-        // console.log(audienceFormData)
-        // closeCreateAudienceModal()
         axios.post(
             'https://agile-dawn-03556.herokuapp.com/api/v1/surveyGroup',
             audienceFormData,
@@ -116,7 +98,6 @@ function CreateAudience({ setOpenCreateAudience }) {
         .then(response => {
             if(response.status === 200) setOpenCreateAudience(false)
             console.log(response)
-            // useAxiosGet('surveyGroup',audienceCard)
             window.location.reload()
         })
         .catch(err => console.error(err))

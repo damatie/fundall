@@ -8,6 +8,8 @@ export const auth = useAuth
 const newBaseUrl = 'https://agile-dawn-03556.herokuapp.com/api/v1/'
 
 const baseAuthGet = (urlString) => axios.get( `${newBaseUrl}${urlString}`, {headers: { Authorization: `JWT ${auth().getToken}` }} )
+const baseAuthUpdate = (urlString) => axios.patch( `${newBaseUrl}${urlString}`,`${updateData}`, {headers: { Authorization: `JWT ${auth().getToken}` }} )
+// const baseAuthGetPaginatedSurveys = (urlString) => axios.get( `${newBaseUrl}${urlString}`, {headers: { Authorization: `JWT ${auth().getToken}` }} )
 
 
 
@@ -20,6 +22,21 @@ const baseAuthGet = (urlString) => axios.get( `${newBaseUrl}${urlString}`, {head
 //         .catch(e => console.error(e));
 //     },[urlString,newData])
 // }?
+
+
+export function useAxiosGetUpdate (urlString,updateData) {
+    useEffect(() => {
+        const fetchSurveys = async (urlString,updateData) => {
+            const data = await baseAuthUpdate(urlString)
+            // newData(data.data.data)
+            console.log(data)
+        }
+        fetchSurveys(urlString,updateData)
+    },[urlString,updateData])
+}
+
+
+
 
 
 export function useAxiosGet (urlString,newData,loading) {
@@ -35,7 +52,7 @@ export function useAxiosGet (urlString,newData,loading) {
 }
 
 
-export function useAxiosGetSingleAudience (urlString,newData,loading) {
+export function useAxiosGetSingleAudience (urlString,newData,loading,refreshInfo) {
     useEffect(() => {
         const fetchSurveys = async (urlString,newData,loading) => {
             loading(true)
@@ -44,7 +61,8 @@ export function useAxiosGetSingleAudience (urlString,newData,loading) {
             loading(false)
         }        
         fetchSurveys(urlString,newData,loading)
-    },[urlString,newData,loading])
+        console.log('hi')
+    },[urlString,newData,loading,refreshInfo])
 }
 
         // axios.get( `https://agile-dawn-03556.herokuapp.com/api/v1/surveyGroup/${i}`,
@@ -57,16 +75,17 @@ export function useAxiosGetSingleAudience (urlString,newData,loading) {
 
 
 
-export function useAxiosGetAllSurveys (urlString,newData,loading) {
+export function useAxiosGetAllSurveys (urlString,newData,page,loading,loadNum) {
     useEffect(() => {
         const fetchSurveys = async (urlString,newData,loading) => {
             loading(true)
-            const res = await baseAuthGet(urlString)
-            newData(res.data.message)
+            const data = await baseAuthGet(urlString)
+            newData(data.data.message.rows)
+            loadNum(data.data.message.count)
             loading(false)
         }
         fetchSurveys(urlString,newData,loading)
-    },[urlString,newData,loading])
+    },[urlString,page,newData,loading])
 }
 
 

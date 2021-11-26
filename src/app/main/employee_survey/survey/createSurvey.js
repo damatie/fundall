@@ -19,6 +19,7 @@ import axios from 'axios';
 import { getBaseUrl } from 'app/shared/getBaseUrl'
 import { useAuth } from 'app/hooks/useAuth'
 import { useHistory } from 'react-router';
+import SingleAudienceLoader from '../utils/singleAudienceLoader';
 
 
 
@@ -67,6 +68,8 @@ function CreateSurvey({setCreateSurveyModal,setSurveyCard,surveyCard}) {
     const [recipientIndividuals, setRecipientIndividuals] = useState("")
     const [listOfDepartments,setListOfDepartments] = useState([])
     const [loading,setLoading] = useState(false)
+    const [loadingGroup, setLoadingGroup] = useState(false)
+    const [loadingDept, setLoadingDept] = useState(false)
     const [dept,setDept] = useState([
         // {
         //     "id": 2,
@@ -104,8 +107,8 @@ function CreateSurvey({setCreateSurveyModal,setSurveyCard,surveyCard}) {
         // BACKEND STILL WORKING ON THIS //
     })
 
-    useAxiosGet('department/all/2',setDept)
-    useAxiosGet('surveyGroup',setGroup)
+    useAxiosGet('department/all/1',setDept,setLoadingDept)
+    useAxiosGet('surveyGroup',setGroup,setLoadingGroup)
 
     const [errorName, setErrorName] = useState(false)
 
@@ -199,10 +202,12 @@ function CreateSurvey({setCreateSurveyModal,setSurveyCard,surveyCard}) {
             {headers: { Authorization: `JWT ${auth().getToken}` }}
             )
         .then(response => {
-            if(response.status === 200) setCreateSurveyModal(false)
-            console.log(response)
-            history.push('/employee-survey')
-            // window.location.reload()
+            if(response.status === 200) {
+                setCreateSurveyModal(false)
+                console.log(response)
+                history.push('/employee-survey')
+                // window.location.reload()
+            }
         })
         .catch(err => console.error(err))
     }
@@ -283,7 +288,7 @@ function CreateSurvey({setCreateSurveyModal,setSurveyCard,surveyCard}) {
                                 >
                                 {dept?.map((ag) => (
                                     <MenuItem key={ag.id} value={ag.id}>{ag.departmentName}</MenuItem>
-                                ))}
+                                ))} 
                                 {/* {department.map((ag) => (
                                     <MenuItem key={ag.id} value={ag.id}>{ag.departmentName}</MenuItem>
                                 ))} */}

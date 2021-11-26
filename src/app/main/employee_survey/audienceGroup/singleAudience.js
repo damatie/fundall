@@ -22,24 +22,16 @@ import SurveyCardLoader from '../utils/surveyCardLoader';
 
 
 function SingleAudience() {
+
     const [surveyCard, setSurveyCard] = useState([])
-
     const [audienceCard, setAudienceCard] = useState([])
-
     const [clickedAudience,setClickedAudience] = useState()
-
     const [membersList, setMembersList] = useState([])
-
     const [fullMemberList, setFullMemberList] = useState(false)
-
     const [refreshInfo,setRefreshInfo] = useState(true)
-
     const [loadingSingleAudience,setLoadingSingleAudience] = useState(false)
-
     const [loadingSurveySnippet, setLoadingSurveySnippet] = useState(false)
-
     const [loadingMembers, setLoadingMembers] = useState(false)
-
     const showFullList = () => {
         setFullMemberList(prev => !prev)
     }
@@ -59,9 +51,7 @@ function SingleAudience() {
             }
             )
           .catch(e => console.error(e));
-        //   setRefreshInfo(false)
         }
-        // console.log(123)
     }
 
 
@@ -71,16 +61,14 @@ function SingleAudience() {
     const auth = useAuth
 
     
-    useAxiosGetSingleAudience(`surveyGroup/${paramsId}`,setClickedAudience,setLoadingSingleAudience)
+    useAxiosGetSingleAudience(`surveyGroup/${paramsId}`,setClickedAudience,setLoadingSingleAudience,refreshInfo)
     useAxiosGet(`surveyGroup/${paramsId}/surveys`,setSurveyCard,setLoadingSurveySnippet)
-    console.log(surveyCard)
     useAxiosGetAllMembers(`surveyGroup/${paramsId}/members`,setMembersList,setLoadingMembers)
-    console.log(loadingSurveySnippet)
+    
     let calc = (x,y) => {
         return x*y
     }
-    console.log(clickedAudience)
-
+    
 
     return (
         <div  className="w-10/12 mx-auto">
@@ -139,7 +127,7 @@ function SingleAudience() {
                                 <p className="text-green-400 text-14"><TrendingUpIcon /> +10.19%</p>
                             </div>
                             <p className="text-gray-500 font-bold text-15 pb-10">
-                            400 surveys were dispatched last month, 212 were opened (53%) and 100 completed (25%)
+                            {surveyCard.length} surveys were dispatched last month, 212 were opened (53%) and 100 completed (25%)
                             </p>
                         </Cards>
                         <Cards className="w-full text-center">
