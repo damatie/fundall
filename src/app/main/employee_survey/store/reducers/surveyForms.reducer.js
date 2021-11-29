@@ -5,12 +5,18 @@ import {
 	DEFAULTOPTIONVALUE,
 	REMOVEOPTION,
 	UPDATEOPTION,
+	UPDATEBODY,
 	ADDSURVEYQUESTION,
 	GETSURVEYQUESTION,
-	UPDATEBODY
+	DELETESURVEYQUESTION,
+	SETREQUIRED,
+	EDITONESURVEYQUESTION,
+	UPDATEONESURVEYQUESTION
+	
 } from '../actions'
 
 const initialState  = {
+	isEdit: false,
 	selected: null,
 	inputType: '',
 	isRequired: false,
@@ -29,6 +35,7 @@ export const surveyFormsReducer = (state = initialState , action) =>{
 				inputType: action.inputType,
 				optionsArray:[],
 				optionsArray:[{name: DEFAULTOPTIONVALUE}],
+				isRequired:false
 			}
 			break;  
 		}
@@ -77,7 +84,7 @@ export const surveyFormsReducer = (state = initialState , action) =>{
 				surveyQuestion:[...state.surveyQuestion, action.payload],
 				optionsArray:[{name:DEFAULTOPTIONVALUE}],
 				body:'Question',
-
+				isRequired:false
 			}
 			break;  
 		}
@@ -86,6 +93,53 @@ export const surveyFormsReducer = (state = initialState , action) =>{
 			return{
 				...state,
 				surveyQuestion:action.payload
+			}
+			break;  
+		}
+		case EDITONESURVEYQUESTION: {
+			const  item= [...state.surveyQuestion]
+			item[action.id].isEdit = action.value
+			console.log(action.id, action.value)
+			return{
+				...state,
+				isEdit:action.value,
+				surveyQuestion:[...item]
+			}
+			break;  
+		}
+
+		case UPDATEONESURVEYQUESTION: {
+			const  item= [...state.surveyQuestion]
+			item[action.id].isEdit = action.value
+			return{
+				...state,
+				isEdit:action.value,
+				surveyQuestion:[...item]
+			}
+			break;  
+		}
+
+
+		case DELETESURVEYQUESTION: {
+			const items = state.surveyQuestion;
+			console.log(state.surveyQuestion.isEdit)
+			console.log(state.isEdit)
+			if(items.length > 0){
+				state.surveyQuestion.splice(action.payload,1)
+				return{
+					...state,
+					surveyQuestion:[...state.surveyQuestion],
+				}
+			}
+			return{
+				...state
+			}
+			break;  
+		}
+		case SETREQUIRED: {
+			return{
+				...state,
+				isRequired:action.payload
 			}
 			break;  
 		}

@@ -7,6 +7,10 @@ export const UPDATEOPTION ='UPDATEOPTION'
 export const UPDATEBODY ='UPDATEBODY' 
 export const ADDSURVEYQUESTION ='ADDSURVEYQUESTION'  
 export const GETSURVEYQUESTION ='GETSURVEYQUESTION'
+export const DELETESURVEYQUESTION ='DELETESURVEYQUESTION'
+export const SETREQUIRED ='SETREQUIRED' 
+export const EDITONESURVEYQUESTION ='EDITONESURVEYQUESTION'
+export const UPDATEONESURVEYQUESTION ='UPDATEONESURVEYQUESTION'
 
 export function inputTypeSelected(selectedValue, inputTypeValue ) {
 	return dispatch => {
@@ -74,6 +78,44 @@ export function getSurveyQuestion() {
 	return dispatch => {
 		dispatch({
 			type: GETSURVEYQUESTION,
+		});
+	}
+}
+export function deleteSurveyQuestion(id) {
+	return dispatch => {
+		dispatch({
+			type: DELETESURVEYQUESTION,
+			payload:id
+		});
+	}
+}
+
+export function editOneSurveyQuestion(id, value) {
+	return dispatch => {
+		dispatch({
+			type: EDITONESURVEYQUESTION,
+			value:value,
+			id:id
+		});
+	}
+}
+
+export function updateOneSurveyQuestion(id,value) {
+	return dispatch => {
+		dispatch({
+			type: UPDATEONESURVEYQUESTION,
+			value:value,
+			id:id
+		});
+	}
+}
+
+
+export function setIsRequired(value) {
+	return dispatch => {
+		dispatch({
+			type: SETREQUIRED,
+			payload:value
 		});
 	}
 }
