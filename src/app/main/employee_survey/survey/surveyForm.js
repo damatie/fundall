@@ -5,9 +5,24 @@ import AddIcon from '@material-ui/icons/Add';
 import SurveyForms from '../component/surveyForms'
 import SurveyQuestion from '../component/surveyQuestion'
 import SaveIcon from '@material-ui/icons/Save';
+import { useDispatch, useSelector } from 'react-redux';
+import * as allSurveyFormActions  from '../store/actions'
+import reducer from '../store/reducers';
+import withReducer from 'app/store/withReducer';
 
 
 const surveyForm = () =>{
+  const dispatch = useDispatch();
+  const stateData = useSelector((state => state.surveyForms.surveyFormsReducer ))
+  let newData = {
+    body:stateData.body,
+    selected:stateData.selected,
+    isRequired: stateData.isRequired,
+    isEdit:stateData.isEdit,
+    options: [...stateData.optionsArray]
+ }
+  
+  
   return (
     <PageLayout
       header={{
@@ -40,7 +55,10 @@ const surveyForm = () =>{
         </div>
         <div className=" mt-72">
           <SurveyQuestion/>
-          <SurveyForms/>
+
+         { stateData.isEdit === false?
+         <SurveyForms newData={newData}/>: ""
+         }
           
         </div>
       </div>
@@ -48,4 +66,4 @@ const surveyForm = () =>{
     />
   )
 }
-export default surveyForm
+export default withReducer('surveyForm',reducer, ) (surveyForm )
