@@ -63,17 +63,19 @@ const SurveyIndexPage = () => {
                         {
                             surveyCard?.length ? (
                                 surveyCard?.map((surveyCardItem,i)=>(
-                                <div className="flex justify-between w-full bg-white shadow-md mb-40 py-16 px-36 rounded-20" key={surveyCardItem?.id} >
-                                    <div className="w-2/3">
-                                        <h3 className="text-2xl font-bold">{surveyCardItem?.title}</h3>
-                                        <h5 className="text-16 py-8 w-full">{surveyCardItem?.description}</h5>
-                                        <p className="text-blue-400 text-14">Created {surveyCardItem?.date ? surveyCardItem?.date : "12/10/2021"}</p>
+                                <Link to={'employee-survey/survey-form/' + surveyCardItem?.id}  className="text-black hover:no-underline" key={surveyCardItem?.id} >
+                                    <div className="flex justify-between w-full bg-white shadow-md mb-40 py-16 px-36 rounded-20">
+                                        <div className="w-2/3">
+                                            <h3 className="text-2xl font-bold">{surveyCardItem?.title}</h3>
+                                            <h5 className="text-16 py-8 w-full">{surveyCardItem?.description}</h5>
+                                            <p className="text-blue-400 text-14">Created {surveyCardItem?.date ? surveyCardItem?.date : "12/10/2021"}</p>
+                                        </div>
+                                        <div className="w-1/3">
+                                            <p className="text-blue-400 text-14 pt-8 text-right">Survey sent to {surveyCardItem?.noOfRecipients}</p>
+                                            <p className="text-blue-400 text-14 pt-8 text-right">{surveyCardItem?.responseRate ? surveyCardItem?.responseRate : 0}% response rate</p>
+                                        </div>
                                     </div>
-                                    <div className="w-1/3">
-                                        <p className="text-blue-400 text-14 pt-8 text-right">Survey sent to {surveyCardItem?.noOfRecipients}</p>
-                                        <p className="text-blue-400 text-14 pt-8 text-right">{surveyCardItem?.responseRate ? surveyCardItem?.responseRate : 0}% response rate</p>
-                                    </div>
-                                </div>
+                                </Link>
                             )) 
                             ) : (
                                 <div className="p-20 text-center w-10/12 mx-auto">

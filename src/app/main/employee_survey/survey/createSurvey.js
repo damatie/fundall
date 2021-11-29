@@ -19,6 +19,7 @@ import axios from 'axios';
 import { getBaseUrl } from 'app/shared/getBaseUrl'
 import { useAuth } from 'app/hooks/useAuth'
 import { useHistory } from 'react-router';
+import Swal from 'sweetalert2';
 import SingleAudienceLoader from '../utils/singleAudienceLoader';
 
 
@@ -186,7 +187,7 @@ function CreateSurvey({setCreateSurveyModal,setSurveyCard,surveyCard}) {
             {headers: { Authorization: `JWT ${auth().getToken}` }}
             )
         .then(response => {
-            console.log(response)
+            console.log(response)  
             if(response.status === 200) {    
                 setCreateSurveyModal(false)
                 console.log(response)
@@ -195,10 +196,10 @@ function CreateSurvey({setCreateSurveyModal,setSurveyCard,surveyCard}) {
             }
         })
         .catch(err => console.error(err))
-
-
-
     }
+
+///////////////////////////////////////////
+//////////////////////////////////////////
 
     const handleChangeDepartments = (event) => {
       setDepartments(event.target.value);
