@@ -10,8 +10,19 @@ export const GETSURVEYQUESTION ='GETSURVEYQUESTION'
 export const DELETESURVEYQUESTION ='DELETESURVEYQUESTION'
 export const SETREQUIRED ='SETREQUIRED' 
 export const EDITONESURVEYQUESTION ='EDITONESURVEYQUESTION'
-export const UPDATEONESURVEYQUESTION ='UPDATEONESURVEYQUESTION'
+export const UPDATE_ONE_SURVEY_QUESTION ='UPDATE_ONE_SURVEY_QUESTION'
+export const GET_ONE_SURVEY ='GET_ONE_SURVEY'
 
+export function getOneSurvey(id) {
+
+	return async (dispatch) => {
+      const data = await Api.get(`survey/${id}`);
+        dispatch({
+          type: GET_ONE_SURVEY,
+          payload: data
+        })
+  }
+}
 export function inputTypeSelected(selectedValue, inputTypeValue ) {
 	return dispatch => {
 		dispatch({
@@ -103,7 +114,7 @@ export function editOneSurveyQuestion(id, value) {
 export function updateOneSurveyQuestion(id,value) {
 	return dispatch => {
 		dispatch({
-			type: UPDATEONESURVEYQUESTION,
+			type: UPDATE_ONE_SURVEY_QUESTION,
 			value:value,
 			id:id
 		});

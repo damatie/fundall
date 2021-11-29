@@ -11,7 +11,7 @@ import {
 	DELETESURVEYQUESTION,
 	SETREQUIRED,
 	EDITONESURVEYQUESTION,
-	UPDATEONESURVEYQUESTION
+	UPDATE_ONE_SURVEY_QUESTION
 	
 } from '../actions'
 
@@ -108,7 +108,7 @@ export const surveyFormsReducer = (state = initialState , action) =>{
 			break;  
 		}
 
-		case UPDATEONESURVEYQUESTION: {
+		case UPDATE_ONE_SURVEY_QUESTION: {
 			const  item= [...state.surveyQuestion]
 			item[action.id].isEdit = action.value
 			return{
