@@ -7,7 +7,7 @@ import Select from '@material-ui/core/Select';
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
 import SideModal from 'app/shared/modal/SideModal';
 import SharedButton from 'app/shared/button/SharedButton';
-import { useAxiosGet } from '../hooks/useAxiosHook';
+import { useAxiosGet, useAxiosGetDept, useAxiosGetUpdate } from '../hooks/useAxiosHook';
 import { useHistory, useParams } from 'react-router';
 import { useAuth } from 'app/hooks/useAuth';
 import axios from 'axios';
@@ -36,67 +36,37 @@ import axios from 'axios';
 //     }
 // ]
 
-function EditAudience({openEditAudience,setOpenEditAudience,testData,item,singleAudienceId,singleAudienceItem,setSingleAudienceItem}) {
-    // console.log(singleAudienceItem)
-
-    // const { id } = useParams()
-
-    // let paramsId = id
-
+function EditAudience({openEditAudience,setOpenEditAudience,testData,setTestData,item,singleAudienceId,singleAudienceItem,setSingleAudienceItem}) {
+    
     const [updateGroupData,setUpdateGroupData] = useState({
         existingGroupInfo:{
             description:'',
             groupId:null,
-            groupName:updateGroupData?.existingGroupInfo?.groupName,
+            groupName:'',
         },
         emailMembers:[],
         deptMembers:[]
     })
-    console.log(testData)
-    useAxiosGet(`surveyGroup/${singleAudienceId}`,setUpdateGroupData)
-    // console.log('updated group',updateGroupData)
-    // console.log('singleAudienceItem',singleAudienceItem)
-    // console.log(singleAudienceItem.name)
-
-    // const [name, setName] = useState(singleAudienceItem?.title)
-    // const [description, setDescription] =  useState(singleAudienceItem?.description)
-    // const [department,setDepartment] = useState([])
-    // const [departments, setDepartments] = useState(singleAudienceItem?.participantDepartments.map(singleDep => singleDep.id))
-    // const [surveyParticipants, setSurveyParticipants] = useState(singleAudienceItem?.participantIndividualEmail)
-    // const [individuals, setIndividuals] = useState("")
-    // const [surveyFormData, setSurveyFormData] = useState({
-    //     name,
-    //     description,
-    //     participantDepartments:departments,
-    //     participantIndividualEmail:surveyParticipants
-    // })
-    // ************************************
-    // const [name, setName] = useState(singleAudienceItem?.name)
-    // const [name, setName] = useState(updateGroupData?.existingGroupInfo?.groupName)
-    const [name, setName] = useState(testData?.existingGroupInfo?.groupName)
-    // const [name, setName] = useState('')
-    const [description, setDescription] =  useState(testData?.existingGroupInfo?.description)
+    
+    const [loadingGroupData, setLoadingGroupData] = useState(false)
+    useAxiosGet(`surveyGroup/${singleAudienceId}`,setUpdateGroupData,setLoadingGroupData)
+    const [name, setName] = useState(testData?.groupInfo?.groupName)
+    const [description, setDescription] =  useState(testData?.groupInfo?.description)
     const [department,setDepartment] = useState([])
-    // const [departments, setDepartments] = useState(updateGroupData?.deptMembers?.map(singleDep => singleDep.id))
-    const [departments, setDepartments] = useState(testData?.deptMembers?.map(singleDep => singleDep.id))
+    const [departments, setDepartments] = useState(testData?.deptMembers?.map(singleDep => singleDep.deptId))
     const [surveyParticipants, setSurveyParticipants] = useState(testData?.emailMembers)
     const [individuals, setIndividuals] = useState("")
+    const [loadingEditDept, setLoadingEditDept] = useState()
     const [newUpdatedFormData, setNewUpdatedFormData] = useState({
         name,
         description,
-        // participantDepartments:departments,
         deptIds:departments,
-        // participantIndividualEmail:surveyParticipants
         emails:surveyParticipants
     })
 
 
 
-    useAxiosGet('department/all/2',setDepartment)
-
-    // console.log(updateGroupData?.existingGroupInfo?.groupName)
-    // console.log(name)
-
+    useAxiosGet('department/all/1',setDepartment,setLoadingEditDept)
 
     const handleName  = (e)  =>  {
         setNewUpdatedFormData({...newUpdatedFormData,name:e.target.value})
@@ -122,10 +92,7 @@ function EditAudience({openEditAudience,setOpenEditAudience,testData,item,single
 
         if ( keyCode === 13 && trimmedIndividualInput.length && !surveyParticipants.includes(trimmedIndividualInput) ) {
             e.preventDefault()
-            // newArr = [...surveyParticipants]
             setSurveyParticipants((prevState) => [...prevState, trimmedIndividualInput])
-            // setSurveyParticipants(newArr)
-            // setSurveyFormData({...surveyFormData,participantIndividualEmail:([...surveyParticipants, trimmedIndividualInput])})
             setNewUpdatedFormData({...newUpdatedFormData,emails:([...surveyParticipants, trimmedIndividualInput])})
             setIndividuals('')
         }
@@ -143,47 +110,41 @@ function EditAudience({openEditAudience,setOpenEditAudience,testData,item,single
     const auth = useAuth        
     const history = useHistory()
 
-    const submitUpdateGroupForm  =   (e)  =>  {
+    const submitUpdateGroupForm  = async (e)  =>  {
         e.preventDefault();
-        // console.log(newUpdatedFormData)
-        // surveyGroup/:id
-
-        axios.patch(
-           `https://agile-dawn-03556.herokuapp.com/api/v1/surveyGroup/${testData.existingGroupInfo.groupId}`,
-            newUpdatedFormData,
-            {headers: { Authorization: `JWT ${auth().getToken}` }}
-            )
-        .then(response => {
-            if(response.status === 200) setOpenCreateAudience(false)
-            console.log(response)
-            // history.push('/employee-survey')
-            window.location.reload()
-        })
-        .catch(err => console.error(err))
+            try {
+                const resp = await axios.patch(
+                    `https://agile-dawn-03556.herokuapp.com/api/v1/surveyGroup/${testData?.groupInfo?.groupId}`,
+                    newUpdatedFormData,
+                    {headers: { Authorization: `JWT ${auth().getToken}` }}
+                    );
+                console.log(resp);
+            } catch (err) {
+                console.error(err);
+            }
     }
-
+    
 
 
     return (
         <SideModal title="Audience/Groups" open={open} handleClose={() => setOpenEditAudience(false)} >
-            <h3 className="mt-8 w-11/12 mx-auto py-10 text-xl font-semibold">Edit {updateGroupData?.existingGroupInfo?.groupName}</h3>
+            <h3 className="mt-8 w-11/12 mx-auto py-10 text-xl font-semibold">Edit {testData?.groupInfo?.groupName}</h3>
             <div className="bg-white w-11/12 mt-8 mx-auto shadow mb-56 rounded-20">
                 <form className="p-28">
                     <TextField
                         label="Group Name"
                         id="outlined-margin-normal"
                         className="inline-block p-1 mb-24"
+                        defaultValue={testData?.groupInfo?.groupName}
                         variant="outlined"
-                        defaultValue={testData?.existingGroupInfo?.groupName}
                         fullWidth
                         name="name"
                         onChange={(e)=>handleName(e)}
-                    />
-                    
+                    />               
                     <TextField
                         id="outlined-multiline-static"
                         label="Description"
-                        defaultValue={testData?.existingGroupInfo?.description}
+                        defaultValue={testData?.groupInfo?.description}
                         multiline
                         rows={4}
                         fullWidth
@@ -229,7 +190,7 @@ function EditAudience({openEditAudience,setOpenEditAudience,testData,item,single
                                 <div className="flex flex-wrap">
                                     {surveyParticipants?.map((item,i)=>(
                                         <div key={i} className="flex bg-blue-500 my-8 mx-8 rounded-md px-12 py-6 items-center justify-between text-white">
-                                            <h5 className='pr-12 text-14 font-semibold'>{item}</h5>
+                                            <h5 className='pr-12 text-14 font-semibold'>{item?.email ? item?.email : item}</h5>
                                             <CloseRoundedIcon onClick={()=> deleteTag(i)} className="text-18 cursor-pointer font-semibold" />
                                         </div>
                                     ))}
