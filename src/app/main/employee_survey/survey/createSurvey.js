@@ -26,29 +26,6 @@ import SingleAudienceLoader from '../utils/singleAudienceLoader';
 
 
 
-const recipientGroup = [
-    {
-        label:"Company Policy Survey Group",
-        value:1,
-        id:10
-    },
-    {
-        label:"Manager Performance Survey Group",
-        value:2,
-        id:11
-    },
-    {
-        label:"Network Performance Survey Group",
-        value:3,
-        id:12
-    },
-    {
-        label:"Employee Work Life Balance Survey Group",
-        value:4,
-        id:13
-    }
-]
-
 
 
 
@@ -57,6 +34,7 @@ function CreateSurvey({setCreateSurveyModal,setSurveyCard,surveyCard}) {
     const [name, setName] = useState("")
     const [description, setDescription] =  useState("")
     const [departments, setDepartments] = useState([])
+    const [reDepts, setReDepts] = useState([])
     const [pickedDepartments, setPickedDepartments] = useState([])
     const [recipientDepartments, setRecipientDepartments] = useState([])
     const [recipientPickedDepartments, setRecipientPickedDepartments] = useState([])
@@ -85,6 +63,7 @@ function CreateSurvey({setCreateSurveyModal,setSurveyCard,surveyCard}) {
         //     "updatedAt": "2021-10-21T12:06:50.577Z"
         //   },
     ])
+    const [recipientDept,setRecipientDept] = useState([])
     const [group,setGroup] = useState([
         // {
         // "id": 2,
@@ -98,16 +77,15 @@ function CreateSurvey({setCreateSurveyModal,setSurveyCard,surveyCard}) {
     const [surveyFormData, setSurveyFormData] = useState({
         title:'',
         description:'',
-        addNewDepartments:[],
-        addGroups:[],
+        departmentIds:[],
+        groupIds:[],
         emails:[],
-        // BACKEND STILL WORKING ON THIS //
-        // reportingGroups: [],
-        // reportingIndividualEmail:[],
-        // BACKEND STILL WORKING ON THIS //
+        authorizedViewersDeptIds:[],
+        authorizedViewersEmails:[]
     })
 
     useAxiosGet('department/all/1',setDept,setLoadingDept)
+    useAxiosGet('department/all/1',setRecipientDept,setLoadingDept)
     useAxiosGet('surveyGroup',setGroup,setLoadingGroup)
 
     const [errorName, setErrorName] = useState(false)
@@ -120,21 +98,24 @@ function CreateSurvey({setCreateSurveyModal,setSurveyCard,surveyCard}) {
         setSurveyFormData({...surveyFormData,description:e.target.value})
     }
 
-    const handleChangeRecipient = (event) => {
-        setRecipientDepartments(event.target.value)
-        setRecipientPickedDepartments(event.target.value)
-        setSurveyFormData({...surveyFormData,reportingDepartments:event.target.value})
-    }
+    // const handleChangeRecipient = (event) => {
+    //     setRecipientDepartments(event.target.value)
+    //     setRecipientPickedDepartments(event.target.value)
+    //     setSurveyFormData({...surveyFormData,reportingDepartments:event.target.value})
+    // }
 
     const handleChangeGroup = (event) => {
         setGroups(event.target.value)
         // setSurveyFormData({...surveyFormData,participantGroups:event.target.value})
-        setSurveyFormData({...surveyFormData,addGroups:event.target.value})
+        // setSurveyFormData({...surveyFormData,addGroups:event.target.value})
+        setSurveyFormData({...surveyFormData,groupIds:event.target.value})
     }
 
-    const handleChangeGroupRecipient = (event) => {
-        setRecipientGroups(event.target.value)
-        setSurveyFormData({...surveyFormData,reportingGroups:event.target.value})
+    const handleChangeDepartmentRecipient = (event) => {
+        // setRecipientGroups(event.target.value)
+        setReDepts(event.target.value)
+        // setSurveyFormData({...surveyFormData,reportingGroups:event.target.value})
+        setSurveyFormData({...surveyFormData,authorizedViewersDeptIds:event.target.value})
     }
 
     const handleChangeIndividualsRecipient = (e) => {
@@ -149,7 +130,8 @@ function CreateSurvey({setCreateSurveyModal,setSurveyCard,surveyCard}) {
         if ( keyCode === 13 && trimmedIndividualInput.length && !recipientSurveyParticipants.includes(trimmedIndividualInput) ) {
             e.preventDefault()
             setRecipientSurveyParticipants((prevState) => [...prevState, trimmedIndividualInput])
-            setSurveyFormData({...surveyFormData,reportingIndividualEmail:([...recipientSurveyParticipants,trimmedIndividualInput])})
+            // setSurveyFormData({...surveyFormData,reportingIndividualEmail:([...recipientSurveyParticipants,trimmedIndividualInput])})
+            setSurveyFormData({...surveyFormData,authorizedViewersEmails:([...recipientSurveyParticipants,trimmedIndividualInput])})
             setRecipientIndividuals('')
         }
     }
@@ -159,7 +141,8 @@ function CreateSurvey({setCreateSurveyModal,setSurveyCard,surveyCard}) {
         if (items.length > 0) {
             const result = items.filter(item => item !== items[id])
             setRecipientSurveyParticipants(result)
-            setSurveyFormData({...surveyFormData,reportingIndividualEmail:result})
+            // setSurveyFormData({...surveyFormData,reportingIndividualEmail:result})
+            setSurveyFormData({...surveyFormData,authorizedViewersEmails:result})
         }
     }
 
@@ -196,13 +179,15 @@ function CreateSurvey({setCreateSurveyModal,setSurveyCard,surveyCard}) {
 
     const submitSurveyForm  =   (e)  =>  {
         e.preventDefault();
+        // console.log(surveyFormData)
         axios.post(
             'https://agile-dawn-03556.herokuapp.com/api/v1/survey/create-survey',
             surveyFormData,
             {headers: { Authorization: `JWT ${auth().getToken}` }}
             )
         .then(response => {
-            if(response.status === 200) {
+            console.log(response)
+            if(response.status === 200) {    
                 setCreateSurveyModal(false)
                 console.log(response)
                 history.push('/employee-survey')
@@ -210,17 +195,21 @@ function CreateSurvey({setCreateSurveyModal,setSurveyCard,surveyCard}) {
             }
         })
         .catch(err => console.error(err))
+
+
+
     }
 
     const handleChangeDepartments = (event) => {
       setDepartments(event.target.value);
     //   setSurveyFormData({...surveyFormData,participantDepartments:event.target.value})
-      setSurveyFormData({...surveyFormData,addNewDepartments:event.target.value})
+    //   setSurveyFormData({...surveyFormData,addNewDepartments:event.target.value})
+      setSurveyFormData({...surveyFormData,departmentIds:event.target.value})
     };
 
 
     function SubmitButton(){
-        if (surveyFormData.title && surveyFormData.description && (surveyFormData.addNewDepartments.length > 0 || surveyFormData.addGroups.length > 0 || surveyFormData.emails.length > 0 )){
+        if (surveyFormData.title && surveyFormData.description && (surveyFormData.departmentIds.length > 0 || surveyFormData.groupIds.length > 0 || surveyFormData.emails.length > 0 )){
           return (
             <SharedButton
                 variant="contained"
@@ -357,19 +346,19 @@ function CreateSurvey({setCreateSurveyModal,setSurveyCard,surveyCard}) {
                         </div>
                     </div>
 
-                    {/* <div className="pb-10 mt-24">
+                    <div className="pb-10 mt-24">
                         <h4 className="text-14 text-grey-700 pb-4 mb-6 font-semibold border-gray-400 border-b-1 ">Who can see response/reporting?</h4>
                         <div className="w-full flex items-center justify-between mb-16">
                             <FormControl className="w-full">
-                                <InputLabel id="group-label">Groups</InputLabel>
+                                <InputLabel id="group-label">Departments</InputLabel>
                                 <Select
                                 multiple
-                                value={recipientGroups}
-                                onChange={handleChangeGroupRecipient}
+                                value={reDepts}
+                                onChange={handleChangeDepartmentRecipient}
                                 >
-                                {recipientGroup?.map((groupItem) => (
-                                    <MenuItem key={groupItem.id} value={groupItem.id}>
-                                        {groupItem.label}
+                                {recipientDept?.map((groupItem) => (
+                                    <MenuItem key={groupItem?.id} value={groupItem?.id}>
+                                        {groupItem?.departmentName}
                                     </MenuItem>
                                 ))}
                                 </Select>
@@ -380,11 +369,11 @@ function CreateSurvey({setCreateSurveyModal,setSurveyCard,surveyCard}) {
                             <h4 className="capitalize text-14 text-grey-700 pb-8">survey participants</h4>
                             <div className="border-gray-400 border-1 py-14 rounded-md flex items-start overflow-y-scroll flex-wrap min-h-36">
                                 <div className="flex flex-wrap">
-                                    {recipientGroups?.map((item,i)=> {
-                                        let recipientGroupChoices = (recipientGroup.find(({ label,value,id }) => id === item ))
+                                    {reDepts?.map((item,i)=> {
+                                        let recipientDeptChoices = (recipientDept?.find(({ label,value,id }) => id === item ))
                                         return (
                                             <div key={i} className="flex bg-blue-500 my-8 mx-8 rounded-md px-12 py-6 items-center justify-between text-white">
-                                                <h5 className='text-14 font-semibold'>{recipientGroupChoices.label}</h5>
+                                                <h5 className='text-14 font-semibold'>{recipientDeptChoices?.departmentName}</h5>
                                             </div>
                                         )
                                     })}
@@ -399,7 +388,7 @@ function CreateSurvey({setCreateSurveyModal,setSurveyCard,surveyCard}) {
                                 </div>
                             </div>
                         </div>
-                    </div> */}
+                    </div>
                     <div className="w-full flex items-center justify-center">
                         <SubmitButton/>
                     </div>

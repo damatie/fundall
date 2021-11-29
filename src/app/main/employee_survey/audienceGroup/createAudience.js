@@ -90,6 +90,7 @@ function CreateAudience({ setOpenCreateAudience }) {
 
     const submitAudienceForm  =   (e)  =>  {
         e.preventDefault();
+        console.log(audienceFormData)
         axios.post(
             'https://agile-dawn-03556.herokuapp.com/api/v1/surveyGroup',
             audienceFormData,

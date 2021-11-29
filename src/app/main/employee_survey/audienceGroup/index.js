@@ -39,7 +39,7 @@ const AudienceGroupIndexPage = () => {
     }
 
     const auth = useAuth
-
+    // Uncomment when done
     const openPopulate = (audienceCardItem,i) => {
         setSingleAudienceItem(audienceCardItem)
         setSingleAudienceId(i)
@@ -51,9 +51,11 @@ const AudienceGroupIndexPage = () => {
                 })
                 .catch(e => console.error(e));
     }
+    // Uncomment when done
 
-
-    useAxiosGet('surveyGroup',setAudienceCard,setLoadingAudienceCard)
+// Edited
+useAxiosGet('surveyGroup',setAudienceCard,setLoadingAudienceCard)
+// Edited
     // useAxiosGet('surveyGroup',setAudienceCard,setLoadingAudienceCard)
     
 	const confirmDeleteAudience = (audienceCardItem,i,id) => {
@@ -108,7 +110,7 @@ const AudienceGroupIndexPage = () => {
                 ) : (
                     <>
                     {
-                    audienceCard.length > 0 ? (
+                    audienceCard?.length ? (
                         audienceCard?.map((audienceCardItem,i)=>(
                             <Cards className="mb-44 px-12 py-8" key={audienceCardItem?.id}>
                                 <div className="flex justify-end">
