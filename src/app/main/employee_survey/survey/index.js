@@ -43,7 +43,7 @@ const SurveyIndexPage = () => {
     //     loadSurveys()
     // },[page])
     useAxiosGetAllSurveys(`survey?page=${page}`,setSurveyCard,page,setLoadingSurveyCard,setNoOfPages)    
-    console.log(surveyCard  )
+    // console.log(surveyCard  )
     // console.log(Math.ceil((noOfPages / 10)))
     
     return (
