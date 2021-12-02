@@ -90,7 +90,7 @@ function CreateAudience({ setOpenCreateAudience }) {
 
     const submitAudienceForm  =   (e)  =>  {
         e.preventDefault();
-        console.log(audienceFormData)
+        // console.log(audienceFormData)
         axios.post(
             'https://agile-dawn-03556.herokuapp.com/api/v1/surveyGroup',
             audienceFormData,
@@ -100,6 +100,9 @@ function CreateAudience({ setOpenCreateAudience }) {
             if(response.status === 200) setOpenCreateAudience(false)
             console.log(response)
             window.location.reload()
+            if(response.status === 'pending') {
+                console.log('hello')
+            }
         })
         .catch(err => console.error(err))
     }

@@ -9,6 +9,7 @@ const newBaseUrl = 'https://agile-dawn-03556.herokuapp.com/api/v1/'
 
 const baseAuthGet = (urlString) => axios.get( `${newBaseUrl}${urlString}`, {headers: { Authorization: `JWT ${auth().getToken}` }} )
 const baseAuthUpdate = (urlString) => axios.patch( `${newBaseUrl}${urlString}`,`${updateData}`, {headers: { Authorization: `JWT ${auth().getToken}` }} )
+const baseAuthPost = (urlString,submitData) => axios.post( `${newBaseUrl}${urlString}`,`${submitData}`, {headers: { Authorization: `JWT ${auth().getToken}` }} )
 // const baseAuthGetPaginatedSurveys = (urlString) => axios.get( `${newBaseUrl}${urlString}`, {headers: { Authorization: `JWT ${auth().getToken}` }} )
 
 
@@ -45,6 +46,21 @@ export function useAxiosGet (urlString,newData,loading) {
             loading(true)
             const data = await baseAuthGet(urlString)
             newData(data.data.data)
+            loading(false)
+        }
+        fetchSurveys(urlString,newData,loading)
+    },[urlString,newData,loading])
+}
+
+
+
+
+export function useAxiosGetGroup (urlString,newData,loading) {
+    useEffect(() => {
+        const fetchSurveys = async (urlString,newData,loading) => {
+            loading(true)
+            const data = await baseAuthGet(urlString)
+            newData(data.data.data.rows)
             loading(false)
         }
         fetchSurveys(urlString,newData,loading)
@@ -90,6 +106,24 @@ export function useAxiosGetAllSurveys (urlString,newData,page,loading,loadNum) {
 
 
 
+export function useAxiosGetAll (urlString,newData,page,loading,loadNum) {
+    useEffect(() => {
+        const fetchData = async (urlString,newData,loading) => {
+            loading(true)
+            const data = await baseAuthGet(urlString)
+            newData(data.data.data.rows)
+            loadNum(data.data.data.count)
+            loading(false)
+        }
+        fetchData(urlString,newData,loading)
+    },[urlString,page,newData,loading])
+}
+
+
+
+
+
+
 export function useAxiosGetAllMembers (urlString,newData,loading) {
     useEffect(() => {
         const fetchSurveys = async (urlString,newData,loading) => {
@@ -100,6 +134,19 @@ export function useAxiosGetAllMembers (urlString,newData,loading) {
         }
         fetchSurveys(urlString,newData,loading)
     },[urlString,newData,loading])
+}
+
+
+
+export function useAxiosCreate (urlString,submitData,loading) {
+    console.log(submitData)
+    const postSurvey = async (urlString,submitData,loading) => {
+        loading(true)
+        const res = await baseAuthPost(urlString,submitData)
+        console.log(res)
+        loading(false)
+    }
+    postSurvey(urlString,submitData,loading)
 }
 
 

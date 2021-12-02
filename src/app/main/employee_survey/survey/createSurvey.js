@@ -14,12 +14,14 @@ import Select from '@material-ui/core/Select';
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
 import SideModal from 'app/shared/modal/SideModal';
 import SharedButton from 'app/shared/button/SharedButton';
-import { useAxiosGet } from '../hooks/useAxiosHook';
+import { useAxiosGet, useAxiosGetAll, useAxiosGetGroup } from '../hooks/useAxiosHook';
 import axios from 'axios';
 import { getBaseUrl } from 'app/shared/getBaseUrl'
 import { useAuth } from 'app/hooks/useAuth'
 import { useHistory } from 'react-router';
 import Swal from 'sweetalert2';
+import Pagination from '@material-ui/lab/Pagination';
+import PaginationItem from '@material-ui/lab/PaginationItem';
 import SingleAudienceLoader from '../utils/singleAudienceLoader';
 
 
@@ -85,9 +87,23 @@ function CreateSurvey({setCreateSurveyModal,setSurveyCard,surveyCard}) {
         authorizedViewersEmails:[]
     })
 
+    const [loadingSelectGroup, setLoadingSelectGroup] = useState(false)
+    const [page,setPage] = useState(0)
+    const [noOfPages, setNoOfPages] = useState(0)
+
     useAxiosGet('department/all/1',setDept,setLoadingDept)
     useAxiosGet('department/all/1',setRecipientDept,setLoadingDept)
-    useAxiosGet('surveyGroup',setGroup,setLoadingGroup)
+    useAxiosGetGroup('surveyGroup',setGroup,setLoadingGroup)
+    // useAxiosGetAll(`surveyGroup?page=${page}`,setGroup,page,setLoadingSelectGroup,setNoOfPages)
+    // console.log(group)
+        // const [loadingAudienceCard, setLoadingAudienceCard] = useState(false)
+    
+        // const auth = useAuth
+    
+    
+        const handleChange = (event,value) => {
+            setPage(value - 1)
+        }
 
     const [errorName, setErrorName] = useState(false)
 
@@ -330,7 +346,7 @@ function CreateSurvey({setCreateSurveyModal,setSurveyCard,surveyCard}) {
                                         let groupChoices = (group.find(({ label,value,id }) => id === item ))
                                         return (
                                             <div key={i} className="flex bg-blue-500 my-8 mx-8 rounded-md px-12 py-6 items-center justify-between text-white">
-                                                <h5 className='text-14 font-semibold'>{groupChoices.name}</h5>
+                                                <h5 className='text-14 font-semibold'>{groupChoices?.name}</h5>
                                             </div>
                                         )
                                     })}

@@ -9,6 +9,8 @@ import Pagination from '@material-ui/lab/Pagination';
 import PaginationItem from '@material-ui/lab/PaginationItem';
 import axios from 'axios';
 import { useAuth } from 'app/hooks/useAuth';
+import moment from 'moment';
+import SurveyCard from '../shared/surveyCard';
 
 const SurveyIndexPage = () => {
 
@@ -41,6 +43,7 @@ const SurveyIndexPage = () => {
     //     loadSurveys()
     // },[page])
     useAxiosGetAllSurveys(`survey?page=${page}`,setSurveyCard,page,setLoadingSurveyCard,setNoOfPages)    
+    console.log(surveyCard  )
     // console.log(Math.ceil((noOfPages / 10)))
     
     return (
@@ -48,7 +51,7 @@ const SurveyIndexPage = () => {
             <h2 className="my-10 mb-32  text-2xl font-semibold capitalize">surveys</h2>
             
             <div className="w-full flex items-center justify-center my-28 py-28">
-                <Pagination count={Math.ceil((noOfPages / 10))} color="primary" size="large" onChange={handleChange} hidePrevButton hideNextButton />
+                <Pagination count={Math.ceil((noOfPages / 10))} color="primary" size="large" onChange={handleChange}  />
             </div>
             <Cards className="w-9/12 mx-auto px-16">
                 <h2 className="text-xl mb-16 font-semibold capitalize">survey list</h2>
@@ -64,17 +67,7 @@ const SurveyIndexPage = () => {
                             surveyCard?.length ? (
                                 surveyCard?.map((surveyCardItem,i)=>(
                                 <Link to={'employee-survey/survey-form/' + surveyCardItem?.id}  className="text-black hover:no-underline" key={surveyCardItem?.id} >
-                                    <div className="flex justify-between w-full bg-white shadow-md mb-40 py-16 px-36 rounded-20">
-                                        <div className="w-2/3">
-                                            <h3 className="text-2xl font-bold">{surveyCardItem?.title}</h3>
-                                            <h5 className="text-16 py-8 w-full">{surveyCardItem?.description}</h5>
-                                            <p className="text-blue-400 text-14">Created {surveyCardItem?.date ? surveyCardItem?.date : "12/10/2021"}</p>
-                                        </div>
-                                        <div className="w-1/3">
-                                            <p className="text-blue-400 text-14 pt-8 text-right">Survey sent to {surveyCardItem?.noOfRecipients}</p>
-                                            <p className="text-blue-400 text-14 pt-8 text-right">{surveyCardItem?.responseRate ? surveyCardItem?.responseRate : 0}% response rate</p>
-                                        </div>
-                                    </div>
+                                    <SurveyCard surveyCardItem={surveyCardItem} />
                                 </Link>
                             )) 
                             ) : (

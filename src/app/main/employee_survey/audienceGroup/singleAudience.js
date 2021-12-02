@@ -15,6 +15,7 @@ import { useAxiosGet, useAxiosGetAllMembers, useAxiosGetSingleAudience } from '.
 import moment from 'moment';
 import SingleAudienceLoader from '../utils/singleAudienceLoader';
 import SurveyCardLoader from '../utils/surveyCardLoader';
+import SurveyCard from '../shared/surveyCard';
 
 
 
@@ -32,6 +33,8 @@ function SingleAudience() {
     const [loadingSingleAudience,setLoadingSingleAudience] = useState(false)
     const [loadingSurveySnippet, setLoadingSurveySnippet] = useState(false)
     const [loadingMembers, setLoadingMembers] = useState(false)
+    const [responseRate, setResponseRate] = useState({})
+    const [loadingResponseRate, setLoadingResponseRate] = useState(false)
     const showFullList = () => {
         setFullMemberList(prev => !prev)
     }
@@ -64,11 +67,26 @@ function SingleAudience() {
     useAxiosGetSingleAudience(`surveyGroup/${paramsId}`,setClickedAudience,setLoadingSingleAudience,refreshInfo)
     useAxiosGet(`surveyGroup/${paramsId}/surveys`,setSurveyCard,setLoadingSurveySnippet)
     useAxiosGetAllMembers(`surveyGroup/${paramsId}/members`,setMembersList,setLoadingMembers)
+    useAxiosGet(`surveyGroup/${paramsId}/response-rate`,setResponseRate,setLoadingResponseRate)
+
+
+    console.log(responseRate)
     
     let calc = (x,y) => {
         return x*y
     }
-    
+
+    let responseCalc = (x,y) => {
+        return ((x/y) * 100)
+    }
+
+    let numOpenedSurvey = (x,y) => {
+        return x + y
+    }
+
+    let responseRateCalc = () => {
+        return responseCalc() + numOpenedSurvey()
+    }
 
     return (
         <div  className="w-10/12 mx-auto">
@@ -111,11 +129,14 @@ function SingleAudience() {
                         <div className="flex items-center justify-between">
                             <div className="text-center">
                                 <h6 className="text-gray-500 capitalize">opened</h6>
-                                <h4 className="text-xl text-black font-bold">212</h4>
+                                <h4 className="text-xl text-black font-bold">{(responseRate?.completedSurvey && responseRate?.notCompletedSurvey) && 
+                            numOpenedSurvey(responseRate?.completedSurvey,responseRate?.notCompletedSurvey)}</h4>
                             </div>
                             <div className="text-center">
                                 <h6 className="text-gray-500 capitalize">completed</h6>
-                                <h4 className="text-xl text-black font-bold">100</h4>
+                                <h4 className="text-xl text-black font-bold">{
+                                responseRate?.completedSurvey && responseRate?.completedSurvey
+                                }</h4>
                             </div>
                         </div>
                     </Cards>
@@ -123,11 +144,21 @@ function SingleAudience() {
                         <Cards className="w-full">
                             <p className="text-gray-500 font-bold text-15">Response Rate</p>
                             <div className="flex py-24">
-                                <h3 className="text-4xl font-bold">2803</h3>
+                                <h3 className="text-4xl font-bold">{(responseRate?.completedSurvey && clickedAudience?.groupInfo?.totalMembers) && 
+                            responseCalc(responseRate?.completedSurvey,clickedAudience?.groupInfo?.totalMembers)}%</h3>
                                 <p className="text-green-400 text-14"><TrendingUpIcon /> +10.19%</p>
                             </div>
                             <p className="text-gray-500 font-bold text-15 pb-10">
-                            {surveyCard.length} surveys were dispatched last month, 212 were opened (53%) and 100 completed (25%)
+                            {surveyCard.length} surveys were dispatched last month, {(responseRate?.completedSurvey && responseRate?.notCompletedSurvey) && 
+                            numOpenedSurvey(responseRate?.completedSurvey,responseRate?.notCompletedSurvey)} were opened (
+                                {responseCalc((clickedAudience?.groupInfo?.totalMembers && responseRate?.completedSurvey && responseRate?.notCompletedSurvey) &&
+                                                numOpenedSurvey(responseRate?.completedSurvey,responseRate?.notCompletedSurvey),
+                                                clickedAudience?.groupInfo?.totalMembers)}%) and {
+                                responseRate?.completedSurvey && responseRate?.completedSurvey
+                                } completed 
+                            (
+                                {(responseRate?.completedSurvey && clickedAudience?.groupInfo?.totalMembers) && 
+                            responseCalc(responseRate?.completedSurvey,clickedAudience?.groupInfo?.totalMembers)}%)
                             </p>
                         </Cards>
                         <Cards className="w-full text-center">
@@ -152,16 +183,8 @@ function SingleAudience() {
 
                                         {
                                             surveyCard?.map((surveyCardItem,i)=>(
-                                                <div className="flex justify-between w-full bg-white shadow-md mb-40 py-16 px-36 rounded-20">
-                                                    <div className="w-2/3">
-                                                        <h3 className="font-bold text-xl">{surveyCardItem?.title}</h3>
-                                                        <h5 className="text-16 py-8 w-full">{surveyCardItem?.description}</h5>
-                                                        <p className="text-blue-400 text-14">Created {surveyCardItem?.date}</p>
-                                                    </div>
-                                                    <div className="w-1/3">
-                                                        <p className="text-blue-400 text-14 pt-8 text-right">Survey sent to {surveyCardItem?.numberOfPeople}</p>
-                                                        <p className="text-blue-400 text-14 pt-8 text-right">{surveyCardItem?.responseRate}% response rate</p>
-                                                    </div>
+                                                <div className="text-black hover:no-underline" key={surveyCardItem?.id} >
+                                                    <SurveyCard surveyCardItem={surveyCardItem} />
                                                 </div>
                                             ))
                                         }
