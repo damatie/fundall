@@ -71,7 +71,7 @@ const AudienceGroupIndexPage = () => {
     // useAxiosGetAll(`surveyGroup?page=${page}`,setAudienceCard,page,setLoadingAudienceCard,setNoOfPages)
     // Edited
     const [currentPage, setCurrentPage] = useState(1)
-    const [audienceCardPerPage, setAudienceCardPerPage] = useState(3)
+    const [audienceCardPerPage, setAudienceCardPerPage] = useState(10)
     const [clicked, setClicked] = useState(false)
 
     const indexOfLastPost = currentPage * audienceCardPerPage;
