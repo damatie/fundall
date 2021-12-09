@@ -238,7 +238,7 @@ function CreateSurvey({setCreateSurveyModal,setSurveyCard,surveyCard}) {
 			} else {
 				// console.log("inside else")
 				Swal.fire({
-					title: 'Create Survey',
+					title: 'Sorry could not create Survey',
 					text: message,
 					icon: 'error',
 					timer: 3000,
@@ -247,8 +247,8 @@ function CreateSurvey({setCreateSurveyModal,setSurveyCard,surveyCard}) {
 			}
 		}).catch(error => {
 			Swal.fire({
-				title: 'Create Survey',
-				text: error.response?.data.error || error.response?.data.message,
+				title: 'Sorry could not create Survey',
+				text: 'Check your internet connection',
 				icon: 'error',
 				timer: 3000,
 			})
@@ -276,7 +276,6 @@ function CreateSurvey({setCreateSurveyModal,setSurveyCard,surveyCard}) {
                 color="primary"
                 className="py-8 px-44 my-24 text-14 text-white font-normal"
                 onClick={(e)=>submitSurveyForm(e)}
-                disabled={loading}
             >
                 submit
             </SharedButton>

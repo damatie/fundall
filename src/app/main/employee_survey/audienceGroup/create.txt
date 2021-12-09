@@ -1,0 +1,65 @@
+    const [nameError, setNameError] = useState(false)
+    const [descriptionError, setDescriptionError] = useState(false)
+
+    const submitAudienceForm  =   (e)  =>  {
+        e.preventDefault();
+        if(audienceFormData.name.trim().length === 0 ){
+            setNameError(true)
+        } else {
+            setNameError(false)
+        }
+        if(audienceFormData.description.trim().length === 0 ){
+            setDescriptionError(true)
+        } else {
+            setDescriptionError(false)
+        }
+        if(nameError === true && descriptionError === true) {
+            axios.post(
+                    'https://agile-dawn-03556.herokuapp.com/api/v1/surveyGroup',
+                    audienceFormData,
+                    {headers: { Authorization: `JWT ${auth().getToken}` }}
+                    ).then((response) => {
+                console.log(response)
+                setPostSurvey(false)
+                const { success, message, token, data } = response.data;
+                if (success) {
+                        Swal.fire({
+                            title: 'Created Audience/Group Successfully',
+                            text: message,
+                            icon: 'success',
+                            timer: 3000,
+                        })
+                        setOpenCreateAudience(false)
+                } else {
+                    // console.log("inside else")
+                    Swal.fire({
+                        title: 'Sorry could not create Audience/Group',
+                        text: message,
+                        icon: 'error',
+                        timer: 3000,
+                    })
+                    setOpenCreateAudience(false)
+                }
+            }).catch(error => {
+                Swal.fire({
+                    title: 'Sorry could not create Audience/Group',
+                    text: 'Check your internet connection',
+                    icon: 'error',
+                    timer: 3000,
+                })
+                setOpenCreateAudience(false)
+            });
+        }
+        // console.log(audienceFormData)
+        // axios.post(
+        //     'https://agile-dawn-03556.herokuapp.com/api/v1/surveyGroup',
+        //     audienceFormData,
+        //     {headers: { Authorization: `JWT ${auth().getToken}` }}
+        //     )
+        // .then(response => {
+        //     if(response.status === 200) setOpenCreateAudience(false)
+        //     console.log(response)
+        //     window.location.reload()
+        // })
+        // .catch(err => console.error(err))
+    }

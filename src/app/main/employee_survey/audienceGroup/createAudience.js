@@ -17,6 +17,8 @@ import SharedButton from 'app/shared/button/SharedButton';
 import { useAxiosGet } from '../hooks/useAxiosHook';
 import axios from 'axios';
 import { useAuth } from 'app/hooks/useAuth';
+import Swal from 'sweetalert2';
+
 
 
 
@@ -88,23 +90,60 @@ function CreateAudience({ setOpenCreateAudience }) {
 
     const history = useHistory()
 
+
     const submitAudienceForm  =   (e)  =>  {
         e.preventDefault();
         // console.log(audienceFormData)
-        axios.post(
-            'https://agile-dawn-03556.herokuapp.com/api/v1/surveyGroup',
-            audienceFormData,
-            {headers: { Authorization: `JWT ${auth().getToken}` }}
-            )
-        .then(response => {
-            if(response.status === 200) setOpenCreateAudience(false)
-            console.log(response)
-            window.location.reload()
-            if(response.status === 'pending') {
-                console.log('hello')
-            }
-        })
-        .catch(err => console.error(err))
+        ////
+
+
+
+                    // ****************************
+                    axios.post('https://agile-dawn-03556.herokuapp.com/api/v1/surveyGroup',audienceFormData,{headers: { Authorization: `JWT ${auth().getToken}` }}).then((response) => {
+                        console.log(response)
+                        // setPostSurvey(false)
+                        const { success, message, token, data } = response.data;
+                        if (success) {
+                                Swal.fire({
+                                    title: 'Created Audience/Group Successfully',
+                                    text: message,
+                                    icon: 'success',
+                                    timer: 3000,
+                                })
+                                setOpenCreateAudience(false)
+                        } else {
+                            // console.log("inside else")
+                            Swal.fire({
+                                title: 'Sorry could not create Audience/Group',
+                                text: 'Check your internet connection',
+                                icon: 'error',
+                                timer: 3000,
+                            })
+                            setOpenCreateAudience(false)
+                        }
+                    }).catch(error => {
+                        Swal.fire({
+                            title: 'Sorry could not create Audience/Group',
+                            text: error.response?.data.error || error.response?.data.message,
+                            icon: 'error',
+                            timer: 3000,
+                        })
+                        setOpenCreateAudience(false)
+                    });
+                    // ***************************
+
+        ////
+        // axios.post(
+        //     'https://agile-dawn-03556.herokuapp.com/api/v1/surveyGroup',
+        //     audienceFormData,
+        //     {headers: { Authorization: `JWT ${auth().getToken}` }}
+        //     )
+        // .then(response => {
+        //     if(response.status === 200) setOpenCreateAudience(false)
+        //     console.log(response)
+        //     window.location.reload()
+        // })
+        // .catch(err => console.error(err))
     }
     
 
@@ -112,17 +151,43 @@ function CreateAudience({ setOpenCreateAudience }) {
         setOpenCreateAudience(false)
     }
 
+    function SubmitButton(){
+        if (audienceFormData.name && audienceFormData.description){
+          return (
+            <SharedButton
+                variant="contained"
+                color="primary"
+                className="py-8 px-44 my-24 mr-28 text-14 text-white font-normal"
+                onClick={(e)=>submitAudienceForm(e)}
+            >
+                submit
+            </SharedButton>
+        )
+        } else {
+            return (
+                <SharedButton
+                        variant="contained"
+                        color="primary"
+                        className="py-8 px-44 my-24 mr-28 text-14 text-white font-normal"
+                        disabled
+                    >
+                        submit
+                </SharedButton>
+        )};
+      };
+
+
 
     return (
         <SideModal title="Create Audience" open={open} handleClose={()=>setOpenCreateAudience(false)}>
-            <h3 className="pb-20 pt-16 w-11/12 mx-auto text-2xl font-bold">Create New Audience/Groups</h3>
+            <h3 className="pb-20 pt-16 w-11/12 mx-auto text-2xl font-bold">Create New Audience/Group</h3>
             <div className="bg-white w-11/12 mt-8 mx-auto shadow mb-56 rounded-20">
                 <form className="p-28" >
                     <TextField
                         label="Group Name"
                         id="outlined-margin-normal"
                         defaultValue=""
-                        className="inline-block p-1 mb-24"
+                        className="inline-block p-1 mb-12"
                         variant="outlined"
                         fullWidth
                         onChange={(e)=>handleName(e)}
@@ -133,7 +198,7 @@ function CreateAudience({ setOpenCreateAudience }) {
                         multiline
                         rows={4}
                         fullWidth
-                        className="mb-16"
+                        className="mb-12"
                         defaultValue=""
                         variant="outlined"
                         onChange={(e)=>handleDescription(e)}
@@ -183,12 +248,7 @@ function CreateAudience({ setOpenCreateAudience }) {
                         </div>
                     </div>
                     <div className="w-full flex items-center justify-start">
-                        <SharedButton variant="contained" color="primary" type="submit" 
-                            className="py-8 px-44 my-24 mr-28 text-14 font-bold"
-                            onClick={(e)=>submitAudienceForm(e)}
-                        >
-                        Submit
-                        </SharedButton>
+                        <SubmitButton/>
                         <Button
                             variant="contained"
                             className="py-8 px-44 my-24 text-black bg-gray-300 text-14 font-bold"
