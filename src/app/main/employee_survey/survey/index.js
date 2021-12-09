@@ -49,10 +49,6 @@ const SurveyIndexPage = () => {
     return (
         <div className="">
             <h2 className="my-10 mb-32  text-2xl font-semibold capitalize">surveys</h2>
-            
-            <div className="w-full flex items-center justify-center my-28 py-28">
-                <Pagination count={Math.ceil((noOfPages / 10))} color="primary" size="large" onChange={handleChange}  />
-            </div>
             <Cards className="w-9/12 mx-auto px-16">
                 <h2 className="text-xl mb-16 font-semibold capitalize">survey list</h2>
                 {loadingSurveyCard ? (
@@ -77,8 +73,12 @@ const SurveyIndexPage = () => {
                             )
                         }
                     </>    
+                               
                 )}
             </Cards>
+            <div className="w-full flex items-center justify-center my-28 py-28">
+                <Pagination count={Math.ceil((noOfPages / 10))} color="primary" size="large" onChange={handleChange}  />
+            </div>
         </div>
     )
 }

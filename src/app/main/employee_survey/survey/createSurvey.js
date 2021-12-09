@@ -23,6 +23,10 @@ import Swal from 'sweetalert2';
 import Pagination from '@material-ui/lab/Pagination';
 import PaginationItem from '@material-ui/lab/PaginationItem';
 import SingleAudienceLoader from '../utils/singleAudienceLoader';
+import * as createSurveyActions from '../store/actions'
+import { useDispatch, useSelector } from 'react-redux';
+import { useForm } from 'react-hook-form';
+import ProgressBtn from 'app/shared/progressBtn';
 
 
 
@@ -194,24 +198,62 @@ function CreateSurvey({setCreateSurveyModal,setSurveyCard,surveyCard}) {
 
     const history = useHistory()
 
+    const dispatch = useDispatch()
+	// useSelector((data) => console.log(data));
+    const [postSurvey,setPostSurvey] = useState(false)
     const submitSurveyForm  =   (e)  =>  {
         e.preventDefault();
         // console.log(surveyFormData)
-        axios.post(
-            'https://agile-dawn-03556.herokuapp.com/api/v1/survey/create-survey',
-            surveyFormData,
-            {headers: { Authorization: `JWT ${auth().getToken}` }}
-            )
-        .then(response => {
-            console.log(response)  
-            if(response.status === 200) {    
+        setPostSurvey(true)
+        // dispatch(createSurveyActions.createSurvey(surveyFormData))
+        // console.log(response.data)
+        // axios.post(
+        //     'https://agile-dawn-03556.herokuapp.com/api/v1/survey/create-survey',
+        //     surveyFormData,
+        //     {headers: { Authorization: `JWT ${auth().getToken}` }}
+        //     )
+        //     .then(response => {
+        //     setPostSurvey(false)
+        //     console.log(response)  
+        //     if(response.status === 200) {    
+        //         setCreateSurveyModal(false)
+        //         console.log(response)
+        //         // history.push('/employee-survey')
+        //         // window.location.reload()
+        //     }
+        // })
+        // .catch(err => console.error(err))
+        axios.post('https://agile-dawn-03556.herokuapp.com/api/v1/survey/create-survey', surveyFormData,{headers: { Authorization: `JWT ${auth().getToken}` }}).then((response) => {
+			console.log(response)
+            setPostSurvey(false)
+			const { success, message, token, data } = response.data;
+			if (success) {
+					Swal.fire({
+						title: 'Created Survey Successfully',
+						text: message,
+						icon: 'success',
+						timer: 3000,
+					})
+                    setCreateSurveyModal(false)
+			} else {
+				// console.log("inside else")
+				Swal.fire({
+					title: 'Create Survey',
+					text: message,
+					icon: 'error',
+					timer: 3000,
+				})
                 setCreateSurveyModal(false)
-                console.log(response)
-                history.push('/employee-survey')
-                // window.location.reload()
-            }
-        })
-        .catch(err => console.error(err))
+			}
+		}).catch(error => {
+			Swal.fire({
+				title: 'Create Survey',
+				text: error.response?.data.error || error.response?.data.message,
+				icon: 'error',
+				timer: 3000,
+			})
+            setCreateSurveyModal(false)
+		});
     }
 
 ///////////////////////////////////////////
@@ -224,6 +266,7 @@ function CreateSurvey({setCreateSurveyModal,setSurveyCard,surveyCard}) {
       setSurveyFormData({...surveyFormData,departmentIds:event.target.value})
     };
 
+    const { register, handleSubmit } = useForm();
 
     function SubmitButton(){
         if (surveyFormData.title && surveyFormData.description && (surveyFormData.departmentIds.length > 0 || surveyFormData.groupIds.length > 0 || surveyFormData.emails.length > 0 )){
@@ -407,7 +450,7 @@ function CreateSurvey({setCreateSurveyModal,setSurveyCard,surveyCard}) {
                         </div>
                     </div>
                     <div className="w-full flex items-center justify-center">
-                        <SubmitButton/>
+                        {postSurvey ? <h1>loading</h1> : <SubmitButton/>}
                     </div>
                 </form>
             </div>

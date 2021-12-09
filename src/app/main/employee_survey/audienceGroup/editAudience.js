@@ -118,7 +118,9 @@ function EditAudience({openEditAudience,setOpenEditAudience,testData,setTestData
                     newUpdatedFormData,
                     {headers: { Authorization: `JWT ${auth().getToken}` }}
                     );
-                console.log(resp);
+                    if(resp.status === 201) setOpenEditAudience(false)
+                    // console.log(response)
+                    window.location.reload()
             } catch (err) {
                 console.error(err);
             }
