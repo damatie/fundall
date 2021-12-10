@@ -27,6 +27,7 @@ import * as createSurveyActions from '../store/actions'
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import ProgressBtn from 'app/shared/progressBtn';
+import BtnLoader from '../utils/btnLoader';
 
 
 
@@ -449,7 +450,7 @@ function CreateSurvey({setCreateSurveyModal,setSurveyCard,surveyCard}) {
                         </div>
                     </div>
                     <div className="w-full flex items-center justify-center">
-                        {postSurvey ? <h1>loading</h1> : <SubmitButton/>}
+                        {postSurvey ? <BtnLoader/> : <SubmitButton/>}
                     </div>
                 </form>
             </div>

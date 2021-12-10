@@ -18,6 +18,7 @@ import { useAxiosGet } from '../hooks/useAxiosHook';
 import axios from 'axios';
 import { useAuth } from 'app/hooks/useAuth';
 import Swal from 'sweetalert2';
+import BtnLoader from '../utils/btnLoader';
 
 
 
@@ -90,60 +91,51 @@ function CreateAudience({ setOpenCreateAudience }) {
 
     const history = useHistory()
 
+    const [postAudience, setPostAudience] = useState(false)
+
 
     const submitAudienceForm  =   (e)  =>  {
         e.preventDefault();
-        // console.log(audienceFormData)
-        ////
 
-
-
-                    // ****************************
-                    axios.post('https://agile-dawn-03556.herokuapp.com/api/v1/surveyGroup',audienceFormData,{headers: { Authorization: `JWT ${auth().getToken}` }}).then((response) => {
-                        console.log(response)
-                        // setPostSurvey(false)
-                        const { success, message, token, data } = response.data;
-                        if (success) {
-                                Swal.fire({
-                                    title: 'Created Audience/Group Successfully',
-                                    text: message,
-                                    icon: 'success',
-                                    timer: 3000,
-                                })
-                                setOpenCreateAudience(false)
-                        } else {
-                            // console.log("inside else")
-                            Swal.fire({
-                                title: 'Sorry could not create Audience/Group',
-                                text: 'Check your internet connection',
-                                icon: 'error',
-                                timer: 3000,
-                            })
-                            setOpenCreateAudience(false)
+        setPostAudience(true)
+        
+        axios.post('https://agile-dawn-03556.herokuapp.com/api/v1/surveyGroup',audienceFormData,{headers: { Authorization: `JWT ${auth().getToken}` }}).then((response) => {
+            setPostAudience(false)
+            const { success, message, token, data } = response.data;
+            if (success) {
+                    Swal.fire({
+                        title: 'Created Audience/Group Successfully',
+                        text: message,
+                        icon: 'success',
+                        timer: 3000,
+                    })
+                    .then((result)=>{
+                        if(result.isConfirmed) {
+                            return <Redirect to='/' />
                         }
-                    }).catch(error => {
-                        Swal.fire({
-                            title: 'Sorry could not create Audience/Group',
-                            text: error.response?.data.error || error.response?.data.message,
-                            icon: 'error',
-                            timer: 3000,
-                        })
-                        setOpenCreateAudience(false)
-                    });
-                    // ***************************
-
-        ////
-        // axios.post(
-        //     'https://agile-dawn-03556.herokuapp.com/api/v1/surveyGroup',
-        //     audienceFormData,
-        //     {headers: { Authorization: `JWT ${auth().getToken}` }}
-        //     )
-        // .then(response => {
-        //     if(response.status === 200) setOpenCreateAudience(false)
-        //     console.log(response)
-        //     window.location.reload()
-        // })
-        // .catch(err => console.error(err))
+                    }
+                    )
+                    setOpenCreateAudience(false)
+            } else {
+                Swal.fire({
+                    title: 'Sorry could not create Audience/Group',
+                    text: error.response?.data.error || error.response?.data.message || 'Check your internet connection',
+                    icon: 'error',
+                    timer: 3000,
+                })
+                setOpenCreateAudience(false)
+            }
+        }).catch(error => {
+            Swal.fire({
+                title: 'Sorry could not create Audience/Group',
+                text: error.response?.data.error || error.response?.data.message || 'Check your internet connection',
+                icon: 'error',
+                timer: 3000,
+            })
+            setOpenCreateAudience(false)
+        });
+        // window.location.reload()
+        // setTimeout(()=>{window.location.reload()},0)
     }
     
 
@@ -248,7 +240,7 @@ function CreateAudience({ setOpenCreateAudience }) {
                         </div>
                     </div>
                     <div className="w-full flex items-center justify-start">
-                        <SubmitButton/>
+                        {postAudience ? <BtnLoader/> :<SubmitButton/> }
                         <Button
                             variant="contained"
                             className="py-8 px-44 my-24 text-black bg-gray-300 text-14 font-bold"
