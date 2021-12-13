@@ -7,34 +7,79 @@ import {
 	UPDATEOPTION,
 	UPDATEBODY,
 	ADDSURVEYQUESTION,
-	GETSURVEYQUESTION,
+	GET_SURVEY_QUESTIONS,
 	DELETESURVEYQUESTION,
 	SETREQUIRED,
 	EDITONESURVEYQUESTION,
-	UPDATE_ONE_SURVEY_QUESTION
+	UPDATE_ONE_SURVEY_QUESTION,
+	GET_ONE_SURVEY,
+	DATA_LOADING
 	
 } from '../actions'
 
 const initialState  = {
 	isEdit: false,
 	selected: null,
+	isLoading: false,
 	inputType: '',
 	isRequired: false,
 	body:'Question',
 	optionsArray:[],
+	getOneSurvey:{},
+	getSurveyQuestions:[],
 	surveyQuestion:[]
 }
 
 export const surveyFormsReducer = (state = initialState , action) =>{
 	
 	switch (action.type) {
+
+		case DATA_LOADING: {
+			return{
+				...state,
+				getSurveyQuestions:[],
+				isLoading:true,
+			}
+			break;  
+		}
+
+		case GET_ONE_SURVEY: {
+			return{
+				...state,
+				getOneSurvey:action.payload,
+				isLoading:false,
+			}
+			break;  
+		}
+
+		case GET_SURVEY_QUESTIONS: {
+			console.log(action.payload)
+			return{
+				...state,
+				getSurveyQuestions:[],
+				getSurveyQuestions:action.payload,
+				isLoading:false,
+			}
+			break;  
+		}
+		case ADDSURVEYQUESTION: {
+			return{
+				...state,
+				// surveyQuestion:[...state.surveyQuestion, action.payload],
+				optionsArray:[DEFAULTOPTIONVALUE],
+				body:'Question',
+				isRequired:false
+			}
+			break;  
+		}
+
 		case INPUTTYPESELECTED: {
 			return{
 				...state,
 				selected: action.selected,
 				inputType: action.inputType,
 				optionsArray:[],
-				optionsArray:[{name: DEFAULTOPTIONVALUE}],
+				optionsArray:[DEFAULTOPTIONVALUE],
 				isRequired:false
 			}
 			break;  
@@ -43,7 +88,7 @@ export const surveyFormsReducer = (state = initialState , action) =>{
 		
 			return{
 				...state,
-				optionsArray:[...state.optionsArray,{name:DEFAULTOPTIONVALUE}],
+				optionsArray:[...state.optionsArray,DEFAULTOPTIONVALUE],
 			}
 			break;  
 		}
@@ -64,7 +109,7 @@ export const surveyFormsReducer = (state = initialState , action) =>{
 		}
 		case UPDATEOPTION: {
 			const  list = [...state.optionsArray]
-    	list[action.id].name = action.value
+    	list[action.id] = action.value
 			return{
 				...state,
 				optionsArray:[...list],
@@ -75,24 +120,6 @@ export const surveyFormsReducer = (state = initialState , action) =>{
 			return{
 				...state,
 				body:action.payload,
-			}
-			break;  
-		}
-		case ADDSURVEYQUESTION: {
-			return{
-				...state,
-				surveyQuestion:[...state.surveyQuestion, action.payload],
-				optionsArray:[{name:DEFAULTOPTIONVALUE}],
-				body:'Question',
-				isRequired:false
-			}
-			break;  
-		}
-
-		case GETSURVEYQUESTION: {
-			return{
-				...state,
-				surveyQuestion:action.payload
 			}
 			break;  
 		}
