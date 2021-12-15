@@ -11,7 +11,6 @@ import axios from 'axios';
 import { useAuth } from 'app/hooks/useAuth';
 import moment from 'moment';
 import SurveyCard from '../shared/surveyCard';
-import newCandidateTab from 'app/main/recruitment/tabs/newCandidateTab';
 
 const SurveyIndexPage = () => {
 
@@ -46,7 +45,6 @@ const SurveyIndexPage = () => {
     useAxiosGetAllSurveys(`survey?page=${page}`,setSurveyCard,page,setLoadingSurveyCard,setNoOfPages)    
     // console.log(surveyCard  )
     // console.log(Math.ceil((noOfPages / 10)))
-    console.log(surveyCard)
     
     return (
         <div className="">
@@ -63,8 +61,8 @@ const SurveyIndexPage = () => {
                     <>
                         {
                             surveyCard?.length ? (
-                                surveyCard?.sort((a,b) => new Date(b?.createdAt) - new Date(a?.createdAt))?.map((surveyCardItem,i)=>(
-                                <Link to={'/employee-survey/survey-form/' + surveyCardItem?.id}  className="text-black hover:no-underline" key={surveyCardItem?.id} >
+                                surveyCard?.map((surveyCardItem,i)=>(
+                                <Link to={'employee-survey/survey-form/' + surveyCardItem?.id}  className="text-black hover:no-underline" key={surveyCardItem?.id} >
                                     <SurveyCard surveyCardItem={surveyCardItem} />
                                 </Link>
                             )) 
