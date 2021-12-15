@@ -14,7 +14,7 @@ const EmployeeSurveyConfig = {
 			component: React.lazy(() => import('./index'))
 		},
 		{
-			path: '/employee-survey/survey-form',
+			path: '/employee-survey/survey-form/:id',
 			component: React.lazy(() => import('./survey/surveyForm'))
 		},
 
