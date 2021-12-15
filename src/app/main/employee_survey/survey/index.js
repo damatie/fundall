@@ -63,7 +63,7 @@ const SurveyIndexPage = () => {
                         {
                             surveyCard?.length ? (
                                 surveyCard?.map((surveyCardItem,i)=>(
-                                <Link to={'employee-survey/survey-form/' + surveyCardItem?.id}  className="text-black hover:no-underline" key={surveyCardItem?.id} >
+                                <Link to={'survey-form/' + surveyCardItem?.id}  className="text-black hover:no-underline" key={surveyCardItem?.id} >
                                     <div className="flex justify-between w-full bg-white shadow-md mb-40 py-16 px-36 rounded-20">
                                         <div className="w-2/3">
                                             <h3 className="text-2xl font-bold">{surveyCardItem?.title}</h3>

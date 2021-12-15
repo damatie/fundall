@@ -10,7 +10,7 @@ export const UPDATEOPTION ='UPDATEOPTION'
 export const UPDATEBODY ='UPDATEBODY' 
 export const ADDSURVEYQUESTION ='ADDSURVEYQUESTION'  
 export const GET_SURVEY_QUESTIONS ='GETSURVEYQUESTION'
-export const DELETESURVEYQUESTION ='DELETESURVEYQUESTION'
+export const DELETE_SURVEY_QUESTION ='DELETESURVEYQUESTION'
 export const SETREQUIRED ='SETREQUIRED' 
 export const EDITONESURVEYQUESTION ='EDITONESURVEYQUESTION'
 export const UPDATE_ONE_SURVEY_QUESTION ='UPDATE_ONE_SURVEY_QUESTION'
@@ -23,13 +23,15 @@ export function getOneSurvey(id) {
 	
 		dispatch({
 			type: DATA_LOADING,
+			payload:id,
 		})
 		const request = await Api.get(`survey/${id}`).then(res => {
 			console.log(res)
 			if(res){
 				return dispatch({
           type: GET_ONE_SURVEY,
-          payload: res.data.message
+          payload: res.data.message,
+					surveyId:id
         });
 			}
     })
@@ -37,7 +39,6 @@ export function getOneSurvey(id) {
 }
 //  Get all questions for one survey
 export function getSurveyQuestions(id) {
-	console.log(id)
 	return async (dispatch) => { 
 		dispatch({
 			type: DATA_LOADING,
@@ -57,11 +58,18 @@ export function addSurveyQuestion(id, newData) {
 		dispatch({
 		  type: ADDSURVEYQUESTION,
 		});  
-		const request = await Api.post(`survey/${id}/questions/`,newData, {
+		 const request = await Api.post(`survey/${id}/questions/`,newData, {
       headers: {
         Authorization: `JWT ${useAuth().getToken}`
       }
     });
+		// Refresh page
+		await Api.get(`survey/${id}/questions/`).then(res => {
+			dispatch({
+				type: GET_SURVEY_QUESTIONS,
+				payload: res.data.data,
+			})
+		});
 		console.log(request.data)
 
 	}
@@ -121,12 +129,25 @@ export function updateBody(value) {
 
 }
 
-export function deleteSurveyQuestion(id) {
-	return dispatch => {
+export function deleteSurveyQuestion(surveyId,questionId) {
+	console.log('SID'+surveyId)
+	console.log('QID'+questionId)
+	return async(dispatch) => {
 		dispatch({
-			type: DELETESURVEYQUESTION,
-			payload:id
+			type: DELETE_SURVEY_QUESTION,
 		});
+		const request = await Api.delete(`survey/${surveyId}/questions/${questionId}`,{
+			header: {
+				Authorization: `JWT ${useAuth().getToken}`
+			}
+		})
+		await Api.get(`survey/${surveyId}/questions/`).then(res => {
+			dispatch({
+				type: GET_SURVEY_QUESTIONS,
+				payload: res.data.data,
+			})
+		});
+		console.log(request.data)
 	}
 }
 

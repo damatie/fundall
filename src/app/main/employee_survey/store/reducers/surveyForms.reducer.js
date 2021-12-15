@@ -8,7 +8,7 @@ import {
 	UPDATEBODY,
 	ADDSURVEYQUESTION,
 	GET_SURVEY_QUESTIONS,
-	DELETESURVEYQUESTION,
+	DELETE_SURVEY_QUESTION,
 	SETREQUIRED,
 	EDITONESURVEYQUESTION,
 	UPDATE_ONE_SURVEY_QUESTION,
@@ -25,6 +25,7 @@ const initialState  = {
 	isRequired: false,
 	body:'Question',
 	optionsArray:[],
+	surveyId:null,
 	getOneSurvey:{},
 	getSurveyQuestions:[],
 	surveyQuestion:[]
@@ -48,6 +49,7 @@ export const surveyFormsReducer = (state = initialState , action) =>{
 				...state,
 				getOneSurvey:action.payload,
 				isLoading:false,
+				surveyId:action.surveyId
 			}
 			break;  
 		}
@@ -65,7 +67,6 @@ export const surveyFormsReducer = (state = initialState , action) =>{
 		case ADDSURVEYQUESTION: {
 			return{
 				...state,
-				// surveyQuestion:[...state.surveyQuestion, action.payload],
 				optionsArray:[DEFAULTOPTIONVALUE],
 				body:'Question',
 				isRequired:false
@@ -147,17 +148,8 @@ export const surveyFormsReducer = (state = initialState , action) =>{
 		}
 
 
-		case DELETESURVEYQUESTION: {
+		case DELETE_SURVEY_QUESTION: {
 			const items = state.surveyQuestion;
-			console.log(state.surveyQuestion.isEdit)
-			console.log(state.isEdit)
-			if(items.length > 0){
-				state.surveyQuestion.splice(action.payload,1)
-				return{
-					...state,
-					surveyQuestion:[...state.surveyQuestion],
-				}
-			}
 			return{
 				...state
 			}

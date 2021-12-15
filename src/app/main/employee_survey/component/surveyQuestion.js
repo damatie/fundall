@@ -13,12 +13,12 @@ import SurveyForms from './surveyForms';
 
 
 
- function surveyQuestion(props) {
+ function surveyQuestion() {
 	const dispatch = useDispatch();
 	const stateData = useSelector((state => state.surveyForms.surveyFormsReducer ))
 
-	function handleDeleteSurveyQuestion (id) {
-		dispatch(allSurveyFormActions.deleteSurveyQuestion(id));
+	function handleDeleteSurveyQuestion (surveyId,questionId) {
+		dispatch(allSurveyFormActions.deleteSurveyQuestion(surveyId,questionId));
 	}
 
 	function handleEditOneSurveyQuestion (id, value) {
@@ -75,7 +75,7 @@ import SurveyForms from './surveyForms';
 								}
 								{ stateData.isEdit === false?
 									<div className=" w-full"> 
-									<span className=" float-right bg-red-100 px-6 py-2 rounded-lg cursor-pointer" onClick={()=>handleDeleteSurveyQuestion(surveyQuestionIndex)}>
+									<span className=" float-right bg-red-100 px-6 py-2 rounded-lg cursor-pointer" onClick={()=>handleDeleteSurveyQuestion(stateData.surveyId,surveyQuestion.id)}>
 										<DeleteOutlineIcon style={{ color:'#FF3030',fontSize: 16}}/>
 									</span>
 									<span

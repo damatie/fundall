@@ -3,7 +3,7 @@ import PageLayout from 'app/shared/pageLayout/PageLayout'
 import Button from '@material-ui/core/Button';
 import DoubleArrowRoundedIcon from '@material-ui/icons/DoubleArrowRounded';
 import SurveyForms from '../component/surveyForms'
-import {useState,useEffect } from 'react';
+import {useState,useEffect,useLayoutEffect } from 'react';
 import Cards from 'app/shared/cards/cards'
 import {useHistory, useParams } from 'react-router-dom'
 import SurveyQuestion from '../component/surveyQuestion'
@@ -32,10 +32,13 @@ const surveyForm = () =>{
  }
 
  // Intial event
- useEffect(() => {
+ useLayoutEffect(() => {
   dispatch(allSurveyFormActions.getOneSurvey(surveyId))
     dispatch(allSurveyFormActions.getSurveyQuestions(surveyId))
   }, [dispatch]);
+
+
+
   
   
   return (
