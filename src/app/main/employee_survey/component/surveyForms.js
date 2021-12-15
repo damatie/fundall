@@ -34,7 +34,7 @@ const inputTypes = [
 
 
 const surveyForms = (props) => {
-  const{newData, surveyQuestionId} = props
+  const{newData,surveyId, surveyQuestionId} = props
   // Using redux
   const dispatch = useDispatch();
   const stateData = useSelector((state => state.surveyForms.surveyFormsReducer ))
@@ -50,7 +50,7 @@ const surveyForms = (props) => {
           <span className="flex pb-16" key={index}> 
             <span className="  inline-block w-16 h-16  mt-8 rounded-full border border-grey-A800"></span>
               <span className=" capitalize pl-10 text-12 text-grey-A800 inline-block w-8/12 ">
-              <TextField value={option.name } className=" float-right w-full"  onChange={ (e) => handelUpdateOptionsArray(e.target.value,index)} />
+              <TextField value={option } className=" float-right w-full"  onChange={ (e) => handelUpdateOptionsArray(e.target.value,index)} />
             </span>
             <span className=" text-red-400 font-700 pt-10 pl-20 cursor-pointer" onClick={() =>handleRemoveOption(index)}> Remove </span>
           </span>
@@ -74,7 +74,7 @@ const surveyForms = (props) => {
           <span className="flex pb-16" key={index}> 
           <span className="  inline-block w-16 h-16  rounded-sm border border-grey-A800 mt-8"></span>
           <span className=" capitalize pl-10 text-12 text-grey-A800 inline-block w-8/12 ">
-              <TextField value={option.name } className=" float-right w-full"  onChange={ (e) => handelUpdateOptionsArray(e.target.value,index)} />
+              <TextField value={option } className=" float-right w-full"  onChange={ (e) => handelUpdateOptionsArray(e.target.value,index)} />
           </span>
             <span className=" text-red-400 font-700 pt-10 pl-20 cursor-pointer" onClick={() =>handleRemoveOption(index)}> Remove </span>
         </span>
@@ -125,8 +125,8 @@ const surveyForms = (props) => {
     dispatch(allSurveyFormActions.updateBody(value));
   }
   //  Handle add survey question
-  function handleAddSurveyQuestion() {
-    dispatch(allSurveyFormActions.addSurveyQuestion(newData));
+  function handleAddSurveyQuestion(id,data) {
+    dispatch(allSurveyFormActions.addSurveyQuestion(id, data));
   }
   // Handle update survey question
   function handleOneUpdateSurveyQuestion (id, value){
@@ -156,7 +156,7 @@ const surveyForms = (props) => {
             <AddIcon style={{ fontSize: 15 }} /> Edit
             </span>
               :
-              <span className=" text- px-10 py-6 rounded-md cursor-pointer text-12 font-medium flex w-64 float-right mb-20" style={{background:'#61DAFB', color:'#242B63'}} onClick={()=>handleAddSurveyQuestion()}>
+              <span className=" text- px-10 py-6 rounded-md cursor-pointer text-12 font-medium flex w-64 float-right mb-20" style={{background:'#61DAFB', color:'#242B63'}} onClick={()=>handleAddSurveyQuestion(surveyId,newData)}>
               <AddIcon style={{ fontSize: 15 }} /> Add
               </span>
 

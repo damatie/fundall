@@ -2,6 +2,7 @@
 import Api from 'app/services/api';
 
 
+
 export const GET_DEPARTMENTS = 'GET DEPARTMENTS';
 export const SET_DEPARTMENTS_SEARCH_TEXT = 'SET DEPARTMENTS SEARCH TEXT';
 export const GET_ONE_DEPARTMENT = 'GET ONE DEPARTMENT';
