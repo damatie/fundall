@@ -14,13 +14,20 @@ import Select from '@material-ui/core/Select';
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
 import SideModal from 'app/shared/modal/SideModal';
 import SharedButton from 'app/shared/button/SharedButton';
-import { useAxiosGet } from '../hooks/useAxiosHook';
+import { useAxiosGet, useAxiosGetAll, useAxiosGetGroup } from '../hooks/useAxiosHook';
 import axios from 'axios';
 import { getBaseUrl } from 'app/shared/getBaseUrl'
 import { useAuth } from 'app/hooks/useAuth'
 import { useHistory } from 'react-router';
 import Swal from 'sweetalert2';
+import Pagination from '@material-ui/lab/Pagination';
+import PaginationItem from '@material-ui/lab/PaginationItem';
 import SingleAudienceLoader from '../utils/singleAudienceLoader';
+import * as createSurveyActions from '../store/actions'
+import { useDispatch, useSelector } from 'react-redux';
+import { useForm } from 'react-hook-form';
+import ProgressBtn from 'app/shared/progressBtn';
+import BtnLoader from '../utils/btnLoader';
 
 
 
@@ -85,9 +92,23 @@ function CreateSurvey({setCreateSurveyModal,setSurveyCard,surveyCard}) {
         authorizedViewersEmails:[]
     })
 
+    const [loadingSelectGroup, setLoadingSelectGroup] = useState(false)
+    const [page,setPage] = useState(0)
+    const [noOfPages, setNoOfPages] = useState(0)
+
     useAxiosGet('department/all/1',setDept,setLoadingDept)
     useAxiosGet('department/all/1',setRecipientDept,setLoadingDept)
-    useAxiosGet('surveyGroup',setGroup,setLoadingGroup)
+    useAxiosGetGroup('surveyGroup',setGroup,setLoadingGroup)
+    // useAxiosGetAll(`surveyGroup?page=${page}`,setGroup,page,setLoadingSelectGroup,setNoOfPages)
+    // console.log(group)
+        // const [loadingAudienceCard, setLoadingAudienceCard] = useState(false)
+    
+        // const auth = useAuth
+    
+    
+        const handleChange = (event,value) => {
+            setPage(value - 1)
+        }
 
     const [errorName, setErrorName] = useState(false)
 
@@ -178,24 +199,62 @@ function CreateSurvey({setCreateSurveyModal,setSurveyCard,surveyCard}) {
 
     const history = useHistory()
 
+    const dispatch = useDispatch()
+	// useSelector((data) => console.log(data));
+    const [postSurvey,setPostSurvey] = useState(false)
     const submitSurveyForm  =   (e)  =>  {
         e.preventDefault();
         // console.log(surveyFormData)
-        axios.post(
-            'https://agile-dawn-03556.herokuapp.com/api/v1/survey/create-survey',
-            surveyFormData,
-            {headers: { Authorization: `JWT ${auth().getToken}` }}
-            )
-        .then(response => {
-            console.log(response)  
-            if(response.status === 200) {    
+        setPostSurvey(true)
+        // dispatch(createSurveyActions.createSurvey(surveyFormData))
+        // console.log(response.data)
+        // axios.post(
+        //     'https://agile-dawn-03556.herokuapp.com/api/v1/survey/create-survey',
+        //     surveyFormData,
+        //     {headers: { Authorization: `JWT ${auth().getToken}` }}
+        //     )
+        //     .then(response => {
+        //     setPostSurvey(false)
+        //     console.log(response)  
+        //     if(response.status === 200) {    
+        //         setCreateSurveyModal(false)
+        //         console.log(response)
+        //         // history.push('/employee-survey')
+        //         // window.location.reload()
+        //     }
+        // })
+        // .catch(err => console.error(err))
+        axios.post('https://agile-dawn-03556.herokuapp.com/api/v1/survey/create-survey', surveyFormData,{headers: { Authorization: `JWT ${auth().getToken}` }}).then((response) => {
+			console.log(response)
+            setPostSurvey(false)
+			const { success, message, token, data } = response.data;
+			if (success) {
+					Swal.fire({
+						title: 'Created Survey Successfully',
+						text: message,
+						icon: 'success',
+						timer: 3000,
+					})
+                    setCreateSurveyModal(false)
+			} else {
+				// console.log("inside else")
+				Swal.fire({
+					title: 'Sorry could not create Survey',
+					text: message,
+					icon: 'error',
+					timer: 3000,
+				})
                 setCreateSurveyModal(false)
-                console.log(response)
-                history.push('/employee-survey')
-                // window.location.reload()
-            }
-        })
-        .catch(err => console.error(err))
+			}
+		}).catch(error => {
+			Swal.fire({
+				title: 'Sorry could not create Survey',
+				text: 'Check your internet connection',
+				icon: 'error',
+				timer: 3000,
+			})
+            setCreateSurveyModal(false)
+		});
     }
 
 ///////////////////////////////////////////
@@ -208,6 +267,7 @@ function CreateSurvey({setCreateSurveyModal,setSurveyCard,surveyCard}) {
       setSurveyFormData({...surveyFormData,departmentIds:event.target.value})
     };
 
+    const { register, handleSubmit } = useForm();
 
     function SubmitButton(){
         if (surveyFormData.title && surveyFormData.description && (surveyFormData.departmentIds.length > 0 || surveyFormData.groupIds.length > 0 || surveyFormData.emails.length > 0 )){
@@ -217,7 +277,6 @@ function CreateSurvey({setCreateSurveyModal,setSurveyCard,surveyCard}) {
                 color="primary"
                 className="py-8 px-44 my-24 text-14 text-white font-normal"
                 onClick={(e)=>submitSurveyForm(e)}
-                disabled={loading}
             >
                 submit
             </SharedButton>
@@ -330,7 +389,7 @@ function CreateSurvey({setCreateSurveyModal,setSurveyCard,surveyCard}) {
                                         let groupChoices = (group.find(({ label,value,id }) => id === item ))
                                         return (
                                             <div key={i} className="flex bg-blue-500 my-8 mx-8 rounded-md px-12 py-6 items-center justify-between text-white">
-                                                <h5 className='text-14 font-semibold'>{groupChoices.name}</h5>
+                                                <h5 className='text-14 font-semibold'>{groupChoices?.name}</h5>
                                             </div>
                                         )
                                     })}
@@ -391,7 +450,7 @@ function CreateSurvey({setCreateSurveyModal,setSurveyCard,surveyCard}) {
                         </div>
                     </div>
                     <div className="w-full flex items-center justify-center">
-                        <SubmitButton/>
+                        {postSurvey ? <BtnLoader/> : <SubmitButton/>}
                     </div>
                 </form>
             </div>
