@@ -14,8 +14,6 @@ import axios from 'axios';
 import { useAuth } from 'app/hooks/useAuth';
 import AudienceCardLoader from '../utils/audienceCardLoader';
 import Pagination from '../shared/pagination';
-import BtnLoader from '../utils/btnLoader';
-import { CircularProgress } from '@material-ui/core';
 
 const AudienceGroupIndexPage = () => {
 
@@ -43,58 +41,18 @@ const AudienceGroupIndexPage = () => {
         setDeleteModal(false)
     }
 
-    // LOADING EDIT INFO
-    const [loadingEditInfo, setLoadingEditInfo] = useState(false)
     const auth = useAuth
     // Uncomment when done
     const openPopulate = (audienceCardItem,i) => {
         setSingleAudienceItem(audienceCardItem)
         setSingleAudienceId(i)
-        setLoadingEditInfo(true)
-        // axios.get( `https://agile-dawn-03556.herokuapp.com/api/v1/surveyGroup/${i}`,
-        //         {headers: { Authorization: `JWT ${auth().getToken}` }} )
-        //         .then(data => {
-        //             console.log(data)
-        //             setLoadingEditInfo(false)
-        //             if(data.data.status === 200) setTestData(data.data.data)
-        //             setOpenEditAudience(true)
-        //         })
-        //         .catch(e => console.error(e));
-
-        axios.get(
-             `https://agile-dawn-03556.herokuapp.com/api/v1/surveyGroup/${i}`,
-             {headers: { Authorization: `JWT ${auth().getToken}` }} )
-             .then((response) => {
-            setLoadingEditInfo(false)
-            const { success, message, token, data } = response.data;
-            if (success) {
-                    Swal.fire({
-                        title: 'Opened Edit form Successfully',
-                        text: message,
-                        icon: 'success',
-                        timer: 2000,
-                    })
-                    setTestData(response.data.data)
+        axios.get( `https://agile-dawn-03556.herokuapp.com/api/v1/surveyGroup/${i}`,
+                {headers: { Authorization: `JWT ${auth().getToken}` }} )
+                .then(data => {
+                    if(data.data.status === 200) setTestData(data.data.data)
                     setOpenEditAudience(true)
-                    // setOpenCreateAudience(false)
-            } else {
-                Swal.fire({
-                    title: 'Sorry could not open an edit form for this Audience/Group',
-                    text: 'Check your internet connection',
-                    icon: 'error',
-                    timer: 2000,
                 })
-                // setOpenCreateAudience(false)
-            }
-        }).catch(error => {
-            Swal.fire({
-                title: 'Sorry could not open an edit form for this Audience/Group',
-                text: error.response?.data.error || error.response?.data.message,
-                icon: 'error',
-                timer: 2000,
-            })
-            // setOpenCreateAudience(false)
-        });
+                .catch(e => console.error(e));
     }
     // Uncomment when done
 
@@ -153,7 +111,6 @@ const AudienceGroupIndexPage = () => {
 		});
 	};
 
-    console.log(audienceCard)
 
     return (
         <>
@@ -173,9 +130,9 @@ const AudienceGroupIndexPage = () => {
                 {/* <div className="w-full flex items-center justify-center my-28 py-28">
                     <Pagination count={Math.ceil((noOfPages / 10))} color="primary" size="large" onChange={handleChange}  />
                 </div> */}
-                    {/* <div className="w-full flex items-center justify-center my-28 py-28">
-                        <Pagination postsPerPage={audienceCardPerPage} totalCards={audienceCard?.length} paginate={paginate} clicked={clicked} />
-                    </div> */}
+                <div className="w-full flex items-center justify-center my-28 py-28">
+                    <Pagination postsPerPage={audienceCardPerPage} totalCards={audienceCard?.length} paginate={paginate} clicked={clicked} />
+                </div>
                 {loadingAudienceCard ? (
                     <>
                         <AudienceCardLoader/>
@@ -186,21 +143,19 @@ const AudienceGroupIndexPage = () => {
                 ) : (
                     <>
                     {
-                    audienceCard?.length ? (
-                        audienceCard?.sort((a,b) => (new Date(b?.createdAt) - (new Date(a?.createdAt)) ))?.map((audienceCardItem,i)=>(
+                    currentPosts?.length ? (
+                        currentPosts?.map((audienceCardItem,i)=>(
                             <Cards className="mb-44 px-12 py-8" key={audienceCardItem?.id}>
                                 <div className="flex justify-end">
-                                    {loadingEditInfo ? <CircularProgress/> : (
-                                        <Button
-                                            variant="contained"
-                                            color="secondary"
-                                            className="px-20 py-6 text-12"
-                                            startIcon={<AddCircleOutlineIcon />}
-                                            onClick={() => openPopulate(audienceCardItem,audienceCardItem?.id)}
-                                        >
-                                            edit Group
-                                        </Button>
-                                    )}
+                                    <Button
+                                        variant="contained"
+                                        color="secondary"
+                                        className="px-20 py-6 text-12"
+                                        startIcon={<AddCircleOutlineIcon />}
+                                        onClick={() => openPopulate(audienceCardItem,audienceCardItem?.id)}
+                                    >
+                                        edit Group
+                                    </Button>
                                     <Button
                                         variant="contained"
                                         color="secondary"

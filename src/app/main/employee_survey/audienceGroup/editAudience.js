@@ -11,6 +11,8 @@ import { useAxiosGet, useAxiosGetDept, useAxiosGetUpdate } from '../hooks/useAxi
 import { useHistory, useParams } from 'react-router';
 import { useAuth } from 'app/hooks/useAuth';
 import axios from 'axios';
+import BtnLoader from '../utils/btnLoader';
+import Swal from 'sweetalert2';
 
 
 // const department = [
@@ -109,20 +111,97 @@ function EditAudience({openEditAudience,setOpenEditAudience,testData,setTestData
 
     const auth = useAuth        
     const history = useHistory()
+    const [editAudience, setEditAudience] = useState(false)
 
     const submitUpdateGroupForm  = async (e)  =>  {
         e.preventDefault();
-            try {
-                const resp = await axios.patch(
-                    `https://agile-dawn-03556.herokuapp.com/api/v1/surveyGroup/${testData?.groupInfo?.groupId}`,
+
+        setEditAudience(true)
+        try {
+            const res = await axios.patch(
+                        `https://agile-dawn-03556.herokuapp.com/api/v1/surveyGroup/${testData?.groupInfo?.groupId}`,
                     newUpdatedFormData,
-                    {headers: { Authorization: `JWT ${auth().getToken}` }}
-                    );
-                console.log(resp);
-            } catch (err) {
-                console.error(err);
-            }
+                            {headers: { Authorization: `JWT ${auth().getToken}` }
+                        })
+                        // .then((response) => {
+                        setEditAudience(false)
+                        const { success, message, token, data } = res.data;
+                        if (success) {
+                                Swal.fire({
+                                    title: 'Edited Audience/Group Successfully',
+                                    text: message,
+                                    icon: 'success',
+                                    timer: 3000,
+                                })
+                                setOpenEditAudience(false)
+                        } else {
+                            Swal.fire({
+                                title: 'Sorry could not edit this Audience/Group',
+                                text: error.response?.data.error || error.response?.data.message,
+                                icon: 'error',
+                                timer: 3000,
+                            })
+                            setOpenEditAudience(false)
+                        }
+                    // .catch(error => {
+                    //     Swal.fire({
+                    //         title: 'Sorry could not create Audience/Group',
+                    //         text: error.response?.data.error || error.response?.data.message,
+                    //         icon: 'error',
+                    //         timer: 3000,
+                    //     })
+                    //     setOpenEditAudience(false)
+                    // });
+                    // window.location.reload()
+        } catch (error) {
+            Swal.fire({
+                title: 'Sorry could not edit Audience/Group',
+                text: 'Check your internet connection',
+                icon: 'error',
+                timer: 3000,
+            })
+            setOpenEditAudience(false)
+        }
+            // window.location.reload()
+            // try {
+            //     const resp = await axios.patch(
+            //         `https://agile-dawn-03556.herokuapp.com/api/v1/surveyGroup/${testData?.groupInfo?.groupId}`,
+            //         newUpdatedFormData,
+            //         {headers: { Authorization: `JWT ${auth().getToken}` }}
+            //         );
+            //         if(resp.status === 201) setOpenEditAudience(false)
+            //         // console.log(response)
+            //         window.location.reload()
+            // } catch (err) {
+            //     console.error(err);
+            // }
     }
+
+
+    function SubmitButton(){
+        if (newUpdatedFormData.name && newUpdatedFormData.description){
+          return (
+            <SharedButton
+                variant="contained"
+                color="primary"
+                className="py-8 px-28 my-24 text-white font-normal"
+                onClick={(e)=>submitUpdateGroupForm(e)}
+            >
+                submit
+            </SharedButton>
+        )
+        } else {
+            return (
+                <SharedButton
+                        variant="contained"
+                        color="primary"
+                        className="py-8 px-44 my-24 mr-28 text-14 text-white font-normal"
+                        disabled
+                    >
+                        submit
+                </SharedButton>
+        )};
+      };
     
 
 
@@ -199,14 +278,7 @@ function EditAudience({openEditAudience,setOpenEditAudience,testData,setTestData
                         </div>
                     </div>
                     <div className="w-full flex items-center justify-center">
-                        <SharedButton
-                            variant="contained"
-                            color="primary"
-                            className="py-8 px-28 my-24 text-white font-normal"
-                            onClick={(e)=>submitUpdateGroupForm(e)}
-                        >
-                            submit
-                        </SharedButton>
+                        {editAudience ? <BtnLoader/> : <SubmitButton/>}
                     </div>
                 </form>
             </div>

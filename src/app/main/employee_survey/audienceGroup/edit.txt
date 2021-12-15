@@ -1,0 +1,86 @@
+            {/* <h3 className="mt-8 w-11/12 mx-auto py-10 text-xl font-semibold">Edit {updateGroupData?.existingGroupInfo?.groupName}</h3> */}
+            <h3 className="mt-8 w-11/12 mx-auto py-10 text-xl font-semibold">Edit {testData?.groupInfo?.groupName}</h3>
+            <div className="bg-white w-11/12 mt-8 mx-auto shadow mb-56 rounded-20">
+                <form className="p-28">
+                    <TextField
+                        label="Group Name"
+                        id="outlined-margin-normal"
+                        className="inline-block p-1 mb-24"
+                        defaultValue={testData?.groupInfo?.groupName}
+                        variant="outlined"
+                        fullWidth
+                        name="name"
+                        onChange={(e)=>handleName(e)}
+                    />
+                        {/* defaultValue={testData?.existingGroupInfo?.groupName} */}
+                    
+                    <TextField
+                        id="outlined-multiline-static"
+                        label="Description"
+                        defaultValue={testData?.groupInfo?.description}
+                        multiline
+                        rows={4}
+                        fullWidth
+                        className="mb-16"
+                        variant="outlined"
+                        onChange={(e)=>handleDescription(e)}
+                    />
+                        {/* defaultValue={testData?.existingGroupInfo?.description} */}
+                    <div className="pb-10 border-gray-400 border-b-1 ">
+                        <h4 className="text-14 text-grey-700 pb-4 font-bold border-gray-400 border-b-1">Fill in members you want to be in this group</h4>
+                        <div className="w-full pt-16 flex items-center justify-between mb-16">
+                            <FormControl className="w-full">
+                                <InputLabel id="demo-group-name-label">Department</InputLabel>
+                                <Select
+                                    value={departments}
+                                    onChange={handleChange}
+                                    displayEmpty
+                                    multiple
+                                    className=""
+                                    inputProps={{ 'aria-label': 'Without label' }}
+                                >
+                                    {department.map((ag) => {
+                                        return (
+                                            <MenuItem key={ag?.id} value={ag?.id}>{ag?.departmentName}</MenuItem>
+                                        )
+                                    })}
+                                </Select>
+                            </FormControl>
+                        </div>
+                        <TextField id="outlined-basic" label="Individual's email" value={individuals} variant="outlined" onChange={handleChangeIndividuals} onKeyDown={onKeyDownIndividuals} fullWidth className="mb-24" />
+                        <div className="">
+                            <h4 className="capitalize text-14 text-grey-700 pb-8 font-bold">members</h4>
+                            <div className="border-gray-400 border-1 py-14 rounded-md flex items-start overflow-y-scroll flex-wrap min-h-36">
+                                <div className="flex flex-wrap">
+                                    {departments.map((single,i) => {
+                                        let deptChoices = ( department.find( ({ label,value,id }) => id === single ))
+                                        return (
+                                            <div key={i} className="flex bg-blue-500 my-8 mx-8 rounded-md px-12 py-6 items-center justify-between text-white">
+                                                <h5 className='text-14 font-semibold'>{deptChoices?.departmentName}</h5>
+                                            </div>
+                                        )
+                                    })}
+                                </div>
+                                <div className="flex flex-wrap">
+                                    {surveyParticipants?.map((item,i)=>(
+                                        <div key={i} className="flex bg-blue-500 my-8 mx-8 rounded-md px-12 py-6 items-center justify-between text-white">
+                                            <h5 className='pr-12 text-14 font-semibold'>{item}</h5>
+                                            <CloseRoundedIcon onClick={()=> deleteTag(i)} className="text-18 cursor-pointer font-semibold" />
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="w-full flex items-center justify-center">
+                        <SharedButton
+                            variant="contained"
+                            color="primary"
+                            className="py-8 px-28 my-24 text-white font-normal"
+                            onClick={(e)=>submitUpdateGroupForm(e)}
+                        >
+                            submit
+                        </SharedButton>
+                    </div>
+                </form>
+            </div>
