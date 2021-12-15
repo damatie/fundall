@@ -225,16 +225,26 @@ function CreateSurvey({setCreateSurveyModal,setSurveyCard,surveyCard}) {
         // })
         // .catch(err => console.error(err))
         axios.post('https://agile-dawn-03556.herokuapp.com/api/v1/survey/create-survey', surveyFormData,{headers: { Authorization: `JWT ${auth().getToken}` }}).then((response) => {
-			console.log(response)
             setPostSurvey(false)
 			const { success, message, token, data } = response.data;
 			if (success) {
+                let surveyId = response.data.data.createNewSurvey.id
+                // console.log(newId)
 					Swal.fire({
 						title: 'Created Survey Successfully',
 						text: message,
 						icon: 'success',
-						timer: 3000,
+						// timer: 3000,
 					})
+                    .then((result)=>{
+                        // console.log('result',result)
+                        if(result.isConfirmed) {
+                            // history.push('/')
+                            // history.push('/employee-survey')
+                            history.push('/employee-survey/survey-form/' + surveyId)
+                        }
+                    }
+                    )
                     setCreateSurveyModal(false)
 			} else {
 				// console.log("inside else")
@@ -249,7 +259,7 @@ function CreateSurvey({setCreateSurveyModal,setSurveyCard,surveyCard}) {
 		}).catch(error => {
 			Swal.fire({
 				title: 'Sorry could not create Survey',
-				text: 'Check your internet connection',
+                text: error.response?.data.error || error.response?.data.message || 'Check your internet connection',
 				icon: 'error',
 				timer: 3000,
 			})

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useLayoutEffect } from 'react';
 import axios from 'axios';
 import { getBaseUrl } from 'app/shared/getBaseUrl'
 import { useAuth } from 'app/hooks/useAuth'
@@ -56,7 +56,7 @@ export function useAxiosGet (urlString,newData,loading) {
 
 
 export function useAxiosGetGroup (urlString,newData,loading) {
-    useEffect(() => {
+    useLayoutEffect(() => {
         const fetchSurveys = async (urlString,newData,loading) => {
             loading(true)
             const data = await baseAuthGet(urlString)
@@ -66,6 +66,17 @@ export function useAxiosGetGroup (urlString,newData,loading) {
         fetchSurveys(urlString,newData,loading)
     },[urlString,newData,loading])
 }
+// export function useAxiosGetGroup (urlString,newData,loading) {
+//     useEffect(() => {
+//         const fetchSurveys = async (urlString,newData,loading) => {
+//             loading(true)
+//             const data = await baseAuthGet(urlString)
+//             newData(data.data.data.rows)
+//             loading(false)
+//         }
+//         fetchSurveys(urlString,newData,loading)
+//     },[urlString,newData,loading])
+// }
 
 
 export function useAxiosGetSingleAudience (urlString,newData,loading,refreshInfo) {
@@ -92,7 +103,7 @@ export function useAxiosGetSingleAudience (urlString,newData,loading,refreshInfo
 
 
 export function useAxiosGetAllSurveys (urlString,newData,page,loading,loadNum) {
-    useEffect(() => {
+    useLayoutEffect(() => {
         const fetchSurveys = async (urlString,newData,loading) => {
             loading(true)
             const data = await baseAuthGet(urlString)

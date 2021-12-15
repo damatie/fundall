@@ -38,7 +38,7 @@ import Swal from 'sweetalert2';
 //     }
 // ]
 
-function EditAudience({openEditAudience,setOpenEditAudience,testData,setTestData,item,singleAudienceId,singleAudienceItem,setSingleAudienceItem}) {
+function AddMembers({openAddMembers,setOpenAddMembers,clickedAudience,addInfo,setAddInfo}) {
     
     const [updateGroupData,setUpdateGroupData] = useState({
         existingGroupInfo:{
@@ -51,12 +51,12 @@ function EditAudience({openEditAudience,setOpenEditAudience,testData,setTestData
     })
     
     const [loadingGroupData, setLoadingGroupData] = useState(false)
-    useAxiosGet(`surveyGroup/${singleAudienceId}`,setUpdateGroupData,setLoadingGroupData)
-    const [name, setName] = useState(testData?.groupInfo?.groupName)
-    const [description, setDescription] =  useState(testData?.groupInfo?.description)
+    // useAxiosGet(`surveyGroup/${singleAudienceId}`,setUpdateGroupData,setLoadingGroupData)
+    const [name, setName] = useState(addInfo?.groupInfo?.groupName)
+    const [description, setDescription] =  useState(addInfo?.groupInfo?.description)
     const [department,setDepartment] = useState([])
-    const [departments, setDepartments] = useState(testData?.deptMembers?.map(singleDep => singleDep.deptId))
-    const [surveyParticipants, setSurveyParticipants] = useState(testData?.emailMembers?.map(singleEmail => singleEmail.email))
+    const [departments, setDepartments] = useState(addInfo?.deptMembers?.map(singleDep => singleDep.deptId))
+    const [surveyParticipants, setSurveyParticipants] = useState(addInfo?.emailMembers?.map(singleEmail => singleEmail.email))
     const [individuals, setIndividuals] = useState("")
     const [loadingEditDept, setLoadingEditDept] = useState()
     const [newUpdatedFormData, setNewUpdatedFormData] = useState({
@@ -65,7 +65,7 @@ function EditAudience({openEditAudience,setOpenEditAudience,testData,setTestData
         deptIds:departments,
         emails:surveyParticipants
     })
-    // console.log(testData?.emailMembers.map((singleEmail) => console.log(singleEmail.email)))
+    // console.log(addInfo?.emailMembers.map((singleEmail) => console.log(singleEmail.email)))
 
 
 
@@ -115,7 +115,8 @@ function EditAudience({openEditAudience,setOpenEditAudience,testData,setTestData
     const [editAudience, setEditAudience] = useState(false)
 
 
-    // console.log(testData)
+    // console.log(addInfo)
+    
 
     const submitUpdateGroupForm  = async (e)  =>  {
         e.preventDefault();
@@ -124,7 +125,7 @@ function EditAudience({openEditAudience,setOpenEditAudience,testData,setTestData
         // ********************/
         try {
             const res = await axios.patch(
-                        `https://agile-dawn-03556.herokuapp.com/api/v1/surveyGroup/${testData?.groupInfo?.groupId}`,
+                        `https://agile-dawn-03556.herokuapp.com/api/v1/surveyGroup/${addInfo?.groupInfo?.groupId}`,
                     newUpdatedFormData,
                             {headers: { Authorization: `JWT ${auth().getToken}` }
                         })
@@ -141,7 +142,7 @@ function EditAudience({openEditAudience,setOpenEditAudience,testData,setTestData
                                 })
                                 .then((result)=>{
                                     console.log('result',result)
-                                    history.push(`/employee-survey/single-audience/${testData?.groupInfo?.groupId}`)
+                                    history.push(`/employee-survey/single-audience/${addInfo?.groupInfo?.groupId}`)
                                     // if(result.isConfirmed) {
                                     //     history.push('/')
                                     // }
@@ -181,7 +182,7 @@ function EditAudience({openEditAudience,setOpenEditAudience,testData,setTestData
             // window.location.reload()
             // try {
             //     const resp = await axios.patch(
-            //         `https://agile-dawn-03556.herokuapp.com/api/v1/surveyGroup/${testData?.groupInfo?.groupId}`,
+            //         `https://agile-dawn-03556.herokuapp.com/api/v1/surveyGroup/${addInfo?.groupInfo?.groupId}`,
             //         newUpdatedFormData,
             //         {headers: { Authorization: `JWT ${auth().getToken}` }}
             //         );
@@ -218,19 +219,31 @@ function EditAudience({openEditAudience,setOpenEditAudience,testData,setTestData
                 </SharedButton>
         )};
       };
-    
+
+      
+      console.log(addInfo)
 
 
     return (
-        <SideModal title="Audience/Groups" open={open} handleClose={() => setOpenEditAudience(false)} >
-            <h3 className="mt-8 w-11/12 mx-auto py-10 text-xl font-semibold">Edit {testData?.groupInfo?.groupName}</h3>
+        <SideModal title="Add Members" open={open} handleClose={() => setOpenAddMembers(false)}>
+            <h3 className="mt-8 w-11/12 mx-auto py-10 text-xl font-semibold">Edit members for {addInfo?.groupInfo?.groupName}</h3>
+            <div className='flex justify-between flex-wrap w-11/12 mx-auto space-x-40'>
+                <div className='flex-1 mb-10 shadow-2 rounded-8 bg-white py-32 px-28'>
+                    <h3 className='font-bold uppercase mb-12 text-20'>Group Name</h3>
+                    <h4 className='text-20'>{addInfo?.groupInfo?.groupName}</h4>
+                </div>
+                <div className='flex-1 mb-10 shadow-2 rounded-8 bg-white py-32 px-28'>
+                    <h3 className='font-bold uppercase mb-12 text-20'>Description</h3>
+                    <h4 className='text-20'>{addInfo?.groupInfo?.description}</h4>
+                </div>
+            </div>
             <div className="bg-white w-11/12 mt-8 mx-auto shadow mb-56 rounded-20">
                 <form className="p-28">
-                    <TextField
+                    {/* <TextField
                         label="Group Name"
                         id="outlined-margin-normal"
                         className="inline-block p-1 mb-24"
-                        defaultValue={testData?.groupInfo?.groupName}
+                        defaultValue={addInfo?.groupInfo?.groupName}
                         variant="outlined"
                         fullWidth
                         name="name"
@@ -239,14 +252,14 @@ function EditAudience({openEditAudience,setOpenEditAudience,testData,setTestData
                     <TextField
                         id="outlined-multiline-static"
                         label="Description"
-                        defaultValue={testData?.groupInfo?.description}
+                        defaultValue={addInfo?.groupInfo?.description}
                         multiline
                         rows={4}
                         fullWidth
                         className="mb-16"
                         variant="outlined"
                         onChange={(e)=>handleDescription(e)}
-                    />
+                    /> */}
                     <div className="pb-10 border-gray-400 border-b-1 ">
                         <h4 className="text-14 text-grey-700 pb-4 font-bold border-gray-400 border-b-1">Fill in members you want to be in this group</h4>
                         <div className="w-full pt-16 flex items-center justify-between mb-16">
@@ -273,7 +286,7 @@ function EditAudience({openEditAudience,setOpenEditAudience,testData,setTestData
                             <h4 className="capitalize text-14 text-grey-700 pb-8 font-bold">members</h4>
                             <div className="border-gray-400 border-1 py-14 rounded-md flex items-start overflow-y-scroll flex-wrap min-h-36">
                                 <div className="flex flex-wrap">
-                                    {departments.map((single,i) => {
+                                    {departments?.map((single,i) => {
                                         let deptChoices = ( department.find( ({ label,value,id }) => id === single ))
                                         return (
                                             <div key={i} className="flex bg-blue-500 my-8 mx-8 rounded-md px-12 py-6 items-center justify-between text-white">
@@ -302,6 +315,6 @@ function EditAudience({openEditAudience,setOpenEditAudience,testData,setTestData
     )
 }
 
-export default EditAudience
+export default AddMembers
 
 

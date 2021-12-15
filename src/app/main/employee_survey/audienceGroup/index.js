@@ -16,6 +16,8 @@ import AudienceCardLoader from '../utils/audienceCardLoader';
 import Pagination from '../shared/pagination';
 import BtnLoader from '../utils/btnLoader';
 import { CircularProgress } from '@material-ui/core';
+import { Redirect, useHistory } from "react-router"
+import DeleteLoadingScreen from '../utils/deleteLoadingScreen';
 
 const AudienceGroupIndexPage = () => {
 
@@ -31,14 +33,60 @@ const AudienceGroupIndexPage = () => {
     const [loadingAudienceCard, setLoadingAudienceCard] = useState(false)
     const [deleteNotification, setDeleteNotification] = useState('')
 
+    const history = useHistory()
+    const [deleteAudienceGroup,setDeleteAudienceGroup] = useState(false)
+
     const deleteAudience = (i,id) => {
         const items = audienceCard;
         if (items.length > 0) {
-          setAudienceCard(items.filter((item, index) => index !== i));
-          axios.delete( `https://agile-dawn-03556.herokuapp.com/api/v1/surveyGroup/${id}`,
-          {headers: { Authorization: `JWT ${auth().getToken}` }} )
-          .then(data => console.log(data))
-          .catch(e => console.error(e));
+            //   setAudienceCard(items.filter((item, index) => index !== i));
+            //   axios.delete( `https://agile-dawn-03556.herokuapp.com/api/v1/surveyGroup/${id}`,
+            //   {headers: { Authorization: `JWT ${auth().getToken}` }} )
+            //   .then(data => console.log(data))
+            //   .catch(e => console.error(e));
+            // setDeleteAudienceGroup(true)
+            axios.delete( `https://agile-dawn-03556.herokuapp.com/api/v1/surveyGroup/${id}`,
+          {headers: { Authorization: `JWT ${auth().getToken}` }} ).then((response) => {
+              // setPostAudience(false)
+              setDeleteAudienceGroup(false)
+              const { success, message, token, data } = response.data;
+              if (success) {
+                  setAudienceCard(items.filter((item, index) => index !== i));
+                  Swal.fire({
+                        title: 'Deleted Audience/Group Successfully',
+                        text: message,
+                        icon: 'success',
+                        // timer: 3000,
+                    })
+                    // .then((result)=>{
+                    //     setAudienceCard(items.filter((item, index) => index !== i));
+                    //     // console.log('result',result)
+                    //     if(result.isConfirmed) {
+                    //         history.push('/')
+                    //         history.push('/employee-survey')
+                    //         // return <Redirect to='/' />
+                    //     }
+                    // }
+                    // )
+                    // setOpenCreateAudience(false)
+            } else {
+                Swal.fire({
+                    title: 'Sorry could not delete Audience/Group',
+                    text: error.response?.data.error || error.response?.data.message || 'Check your internet connection',
+                    icon: 'error',
+                    // timer: 3000,
+                })
+                // setOpenCreateAudience(false)
+            }
+            }).catch(error => {
+            Swal.fire({
+                title: 'Sorry could not delete Audience/Group',
+                text: error.response?.data.error || error.response?.data.message || 'Check your internet connection',
+                icon: 'error',
+                timer: 3000,
+            })
+            // setOpenCreateAudience(false)
+        });
         }
         setDeleteModal(false)
     }
@@ -47,56 +95,103 @@ const AudienceGroupIndexPage = () => {
     const [loadingEditInfo, setLoadingEditInfo] = useState(false)
     const auth = useAuth
     // Uncomment when done
+    // const openPopulate = (audienceCardItem,i) => {
+    //     setSingleAudienceItem(audienceCardItem)
+    //     setSingleAudienceId(i)
+    //     setLoadingEditInfo(true)
+    //     // axios.get( `https://agile-dawn-03556.herokuapp.com/api/v1/surveyGroup/${i}`,
+    //     //         {headers: { Authorization: `JWT ${auth().getToken}` }} )
+    //     //         .then(data => {
+    //     //             console.log(data)
+    //     //             setLoadingEditInfo(false)
+    //     //             if(data.data.status === 200) setTestData(data.data.data)
+    //     //             setOpenEditAudience(true)
+    //     //         })
+    //     //         .catch(e => console.error(e));
+
+    //     axios.get(
+    //          `https://agile-dawn-03556.herokuapp.com/api/v1/surveyGroup/${i}`,
+    //          {headers: { Authorization: `JWT ${auth().getToken}` }} )
+    //          .then((response) => {
+    //         setLoadingEditInfo(false)
+    //         const { success, message, token, data } = response.data;
+    //         if (success) {
+    //                 Swal.fire({
+    //                     title: 'Opened Edit form Successfully',
+    //                     text: message,
+    //                     icon: 'success',
+    //                     timer: 2000,
+    //                 })
+    //                 setTestData(response.data.data)
+    //                 setOpenEditAudience(true)
+    //                 // setOpenCreateAudience(false)
+    //         } else {
+    //             Swal.fire({
+    //                 title: 'Sorry could not open an edit form for this Audience/Group',
+    //                 text: 'Check your internet connection',
+    //                 icon: 'error',
+    //                 timer: 2000,
+    //             })
+    //             // setOpenCreateAudience(false)
+    //         }
+    //     }).catch(error => {
+    //         Swal.fire({
+    //             title: 'Sorry could not open an edit form for this Audience/Group',
+    //             text: error.response?.data.error || error.response?.data.message,
+    //             icon: 'error',
+    //             timer: 2000,
+    //         })
+    //         // setOpenCreateAudience(false)
+    //     });
+    // }
+    // Uncomment when done
+    ///////////////////////
     const openPopulate = (audienceCardItem,i) => {
         setSingleAudienceItem(audienceCardItem)
         setSingleAudienceId(i)
         setLoadingEditInfo(true)
-        // axios.get( `https://agile-dawn-03556.herokuapp.com/api/v1/surveyGroup/${i}`,
-        //         {headers: { Authorization: `JWT ${auth().getToken}` }} )
-        //         .then(data => {
-        //             console.log(data)
-        //             setLoadingEditInfo(false)
-        //             if(data.data.status === 200) setTestData(data.data.data)
-        //             setOpenEditAudience(true)
-        //         })
-        //         .catch(e => console.error(e));
-
-        axios.get(
-             `https://agile-dawn-03556.herokuapp.com/api/v1/surveyGroup/${i}`,
-             {headers: { Authorization: `JWT ${auth().getToken}` }} )
-             .then((response) => {
-            setLoadingEditInfo(false)
-            const { success, message, token, data } = response.data;
-            if (success) {
-                    Swal.fire({
-                        title: 'Opened Edit form Successfully',
-                        text: message,
-                        icon: 'success',
-                        timer: 2000,
-                    })
-                    setTestData(response.data.data)
-                    setOpenEditAudience(true)
-                    // setOpenCreateAudience(false)
-            } else {
-                Swal.fire({
-                    title: 'Sorry could not open an edit form for this Audience/Group',
-                    text: 'Check your internet connection',
-                    icon: 'error',
-                    timer: 2000,
-                })
-                // setOpenCreateAudience(false)
-            }
-        }).catch(error => {
-            Swal.fire({
-                title: 'Sorry could not open an edit form for this Audience/Group',
-                text: error.response?.data.error || error.response?.data.message,
-                icon: 'error',
-                timer: 2000,
-            })
-            // setOpenCreateAudience(false)
-        });
+        let name = audienceCardItem.name
+        Swal.fire({
+            title:`<h3 class="py-20">Click on open to proceed to edit this ${name}</h3>`,
+            showCancelButton: true,
+            confirmButtonText: 'Open',
+            showLoaderOnConfirm: true,
+            preConfirm: () => {
+              return axios.get(`https://agile-dawn-03556.herokuapp.com/api/v1/surveyGroup/${i}`,
+                            {headers: { Authorization: `JWT ${auth().getToken}` }} )
+                            .then((response) => {
+                             setLoadingEditInfo(false)
+                            const { success, message, token, data } = response.data;
+                            if (success) {
+                                // Swal.fire({
+                                //     title: `Opened edit form for ${name} successfully`,
+                                //     text: message,
+                                //     icon: 'success',
+                                //     timer: 2000,
+                                // })
+                                setTestData(response.data.data)
+                                setOpenEditAudience(true)
+                            } else {
+                                Swal.fire({
+                                    title: 'Sorry could not open the edit form for ${name}',
+                                    text: error.response?.data.error || error.response?.data.message || 'Check your internet connection',
+                                    icon: 'error',
+                                    timer: 3000,
+                                })
+                            }
+                            })
+                            .catch(error => {
+                            Swal.showValidationMessage(
+                                `Request failed: ${error}`
+                            )
+                            })
+            },
+            ////////////////////////
+            allowOutsideClick: () => !Swal.isLoading()
+          })
+        //********************************** */
     }
-    // Uncomment when done
+    //////////////////////
 
 // Edited
 // useAxiosGet('surveyGroup',setAudienceCard,setLoadingAudienceCard)
@@ -127,33 +222,85 @@ const AudienceGroupIndexPage = () => {
         setClicked(true)
     }
     
+	// const confirmDeleteAudience = (audienceCardItem,i,id) => {
+    //     let name = audienceCardItem.name
+	// 	Swal.fire({
+	// 		icon: 'info',
+	// 		title: 'Do you want to delete \n this Audience ?',
+	// 		html:
+    //             `<h3 class="py-20">Note that by clicking on continue, you will delete <span class="font-bold">${name}</span>.</h3>`,
+	// 		showConfirmButton: true,
+	// 		showCancelButton: true,
+	// 		confirmButtonText: `CONTINUE`,
+	// 		confirmButtonColor: '#19AC4B',
+	// 		cancelButtonColor: '#FA1C1C',
+	// 		customClass: {
+	// 			cancelButton: 'kpo-custom-swal-btn',
+	// 			confirmButton: 'kpo-custom-swal-btn',
+	// 			title: 'kpo-custom-swal-title',
+	// 			popup: 'kpo-custom-swal-popup',
+	// 			icon: 'kpo-custom-swal-icon'
+	// 		}
+	// 	}).then(result => {
+    //         // setDeleteAudienceGroup(true)
+    //         console.log('i',i)
+    //         console.log('id',id)
+	// 		if (result.isConfirmed) {
+    //             deleteAudience(i,id)
+	// 		}
+	// 	});
+	// };
 	const confirmDeleteAudience = (audienceCardItem,i,id) => {
+        const items = audienceCard;
         let name = audienceCardItem.name
-		Swal.fire({
-			icon: 'info',
-			title: 'Do you want to delete \n this Audience ?',
-			html:
-                `<h3 class="py-20">Note that by clicking on continue, you will delete <span class="font-bold">${name}</span>.</h3>`,
-			showConfirmButton: true,
-			showCancelButton: true,
-			confirmButtonText: `CONTINUE`,
-			confirmButtonColor: '#19AC4B',
-			cancelButtonColor: '#FA1C1C',
-			customClass: {
-				cancelButton: 'kpo-custom-swal-btn',
-				confirmButton: 'kpo-custom-swal-btn',
-				title: 'kpo-custom-swal-title',
-				popup: 'kpo-custom-swal-popup',
-				icon: 'kpo-custom-swal-icon'
-			}
-		}).then(result => {
-			if (result.isConfirmed) {
-                deleteAudience(i,id)
-			}
-		});
+        Swal.fire({
+            title:`<h3 class="py-20">Note that by clicking on continue, you will delete <span class="font-bold">${name}</span>.</h3>`,
+            // html:
+            //     `<h3 class="py-20">Note that by clicking on continue, you will delete <span class="font-bold">${name}</span>.</h3>`,
+            // input: 'text',
+            // inputAttributes: {
+            //   autocapitalize: 'off'
+            // },
+            showCancelButton: true,
+            confirmButtonText: 'Continue',
+            showLoaderOnConfirm: true,
+            preConfirm: () => {
+              return   axios.delete( `https://agile-dawn-03556.herokuapp.com/api/v1/surveyGroup/${id}`,
+              {headers: { Authorization: `JWT ${auth().getToken}` }} ).then((response) => {
+                  // setPostAudience(false)
+                  const { success, message, token, data } = response.data;
+                  if (success) {
+                    if (items.length > 0) {
+                      setAudienceCard(items.filter((item, index) => index !== i));
+                    }
+                    Swal.fire({
+                        title: 'Deleted Audience/Group Successfully',
+                        text: message,
+                        icon: 'success',
+                        timer: 3000,
+                    })
+                } else {
+                    Swal.fire({
+                        title: 'Sorry could not delete Audience/Group',
+                        text: error.response?.data.error || error.response?.data.message || 'Check your internet connection',
+                        icon: 'error',
+                        timer: 3000,
+                    })
+                }
+                })
+                .catch(error => {
+                  Swal.showValidationMessage(
+                    `Request failed: ${error}`
+                  )
+                })
+            },
+            ////////////////////////
+            allowOutsideClick: () => !Swal.isLoading()
+          })
 	};
 
-    console.log(audienceCard)
+    // console.log('audience card',audienceCard)
+    // console.log(deleteAudienceGroup)
 
     return (
         <>
@@ -190,7 +337,6 @@ const AudienceGroupIndexPage = () => {
                         audienceCard?.sort((a,b) => (new Date(b?.createdAt) - (new Date(a?.createdAt)) ))?.map((audienceCardItem,i)=>(
                             <Cards className="mb-44 px-12 py-8" key={audienceCardItem?.id}>
                                 <div className="flex justify-end">
-                                    {loadingEditInfo ? <CircularProgress/> : (
                                         <Button
                                             variant="contained"
                                             color="secondary"
@@ -200,7 +346,7 @@ const AudienceGroupIndexPage = () => {
                                         >
                                             edit Group
                                         </Button>
-                                    )}
+                                    {/* { deleteAudienceGroup ? <h6>Deleting</h6> : <h6>Deleted Group</h6>} */}
                                     <Button
                                         variant="contained"
                                         color="secondary"
@@ -235,7 +381,9 @@ const AudienceGroupIndexPage = () => {
             </>
                 {openEditAudience && <EditAudience setOpenEditAudience={setOpenEditAudience} openEditAudience={openEditAudience} testData={testData} setTestData={setTestData} singleAudienceItem={singleAudienceItem} setSingleAudienceItem={setSingleAudienceItem} singleAudienceId={singleAudienceId} setSingleAudienceId={setSingleAudienceId} />}
 
-                {openCreateAudience && <CreateAudience setOpenCreateAudience={setOpenCreateAudience} audienceCard={audienceCard} />  }
+                {openCreateAudience && <CreateAudience setOpenCreateAudience={setOpenCreateAudience} audienceCard={audienceCard} setAudienceCard={setAudienceCard} /> }
+
+                {/* {deleteAudienceGroup && <DeleteLoadingScreen setDeleteAudienceGroup={setDeleteAudienceGroup} deleteAudienceGroup={deleteAudienceGroup} />} */}
 
 
         </>

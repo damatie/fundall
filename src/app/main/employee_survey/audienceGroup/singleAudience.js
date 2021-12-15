@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
@@ -17,6 +17,8 @@ import SingleAudienceLoader from '../utils/singleAudienceLoader';
 import SurveyCardLoader from '../utils/surveyCardLoader';
 import SurveyCard from '../shared/surveyCard';
 import { Doughnut } from 'react-chartjs-2';
+import AddMembers from './addMembers';
+import Swal from 'sweetalert2';
 
 
 
@@ -36,6 +38,7 @@ function SingleAudience() {
             }
         ]
     };
+    const [openAddMembers, setOpenAddMembers] = useState(false)
     const [surveyCard, setSurveyCard] = useState([])
     const [audienceCard, setAudienceCard] = useState([])
     const [clickedAudience,setClickedAudience] = useState()
@@ -82,7 +85,7 @@ function SingleAudience() {
     useAxiosGet(`surveyGroup/${paramsId}/response-rate`,setResponseRate,setLoadingResponseRate)
 
 
-    console.log(responseRate)
+    // console.log(responseRate)
     
 
     let responseCalc = (x,y) => {
@@ -102,8 +105,42 @@ function SingleAudience() {
         }
     })
 
+    const [addInfo, setAddInfo] = useState({})
+
+    //**************** */
+    useLayoutEffect(() => {
+        axios.get(`https://agile-dawn-03556.herokuapp.com/api/v1/surveyGroup/${clickedAudience?.groupInfo?.groupId}`,
+        {headers: { Authorization: `JWT ${auth().getToken}` }} )
+        .then((response) => {
+            // console.log(response.data.data)
+        //  setLoadingEditInfo(false)
+        const { success, message, token, data } = response.data;
+        if (success) {
+            // Swal.fire({
+            //     title: `Opened edit form for ${name} successfully`,
+            //     text: message,
+            //     icon: 'success',
+            //     timer: 2000,
+            // })
+            setAddInfo(response.data.data)
+            // setOpenEditAudience(true)
+        } else {
+            Swal.fire({
+                title: 'Sorry could not open the edit form for ${name}',
+                text: error.response?.data.error || error.response?.data.message || 'Check your internet connection',
+                icon: 'error',
+                timer: 3000,
+            })
+        }
+        })
+    }, [clickedAudience])
+    // console.log(clickedAudience)
+    // console.log(addInfo)
+    //**************** */
+
     return (
-        <div  className="w-10/12 mx-auto">
+        <>
+        <div className="w-10/12 mx-auto">
             <div className="my-16 flex items-center">
                 {/* <Link to="/employee-survey"> */}
                 <div className="cursor-pointer" onClick={() => history.goBack()}>
@@ -170,7 +207,7 @@ function SingleAudience() {
                         </Cards>
                         <Cards className="w-full text-center">
                             <p className="text-gray-500 font-semibold py-10 text-15">Total Surveys Sent</p>
-                            <h4 className="text-black font-bold text-3xl">{responseRate?.totalRecipient && responseRate?.totalRecipient}</h4>
+                            <h4 className="text-black font-bold text-3xl">{responseRate?.totalRecipients && responseRate?.totalRecipients}</h4>
                         </Cards>
                     </div>
                 </div>
@@ -201,7 +238,10 @@ function SingleAudience() {
                         )
                     }
                     <Cards className="w-2/5 pt-4">
-                        <h4 className="pb-10 text-black font-bold text-lg">Group Member List</h4>
+                        <div className='flex justify-between items-center flex-wrap mb-10 w-full'>
+                            <h4 className="text-black font-bold text-lg">Group Member List</h4>
+                            <button className='bg-blue-300 text-14 py-10 px-20 text-black rounded-md font-500' onClick={() => setOpenAddMembers(true)}>Add Member</button>
+                        </div>
                         {!membersList.length > 0 ? (
                             <h4 className="text-black text-16 text-center p-10 font-semibold">There are no members in this Audience/Group</h4>
                         ) : (
@@ -263,6 +303,8 @@ function SingleAudience() {
                 </div>
             </div>
         </div>
+        {openAddMembers && <AddMembers openAddMembers={openAddMembers} setOpenAddMembers={setOpenAddMembers} clickedAudience={clickedAudience} addInfo={addInfo} setAddInfo={setAddInfo} />}
+        </>
     )
 }
 

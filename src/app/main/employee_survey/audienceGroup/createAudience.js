@@ -11,7 +11,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Chip from '@material-ui/core/Chip';
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
 import {Link} from "react-router-dom"
-import { useHistory } from "react-router"
+import { Redirect, useHistory } from "react-router"
 import SideModal from 'app/shared/modal/SideModal';
 import SharedButton from 'app/shared/button/SharedButton';
 import { useAxiosGet } from '../hooks/useAxiosHook';
@@ -23,7 +23,7 @@ import BtnLoader from '../utils/btnLoader';
 
 
 
-function CreateAudience({ setOpenCreateAudience }) {
+function CreateAudience({ setOpenCreateAudience,audienceCard,setAudienceCard }) {
 
     const [name, setName] = useState("")
     const [description, setDescription] =  useState("")
@@ -99,19 +99,24 @@ function CreateAudience({ setOpenCreateAudience }) {
 
         setPostAudience(true)
         
+        // axios.post('https://vast-river-34476.herokuapp.com/https://agile-dawn-03556.herokuapp.com/api/v1/surveyGroup',audienceFormData,{headers: { Authorization: `JWT ${auth().getToken}` }}).then((response) => {
         axios.post('https://agile-dawn-03556.herokuapp.com/api/v1/surveyGroup',audienceFormData,{headers: { Authorization: `JWT ${auth().getToken}` }}).then((response) => {
             setPostAudience(false)
+            console.log(response)
             const { success, message, token, data } = response.data;
             if (success) {
-                    Swal.fire({
+                let groupId = data.newGroup.id
+                // setAudienceCard.push(...audienceCard,audienceFormData)
+                Swal.fire({
                         title: 'Created Audience/Group Successfully',
                         text: message,
                         icon: 'success',
-                        timer: 3000,
+                        // timer: 3000,
                     })
                     .then((result)=>{
+                        // console.log('result',result)
                         if(result.isConfirmed) {
-                            return <Redirect to='/' />
+                            history.push('/employee-survey/single-audience/' + groupId)
                         }
                     }
                     )
