@@ -64,7 +64,7 @@ const SurveyIndexPage = () => {
                         {
                             surveyCard?.length ? (
                                 surveyCard?.sort((a,b) => new Date(b?.createdAt) - new Date(a?.createdAt))?.map((surveyCardItem,i)=>(
-                                <Link to={'survey-form/' + surveyCardItem?.id}  className="text-black hover:no-underline" key={surveyCardItem?.id} >
+                                <Link to={'/employee-survey/survey-form/' + surveyCardItem?.id}  className="text-black hover:no-underline" key={surveyCardItem?.id} >
                                     <SurveyCard surveyCardItem={surveyCardItem} />
                                 </Link>
                             )) 
