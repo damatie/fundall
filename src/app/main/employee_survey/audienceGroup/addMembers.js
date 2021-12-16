@@ -130,7 +130,7 @@ function AddMembers({openAddMembers,setOpenAddMembers,clickedAudience,addInfo,se
                             {headers: { Authorization: `JWT ${auth().getToken}` }
                         })
                         // .then((response) => {
-                        setEditAudience(false)
+                        // setEditAudience(false)
                         const { success, message, token, data } = res.data;
                         console.log(res)
                         if (success) {
@@ -141,22 +141,25 @@ function AddMembers({openAddMembers,setOpenAddMembers,clickedAudience,addInfo,se
                                     // timer: 2000,
                                 })
                                 .then((result)=>{
-                                    console.log('result',result)
-                                    history.push(`/employee-survey/single-audience/${addInfo?.groupInfo?.groupId}`)
+                                    // console.log('result',result)
+                                    if(result.isConfirmed) {
+                                        history.push('/employee-survey')
+                                        history.push(`/employee-survey/single-audience/${addInfo?.groupInfo?.groupId}`)
+                                    }
                                     // if(result.isConfirmed) {
                                     //     history.push('/')
                                     // }
                                 }
                                 )
-                                setOpenEditAudience(false)
-                        } else {
-                            Swal.fire({
-                                title: 'Sorry could not edit this Audience/Group',
-                                text: error.response?.data.error || error.response?.data.message,
-                                icon: 'error',
-                                timer: 3000,
-                            })
-                            setOpenEditAudience(false)
+                                setOpenAddMembers(false)
+                            } else {
+                                Swal.fire({
+                                    title: 'Sorry could not edit this Audience/Group',
+                                    text: error.response?.data.error || error.response?.data.message,
+                                    icon: 'error',
+                                    timer: 3000,
+                                })
+                                setOpenAddMembers(false)
                         }
                     // .catch(error => {
                     //     Swal.fire({
@@ -175,7 +178,7 @@ function AddMembers({openAddMembers,setOpenAddMembers,clickedAudience,addInfo,se
                 icon: 'error',
                 timer: 3000,
             })
-            setOpenEditAudience(false)
+            setOpenAddMembers(false)
         }
         //****************** */
 
@@ -221,18 +224,18 @@ function AddMembers({openAddMembers,setOpenAddMembers,clickedAudience,addInfo,se
       };
 
       
-      console.log(addInfo)
+    //   console.log(addInfo)
 
 
     return (
         <SideModal title="Add Members" open={open} handleClose={() => setOpenAddMembers(false)}>
             <h3 className="mt-8 w-11/12 mx-auto py-10 text-xl font-semibold">Edit members for {addInfo?.groupInfo?.groupName}</h3>
             <div className='flex justify-between flex-wrap w-11/12 mx-auto space-x-40'>
-                <div className='flex-1 mb-10 shadow-2 rounded-8 bg-white py-32 px-28'>
+                <div className='flex-1 mb-10 shadow-2 rounded-8 bg-white pt-32 pb-48 px-28'>
                     <h3 className='font-bold uppercase mb-12 text-20'>Group Name</h3>
                     <h4 className='text-20'>{addInfo?.groupInfo?.groupName}</h4>
                 </div>
-                <div className='flex-1 mb-10 shadow-2 rounded-8 bg-white py-32 px-28'>
+                <div className='flex-1 mb-10 shadow-2 rounded-8 bg-white pt-32 pb-48 px-28'>
                     <h3 className='font-bold uppercase mb-12 text-20'>Description</h3>
                     <h4 className='text-20'>{addInfo?.groupInfo?.description}</h4>
                 </div>

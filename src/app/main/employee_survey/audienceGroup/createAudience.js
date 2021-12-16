@@ -115,9 +115,9 @@ function CreateAudience({ setOpenCreateAudience,audienceCard,setAudienceCard }) 
                     })
                     .then((result)=>{
                         // console.log('result',result)
-                        if(result.isConfirmed) {
-                            history.push('/employee-survey/single-audience/' + groupId)
-                        }
+                            if(result.isConfirmed) {
+                                history.push('/employee-survey/single-audience/' + groupId)
+                            }
                     }
                     )
                     setOpenCreateAudience(false)

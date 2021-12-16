@@ -44,9 +44,10 @@ const SurveyIndexPage = () => {
     //     loadSurveys()
     // },[page])
     useAxiosGetAllSurveys(`survey?page=${page}`,setSurveyCard,page,setLoadingSurveyCard,setNoOfPages)    
+    // console.log(loadingSurveyCard)
     // console.log(surveyCard  )
     // console.log(Math.ceil((noOfPages / 10)))
-    console.log(surveyCard)
+    // console.log(surveyCard)
     
     return (
         <div className="">
@@ -61,9 +62,10 @@ const SurveyIndexPage = () => {
                     </>
                 ) : (
                     <>
+                            {/* surveyCard?.sort((a,b) => new Date(b?.createdAt) - new Date(a?.createdAt))?.map((surveyCardItem,i)=>( */}
                         {
                             surveyCard?.length ? (
-                                surveyCard?.sort((a,b) => new Date(b?.createdAt) - new Date(a?.createdAt))?.map((surveyCardItem,i)=>(
+                                surveyCard?.map((surveyCardItem,i)=>(
                                 <Link to={'employee-survey/survey-form/' + surveyCardItem?.id}  className="text-black hover:no-underline" key={surveyCardItem?.id} >
                                     <SurveyCard surveyCardItem={surveyCardItem} />
                                 </Link>
