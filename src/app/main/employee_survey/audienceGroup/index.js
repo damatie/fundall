@@ -344,7 +344,6 @@ const AudienceGroupIndexPage = () => {
                                             startIcon={<AddCircleOutlineIcon />}
                                             onClick={() => openPopulate(audienceCardItem,audienceCardItem?.id)}
                                         >
-                                            edit Group
                                         </Button>
                                     {/* { deleteAudienceGroup ? <h6>Deleting</h6> : <h6>Deleted Group</h6>} */}
                                     <Button
@@ -355,7 +354,6 @@ const AudienceGroupIndexPage = () => {
                                         onClick={() => confirmDeleteAudience(audienceCardItem,i,audienceCardItem?.id)}
                                         // onClick={() => openDeleteModal(audienceCardItem,i)}
                                     >
-                                        Delete
                                     </Button>
                                 </div>
                                 <div className="py-10 w-8/12">
@@ -379,7 +377,18 @@ const AudienceGroupIndexPage = () => {
                     </>
                 )}
             </>
-                {openEditAudience && <EditAudience setOpenEditAudience={setOpenEditAudience} openEditAudience={openEditAudience} testData={testData} setTestData={setTestData} singleAudienceItem={singleAudienceItem} setSingleAudienceItem={setSingleAudienceItem} singleAudienceId={singleAudienceId} setSingleAudienceId={setSingleAudienceId} />}
+                {
+                    openEditAudience && <EditAudience 
+                                            setOpenEditAudience={setOpenEditAudience}
+                                            openEditAudience={openEditAudience}
+                                            testData={testData}
+                                            setTestData={setTestData}
+                                            singleAudienceItem={singleAudienceItem} 
+                                            setSingleAudienceItem={setSingleAudienceItem} 
+                                            singleAudienceId={singleAudienceId} 
+                                            setSingleAudienceId={setSingleAudienceId} 
+                                        />
+                }
 
                 {openCreateAudience && <CreateAudience setOpenCreateAudience={setOpenCreateAudience} audienceCard={audienceCard} setAudienceCard={setAudienceCard} /> }
 
