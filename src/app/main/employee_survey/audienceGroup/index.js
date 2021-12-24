@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import Button from '@material-ui/core/Button';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
+import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Cards from 'app/shared/cards/cards'
 import { Link } from 'react-router-dom';
@@ -336,25 +337,19 @@ const AudienceGroupIndexPage = () => {
                     audienceCard?.length ? (
                         audienceCard?.sort((a,b) => (new Date(b?.createdAt) - (new Date(a?.createdAt)) ))?.map((audienceCardItem,i)=>(
                             <Cards className="mb-44 px-12 py-8" key={audienceCardItem?.id}>
-                                <div className="flex justify-end">
-                                        <Button
-                                            variant="contained"
-                                            color="secondary"
-                                            className="px-20 py-6 text-12"
-                                            startIcon={<AddCircleOutlineIcon />}
-                                            onClick={() => openPopulate(audienceCardItem,audienceCardItem?.id)}
-                                        >
-                                        </Button>
-                                    {/* { deleteAudienceGroup ? <h6>Deleting</h6> : <h6>Deleted Group</h6>} */}
-                                    <Button
-                                        variant="contained"
-                                        color="secondary"
-                                        className="px-20 py-6 text-12 bg-red-200 ml-10 cursor-pointer text-red-900"
-                                        startIcon={<DeleteIcon />}
-                                        onClick={() => confirmDeleteAudience(audienceCardItem,i,audienceCardItem?.id)}
-                                        // onClick={() => openDeleteModal(audienceCardItem,i)}
+                                <div className='flex justify-end space-x-8'>
+                                    <button
+                                        className="bg-blue-200 text-blue-700 cursor-pointer rounded-sm py-4 px-6"
+                                        onClick={() => openPopulate(audienceCardItem,audienceCardItem?.id)}
                                     >
-                                    </Button>
+                                        <EditIcon  className="text-18" />
+                                    </button>
+                                    <button
+                                        className="bg-red-200 cursor-pointer rounded-sm py-4 px-6 text-red-700"
+                                        onClick={() => confirmDeleteAudience(audienceCardItem,i,audienceCardItem?.id)}
+                                    >
+                                        <DeleteIcon className='text-18' />
+                                    </button>
                                 </div>
                                 <div className="py-10 w-8/12">
                                     <Link to={'employee-survey/single-audience/' + audienceCardItem?.id } className="text-black hover:no-underline">

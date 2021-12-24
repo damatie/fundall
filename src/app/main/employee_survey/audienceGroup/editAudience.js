@@ -273,13 +273,19 @@ function EditAudience({openEditAudience,setOpenEditAudience,testData,setTestData
                             <h4 className="capitalize text-14 text-grey-700 pb-8 font-bold">members</h4>
                             <div className="border-gray-400 border-1 py-14 rounded-md flex items-start overflow-y-scroll flex-wrap min-h-36">
                                 <div className="flex flex-wrap">
-                                    {departments.map((single,i) => {
+                                    {departments?.map((single,i) => {
                                         let deptChoices = ( department.find( ({ label,value,id }) => id === single ))
                                         return (
-                                            <div key={i} className="flex bg-blue-500 my-8 mx-8 rounded-md px-12 py-6 items-center justify-between text-white">
-                                                <h5 className='text-14 font-semibold'>{deptChoices?.departmentName}</h5>
-                                            </div>
-                                        )
+                                            <>
+                                                {
+                                                    deptChoices?.departmentName && (
+                                                        <div key={i} className="flex bg-blue-500 my-8 mx-8 rounded-md px-12 py-6 items-center justify-between text-white">
+                                                            <h5 className='text-14 font-semibold'>{deptChoices?.departmentName}</h5>
+                                                        </div>
+                                                    )
+                                                }
+                                            </>
+                                            )
                                     })}
                                 </div>
                                 <div className="flex flex-wrap">
