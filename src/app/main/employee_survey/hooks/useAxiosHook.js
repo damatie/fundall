@@ -1,7 +1,8 @@
-import { useEffect } from 'react';
+import { useEffect, useLayoutEffect } from 'react';
 import axios from 'axios';
 import { getBaseUrl } from 'app/shared/getBaseUrl'
 import { useAuth } from 'app/hooks/useAuth'
+import Swal from 'sweetalert2';
 
 export const auth = useAuth
 
@@ -56,7 +57,7 @@ export function useAxiosGet (urlString,newData,loading) {
 
 
 export function useAxiosGetGroup (urlString,newData,loading) {
-    useEffect(() => {
+    useLayoutEffect(() => {
         const fetchSurveys = async (urlString,newData,loading) => {
             loading(true)
             const data = await baseAuthGet(urlString)
@@ -66,6 +67,17 @@ export function useAxiosGetGroup (urlString,newData,loading) {
         fetchSurveys(urlString,newData,loading)
     },[urlString,newData,loading])
 }
+// export function useAxiosGetGroup (urlString,newData,loading) {
+//     useEffect(() => {
+//         const fetchSurveys = async (urlString,newData,loading) => {
+//             loading(true)
+//             const data = await baseAuthGet(urlString)
+//             newData(data.data.data.rows)
+//             loading(false)
+//         }
+//         fetchSurveys(urlString,newData,loading)
+//     },[urlString,newData,loading])
+// }
 
 
 export function useAxiosGetSingleAudience (urlString,newData,loading,refreshInfo) {
@@ -90,16 +102,63 @@ export function useAxiosGetSingleAudience (urlString,newData,loading,refreshInfo
         // .catch(e => console.error(e));
 
 
+//************************ */
+// export function useAxiosGetAllSurveys (urlString,newData,page,loading,loadNum) {
+//     useLayoutEffect(() => {
+//         const fetchSurveys = async (urlString,newData,loading) => {
+//             loading(true)
+//             const data = await baseAuthGet(urlString)
+//             newData(data.data.message.rows)
+//             loadNum(data.data.message.count)
+//             loading(false)
+//         }
+//         fetchSurveys(urlString,newData,loading)
+//     },[urlString,page,newData,loading])
+// }
+
+//*************** */
 
 export function useAxiosGetAllSurveys (urlString,newData,page,loading,loadNum) {
-    useEffect(() => {
+    useLayoutEffect(() => {
         const fetchSurveys = async (urlString,newData,loading) => {
             loading(true)
-            const data = await baseAuthGet(urlString)
-            newData(data.data.message.rows)
-            loadNum(data.data.message.count)
-            loading(false)
+            try {
+                const data = await baseAuthGet(urlString)
+                const {success, message: {count,rows}} = await data.data
+                // console.log('Hello')
+                if (success) {
+                    loading(false)
+                    newData(rows)
+                    loadNum(count)
+                } else {
+                    loading(false)
+                    // console.log('network')
+                    Swal.fire({
+                        title: 'Sorry could not load survey',
+                        text: error.response?.data.error || error.response?.data.message || 'Check your internet connection',
+                        icon: 'error',
+                        // timer: 3000,
+                    })
+                }
+            } catch(e) {
+                loading(false)
+                // console.log(e)
+                // console.log('hi')
+                Swal.fire({
+                    title:`<h3 class="py-20">Could not fetch the survey data successfully.</h3>`,
+                    showCancelButton: true,
+                    confirmButtonText: 'Try again',
+                    showLoaderOnConfirm: true,
+                    preConfirm: () => {
+                      return  fetchSurveys(urlString,newData,loading) 
+                    },
+                    ////////////////////////
+                    allowOutsideClick: () => !Swal.isLoading()
+                  })
+            }
+            // loading(false)
         }
+        // console.log(loading)
         fetchSurveys(urlString,newData,loading)
     },[urlString,page,newData,loading])
 }
