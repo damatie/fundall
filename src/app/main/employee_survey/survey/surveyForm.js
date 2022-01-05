@@ -92,8 +92,8 @@ const surveyForm = () =>{
           <SurveyQuestion/>
           }
 
-         { stateData.isEdit === false?
-         <SurveyForms surveyId={surveyId}  newData={newData} />: "test"
+         { stateData.isEdit?.status === false?
+         <SurveyForms surveyId={surveyId}  newData={newData} />: " "
          }
           
         </div>

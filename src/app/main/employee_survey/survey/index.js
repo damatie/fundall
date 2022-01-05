@@ -49,39 +49,39 @@ const SurveyIndexPage = () => {
     console.log(surveyCard)
     
     return (
-        <div className="">
-            <h2 className="my-10 mb-32  text-2xl font-semibold capitalize">surveys</h2>
-            <Cards className="w-9/12 mx-auto px-16">
-                <h2 className="text-xl mb-16 font-semibold capitalize">survey list</h2>
-                {loadingSurveyCard ? (
-                    <>
-                        <SurveyCardLoader/>
-                        <SurveyCardLoader/>
-                        <SurveyCardLoader/>
-                    </>
-                ) : (
-                    <>
-                        {
-                            surveyCard?.length ? (
-                                surveyCard?.sort((a,b) => new Date(b?.createdAt) - new Date(a?.createdAt))?.map((surveyCardItem,i)=>(
-                                <Link to={'/employee-survey/survey-form/' + surveyCardItem?.id}  className="text-black hover:no-underline" key={surveyCardItem?.id} >
-                                    <SurveyCard surveyCardItem={surveyCardItem} />
-                                </Link>
-                            )) 
-                            ) : (
-                                <div className="p-20 text-center w-10/12 mx-auto">
-                                    <h3 className="text-black text-24">There is currently no survey. Click the button above to create a survey.</h3>
-                                </div>
-                            )
-                        }
-                    </>    
-                               
-                )}
-            </Cards>
-            <div className="w-full flex items-center justify-center my-28 py-28">
-                <Pagination count={Math.ceil((noOfPages / 10))} color="primary" size="large" onChange={handleChange}  />
-            </div>
-        </div>
+			<div className="">
+				<h2 className="my-10 mb-32  text-2xl font-semibold capitalize">surveys</h2>
+				<Cards className="w-9/12 mx-auto px-16">
+						<h2 className="text-xl mb-16 font-semibold capitalize">survey list</h2>
+						{loadingSurveyCard ? (
+								<>
+										<SurveyCardLoader/>
+										<SurveyCardLoader/>
+										<SurveyCardLoader/>
+								</>
+						) : (
+								<>
+										{
+												surveyCard?.length ? (  
+														surveyCard?.sort((a,b) => new Date(b?.createdAt) - new Date(a?.createdAt))?.map((surveyCardItem,i)=>(
+														<Link to={'/employee-survey/survey-form/' + surveyCardItem?.id}  className="text-black hover:no-underline" key={surveyCardItem?.id} >
+																<SurveyCard surveyCardItem={surveyCardItem} />
+														</Link>
+												)) 
+												) : (
+														<div className="p-20 text-center w-10/12 mx-auto">
+																<h3 className="text-black text-24">There is currently no survey. Click the button above to create a survey.</h3>
+														</div>
+												)
+										}
+								</>    
+														
+						)}
+				</Cards>
+				<div className="w-full flex items-center justify-center my-28 py-28">
+						<Pagination count={Math.ceil((noOfPages / 10))} color="primary" size="large" onChange={handleChange}  />
+				</div>
+			</div>
     )
 }
 

@@ -17,25 +17,34 @@ import SurveyForms from './surveyForms';
 	const dispatch = useDispatch();
 	const stateData = useSelector((state => state.surveyForms.surveyFormsReducer ))
 
-	function handleDeleteSurveyQuestion (surveyId,questionId) {
-		dispatch(allSurveyFormActions.deleteSurveyQuestion(surveyId,questionId));
+	function handleDeleteSurveyQuestion (surveyId,questionId, index) {
+		dispatch(allSurveyFormActions.deleteSurveyQuestion(surveyId,questionId, index));
 	}
 
-	function handleEditOneSurveyQuestion (id, value) {
-		dispatch(allSurveyFormActions.editOneSurveyQuestion(id, value));
+	function handleEditOneSurveyQuestion (surveyId,questionId,index) {
+		
+		dispatch(allSurveyFormActions.editOneSurveyQuestion(surveyId,questionId,index));
 	}
 
+  let newData = {
+    body:stateData.body,
+    options: [...stateData.optionsArray],
+    type:stateData.selected,
+    required: stateData.isRequired,
+    description: "Choose your test"
+   
+ }
   const handleChange = (event) => {
   };
 	console.log()
 	 
 	return(
 		<div className=" flex flex-col   relative ">
-			{ stateData.getSurveyQuestions.map((surveyQuestion, surveyQuestionIndex) =>
+			{ stateData.getSurveyQuestions.sort((a,b) => (a.id - b.id)).map((surveyQuestion, surveyQuestionIndex) =>
 			<div key={surveyQuestionIndex}>
-				{stateData?.isEdit === true? 
+				{stateData?.isEdit?.index === surveyQuestionIndex? 
 					<div className=" mb-32">
-						<SurveyForms surveyQuestionId={surveyQuestionIndex}/>
+						<SurveyForms questionIndex={surveyQuestionIndex} surveyId={stateData.surveyId} surveyQuestionId={surveyQuestion.id} newData={newData}/>
 					</div> : 
 					<div> 
 						<Cards className="w-7/12 mx-auto py-10 px-16 mb-40 rounded-20px shadow-10  break-words">
@@ -52,17 +61,17 @@ import SurveyForms from './surveyForms';
 								{	surveyQuestion.options.map((option, optionIndex) =>
 									<div className="w-full flex" style={{fontSize:14,}} key={optionIndex}> 
 
-									{surveyQuestion.type  ==='multiChoice'? 
+									{surveyQuestion.type  ==='Multiple Choice'? 
 									<span>
 									<Radio
 										name="radio-button"
-										inputProps={{ 'aria-label': 'A' }}
+										// inputProps={{ 'aria-label': 'A' }}
 							/>
 							</span>
-									: surveyQuestion.type ==='checkBox'? 	
+									: surveyQuestion.type ==='Check Box'? 	
 									<span>
 											<Checkbox
-												inputProps={{ 'aria-label': 'primary checkbox' }}
+												// inputProps={{ 'aria-label': 'primary checkbox' }}
 											/>
 									</span>
 									: '' }
@@ -73,14 +82,14 @@ import SurveyForms from './surveyForms';
 									</div>
 									)
 								}
-								{ stateData.isEdit === false?
-									<div className=" w-full"> 
-									<span className=" float-right bg-red-100 px-6 py-2 rounded-lg cursor-pointer" onClick={()=>handleDeleteSurveyQuestion(stateData.surveyId,surveyQuestion.id)}>
+								{ stateData.isEdit.status === false ?
+									<div className=" w-full"> {stateData.surveyId} {surveyQuestion.id}
+									<span className=" float-right bg-red-100 px-6 py-2 rounded-lg cursor-pointer" onClick={()=>handleDeleteSurveyQuestion(stateData.surveyId,surveyQuestion.id,surveyQuestionIndex)}>
 										<DeleteOutlineIcon style={{ color:'#FF3030',fontSize: 16}}/>
 									</span>
 									<span
 									className=" float-right bg-light-blue-50 rounded-lg px-6 py-2  cursor-pointer font-800 mr-16" 
-									onClick={()=> handleEditOneSurveyQuestion(surveyQuestionIndex,!surveyQuestion.isEdit)}
+									onClick={()=> handleEditOneSurveyQuestion(stateData.surveyId,surveyQuestion.id,surveyQuestionIndex )}
 									>
 										<EditIcon  style={{ color:'#62DAFC',fontSize: 16}} /> 
 									</span>
