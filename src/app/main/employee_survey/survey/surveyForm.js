@@ -70,15 +70,15 @@ const surveyForm = () =>{
                 Surveys 
             </p>
             <DoubleArrowRoundedIcon className="text-20 mx-6 text-black" />
-            <p className="font-semibold"> {stateData.getOneSurvey.surveyInfo.title}</p>
+            <p className="font-semibold"> {stateData.getOneSurvey.title}</p>
           </div>
           
           <div className="w-full">
             <span className="block text-sm text-night font-bold mt-24">
-              {stateData.getOneSurvey.surveyInfo.title}
-            </span
+              {stateData.getOneSurvey.title}
+            </span>
             <span className=" block text-black text-xs w-5/12 pt-16 leading-relaxed font-semibold ">
-            {stateData.getOneSurvey.surveyInfo.description}
+            {stateData.getOneSurvey.description}
             </span>
           </div>
           </div>
