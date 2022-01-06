@@ -435,7 +435,7 @@ function EditSurvey({setSurveyCard,surveyCard,setOpenSurvey,testData,singleSurve
                         </div>
                     </div>
                     <div className="w-full flex items-center justify-center">
-                        {postSurvey ? <BtnLoader/> : <SubmitButton/>}
+                        {editSurvey ? <BtnLoader/> : <SubmitButton/>}
                     </div>
                 </form>
             </div>

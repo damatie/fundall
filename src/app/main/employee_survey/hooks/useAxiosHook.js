@@ -131,6 +131,7 @@ export function useAxiosGetAllSurveys (urlString,newData,page,loading,loadNum) {
                     loading(false)
                     newData(rows)
                     loadNum(count)
+                    window.scrollTo(0,0)
                 } else {
                     loading(false)
                     // console.log('network')
