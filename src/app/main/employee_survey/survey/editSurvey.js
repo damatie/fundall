@@ -37,59 +37,42 @@ import BtnLoader from '../utils/btnLoader';
 
 
 
-function CreateSurvey({setCreateSurveyModal,setSurveyCard,surveyCard}) {
+function EditSurvey({setSurveyCard,surveyCard,setOpenSurvey,testData,singleSurvey,singleSurveyId}) {
 
-    const [name, setName] = useState("")
-    const [description, setDescription] =  useState("")
-    const [departments, setDepartments] = useState([])
-    const [reDepts, setReDepts] = useState([])
+    // console.log(testData)
+    const [name, setName] = useState(testData?.surveyInfo?.title)
+    const [description, setDescription] =  useState(testData?.surveyInfo?.description)
+    // const [departments, setDepartments] = useState([])
+    const [departments, setDepartments] = useState(testData?.surveyRecipients?.deptRecipients?.map(singleDep => singleDep.department.id))
+    // const [reDepts, setReDepts] = useState([])
+    const [reDepts, setReDepts] = useState(testData?.authorizedViewers?.deptViewers?.map(singleDep => singleDep.departmentId))
     const [pickedDepartments, setPickedDepartments] = useState([])
     const [recipientDepartments, setRecipientDepartments] = useState([])
     const [recipientPickedDepartments, setRecipientPickedDepartments] = useState([])
-    const [groups, setGroups] = useState([])
+    const [groups, setGroups] = useState(testData?.surveyRecipients?.groupRecipients?.map(singleDep => singleDep.surveyGroup?.id))
+    // const [groups, setGroups] = useState([])
     const [recipientGroups, setRecipientGroups] = useState([])
-    const [surveyParticipants, setSurveyParticipants] = useState([])
-    const [recipientSurveyParticipants, setRecipientSurveyParticipants] = useState([])
+    // const [surveyParticipants, setSurveyParticipants] = useState([])
+    const [surveyParticipants, setSurveyParticipants] = useState(testData?.surveyRecipients?.emailRecipients?.map(singleEmail => singleEmail.email))
+    const [recipientSurveyParticipants, setRecipientSurveyParticipants] = useState(testData?.authorizedViewers?.emailViewers?.map(singleEmail => singleEmail.email))
+    // const [recipientSurveyParticipants, setRecipientSurveyParticipants] = useState([])
     const [individuals, setIndividuals] = useState("")
     const [recipientIndividuals, setRecipientIndividuals] = useState("")
     const [listOfDepartments,setListOfDepartments] = useState([])
     const [loading,setLoading] = useState(false)
     const [loadingGroup, setLoadingGroup] = useState(false)
     const [loadingDept, setLoadingDept] = useState(false)
-    const [dept,setDept] = useState([
-        // {
-        //     "id": 2,
-        //     "departmentName": "SALES",
-        //     "entityId": 2,
-        //     "departmentCode": null,
-        //     "departmentHeadId": null,
-        //     "startedOn": "2021-10-21",
-        //     "address": null,
-        //     "description": "Sales",
-        //     "companyId": 1,
-        //     "createdAt": "2021-10-21T12:06:50.577Z",
-        //     "updatedAt": "2021-10-21T12:06:50.577Z"
-        //   },
-    ])
+    const [dept,setDept] = useState([])
     const [recipientDept,setRecipientDept] = useState([])
-    const [group,setGroup] = useState([
-        // {
-        // "id": 2,
-        // "companyId": 2,
-        // "name": "NEW REFACTORED GOUPAAAS",
-        // "description": "Hi New Refactored",
-        // "createdAt": "2021-11-22T09:26:14.141Z",
-        // "updatedAt": "2021-11-22T09:26:14.141Z"
-        // }
-    ])
+    const [group,setGroup] = useState([])
     const [surveyFormData, setSurveyFormData] = useState({
-        title:'',
-        description:'',
-        departmentIds:[],
-        groupIds:[],
-        emails:[],
-        authorizedViewersDeptIds:[],
-        authorizedViewersEmails:[]
+        title:name,
+        description,
+        departmentIds:departments,
+        groupIds:groups,
+        emails:surveyParticipants,
+        authorizedViewersDeptIds:reDepts,
+        authorizedViewersEmails:recipientSurveyParticipants
     })
 
     const [loadingSelectGroup, setLoadingSelectGroup] = useState(false)
@@ -204,67 +187,49 @@ function CreateSurvey({setCreateSurveyModal,setSurveyCard,surveyCard}) {
     const [postSurvey,setPostSurvey] = useState(false)
     const submitSurveyForm  =   (e)  =>  {
         e.preventDefault();
-        // console.log(surveyFormData)
-        setPostSurvey(true)
-        // dispatch(createSurveyActions.createSurvey(surveyFormData))
-        // console.log(response.data)
-        // axios.post(
-        //     'https://agile-dawn-03556.herokuapp.com/api/v1/survey/create-survey',
-        //     surveyFormData,
-        //     {headers: { Authorization: `JWT ${auth().getToken}` }}
-        //     )
-        //     .then(response => {
+        console.log(surveyFormData)
+        // setPostSurvey(true)
+        // axios.post('https://agile-dawn-03556.herokuapp.com/api/v1/survey/create-survey', surveyFormData,{headers: { Authorization: `JWT ${auth().getToken}` }}).then((response) => {
         //     setPostSurvey(false)
-        //     console.log(response)  
-        //     if(response.status === 200) {    
+		// 	const { success, message, token, data } = response.data;
+		// 	if (success) {
+        //         let surveyId = response.data.data.createNewSurvey.id
+        //         // console.log(newId)
+		// 			Swal.fire({
+		// 				title: 'Created Survey Successfully',
+		// 				text: message,
+		// 				icon: 'success',
+		// 				// timer: 3000,
+		// 			})
+        //             .then((result)=>{
+        //                 // console.log('result',result)
+        //                 if(result.isConfirmed) {
+        //                     // history.push('/')
+        //                     // history.push('/employee-survey')
+        //                     history.push('/employee-survey/survey-form/' + surveyId)
+        //                 }
+        //             }
+        //             )
+        //             setCreateSurveyModal(false)
+		// 	} else {
+		// 		// console.log("inside else")
+		// 		Swal.fire({
+		// 			title: 'Sorry could not create Survey',
+		// 			text: message,
+		// 			icon: 'error',
+		// 			timer: 3000,
+		// 		})
         //         setCreateSurveyModal(false)
-        //         console.log(response)
-        //         // history.push('/employee-survey')
-        //         // window.location.reload()
-        //     }
-        // })
-        // .catch(err => console.error(err))
-        axios.post('https://agile-dawn-03556.herokuapp.com/api/v1/survey/create-survey', surveyFormData,{headers: { Authorization: `JWT ${auth().getToken}` }}).then((response) => {
-            setPostSurvey(false)
-			const { success, message, token, data } = response.data;
-			if (success) {
-                let surveyId = response.data.data.createNewSurvey.id
-                // console.log(newId)
-					Swal.fire({
-						title: 'Created Survey Successfully',
-						text: message,
-						icon: 'success',
-						// timer: 3000,
-					})
-                    .then((result)=>{
-                        // console.log('result',result)
-                        if(result.isConfirmed) {
-                            // history.push('/')
-                            // history.push('/employee-survey')
-                            history.push('/employee-survey/survey-form/' + surveyId)
-                        }
-                    }
-                    )
-                    setCreateSurveyModal(false)
-			} else {
-				// console.log("inside else")
-				Swal.fire({
-					title: 'Sorry could not create Survey',
-					text: message,
-					icon: 'error',
-					timer: 3000,
-				})
-                setCreateSurveyModal(false)
-			}
-		}).catch(error => {
-			Swal.fire({
-				title: 'Sorry could not create Survey',
-                text: error.response?.data.error || error.response?.data.message || 'Check your internet connection',
-				icon: 'error',
-				timer: 3000,
-			})
-            setCreateSurveyModal(false)
-		});
+		// 	}
+		// }).catch(error => {
+		// 	Swal.fire({
+		// 		title: 'Sorry could not create Survey',
+        //         text: error.response?.data.error || error.response?.data.message || 'Check your internet connection',
+		// 		icon: 'error',
+		// 		timer: 3000,
+		// 	})
+        //     setCreateSurveyModal(false)
+		// });
     }
 
 ///////////////////////////////////////////
@@ -306,14 +271,14 @@ function CreateSurvey({setCreateSurveyModal,setSurveyCard,surveyCard}) {
 
 
     return (
-        <SideModal title="Create Survey" open={open} handleClose={()=>setCreateSurveyModal(false)}>
+        <SideModal title="Edit Survey" open={open} handleClose={()=>setOpenSurvey(false)}>
             <div className="h-full w-11/12 mt-8 mx-auto">
                 <form className=" p-28 rounded-lg">
                     <div className="mb-24">
                         <TextField
                             label="Survey Name"
                             id="outlined-margin-normal"
-                            defaultValue=""
+                            defaultValue={testData?.surveyInfo?.title}
                             className="inline-block p-1"
                             variant="outlined"
                             fullWidth
@@ -327,7 +292,7 @@ function CreateSurvey({setCreateSurveyModal,setSurveyCard,surveyCard}) {
                             multiline
                             rows={4}
                             fullWidth
-                            defaultValue=""
+                            defaultValue={testData?.surveyInfo?.description}
                             variant="outlined"
                             onChange={(e)=>handleDescription(e)}
                         />
@@ -345,12 +310,9 @@ function CreateSurvey({setCreateSurveyModal,setSurveyCard,surveyCard}) {
                                     className=""
                                     inputProps={{ 'aria-label': 'Without label' }}
                                 >
-                                {dept?.map((ag) => (
-                                    <MenuItem key={ag.id} value={ag.id}>{ag.departmentName}</MenuItem>
-                                ))} 
-                                {/* {department.map((ag) => (
-                                    <MenuItem key={ag.id} value={ag.id}>{ag.departmentName}</MenuItem>
-                                ))} */}
+                                    {dept?.map((ag) => (
+                                        <MenuItem key={ag.id} value={ag.id}>{ag.departmentName}</MenuItem>
+                                    ))}
                                 </Select>
                             </FormControl>
                             <FormControl className="w-1/3">
@@ -388,9 +350,13 @@ function CreateSurvey({setCreateSurveyModal,setSurveyCard,surveyCard}) {
                                     {departments.map((single,i) => {
                                         let deptChoices = ( dept.find( ({ label,value,id }) => id === single ))
                                         return (
-                                            <div key={i} className="flex bg-blue-500 my-8 mx-8 rounded-md px-12 py-6 items-center justify-between text-white">
-                                                <h5 className='text-14 font-semibold'>{deptChoices.departmentName}</h5>
-                                            </div>
+                                            <>
+                                                {deptChoices?.departmentName && (
+                                                    <div key={i} className="flex bg-blue-500 my-8 mx-8 rounded-md px-12 py-6 items-center justify-between text-white">
+                                                        <h5 className='text-14 font-semibold'>{deptChoices?.departmentName}</h5>
+                                                    </div>
+                                                )}
+                                            </>
                                         )
                                     })}
                                 </div>
@@ -398,9 +364,13 @@ function CreateSurvey({setCreateSurveyModal,setSurveyCard,surveyCard}) {
                                     {groups?.map((item,i)=> {
                                         let groupChoices = (group.find(({ label,value,id }) => id === item ))
                                         return (
-                                            <div key={i} className="flex bg-blue-500 my-8 mx-8 rounded-md px-12 py-6 items-center justify-between text-white">
-                                                <h5 className='text-14 font-semibold'>{groupChoices?.name}</h5>
-                                            </div>
+                                            <>
+                                                {groupChoices?.name && (
+                                                    <div key={i} className="flex bg-blue-500 my-8 mx-8 rounded-md px-12 py-6 items-center justify-between text-white">
+                                                        <h5 className='text-14 font-semibold'>{groupChoices?.name}</h5>
+                                                    </div>
+                                                )}
+                                            </>
                                         )
                                     })}
                                 </div>
@@ -468,4 +438,4 @@ function CreateSurvey({setCreateSurveyModal,setSurveyCard,surveyCard}) {
     )
 }
 
-export default CreateSurvey
+export default EditSurvey
