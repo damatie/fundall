@@ -10,7 +10,7 @@ import {
 	GET_SURVEY_QUESTIONS,
 	DELETE_SURVEY_QUESTION,
 	SETREQUIRED,
-	EDITONESURVEYQUESTION,
+	EDIT_ONE_SURVEY_QUESTION,
 	UPDATE_ONE_SURVEY_QUESTION,
 	GET_ONE_SURVEY,
 	DATA_LOADING
@@ -18,27 +18,33 @@ import {
 } from '../actions'
 
 const initialState  = {
-	isEdit: false,
+	isEdit: {
+		status: false,
+		id:null,
+		index: null
+	},
 	selected: null,
 	isLoading: false,
-	inputType: '',
+	inputType: null,
 	isRequired: false,
 	body:'Question',
 	optionsArray:[],
 	surveyId:null,
 	getOneSurvey:{},
 	getSurveyQuestions:[],
+	getOneSurveyQuestion:{},
 	surveyQuestion:[]
 }
+
 
 export const surveyFormsReducer = (state = initialState , action) =>{
 	
 	switch (action.type) {
 
 		case DATA_LOADING: {
-			return{
+			return {
 				...state,
-				getSurveyQuestions:[],
+				// getSurveyQuestions:[],
 				isLoading:true,
 			}
 			break;  
@@ -67,6 +73,7 @@ export const surveyFormsReducer = (state = initialState , action) =>{
 		case ADDSURVEYQUESTION: {
 			return{
 				...state,
+				getSurveyQuestions:[...state.getSurveyQuestions,action.payload],
 				optionsArray:[DEFAULTOPTIONVALUE],
 				body:'Question',
 				isRequired:false
@@ -75,9 +82,10 @@ export const surveyFormsReducer = (state = initialState , action) =>{
 		}
 
 		case INPUTTYPESELECTED: {
+			console.log(action.selected)
 			return{
 				...state,
-				selected: action.selected,
+				selected: action.inputType,
 				inputType: action.inputType,
 				optionsArray:[],
 				optionsArray:[DEFAULTOPTIONVALUE],
@@ -124,34 +132,53 @@ export const surveyFormsReducer = (state = initialState , action) =>{
 			}
 			break;  
 		}
-		case EDITONESURVEYQUESTION: {
-			const  item= [...state.surveyQuestion]
-			item[action.id].isEdit = action.value
-			console.log(action.id, action.value)
+		case EDIT_ONE_SURVEY_QUESTION: {
+			// const  item= [...state.getSurveyQuestions]
+			// item[action.index] ===action.index
 			return{
 				...state,
-				isEdit:action.value,
-				surveyQuestion:[...item]
+			
+				isEdit: {
+					id:action.id,
+					index:action.index,
+					status: true
+				},
+
+				selected:action.payload.type,
+				isRequired:action.payload.required,
+				body:action.payload.body,
+				optionsArray:action.payload.options,
 			}
 			break;  
 		}
 
 		case UPDATE_ONE_SURVEY_QUESTION: {
-			const  item= [...state.surveyQuestion]
-			item[action.id].isEdit = action.value
+			// const  item= [...state.getSurveyQuestions]
+			// item[action.index]===action.index
 			return{
 				...state,
-				isEdit:action.value,
-				surveyQuestion:[...item]
+				isEdit: {
+					id:null,
+					index:null,
+					status: !state.isEdit.status
+				},
+				selected:null,
+				inputTypeIcon:null,
+				// getSurveyQuestions:[...item],
+				optionsArray:[DEFAULTOPTIONVALUE],
+				body:'Question',
+				isRequired:false
+
 			}
 			break;  
 		}
 
-
 		case DELETE_SURVEY_QUESTION: {
-			const items = state.surveyQuestion;
+			const items = state.getSurveyQuestions;
+			state.getSurveyQuestions.splice(action.payload,1)
 			return{
-				...state
+				...state,
+				getSurveyQuestions:[...state.getSurveyQuestions],
 			}
 			break;  
 		}
