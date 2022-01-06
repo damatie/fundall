@@ -10,7 +10,7 @@ import EditIcon from '@material-ui/icons/Edit';
 function SurveyCard({surveyCardItem,deleteSurvey,index,setOpenSurvey,populateSurvey}) {
     return (
         <div className="flex justify-between w-full bg-white shadow-md mb-40 py-16 px-36 rounded-20">
-            <Link to={'employee-survey/survey-form/' + surveyCardItem?.id}  className="text-black hover:no-underline w-2/3">
+            <Link to={'/employee-survey/survey-form/' + surveyCardItem?.id}  className="text-black hover:no-underline w-2/3">
                 <h3 className="text-2xl font-bold">{surveyCardItem?.title}</h3>
                 <h5 className="text-16 py-8 w-full">{surveyCardItem?.description}</h5>
                 {surveyCardItem?.createdAt && 
