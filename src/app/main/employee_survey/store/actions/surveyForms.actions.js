@@ -12,11 +12,22 @@ export const ADDSURVEYQUESTION ='ADDSURVEYQUESTION'
 export const GET_SURVEY_QUESTIONS ='GETSURVEYQUESTION'
 export const DELETE_SURVEY_QUESTION ='DELETESURVEYQUESTION'
 export const SETREQUIRED ='SETREQUIRED' 
-export const EDITONESURVEYQUESTION ='EDITONESURVEYQUESTION'
+export const EDIT_ONE_SURVEY_QUESTION ='EDITONESURVEYQUESTION'
 export const UPDATE_ONE_SURVEY_QUESTION ='UPDATE_ONE_SURVEY_QUESTION'
 export const GET_ONE_SURVEY ='GET_ONE_SURVEY'
 export const DATA_LOADING ='DATA_LOADING'
 
+
+export function inputTypeSelected( inputTypeValue ) {
+	return dispatch => {
+		dispatch({
+		  type: INPUTTYPESELECTED,
+			selected: inputTypeValue,
+			inputType: inputTypeValue,
+		
+		});
+	}
+}
 // Get one survey from list of surveys
 export function getOneSurvey(id) {
 	return async (dispatch) => { 
@@ -30,7 +41,7 @@ export function getOneSurvey(id) {
 			if(res){
 				return dispatch({
           type: GET_ONE_SURVEY,
-          payload: res.data.message,
+          payload: res.data.data.surveyInfo,
 					surveyId:id
         });
 			}
@@ -55,36 +66,90 @@ export function getSurveyQuestions(id) {
 export function addSurveyQuestion(id, newData) {
 	console.log(id, newData)
 	return async (dispatch) => {
-		dispatch({
-		  type: ADDSURVEYQUESTION,
-		});  
+	 
 		 const request = await Api.post(`survey/${id}/questions/`,newData, {
       headers: {
         Authorization: `JWT ${useAuth().getToken}`
       }
     });
-		// Refresh page
+		dispatch({
+		  type: ADDSURVEYQUESTION,
+			payload: newData
+		}); 
+
+	// Refresh End point 
 		await Api.get(`survey/${id}/questions/`).then(res => {
 			dispatch({
 				type: GET_SURVEY_QUESTIONS,
 				payload: res.data.data,
 			})
 		});
-		console.log(request.data)
 
+		console.log(request.data)
 	}
 
 }
 
-// 
-export function inputTypeSelected(selectedValue, inputTypeValue ) {
-	return dispatch => {
+export function deleteSurveyQuestion(surveyId,questionId,index) {
+	console.log(index)
+	return async(dispatch) => {
+		const request = await Api.delete(`survey/${surveyId}/questions/${questionId}`,{
+			header: {
+				Authorization: `JWT ${useAuth().getToken}`
+			}
+		})
+		console.log(request.data.success)
 		dispatch({
-		  type: INPUTTYPESELECTED,
-			selected: selectedValue,
-			inputType: inputTypeValue,
-		
+			type: DELETE_SURVEY_QUESTION,
+			payload:index
 		});
+	
+		console.log(request.data)
+	}
+}
+
+export function editOneSurveyQuestion(surveyId,questionId, index,) {
+	console.log(questionId)
+	return async(dispatch) => { 
+		const request = await Api.get(`survey/${surveyId}/questions/${questionId}`,{
+			header: {
+				Authorization: `JWT ${useAuth().getToken}`
+			}
+		})
+		const data = request.data.data
+		dispatch({
+			type: EDIT_ONE_SURVEY_QUESTION,
+			id:questionId,
+			index:index,
+			payload:data
+		});
+	}
+}
+
+export function updateOneSurveyQuestion(index,surveyId,questionId,newData) {
+	console.log(index,surveyId,questionId,newData)
+	return async(dispatch) => { 
+		const request = await Api.patch(`survey/${surveyId}/questions/${questionId}`,newData,{
+			header: {
+				Authorization: `JWT ${useAuth().getToken}`
+			}
+		})
+		const data = request.data.data
+		dispatch({
+			type: UPDATE_ONE_SURVEY_QUESTION,
+			value:newData,
+			index:index,
+			id:questionId
+		});
+
+		// Refresh End point 
+		await Api.get(`survey/${surveyId}/questions/`).then(res => {
+			dispatch({
+				type: GET_SURVEY_QUESTIONS,
+				payload: res.data.data,
+			})
+		});
+
 	}
 }
 
@@ -128,50 +193,6 @@ export function updateBody(value) {
 	}
 
 }
-
-export function deleteSurveyQuestion(surveyId,questionId) {
-	console.log('SID'+surveyId)
-	console.log('QID'+questionId)
-	return async(dispatch) => {
-		dispatch({
-			type: DELETE_SURVEY_QUESTION,
-		});
-		const request = await Api.delete(`survey/${surveyId}/questions/${questionId}`,{
-			header: {
-				Authorization: `JWT ${useAuth().getToken}`
-			}
-		})
-		await Api.get(`survey/${surveyId}/questions/`).then(res => {
-			dispatch({
-				type: GET_SURVEY_QUESTIONS,
-				payload: res.data.data,
-			})
-		});
-		console.log(request.data)
-	}
-}
-
-export function editOneSurveyQuestion(id, value) {
-	return dispatch => {
-		dispatch({
-			type: EDITONESURVEYQUESTION,
-			value:value,
-			id:id
-		});
-	}
-}
-
-export function updateOneSurveyQuestion(id,value) {
-	return dispatch => {
-		dispatch({
-			type: UPDATE_ONE_SURVEY_QUESTION,
-			value:value,
-			id:id
-		});
-	}
-}
-
-
 export function setIsRequired(value) {
 	return dispatch => {
 		dispatch({
