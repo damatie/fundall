@@ -75,8 +75,8 @@ const surveyForm = () =>{
           
           <div className="w-full">
             <span className="block text-sm text-night font-bold mt-24">
-              {stateData.getOneSurvey.title}
-            </span>
+              {stateData.getOneSurvey.surveyInfo.title}
+            </span
             <span className=" block text-black text-xs w-5/12 pt-16 leading-relaxed font-semibold ">
             {stateData.getOneSurvey.description}
             </span>
