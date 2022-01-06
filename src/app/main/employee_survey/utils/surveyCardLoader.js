@@ -10,8 +10,7 @@ function SurveyCardLoader({classes}) {
                 <p className="text-blue-400 text-14 w-5/12 py-6 bg-blue-200"></p>
             </div>
             <div className="w-1/3 flex flex-col items-end">
-                <p className="text-blue-400 py-10 text-14 pt-8 w-7/12 bg-blue-200 mb-10"></p>
-                <p className="text-blue-400 py-10 text-14 pt-8 w-7/12 bg-blue-200"></p>
+                <p className="text-blue-400 py-10 text-14 pt-8 w-6/12 bg-blue-200 mb-10"></p>
             </div>
         </div>
     )

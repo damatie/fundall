@@ -7,6 +7,7 @@ import Swal from 'sweetalert2';
 export const auth = useAuth
 
 const newBaseUrl = 'https://agile-dawn-03556.herokuapp.com/api/v1/'
+// https://agile-dawn-03556.herokuapp.com/api/v1/survey?page=1
 
 const baseAuthGet = (urlString) => axios.get( `${newBaseUrl}${urlString}`, {headers: { Authorization: `JWT ${auth().getToken}` }} )
 const baseAuthUpdate = (urlString) => axios.patch( `${newBaseUrl}${urlString}`,`${updateData}`, {headers: { Authorization: `JWT ${auth().getToken}` }} )
@@ -144,17 +145,18 @@ export function useAxiosGetAllSurveys (urlString,newData,page,loading,loadNum) {
                 loading(false)
                 // console.log(e)
                 // console.log('hi')
-                Swal.fire({
-                    title:`<h3 class="py-20">Could not fetch the survey data successfully.</h3>`,
-                    showCancelButton: true,
-                    confirmButtonText: 'Try again',
-                    showLoaderOnConfirm: true,
-                    preConfirm: () => {
-                      return  fetchSurveys(urlString,newData,loading) 
-                    },
-                    ////////////////////////
-                    allowOutsideClick: () => !Swal.isLoading()
-                  })
+                console.log(e)
+            //    // Swal.fire({
+            //    //     title:`<h3 class="py-20">Could not fetch the survey data successfully.</h3>`,
+            //    //     showCancelButton: true,
+            //    //     confirmButtonText: 'Try again',
+            //    //     showLoaderOnConfirm: true,
+            //    //     preConfirm: () => {
+            //    //       return  fetchSurveys(urlString,newData,loading) 
+            //    //     },
+            //    //     ////////////////////////
+            //    //     allowOutsideClick: () => !Swal.isLoading()
+            //    //   })
             }
             // loading(false)
         }

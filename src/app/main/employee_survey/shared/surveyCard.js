@@ -9,9 +9,9 @@ import EditIcon from '@material-ui/icons/Edit';
 
 function SurveyCard({surveyCardItem,deleteSurvey,index,setOpenSurvey,populateSurvey}) {
     return (
-        <div className="flex justify-between w-full bg-white shadow-md mb-40 py-16 px-36 rounded-20">
-            <Link to={'employee-survey/survey-form/' + surveyCardItem?.id}  className="text-black hover:no-underline w-2/3">
-                <h3 className="text-2xl font-bold">{surveyCardItem?.title}</h3>
+        <div className="flex flex-col md:flex-row justify-between w-full bg-white shadow-md mb-40 md:py-16 md:px-36 px-10 py-10 rounded-20">
+            <Link to={'/employee-survey/survey-form/' + surveyCardItem?.id}  className="text-black hover:no-underline md:w-2/3 w-full">
+                <h3 className="text-2xl font-bold break-words">{surveyCardItem?.title}</h3>
                 <h5 className="text-16 py-8 w-full">{surveyCardItem?.description}</h5>
                 {surveyCardItem?.createdAt && 
                     <p className="text-blue-400 text-14">
@@ -20,7 +20,7 @@ function SurveyCard({surveyCardItem,deleteSurvey,index,setOpenSurvey,populateSur
                     </p>
                 }
             </Link>
-            <div className="w-1/3 space-y-4 flex flex-col justify-between">
+            <div className="md:w-1/3 w-full space-y-4 flex flex-col justify-between">
                 <p className="text-blue-400 text-14 pt-8 text-right">Survey sent to {surveyCardItem?.noOfRecipients ? surveyCardItem?.noOfRecipients : 0}</p>
                 {surveyCardItem?.editable && (
                     <div className='flex justify-end space-x-8'>
