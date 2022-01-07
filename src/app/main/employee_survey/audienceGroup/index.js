@@ -311,12 +311,18 @@ const AudienceGroupIndexPage = () => {
                     <Button
                         variant="contained"
                         color="secondary"
-                        className="py-8 px-60 text-12 cursor-pointer"
+                        className="py-8 px-60 text-12 cursor-pointer hidden sm:flex"
                         startIcon={<AddCircleOutlineIcon />}
                         onClick={()=>setOpenCreateAudience(true)}
                     >
                         Create Audience/Group
                     </Button>
+                    <button
+                        className="block sm:hidden bg-blue-400 text-white cursor-pointer rounded-sm py-4 px-6"
+                        onClick={()=>setOpenCreateAudience(true)}
+                    >
+                        <AddCircleOutlineIcon className='text-18' />
+                    </button>
                 </div>
                 {/* <div className="w-full flex items-center justify-center my-28 py-28">
                     <Pagination count={Math.ceil((noOfPages / 10))} color="primary" size="large" onChange={handleChange}  />
