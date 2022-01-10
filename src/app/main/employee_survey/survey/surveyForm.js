@@ -16,6 +16,7 @@ import SurveyLoader from '../utils/surveyLoader';
 
 
 const surveyForm = () =>{
+  const[showNotice, setShowNotice] = useState(false)
   // Get one survey id 
   const { id } = useParams()
   const   surveyId = id
@@ -31,6 +32,16 @@ const surveyForm = () =>{
    
  }
 
+ //  handle settime out
+//  if(showNotice=== true && stateData.notice!= null){
+//   const timeout = setTimeout(() => {
+//     console.log('i made it')
+//   }, 3000);
+//   setShowNotice(true)
+//   console.log('showNotice')
+//   return () => clearTimeout(timeout);
+//  }
+
  // Intial event
  useLayoutEffect(() => {
   dispatch(allSurveyFormActions.getOneSurvey(surveyId))
@@ -38,9 +49,6 @@ const surveyForm = () =>{
   }, [dispatch]);
 
 
-
-  
-  
   return (
     <PageLayout
       header={{
@@ -57,12 +65,20 @@ const surveyForm = () =>{
           onClick={()=>console.log('modal opened')}
           startIcon={<SaveIcon/>}
         >
-          Save Survey
+          Send Survey
         </Button>
       )
       }}
       content={
-      <div className=" w-10/12 py-28 mx-auto">
+      <div className=" w-10/12 py-28 mx-auto ">
+        {showNotice === true? 'function': ''}
+       
+        <span  id="notice-Box" className={stateData.notice? 'block' : 'hidden'}>
+          <span className='  capitalize mx-12 block px-16 text-center py-12 text-18 text-white rounded bg-green-400 fixed bottom-0  right-0'> 
+          {stateData.notice}
+          </span>
+        </span>
+       
          {stateData.isLoading!== false? <SurveyLoader/>:
          <div className="w-full">
           <div className=" flex  w-full cursor-pointer" onClick={() => history.goBack()}>
