@@ -19,20 +19,15 @@ const SurveyIndexPage = () => {
 
 	const [surveyCard, setSurveyCard] = useState([])
     const [loadingSurveyCard, setLoadingSurveyCard] = useState(false)
-    const [page,setPage] = useState(0)
+    const [page,setPage] = useState(1)
+    // console.log(page)
     const [noOfPages, setNoOfPages] = useState(0)
 
     const auth = useAuth
     
     
     const handleChange = (event,value) => {
-        setPage(value - 1)
-        // console.log('value',value)
-        // console.log('page',page)
-        // axios.get( `https://agile-dawn-03556.herokuapp.com/api/v1/survey?page=${page}`,
-        // {headers: { Authorization: `JWT ${auth().getToken}` }} )
-        // .then(data => setSurveyCard(data.data.message))
-        // .catch(e => console.error(e));
+        setPage(value)
     }
     
     // const loadSurveys = async () => {
@@ -162,13 +157,15 @@ const SurveyIndexPage = () => {
         //********************************** */
     }
 
+    // console.log(surveyCard)
+
 
 
     return (
         <>
             <div className="">
                 <h2 className="my-10 mb-32  text-2xl font-semibold capitalize">surveys</h2>
-                <Cards className="w-9/12 mx-auto px-16">
+                <Cards className="md:w-9/12 w-full mx-auto md:px-16 px-0">
                     <h2 className="text-xl mb-16 font-semibold capitalize">survey list</h2>
                     {loadingSurveyCard ? (
                         <>
@@ -178,12 +175,16 @@ const SurveyIndexPage = () => {
                         </>
                     ) : (
                         <>
-                                {/* surveyCard?.sort((a,b) => new Date(b?.createdAt) - new Date(a?.createdAt))?.map((surveyCardItem,i)=>( */}
                             {
                                 surveyCard?.length ? (
                                     surveyCard?.map((surveyCardItem,i)=>(
                                     <div key={surveyCardItem?.id} >
-                                        <SurveyCard surveyCardItem={surveyCardItem} deleteSurvey={confirmDeleteSurvey} index={i} setOpenSurvey={setOpenSurvey} populateSurvey={populateSurvey} />
+                                        <SurveyCard surveyCardItem={surveyCardItem} 
+                                                    deleteSurvey={confirmDeleteSurvey} 
+                                                    index={i} 
+                                                    setOpenSurvey={setOpenSurvey} 
+                                                    populateSurvey={populateSurvey} 
+                                        />
                                     </div>
                                 )) 
                                 ) : (

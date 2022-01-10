@@ -183,53 +183,58 @@ function EditSurvey({setSurveyCard,surveyCard,setOpenSurvey,testData,singleSurve
     const history = useHistory()
 
     const dispatch = useDispatch()
+    
+    const [editSurvey, setEditSurvey] = useState(false)
+
 	// useSelector((data) => console.log(data));
     const [postSurvey,setPostSurvey] = useState(false)
-    const submitSurveyForm  =   (e)  =>  {
+    const submitSurveyForm  =  async (e)  =>  {
         e.preventDefault();
-        console.log(surveyFormData)
-        // setPostSurvey(true)
-        // axios.post('https://agile-dawn-03556.herokuapp.com/api/v1/survey/create-survey', surveyFormData,{headers: { Authorization: `JWT ${auth().getToken}` }}).then((response) => {
-        //     setPostSurvey(false)
-		// 	const { success, message, token, data } = response.data;
-		// 	if (success) {
-        //         let surveyId = response.data.data.createNewSurvey.id
-        //         // console.log(newId)
-		// 			Swal.fire({
-		// 				title: 'Created Survey Successfully',
-		// 				text: message,
-		// 				icon: 'success',
-		// 				// timer: 3000,
-		// 			})
-        //             .then((result)=>{
-        //                 // console.log('result',result)
-        //                 if(result.isConfirmed) {
-        //                     // history.push('/')
-        //                     // history.push('/employee-survey')
-        //                     history.push('/employee-survey/survey-form/' + surveyId)
-        //                 }
-        //             }
-        //             )
-        //             setCreateSurveyModal(false)
-		// 	} else {
-		// 		// console.log("inside else")
-		// 		Swal.fire({
-		// 			title: 'Sorry could not create Survey',
-		// 			text: message,
-		// 			icon: 'error',
-		// 			timer: 3000,
-		// 		})
-        //         setCreateSurveyModal(false)
-		// 	}
-		// }).catch(error => {
-		// 	Swal.fire({
-		// 		title: 'Sorry could not create Survey',
-        //         text: error.response?.data.error || error.response?.data.message || 'Check your internet connection',
-		// 		icon: 'error',
-		// 		timer: 3000,
-		// 	})
-        //     setCreateSurveyModal(false)
-		// });
+        // console.log(surveyFormData)
+        setEditSurvey(true)
+        try {
+            const res = await axios.patch(`https://agile-dawn-03556.herokuapp.com/api/v1/survey/${testData?.surveyInfo?.id}`,surveyFormData,
+            {headers: { Authorization: `JWT ${auth().getToken}` }
+            })
+            // .then((response) => {
+            setEditSurvey(false)
+            const { success, message } = res.data;
+            console.log(res)
+            if (success) {
+                    Swal.fire({
+                        title: 'Edited Survey Successfully',
+                        text: message,
+                        icon: 'success',
+                        // timer: 2000,
+                    })
+                    .then((result)=>{
+                        console.log('result',result)
+                        history.push(`/employee-survey/survey-form/${testData?.surveyInfo?.id}`)
+                        // if(result.isConfirmed) {
+                        //     history.push('/')
+                        // }
+                    }
+                    )
+                    setOpenSurvey(false)
+            } else {
+                Swal.fire({
+                    title: 'Sorry could not edit this survey',
+                    text: error.response?.data.error || error.response?.data.message || 'Check your internet connection',
+                    icon: 'error',
+                    timer: 3000,
+                })
+                setOpenSurvey(false)
+            }
+        } catch (error) {
+            console.log(error)
+            Swal.fire({
+                title: 'Sorry could not edit Survey',
+                text: error.response?.data.error || error.response?.data.message || 'Check your internet connection',
+                icon: 'error',
+                timer: 3000,
+            })
+            setOpenSurvey(false)
+        }
     }
 
 ///////////////////////////////////////////
@@ -430,7 +435,7 @@ function EditSurvey({setSurveyCard,surveyCard,setOpenSurvey,testData,singleSurve
                         </div>
                     </div>
                     <div className="w-full flex items-center justify-center">
-                        {postSurvey ? <BtnLoader/> : <SubmitButton/>}
+                        {editSurvey ? <BtnLoader/> : <SubmitButton/>}
                     </div>
                 </form>
             </div>
