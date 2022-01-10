@@ -271,7 +271,7 @@ function EditAudience({openEditAudience,setOpenEditAudience,testData,setTestData
                         <TextField id="outlined-basic" label="Individual's email" value={individuals} variant="outlined" onChange={handleChangeIndividuals} onKeyDown={onKeyDownIndividuals} fullWidth className="mb-24" />
                         <div className="">
                             <h4 className="capitalize text-14 text-grey-700 pb-8 font-bold">members</h4>
-                            <div className="border-gray-400 border-1 py-14 rounded-md flex items-start overflow-y-scroll flex-wrap min-h-36">
+                            <div className="border-gray-400 border-1 py-14 rounded-md flex items-start overflow-y-scroll flex-wrap min-h-36 bg-grey-200">
                                 <div className="flex flex-wrap">
                                     {departments?.map((single,i) => {
                                         let deptChoices = ( department.find( ({ label,value,id }) => id === single ))

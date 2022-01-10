@@ -5,19 +5,9 @@ import React from 'react'
 function AudienceCardLoader() {
     return (
         <Cards className="mb-44 px-12 py-8">
-            <div className="flex justify-end">
-                <Button
-                    variant="contained"
-                    color="secondary"
-                    className="py-10 px-20 text-12 bg-blue-400 ml-10 cursor-pointer"
-                >
-                </Button>
-                <Button
-                    variant="contained"
-                    color="secondary"
-                    className="py-10 px-20 text-12 bg-red-200 ml-10 cursor-pointer"
-                >
-                </Button>
+            <div className='flex justify-end space-x-8'>
+                <button className="bg-blue-200 text-blue-700 cursor-pointer rounded-sm py-12 px-12"></button>
+                <button className="bg-red-200 cursor-pointer rounded-sm py-12 px-12 text-red-700"></button>
             </div>
             <div className="py-10 w-8/12">
                 <h3 className="text-xl p-10 bg-grey-400 mb-10 font-bold"></h3>

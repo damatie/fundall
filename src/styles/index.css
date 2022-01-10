@@ -252,12 +252,19 @@ input:-webkit-autofill {
     border-radius:17px;
     cursor:pointer
   }
-#topToBottom {
-  animation: topToBottom ease .5s;
-  -webkit-animation: topToBottom ease .5s;
-  -moz-animation: topToBottom ease .5s;
-  -o-animation: topToBottom ease .5s;
-  -ms-animation: topToBottom ease .5s;
+#topToBottom{
+    animation: topToBottom ease .5s;
+    -webkit-animation: topToBottom ease .5s;
+    -moz-animation: topToBottom ease .5s;
+    -o-animation: topToBottom ease .5s;
+    -ms-animation: topToBottom ease .5s;  
+}
+#notice-Box {
+  animation: noticeBox ease .10s;
+  -webkit-animation: noticeBox ease .5s;
+  -moz-animation: noticeBox ease .5s;
+  -o-animation: noticeBox ease .5s;
+  -ms-animation: noticeBox ease .5s;
 }
 
 @keyframes topToBottom {
@@ -304,6 +311,17 @@ input:-webkit-autofill {
     margin-top: 0%;
   }
 }
+
+
+/* @keyframes noticeBox {
+    0% {
+        right:-250px;
+    }
+    100% {
+        right: 0px
+    }
+  } */
+
 
 /* End Survey Forms  */
 @import 'print.css';

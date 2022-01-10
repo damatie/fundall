@@ -383,7 +383,7 @@ function CreateSurvey({setCreateSurveyModal,setSurveyCard,surveyCard}) {
                         />
                         <div className="">
                             <h4 className="capitalize text-14 text-grey-700 pb-8">survey participants</h4>
-                            <div className="border-gray-400 border-1  py-14 rounded-md flex items-start overflow-y-scroll flex-wrap min-h-36">
+                            <div className="border-gray-400 border-1  py-14 rounded-md flex items-start overflow-y-scroll flex-wrap min-h-36 bg-grey-200">
                                 <div className="flex flex-wrap">
                                     {departments.map((single,i) => {
                                         let deptChoices = ( dept.find( ({ label,value,id }) => id === single ))
@@ -437,7 +437,7 @@ function CreateSurvey({setCreateSurveyModal,setSurveyCard,surveyCard}) {
                         <TextField id="outlined-basic" label="Individual's email" value={recipientIndividuals} variant="outlined" onChange={handleChangeIndividualsRecipient} onKeyDown={onKeyDownIndividualsRecipient} fullWidth className="mb-24" />
                         <div className="">
                             <h4 className="capitalize text-14 text-grey-700 pb-8">survey participants</h4>
-                            <div className="border-gray-400 border-1 py-14 rounded-md flex items-start overflow-y-scroll flex-wrap min-h-36">
+                            <div className="border-gray-400 border-1 py-14 rounded-md flex items-start overflow-y-scroll flex-wrap min-h-36 bg-grey-200">
                                 <div className="flex flex-wrap">
                                     {reDepts?.map((item,i)=> {
                                         let recipientDeptChoices = (recipientDept?.find(({ label,value,id }) => id === item ))
