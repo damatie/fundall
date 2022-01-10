@@ -50,7 +50,7 @@ const SurveyIndexPage = () => {
         const items = surveyCard;
         let name = survey?.title
         Swal.fire({
-            title:`<h3 class="py-20">Note that by clicking on continue, you will delete <span class="font-bold">${name}</span>.</h3>`,
+            title:`<h3 class="py-20">Are you sure you want to delete <span class="font-bold">${name}</span>.</h3>`,
             // html:
             //     `<h3 class="py-20">Note that by clicking on continue, you will delete <span class="font-bold">${name}</span>.</h3>`,
             // input: 'text',
@@ -58,7 +58,7 @@ const SurveyIndexPage = () => {
             //   autocapitalize: 'off'
             // },
             showCancelButton: true,
-            confirmButtonText: 'Continue',
+            confirmButtonText: 'Yes',
             showLoaderOnConfirm: true,
             preConfirm: () => {
               return   axios.delete( `https://agile-dawn-03556.herokuapp.com/api/v1/survey/${surveyId}`,
