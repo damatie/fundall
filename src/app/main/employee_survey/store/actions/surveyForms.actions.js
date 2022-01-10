@@ -16,6 +16,7 @@ export const EDIT_ONE_SURVEY_QUESTION ='EDITONESURVEYQUESTION'
 export const UPDATE_ONE_SURVEY_QUESTION ='UPDATE_ONE_SURVEY_QUESTION'
 export const GET_ONE_SURVEY ='GET_ONE_SURVEY'
 export const DATA_LOADING ='DATA_LOADING'
+export const SHOW_NOTICE ='SHOWNOTICE'
 
 
 export function inputTypeSelected( inputTypeValue ) {
@@ -74,7 +75,8 @@ export function addSurveyQuestion(id, newData) {
     });
 		dispatch({
 		  type: ADDSURVEYQUESTION,
-			payload: newData
+			payload: newData,
+			message:request.data.message
 		}); 
 
 	// Refresh End point 
@@ -85,7 +87,12 @@ export function addSurveyQuestion(id, newData) {
 			})
 		});
 
-		console.log(request.data)
+		setTimeout(() => {
+			dispatch({
+				type: SHOW_NOTICE
+			})
+		}, 5000)
+		// console.log(request.data.message)
 	}
 
 }
@@ -98,13 +105,20 @@ export function deleteSurveyQuestion(surveyId,questionId,index) {
 				Authorization: `JWT ${useAuth().getToken}`
 			}
 		})
-		console.log(request.data.success)
+		// console.log(request.data.success)
 		dispatch({
 			type: DELETE_SURVEY_QUESTION,
-			payload:index
+			payload:index,
+			message:request.data.message
 		});
+
+		setTimeout(() => {
+			dispatch({
+				type: SHOW_NOTICE
+			})
+		}, 5000)
 	
-		console.log(request.data)
+		// console.log(request.data)
 	}
 }
 
@@ -139,7 +153,8 @@ export function updateOneSurveyQuestion(index,surveyId,questionId,newData) {
 			type: UPDATE_ONE_SURVEY_QUESTION,
 			value:newData,
 			index:index,
-			id:questionId
+			id:questionId,
+			message:request.data.message
 		});
 
 		// Refresh End point 
@@ -150,6 +165,12 @@ export function updateOneSurveyQuestion(index,surveyId,questionId,newData) {
 			})
 		});
 
+		setTimeout(() => {
+			dispatch({
+				type: SHOW_NOTICE
+			})
+		}, 5000)
+		
 	}
 }
 

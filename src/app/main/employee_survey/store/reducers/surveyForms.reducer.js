@@ -13,11 +13,13 @@ import {
 	EDIT_ONE_SURVEY_QUESTION,
 	UPDATE_ONE_SURVEY_QUESTION,
 	GET_ONE_SURVEY,
-	DATA_LOADING
+	DATA_LOADING,
+	SHOW_NOTICE
 	
 } from '../actions'
 
 const initialState  = {
+	notice: null,
 	isEdit: {
 		status: false,
 		id:null,
@@ -50,6 +52,15 @@ export const surveyFormsReducer = (state = initialState , action) =>{
 			break;  
 		}
 
+		case SHOW_NOTICE: {
+			return {
+				...state,
+				// getSurveyQuestions:[],
+				notice:null,
+			}
+			break;  
+		}
+
 		case GET_ONE_SURVEY: {
 			return{
 				...state,
@@ -71,24 +82,32 @@ export const surveyFormsReducer = (state = initialState , action) =>{
 			break;  
 		}
 		case ADDSURVEYQUESTION: {
+			console.log(state.selected)
+		
 			return{
 				...state,
 				getSurveyQuestions:[...state.getSurveyQuestions,action.payload],
 				optionsArray:[DEFAULTOPTIONVALUE],
 				body:'Question',
-				isRequired:false
+				isRequired:false,
+				notice:`Question` +" " +action.message
 			}
 			break;  
 		}
 
 		case INPUTTYPESELECTED: {
 			console.log(action.selected)
+			let DATAVALUE = null
+			if(action.selected=== 'Multiple Choice' || action.selected==='Check Box'){
+				DATAVALUE = DEFAULTOPTIONVALUE
+			}else{
+				DATAVALUE = '-----------'
+			}
 			return{
 				...state,
 				selected: action.inputType,
 				inputType: action.inputType,
-				optionsArray:[],
-				optionsArray:[DEFAULTOPTIONVALUE],
+				optionsArray:[DATAVALUE],
 				isRequired:false
 			}
 			break;  
@@ -152,6 +171,16 @@ export const surveyFormsReducer = (state = initialState , action) =>{
 			break;  
 		}
 
+		case DELETE_SURVEY_QUESTION: {
+			state.getSurveyQuestions.splice(action.payload,1)
+			return{
+				...state,
+				getSurveyQuestions:[...state.getSurveyQuestions],
+				notice: action.message,
+			}
+			break;  
+		}
+
 		case UPDATE_ONE_SURVEY_QUESTION: {
 			// const  item= [...state.getSurveyQuestions]
 			// item[action.index]===action.index
@@ -162,6 +191,7 @@ export const surveyFormsReducer = (state = initialState , action) =>{
 					index:null,
 					status: !state.isEdit.status
 				},
+				notice:`Question` +" "+action.message,
 				selected:null,
 				inputTypeIcon:null,
 				// getSurveyQuestions:[...item],
@@ -170,18 +200,10 @@ export const surveyFormsReducer = (state = initialState , action) =>{
 				isRequired:false
 
 			}
-			break;  
-		}
 
-		case DELETE_SURVEY_QUESTION: {
-			const items = state.getSurveyQuestions;
-			state.getSurveyQuestions.splice(action.payload,1)
-			return{
-				...state,
-				getSurveyQuestions:[...state.getSurveyQuestions],
-			}
 			break;  
 		}
+		
 		case SETREQUIRED: {
 			return{
 				...state,

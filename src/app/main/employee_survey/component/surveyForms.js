@@ -190,7 +190,7 @@ const surveyForms = (props) => {
             </span>
           </div>
           </div>
-          {stateData.selected ==='Multiple Choice'?   multiChoice : stateData.selected ==='Check Box'? checkBox : '' }
+          {stateData.selected ==='Multiple Choice'?   multiChoice : stateData.selected ==='Check Box'? checkBox : "" }
           <div className="mt-10">
             <span className=" float-right -mt-8 pl-10">
               <span className="text-grey-A800 text-13"> Required</span>

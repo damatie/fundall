@@ -40,6 +40,15 @@ import SurveyForms from './surveyForms';
 	 
 	return(
 		<div className=" flex flex-col   relative ">
+			{ stateData.getSurveyQuestions.length === 0? 
+			<Cards className="w-7/12 mx-auto py-10 px-16 mb-40 rounded-20px shadow-10  break-words">
+				<span className=' block  text-20 font-700'> No questions found </span>
+				<span className=' block text-16 font-500 mt-4'>Kindly create one</span>
+			</Cards>
+			:
+			""
+			}
+		
 			{ stateData.getSurveyQuestions.sort((a,b) => (a.id - b.id)).map((surveyQuestion, surveyQuestionIndex) =>
 			<div key={surveyQuestionIndex}>
 				{stateData?.isEdit?.index === surveyQuestionIndex? 
@@ -64,26 +73,22 @@ import SurveyForms from './surveyForms';
 									{surveyQuestion.type  ==='Multiple Choice'? 
 									<span>
 									<Radio
-										name="radio-button"
-										// inputProps={{ 'aria-label': 'A' }}
-							/>
+										name="radio-button"/>
 							</span>
 									: surveyQuestion.type ==='Check Box'? 	
 									<span>
-											<Checkbox
-												// inputProps={{ 'aria-label': 'primary checkbox' }}
-											/>
+											<Checkbox/>
 									</span>
 									: '' }
 								
-										<span className="  leading-10 pt-2">
+										<span className="leading-10 pt-2">
 											{option}
 										</span>
 									</div>
 									)
 								}
 								{ stateData.isEdit.status === false ?
-									<div className=" w-full"> {stateData.surveyId} {surveyQuestion.id}
+									<div className=" w-full">
 									<span className=" float-right bg-red-100 px-6 py-2 rounded-lg cursor-pointer" onClick={()=>handleDeleteSurveyQuestion(stateData.surveyId,surveyQuestion.id,surveyQuestionIndex)}>
 										<DeleteOutlineIcon style={{ color:'#FF3030',fontSize: 16}}/>
 									</span>
