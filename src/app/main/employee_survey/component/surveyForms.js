@@ -1,5 +1,5 @@
 import React from 'react'
-import { useState, useEffect,useLayoutEffect } from 'react';
+import { useState, useRef, useEffect,useLayoutEffect } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Cards from 'app/shared/cards/cards'
 import AddIcon from '@material-ui/icons/Add';
@@ -22,18 +22,19 @@ import withReducer from 'app/store/withReducer';
 const inputTypes = [
   { name:'Multiple Choice', value:'multipleChoice', icon:<RadioButtonCheckedIcon/>},
   { name:'Check Box', value:'checkBox', icon:<CheckBoxIcon/>},
-  { name:'Image Type', value:'imageType', icon:<CropOriginalIcon/>},
+  // { name:'Image Type', value:'imageType', icon:<CropOriginalIcon/>},
   { name:'Single Line', value:'singleLine',icon:<ShortTextIcon/>},
   { name:'Multiple Line ', value:'multipleLine', icon:<SubjectIcon/>},
-  { name:'Numeric ', value:'numeric', icon:<ExposureIcon/>},
-  { name:'Rating Scale', value:'ratingScale', icon:''},
-  { name:'Ranking ', value:'ranking', icon:''},
-  { name:'Matrix Choice ', value:'matrixChoice', icon:''},
-  { name:'Matrix Dropdown ', value:'matrixDropdown', icon:''},
+  // { name:'Numeric ', value:'numeric', icon:<ExposureIcon/>},
+  // { name:'Rating Scale', value:'ratingScale', icon:''},
+  // { name:'Ranking ', value:'ranking', icon:''},
+  // { name:'Matrix Choice ', value:'matrixChoice', icon:''},
+  // { name:'Matrix Dropdown ', value:'matrixDropdown', icon:''},
 ]
 
 
 const surveyForms = (props) => {
+  const elementRef = useRef()
   const{newData,surveyId, questionIndex, surveyQuestionId} = props
   // Using redux
   const dispatch = useDispatch();
@@ -41,6 +42,24 @@ const surveyForms = (props) => {
   // Using useState
   const [showInputTypeList,setShowInputTypeList] = useState(false)
   
+  console.log(showInputTypeList)
+  useEffect(() => {
+    const checkIfClickedOutside = e => {
+      // If the menu is open and the clicked target is not within the menu,
+      // then close the menu
+      if (showInputTypeList && elementRef.current && !elementRef.current.contains(e.target)) {
+        setShowInputTypeList(false)
+      }
+    }
+
+    document.addEventListener("mousedown", checkIfClickedOutside)
+
+    return () => {
+      // Cleanup the event listener
+      document.removeEventListener("mousedown", checkIfClickedOutside)
+    }
+  }, [showInputTypeList])
+
  //  Input types layout
   // Radio input
   const multiChoice = (
@@ -173,7 +192,7 @@ const surveyForms = (props) => {
               style ={{width: '90%'}}
             />
           </div>
-          <div className=" w-320 border border-grey-A800 rounded  pt-8 leading-8 pl-16 pr-5 cursor-pointer "  onClick={ ()=>setShowInputTypeList(!showInputTypeList)}>
+          <div className=" w-320 border border-grey-A800 rounded  pt-8 leading-8 pl-16 pr-5 cursor-pointer "  onClick={ ()=>setShowInputTypeList(true)}>
             <span className=" inline-block text-grey-A800" style={{ fontSize: 15 }}>
             {/* {stateData.inputTypeIcon} */}
             {stateData.selected && inputTypes.map((type) => {
@@ -201,13 +220,13 @@ const surveyForms = (props) => {
           </Cards>
           {/*End Survey Questions */}
           { !showInputTypeList? "" :
-          <div className=" block w-288  inputTypeOptions " id="topToBottom">
-          <Cards  className=" block  py-4 px-16 rounded-20px shadow-10 mb-32 "  >
+          <div  ref={elementRef} className=" block w-288  inputTypeOptions " id="topToBottom">
+          <Cards className=" block  py-4 px-16 rounded-20px shadow-10 mb-32 "  >
             <ul className="block">
               {
                 inputTypes.map((name, index)=>
-                  <li className=" block inputTypeOptionsLi" key={index} onClick={() => handleSelected(name.name,name.value)}>
-                    <span className="  w-full px-4 block" >
+                  <li className=" block inputTypeOptionsLi" key={index}   onClick={() => handleSelected(name.name,name.value)} >
+                    <span onClick={()=> setShowInputTypeList(false)} className="  w-full px-4 block" >
                       <span style={{ fontSize: 20, color:'#00CCF2'}}>
                       {name.icon}
                       </span>

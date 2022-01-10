@@ -313,14 +313,14 @@ input:-webkit-autofill {
 }
 
 
-@keyframes noticeBox {
+/* @keyframes noticeBox {
     0% {
-        transform: translateX(250px);
+        right:-250px;
     }
     100% {
-        transform: translateX(0) 
+        right: 0px
     }
-  }
+  } */
 
 
 /* End Survey Forms  */

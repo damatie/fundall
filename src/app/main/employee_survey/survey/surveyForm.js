@@ -65,7 +65,7 @@ const surveyForm = () =>{
           onClick={()=>console.log('modal opened')}
           startIcon={<SaveIcon/>}
         >
-          Save Survey
+          Send Survey
         </Button>
       )
       }}
@@ -73,11 +73,11 @@ const surveyForm = () =>{
       <div className=" w-10/12 py-28 mx-auto ">
         {showNotice === true? 'function': ''}
        
-        <div  id="notice-Box" className={stateData.notice? 'block' : 'hidden'}>
+        <span  id="notice-Box" className={stateData.notice? 'block' : 'hidden'}>
           <span className='  capitalize mx-12 block px-16 text-center py-12 text-18 text-white rounded bg-green-400 fixed bottom-0  right-0'> 
           {stateData.notice}
           </span>
-        </div>
+        </span>
        
          {stateData.isLoading!== false? <SurveyLoader/>:
          <div className="w-full">
