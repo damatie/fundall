@@ -2,27 +2,28 @@ import Api from 'app/services/api';
 import axios from 'axios';
 import { getBaseUrl } from 'app/shared/getBaseUrl';
 import { useAuth } from 'app/hooks/useAuth';
-export const INPUTTYPESELECTED ='INPUTTYPESELECTED'
-export const ADDNEWOPTION ='ADDNEWOPTION'
+export const INPUT_TYPE_SELECTED ='INPUTTYPESELECTED'
+export const ADD_NEW_OPTION ='ADDNEWOPTION'
 export const DEFAULTOPTIONVALUE ='Option'
-export const REMOVEOPTION ='REMOVEOPTION' 
-export const UPDATEOPTION ='UPDATEOPTION' 
-export const UPDATEBODY ='UPDATEBODY' 
-export const ADDSURVEYQUESTION ='ADDSURVEYQUESTION'  
+export const REMOVE_OPTION ='REMOVEOPTION' 
+export const UPDATE_OPTION ='UPDATEOPTION' 
+export const UPDATE_BODY ='UPDATEBODY' 
+export const ADD_SURVEY_QUESTION ='ADDSURVEYQUESTION'  
 export const GET_SURVEY_QUESTIONS ='GETSURVEYQUESTION'
 export const DELETE_SURVEY_QUESTION ='DELETESURVEYQUESTION'
-export const SETREQUIRED ='SETREQUIRED' 
+export const SET_REQUIRED ='SETREQUIRED' 
 export const EDIT_ONE_SURVEY_QUESTION ='EDITONESURVEYQUESTION'
 export const UPDATE_ONE_SURVEY_QUESTION ='UPDATE_ONE_SURVEY_QUESTION'
 export const GET_ONE_SURVEY ='GET_ONE_SURVEY'
 export const DATA_LOADING ='DATA_LOADING'
 export const SHOW_NOTICE ='SHOWNOTICE'
+export const SEND_SURVEY ='SENDSURVEY'
 
 
 export function inputTypeSelected( inputTypeValue ) {
 	return dispatch => {
 		dispatch({
-		  type: INPUTTYPESELECTED,
+		  type: INPUT_TYPE_SELECTED,
 			selected: inputTypeValue,
 			inputType: inputTypeValue,
 		
@@ -74,7 +75,7 @@ export function addSurveyQuestion(id, newData) {
       }
     });
 		dispatch({
-		  type: ADDSURVEYQUESTION,
+		  type: ADD_SURVEY_QUESTION,
 			payload: newData,
 			message:request.data.message
 		}); 
@@ -177,7 +178,7 @@ export function updateOneSurveyQuestion(index,surveyId,questionId,newData) {
 export function addNewOption() {
 	return dispatch => {
 		dispatch({
-		  type: ADDNEWOPTION,
+		  type: ADD_NEW_OPTION,
 			payload:DEFAULTOPTIONVALUE
 		
 		});
@@ -187,7 +188,7 @@ export function addNewOption() {
 export function removeOption(id) {
 	return dispatch => {
 		dispatch({
-		  type: REMOVEOPTION,
+		  type: REMOVE_OPTION,
 			payload:id
 		
 		});
@@ -197,7 +198,7 @@ export function removeOption(id) {
 export function updateOption(value,id) {
 	return dispatch => {
 		dispatch({
-		  type: UPDATEOPTION,
+		  type: UPDATE_OPTION,
 			value:value,
 			id:id
 		
@@ -208,7 +209,7 @@ export function updateOption(value,id) {
 export function updateBody(value) {
 	return dispatch => {
 		dispatch({
-		  type: UPDATEBODY,
+		  type: UPDATE_BODY,
 			payload:value,
 		});
 	}
@@ -217,7 +218,7 @@ export function updateBody(value) {
 export function setIsRequired(value) {
 	return dispatch => {
 		dispatch({
-			type: SETREQUIRED,
+			type: SET_REQUIRED,
 			payload:value
 		});
 	}

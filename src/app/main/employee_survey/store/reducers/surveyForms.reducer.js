@@ -1,20 +1,21 @@
 
 import {
-	INPUTTYPESELECTED,
-	ADDNEWOPTION,
+	INPUT_TYPE_SELECTED,
+	ADD_NEW_OPTION,
 	DEFAULTOPTIONVALUE,
-	REMOVEOPTION,
-	UPDATEOPTION,
-	UPDATEBODY,
-	ADDSURVEYQUESTION,
+	REMOVE_OPTION,
+	UPDATE_OPTION,
+	UPDATE_BODY,
+	ADD_SURVEY_QUESTION,
 	GET_SURVEY_QUESTIONS,
 	DELETE_SURVEY_QUESTION,
-	SETREQUIRED,
+	SET_REQUIRED,
 	EDIT_ONE_SURVEY_QUESTION,
 	UPDATE_ONE_SURVEY_QUESTION,
 	GET_ONE_SURVEY,
 	DATA_LOADING,
-	SHOW_NOTICE
+	SHOW_NOTICE,
+	SEND_SURVEY
 	
 } from '../actions'
 
@@ -81,7 +82,7 @@ export const surveyFormsReducer = (state = initialState , action) =>{
 			}
 			break;  
 		}
-		case ADDSURVEYQUESTION: {
+		case ADD_SURVEY_QUESTION: {
 			console.log(state.selected)
 		
 			return{
@@ -95,7 +96,7 @@ export const surveyFormsReducer = (state = initialState , action) =>{
 			break;  
 		}
 
-		case INPUTTYPESELECTED: {
+		case INPUT_TYPE_SELECTED: {
 			console.log(action.selected)
 			let DATAVALUE = null
 			if(action.selected=== 'Multiple Choice' || action.selected==='Check Box'){
@@ -112,7 +113,7 @@ export const surveyFormsReducer = (state = initialState , action) =>{
 			}
 			break;  
 		}
-		case ADDNEWOPTION: {
+		case ADD_NEW_OPTION: {
 		
 			return{
 				...state,
@@ -121,7 +122,7 @@ export const surveyFormsReducer = (state = initialState , action) =>{
 			break;  
 		}
 
-		case REMOVEOPTION: {
+		case REMOVE_OPTION: {
 			const items = state.optionsArray;
 			if(items.length > 1){
 				state.optionsArray.splice(action.payload,1)
@@ -135,7 +136,7 @@ export const surveyFormsReducer = (state = initialState , action) =>{
 			}
 			break;  
 		}
-		case UPDATEOPTION: {
+		case UPDATE_OPTION: {
 			const  list = [...state.optionsArray]
     	list[action.id] = action.value
 			return{
@@ -144,7 +145,7 @@ export const surveyFormsReducer = (state = initialState , action) =>{
 			}
 			break;  
 		}
-		case UPDATEBODY: {
+		case UPDATE_BODY: {
 			return{
 				...state,
 				body:action.payload,
@@ -204,7 +205,7 @@ export const surveyFormsReducer = (state = initialState , action) =>{
 			break;  
 		}
 		
-		case SETREQUIRED: {
+		case SET_REQUIRED: {
 			return{
 				...state,
 				isRequired:action.payload

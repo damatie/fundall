@@ -30,6 +30,7 @@ const inputTypes = [
   // { name:'Ranking ', value:'ranking', icon:''},
   // { name:'Matrix Choice ', value:'matrixChoice', icon:''},
   // { name:'Matrix Dropdown ', value:'matrixDropdown', icon:''},
+   
 ]
 
 
