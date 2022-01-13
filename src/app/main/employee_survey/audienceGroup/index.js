@@ -332,42 +332,45 @@ const AudienceGroupIndexPage = () => {
                         <Pagination postsPerPage={audienceCardPerPage} totalCards={audienceCard?.length} paginate={paginate} clicked={clicked} />
                     </div> */}
                 {loadingAudienceCard ? (
+                    <div className='grid gap-44 grid-cols-2 w-full'>
                     <>
                         <AudienceCardLoader/>
                         <AudienceCardLoader/>
                         <AudienceCardLoader/>
                         <AudienceCardLoader/>
                     </>
+                    </div>
                 ) : (
+                    <div className='grid gap-44 grid-cols-2 w-full'>
                     <>
                     {
                     audienceCard?.length ? (
                         audienceCard?.sort((a,b) => (new Date(b?.createdAt) - (new Date(a?.createdAt)) ))?.map((audienceCardItem,i)=>(
-                            <Cards className="mb-44 px-12 py-8" key={audienceCardItem?.id}>
-                                <div className='flex justify-end'>
-                                    <span   
-                                        className=" float-right bg-light-blue-50 rounded-lg px-6 py-2  cursor-pointer font-800 mr-16" 
-                                        onClick={() => openPopulate(audienceCardItem,audienceCardItem?.id)}
-                                    >
-                                        <EditIcon  style={{ color:'#62DAFC',fontSize: 16}} /> 
-                                    </span>
-                                    <span 
-                                        className=" float-right bg-red-100 px-6 py-2 rounded-lg cursor-pointer"
-                                        onClick={() => confirmDeleteAudience(audienceCardItem,i,audienceCardItem?.id)}
-                                    >
-                                        <DeleteOutlineIcon style={{ color:'#FF3030',fontSize: 16}}/>
-                                    </span>
-                                </div>
-                                <div className="py-10 w-8/12">
-                                    <Link to={'employee-survey/single-audience/' + audienceCardItem?.id } className="text-black hover:no-underline">
-                                        <h3 className="text-2xl p-4 pb-0 border-b-2 border-gray-A100 font-bold">   {audienceCardItem?.name}
-                                        </h3>
-                                    </Link>
-                                    <h5 className="py-10 text-16 w-full">{audienceCardItem?.description}</h5>
-                                    <p className="text-blue-400 cursor-pointer text-18">
-                                        {audienceCardItem?.totalMembers ? audienceCardItem?.totalMembers : 0} {audienceCardItem?.totalMembers > 1 ? 'members' : 'member'} in this group</p>
-                                </div>
-                            </Cards>
+                                <Cards className="px-12 py-8" key={audienceCardItem?.id}>
+                                    <div className='flex justify-end'>
+                                        <span   
+                                            className=" float-right bg-light-blue-50 rounded-lg px-6 py-2  cursor-pointer font-800 mr-16" 
+                                            onClick={() => openPopulate(audienceCardItem,audienceCardItem?.id)}
+                                        >
+                                            <EditIcon  style={{ color:'#62DAFC',fontSize: 16}} /> 
+                                        </span>
+                                        <span 
+                                            className=" float-right bg-red-100 px-6 py-2 rounded-lg cursor-pointer"
+                                            onClick={() => confirmDeleteAudience(audienceCardItem,i,audienceCardItem?.id)}
+                                        >
+                                            <DeleteOutlineIcon style={{ color:'#FF3030',fontSize: 16}}/>
+                                        </span>
+                                    </div>
+                                    <div className="py-10 w-9/12">
+                                        <Link to={'employee-survey/single-audience/' + audienceCardItem?.id } className="text-black hover:no-underline">
+                                            <h3 className="text-2xl p-4 pb-0 underline font-bold">   {audienceCardItem?.name}
+                                            </h3>
+                                        </Link>
+                                        <h5 className="py-10 text-16 w-full truncate">{audienceCardItem?.description}</h5>
+                                        <p className="text-blue-400 cursor-pointer text-18">
+                                            {audienceCardItem?.totalMembers ? audienceCardItem?.totalMembers : 0} {audienceCardItem?.totalMembers > 1 ? 'members' : 'member'} in this group</p>
+                                    </div>
+                                </Cards>
                         ))
                     ) : (
                         <div className="flex flex-col items-center justify-center">
@@ -377,6 +380,7 @@ const AudienceGroupIndexPage = () => {
                     )
                 }
                     </>
+                    </div>
                 )}
             </>
                 {

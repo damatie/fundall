@@ -22,7 +22,11 @@ function SurveyCard({surveyCardItem,deleteSurvey,index,setOpenSurvey,populateSur
                 }
             </Link>
             <div className="md:w-1/3 w-full space-y-4 flex flex-col justify-between">
-                <p className="text-blue-400 text-14 pt-8 text-right">Survey sent to {surveyCardItem?.noOfRecipients ? surveyCardItem?.noOfRecipients : 0}</p>
+                {surveyCardItem?.noOfRecipients > 0 ? (
+                    <p className="text-blue-400 text-14 pt-8 text-right">Survey sent to {surveyCardItem?.noOfRecipients}</p>
+                ) : (
+                    <p className="text-blue-400 text-14 pt-8 text-right">Survey not sent</p>
+                )}
                 {surveyCardItem?.editable && (
                     <div className='flex justify-end'>
                         <span
