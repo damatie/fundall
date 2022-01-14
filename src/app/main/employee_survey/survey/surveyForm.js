@@ -31,17 +31,10 @@ const surveyForm = () =>{
     description: "Choose your test"
    
  }
-
- //  handle settime out
-//  if(showNotice=== true && stateData.notice!= null){
-//   const timeout = setTimeout(() => {
-//     console.log('i made it')
-//   }, 3000);
-//   setShowNotice(true)
-//   console.log('showNotice')
-//   return () => clearTimeout(timeout);
-//  }
-
+ function handleSendSurvey(){
+  dispatch(allSurveyFormActions.sendSurvey(surveyId))
+ }
+ 
  // Intial event
  useLayoutEffect(() => {
   dispatch(allSurveyFormActions.getOneSurvey(surveyId))
@@ -62,7 +55,7 @@ const surveyForm = () =>{
         <Button
           variant="contained"
           color="secondary"
-          onClick={()=>console.log('modal opened')}
+          onClick={()=>handleSendSurvey()}
           startIcon={<SaveIcon/>}
         >
           Send Survey

@@ -206,9 +206,18 @@ export const surveyFormsReducer = (state = initialState , action) =>{
 		}
 		
 		case SET_REQUIRED: {
+			console.log(action.payload)
 			return{
 				...state,
 				isRequired:action.payload
+			}
+			break;  
+		}
+
+		case SEND_SURVEY: {
+			return{
+				...state,
+				notice:`Question` +" "+action.message,
 			}
 			break;  
 		}

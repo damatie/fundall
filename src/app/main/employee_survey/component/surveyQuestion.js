@@ -34,10 +34,6 @@ import SurveyForms from './surveyForms';
     description: "Choose your test"
    
  }
-  const handleChange = (event) => {
-  };
-	console.log()
-	 
 	return(
 		<div className=" flex flex-col   relative ">
 			{ stateData.getSurveyQuestions.length === 0? 
@@ -57,6 +53,7 @@ import SurveyForms from './surveyForms';
 					</div> : 
 					<div> 
 						<Cards className="w-7/12 mx-auto py-10 px-16 mb-40 rounded-20px shadow-10  break-words">
+							{stateData.isRequired}
 								<div className="w-full" style={{fontSize:14, fontWeight:700,}}>
 									<span> {surveyQuestion.required}</span>
 										{surveyQuestion.body}

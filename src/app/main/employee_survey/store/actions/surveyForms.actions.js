@@ -224,5 +224,28 @@ export function setIsRequired(value) {
 	}
 }
 
+export function sendSurvey(surveyId){
+	return async(dispatch) => {
+		const request = await Api.get(`survey/${surveyId}/send/`,{
+			header: {
+				Authorization: `JWT ${useAuth().getToken}`
+			}
+		}).then(res => {
+			// dispatch({
+			// 	type: SEND_SURVEY,
+			// 	message:request
+			// })
+			console.log(res)
+		});
+
+		// setTimeout(() => {
+		// 	dispatch({
+		// 		type: SHOW_NOTICE
+		// 	})
+		// }, 5000)
+	}
+
+}
+
 
 
