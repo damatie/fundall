@@ -35,6 +35,15 @@ const inputTypes = [
 
 
 const surveyForms = (props) => {
+  // 
+  let i =3
+  let j = 4
+  let k = 1
+  for(i =0; i <3 i++){
+    k +=j;
+    j=
+  }
+  // 
   const elementRef = useRef()
   const{newData,surveyId, questionIndex, surveyQuestionId} = props
   // Using redux
@@ -43,7 +52,6 @@ const surveyForms = (props) => {
   // Using useState
   const [showInputTypeList,setShowInputTypeList] = useState(false)
   
-  console.log(showInputTypeList)
   useEffect(() => {
     const checkIfClickedOutside = e => {
       // If the menu is open and the clicked target is not within the menu,
