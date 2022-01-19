@@ -1,5 +1,6 @@
 import Image from 'next/image'
-export default function DataTable(){
+export default function DataTable({summary}){
+  // console.log(summary)
   return(
     < div className=' w-full'>
     <table className="table-fixed w-full">
