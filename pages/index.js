@@ -15,7 +15,7 @@ export default function Home() {
         <nav className=' flex mt-10'>
           <div className=' flex-1'>
           <Link href="/">
-            <a>  <Image src='/../public/img/logo2.png' height={62} width={120} placeholder="logo" /></a>
+            <a>  <Image src='/img/logo2.png' height={62} width={120} placeholder="logo" /></a>
           </Link>
          
           </div>
@@ -32,7 +32,7 @@ export default function Home() {
         </nav>
         <div className='w-full pt-20'>
           <span className=' block mx-auto w-1/4'>
-          <Image src='/../public/img/h-img.png' height={280} width={270} placeholder="image" />
+          <Image src='/img/h-img.png' height={280} width={270} placeholder="image" />
           </span>
         </div>
         <div className='w-full pt-20 text-center'>
