@@ -52,7 +52,7 @@ export default function Login() {
         <div className="block text-4xl font-bold w-6/12 mx-auto  mt-20">
           <span className=" text-fundall-green">
             <Image
-              src="/img/h-img.png"
+              src="/img/l-img.png"
               height={280}
               width={270}
               placeholder="image"
