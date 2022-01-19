@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* CSS START */
+@font-face {
+  font-family: "circular";
+  src: url("/../fonts/circular-std.ttf")
+}
+body{
+  background-color: #FCFBFC;
+}
+
+.input-blocK{
+  padding-top: 6px;
+}
+input{
+  padding: 10px 14px !important;
+  border-radius: 4px;
+  border: solid 2px #CAD0C9
+  
+}
+label{
+  color:black
+}
+input:focus {
+  outline: none !important;
+  border: solid 2px #4CE895 !important;
+}
+.button-lg{
+  padding: 15px 2px;
+  border-radius: 3px;
+}
+.li-bullet {
+  height: 10px;
+  width: 10px;
+  display: block;
+  background-color: #4CE895 !important;
+}
+.pagination {
+   width: 30px;
+   height: 30px;
+   margin-left: 10px;
+   background-color: #4CE895 !important;
+}
