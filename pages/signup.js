@@ -30,7 +30,7 @@ export default function Signup(){
         <div className=' w-9/12  py-10 mx-auto'>
           <div className=' grid grid-cols-2 gap-4'>
             <span className='block '>
-            <label for="firstname" className=' block  text-base font-medium'> First Name</label >
+            <label className=' block  text-base font-medium'> First Name</label >
               <TextInput type='text' placeholder='Enter First Name'/>
             </span>
 
@@ -43,7 +43,7 @@ export default function Signup(){
 
           <div className=' grid grid-cols-1 gap-7 pt-7'>
             <span className='block '>
-              <label for="firstname" className=' block  text-base font-medium'> Email address</label >
+              <label  className=' block  text-base font-medium'> Email address</label >
                 <TextInput type='text'  placeholder='Enter Email'/>
             </span>
 
