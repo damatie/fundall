@@ -14,7 +14,7 @@ export default function Login(){
           </Link>
         </div>
         <div className='block text-4xl font-bold w-6/12 mx-auto  mt-20'>
-        <span  className=' text-fundall-green'><Image src='/img/h-img.png' height={280} width={270} placeholder="image" /></span>
+        <span  className=' text-fundall-green'><Image src='/img/s-img.png' height={207} width={278} placeholder="image" /></span>
         </div>
         <div className='block text-4xl font-bold w-6/12 mx-auto mt-10'>
         <span  className=' text-fundall-green'>Welcome!</span> Let’s get to know you.
